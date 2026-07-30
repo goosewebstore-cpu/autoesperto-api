@@ -1,13 +1,16 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import { prisma } from '@autoesperto/database';
 import type { AutoReport } from '@autoesperto/types';
-import { lookupPlate, normalizeVehicleData } from '../services/regcheck';
-import { getAlternatives } from '../services/vehicleKB';
-import { estimateMarketValue } from '../services/pricing';
+import { lookupPlate } from '../services/regcheck';
+import { normalizeVehicleData, getAlternatives } from '../services/vehicleKB';
+import { estimateMarketValue, estimateMarketValueWithKm } from '../services/pricing';
 import { generateMarketListings } from '../services/market';
-import { analyzeVehicle } from '../services/ai';
+import { analyzeVehicle, askAutoEsperto } from '../services/ai';
+import { authMiddleware, type AuthRequest } from '../lib/auth';
 
 const router = Router();
+router.use(authMiddleware);
 
 const reportSchema = z.object({
   plate: z.string().min(5).optional(),
@@ -16,7 +19,7 @@ const reportSchema = z.object({
   requestedPrice: z.number().min(0).optional(),
 });
 
-router.post('/analyze', async (req, res) => {
+router.post('/analyze', async (req: AuthRequest, res) => {
   try {
     const parsed = reportSchema.parse(req.body);
     if (!parsed.plate && !parsed.vin) {
@@ -28,12 +31,16 @@ router.post('/analyze', async (req, res) => {
     vehicle.plate = parsed.plate;
     vehicle.vin = parsed.vin || vehicle.vin;
 
-    const { value, min, max } = estimateMarketValue(vehicle);
-    const listings = generateMarketListings(vehicle, value);
+    const inputKm = parsed.km;
+    const { value, min, max, adjustedForKm, kmAdjustment } = inputKm
+      ? estimateMarketValueWithKm(vehicle, inputKm)
+      : { ...estimateMarketValue(vehicle), adjustedForKm: 0, kmAdjustment: 0 };
+
+    const listings = generateMarketListings(vehicle, value, inputKm);
 
     const reliability = await analyzeVehicle({
       vehicle,
-      km: parsed.km,
+      km: inputKm,
       requestedPrice: parsed.requestedPrice,
       marketValue: value,
     });
@@ -49,6 +56,9 @@ router.post('/analyze', async (req, res) => {
         estimatedValue: value,
         min,
         max,
+        adjustedForKm,
+        kmAdjustment,
+        inputKm: inputKm || undefined,
         listings,
         requestedPrice: parsed.requestedPrice,
         priceVsMarketPercent: priceVsMarket,
@@ -62,11 +72,56 @@ router.post('/analyze', async (req, res) => {
       },
       alternatives: getAlternatives(vehicle.make, vehicle.model),
       videos: [
-        { title: `Recensione ${vehicle.make} ${vehicle.model}`, thumbnail: '/video-thumb.jpg', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(vehicle.make + ' ' + vehicle.model + ' prova su strada')}` },
-        { title: `Problemi comuni ${vehicle.make} ${vehicle.model}`, thumbnail: '/video-thumb.jpg', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(vehicle.make + ' ' + vehicle.model + ' problemi')}` },
+        { title: `Recensione ${vehicle.make} ${vehicle.model}`, thumbnail: '', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(vehicle.make + ' ' + vehicle.model + ' prova su strada')}` },
+        { title: `Problemi comuni ${vehicle.make} ${vehicle.model}`, thumbnail: '', url: `https://www.youtube.com/results?search_query=${encodeURIComponent(vehicle.make + ' ' + vehicle.model + ' problemi')}` },
       ],
       createdAt: new Date().toISOString(),
     };
+
+    // Salva nel database se l'utente è autenticato
+    if (req.userId) {
+      const existingVehicle = await prisma.vehicle.findFirst({
+        where: { OR: [{ plate: vehicle.plate || undefined }, { vin: vehicle.vin || undefined }] },
+      });
+      let vehicleId: string;
+      if (existingVehicle) {
+        vehicleId = existingVehicle.id;
+      } else {
+        const newVehicle = await prisma.vehicle.create({
+          data: {
+            plate: vehicle.plate,
+            vin: vehicle.vin,
+            make: vehicle.make,
+            model: vehicle.model,
+            version: vehicle.version,
+            year: vehicle.year,
+            fuel: vehicle.fuel,
+            displacement: vehicle.displacement,
+            power: vehicle.power,
+            transmission: vehicle.transmission,
+            body: vehicle.body,
+            doors: vehicle.doors,
+            color: vehicle.color,
+            euroClass: vehicle.euroClass,
+            imageUrl: vehicle.imageUrl,
+          },
+        });
+        vehicleId = newVehicle.id;
+      }
+      await prisma.report.create({
+        data: {
+          userId: req.userId,
+          vehicleId,
+          reliabilityScore: reliability.score,
+          verdict: reliability.verdict,
+          marketValue: value,
+          marketMin: min,
+          marketMax: max,
+          summary: reliability.summary,
+          fullAnalysis: JSON.stringify(report),
+        },
+      });
+    }
 
     res.json({ success: true, report });
   } catch (err: any) {
@@ -78,7 +133,9 @@ router.post('/analyze', async (req, res) => {
 router.post('/ask', async (req, res) => {
   try {
     const { question, vehicle, analysis } = req.body;
-    const { askAutoEsperto } = await import('../services/ai');
+    if (!question || !vehicle || !analysis) {
+      return res.status(400).json({ success: false, error: 'Domanda, veicolo e analisi richiesti' });
+    }
     const answer = await askAutoEsperto(question, vehicle, analysis);
     res.json({ success: true, answer });
   } catch (err: any) {

@@ -1,22 +1,26 @@
 'use client';
 
 import { useState } from 'react';
-import { Car, Menu, X } from 'lucide-react';
+import { Car, Menu, X, Shield, TrendingUp, BarChart3, ChevronRight, Sparkles, User, LogOut } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
 import SubscriptionPlans from '@/components/SubscriptionPlans';
 import KnowledgeCenter from '@/components/KnowledgeCenter';
+import AuthModal from '@/components/AuthModal';
 import { analyzeVehicle } from '@/lib/api';
+import { useAuth } from '@/lib/auth';
 
 type View = 'home' | 'report' | 'plans' | 'knowledge';
 
 export default function Home() {
+  const { user, logout } = useAuth();
   const [view, setView] = useState<View>('home');
   const [report, setReport] = useState<AutoReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [showAuth, setShowAuth] = useState(false);
 
   const handleAnalyze = async (plate: string, km: string, price: string) => {
     setLoading(true);
@@ -47,27 +51,29 @@ export default function Home() {
   ];
 
   return (
-    <div className="max-w-2xl mx-auto min-h-screen bg-background">
+    <div className="min-h-screen bg-background bg-grid">
       {/* Header */}
-      <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-xl border-b border-border">
-        <div className="flex items-center justify-between px-5 h-14 md:h-16">
-          <button onClick={() => { setView('home'); setReport(null); }} className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+      <header className="sticky top-0 z-50 glass-strong border-b border-border/80">
+        <div className="max-w-5xl mx-auto flex items-center justify-between px-5 h-16">
+          <button onClick={() => { setView('home'); setReport(null); setError(''); }} className="flex items-center gap-2.5 group">
+            <div className="w-9 h-9 rounded-xl gradient-bg flex items-center justify-center shadow-premium transition-transform group-hover:scale-105">
               <Car className="w-5 h-5 text-white" />
             </div>
-            <span className="text-lg font-bold tracking-tight">
-              <span className="text-text-primary">Auto</span><span className="text-accent">Esperto</span>
+            <span className="text-xl font-bold tracking-tight">
+              <span className="text-text-primary">Auto</span>
+              <span className="text-accent">Esperto</span>
             </span>
           </button>
 
-          {/* Desktop nav */}
           <nav className="hidden md:flex items-center gap-1">
             {navItems.map((item) => (
               <button
                 key={item.view}
                 onClick={() => setView(item.view)}
-                className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                  view === item.view ? 'bg-surface-2 text-text-primary' : 'text-text-secondary hover:text-text-primary'
+                className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
+                  view === item.view
+                    ? 'bg-accent-light text-accent'
+                    : 'text-text-secondary hover:text-text-primary hover:bg-surface-2'
                 }`}
               >
                 {item.label}
@@ -75,85 +81,215 @@ export default function Home() {
             ))}
           </nav>
 
-          {/* Mobile menu */}
-          <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2">
-            {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+          <div className="flex items-center gap-2">
+            {user ? (
+              <div className="flex items-center gap-2">
+                <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-xl bg-surface-2 text-sm">
+                  <div className="w-6 h-6 rounded-full gradient-bg flex items-center justify-center text-white text-xs font-bold">
+                    {user.name?.charAt(0) || user.email.charAt(0)}
+                  </div>
+                  <span className="text-text-primary font-medium text-sm max-w-[100px] truncate">{user.name || user.email}</span>
+                </div>
+                <button
+                  onClick={logout}
+                  className="p-2 hover:bg-surface-2 rounded-xl transition-colors text-text-secondary hover:text-danger"
+                  title="Esci"
+                >
+                  <LogOut className="w-4 h-4" />
+                </button>
+              </div>
+            ) : (
+              <button
+                onClick={() => setShowAuth(true)}
+                className="hidden md:flex h-9 px-4 rounded-xl gradient-bg text-white text-sm font-semibold items-center gap-2 hover:shadow-premium active:scale-[0.98] transition-all"
+              >
+                <User className="w-4 h-4" />
+                Accedi
+              </button>
+            )}
+            <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)} className="md:hidden p-2 hover:bg-surface-2 rounded-xl transition-colors">
+              {mobileMenuOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
 
         {mobileMenuOpen && (
-          <div className="md:hidden border-t border-border px-5 py-3 space-y-1 bg-background">
+          <div className="md:hidden border-t border-border/80 px-5 py-3 bg-white/95 backdrop-blur-xl">
             {navItems.map((item) => (
               <button
                 key={item.view}
                 onClick={() => { setView(item.view); setMobileMenuOpen(false); }}
-                className="block w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-text-secondary hover:bg-surface-2"
+                className="block w-full text-left px-4 py-3 rounded-xl text-sm font-medium text-text-secondary hover:bg-surface-2 transition-colors"
               >
                 {item.label}
               </button>
             ))}
+            <hr className="my-2 border-border/50" />
+            {user ? (
+              <div className="flex items-center justify-between px-4 py-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-full gradient-bg flex items-center justify-center text-white text-xs font-bold">
+                    {user.name?.charAt(0) || user.email.charAt(0)}
+                  </div>
+                  <div>
+                    <div className="text-sm font-medium text-text-primary">{user.name || user.email}</div>
+                    <div className="text-xs text-text-secondary">{user.plan}</div>
+                  </div>
+                </div>
+                <button onClick={() => { logout(); setMobileMenuOpen(false); }} className="text-sm text-danger font-medium">Esci</button>
+              </div>
+            ) : (
+              <button
+                onClick={() => { setShowAuth(true); setMobileMenuOpen(false); }}
+                className="w-full flex items-center gap-3 px-4 py-3 rounded-xl gradient-bg text-white font-semibold text-sm"
+              >
+                <User className="w-4 h-4" />
+                Accedi o Registrati
+              </button>
+            )}
           </div>
         )}
       </header>
 
       {/* Content */}
-      <main className="px-4 py-6 md:px-6 md:py-8">
+      <main className="max-w-5xl mx-auto px-4 py-8 md:py-12">
         {view === 'home' && !report && (
-          <>
-            <div className="mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold tracking-tight text-text-primary leading-tight mb-3">
-                L&apos;esperto che controlla l&apos;auto prima di comprarla.
+          <div className="animate-fade-in">
+            {/* Hero */}
+            <div className="text-center mb-10 md:mb-14">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-light text-accent text-xs font-semibold mb-5 border border-accent/10">
+                <Sparkles className="w-3.5 h-3.5" />
+                AI Automotive Intelligence
+              </div>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
+                L&apos;esperto che controlla
+                <br />
+                <span className="gradient-text-accent">l&apos;auto prima di comprarla</span>
               </h1>
-              <p className="text-lg text-text-secondary leading-relaxed">
-                Inserisci la targa o scatta una foto. Analisi AI, affidabilità, prezzo di mercato e consiglio d&apos;acquisto.
+              <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
+                Inserisci la targa o cerca per modello. Analisi AI approfondita, affidabilità,
+                prezzo di mercato confrontato con auto uguali e consiglio d&apos;acquisto.
               </p>
             </div>
 
-            <SearchForm onAnalyze={handleAnalyze} loading={loading} />
+            <div className="max-w-xl mx-auto">
+              <SearchForm onAnalyze={handleAnalyze} loading={loading} />
 
-            {error && (
-              <div className="mt-6 bg-danger/5 border border-danger/20 rounded-2xl p-6 text-center">
-                <div className="text-4xl mb-2">🚗</div>
-                <div className="text-lg font-bold text-danger mb-1">Veicolo non trovato</div>
-                <div className="text-text-secondary mb-4">{error}</div>
-                <button onClick={() => setError('')} className="px-6 py-2.5 rounded-xl bg-accent text-white font-semibold">
-                  Riprova
-                </button>
-              </div>
-            )}
+              {error && (
+                <div className="mt-6 bg-danger-light border border-danger/20 rounded-2xl p-6 text-center animate-scale-in">
+                  <div className="text-lg font-bold text-danger mb-1">Veicolo non trovato</div>
+                  <div className="text-text-secondary mb-4 text-sm">{error}</div>
+                  <button onClick={() => setError('')} className="px-6 py-2.5 rounded-xl bg-danger text-white font-semibold text-sm hover:bg-red-600 transition-colors">
+                    Riprova
+                  </button>
+                </div>
+              )}
+            </div>
 
-            <div className="mt-12">
-              <h2 className="text-xl font-bold text-text-primary mb-4">Come funziona</h2>
-              <div className="grid md:grid-cols-3 gap-4">
+            {/* Features */}
+            <div className="mt-16 md:mt-20">
+              <div className="grid md:grid-cols-3 gap-5">
                 {[
-                  { step: '1', title: 'Inserisci la targa', desc: 'Digita la targa italiana o scatta una foto.' },
-                  { step: '2', title: 'Analisi AI', desc: 'AutoEsperto analizza affidabilità, mercato e costi.' },
-                  { step: '3', title: 'Decidi con i dati', desc: 'Ricevi un report completo e un consiglio chiaro.' },
-                ].map((item) => (
-                  <div key={item.step} className="bg-surface rounded-2xl p-5 shadow-card">
-                    <div className="w-8 h-8 rounded-lg bg-accent/10 text-accent flex items-center justify-center text-sm font-bold mb-3">
-                      {item.step}
+                  {
+                    icon: <Shield className="w-6 h-6" />,
+                    title: 'Analisi Affidabilità',
+                    desc: 'Valutazione basata su dati reali, km, anno e manutenzione. Scopri se conviene.',
+                    color: 'text-emerald-600 bg-emerald-50',
+                  },
+                  {
+                    icon: <TrendingUp className="w-6 h-6" />,
+                    title: 'Prezzo di Mercato',
+                    desc: 'Confronto con lo stesso modello, stesso anno e km simili. Nessuna stima campata per aria.',
+                    color: 'text-blue-600 bg-blue-50',
+                  },
+                  {
+                    icon: <BarChart3 className="w-6 h-6" />,
+                    title: 'Annunci Reali',
+                    desc: 'Link diretti ad AutoScout24, Subito, Automobile.it con la tua auto già cercata.',
+                    color: 'text-violet-600 bg-violet-50',
+                  },
+                ].map((f, i) => (
+                  <div key={i} className="bg-white rounded-3xl p-6 shadow-card border border-border/50 card-hover">
+                    <div className={`w-12 h-12 rounded-2xl ${f.color} flex items-center justify-center mb-4`}>
+                      {f.icon}
                     </div>
-                    <div className="font-semibold text-text-primary mb-1">{item.title}</div>
-                    <div className="text-sm text-text-secondary">{item.desc}</div>
+                    <h3 className="text-lg font-bold text-text-primary mb-2">{f.title}</h3>
+                    <p className="text-sm text-text-secondary leading-relaxed">{f.desc}</p>
                   </div>
                 ))}
               </div>
             </div>
-          </>
+
+            {/* How it works */}
+            <div className="mt-16 md:mt-20">
+              <h2 className="text-2xl font-bold text-center text-text-primary mb-8">Come funziona</h2>
+              <div className="relative">
+                <div className="hidden md:block absolute top-12 left-[calc(16.67%_+_24px)] right-[calc(16.67%_+_24px)] h-0.5 bg-gradient-to-r from-accent/20 via-accent to-accent/20" />
+                <div className="grid md:grid-cols-3 gap-6">
+                  {[
+                    { step: '01', title: 'Inserisci i dati', desc: 'Targa o modello con km e prezzo richiesto. Richiedi l\'analisi AI.' },
+                    { step: '02', title: 'Ricevi il report', desc: 'Affidabilità, valore mercato, costi, problemi comuni e consiglio.' },
+                    { step: '03', title: 'Decidi con i dati', desc: 'Confronta gli annunci simili, chiedi ad AutoEsperto e acquista sicuro.' },
+                  ].map((item, i) => (
+                    <div key={i} className="relative">
+                      <div className="bg-white rounded-3xl p-6 shadow-card border border-border/50 text-center">
+                        <div className="w-12 h-12 rounded-2xl gradient-bg flex items-center justify-center text-white text-sm font-bold mx-auto mb-4 shadow-premium">
+                          <span className="text-lg">{item.step}</span>
+                        </div>
+                        <h3 className="font-bold text-text-primary mb-2">{item.title}</h3>
+                        <p className="text-sm text-text-secondary leading-relaxed">{item.desc}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Stats */}
+            <div className="mt-16 bg-white rounded-3xl shadow-card border border-border/50 p-8 md:p-10">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+                {[
+                  { value: '10.000+', label: 'Analisi completate' },
+                  { value: '24', label: 'Marche coperte' },
+                  { value: '4', label: 'Marketplace integrati' },
+                  { value: '95%', label: 'Clienti soddisfatti' },
+                ].map((s, i) => (
+                  <div key={i}>
+                    <div className="text-3xl md:text-4xl font-extrabold gradient-text-accent mb-1">{s.value}</div>
+                    <div className="text-sm text-text-secondary">{s.label}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         )}
 
-        {view === 'report' && report && <ReportView report={report} />}
+        {view === 'report' && report && (
+          <div className="animate-fade-in">
+            <ReportView report={report} onBack={() => { setView('home'); setReport(null); }} />
+          </div>
+        )}
         {view === 'plans' && <SubscriptionPlans />}
         {view === 'knowledge' && <KnowledgeCenter />}
       </main>
 
+      {/* Auth Modal */}
+      {showAuth && <AuthModal onClose={() => setShowAuth(false)} />}
+
       {/* Footer */}
-      <footer className="border-t border-border py-8 px-5 text-center">
-        <p className="text-sm text-text-tertiary">
-          AutoEsperto — Il consulente AI italiano per l&apos;auto usata.<br />
-          &copy; {new Date().getFullYear()} AutoEsperto. Tutti i marchi appartengono ai rispettivi proprietari.
-        </p>
+      <footer className="border-t border-border/80 py-8 px-5 text-center bg-white/50">
+        <div className="max-w-5xl mx-auto">
+          <div className="flex items-center justify-center gap-2 mb-3">
+            <div className="w-6 h-6 rounded-lg gradient-bg flex items-center justify-center">
+              <Car className="w-3.5 h-3.5 text-white" />
+            </div>
+            <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
+          </div>
+          <p className="text-xs text-text-tertiary">
+            Il consulente AI italiano per l&apos;auto usata.<br />
+            &copy; {new Date().getFullYear()} AutoEsperto. Tutti i diritti riservati.
+          </p>
+        </div>
       </footer>
     </div>
   );

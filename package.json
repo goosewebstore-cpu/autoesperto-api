@@ -10,6 +10,9 @@
     "db:generate": "npm run db:generate --workspace=packages/database",
     "db:migrate": "npm run db:migrate --workspace=packages/database",
     "db:studio": "npm run db:studio --workspace=packages/database",
+    "db:postgres": "copy packages\\database\\prisma\\schema.postgresql.prisma packages\\database\\prisma\\schema.prisma /y && echo Copiato schema PostgreSQL. Metti DATABASE_URL in .env e lancia npm run db:migrate",
+    "db:push": "npm run db:generate --workspace=packages/database && npx prisma db push --schema=packages/database/prisma/schema.prisma",
+    "test": "npm run test --workspace=apps/api",
     "lint": "npm run lint --workspace=apps/web"
   },
   "workspaces": [
@@ -18,5 +21,12 @@
   ],
   "engines": {
     "node": ">=20"
+  },
+  "allowScripts": {
+    "core-js@3.49.0": true,
+    "esbuild@0.28.1": true,
+    "prisma@5.22.0": true,
+    "@prisma/client@5.22.0": true,
+    "@prisma/engines@5.22.0": true
   }
 }

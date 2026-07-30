@@ -59,6 +59,9 @@ export interface PriceAnalysis {
   estimatedValue: number;
   min: number;
   max: number;
+  adjustedForKm?: number;
+  kmAdjustment?: number;
+  inputKm?: number;
   listings: MarketListing[];
   requestedPrice?: number;
   priceVsMarketPercent?: number;

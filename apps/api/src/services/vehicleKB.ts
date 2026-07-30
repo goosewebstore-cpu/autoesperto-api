@@ -264,7 +264,7 @@ const kb: Record<string, VehicleKnowledge> = {
     versionsToAvoid: ['DSG 7 marce usurato'],
     versionsRecommended: ['1.6 TDI 115 CV', '2.0 TDI 150 CV', '1.5 TSI 150 CV']
   },
-  alfa romeo: {
+  'alfa romeo': {
     reliabilityScore: 6,
     maintenance: 'alto',
     common: ['Problemi elettrici Giulietta/MiTo', 'Usura sospensioni anteriori'],

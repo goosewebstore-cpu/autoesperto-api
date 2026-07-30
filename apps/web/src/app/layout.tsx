@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from 'next';
 import './globals.css';
 import ServiceWorker from '@/components/ServiceWorker';
+import { AuthProvider } from '@/lib/auth';
 
 export const metadata: Metadata = {
   title: 'AutoEsperto — L\'esperto che controlla l\'auto prima di comprarla',
@@ -29,9 +30,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="min-h-screen">
-        <ServiceWorker />
-        {children}
-        <div id="modal-root" />
+        <AuthProvider>
+          <ServiceWorker />
+          {children}
+          <div id="modal-root" />
+        </AuthProvider>
       </body>
     </html>
   );

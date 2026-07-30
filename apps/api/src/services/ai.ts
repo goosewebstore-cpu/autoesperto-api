@@ -40,6 +40,9 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
   return { maintenance, fuelCost, insurance };
 }
 
+function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
+function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
+
 export async function analyzeVehicle(input: AIAnalysisInput): Promise<ReliabilityAnalysis> {
   const knowledge = getVehicleKnowledge(input.vehicle.make);
   const km = input.km || 100000;
@@ -65,7 +68,7 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
     ? `${input.vehicle.make} ${input.vehicle.model} può andare bene, ma valuta il prezzo e verifica lo storico manutenzione prima di acquistare.`
     : `Attenzione: ${input.vehicle.make} ${input.vehicle.model} presenta rischi significativi di affidabilità o un prezzo troppo alto rispetto al mercato.`;
 
-  return {
+  const analysis: ReliabilityAnalysis = {
     score,
     verdict,
     verdictLabel: label,
@@ -90,6 +93,64 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
       depreciation5Years: estimatedValue - future5,
     },
   };
+
+  const openaiKey = process.env.OPENAI_API_KEY;
+  if (openaiKey && openaiKey !== 'mock') {
+    try {
+      const enriched = await enrichWithAI(input, analysis, openaiKey);
+      if (enriched) {
+        console.log('AI enrichment: report arricchito con AI');
+        return enriched;
+      }
+    } catch (e: any) {
+      console.warn('AI enrichment fallito:', e.message);
+    }
+  }
+
+  return analysis;
+}
+
+async function enrichWithAI(input: AIAnalysisInput, base: ReliabilityAnalysis, key: string): Promise<ReliabilityAnalysis | null> {
+  const prompt = `Analizza questo veicolo per un report di acquisto:
+- Modello: ${input.vehicle.make} ${input.vehicle.model} ${input.vehicle.year || ''}
+- Versione: ${input.vehicle.version || 'N/A'}
+- Km: ${input.km || 'N/A'}
+- Carburante: ${input.vehicle.fuel || 'N/A'}
+- Prezzo richiesto: €${input.requestedPrice || 'N/A'}
+- Valore mercato: €${input.marketValue}
+- Punteggio affidabilità base: ${base.score}/10
+
+Fornisci UNA SOLA risposta JSON con questi campi:
+- "summary": analisi personalizzata (max 150 caratteri)
+- "strengths": array di 3 punti di forza specifici
+- "weaknesses": array di 3 punti deboli specifici
+- "recommendation": "comprare" | "trattare" | "evitare"`;
+
+  const resp = await fetch(`${getAIBaseUrl()}/chat/completions`, {
+    method: 'POST',
+    signal: AbortSignal.timeout(8000),
+    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+    body: JSON.stringify({
+      model: getAIModel(),
+      messages: [
+        { role: 'system', content: 'Sei un esperto automotive italiano. Rispondi SOLO con JSON valido.' },
+        { role: 'user', content: prompt },
+      ],
+      temperature: 0.5,
+      response_format: { type: 'json_object' },
+    }),
+  });
+  const data = await resp.json() as any;
+  if (data.error) return null;
+  const content = data.choices?.[0]?.message?.content;
+  if (!content) return null;
+  const ai = JSON.parse(content);
+  return {
+    ...base,
+    summary: ai.summary || base.summary,
+    strengths: ai.strengths || base.strengths,
+    weaknesses: ai.weaknesses || base.weaknesses,
+  };
 }
 
 export async function askAutoEsperto(question: string, vehicle: VehicleData, analysis: ReliabilityAnalysis): Promise<string> {
@@ -99,14 +160,15 @@ export async function askAutoEsperto(question: string, vehicle: VehicleData, ana
   }
 
   try {
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
       method: 'POST',
+      signal: AbortSignal.timeout(15000),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': `Bearer ${openaiKey}`,
       },
       body: JSON.stringify({
-        model: 'gpt-4o-mini',
+      model: getAIModel(),
         messages: [
           {
             role: 'system',
@@ -121,8 +183,18 @@ export async function askAutoEsperto(question: string, vehicle: VehicleData, ana
       }),
     });
     const data = await response.json() as any;
-    return data.choices?.[0]?.message?.content || mockAnswer(question, vehicle, analysis);
-  } catch (e) {
+    if (data.error) {
+      console.warn('OpenAI API error:', data.error.message);
+      return mockAnswer(question, vehicle, analysis);
+    }
+    const content = data.choices?.[0]?.message?.content;
+    if (!content) {
+      console.warn('OpenAI: risposta vuota');
+      return mockAnswer(question, vehicle, analysis);
+    }
+    return content;
+  } catch (e: any) {
+    console.warn('OpenAI fetch error:', e.message);
     return mockAnswer(question, vehicle, analysis);
   }
 }

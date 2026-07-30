@@ -1,0 +1,145 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  role          UserRole  @default(USER)
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  subscription  Subscription?
+  reports       Report[]
+  savedVehicles SavedVehicle[]
+  dealerProfile DealerProfile?
+}
+
+enum UserRole {
+  USER
+  DEALER
+  ADMIN
+}
+
+model Subscription {
+  id        String             @id @default(cuid())
+  userId    String             @unique
+  user      User               @relation(fields: [userId], references: [id])
+  plan      SubscriptionPlan   @default(FREE)
+  status    SubscriptionStatus @default(ACTIVE)
+  credits   Int                @default(1)
+  renewsAt  DateTime?
+  createdAt DateTime           @default(now())
+  updatedAt DateTime           @updatedAt
+}
+
+enum SubscriptionPlan {
+  FREE
+  PLUS
+  PRO
+  DEALER_BASE
+  DEALER_PREMIUM
+  DEALER_ENTERPRISE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  CANCELED
+  PAST_DUE
+}
+
+model Vehicle {
+  id              String         @id @default(cuid())
+  plate           String?
+  vin             String?
+  make            String
+  model           String
+  version         String?
+  year            Int?
+  fuel            String?
+  displacement    String?
+  power           String?
+  transmission    String?
+  body            String?
+  doors           Int?
+  color           String?
+  euroClass       String?
+  imageUrl        String?
+  reports         Report[]
+  savedVehicles   SavedVehicle[]
+  createdAt       DateTime       @default(now())
+}
+
+model Report {
+  id              String   @id @default(cuid())
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  vehicleId       String
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
+  reliabilityScore Float
+  verdict         String
+  marketValue     Float?
+  marketMin       Float?
+  marketMax       Float?
+  summary         String   @db.Text
+  fullAnalysis    Json
+  pdfUrl          String?
+  createdAt       DateTime @default(now())
+}
+
+model SavedVehicle {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, vehicleId])
+}
+
+model DealerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  companyName String
+  vatNumber   String?
+  phone       String?
+  address     String?
+  city        String?
+  website     String?
+  listings    DealerListing[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DealerListing {
+  id          String        @id @default(cuid())
+  dealerId    String
+  dealer      DealerProfile @relation(fields: [dealerId], references: [id])
+  title       String
+  price       Float
+  km          Int
+  year        Int
+  fuel        String
+  imageUrl    String?
+  description String?       @db.Text
+  source      String?
+  sourceUrl   String?
+  status      ListingStatus @default(ACTIVE)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+}
+
+enum ListingStatus {
+  ACTIVE
+  SOLD
+  RESERVED
+  ARCHIVED
+}

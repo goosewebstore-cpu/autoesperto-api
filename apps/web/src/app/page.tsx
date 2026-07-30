@@ -46,7 +46,8 @@ export default function Home() {
 
   const navItems = [
     { label: 'Cerca Auto', view: 'home' as View },
-    { label: 'Piani', view: 'plans' as View },
+    { label: 'Come funziona', view: 'home' as View, scroll: true },
+    { label: 'Prezzi', view: 'plans' as View },
     { label: 'Guida', view: 'knowledge' as View },
   ];
 
@@ -69,7 +70,12 @@ export default function Home() {
             {navItems.map((item) => (
               <button
                 key={item.view}
-                onClick={() => setView(item.view)}
+                onClick={() => {
+                  setView(item.view);
+                  if ((item as any).scroll) {
+                    setTimeout(() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' }), 100);
+                  }
+                }}
                 className={`px-4 py-2 rounded-xl text-sm font-semibold transition-all ${
                   view === item.view
                     ? 'bg-accent-light text-accent'
@@ -152,23 +158,22 @@ export default function Home() {
       </header>
 
       {/* Content */}
-      <main className="max-w-5xl mx-auto px-4 py-8 md:py-12">
+      <main className="max-w-5xl mx-auto px-4 py-6 md:py-16">
         {view === 'home' && !report && (
           <div className="animate-fade-in">
             {/* Hero */}
-            <div className="text-center mb-10 md:mb-14">
-              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-light text-accent text-xs font-semibold mb-5 border border-accent/10">
+            <div className="text-center mb-8 md:mb-16 pt-8 md:pt-12">
+              <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-light text-accent text-xs font-semibold mb-6 border border-accent/10">
                 <Sparkles className="w-3.5 h-3.5" />
                 AI Automotive Intelligence
               </div>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-[1.1] mb-4">
+              <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.05] mb-5 max-w-4xl mx-auto">
                 L&apos;esperto che controlla
-                <br />
-                <span className="gradient-text-accent">l&apos;auto prima di comprarla</span>
+                <span className="gradient-text-accent block mt-1">l&apos;auto prima di comprarla</span>
               </h1>
-              <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed">
-                Inserisci la targa o cerca per modello. Analisi AI approfondita, affidabilità,
-                prezzo di mercato confrontato con auto uguali e consiglio d&apos;acquisto.
+              <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed px-4">
+                Analizza un&apos;auto usata, verifica i dati disponibili, confronta il prezzo
+                di mercato e scopri cosa controllare prima di acquistarla.
               </p>
             </div>
 
@@ -187,33 +192,33 @@ export default function Home() {
             </div>
 
             {/* Features */}
-            <div className="mt-16 md:mt-20">
+            <div className="mt-16 md:mt-24">
               <div className="grid md:grid-cols-3 gap-5">
                 {[
                   {
                     icon: <Shield className="w-6 h-6" />,
                     title: 'Analisi Affidabilità',
-                    desc: 'Valutazione basata su dati reali, km, anno e manutenzione. Scopri se conviene.',
+                    desc: 'Punteggio da 1 a 10 basato su dati reali, storico manutenzione e problemi noti di ogni modello.',
                     color: 'text-emerald-600 bg-emerald-50',
                   },
                   {
                     icon: <TrendingUp className="w-6 h-6" />,
                     title: 'Prezzo di Mercato',
-                    desc: 'Confronto con lo stesso modello, stesso anno e km simili. Nessuna stima campata per aria.',
+                    desc: 'Confronto con annunci reali: stesso modello, anno e km. Scopri se il prezzo richiesto è giusto.',
                     color: 'text-blue-600 bg-blue-50',
                   },
                   {
                     icon: <BarChart3 className="w-6 h-6" />,
                     title: 'Annunci Reali',
-                    desc: 'Link diretti ad AutoScout24, Subito, Automobile.it con la tua auto già cercata.',
+                    desc: 'Link diretti ad AutoScout24, Subito e Automobile.it. Annunci già filtrati per la tua ricerca.',
                     color: 'text-violet-600 bg-violet-50',
                   },
                 ].map((f, i) => (
-                  <div key={i} className="bg-white rounded-3xl p-6 shadow-card border border-border/50 card-hover">
-                    <div className={`w-12 h-12 rounded-2xl ${f.color} flex items-center justify-center mb-4`}>
+                  <div key={i} className="bg-white rounded-3xl p-6 md:p-7 shadow-card border border-border/50 card-hover">
+                    <div className={`w-12 h-12 rounded-2xl ${f.color} flex items-center justify-center mb-5`}>
                       {f.icon}
                     </div>
-                    <h3 className="text-lg font-bold text-text-primary mb-2">{f.title}</h3>
+                    <h3 className="text-lg font-bold text-text-primary mb-2.5">{f.title}</h3>
                     <p className="text-sm text-text-secondary leading-relaxed">{f.desc}</p>
                   </div>
                 ))}
@@ -221,15 +226,16 @@ export default function Home() {
             </div>
 
             {/* How it works */}
-            <div className="mt-16 md:mt-20">
-              <h2 className="text-2xl font-bold text-center text-text-primary mb-8">Come funziona</h2>
+            <div id="how-it-works" className="mt-16 md:mt-24">
+              <h2 className="text-2xl md:text-3xl font-bold text-center text-text-primary mb-3">Come funziona</h2>
+              <p className="text-text-secondary text-center mb-10 text-sm md:text-base">Tre semplici passi per acquistare con sicurezza</p>
               <div className="relative">
                 <div className="hidden md:block absolute top-12 left-[calc(16.67%_+_24px)] right-[calc(16.67%_+_24px)] h-0.5 bg-gradient-to-r from-accent/20 via-accent to-accent/20" />
                 <div className="grid md:grid-cols-3 gap-6">
                   {[
-                    { step: '01', title: 'Inserisci i dati', desc: 'Targa o modello con km e prezzo richiesto. Richiedi l\'analisi AI.' },
-                    { step: '02', title: 'Ricevi il report', desc: 'Affidabilità, valore mercato, costi, problemi comuni e consiglio.' },
-                    { step: '03', title: 'Decidi con i dati', desc: 'Confronta gli annunci simili, chiedi ad AutoEsperto e acquista sicuro.' },
+                    { step: '01', title: 'Inserisci i dati', desc: 'Targa, chilometraggio e prezzo richiesto. Bastano pochi secondi.' },
+                    { step: '02', title: 'Analisi AI', desc: 'AutoEsperto elabora affidabilità, valore di mercato, costi e problemi noti.' },
+                    { step: '03', title: 'Decidi con i dati', desc: 'Ricevi un report chiaro con consiglio d\'acquisto e annunci reali.' },
                   ].map((item, i) => (
                     <div key={i} className="relative">
                       <div className="bg-white rounded-3xl p-6 shadow-card border border-border/50 text-center">

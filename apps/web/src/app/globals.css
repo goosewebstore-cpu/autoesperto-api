@@ -12,6 +12,7 @@ body {
   font-family: 'Inter', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background: #F8F9FA;
 }
 
 /* Custom scrollbar */

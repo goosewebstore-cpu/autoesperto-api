@@ -29,7 +29,7 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
 
   return (
     <form onSubmit={handleSubmit} className="animate-fade-in">
-      <div className="bg-white rounded-3xl shadow-premium p-6 md:p-8 border border-border/50">
+      <div className="bg-white rounded-3xl shadow-premium p-5 sm:p-6 md:p-8 border border-border/40">
         {/* Mode Tabs */}
         <div className="flex gap-1.5 bg-surface-2 rounded-xl p-1 mb-6">
           <button

@@ -1,10 +1,10 @@
 'use client';
 
 import { useState } from 'react';
-import { Search, Camera, Car, Gauge, Euro, Loader2, Sparkles, Hash } from 'lucide-react';
+import { Search, Camera, Car, Loader2, Sparkles, Hash } from 'lucide-react';
 
 interface SearchFormProps {
-  onAnalyze: (plate: string, km: string, price: string) => void;
+  onAnalyze: (plate: string) => void;
   loading: boolean;
 }
 
@@ -13,18 +13,15 @@ type SearchMode = 'plate' | 'model';
 export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
   const [mode, setMode] = useState<SearchMode>('plate');
   const [plate, setPlate] = useState('');
-  const [km, setKm] = useState('');
-  const [price, setPrice] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (mode === 'plate' && plate.trim().length < 5) return;
     if (mode === 'model') {
-      // For model search, use a placeholder plate that the backend will recognize
-      onAnalyze('SEARCH', km, price);
+      onAnalyze('SEARCH');
       return;
     }
-    onAnalyze(plate.trim().toUpperCase(), km, price);
+    onAnalyze(plate.trim().toUpperCase());
   };
 
   return (
@@ -88,7 +85,7 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
           </div>
         )}
 
-        {/* Model Search Banner */}
+        {/* Model Search */}
         {mode === 'model' && (
           <div className="mb-5 bg-accent-light rounded-2xl p-5 border border-accent/10">
             <div className="flex items-center gap-3 mb-3">
@@ -97,56 +94,18 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
               </div>
               <div>
                 <div className="font-bold text-text-primary text-sm">Ricerca per Modello</div>
-                <div className="text-xs text-text-secondary">Inserisci le caratteristiche dell&apos;auto</div>
+                <div className="text-xs text-text-secondary">Inserisci marca e modello</div>
               </div>
             </div>
-            <div className="grid grid-cols-2 gap-3">
-              <div className="col-span-2">
-                <input
-                  type="text"
-                  value={plate}
-                  onChange={(e) => setPlate(e.target.value)}
-                  placeholder="Es. BMW Serie 3, Volkswagen Golf..."
-                  className="w-full h-12 px-4 rounded-xl border-2 border-border bg-white text-text-primary font-medium outline-none focus:border-accent input-premium transition-all placeholder:text-text-tertiary"
-                />
-              </div>
-            </div>
+            <input
+              type="text"
+              value={plate}
+              onChange={(e) => setPlate(e.target.value)}
+              placeholder="Es. BMW Serie 3, Volkswagen Golf..."
+              className="w-full h-12 px-4 rounded-xl border-2 border-border bg-white text-text-primary font-medium outline-none focus:border-accent input-premium transition-all placeholder:text-text-tertiary"
+            />
           </div>
         )}
-
-        {/* KM and Price */}
-        <div className="grid grid-cols-2 gap-3 mb-5">
-          <div>
-            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
-              <Gauge className="w-3 h-3 inline mr-1" />
-              Km
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                value={km}
-                onChange={(e) => setKm(e.target.value)}
-                placeholder="Es. 75000"
-                className="w-full h-12 px-4 rounded-xl border-2 border-border bg-surface-2 text-text-primary font-medium outline-none focus:border-accent focus:bg-white input-premium transition-all placeholder:text-text-tertiary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            </div>
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-text-secondary uppercase tracking-wider mb-2">
-              <Euro className="w-3 h-3 inline mr-1" />
-              Prezzo richiesto
-            </label>
-            <div className="relative">
-              <input
-                type="number"
-                value={price}
-                onChange={(e) => setPrice(e.target.value)}
-                placeholder="Es. 15000"
-                className="w-full h-12 px-4 rounded-xl border-2 border-border bg-surface-2 text-text-primary font-medium outline-none focus:border-accent focus:bg-white input-premium transition-all placeholder:text-text-tertiary [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
-              />
-            </div>
-          </div>
-        </div>
 
         {/* Submit */}
         <button
@@ -188,7 +147,7 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
         </span>
         <span className="flex items-center gap-1.5">
           <div className="w-1.5 h-1.5 rounded-full bg-success" />
-          Analisi AI
+          Analisi tecnica
         </span>
         <span className="flex items-center gap-1.5">
           <div className="w-1.5 h-1.5 rounded-full bg-success" />

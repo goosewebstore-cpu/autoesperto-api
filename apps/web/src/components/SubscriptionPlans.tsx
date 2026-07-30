@@ -5,7 +5,7 @@ import { Check, Crown } from 'lucide-react';
 const userPlans = [
   { id: 'free', name: 'Free', price: '0', period: '/mese', features: ['1 analisi gratuita', 'Dati base veicolo', 'Valutazione semplice'], popular: false, btn: 'Inizia gratis' },
   { id: 'plus', name: 'Plus', price: '5,99', period: '/mese', features: ['30 analisi al mese', 'Nessuna pubblicità', 'Report completo', 'Prezzo di mercato', 'Problemi conosciuti', 'Report PDF'], popular: true, btn: 'Passa a Plus' },
-  { id: 'pro', name: 'Pro', price: '14,99', period: '/mese', features: ['Analisi illimitate', 'AI avanzata', 'Confronto auto', 'Centro conoscenza', 'Previsioni valore futuro', 'Report avanzati'], popular: false, btn: 'Passa a Pro' },
+  { id: 'pro', name: 'Pro', price: '14,99', period: '/mese', features: ['Analisi illimitate', 'Report completi', 'Confronto auto', 'Centro conoscenza', 'Previsioni valore futuro', 'Dati avanzati'], popular: false, btn: 'Passa a Pro' },
 ];
 
 const dealerPlans = [

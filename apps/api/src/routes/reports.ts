@@ -15,8 +15,6 @@ router.use(authMiddleware);
 const reportSchema = z.object({
   plate: z.string().min(5).optional(),
   vin: z.string().min(5).optional(),
-  km: z.number().min(0).optional(),
-  requestedPrice: z.number().min(0).optional(),
 });
 
 router.post('/analyze', async (req: AuthRequest, res) => {
@@ -31,7 +29,7 @@ router.post('/analyze', async (req: AuthRequest, res) => {
     vehicle.plate = parsed.plate;
     vehicle.vin = parsed.vin || vehicle.vin;
 
-    const inputKm = parsed.km;
+    const inputKm = undefined;
     const { value, min, max, adjustedForKm, kmAdjustment } = inputKm
       ? estimateMarketValueWithKm(vehicle, inputKm)
       : { ...estimateMarketValue(vehicle), adjustedForKm: 0, kmAdjustment: 0 };
@@ -40,14 +38,10 @@ router.post('/analyze', async (req: AuthRequest, res) => {
 
     const reliability = await analyzeVehicle({
       vehicle,
-      km: inputKm,
-      requestedPrice: parsed.requestedPrice,
       marketValue: value,
     });
 
-    const priceVsMarket = parsed.requestedPrice && value
-      ? Math.round(((parsed.requestedPrice - value) / value) * 100)
-      : undefined;
+    const priceVsMarket = undefined;
 
     const report: AutoReport = {
       vehicle,
@@ -60,15 +54,8 @@ router.post('/analyze', async (req: AuthRequest, res) => {
         kmAdjustment,
         inputKm: inputKm || undefined,
         listings,
-        requestedPrice: parsed.requestedPrice,
         priceVsMarketPercent: priceVsMarket,
-        comment: priceVsMarket === undefined
-          ? 'Prezzo stimato allineato alle quotazioni di mercato.'
-          : priceVsMarket > 10
-          ? `Il prezzo richiesto è superiore del ${priceVsMarket}% rispetto alla media. Consigliamo una trattativa.`
-          : priceVsMarket < -10
-          ? `Il prezzo richiesto è inferiore del ${Math.abs(priceVsMarket)}%: potrebbe essere un'occasione, ma verifica lo stato.`
-          : 'Il prezzo richiesto è allineato al mercato.',
+        comment: 'Stima basata su quotazioni e annunci comparabili.',
       },
       alternatives: getAlternatives(vehicle.make, vehicle.model),
       videos: [

@@ -4,8 +4,8 @@ import type { AutoReport } from '@autoesperto/types';
 import {
   AlertTriangle, CheckCircle2, XCircle, Gauge, Wrench, Fuel, Shield, Users,
   Navigation, GraduationCap, TrendingDown, Car, MapPin, ExternalLink,
-  MessageSquare, Download, ChevronRight, Star, Bot, ArrowLeft, Search,
-  BarChart3, Euro, Zap, Clock, Percent, Smartphone, Hash
+  MessageSquare, Download, ChevronRight, ArrowLeft, Search,
+  BarChart3, Euro, Zap, Percent, Hash
 } from 'lucide-react';
 import { useState } from 'react';
 import { askAutoEsperto } from '@/lib/api';
@@ -148,7 +148,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           { icon: <Gauge className="w-4 h-4" />, label: 'Potenza', value: vehicle.power || 'N/D' },
           { icon: <Fuel className="w-4 h-4" />, label: 'Alimentazione', value: vehicle.fuel || 'N/D' },
           { icon: <Wrench className="w-4 h-4" />, label: 'Cambio', value: vehicle.transmission || 'N/D' },
-          { icon: <Smartphone className="w-4 h-4" />, label: 'Km indicativi', value: price.inputKm ? formatKm(price.inputKm) : 'N/D' },
+          { icon: <Gauge className="w-4 h-4" />, label: 'Chilometraggio medio', value: price.listings.length > 0 ? formatKm(Math.round(price.listings.reduce((a, l) => a + l.km, 0) / price.listings.length)) : 'N/D' },
         ].map((s, i) => (
           <div key={i} className="bg-white rounded-2xl p-4 shadow-card border border-border/50 text-center card-hover">
             <div className="flex justify-center text-accent mb-2">{s.icon}</div>
@@ -308,11 +308,11 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         </div>
       </section>
 
-      {/* AI Analysis */}
+      {/* Analysis */}
       <section className="bg-white rounded-4xl shadow-card border border-border/50 p-6 md:p-8">
         <h2 className="text-lg font-bold text-text-primary mb-5 flex items-center gap-2">
-          <Bot className="w-5 h-5 text-accent" />
-          Analisi AutoEsperto
+          <BarChart3 className="w-5 h-5 text-accent" />
+          Analisi del veicolo
         </h2>
 
         <div className="grid md:grid-cols-2 gap-6 mb-6">
@@ -526,13 +526,13 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         </div>
       </section>
 
-      {/* Chat AI + PDF */}
+      {/* Chat + PDF */}
       <div className="grid md:grid-cols-2 gap-4">
-        {/* Chat AI */}
+        {/* Chat */}
         <section className="bg-white rounded-4xl shadow-card border border-border/50 p-6 md:p-8">
           <h2 className="text-lg font-bold text-text-primary mb-4 flex items-center gap-2">
             <MessageSquare className="w-5 h-5 text-accent" />
-            Chiedi ad AutoEsperto
+            Domande sul veicolo
           </h2>
           <form onSubmit={handleAsk} className="flex gap-2">
             <input
@@ -557,8 +557,8 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           {answer && (
             <div className="mt-4 bg-surface-2 rounded-2xl p-4 animate-slide-up">
               <div className="flex items-center gap-2 mb-2">
-                <div className="w-6 h-6 rounded-lg gradient-bg flex items-center justify-center">
-                  <Bot className="w-3.5 h-3.5 text-white" />
+                <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center">
+                  <MessageSquare className="w-3.5 h-3.5 text-white" />
                 </div>
                 <span className="text-xs font-bold text-text-primary">AutoEsperto</span>
               </div>

@@ -4,8 +4,6 @@ import { estimateMarketValue } from './pricing';
 
 export interface AIAnalysisInput {
   vehicle: VehicleData;
-  km?: number;
-  requestedPrice?: number;
   marketValue: number;
 }
 
@@ -26,9 +24,9 @@ function computeReliabilityScore(vehicle: VehicleData, km: number, knowledge: Re
   return Math.min(9.9, Math.max(3.0, Math.round(score * 10) / 10));
 }
 
-function getVerdict(score: number, priceVsMarket: number): { verdict: ReliabilityAnalysis['verdict']; label: string } {
-  if (score >= 8 && priceVsMarket <= 10) return { verdict: 'BUY', label: 'Auto consigliata' };
-  if (score >= 6 && priceVsMarket <= 25) return { verdict: 'NEGOTIATE', label: 'Valuta attentamente' };
+function getVerdict(score: number): { verdict: ReliabilityAnalysis['verdict']; label: string } {
+  if (score >= 8) return { verdict: 'BUY', label: 'Auto consigliata' };
+  if (score >= 6) return { verdict: 'NEGOTIATE', label: 'Valuta attentamente' };
   return { verdict: 'AVOID', label: 'Possibili problemi' };
 }
 
@@ -45,15 +43,11 @@ function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
 
 export async function analyzeVehicle(input: AIAnalysisInput): Promise<ReliabilityAnalysis> {
   const knowledge = getVehicleKnowledge(input.vehicle.make);
-  const km = input.km || 100000;
+  const km = 100000;
   const power = parseInt((input.vehicle.power || '').replace(/\D/g, '')) || 100;
   const fuel = (input.vehicle.fuel || '').toLowerCase();
-  const priceVsMarket = input.requestedPrice && input.marketValue
-    ? Math.round(((input.requestedPrice - input.marketValue) / input.marketValue) * 100)
-    : 0;
-
   const score = computeReliabilityScore(input.vehicle, km, knowledge);
-  const { verdict, label } = getVerdict(score, priceVsMarket);
+  const { verdict, label } = getVerdict(score);
 
   const costs = estimateCosts(input.vehicle, fuel, power);
   const { value: estimatedValue } = estimateMarketValue(input.vehicle);
@@ -68,6 +62,8 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
     ? `${input.vehicle.make} ${input.vehicle.model} può andare bene, ma valuta il prezzo e verifica lo storico manutenzione prima di acquistare.`
     : `Attenzione: ${input.vehicle.make} ${input.vehicle.model} presenta rischi significativi di affidabilità o un prezzo troppo alto rispetto al mercato.`;
 
+  const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili/i.test(s);
+
   const analysis: ReliabilityAnalysis = {
     score,
     verdict,
@@ -78,11 +74,11 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
       knowledge.robust,
       `Costi manutenzione ${knowledge.maintenance} per la categoria.`,
     ],
-    weaknesses: knowledge.common.slice(0, 3),
-    engine: knowledge.engine,
-    transmission: knowledge.transmission,
+    weaknesses: knowledge.common.slice(0, 3).filter((w: string) => !isGeneric(w)),
+    engine: !isGeneric(knowledge.engine) ? knowledge.engine : 'Dati specifici sul motore non disponibili per questa versione.',
+    transmission: !isGeneric(knowledge.transmission) ? knowledge.transmission : 'Dati specifici sul cambio non disponibili per questa versione.',
     maintenance: knowledge.maintenance,
-    commonIssues: knowledge.common,
+    commonIssues: knowledge.common.filter((i: string) => !isGeneric(i)),
     usage: knowledge.bestFor,
     futureCosts: {
       annualMaintenance: costs.maintenance,
@@ -111,32 +107,34 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
 }
 
 async function enrichWithAI(input: AIAnalysisInput, base: ReliabilityAnalysis, key: string): Promise<ReliabilityAnalysis | null> {
-  const prompt = `Analizza questo veicolo per un report di acquisto:
-- Modello: ${input.vehicle.make} ${input.vehicle.model} ${input.vehicle.year || ''}
-- Versione: ${input.vehicle.version || 'N/A'}
-- Km: ${input.km || 'N/A'}
-- Carburante: ${input.vehicle.fuel || 'N/A'}
-- Prezzo richiesto: €${input.requestedPrice || 'N/A'}
-- Valore mercato: €${input.marketValue}
-- Punteggio affidabilità base: ${base.score}/10
+  const fullModel = `${input.vehicle.make} ${input.vehicle.model} ${input.vehicle.year || ''}`.trim();
+  const prompt = `Analizza questo veicolo (${fullModel}) per un report di acquisto:
 
-Fornisci UNA SOLA risposta JSON con questi campi:
-- "summary": analisi personalizzata (max 150 caratteri)
-- "strengths": array di 3 punti di forza specifici
-- "weaknesses": array di 3 punti deboli specifici
-- "recommendation": "comprare" | "trattare" | "evitare"`;
+Modello: ${fullModel}
+Versione: ${input.vehicle.version || 'N/A'}
+Alimentazione: ${input.vehicle.fuel || 'N/A'}
+Anno immatricolazione: ${input.vehicle.year || 'N/A'}
+
+Usa la tua conoscenza su forum italiani (Quattroruote, forumauto.it), Reddit (r/cars_it), YouTube (recensioni).
+Fornisci UNA SOLA risposta JSON valida con:
+- "summary": analisi specifica (max 180 caratteri) basata sul modello reale, non generica
+- "strengths": 3 punti di forza specifici di ${input.vehicle.make} ${input.vehicle.model}
+- "weaknesses": 3 punti deboli specifici di ${input.vehicle.make} ${input.vehicle.model} (es. "Frizione pesante nel traffico", "Infotainment lento", "Materiali plastici interni"). NON scrivere "prezzo non disponibile", "km non disponibili" o frasi sul prezzo/chilometraggio
+- "engine": analisi del motore specifica per ${input.vehicle.make} ${input.vehicle.model} (es. "1.6 Multijet 120 CV: affidabile, attenzione a FAP se uso urbano. Consiglio olio 5W-30 full synthetic."). NON scrivere "verifica", "controlla" o suggerimenti generici. Scrivi SOLO dati reali.
+- "transmission": consigli specifici sul cambio per ${input.vehicle.make} ${input.vehicle.model} (es. "Cambio manuale a 6 marce preciso, automatico ZF 8HP raccomandato su versioni 190 CV"). NON scrivere "verifica", "controlla" o suggerimenti generici. Scrivi SOLO dati reali.
+- "commonIssues": 3 problemi specifici noti presso community owners di ${input.vehicle.make} ${input.vehicle.model} (es. "Problemi EGR su 1.6 CRDi 2016-2018", "Usura prematura cuscinetti ruota posteriori")`;
 
   const resp = await fetch(`${getAIBaseUrl()}/chat/completions`, {
     method: 'POST',
-    signal: AbortSignal.timeout(8000),
+    signal: AbortSignal.timeout(12000),
     headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
     body: JSON.stringify({
       model: getAIModel(),
       messages: [
-        { role: 'system', content: 'Sei un esperto automotive italiano. Rispondi SOLO con JSON valido.' },
+        { role: 'system', content: 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione" non "verificare cambio").' },
         { role: 'user', content: prompt },
       ],
-      temperature: 0.5,
+      temperature: 0.4,
       response_format: { type: 'json_object' },
     }),
   });
@@ -145,11 +143,17 @@ Fornisci UNA SOLA risposta JSON con questi campi:
   const content = data.choices?.[0]?.message?.content;
   if (!content) return null;
   const ai = JSON.parse(content);
+
+  const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili|prezzo|km\s*non/i.test(s);
+
   return {
     ...base,
     summary: ai.summary || base.summary,
-    strengths: ai.strengths || base.strengths,
-    weaknesses: ai.weaknesses || base.weaknesses,
+    strengths: (ai.strengths && ai.strengths.length >= 2) ? ai.strengths : base.strengths,
+    weaknesses: (ai.weaknesses && ai.weaknesses.length >= 2) ? ai.weaknesses.filter((w: string) => !isGeneric(w)) : base.weaknesses,
+    engine: ai.engine && !isGeneric(ai.engine) ? ai.engine : base.engine,
+    transmission: ai.transmission && !isGeneric(ai.transmission) ? ai.transmission : base.transmission,
+    commonIssues: (ai.commonIssues && ai.commonIssues.length >= 2) ? ai.commonIssues.filter((i: string) => !isGeneric(i)) : base.commonIssues,
   };
 }
 

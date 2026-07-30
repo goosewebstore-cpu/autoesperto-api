@@ -350,22 +350,42 @@ const kb: Record<string, VehicleKnowledge> = {
   }
 };
 
+function normalizeMake(make: string): string {
+  const m = make.toLowerCase().trim();
+  const aliases: Record<string, string> = {
+    'mercedes-benz': 'mercedes',
+    'bmw ag': 'bmw',
+    'alfa romeo': 'alfa romeo',
+    'land rover': 'land rover',
+    'groupe renault': 'renault',
+    's.p.a.': '',
+  };
+  return aliases[m] !== undefined ? aliases[m] : m.replace(/-/g, ' ').replace(/\s+/g, ' ').replace(/\s?\(.*\)$/, '');
+}
+
 export function getVehicleKnowledge(make: string): VehicleKnowledge {
-  const key = make.toLowerCase().trim();
-  return (
-    kb[key] || {
-      reliabilityScore: 6,
-      maintenance: 'medio',
-      common: ['Verificare storico manutenzione', 'Effettuare diagnosi completa in officina'],
-      engine: 'Motore da valutare in officina specializzata.',
-      transmission: 'Cambio da verificare durante il test drive.',
-      robust: 'Robustezza generica: richiede ispezione.',
-      bestFor: { city: 'Discreta', family: 'Discreta', highway: 'Discreta', newDriver: 'Discreta' },
-      generations: [],
-      versionsToAvoid: ['Versioni senza storico manutenzione'],
-      versionsRecommended: ['Versioni con tagliandi regolari']
-    }
-  );
+  const key = normalizeMake(make);
+  const byKey = kb[key];
+  if (byKey) return byKey;
+  const root = key.split(' ')[0];
+  const byRoot = kb[root];
+  if (byRoot) return byRoot;
+  return {
+    reliabilityScore: 6,
+    maintenance: 'medio',
+    common: [
+      `Storico tagliandi regolare essenziale per ${make}: verifica libretto manutenzione`,
+      `Verifica richiami aperti su sicurezza-europa.eu per ${make}`,
+      `Controlla cinghia/catena distribuzione e tagliando olio motore su ${make}`,
+    ],
+    engine: `Motori ${make}: verificare consumo olio, problemi cinghia/catena distribuzione e turbo (se presente). Preferire versioni con documentazione tagliandi.`,
+    transmission: `Cambio: preferire versioni con tagliandi cambio documentati. Per automatici, verificare sostituzione olio cambio entro i 60.000 km.`,
+    robust: `Robustezza nella media per la categoria ${make}. Verificare condizioni sospensioni e impianto frenante.`,
+    bestFor: { city: 'Discreta', family: 'Buona', highway: 'Buona', newDriver: 'Discreta' },
+    generations: [],
+    versionsToAvoid: ['Versioni senza documentazione tagliandi continua'],
+    versionsRecommended: ['Versioni con tagliandi documentati e basso chilometraggio'],
+  };
 }
 
 export function getAlternatives(make: string, model: string): VehicleData[] {

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Car, Menu, X, Shield, TrendingUp, BarChart3, ChevronRight, Sparkles, User, LogOut } from 'lucide-react';
+import { Car, Menu, X, Shield, TrendingUp, BarChart3, ChevronRight, User, LogOut } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
@@ -22,15 +22,11 @@ export default function Home() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [showAuth, setShowAuth] = useState(false);
 
-  const handleAnalyze = async (plate: string, km: string, price: string) => {
+  const handleAnalyze = async (plate: string) => {
     setLoading(true);
     setError('');
     try {
-      const res = await analyzeVehicle({
-        plate,
-        km: km ? parseInt(km) : undefined,
-        requestedPrice: price ? parseInt(price) : undefined,
-      });
+      const res = await analyzeVehicle({ plate });
       if (res.success) {
         setReport(res.report);
         setView('report');
@@ -164,16 +160,16 @@ export default function Home() {
             {/* Hero */}
             <div className="text-center mb-8 md:mb-16 pt-8 md:pt-12">
               <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-accent-light text-accent text-xs font-semibold mb-6 border border-accent/10">
-                <Sparkles className="w-3.5 h-3.5" />
-                AI Automotive Intelligence
+                <Shield className="w-3.5 h-3.5" />
+                Analisi Auto Esperto
               </div>
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight text-text-primary leading-[1.05] mb-5 max-w-4xl mx-auto">
                 L&apos;esperto che controlla
                 <span className="gradient-text-accent block mt-1">l&apos;auto prima di comprarla</span>
               </h1>
               <p className="text-lg md:text-xl text-text-secondary max-w-2xl mx-auto leading-relaxed px-4">
-                Analizza un&apos;auto usata, verifica i dati disponibili, confronta il prezzo
-                di mercato e scopri cosa controllare prima di acquistarla.
+                Analizza un&apos;auto usata in pochi secondi: verifica i dati, confronta il prezzo
+                di mercato e scopri i punti critici prima di acquistare.
               </p>
             </div>
 
@@ -198,7 +194,7 @@ export default function Home() {
                   {
                     icon: <Shield className="w-6 h-6" />,
                     title: 'Analisi Affidabilità',
-                    desc: 'Punteggio da 1 a 10 basato su dati reali, storico manutenzione e problemi noti di ogni modello.',
+                    desc: 'Punteggio da 1 a 10 basato su dati tecnici, storico manutenzione e problemi noti del modello.',
                     color: 'text-emerald-600 bg-emerald-50',
                   },
                   {
@@ -228,14 +224,14 @@ export default function Home() {
             {/* How it works */}
             <div id="how-it-works" className="mt-16 md:mt-24">
               <h2 className="text-2xl md:text-3xl font-bold text-center text-text-primary mb-3">Come funziona</h2>
-              <p className="text-text-secondary text-center mb-10 text-sm md:text-base">Tre semplici passi per acquistare con sicurezza</p>
+              <p className="text-text-secondary text-center mb-10 text-sm md:text-base">Tre semplici passi per un acquisto consapevole</p>
               <div className="relative">
                 <div className="hidden md:block absolute top-12 left-[calc(16.67%_+_24px)] right-[calc(16.67%_+_24px)] h-0.5 bg-gradient-to-r from-accent/20 via-accent to-accent/20" />
                 <div className="grid md:grid-cols-3 gap-6">
                   {[
-                    { step: '01', title: 'Inserisci i dati', desc: 'Targa, chilometraggio e prezzo richiesto. Bastano pochi secondi.' },
-                    { step: '02', title: 'Analisi AI', desc: 'AutoEsperto elabora affidabilità, valore di mercato, costi e problemi noti.' },
-                    { step: '03', title: 'Decidi con i dati', desc: 'Ricevi un report chiaro con consiglio d\'acquisto e annunci reali.' },
+                    { step: '01', title: 'Inserisci la targa', desc: 'Basta la targa del veicolo. Analizziamo tutto noi.' },
+                    { step: '02', title: 'Analisi completa', desc: 'AutoEsperto elabora affidabilità, valore di mercato, costi e problemi noti.' },
+                    { step: '03', title: 'Scegli informato', desc: 'Ricevi un report completo con valutazione, annunci reali e costi stimati.' },
                   ].map((item, i) => (
                     <div key={i} className="relative">
                       <div className="bg-white rounded-3xl p-6 shadow-card border border-border/50 text-center">

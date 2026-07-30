@@ -1,0 +1,148 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  passwordHash  String?
+  name          String?
+  image         String?
+  role          String    @default("USER")
+  accounts      Account[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+  subscription  Subscription?
+  reports       Report[]
+  savedVehicles SavedVehicle[]
+  dealerProfile DealerProfile?
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  user              User    @relation(fields: [userId], references: [id])
+  provider          String
+  providerId        String
+  email             String?
+  name              String?
+  image             String?
+  accessToken       String?
+  refreshToken      String?
+  expiresAt         Int?
+
+  @@unique([provider, providerId])
+  @@unique([userId, provider])
+}
+
+model Subscription {
+  id                   String    @id @default(cuid())
+  userId               String    @unique
+  user                 User      @relation(fields: [userId], references: [id])
+  plan                 String    @default("FREE")
+  status               String    @default("ACTIVE")
+  credits              Int       @default(1)
+  stripeCustomerId     String?
+  stripeSubscriptionId String?
+  renewsAt             DateTime?
+  createdAt            DateTime  @default(now())
+  updatedAt            DateTime  @updatedAt
+}
+
+model Vehicle {
+  id              String         @id @default(cuid())
+  plate           String?
+  vin             String?
+  make            String
+  model           String
+  version         String?
+  year            Int?
+  fuel            String?
+  displacement    String?
+  power           String?
+  transmission    String?
+  body            String?
+  doors           Int?
+  color           String?
+  euroClass       String?
+  imageUrl        String?
+  reports         Report[]
+  savedVehicles   SavedVehicle[]
+  createdAt       DateTime       @default(now())
+
+  @@index([plate])
+  @@index([vin])
+}
+
+model Report {
+  id              String   @id @default(cuid())
+  userId          String?
+  user            User?    @relation(fields: [userId], references: [id])
+  vehicleId       String
+  vehicle         Vehicle  @relation(fields: [vehicleId], references: [id])
+  reliabilityScore Float
+  verdict         String
+  marketValue     Float?
+  marketMin       Float?
+  marketMax       Float?
+  summary         String
+  fullAnalysis    String
+  pdfUrl          String?
+  createdAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([vehicleId])
+}
+
+model SavedVehicle {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  vehicleId String
+  vehicle   Vehicle  @relation(fields: [vehicleId], references: [id])
+  notes     String?
+  createdAt DateTime @default(now())
+
+  @@unique([userId, vehicleId])
+}
+
+model DealerProfile {
+  id          String   @id @default(cuid())
+  userId      String   @unique
+  user        User     @relation(fields: [userId], references: [id])
+  companyName String
+  vatNumber   String?
+  phone       String?
+  address     String?
+  city        String?
+  website     String?
+  listings    DealerListing[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model DealerListing {
+  id          String        @id @default(cuid())
+  dealerId    String
+  dealer      DealerProfile @relation(fields: [dealerId], references: [id])
+  title       String
+  price       Float
+  km          Int
+  year        Int
+  fuel        String
+  imageUrl    String?
+  description String?
+  source      String?
+  sourceUrl   String?
+  status      String        @default("ACTIVE")
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  @@index([dealerId])
+  @@index([status])
+}

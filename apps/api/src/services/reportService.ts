@@ -7,7 +7,7 @@ import { getMarketSearchUrls } from './market';
 import { analyzeVehicle } from './ai';
 import { cacheGet, cacheSet } from './cache';
 import { getAlternatives } from './vehicleKB';
-import { badRequest, notFound } from '../http';
+import { badRequest } from '../http';
 
 export interface ReportInput {
   plate?: string;
@@ -42,8 +42,12 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   if (!input.plate) {
     if (!input.make || !input.model) throw badRequest('Inserisci marca e modello');
     const found = searchModel(input.make, input.model);
-    if (!found) throw notFound(`Modello "${input.make} ${input.model}" non trovato nel database.`);
-    return found;
+    if (found) return found;
+    return {
+      make: input.make.trim(),
+      model: input.model.trim(),
+      dataSource: 'model',
+    };
   }
 
   const cacheKey = cacheKeyFor(input);

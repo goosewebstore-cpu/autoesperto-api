@@ -66,12 +66,15 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.status, 400);
     });
 
-    it('modello non presente nel database → 404', async () => {
+    it('modello non nel database → report generico 200', async () => {
       const r = await req('/reports/analyze', {
         method: 'POST',
         body: { make: 'XYZ', model: 'Q123' },
       });
-      assert.strictEqual(r.status, 404);
+      assert.strictEqual(r.status, 200);
+      assert.strictEqual(r.data.report.vehicle.make, 'XYZ');
+      assert.strictEqual(r.data.report.vehicle.model, 'Q123');
+      assert.strictEqual(r.data.report.vehicle.dataSource, 'model');
     });
 
     it('richieste ripetute → risposta in cache', async () => {

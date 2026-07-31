@@ -1,8 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { Search, Car, Hash, Loader2 } from 'lucide-react';
 import type { AnalyzePayload } from '@/lib/api';
+import catalogo from '@/lib/catalogo.json';
 
 export type SearchPayload = AnalyzePayload;
 
@@ -20,6 +21,18 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
   const [model, setModel] = useState('');
   const [km, setKm] = useState('');
   const [price, setPrice] = useState('');
+
+  const brands = useMemo(
+    () => Object.keys(catalogo.brands).sort((a, b) => a.localeCompare(b, 'it')),
+    []
+  );
+
+  const modelsForMake = useMemo(() => {
+    const m = make.trim().toLowerCase();
+    const key = brands.find((b) => b.toLowerCase() === m);
+    if (!key) return [];
+    return (catalogo.brands as Record<string, string[]>)[key] || [];
+  }, [make, brands]);
 
   const isSubmitDisabled =
     loading ||
@@ -92,24 +105,36 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
               <input
                 id="make"
                 type="text"
+                list="auto-makes"
                 autoComplete="off"
                 value={make}
                 onChange={(e) => setMake(e.target.value)}
                 placeholder="Es. BMW"
                 className={inputClass}
               />
+              <datalist id="auto-makes">
+                {brands.map((b) => (
+                  <option key={b} value={b} />
+                ))}
+              </datalist>
             </div>
             <div>
               <label htmlFor="model" className="block text-xs font-semibold text-text-secondary mb-1.5">Modello</label>
               <input
                 id="model"
                 type="text"
+                list="auto-models"
                 autoComplete="off"
                 value={model}
                 onChange={(e) => setModel(e.target.value)}
                 placeholder="Es. Serie 3"
                 className={inputClass}
               />
+              <datalist id="auto-models">
+                {modelsForMake.map((m) => (
+                  <option key={m} value={m} />
+                ))}
+              </datalist>
             </div>
           </div>
         )}

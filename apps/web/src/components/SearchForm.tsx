@@ -10,17 +10,30 @@ export type SearchPayload = AnalyzePayload;
 interface SearchFormProps {
   onAnalyze: (payload: AnalyzePayload) => void;
   loading: boolean;
+  initialMode?: SearchMode;
+  initialMake?: string;
+  initialModel?: string;
+  initialKm?: string;
+  initialPrice?: string;
 }
 
 type SearchMode = 'plate' | 'model';
 
-export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
-  const [mode, setMode] = useState<SearchMode>('plate');
+export default function SearchForm({
+  onAnalyze,
+  loading,
+  initialMode = 'plate',
+  initialMake = '',
+  initialModel = '',
+  initialKm = '',
+  initialPrice = '',
+}: SearchFormProps) {
+  const [mode, setMode] = useState<SearchMode>(initialMode);
   const [plate, setPlate] = useState('');
-  const [make, setMake] = useState('');
-  const [model, setModel] = useState('');
-  const [km, setKm] = useState('');
-  const [price, setPrice] = useState('');
+  const [make, setMake] = useState(initialMake);
+  const [model, setModel] = useState(initialModel);
+  const [km, setKm] = useState(initialKm);
+  const [price, setPrice] = useState(initialPrice);
 
   const brands = useMemo(
     () => Object.keys(catalogo.brands).sort((a, b) => a.localeCompare(b, 'it')),

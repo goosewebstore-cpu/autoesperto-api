@@ -1,17 +1,58 @@
 'use client';
 
-import { useState } from 'react';
-import { Car, Search, Download, Sparkles, Scale } from 'lucide-react';
+import { Suspense, useEffect, useRef, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
+import { Car, Search, Download, Sparkles, Scale, ChevronRight } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
 import AdSlot from '@/components/AdSlot';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
+import { POPULAR_MODELS, slugify } from '@/lib/catalogo';
+
+function usePrefilled(params: URLSearchParams) {
+  const ref = useRef<AnalyzePayload | null>(null);
+  if (ref.current === null) {
+    const make = params.get('make');
+    const model = params.get('model');
+    if (make && model) {
+      const km = params.get('km');
+      const price = params.get('price');
+      ref.current = {
+        make,
+        model,
+        km: km && !Number.isNaN(Number(km)) ? Number(km) : undefined,
+        requestedPrice: price && !Number.isNaN(Number(price)) ? Number(price) : undefined,
+      };
+    }
+  }
+  return ref;
+}
 
 export default function Home() {
+  return (
+    <Suspense fallback={null}>
+      <HomeContent />
+    </Suspense>
+  );
+}
+
+function HomeContent() {
   const [report, setReport] = useState<AutoReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [prefill, setPrefill] = useState<AnalyzePayload | null>(null);
+  const params = useSearchParams();
+  const prefilledRef = usePrefilled(params);
+
+  useEffect(() => {
+    if (prefilledRef.current) {
+      setPrefill(prefilledRef.current);
+      handleAnalyze(prefilledRef.current);
+      prefilledRef.current = null;
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleAnalyze = async (payload: AnalyzePayload) => {
     setLoading(true);
@@ -78,7 +119,16 @@ export default function Home() {
 
             {/* Search */}
             <section className="max-w-xl mx-auto pb-6" id="ricerca">
-              <SearchForm onAnalyze={handleAnalyze} loading={loading} />
+              <SearchForm
+                key={prefill ? 'prefilled' : 'initial'}
+                onAnalyze={handleAnalyze}
+                loading={loading}
+                initialMode={prefill ? 'model' : 'plate'}
+                initialMake={prefill?.make}
+                initialModel={prefill?.model}
+                initialKm={prefill?.km ? String(prefill.km) : undefined}
+                initialPrice={prefill?.requestedPrice ? String(prefill.requestedPrice) : undefined}
+              />
 
               {error && (
                 <div role="alert" className="mt-4 bg-danger-light border border-danger/20 rounded-2xl p-5 text-center animate-fade-in">
@@ -157,6 +207,33 @@ export default function Home() {
                 </a>
               </div>
             </section>
+
+            {/* Popular models */}
+            <section className="py-10 md:py-14 border-t border-border/60">
+              <div className="text-center mb-8">
+                <h2 className="text-2xl md:text-3xl font-bold text-text-primary">I modelli più cercati</h2>
+                <p className="text-text-secondary mt-1 text-sm md:text-base">
+                  Quanto costa un&apos;auto usata? Vedi i prezzi reali dagli annunci in vendita.
+                </p>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                {POPULAR_MODELS.map((p) => (
+                  <a
+                    key={`${p.make}-${p.model}`}
+                    href={`/valutazione/${slugify(p.make)}/${slugify(p.model)}/`}
+                    className="bg-surface-2 hover:bg-border/50 rounded-xl px-3.5 py-3 text-sm font-semibold text-text-primary flex items-center justify-between gap-2 transition-colors"
+                  >
+                    <span className="truncate">{p.make} {p.model}</span>
+                    <ChevronRight className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+                  </a>
+                ))}
+              </div>
+              <div className="text-center mt-6">
+                <a href="/valutazione/" className="text-sm font-semibold text-accent hover:underline">
+                  Vedi tutte le marche →
+                </a>
+              </div>
+            </section>
           </div>
         ) : (
           <div className="pt-6">
@@ -176,6 +253,7 @@ export default function Home() {
               <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
             </div>
             <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
+              <a href="/valutazione/" className="hover:text-text-primary transition-colors">Valutazione</a>
               <a href="/privacy" className="hover:text-text-primary transition-colors">Privacy</a>
               <a href="/cookie-policy" className="hover:text-text-primary transition-colors">Cookie</a>
               <a href="/terms" className="hover:text-text-primary transition-colors">Termini</a>

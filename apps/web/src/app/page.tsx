@@ -304,7 +304,7 @@ function HomeContent() {
                     href={`/valutazione/${slugify(p.make)}/${slugify(p.model)}/`}
                     className="bg-surface-2 hover:bg-border/50 rounded-xl px-3.5 py-3 text-sm font-semibold text-text-primary flex items-center justify-between gap-2 transition-colors"
                   >
-                    <span className="truncate">{p.make} {p.model}</span>
+                    <span className="truncate">{p.model.toLowerCase().startsWith(p.make.toLowerCase()) ? p.model : `${p.make} ${p.model}`}</span>
                     <ChevronRight className="w-4 h-4 text-text-tertiary flex-shrink-0" />
                   </a>
                 ))}

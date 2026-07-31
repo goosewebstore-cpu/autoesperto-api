@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'autoesperto-static-v3';
+const STATIC_CACHE = 'autoesperto-static-v4';
 
 const PRECACHE_URLS = [
   '/',
@@ -29,6 +29,10 @@ self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
+
+  // Service worker e bundle Next devono arrivare sempre dalla rete: altrimenti
+  // un visitatore può restare bloccato su una versione precedente del sito.
+  if (url.pathname === '/sw.js' || url.pathname.startsWith('/_next/')) return;
 
   if (e.request.mode === 'navigate') {
     e.respondWith(fetch(e.request).catch(() => caches.match('/')));

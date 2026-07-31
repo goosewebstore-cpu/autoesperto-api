@@ -13,6 +13,10 @@ function splitModel(value: string) {
   return { make, model };
 }
 
+function modelLabel(make: string, model: string) {
+  return model.toLowerCase().startsWith(make.toLowerCase()) ? model : `${make} ${model}`;
+}
+
 export default function CompareModels() {
   const [left, setLeft] = useState(defaultLeft);
   const [right, setRight] = useState(defaultRight);
@@ -32,7 +36,7 @@ export default function CompareModels() {
               {field.label}
               <select value={field.value} onChange={(event) => field.onChange(event.target.value)} className="mt-2 w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/30">
                 {POPULAR_MODELS.map((item) => (
-                  <option key={`${item.make}|${item.model}`} value={`${item.make}|${item.model}`}>{item.make} {item.model}</option>
+                  <option key={`${item.make}|${item.model}`} value={`${item.make}|${item.model}`}>{modelLabel(item.make, item.model)}</option>
                 ))}
               </select>
             </label>

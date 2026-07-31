@@ -7,12 +7,14 @@ import Link from 'next/link';
 
 export default function CookieConsent() {
   const [choice, setChoice] = useState<ConsentChoice>(null);
+  const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
+    setMounted(true);
     setChoice(getConsent());
   }, []);
 
-  if (choice !== null) return null;
+  if (!mounted || choice !== null) return null;
 
   return (
     <div className="fixed bottom-0 inset-x-0 z-50 p-4 animate-slide-up" role="dialog" aria-label="Consenso cookie">

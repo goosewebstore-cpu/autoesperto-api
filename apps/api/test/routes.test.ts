@@ -20,7 +20,7 @@ describe('AutoEsperto API (MVP)', () => {
     assert.strictEqual(r.data.service, 'autoesperto-api');
   });
 
-  it('GET / → risorsa sconosciuta 404 JSON', async () => {
+  it('percorso sconosciuto → 404 JSON', async () => {
     const r = await req('/nonexistent');
     assert.strictEqual(r.status, 404);
     assert.strictEqual(r.data.success, false);

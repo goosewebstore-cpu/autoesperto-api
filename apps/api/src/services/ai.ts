@@ -7,7 +7,6 @@ export interface AIAnalysisInput {
   vehicle: VehicleData;
   km?: number;
   requestedPrice?: number;
-  marketValue: number;
 }
 
 const AI_ENRICH_ENABLED = process.env.AI_ENRICH === 'true';
@@ -190,7 +189,7 @@ Fornisci UNA SOLA risposta JSON valida con:
   if (data.error) return null;
   const content = data.choices?.[0]?.message?.content;
   if (!content) return null;
-  const ai = JSON.parse(content);
+  const ai = parseJsonContent<Record<string, unknown>>(content);
 
   const clean = (list: unknown): string[] | null => {
     if (!Array.isArray(list) || list.length < 2) return null;
@@ -210,7 +209,25 @@ Fornisci UNA SOLA risposta JSON valida con:
   };
 }
 
-export async function askAutoEsperto(question: string, vehicle: VehicleData, analysis: ReliabilityAnalysis): Promise<string> {
+function parseJsonContent<T>(content: string): T {
+  const json = content
+    .trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '');
+  return JSON.parse(json) as T;
+}
+
+export interface AskInput {
+  score?: number;
+  verdict?: string;
+  summary?: string;
+  weaknesses?: string[];
+  maintenance?: string;
+  commonIssues?: string[];
+  futureCosts?: { insuranceEstimate?: number };
+}
+
+export async function askAutoEsperto(question: string, vehicle: VehicleData, analysis: AskInput): Promise<string> {
   const openaiKey = process.env.OPENAI_API_KEY;
   if (!openaiKey || openaiKey === 'mock' || !AI_ENRICH_ENABLED) {
     const weaknesses = (analysis.weaknesses || []).slice(0, 2).join('; ');
@@ -226,7 +243,7 @@ export async function askAutoEsperto(question: string, vehicle: VehicleData, ana
         model: getAIModel(),
         messages: [
           { role: 'system', content: 'Sei AutoEsperto, un consulente automotive italiano esperto. Rispondi in modo professionale, conciso e utile.' },
-          { role: 'user', content: `Veicolo: ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}. Analisi: ${analysis.summary}. Domanda: ${question}` },
+          { role: 'user', content: `Veicolo: ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}. Analisi: ${analysis.summary || ''}. Domanda: ${question}` },
         ],
         temperature: 0.6,
       }),
@@ -241,7 +258,7 @@ export async function askAutoEsperto(question: string, vehicle: VehicleData, ana
   }
 }
 
-function mockAnswer(question: string, vehicle: VehicleData, analysis: ReliabilityAnalysis): string {
+function mockAnswer(question: string, vehicle: VehicleData, analysis: AskInput): string {
   const q = question.toLowerCase();
   if (q.includes('conviene') || q.includes('comprare')) {
     return analysis.verdict === 'BUY'
@@ -251,7 +268,7 @@ function mockAnswer(question: string, vehicle: VehicleData, analysis: Reliabilit
       : `Sconsiglio l'acquisto senza controlli approfonditi: ${analysis.summary}`;
   }
   if (q.includes('problema') || q.includes('difetti')) {
-    return `I problemi più comuni su ${vehicle.make} ${vehicle.model}: ${analysis.commonIssues.slice(0, 3).join('; ')}.`;
+    return `I problemi più comuni su ${vehicle.make} ${vehicle.model}: ${(analysis.commonIssues || []).slice(0, 3).join('; ')}.`;
   }
-  return `Per ${vehicle.make} ${vehicle.model}: affidabilità ${analysis.score}/10, manutenzione ${analysis.maintenance}, assicurazione stimata ${analysis.futureCosts.insuranceEstimate}€/anno. Vuoi approfondire un aspetto specifico?`;
+  return `Per ${vehicle.make} ${vehicle.model}: affidabilità ${analysis.score}/10, manutenzione ${analysis.maintenance}, assicurazione stimata ${analysis.futureCosts?.insuranceEstimate ?? 0}€/anno. Vuoi approfondire un aspetto specifico?`;
 }

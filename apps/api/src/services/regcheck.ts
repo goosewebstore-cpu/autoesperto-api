@@ -1,7 +1,9 @@
+import { HttpError, serviceUnavailable } from '../http';
 import { RegCheckDemoData } from './demoData';
 
 const API_BASE = 'https://www.regcheck.org.uk/api/reg.asmx';
 const USERNAME = process.env.REGCHECK_USERNAME || 'demo';
+const SERVICE_DOWN_MESSAGE = 'Servizio di ricerca veicoli temporaneamente non disponibile. Riprova più tardi.';
 
 export interface RegCheckRawData {
   Description?: string;
@@ -29,20 +31,25 @@ export interface RegCheckRawData {
 let useDemoFallback = USERNAME === 'demo';
 
 export async function lookupPlate(plate: string): Promise<RegCheckRawData> {
+  const plateKey = plate.toUpperCase();
   if (useDemoFallback) {
-    const demoData = RegCheckDemoData[plate.toUpperCase()];
+    const demoData = RegCheckDemoData[plateKey];
     if (demoData) return demoData;
-    const apiUrl = `${API_BASE}/CheckItaly?RegistrationNumber=${encodeURIComponent(plate)}&username=${USERNAME}`;
-    const data = await fetchRegCheck(apiUrl, plate);
-    return data;
   }
 
   const apiUrl = `${API_BASE}/CheckItaly?RegistrationNumber=${encodeURIComponent(plate)}&username=${USERNAME}`;
-  const data = await fetchRegCheck(apiUrl, plate);
-  return data;
+  return fetchRegCheck(apiUrl, plateKey);
 }
 
-async function fetchRegCheck(apiUrl: string, plate: string): Promise<RegCheckRawData> {
+function decodeEntities(text: string): string {
+  return text
+    .replace(/&lt;/g, '<')
+    .replace(/&gt;/g, '>')
+    .replace(/&amp;/g, '&')
+    .replace(/&quot;/g, '"');
+}
+
+async function fetchRegCheck(apiUrl: string, plateKey: string): Promise<RegCheckRawData> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 12000);
 
@@ -53,33 +60,27 @@ async function fetchRegCheck(apiUrl: string, plate: string): Promise<RegCheckRaw
 
     if (resp.status === 500 && text.toLowerCase().includes('out of credit')) {
       useDemoFallback = true;
-      if (USERNAME === 'demo') {
-        const demoData = RegCheckDemoData[plate.toUpperCase()];
-        if (demoData) return demoData;
-      }
-      console.error("[regcheck] Crediti esauriti per l'account", USERNAME, '- targa', plate);
-      throw new Error('Servizio di ricerca veicoli temporaneamente non disponibile. Riprova più tardi.');
+      const demoData = RegCheckDemoData[plateKey];
+      if (demoData) return demoData;
+      console.error('[regcheck] Crediti esauriti per account', USERNAME, '- targa', plateKey);
+      throw serviceUnavailable(SERVICE_DOWN_MESSAGE);
     }
 
-    if (!resp.ok) throw new Error('Errore server ' + resp.status);
-    const m = text.match(/<vehicleJson>([\s\S]*?)<\/vehicleJson>/i);
-    if (!m) throw new Error('Formato risposta non valido');
-    const json = m[1]
-      .replace(/&lt;/g, '<')
-      .replace(/&gt;/g, '>')
-      .replace(/&amp;/g, '&')
-      .replace(/&quot;/g, '"');
-    return JSON.parse(json);
-  } catch (e: any) {
+    if (!resp.ok) throw new Error(`Errore server ${resp.status}`);
+    const match = text.match(/<vehicleJson>([\s\S]*?)<\/vehicleJson>/i);
+    if (!match) throw new Error('Formato risposta non valido');
+    return JSON.parse(decodeEntities(match[1]));
+  } catch (err) {
     clearTimeout(timeout);
-    if (e.message && e.message.includes('Servizio di ricerca veicoli')) throw e;
-    console.error('[regcheck] Errore di rete o risposta per targa', plate, ':', e.message || 'unknown');
-    throw new Error('Servizio di ricerca veicoli temporaneamente non disponibile. Riprova più tardi.');
+    if (err instanceof HttpError) throw err;
+    console.error('[regcheck] Errore per targa', plateKey, ':', err instanceof Error ? err.message : err);
+    throw serviceUnavailable(SERVICE_DOWN_MESSAGE);
   }
 }
 
-export function getTextValue(obj: any): string {
+export function getTextValue(obj: unknown): string {
   if (!obj) return '';
   if (typeof obj === 'string') return obj;
-  return obj.CurrentTextValue || obj.CurrentValue || '';
+  const value = obj as { CurrentTextValue?: string; CurrentValue?: string };
+  return value.CurrentTextValue || value.CurrentValue || '';
 }

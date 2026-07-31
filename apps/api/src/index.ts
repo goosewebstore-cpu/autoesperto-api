@@ -4,8 +4,10 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import path from 'path';
+import { z } from 'zod';
 
 import reportRoutes from './routes/reports';
+import { HttpError } from './http';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -28,7 +30,7 @@ app.use(
   cors({
     origin(origin, callback) {
       if (!origin || WEB_URLS.includes(origin)) return callback(null, true);
-      return callback(new Error('Origine non consentita'));
+      return callback(new HttpError(403, 'Origine non consentita'));
     },
     methods: ['GET', 'POST'],
   })
@@ -59,11 +61,14 @@ app.use((_req, res) => {
   res.status(404).json({ success: false, error: 'Risorsa non trovata' });
 });
 
-app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
-  if (err.message === 'Origine non consentita') {
-    return res.status(403).json({ success: false, error: err.message });
+app.use((err: unknown, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  if (err instanceof HttpError) {
+    return res.status(err.status).json({ success: false, error: err.message });
   }
-  console.error('Server error:', err.message);
+  if (err instanceof z.ZodError) {
+    return res.status(400).json({ success: false, error: err.issues[0]?.message || 'Dati non validi' });
+  }
+  console.error('Server error:', err instanceof Error ? err.message : err);
   res.status(500).json({ success: false, error: 'Errore interno del server' });
 });
 

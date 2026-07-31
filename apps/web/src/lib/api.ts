@@ -3,6 +3,14 @@ import type { AutoReport } from '@autoesperto/types';
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 const TIMEOUT_MS = 30000;
 
+export interface AnalyzePayload {
+  plate?: string;
+  make?: string;
+  model?: string;
+  km?: number;
+  requestedPrice?: number;
+}
+
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -30,13 +38,7 @@ async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   }
 }
 
-export async function analyzeVehicle(payload: {
-  plate?: string;
-  make?: string;
-  model?: string;
-  km?: number;
-  requestedPrice?: number;
-}): Promise<{ success: boolean; report: AutoReport; cached?: boolean }> {
+export async function analyzeVehicle(payload: AnalyzePayload): Promise<{ success: boolean; report: AutoReport; cached?: boolean }> {
   return fetchJson('/reports/analyze', {
     method: 'POST',
     body: JSON.stringify(payload),

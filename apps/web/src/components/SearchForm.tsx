@@ -2,17 +2,12 @@
 
 import { useState } from 'react';
 import { Search, Car, Hash, Loader2 } from 'lucide-react';
+import type { AnalyzePayload } from '@/lib/api';
 
-export interface SearchPayload {
-  plate?: string;
-  make?: string;
-  model?: string;
-  km?: number;
-  requestedPrice?: number;
-}
+export type SearchPayload = AnalyzePayload;
 
 interface SearchFormProps {
-  onAnalyze: (payload: SearchPayload) => void;
+  onAnalyze: (payload: AnalyzePayload) => void;
   loading: boolean;
 }
 
@@ -26,14 +21,14 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
   const [km, setKm] = useState('');
   const [price, setPrice] = useState('');
 
-  const canSubmit =
+  const isSubmitDisabled =
     loading ||
     (mode === 'plate' && plate.trim().length < 5) ||
     (mode === 'model' && (!make.trim() || !model.trim()));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (canSubmit) return;
+    if (isSubmitDisabled) return;
     onAnalyze({
       plate: mode === 'plate' ? plate.trim().toUpperCase() : undefined,
       make: mode === 'model' ? make.trim() : undefined,
@@ -155,7 +150,7 @@ export default function SearchForm({ onAnalyze, loading }: SearchFormProps) {
 
         <button
           type="submit"
-          disabled={canSubmit}
+          disabled={isSubmitDisabled}
           className="w-full h-12 rounded-xl bg-accent text-white font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent-hover active:scale-[0.99] transition-all"
         >
           {loading ? (

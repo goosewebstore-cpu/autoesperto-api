@@ -3,17 +3,17 @@
 import { useState } from 'react';
 import { Car, Shield, TrendingUp, Search, Download } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import SearchForm, { type SearchPayload } from '@/components/SearchForm';
+import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
 import AdSlot from '@/components/AdSlot';
-import { analyzeVehicle } from '@/lib/api';
+import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 
 export default function Home() {
   const [report, setReport] = useState<AutoReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
-  const handleAnalyze = async (payload: SearchPayload) => {
+  const handleAnalyze = async (payload: AnalyzePayload) => {
     setLoading(true);
     setError('');
     try {

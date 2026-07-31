@@ -23,11 +23,3 @@ export function cacheSet(key: string, value: unknown, ttlMs: number): void {
     if (oldest) cache.delete(oldest);
   }
 }
-
-export function cacheRemember<T>(key: string, ttlMs: number, producer: () => T): T {
-  const cached = cacheGet<T>(key);
-  if (cached !== undefined) return cached;
-  const value = producer();
-  cacheSet(key, value, ttlMs);
-  return value;
-}

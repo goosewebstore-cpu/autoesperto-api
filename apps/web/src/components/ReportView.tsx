@@ -544,7 +544,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
           <h2 className="text-base font-bold text-text-primary mb-2">Verifiche ufficiali aggiuntive</h2>
           <p className="text-sm text-text-secondary mb-4">
-            Per privacy e sicurezza la targa non viene inoltrata automaticamente: inseriscila tu sul Portale dell&apos;Automobilista per controllare copertura RCA e revisioni registrate.
+            Per privacy e sicurezza la targa non viene inoltrata automaticamente: inseriscila tu sul Portale dell&apos;Automobilista per controllare copertura RCA, revisioni e chilometri rilevati.
           </p>
           <div className="grid sm:grid-cols-2 gap-2">
             <a
@@ -565,19 +565,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
               Verifica revisioni e km
               <ExternalLink className="w-4 h-4 text-text-tertiary" />
             </a>
-            <a
-              href="https://www.kmsicuro.it/verifica-km-auto"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-            >
-              Verifica storico km
-              <ExternalLink className="w-4 h-4 text-text-tertiary" />
-            </a>
           </div>
-          <p className="mt-3 text-xs text-text-tertiary">
-            KMSicuro è un servizio esterno: per continuare l&apos;analisi, inserisci qui i chilometri rilevati dopo la verifica.
-          </p>
         </section>
       )}
 

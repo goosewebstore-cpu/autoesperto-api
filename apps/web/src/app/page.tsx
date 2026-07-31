@@ -67,8 +67,13 @@ function HomeContent() {
       }
     } catch (err: any) {
       const message = err.message || 'Veicolo non trovato. Controlla i dati inseriti.';
-      setError(message);
-      setPlateLookupUnavailable(Boolean(payload.plate) && /ricerca veicoli|temporaneamente non disponibile|servizio/i.test(message));
+      const lookupUnavailable = Boolean(payload.plate) && /ricerca veicoli|temporaneamente non disponibile|servizio/i.test(message);
+      setPlateLookupUnavailable(lookupUnavailable);
+      setError(
+        lookupUnavailable
+          ? 'La ricerca automatica della targa non è disponibile in questo momento.'
+          : message
+      );
     } finally {
       setLoading(false);
     }

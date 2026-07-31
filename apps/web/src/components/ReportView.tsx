@@ -3,7 +3,7 @@
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
-  Euro, Download, ExternalLink, ShieldCheck, Hash, Info,
+  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows,
 } from 'lucide-react';
 import AdSlot from '@/components/AdSlot';
 
@@ -101,6 +101,15 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
               <VerdictIcon className="w-3.5 h-3.5" />
               {verdict.label}
             </span>
+            {reliability.aiEnhanced && (
+              <span
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
+                title="Punti di forza, criticità e consigli generati dall'AI sul modello specifico"
+              >
+                <Sparkles className="w-3.5 h-3.5" />
+                Analizzato con AI
+              </span>
+            )}
             {isModelData && (
               <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-surface-2 text-text-secondary">
                 <Info className="w-3 h-3" />
@@ -196,6 +205,70 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           </ul>
         </div>
       </section>
+
+      {/* Usage suitability + versions */}
+      {(reliability.usage || reliability.recommendedVersions?.length || reliability.versionsToAvoid?.length) && (
+        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+          {reliability.usage && (
+            <>
+              <h2 className="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
+                <Gauge className="w-4 h-4 text-accent" />
+                A chi si addice
+              </h2>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-5">
+                {[
+                  { label: 'Città', value: reliability.usage.city },
+                  { label: 'Famiglia', value: reliability.usage.family },
+                  { label: 'Autostrada', value: reliability.usage.highway },
+                  { label: 'Neopatentati', value: reliability.usage.newDriver },
+                ].map((u) => (
+                  <div key={u.label} className="bg-surface-2 rounded-xl p-3 text-center">
+                    <div className="text-[11px] font-medium text-text-secondary mb-0.5">{u.label}</div>
+                    <div className="text-sm font-semibold text-text-primary">{u.value}</div>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+
+          {(reliability.recommendedVersions?.length || reliability.versionsToAvoid?.length) && (
+            <div className="grid md:grid-cols-2 gap-5">
+              {reliability.recommendedVersions?.length ? (
+                <div>
+                  <h3 className="font-semibold text-success flex items-center gap-2 mb-3 text-sm">
+                    <CheckCircle2 className="w-4 h-4" />
+                    Versioni consigliate
+                  </h3>
+                  <ul className="space-y-2">
+                    {reliability.recommendedVersions.map((v, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary">
+                        <span className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 flex-shrink-0" />
+                        {v}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+              {reliability.versionsToAvoid?.length ? (
+                <div>
+                  <h3 className="font-semibold text-danger flex items-center gap-2 mb-3 text-sm">
+                    <AlertTriangle className="w-4 h-4" />
+                    Versioni da evitare
+                  </h3>
+                  <ul className="space-y-2">
+                    {reliability.versionsToAvoid.map((v, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary">
+                        <span className="w-1.5 h-1.5 rounded-full bg-danger mt-1.5 flex-shrink-0" />
+                        {v}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          )}
+        </section>
+      )}
 
       {/* Vehicle info */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
@@ -342,6 +415,47 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           Stime indicative basate sul modello. I costi reali variano in base a utilizzo e stato del veicolo.
         </p>
       </section>
+
+      {/* Alternatives comparison */}
+      {report.alternatives && report.alternatives.length > 0 && (
+        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+          <h2 className="text-base font-bold text-text-primary mb-1 flex items-center gap-2">
+            <GitCompareArrows className="w-4 h-4 text-accent" />
+            Confronta con auto simili
+          </h2>
+          <p className="text-xs text-text-tertiary mb-4 flex items-start gap-1.5">
+            <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+            Stime di mercato per modelli paragonabili, per capire se quello che guardi ha un prezzo in linea con la categoria.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            {report.alternatives.map((alt) => (
+              <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-4">
+                <div className="flex items-center justify-between gap-2 mb-1">
+                  <div className="text-sm font-semibold text-text-primary truncate">
+                    {alt.make} {alt.model}
+                  </div>
+                  <Scale className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+                </div>
+                <div className="text-lg font-extrabold text-text-primary number-mono">
+                  {formatPrice(alt.estimatedValue)}
+                </div>
+                <div className="text-xs text-text-secondary mt-0.5">
+                  Range: {formatPrice(alt.estimatedMin)} – {formatPrice(alt.estimatedMax)}
+                </div>
+                <a
+                  href={`https://www.autoscout24.it/risultati/?cy=IT&make=${encodeURIComponent(alt.make)}&model=${encodeURIComponent(alt.model)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-accent hover:underline"
+                >
+                  Cerca annunci
+                  <ExternalLink className="w-3 h-3" />
+                </a>
+              </div>
+            ))}
+          </div>
+        </section>
+      )}
 
       {/* Market links + PDF */}
       <section className="grid md:grid-cols-2 gap-4">

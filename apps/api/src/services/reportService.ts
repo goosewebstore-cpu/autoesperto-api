@@ -6,6 +6,7 @@ import { estimateMarketValue, estimateMarketValueWithKm } from './pricing';
 import { getMarketSearchUrls } from './market';
 import { analyzeVehicle } from './ai';
 import { cacheGet, cacheSet } from './cache';
+import { getAlternatives } from './vehicleKB';
 import { badRequest, notFound } from '../http';
 
 export interface ReportInput {
@@ -105,6 +106,12 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
       comment: buildPriceComment(input.requestedPrice, comparisonValue, input.km),
       marketUrls: getMarketSearchUrls(vehicle),
     },
+    alternatives: getAlternatives(vehicle.make, vehicle.model)
+      .slice(0, 4)
+      .map((alt) => {
+        const est = estimateMarketValue(alt);
+        return { make: alt.make, model: alt.model, estimatedValue: est.value, estimatedMin: est.min, estimatedMax: est.max };
+      }),
     createdAt: new Date().toISOString(),
   };
 

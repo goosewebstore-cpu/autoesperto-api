@@ -119,6 +119,9 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
     maintenance: knowledge.maintenance,
     commonIssues: knowledge.common.filter((i: string) => !isGeneric(i)),
     usage: knowledge.bestFor,
+    recommendedVersions: knowledge.versionsRecommended,
+    versionsToAvoid: knowledge.versionsToAvoid,
+    aiEnhanced: false,
     futureCosts: {
       annualMaintenance: costs.maintenance,
       fuelCostPer100Km: costs.fuelCost,
@@ -137,7 +140,7 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
       const enriched = await enrichWithAI(input, result, openaiKey);
       if (enriched) {
         console.log(`AI enrichment per ${vehicle.make} ${vehicle.model}`);
-        result = enriched;
+        result = { ...enriched, aiEnhanced: true };
       }
     } catch (e: any) {
       console.warn('AI enrichment fallito:', e.message);

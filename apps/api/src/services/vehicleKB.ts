@@ -401,42 +401,51 @@ export function getVehicleKnowledge(make: string): VehicleKnowledge {
 }
 
 export function getAlternatives(make: string, model: string): VehicleData[] {
+  const alt = (make: string, model: string, year: number, power: number, fuel: string, body: string): VehicleData => ({
+    make,
+    model,
+    year,
+    power: `${power} CV`,
+    fuel,
+    body,
+  });
+
   const map: Record<string, VehicleData[]> = {
     'volkswagen t-roc': [
-      { make: 'Peugeot', model: '2008' },
-      { make: 'Renault', model: 'Captur' },
-      { make: 'Toyota', model: 'C-HR' },
-      { make: 'Nissan', model: 'Juke' },
+      alt('Peugeot', '2008', 2019, 110, 'Benzina', 'SUV'),
+      alt('Renault', 'Captur', 2018, 110, 'Diesel', 'Crossover'),
+      alt('Toyota', 'C-HR', 2019, 122, 'Ibrida', 'SUV'),
+      alt('Nissan', 'Juke', 2019, 117, 'Benzina', 'SUV'),
     ],
     'mazda cx-3': [
-      { make: 'Peugeot', model: '2008' },
-      { make: 'Renault', model: 'Captur' },
-      { make: 'Toyota', model: 'C-HR' },
-      { make: 'Nissan', model: 'Juke' },
+      alt('Peugeot', '2008', 2019, 110, 'Benzina', 'SUV'),
+      alt('Renault', 'Captur', 2018, 110, 'Diesel', 'Crossover'),
+      alt('Toyota', 'C-HR', 2019, 122, 'Ibrida', 'SUV'),
+      alt('Nissan', 'Juke', 2019, 117, 'Benzina', 'SUV'),
     ],
     'fiat 500': [
-      { make: 'Toyota', model: 'Aygo' },
-      { make: 'Volkswagen', model: 'up!' },
-      { make: 'Renault', model: 'Twingo' },
-      { make: 'Smart', model: 'ForTwo' },
+      alt('Toyota', 'Aygo', 2019, 72, 'Benzina', 'Utilitaria'),
+      alt('Volkswagen', 'up!', 2018, 75, 'Benzina', 'Utilitaria'),
+      alt('Renault', 'Twingo', 2018, 90, 'Benzina', 'Utilitaria'),
+      alt('Hyundai', 'i10', 2019, 67, 'Benzina', 'Utilitaria'),
     ],
     'ford focus': [
-      { make: 'Volkswagen', model: 'Golf' },
-      { make: 'Peugeot', model: '308' },
-      { make: 'Opel', model: 'Astra' },
-      { make: 'Toyota', model: 'Corolla' },
+      alt('Volkswagen', 'Golf', 2018, 115, 'Diesel', 'Berlina'),
+      alt('Peugeot', '308', 2019, 130, 'Diesel', 'Berlina'),
+      alt('Opel', 'Astra', 2018, 110, 'Benzina', 'Berlina'),
+      alt('Toyota', 'Corolla', 2020, 122, 'Ibrida', 'Berlina'),
     ],
     'bmw serie 3': [
-      { make: 'Mercedes', model: 'Classe C' },
-      { make: 'Audi', model: 'A4' },
-      { make: 'Volvo', model: 'S60' },
-      { make: 'Lexus', model: 'IS' },
-    ]
+      alt('Mercedes', 'Classe C', 2018, 194, 'Diesel', 'Berlina'),
+      alt('Audi', 'A4', 2018, 190, 'Diesel', 'Berlina'),
+      alt('Volvo', 'S60', 2019, 190, 'Diesel', 'Berlina'),
+      alt('Lexus', 'IS', 2018, 200, 'Benzina', 'Berlina'),
+    ],
   };
   return map[`${make.toLowerCase()} ${model.toLowerCase()}`] || [
-    { make: 'Volkswagen', model: 'Golf' },
-    { make: 'Toyota', model: 'Corolla' },
-    { make: 'Peugeot', model: '308' },
-    { make: 'Ford', model: 'Focus' },
+    alt('Volkswagen', 'Golf', 2018, 115, 'Diesel', 'Berlina'),
+    alt('Toyota', 'Corolla', 2020, 122, 'Ibrida', 'Berlina'),
+    alt('Peugeot', '308', 2019, 130, 'Diesel', 'Berlina'),
+    alt('Ford', 'Focus', 2018, 120, 'Diesel', 'Berlina'),
   ];
 }

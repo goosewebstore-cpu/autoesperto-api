@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Car, Shield, TrendingUp, Search, Download } from 'lucide-react';
+import { Car, Search, Download, Sparkles, Scale } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
@@ -63,12 +63,16 @@ export default function Home() {
           <div className="animate-fade-in">
             {/* Hero */}
             <section className="text-center pt-12 md:pt-16 pb-10">
+              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border border-indigo-500/20 text-indigo-700 text-xs font-semibold mb-5">
+                <Sparkles className="w-3.5 h-3.5" />
+                Analisi potenziata con l&apos;intelligenza artificiale
+              </div>
               <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-[1.1] max-w-3xl mx-auto">
                 L&apos;esperto che controlla l&apos;auto prima di comprarla
               </h1>
               <p className="text-base md:text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed mt-4 px-2">
-                Analizza un&apos;auto usata, confronta le informazioni disponibili e scopri cosa
-                controllare prima dell&apos;acquisto.
+                In pochi secondi analizza un&apos;auto usata con l&apos;AI, confronta il prezzo con
+                modelli simili e scopri cosa controllare prima dell&apos;acquisto.
               </p>
             </section>
 
@@ -114,13 +118,15 @@ export default function Home() {
             <section id="vantaggi" className="py-10 md:py-14 border-t border-border/60">
               <div className="text-center mb-8">
                 <h2 className="text-2xl md:text-3xl font-bold text-text-primary">Perché AutoEsperto</h2>
-                <p className="text-text-secondary mt-1 text-sm md:text-base">Informazioni chiare, senza sorprese</p>
+                <p className="text-text-secondary mt-1 text-sm md:text-base">
+                  L&apos;AI analizza il modello, confronta i prezzi e ti dà risposte specifiche, non generiche.
+                </p>
               </div>
               <div className="grid md:grid-cols-3 gap-4">
                 {[
-                  { icon: <Shield className="w-5 h-5" />, title: 'Valutazione affidabilità', desc: 'Punteggio e punti critici basati sui dati del modello, non su sensazioni.' },
-                  { icon: <TrendingUp className="w-5 h-5" />, title: 'Stima di mercato', desc: 'Confronta il prezzo richiesto con una stima indicativa e capisci se è onesto.' },
-                  { icon: <Download className="w-5 h-5" />, title: 'Report scaricabile', desc: 'Il PDF di AutoEsperto ti accompagna in concessionaria per contrattare.' },
+                  { icon: <Sparkles className="w-5 h-5" />, title: 'Analisi potenziata con AI', desc: 'Punti di forza, criticità e consigli specifici del modello, generati dall\'AI su forum e recensioni reali — non da sensazioni.' },
+                  { icon: <Scale className="w-5 h-5" />, title: 'Confronto con auto simili', desc: 'Vedi la stima di mercato del modello e di alternative paragonabili, per capire se il prezzo richiesto è onesto.' },
+                  { icon: <Download className="w-5 h-5" />, title: 'Report scaricabile', desc: 'Il PDF di AutoEsperto ti accompagna in concessionaria per contrattare con dati alla mano.' },
                 ].map((f) => (
                   <div key={f.title} className="bg-white rounded-2xl border border-border p-6">
                     <div className="w-10 h-10 rounded-xl bg-surface-2 flex items-center justify-center text-accent mb-4">
@@ -140,7 +146,7 @@ export default function Home() {
             <section className="py-8">
               <div className="bg-accent rounded-2xl px-6 py-8 md:py-10 text-center text-white">
                 <p className="text-lg md:text-xl font-semibold max-w-2xl mx-auto leading-relaxed">
-                  Il tuo prossimo acquisto merita un controllo in più.
+                  Prima di comprare, fai la scelta che fanno gli esperti: analizza con l&apos;AI.
                 </p>
                 <a
                   href="#ricerca"

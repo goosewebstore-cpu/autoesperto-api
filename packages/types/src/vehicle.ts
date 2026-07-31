@@ -34,6 +34,14 @@ export interface MarketLink {
   url: string;
 }
 
+export interface AlternativeVehicle {
+  make: string;
+  model: string;
+  estimatedValue: number;
+  estimatedMin: number;
+  estimatedMax: number;
+}
+
 export interface ReliabilityAnalysis {
   score: number;
   verdict: 'BUY' | 'NEGOTIATE' | 'AVOID';
@@ -52,6 +60,9 @@ export interface ReliabilityAnalysis {
     highway: string;
     newDriver: string;
   };
+  recommendedVersions?: string[];
+  versionsToAvoid?: string[];
+  aiEnhanced?: boolean;
   futureCosts: {
     annualMaintenance: number;
     fuelCostPer100Km: number;
@@ -82,5 +93,6 @@ export interface AutoReport {
   vehicle: VehicleData;
   reliability: ReliabilityAnalysis;
   price: PriceAnalysis;
+  alternatives?: AlternativeVehicle[];
   createdAt: string;
 }

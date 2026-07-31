@@ -510,6 +510,35 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         </section>
       )}
 
+      {vehicle.plate && (
+        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+          <h2 className="text-base font-bold text-text-primary mb-2">Verifiche ufficiali aggiuntive</h2>
+          <p className="text-sm text-text-secondary mb-4">
+            Per privacy e sicurezza la targa non viene inoltrata automaticamente: inseriscila tu sul Portale dell&apos;Automobilista per controllare copertura RCA e revisioni registrate.
+          </p>
+          <div className="grid sm:grid-cols-2 gap-2">
+            <a
+              href="https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/verifica-copertura-rc?p_p_id=CoperturaRC_WAR_ServiziAlCittadinowar100SNAPSHOTesercizio&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=_118_INSTANCE_hoIzOCy6I6vu__column-2&p_p_col_count=1&_CoperturaRC_WAR_ServiziAlCittadinowar100SNAPSHOTesercizio_action=coperturaRCCiclomotore"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+            >
+              Verifica copertura RCA
+              <ExternalLink className="w-4 h-4 text-text-tertiary" />
+            </a>
+            <a
+              href="https://www.ilportaledellautomobilista.it/web/portale-automobilista/verifica-revisioni-effettuate-ms"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+            >
+              Verifica revisioni e km
+              <ExternalLink className="w-4 h-4 text-text-tertiary" />
+            </a>
+          </div>
+        </section>
+      )}
+
       {/* Market links + PDF */}
       <section className="grid md:grid-cols-2 gap-4">
         <div className="bg-white rounded-2xl shadow-card border border-border p-6">

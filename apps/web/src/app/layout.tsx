@@ -55,6 +55,34 @@ export const viewport: Viewport = {
   themeColor: '#0F172A',
 };
 
+function JsonLd() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  const schema = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'WebSite',
+      name: 'AutoEsperto',
+      url: siteUrl,
+      description:
+        'Analizza un\'auto usata in pochi secondi: dati del veicolo, valutazione di affidabilità, stima di mercato e consigli prima dell\'acquisto.',
+      inLanguage: 'it-IT',
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AutoEsperto',
+      url: siteUrl,
+      logo: `${siteUrl}/icon-192.png`,
+    },
+  ];
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+    />
+  );
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="it" className={inter.variable}>
@@ -62,6 +90,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>
       <body className="min-h-screen">
+        <JsonLd />
         <ServiceWorker />
         <CookieConsent />
         {children}

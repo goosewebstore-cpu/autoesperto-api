@@ -7,6 +7,7 @@ import type { AutoReport } from '@autoesperto/types';
 import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
 import AdSlot from '@/components/AdSlot';
+import CarFinder from '@/components/CarFinder';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 import { POPULAR_MODELS, slugify } from '@/lib/catalogo';
 
@@ -104,6 +105,7 @@ function HomeContent() {
                 <a href="#come-funziona" className="hover:text-text-primary transition-colors">Come funziona</a>
                 <a href="#vantaggi" className="hover:text-text-primary transition-colors">Vantaggi</a>
                 <a href="#prezzi" className="hover:text-text-primary transition-colors">Prezzi</a>
+                <a href="/confronta/" className="hover:text-text-primary transition-colors">Confronta</a>
               </>
             )}
           </nav>
@@ -215,6 +217,8 @@ function HomeContent() {
             </section>
 
             {/* Ad slot (attivo solo se NEXT_PUBLIC_ADSENSE_CLIENT è configurato) */}
+            <CarFinder />
+
             <section id="prezzi" className="py-12 md:py-16 border-t border-border/60">
               <div className="text-center mb-8">
                 <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent mb-2">Prezzi di lancio</p>

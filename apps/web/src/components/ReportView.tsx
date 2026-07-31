@@ -565,7 +565,19 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
               Verifica revisioni e km
               <ExternalLink className="w-4 h-4 text-text-tertiary" />
             </a>
+            <a
+              href="https://www.kmsicuro.it/verifica-km-auto"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+            >
+              Verifica storico km
+              <ExternalLink className="w-4 h-4 text-text-tertiary" />
+            </a>
           </div>
+          <p className="mt-3 text-xs text-text-tertiary">
+            KMSicuro è un servizio esterno: per continuare l&apos;analisi, inserisci qui i chilometri rilevati dopo la verifica.
+          </p>
         </section>
       )}
 

@@ -141,16 +141,16 @@ function HomeContent() {
               />
 
               {error && (
-                <div role="alert" className="mt-4 bg-danger-light border border-danger/20 rounded-2xl p-5 text-center animate-fade-in">
-                  <div className="text-sm font-semibold text-danger mb-3">{error}</div>
+                <div role="alert" className={`mt-4 rounded-2xl p-5 text-center animate-fade-in ${plateLookupUnavailable ? 'bg-warning-light border border-warning/20' : 'bg-danger-light border border-danger/20'}`}>
+                  <div className={`text-sm font-semibold mb-3 ${plateLookupUnavailable ? 'text-warning' : 'text-danger'}`}>{error}</div>
                   {plateLookupUnavailable ? (
                     <>
                       <p className="text-sm text-text-secondary mb-3">
-                        Puoi continuare subito inserendo marca e modello: il report include affidabilitÃ , alternative e prezzi dagli annunci in vendita.
+                        Puoi continuare subito inserendo marca e modello: il report include affidabilità, alternative e prezzi dagli annunci in vendita.
                       </p>
                       <button
                         onClick={() => { setError(''); setPlateLookupUnavailable(true); }}
-                        className="px-5 py-2 rounded-lg bg-danger text-white font-semibold text-sm hover:bg-red-600 transition-colors"
+                        className="px-5 py-2 rounded-lg bg-warning text-white font-semibold text-sm hover:brightness-95 transition-colors"
                       >
                         Cerca per marca e modello
                       </button>

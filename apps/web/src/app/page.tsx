@@ -179,7 +179,7 @@ function HomeContent() {
               <div className="grid md:grid-cols-3 gap-4">
                 {[
                   { step: '01', title: 'Inserisci i dati', desc: 'Targa oppure marca e modello. Aggiungi chilometri e prezzo se li conosci.' },
-                  { step: '02', title: 'Analisi automatica', desc: 'Otteni dati del veicolo, valutazione di affidabilità e stima di mercato.' },
+                  { step: '02', title: 'Analisi automatica', desc: 'Ottieni dati del veicolo, valutazione di affidabilità e stima di mercato.' },
                   { step: '03', title: 'Scegli informato', desc: 'Consigli specifici, punti critici e link agli annunci reali in vendita.' },
                 ].map((item) => (
                   <div key={item.step} className="bg-surface-2 rounded-2xl p-6">

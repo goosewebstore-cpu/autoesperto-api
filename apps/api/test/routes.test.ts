@@ -1,23 +1,18 @@
-import { describe, it, before } from 'node:test';
+import { describe, it } from 'node:test';
 import assert from 'node:assert';
 
-const BASE = 'http://localhost:4000';
-let token = '';
-let dupEmail = '';
+const BASE = process.env.TEST_API_URL || 'http://localhost:4000';
 
 function req(path: string, opts: any = {}) {
   const headers: any = { 'Content-Type': 'application/json' };
-  if (opts.token !== false && token) {
-    headers.Authorization = `Bearer ${token}`;
-  }
   return fetch(`${BASE}${path}`, {
     method: opts.method || 'GET',
     headers,
     body: opts.body ? JSON.stringify(opts.body) : undefined,
-  }).then(async (r) => ({ status: r.status, data: await r.json() }));
+  }).then(async (r) => ({ status: r.status, data: await r.json().catch(() => null) }));
 }
 
-describe('AutoEsperto API', () => {
+describe('AutoEsperto API (MVP)', () => {
   it('GET /health', async () => {
     const r = await req('/health');
     assert.strictEqual(r.status, 200);
@@ -25,162 +20,87 @@ describe('AutoEsperto API', () => {
     assert.strictEqual(r.data.service, 'autoesperto-api');
   });
 
-  it('POST /auth/register — creazione utente', async () => {
-    const r = await req('/auth/register', {
-      method: 'POST',
-      body: { email: `test-${Date.now()}@autoesperto.it`, password: 'test123456', name: 'Tester' },
-    });
-    assert.strictEqual(r.status, 200);
-    assert.ok(r.data.success);
-    assert.ok(r.data.token);
-    token = r.data.token;
+  it('GET / → risorsa sconosciuta 404 JSON', async () => {
+    const r = await req('/nonexistent');
+    assert.strictEqual(r.status, 404);
+    assert.strictEqual(r.data.success, false);
   });
 
-  it('POST /auth/register — 409 su email duplicata', async () => {
-    dupEmail = `dup-${Date.now()}@autoesperto.it`;
-    const r1 = await req('/auth/register', {
-      method: 'POST', body: { email: dupEmail, password: 'test123456' },
-    });
-    assert.strictEqual(r1.status, 200);
-    const r2 = await req('/auth/register', {
-      method: 'POST', body: { email: dupEmail, password: 'test123456' },
-    });
-    assert.strictEqual(r2.status, 409);
-  });
-
-  it('POST /auth/login — login valido', async () => {
-    const r = await req('/auth/login', {
-      method: 'POST', body: { email: dupEmail, password: 'test123456' },
-    });
-    assert.strictEqual(r.status, 200);
-    assert.ok(r.data.success);
-    assert.ok(r.data.token);
-    token = r.data.token;
-  });
-
-  it('POST /auth/login — 401 su password errata', async () => {
-    const r = await req('/auth/login', {
-      method: 'POST', body: { email: dupEmail, password: 'wrongpass' },
-    });
-    assert.strictEqual(r.status, 401);
-  });
-
-  it('POST /auth/login — 400 su email mancante', async () => {
-    const r = await req('/auth/login', {
-      method: 'POST', body: { password: 'test123456' },
-    });
-    assert.strictEqual(r.status, 400);
-  });
-
-  describe('Flusso autenticato', () => {
-    before(async () => {
-      const r = await req('/auth/register', {
-        method: 'POST',
-        body: { email: `flow-${Date.now()}@autoesperto.it`, password: 'test123456' },
-      });
-      token = r.data.token;
-    });
-
-    it('GET /user/me', async () => {
-      const r = await req('/user/me');
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.user.email);
-      assert.ok(r.data.user.plan);
-    });
-
-    it('GET /vehicles/lookup/FE120KD', async () => {
-      const r = await req('/vehicles/lookup/FE120KD');
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.vehicle?.make);
-    });
-
-    it('POST /reports/analyze', async () => {
+  describe('POST /reports/analyze', () => {
+    it('targa valida → report completo', async () => {
       const r = await req('/reports/analyze', {
         method: 'POST',
-        body: { plate: 'FE120KD', km: 85000, requestedPrice: 12000 },
-      });
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.report.vehicle);
-      assert.ok(r.data.report.reliability.score > 0);
-      assert.ok(r.data.report.price.estimatedValue > 0);
-      assert.ok(Array.isArray(r.data.report.alternatives));
-    });
-
-    it('GET /user/reports', async () => {
-      const r = await req('/user/reports');
-      assert.strictEqual(r.status, 200);
-      assert.ok(Array.isArray(r.data.reports));
-    });
-
-    it('POST /reports/ask — AI chat', async () => {
-      const report = await req('/reports/analyze', {
-        method: 'POST',
-        body: { plate: 'FE120KD', km: 85000, requestedPrice: 12000 },
-      });
-      const r = await req('/reports/ask', {
-        method: 'POST',
-        body: {
-          question: 'Conviene comprare questa auto?',
-          vehicle: report.data.report.vehicle,
-          analysis: report.data.report.reliability,
-        },
-      });
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.answer);
-    });
-
-    it('POST /dealer/setup', async () => {
-      const r = await req('/dealer/setup', {
-        method: 'POST',
-        body: { companyName: 'Auto Test Srl', vatNumber: 'IT12345678901', phone: '+39 333 1234567', city: 'Milano' },
-      });
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.dealer);
-    });
-
-    it('POST /dealer — crea listing', async () => {
-      const r = await req('/dealer', {
-        method: 'POST',
-        body: { title: 'Fiat 500 2018', price: 10500, km: 65000, year: 2018, fuel: 'Benzina' },
-      });
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.listing);
-    });
-
-    it('GET /dealer — lista listing', async () => {
-      const r = await req('/dealer');
-      assert.strictEqual(r.status, 200);
-      assert.ok(Array.isArray(r.data.listings));
-    });
-
-    it('GET /subscriptions/plans', async () => {
-      const r = await req('/subscriptions/plans');
-      assert.strictEqual(r.status, 200);
-      assert.ok(Array.isArray(r.data.plans));
-      assert.ok(Array.isArray(r.data.dealerPlans));
-    });
-
-    it('POST /subscriptions/checkout — piano free', async () => {
-      const r = await req('/subscriptions/checkout', {
-        method: 'POST', body: { planId: 'free' },
+        body: { plate: 'FE120KD', km: 85000, requestedPrice: 14500 },
       });
       assert.strictEqual(r.status, 200);
       assert.ok(r.data.success);
+      assert.ok(r.data.report.vehicle.make);
+      assert.strictEqual(r.data.report.vehicle.dataSource, 'plate');
+      assert.ok(r.data.report.reliability.score > 0);
+      assert.ok(r.data.report.price.estimatedValue > 0);
+      assert.ok(Array.isArray(r.data.report.price.marketUrls));
+      assert.ok(r.data.report.price.marketUrls.length > 0);
+    });
+
+    it('ricerca per modello → report con dataSource model', async () => {
+      const r = await req('/reports/analyze', {
+        method: 'POST',
+        body: { make: 'BMW', model: 'Serie 3', km: 120000, requestedPrice: 22000 },
+      });
+      assert.strictEqual(r.status, 200);
+      assert.strictEqual(r.data.report.vehicle.dataSource, 'model');
+      assert.ok(r.data.report.reliability.advice.length > 0);
+    });
+
+    it('targa in formato non valido → 400 con messaggio', async () => {
+      const r = await req('/reports/analyze', {
+        method: 'POST',
+        body: { plate: '1234' },
+      });
+      assert.strictEqual(r.status, 400);
+      assert.match(r.data.error, /Targa non valida/i);
+    });
+
+    it('né targa né modello → 400', async () => {
+      const r = await req('/reports/analyze', { method: 'POST', body: { km: 1000 } });
+      assert.strictEqual(r.status, 400);
+    });
+
+    it('modello non presente nel database → 404', async () => {
+      const r = await req('/reports/analyze', {
+        method: 'POST',
+        body: { make: 'XYZ', model: 'Q123' },
+      });
+      assert.strictEqual(r.status, 404);
+    });
+
+    it('richieste ripetute → risposta in cache', async () => {
+      const body = { plate: 'AB123CD', km: 50000, requestedPrice: 9000 };
+      const first = await req('/reports/analyze', { method: 'POST', body });
+      const second = await req('/reports/analyze', { method: 'POST', body });
+      assert.strictEqual(first.status, 200);
+      assert.strictEqual(second.status, 200);
+      assert.strictEqual(second.data.cached, true);
     });
   });
 
-  describe('Senza autenticazione', () => {
-    it('GET /user/me → 401', async () => {
-      const r = await req('/user/me', { token: false });
-      assert.strictEqual(r.status, 401);
+  describe('POST /reports/ask', () => {
+    it('risponde a una domanda sul veicolo', async () => {
+      const r = await req('/reports/ask', {
+        method: 'POST',
+        body: {
+          question: 'Il motore è affidabile?',
+          vehicle: { make: 'Mazda', model: 'CX-3', year: 2016 },
+          analysis: { score: 7.9, verdict: 'BUY', summary: 'Affidabile.' },
+        },
+      });
+      assert.strictEqual(r.status, 200);
+      assert.ok(r.data.answer.length > 20);
     });
 
-    it('POST /dealer → 401', async () => {
-      const r = await req('/dealer', {
-        method: 'POST', token: false,
-        body: { title: 'Test', price: 1000, km: 50000, year: 2020, fuel: 'Diesel' },
-      });
-      assert.strictEqual(r.status, 401);
+    it('payload non valido → 400', async () => {
+      const r = await req('/reports/ask', { method: 'POST', body: { question: '?' } });
+      assert.strictEqual(r.status, 400);
     });
   });
 });

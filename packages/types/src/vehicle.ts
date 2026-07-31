@@ -14,6 +14,7 @@ export interface VehicleData {
   imageUrl?: string;
   plate?: string;
   vin?: string;
+  dataSource?: 'plate' | 'model';
 }
 
 export interface MarketListing {
@@ -28,6 +29,11 @@ export interface MarketListing {
   imageUrl?: string;
 }
 
+export interface MarketLink {
+  source: string;
+  url: string;
+}
+
 export interface ReliabilityAnalysis {
   score: number;
   verdict: 'BUY' | 'NEGOTIATE' | 'AVOID';
@@ -35,6 +41,7 @@ export interface ReliabilityAnalysis {
   summary: string;
   strengths: string[];
   weaknesses: string[];
+  advice: string[];
   engine: string;
   transmission: string;
   maintenance: 'basso' | 'medio' | 'alto' | 'molto alto';
@@ -55,6 +62,8 @@ export interface ReliabilityAnalysis {
   };
 }
 
+export type PriceLabel = 'GOOD' | 'FAIR' | 'HIGH';
+
 export interface PriceAnalysis {
   estimatedValue: number;
   min: number;
@@ -62,17 +71,16 @@ export interface PriceAnalysis {
   adjustedForKm?: number;
   kmAdjustment?: number;
   inputKm?: number;
-  listings: MarketListing[];
   requestedPrice?: number;
   priceVsMarketPercent?: number;
+  priceLabel?: PriceLabel;
   comment: string;
+  marketUrls: MarketLink[];
 }
 
 export interface AutoReport {
   vehicle: VehicleData;
   reliability: ReliabilityAnalysis;
   price: PriceAnalysis;
-  alternatives: VehicleData[];
-  videos: { title: string; thumbnail: string; url: string }[];
   createdAt: string;
 }

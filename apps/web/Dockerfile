@@ -3,7 +3,6 @@ WORKDIR /app
 COPY package.json package-lock.json ./
 COPY apps/web/package.json apps/web/
 COPY packages/types/package.json packages/types/
-COPY packages/ui/package.json packages/ui/
 RUN npm install
 COPY . .
 RUN npm run build --workspace=apps/web

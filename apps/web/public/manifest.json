@@ -1,11 +1,11 @@
 {
   "name": "AutoEsperto — Analisi auto usate",
   "short_name": "AutoEsperto",
-  "description": "L'esperto che controlla l'auto prima di comprarla. Analisi AI, affidabilità, prezzo di mercato e consiglio d'acquisto.",
+  "description": "Analizza un'auto usata, confronta le informazioni disponibili e scopri cosa controllare prima dell'acquisto.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#F8F9FA",
-  "theme_color": "#2563EB",
+  "background_color": "#FFFFFF",
+  "theme_color": "#0F172A",
   "orientation": "portrait",
   "scope": "/",
   "icons": [

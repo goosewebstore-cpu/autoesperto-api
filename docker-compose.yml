@@ -9,8 +9,6 @@ services:
       - "4000:4000"
     env_file:
       - apps/api/.env
-    volumes:
-      - ./data:/app/apps/api/prisma
     restart: unless-stopped
 
   web:

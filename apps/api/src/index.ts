@@ -1,47 +1,71 @@
 import express from 'express';
 import cors from 'cors';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import path from 'path';
 
-import { authMiddleware } from './lib/auth';
-import vehicleRoutes from './routes/vehicles';
 import reportRoutes from './routes/reports';
-import subscriptionRoutes from './routes/subscriptions';
-import authRoutes from './routes/auth';
-import oauthRoutes from './routes/oauth';
-import userRoutes from './routes/user';
-import dealerRoutes from './routes/dealer';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors());
+const WEB_URLS = (process.env.WEB_URLS || process.env.WEB_URL || 'http://localhost:3000')
+  .split(',')
+  .map((u) => u.trim())
+  .filter(Boolean);
 
-app.use('/subscriptions/webhook', express.raw({ type: 'application/json' }));
-app.use(express.json());
-app.use(authMiddleware);
+if (WEB_URLS.length === 1 && WEB_URLS[0] === 'http://localhost:3000') {
+  console.warn('[CORS] WEB_URLS non configurato: in produzione imposta WEB_URLS con l\'URL pubblico del sito (es. https://autoesperto.it).');
+}
+
+app.set('trust proxy', 1);
+
+app.use(helmet({ contentSecurityPolicy: false }));
+app.use(
+  cors({
+    origin(origin, callback) {
+      if (!origin || WEB_URLS.includes(origin)) return callback(null, true);
+      return callback(new Error('Origine non consentita'));
+    },
+    methods: ['GET', 'POST'],
+  })
+);
+app.use(express.json({ limit: '20kb' }));
+
+const apiLimiter = rateLimit({
+  windowMs: 60 * 1000,
+  max: 30,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Troppe richieste. Riprova tra un minuto.' },
+});
+app.use('/reports', apiLimiter);
 
 app.get('/health', (_req, res) => {
+  res.set('Cache-Control', 'no-store');
   res.json({ ok: true, service: 'autoesperto-api' });
 });
 
 app.get('/', (_req, res) => {
-  res.json({ service: 'autoesperto-api', version: '0.1.0', web: process.env.WEB_URL || 'http://localhost:3000' });
+  res.json({ service: 'autoesperto-api', version: '1.0.0', web: WEB_URLS[0] || 'http://localhost:3000' });
 });
 
-
-
-
-
-app.use('/auth', authRoutes);
-app.use('/auth', oauthRoutes);
-app.use('/vehicles', vehicleRoutes);
 app.use('/reports', reportRoutes);
-app.use('/subscriptions', subscriptionRoutes);
-app.use('/user', userRoutes);
-app.use('/dealer', dealerRoutes);
+
+app.use((_req, res) => {
+  res.status(404).json({ success: false, error: 'Risorsa non trovata' });
+});
+
+app.use((err: Error, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+  if (err.message === 'Origine non consentita') {
+    return res.status(403).json({ success: false, error: err.message });
+  }
+  console.error('Server error:', err.message);
+  res.status(500).json({ success: false, error: 'Errore interno del server' });
+});
 
 app.listen(PORT, () => {
   console.log(`AutoEsperto API running on http://localhost:${PORT}`);

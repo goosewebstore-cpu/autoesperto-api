@@ -57,7 +57,8 @@ async function fetchRegCheck(apiUrl: string, plate: string): Promise<RegCheckRaw
         const demoData = RegCheckDemoData[plate.toUpperCase()];
         if (demoData) return demoData;
       }
-      throw new Error('Crediti API esauriti. Ricarica il tuo account su www.regcheck.org.uk oppure imposta REGCHECK_USERNAME nel file .env.');
+      console.error("[regcheck] Crediti esauriti per l'account", USERNAME, '- targa', plate);
+      throw new Error('Servizio di ricerca veicoli temporaneamente non disponibile. Riprova più tardi.');
     }
 
     if (!resp.ok) throw new Error('Errore server ' + resp.status);
@@ -71,8 +72,9 @@ async function fetchRegCheck(apiUrl: string, plate: string): Promise<RegCheckRaw
     return JSON.parse(json);
   } catch (e: any) {
     clearTimeout(timeout);
-    if (e.message && e.message.includes('Crediti API esauriti')) throw e;
-    throw new Error(e.message || 'Richiesta fallita');
+    if (e.message && e.message.includes('Servizio di ricerca veicoli')) throw e;
+    console.error('[regcheck] Errore di rete o risposta per targa', plate, ':', e.message || 'unknown');
+    throw new Error('Servizio di ricerca veicoli temporaneamente non disponibile. Riprova più tardi.');
   }
 }
 

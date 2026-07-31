@@ -19,6 +19,18 @@ export interface VehicleKnowledge {
   versionsRecommended: string[];
 }
 
+function normalizeDisplacement(raw: string): string | undefined {
+  if (!raw) return undefined;
+  const d = raw.trim().toLowerCase().replace(/\bcc\b/g, '').replace(/\s+/g, ' ');
+  if (/^\d+(\.\d+)?$/.test(d)) {
+    const n = parseFloat(d);
+    const liters = n >= 100 ? n / 1000 : n;
+    return `${liters.toFixed(1).replace(/\.0$/, '')} L`;
+  }
+  if (/^\d+(\.\d+)?\s*l$/.test(d)) return d;
+  return raw.trim();
+}
+
 export function normalizeVehicleData(data: RegCheckRawData): VehicleData {
   const make = getTextValue(data.CarMake);
   const model = getTextValue(data.CarModel);
@@ -30,8 +42,8 @@ export function normalizeVehicleData(data: RegCheckRawData): VehicleData {
   const doors = data.NumberOfDoors;
 
   let fuel = fuelRaw;
-  let displacement = engineSize;
-  let power = powerCVRaw ? String(Math.round(parseFloat(powerCVRaw))) : '';
+  let displacement = normalizeDisplacement(engineSize);
+  let power = powerCVRaw && parseFloat(powerCVRaw) > 0 ? String(Math.round(parseFloat(powerCVRaw))) : '';
 
   if (!fuel && versionRaw) {
     const v = versionRaw.toLowerCase();

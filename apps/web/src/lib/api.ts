@@ -1,54 +1,44 @@
 import type { AutoReport } from '@autoesperto/types';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
-
-function getHeaders(): Record<string, string> {
-  const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  if (typeof window !== 'undefined') {
-    const token = localStorage.getItem('auth_token');
-    if (token) headers['Authorization'] = `Bearer ${token}`;
-  }
-  return headers;
-}
+const TIMEOUT_MS = 30000;
 
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
-  const res = await fetch(`${API_URL}${path}`, {
-    ...options,
-    headers: {
-      ...getHeaders(),
-      ...(options?.headers as Record<string, string>),
-    },
-  });
-  if (!res.ok) {
-    const err = await res.json().catch(() => ({ error: 'Errore di rete' }));
-    throw new Error(err.error || `Errore ${res.status}`);
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  try {
+    const res = await fetch(`${API_URL}${path}`, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        ...(options?.headers as Record<string, string>),
+      },
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: `Errore ${res.status}` }));
+      throw new Error(err.error || `Errore ${res.status}`);
+    }
+    return res.json();
+  } catch (err: any) {
+    if (err.name === 'AbortError') {
+      throw new Error('Il servizio sta impiegando troppo tempo. Riprova tra qualche istante.');
+    }
+    throw err;
+  } finally {
+    clearTimeout(timeout);
   }
-  return res.json();
 }
 
 export async function analyzeVehicle(payload: {
   plate?: string;
-  vin?: string;
+  make?: string;
+  model?: string;
   km?: number;
   requestedPrice?: number;
-}): Promise<{ success: boolean; report: AutoReport }> {
+}): Promise<{ success: boolean; report: AutoReport; cached?: boolean }> {
   return fetchJson('/reports/analyze', {
     method: 'POST',
     body: JSON.stringify(payload),
   });
-}
-
-export async function askAutoEsperto(
-  question: string,
-  vehicle: AutoReport['vehicle'],
-  analysis: AutoReport['reliability']
-): Promise<{ success: boolean; answer: string }> {
-  return fetchJson('/reports/ask', {
-    method: 'POST',
-    body: JSON.stringify({ question, vehicle, analysis }),
-  });
-}
-
-export async function getPlans() {
-  return fetchJson('/subscriptions/plans');
 }

@@ -1,14 +1,20 @@
 import type { VehicleData, ReliabilityAnalysis } from '@autoesperto/types';
 import { getVehicleKnowledge } from './vehicleKB';
 import { estimateMarketValue } from './pricing';
+import { cacheGet, cacheSet } from './cache';
 
 export interface AIAnalysisInput {
   vehicle: VehicleData;
+  km?: number;
+  requestedPrice?: number;
   marketValue: number;
 }
 
+const AI_ENRICH_ENABLED = process.env.AI_ENRICH === 'true';
+
 function computeReliabilityScore(vehicle: VehicleData, km: number, knowledge: ReturnType<typeof getVehicleKnowledge>): number {
-  const age = 2026 - (vehicle.year || 2020);
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - (vehicle.year || currentYear - 5);
   let score = knowledge.reliabilityScore;
   if (age <= 5) score += 1.2;
   else if (age <= 8) score += 0.5;
@@ -25,13 +31,14 @@ function computeReliabilityScore(vehicle: VehicleData, km: number, knowledge: Re
 }
 
 function getVerdict(score: number): { verdict: ReliabilityAnalysis['verdict']; label: string } {
-  if (score >= 8) return { verdict: 'BUY', label: 'Auto consigliata' };
-  if (score >= 6) return { verdict: 'NEGOTIATE', label: 'Valuta attentamente' };
-  return { verdict: 'AVOID', label: 'Possibili problemi' };
+  if (score >= 7.5) return { verdict: 'BUY', label: 'Affidabile' };
+  if (score >= 6) return { verdict: 'NEGOTIATE', label: 'Valuta con attenzione' };
+  return { verdict: 'AVOID', label: 'Rischi possibili' };
 }
 
 function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
-  const age = 2026 - (vehicle.year || 2020);
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - (vehicle.year || currentYear - 5);
   const maintenance = age <= 5 ? 400 : age <= 10 ? 700 : 1100;
   const fuelCost = fuel.includes('diesel') ? 12 : fuel.includes('elettr') ? 6 : fuel.includes('ibrid') ? 8 : 15;
   const insurance = power < 90 ? 450 : power < 130 ? 650 : power < 180 ? 900 : 1300;
@@ -41,28 +48,56 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
 function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
 function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
 
+const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili/i.test(s);
+
+function buildAdvice(knowledge: ReturnType<typeof getVehicleKnowledge>, make: string, model: string, source: 'plate' | 'model' | undefined): string[] {
+  const advice: string[] = [];
+  if (knowledge.versionsToAvoid.length) advice.push(`Evita: ${knowledge.versionsToAvoid.slice(0, 2).join(' · ')}.`);
+  if (knowledge.versionsRecommended.length) advice.push(`Preferisci: ${knowledge.versionsRecommended.slice(0, 2).join(' · ')}.`);
+  if (source === 'model') {
+    advice.push('Dati basati sul modello: verifica l\'esemplare specifico prima dell\'acquisto.');
+  } else {
+    advice.push('Richiedi lo storico tagliandi e verifica revisione e cinghia/distribuzione.');
+  }
+  advice.push('Fai un test drive di almeno 30 minuti e controlla partenza a freddo, frenata e rumori anomali.');
+  return advice;
+}
+
 export async function analyzeVehicle(input: AIAnalysisInput): Promise<ReliabilityAnalysis> {
-  const knowledge = getVehicleKnowledge(input.vehicle.make);
-  const km = 100000;
-  const power = parseInt((input.vehicle.power || '').replace(/\D/g, '')) || 100;
-  const fuel = (input.vehicle.fuel || '').toLowerCase();
-  const score = computeReliabilityScore(input.vehicle, km, knowledge);
+  const { vehicle } = input;
+  const cacheKey = [
+    'analysis',
+    vehicle.make.toLowerCase(),
+    vehicle.model.toLowerCase(),
+    vehicle.year || '',
+    vehicle.fuel || '',
+    input.km || '',
+  ].join(':');
+  const cached = cacheGet<ReliabilityAnalysis>(cacheKey);
+  if (cached) return cached;
+
+  const knowledge = getVehicleKnowledge(vehicle.make);
+  const km = input.km || 100000;
+  const power = parseInt((vehicle.power || '').replace(/\D/g, '')) || 100;
+  const fuel = (vehicle.fuel || '').toLowerCase();
+
+  const score = computeReliabilityScore(vehicle, km, knowledge);
   const { verdict, label } = getVerdict(score);
 
-  const costs = estimateCosts(input.vehicle, fuel, power);
-  const { value: estimatedValue } = estimateMarketValue(input.vehicle);
+  const costs = estimateCosts(vehicle, fuel, power);
+  const { value: estimatedValue } = estimateMarketValue(vehicle);
 
   const future1 = Math.round(estimatedValue * (fuel.includes('diesel') ? 0.82 : 0.85) / 100) * 100;
   const future3 = Math.round(estimatedValue * (fuel.includes('diesel') ? 0.55 : 0.62) / 100) * 100;
   const future5 = Math.round(estimatedValue * (fuel.includes('diesel') ? 0.35 : 0.42) / 100) * 100;
 
   const summary = verdict === 'BUY'
-    ? `${input.vehicle.make} ${input.vehicle.model} è un'ottima scelta: affidabile, con costi di gestione contenuti e valore di mercato sostenuto.`
+    ? `${vehicle.make} ${vehicle.model} è un modello complessivamente affidabile e con costi di gestione contenuti.`
     : verdict === 'NEGOTIATE'
-    ? `${input.vehicle.make} ${input.vehicle.model} può andare bene, ma valuta il prezzo e verifica lo storico manutenzione prima di acquistare.`
-    : `Attenzione: ${input.vehicle.make} ${input.vehicle.model} presenta rischi significativi di affidabilità o un prezzo troppo alto rispetto al mercato.`;
+    ? `${vehicle.make} ${vehicle.model} può essere una scelta valida, ma richiede controlli mirati: verifica storico manutenzione e condizioni generali.`
+    : `${vehicle.make} ${vehicle.model} presenta alcuni rischi noti di affidabilità o costi elevati: valuta con molta attenzione.`;
 
-  const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili/i.test(s);
+  const weaknesses = knowledge.common.slice(0, 3).filter((w: string) => !isGeneric(w));
 
   const analysis: ReliabilityAnalysis = {
     score,
@@ -70,13 +105,18 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
     verdictLabel: label,
     summary,
     strengths: [
-      `Affidabilità generale ${knowledge.reliabilityScore}/10 per ${input.vehicle.make}.`,
+      `Affidabilità complessiva ${knowledge.reliabilityScore}/10 per ${vehicle.make}.`,
       knowledge.robust,
       `Costi manutenzione ${knowledge.maintenance} per la categoria.`,
-    ],
-    weaknesses: knowledge.common.slice(0, 3).filter((w: string) => !isGeneric(w)),
-    engine: !isGeneric(knowledge.engine) ? knowledge.engine : 'Dati specifici sul motore non disponibili per questa versione.',
-    transmission: !isGeneric(knowledge.transmission) ? knowledge.transmission : 'Dati specifici sul cambio non disponibili per questa versione.',
+    ].filter(Boolean),
+    weaknesses: weaknesses.length ? weaknesses : ['Nessuna criticità grave segnalata per questo modello.'],
+    advice: buildAdvice(knowledge, vehicle.make, vehicle.model, vehicle.dataSource),
+    engine: !isGeneric(knowledge.engine)
+      ? knowledge.engine
+      : `Motori ${vehicle.make}: affidabilità media, verificare condizioni reali dell'esemplare.`,
+    transmission: !isGeneric(knowledge.transmission)
+      ? knowledge.transmission
+      : `Cambio ${vehicle.make}: preferire versioni con cambio manuale o automatico con tagliandi documentati.`,
     maintenance: knowledge.maintenance,
     commonIssues: knowledge.common.filter((i: string) => !isGeneric(i)),
     usage: knowledge.bestFor,
@@ -90,39 +130,44 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
     },
   };
 
+  let result = analysis;
+
   const openaiKey = process.env.OPENAI_API_KEY;
-  if (openaiKey && openaiKey !== 'mock') {
+  if (AI_ENRICH_ENABLED && openaiKey && openaiKey !== 'mock') {
     try {
-      const enriched = await enrichWithAI(input, analysis, openaiKey);
+      const enriched = await enrichWithAI(input, result, openaiKey);
       if (enriched) {
-        console.log('AI enrichment: report arricchito con AI');
-        return enriched;
+        console.log(`AI enrichment per ${vehicle.make} ${vehicle.model}`);
+        result = enriched;
       }
     } catch (e: any) {
       console.warn('AI enrichment fallito:', e.message);
     }
   }
 
-  return analysis;
+  cacheSet(cacheKey, result, 24 * 60 * 60 * 1000);
+  return result;
 }
 
 async function enrichWithAI(input: AIAnalysisInput, base: ReliabilityAnalysis, key: string): Promise<ReliabilityAnalysis | null> {
-  const fullModel = `${input.vehicle.make} ${input.vehicle.model} ${input.vehicle.year || ''}`.trim();
+  const { vehicle } = input;
+  const fullModel = `${vehicle.make} ${vehicle.model} ${vehicle.year || ''}`.trim();
   const prompt = `Analizza questo veicolo (${fullModel}) per un report di acquisto:
 
 Modello: ${fullModel}
-Versione: ${input.vehicle.version || 'N/A'}
-Alimentazione: ${input.vehicle.fuel || 'N/A'}
-Anno immatricolazione: ${input.vehicle.year || 'N/A'}
+Versione: ${vehicle.version || 'N/A'}
+Alimentazione: ${vehicle.fuel || 'N/A'}
+Anno immatricolazione: ${vehicle.year || 'N/A'}
 
-Usa la tua conoscenza su forum italiani (Quattroruote, forumauto.it), Reddit (r/cars_it), YouTube (recensioni).
+Usa la tua conoscenza su forum italiani (Quattroruote, forumauto.it), Reddit (r/cars_it) e recensioni YouTube.
 Fornisci UNA SOLA risposta JSON valida con:
 - "summary": analisi specifica (max 180 caratteri) basata sul modello reale, non generica
-- "strengths": 3 punti di forza specifici di ${input.vehicle.make} ${input.vehicle.model}
-- "weaknesses": 3 punti deboli specifici di ${input.vehicle.make} ${input.vehicle.model} (es. "Frizione pesante nel traffico", "Infotainment lento", "Materiali plastici interni"). NON scrivere "prezzo non disponibile", "km non disponibili" o frasi sul prezzo/chilometraggio
-- "engine": analisi del motore specifica per ${input.vehicle.make} ${input.vehicle.model} (es. "1.6 Multijet 120 CV: affidabile, attenzione a FAP se uso urbano. Consiglio olio 5W-30 full synthetic."). NON scrivere "verifica", "controlla" o suggerimenti generici. Scrivi SOLO dati reali.
-- "transmission": consigli specifici sul cambio per ${input.vehicle.make} ${input.vehicle.model} (es. "Cambio manuale a 6 marce preciso, automatico ZF 8HP raccomandato su versioni 190 CV"). NON scrivere "verifica", "controlla" o suggerimenti generici. Scrivi SOLO dati reali.
-- "commonIssues": 3 problemi specifici noti presso community owners di ${input.vehicle.make} ${input.vehicle.model} (es. "Problemi EGR su 1.6 CRDi 2016-2018", "Usura prematura cuscinetti ruota posteriori")`;
+- "strengths": 3 punti di forza specifici di ${vehicle.make} ${vehicle.model}
+- "weaknesses": 3 punti deboli specifici di ${vehicle.make} ${vehicle.model} (es. "Frizione pesante nel traffico", "Infotainment lento", "Materiali interni plastici"). NON scrivere frasi su prezzo o chilometraggio
+- "advice": 3 consigli pratici prima dell'acquisto specifici per ${vehicle.make} ${vehicle.model}
+- "engine": analisi del motore specifica per ${vehicle.make} ${vehicle.model} (es. "1.6 Multijet 120 CV: affidabile, attenzione FAP se uso urbano"). NON scrivere "verifica", "controlla" o consigli generici
+- "transmission": consigli specifici sul cambio per ${vehicle.make} ${vehicle.model} (es. "Manuale preciso, automatico ZF 8HP raccomandato"). NON scrivere "verifica", "controlla" o consigli generici
+- "commonIssues": 3 problemi specifici noti presso i proprietari di ${vehicle.make} ${vehicle.model}`;
 
   const resp = await fetch(`${getAIBaseUrl()}/chat/completions`, {
     method: 'POST',
@@ -131,7 +176,10 @@ Fornisci UNA SOLA risposta JSON valida con:
     body: JSON.stringify({
       model: getAIModel(),
       messages: [
-        { role: 'system', content: 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione" non "verificare cambio").' },
+        {
+          role: 'system',
+          content: 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione", non "verifica il cambio").',
+        },
         { role: 'user', content: prompt },
       ],
       temperature: 0.4,
@@ -144,59 +192,49 @@ Fornisci UNA SOLA risposta JSON valida con:
   if (!content) return null;
   const ai = JSON.parse(content);
 
-  const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili|prezzo|km\s*non/i.test(s);
+  const clean = (list: unknown): string[] | null => {
+    if (!Array.isArray(list) || list.length < 2) return null;
+    const items = list.map((x) => String(x).trim()).filter((x) => x && !isGeneric(x));
+    return items.length >= 2 ? items.slice(0, 3) : null;
+  };
 
   return {
     ...base,
-    summary: ai.summary || base.summary,
-    strengths: (ai.strengths && ai.strengths.length >= 2) ? ai.strengths : base.strengths,
-    weaknesses: (ai.weaknesses && ai.weaknesses.length >= 2) ? ai.weaknesses.filter((w: string) => !isGeneric(w)) : base.weaknesses,
-    engine: ai.engine && !isGeneric(ai.engine) ? ai.engine : base.engine,
-    transmission: ai.transmission && !isGeneric(ai.transmission) ? ai.transmission : base.transmission,
-    commonIssues: (ai.commonIssues && ai.commonIssues.length >= 2) ? ai.commonIssues.filter((i: string) => !isGeneric(i)) : base.commonIssues,
+    summary: typeof ai.summary === 'string' && ai.summary.trim() ? ai.summary : base.summary,
+    strengths: clean(ai.strengths) || base.strengths,
+    weaknesses: clean(ai.weaknesses) || base.weaknesses,
+    advice: clean(ai.advice) || base.advice,
+    engine: typeof ai.engine === 'string' && !isGeneric(ai.engine) ? ai.engine : base.engine,
+    transmission: typeof ai.transmission === 'string' && !isGeneric(ai.transmission) ? ai.transmission : base.transmission,
+    commonIssues: clean(ai.commonIssues) || base.commonIssues,
   };
 }
 
 export async function askAutoEsperto(question: string, vehicle: VehicleData, analysis: ReliabilityAnalysis): Promise<string> {
   const openaiKey = process.env.OPENAI_API_KEY;
-  if (!openaiKey || openaiKey === 'mock') {
-    return mockAnswer(question, vehicle, analysis);
+  if (!openaiKey || openaiKey === 'mock' || !AI_ENRICH_ENABLED) {
+    const weaknesses = (analysis.weaknesses || []).slice(0, 2).join('; ');
+    return `Per ${vehicle.make} ${vehicle.model}: affidabilità ${analysis.score ?? 0}/10, manutenzione ${analysis.maintenance || 'media'}. Punti deboli noti: ${weaknesses || 'nessuno segnalato'}. Prezzo stimato indicativo: vedi la sezione prezzo del report.`;
   }
 
   try {
     const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
       method: 'POST',
       signal: AbortSignal.timeout(15000),
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${openaiKey}`,
-      },
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
       body: JSON.stringify({
-      model: getAIModel(),
+        model: getAIModel(),
         messages: [
-          {
-            role: 'system',
-            content: 'Sei AutoEsperto, un consulente automotive italiano esperto. Rispondi in modo professionale, conciso e utile. Usa dati tecnici e di mercato per supportare la tua opinione.'
-          },
-          {
-            role: 'user',
-            content: `Veicolo: ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}. Analisi: ${analysis.summary}. Domanda: ${question}`
-          }
+          { role: 'system', content: 'Sei AutoEsperto, un consulente automotive italiano esperto. Rispondi in modo professionale, conciso e utile.' },
+          { role: 'user', content: `Veicolo: ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}. Analisi: ${analysis.summary}. Domanda: ${question}` },
         ],
         temperature: 0.6,
       }),
     });
     const data = await response.json() as any;
-    if (data.error) {
-      console.warn('OpenAI API error:', data.error.message);
-      return mockAnswer(question, vehicle, analysis);
-    }
+    if (data.error) return mockAnswer(question, vehicle, analysis);
     const content = data.choices?.[0]?.message?.content;
-    if (!content) {
-      console.warn('OpenAI: risposta vuota');
-      return mockAnswer(question, vehicle, analysis);
-    }
-    return content;
+    return content || mockAnswer(question, vehicle, analysis);
   } catch (e: any) {
     console.warn('OpenAI fetch error:', e.message);
     return mockAnswer(question, vehicle, analysis);
@@ -207,19 +245,13 @@ function mockAnswer(question: string, vehicle: VehicleData, analysis: Reliabilit
   const q = question.toLowerCase();
   if (q.includes('conviene') || q.includes('comprare')) {
     return analysis.verdict === 'BUY'
-      ? `Sì, ${vehicle.make} ${vehicle.model} è una scelta solida. ${analysis.summary} Verifica solo che l'auto abbia regolare tagliando e FAP/cinghia fatti.`
+      ? `Sì, ${vehicle.make} ${vehicle.model} è una scelta solida: ${analysis.summary} Verifica comunque lo storico tagliandi prima di chiudere.`
       : analysis.verdict === 'NEGOTIATE'
-      ? `Può andare, ma con cautela. ${analysis.summary} Prova a trattare il prezzo e fai un test drive approfondito.`
-      : `Sconsiglio l'acquisto. ${analysis.summary} I costi futuri e i problemi comuni superano i benefici.`;
+      ? `Può andare, ma con cautela: ${analysis.summary} Controlla i punti deboli segnalati prima di decidere.`
+      : `Sconsiglio l'acquisto senza controlli approfonditi: ${analysis.summary}`;
   }
   if (q.includes('problema') || q.includes('difetti')) {
-    return `I problemi più comuni su ${vehicle.make} ${vehicle.model} sono: ${analysis.commonIssues.slice(0, 3).join('; ')}.`;
+    return `I problemi più comuni su ${vehicle.make} ${vehicle.model}: ${analysis.commonIssues.slice(0, 3).join('; ')}.`;
   }
-  if (q.includes('prezzo') || q.includes('trattare')) {
-    return `Per ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}, il valore di mercato è indicativamente quello mostrato. Se il prezzo richiesto è superiore al 10%, prova a trattare.`;
-  }
-  if (q.includes('manutenzione') || q.includes('costi')) {
-    return `Manutenzione stimata: ${analysis.futureCosts.annualMaintenance}€/anno, carburante ~${analysis.futureCosts.fuelCostPer100Km}€/100km, assicurazione ~${analysis.futureCosts.insuranceEstimate}€/anno.`;
-  }
-  return `AutoEsperto consiglia di valutare ${vehicle.make} ${vehicle.model} in base a: affidabilità ${analysis.score}/10, costi ${analysis.maintenance} e problemi comuni noti. Vuoi approfondire un aspetto specifico?`;
+  return `Per ${vehicle.make} ${vehicle.model}: affidabilità ${analysis.score}/10, manutenzione ${analysis.maintenance}, assicurazione stimata ${analysis.futureCosts.insuranceEstimate}€/anno. Vuoi approfondire un aspetto specifico?`;
 }

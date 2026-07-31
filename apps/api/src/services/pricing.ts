@@ -41,7 +41,8 @@ export function estimateMarketValue(vehicle: VehicleData): { value: number; min:
   base += getBodyAdjust(body);
   base += getFuelAdjust(fuel);
 
-  const age = 2026 - year;
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - year;
   let depreciation = age <= 10 ? 1 - age * 0.05 : 0.5 - (age - 10) * 0.04;
   depreciation = Math.max(0.12, depreciation);
 

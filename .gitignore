@@ -1,10 +1,14 @@
 node_modules/
 .next/
 dist/
+out/
 .env
 *.tsbuildinfo
 .DS_Store
 data/
 api.log
+web.log
 *.db
 *.db-journal
+
+.vercel

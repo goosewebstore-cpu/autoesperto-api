@@ -41,6 +41,7 @@ function HomeContent() {
   const [report, setReport] = useState<AutoReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [plateLookupUnavailable, setPlateLookupUnavailable] = useState(false);
   const [prefill, setPrefill] = useState<AnalyzePayload | null>(null);
   const params = useSearchParams();
   const prefilledRef = usePrefilled(params);
@@ -57,6 +58,7 @@ function HomeContent() {
   const handleAnalyze = async (payload: AnalyzePayload) => {
     setLoading(true);
     setError('');
+    setPlateLookupUnavailable(false);
     try {
       const res = await analyzeVehicle(payload);
       if (res.success) {
@@ -64,7 +66,9 @@ function HomeContent() {
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
     } catch (err: any) {
-      setError(err.message || 'Veicolo non trovato. Controlla i dati inseriti.');
+      const message = err.message || 'Veicolo non trovato. Controlla i dati inseriti.';
+      setError(message);
+      setPlateLookupUnavailable(Boolean(payload.plate) && /ricerca veicoli|temporaneamente non disponibile|servizio/i.test(message));
     } finally {
       setLoading(false);
     }
@@ -73,6 +77,7 @@ function HomeContent() {
   const handleBack = () => {
     setReport(null);
     setError('');
+    setPlateLookupUnavailable(false);
   };
 
   return (
@@ -120,10 +125,10 @@ function HomeContent() {
             {/* Search */}
             <section className="max-w-xl mx-auto pb-6" id="ricerca">
               <SearchForm
-                key={prefill ? 'prefilled' : 'initial'}
+                key={prefill ? 'prefilled' : plateLookupUnavailable ? 'model-fallback' : 'initial'}
                 onAnalyze={handleAnalyze}
                 loading={loading}
-                initialMode={prefill ? 'model' : 'plate'}
+                initialMode={prefill || plateLookupUnavailable ? 'model' : 'plate'}
                 initialMake={prefill?.make}
                 initialModel={prefill?.model}
                 initialKm={prefill?.km ? String(prefill.km) : undefined}
@@ -133,12 +138,26 @@ function HomeContent() {
               {error && (
                 <div role="alert" className="mt-4 bg-danger-light border border-danger/20 rounded-2xl p-5 text-center animate-fade-in">
                   <div className="text-sm font-semibold text-danger mb-3">{error}</div>
-                  <button
-                    onClick={() => setError('')}
-                    className="px-5 py-2 rounded-lg bg-danger text-white font-semibold text-sm hover:bg-red-600 transition-colors"
-                  >
-                    Riprova
-                  </button>
+                  {plateLookupUnavailable ? (
+                    <>
+                      <p className="text-sm text-text-secondary mb-3">
+                        Puoi continuare subito inserendo marca e modello: il report include affidabilitÃ , alternative e prezzi dagli annunci in vendita.
+                      </p>
+                      <button
+                        onClick={() => { setError(''); setPlateLookupUnavailable(true); }}
+                        className="px-5 py-2 rounded-lg bg-danger text-white font-semibold text-sm hover:bg-red-600 transition-colors"
+                      >
+                        Cerca per marca e modello
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      onClick={() => setError('')}
+                      className="px-5 py-2 rounded-lg bg-danger text-white font-semibold text-sm hover:bg-red-600 transition-colors"
+                    >
+                      Riprova
+                    </button>
+                  )}
                 </div>
               )}
             </section>

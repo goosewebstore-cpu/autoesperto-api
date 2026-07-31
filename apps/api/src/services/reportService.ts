@@ -3,7 +3,7 @@ import { lookupPlate, type RegCheckRawData } from './regcheck';
 import { normalizeVehicleData } from './vehicleKB';
 import { searchModel } from './modelDB';
 import { estimateMarketValue, estimateMarketValueWithKm } from './pricing';
-import { getMarketSearchUrls } from './market';
+import { fetchSubitoMarketStats, getMarketSearchUrls } from './market';
 import { analyzeVehicle } from './ai';
 import { cacheGet, cacheSet } from './cache';
 import { getAlternatives } from './vehicleKB';
@@ -86,6 +86,15 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
 
   const comparisonValue = adjustedForKm > 0 ? adjustedForKm : value;
 
+  const alternatives = getAlternatives(vehicle.make, vehicle.model).slice(0, 4);
+
+  const [marketStats, alternativeStats] = await Promise.all([
+    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year).catch(() => undefined),
+    Promise.all(alternatives.map((alt) =>
+      fetchSubitoMarketStats(alt.make, alt.model, alt.year).catch(() => undefined)
+    )),
+  ]);
+
   const reliability = await analyzeVehicle({
     vehicle,
     km: input.km,
@@ -109,13 +118,23 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
       priceLabel: input.requestedPrice ? priceLabelFor(input.requestedPrice, comparisonValue) : undefined,
       comment: buildPriceComment(input.requestedPrice, comparisonValue, input.km),
       marketUrls: getMarketSearchUrls(vehicle),
+      market: marketStats,
     },
-    alternatives: getAlternatives(vehicle.make, vehicle.model)
-      .slice(0, 4)
-      .map((alt) => {
-        const est = estimateMarketValue(alt);
-        return { make: alt.make, model: alt.model, estimatedValue: est.value, estimatedMin: est.min, estimatedMax: est.max };
-      }),
+    alternatives: alternatives.map((alt, i) => {
+      const est = estimateMarketValue(alt);
+      const market = alternativeStats[i];
+      if (market && market.priceAvg) {
+        return {
+          make: alt.make,
+          model: alt.model,
+          estimatedValue: market.priceAvg,
+          estimatedMin: market.priceMin || est.min,
+          estimatedMax: market.priceMax || est.max,
+          market,
+        };
+      }
+      return { make: alt.make, model: alt.model, estimatedValue: est.value, estimatedMin: est.min, estimatedMax: est.max };
+    }),
     createdAt: new Date().toISOString(),
   };
 

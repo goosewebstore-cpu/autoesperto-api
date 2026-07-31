@@ -366,6 +366,35 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
             </div>
           </div>
 
+          {price.market && price.market.priceAvg && (
+            <div className="bg-surface-2 rounded-xl p-4 mb-3 border border-[#e6007e]/20">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-medium text-text-secondary">
+                  Prezzo medio reale degli annunci in vendita
+                </span>
+                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#e6007e]/10 text-[#c4006b] text-[11px] font-semibold">
+                  subito.it
+                </span>
+              </div>
+              <div className="text-2xl font-extrabold text-text-primary number-mono">
+                {formatPrice(price.market.priceAvg)}
+              </div>
+              <div className="text-xs text-text-secondary mt-0.5">
+                {formatPrice(price.market.priceMin || 0)} – {formatPrice(price.market.priceMax || 0)} · da {price.market.total} annunci
+                {price.market.yearMin && price.market.yearMax ? ` · ${price.market.yearMin}–${price.market.yearMax}` : ''}
+              </div>
+              <a
+                href={price.market.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-accent hover:underline"
+              >
+                Vedi gli annunci reali
+                <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+          )}
+
           {price.adjustedForKm && price.adjustedForKm > 0 && (
             <div className="bg-surface-2 rounded-xl p-4 mb-3">
               <div className="flex items-center justify-between mb-1">
@@ -425,34 +454,58 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           </h2>
           <p className="text-xs text-text-tertiary mb-4 flex items-start gap-1.5">
             <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-            Stime di mercato per modelli paragonabili, per capire se quello che guardi ha un prezzo in linea con la categoria.
+            Prezzi reali degli annunci in vendita per modelli paragonabili, per capire se quello che guardi ha un prezzo in linea con la categoria.
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
-            {report.alternatives.map((alt) => (
-              <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-4">
-                <div className="flex items-center justify-between gap-2 mb-1">
-                  <div className="text-sm font-semibold text-text-primary truncate">
-                    {alt.make} {alt.model}
+            {report.alternatives.map((alt) => {
+              const market = alt.market;
+              const hasMarket = Boolean(market && market.priceAvg);
+              return (
+                <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-4">
+                  <div className="flex items-center justify-between gap-2 mb-1">
+                    <div className="text-sm font-semibold text-text-primary truncate">
+                      {alt.make} {alt.model}
+                    </div>
+                    <Scale className="w-4 h-4 text-text-tertiary flex-shrink-0" />
                   </div>
-                  <Scale className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+                  <div className="text-lg font-extrabold text-text-primary number-mono">
+                    {formatPrice(alt.estimatedValue)}
+                  </div>
+                  <div className="text-xs text-text-secondary mt-0.5">
+                    {hasMarket ? (
+                      <>
+                        Prezzo medio da {market!.total} annunci · Range: {formatPrice(alt.estimatedMin)} – {formatPrice(alt.estimatedMax)}
+                      </>
+                    ) : (
+                      <>
+                        Stima · Range: {formatPrice(alt.estimatedMin)} – {formatPrice(alt.estimatedMax)}
+                      </>
+                    )}
+                  </div>
+                  {hasMarket && (
+                    <div className="flex items-center gap-1.5 mt-2">
+                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#e6007e]/10 text-[#c4006b] text-[11px] font-semibold">
+                        subito.it
+                      </span>
+                      {market!.yearMin && market!.yearMax && (
+                        <span className="text-[11px] text-text-tertiary">
+                          {market!.yearMin}–{market!.yearMax}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <a
+                    href={market?.url || `https://www.subito.it/annunci-italia/vendita/auto/${alt.make.toLowerCase()}/${alt.model.toLowerCase()}/`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-accent hover:underline"
+                  >
+                    Cerca annunci
+                    <ExternalLink className="w-3 h-3" />
+                  </a>
                 </div>
-                <div className="text-lg font-extrabold text-text-primary number-mono">
-                  {formatPrice(alt.estimatedValue)}
-                </div>
-                <div className="text-xs text-text-secondary mt-0.5">
-                  Range: {formatPrice(alt.estimatedMin)} – {formatPrice(alt.estimatedMax)}
-                </div>
-                <a
-                  href={`https://www.autoscout24.it/risultati/?cy=IT&make=${encodeURIComponent(alt.make)}&model=${encodeURIComponent(alt.model)}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-accent hover:underline"
-                >
-                  Cerca annunci
-                  <ExternalLink className="w-3 h-3" />
-                </a>
-              </div>
-            ))}
+              );
+            })}
           </div>
         </section>
       )}

@@ -34,12 +34,26 @@ export interface MarketLink {
   url: string;
 }
 
+export interface MarketStats {
+  source: string;
+  total: number;
+  priceAvg?: number;
+  priceMin?: number;
+  priceMax?: number;
+  kmAvg?: number;
+  yearMin?: number;
+  yearMax?: number;
+  url: string;
+  fetchedAt: string;
+}
+
 export interface AlternativeVehicle {
   make: string;
   model: string;
   estimatedValue: number;
   estimatedMin: number;
   estimatedMax: number;
+  market?: MarketStats;
 }
 
 export interface ReliabilityAnalysis {
@@ -87,6 +101,7 @@ export interface PriceAnalysis {
   priceLabel?: PriceLabel;
   comment: string;
   marketUrls: MarketLink[];
+  market?: MarketStats;
 }
 
 export interface AutoReport {

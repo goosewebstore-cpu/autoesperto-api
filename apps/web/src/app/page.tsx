@@ -103,6 +103,7 @@ function HomeContent() {
               <>
                 <a href="#come-funziona" className="hover:text-text-primary transition-colors">Come funziona</a>
                 <a href="#vantaggi" className="hover:text-text-primary transition-colors">Vantaggi</a>
+                <a href="#prezzi" className="hover:text-text-primary transition-colors">Prezzi</a>
               </>
             )}
           </nav>
@@ -214,6 +215,58 @@ function HomeContent() {
             </section>
 
             {/* Ad slot (attivo solo se NEXT_PUBLIC_ADSENSE_CLIENT è configurato) */}
+            <section id="prezzi" className="py-12 md:py-16 border-t border-border/60">
+              <div className="text-center mb-8">
+                <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent mb-2">Prezzi di lancio</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-text-primary">Prima capisci l&apos;auto. Poi scegli se approfondire.</h2>
+                <p className="text-text-secondary mt-2 text-sm md:text-base max-w-2xl mx-auto">
+                  L&apos;analisi con prezzi reali, affidabilità e alternative resta gratuita. I controlli targa saranno sempre opzionali e con un prezzo chiaro.
+                </p>
+              </div>
+              <div className="grid md:grid-cols-3 gap-4 max-w-4xl mx-auto">
+                <div className="bg-white rounded-2xl border-2 border-accent p-6 relative shadow-card">
+                  <span className="absolute -top-3 left-6 rounded-full bg-accent px-3 py-1 text-xs font-bold text-white">Disponibile ora</span>
+                  <h3 className="font-bold text-text-primary text-lg">Beta gratuita</h3>
+                  <p className="mt-3 text-3xl font-extrabold text-text-primary">€0</p>
+                  <p className="text-sm text-text-secondary mt-1">Nessuna carta richiesta</p>
+                  <ul className="mt-5 space-y-2.5 text-sm text-text-secondary">
+                    <li>Analisi marca e modello</li>
+                    <li>Prezzi medi dagli annunci</li>
+                    <li>Affidabilità e punti critici</li>
+                    <li>Alternative nella stessa fascia</li>
+                  </ul>
+                  <a href="#ricerca" className="mt-6 inline-flex w-full items-center justify-center rounded-xl bg-accent px-4 py-3 text-sm font-semibold text-white hover:brightness-95 transition-colors">Inizia gratis</a>
+                </div>
+                <div className="bg-surface-2 rounded-2xl border border-border p-6">
+                  <div className="text-xs font-bold text-text-tertiary">IN ARRIVO</div>
+                  <h3 className="font-bold text-text-primary text-lg mt-2">Report Targa</h3>
+                  <p className="mt-3 text-3xl font-extrabold text-text-primary">€1,99</p>
+                  <p className="text-sm text-text-secondary mt-1">Una sola verifica, senza abbonamento</p>
+                  <ul className="mt-5 space-y-2.5 text-sm text-text-secondary">
+                    <li>Riconoscimento automatico veicolo</li>
+                    <li>Report AutoEsperto completo</li>
+                    <li>Pagamento solo quando ti serve</li>
+                  </ul>
+                  <div className="mt-6 text-center rounded-xl border border-border bg-white px-4 py-3 text-sm font-semibold text-text-tertiary">In preparazione</div>
+                </div>
+                <div className="bg-surface-2 rounded-2xl border border-border p-6">
+                  <div className="text-xs font-bold text-text-tertiary">IN ARRIVO</div>
+                  <h3 className="font-bold text-text-primary text-lg mt-2">Plus</h3>
+                  <p className="mt-3 text-3xl font-extrabold text-text-primary">€4,99<span className="text-base font-semibold text-text-secondary">/mese</span></p>
+                  <p className="text-sm text-text-secondary mt-1">Per chi sta cercando più auto</p>
+                  <ul className="mt-5 space-y-2.5 text-sm text-text-secondary">
+                    <li>3 verifiche targa al mese</li>
+                    <li>Report completi inclusi</li>
+                    <li>Disdici quando vuoi</li>
+                  </ul>
+                  <div className="mt-6 text-center rounded-xl border border-border bg-white px-4 py-3 text-sm font-semibold text-text-tertiary">In preparazione</div>
+                </div>
+              </div>
+              <p className="max-w-3xl mx-auto mt-6 text-center text-xs text-text-tertiary leading-relaxed">
+                Le verifiche targa saranno attivate solo con una fonte dati autorizzata. Per il controllo dello storico chilometrico, AutoEsperto indica sempre la verifica pubblica disponibile.
+              </p>
+            </section>
+
             <AdSlot slot="0000000000" className="mt-6" />
 
             {/* Trust strip */}

@@ -446,15 +446,45 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
       </section>
 
       {/* Alternatives comparison */}
+      {price.market?.listings && price.market.listings.length > 0 && (
+        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+          <div className="flex items-start justify-between gap-4 mb-5">
+            <div>
+              <h2 className="text-base font-bold text-text-primary">Annunci vicini alla media</h2>
+              <p className="text-sm text-text-secondary mt-1">I tre annunci Subito.it con prezzo più vicino a {formatPrice(price.market.priceAvg || 0)}.</p>
+            </div>
+            <span className="shrink-0 rounded-full bg-[#e6007e]/10 px-2.5 py-1 text-[11px] font-semibold text-[#c4006b]">subito.it</span>
+          </div>
+          <div className="space-y-2">
+            {price.market.listings.map((listing) => {
+              const distance = Math.round(((listing.price - (price.market?.priceAvg || listing.price)) / (price.market?.priceAvg || listing.price)) * 100);
+              return (
+                <a key={listing.id} href={listing.sourceUrl} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border bg-white p-4 transition-colors hover:border-accent/40 hover:bg-surface-2">
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate text-sm font-semibold text-text-primary">{listing.title}</p>
+                    <p className="mt-1 text-xs text-text-secondary">{[listing.year || undefined, listing.km ? formatKm(listing.km) : undefined, listing.city || undefined].filter(Boolean).join(' · ')}</p>
+                  </div>
+                  <div className="shrink-0 text-right">
+                    <p className="text-lg font-extrabold text-text-primary number-mono">{formatPrice(listing.price)}</p>
+                    <p className={`text-[11px] font-semibold ${Math.abs(distance) <= 3 ? 'text-success' : 'text-text-secondary'}`}>{distance >= 0 ? '+' : ''}{distance}% dalla media</p>
+                  </div>
+                  <ExternalLink className="h-4 w-4 shrink-0 text-text-tertiary transition-colors group-hover:text-accent" />
+                </a>
+              );
+            })}
+          </div>
+        </section>
+      )}
+
       {report.alternatives && report.alternatives.length > 0 && (
         <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
           <h2 className="text-base font-bold text-text-primary mb-1 flex items-center gap-2">
             <GitCompareArrows className="w-4 h-4 text-accent" />
-            Confronta con auto simili
+            Alternative nella stessa fascia
           </h2>
           <p className="text-xs text-text-tertiary mb-4 flex items-start gap-1.5">
             <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-            Prezzi reali degli annunci in vendita per modelli paragonabili, per capire se quello che guardi ha un prezzo in linea con la categoria.
+            Modelli comparabili per prezzo, categoria e utilizzo. Gli annunci sopra sono quelli del modello cercato.
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
             {report.alternatives.map((alt) => {

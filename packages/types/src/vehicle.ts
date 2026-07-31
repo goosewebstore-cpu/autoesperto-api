@@ -45,6 +45,7 @@ export interface MarketStats {
   yearMax?: number;
   url: string;
   fetchedAt: string;
+  listings?: MarketListing[];
 }
 
 export interface AlternativeVehicle {

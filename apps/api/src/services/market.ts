@@ -1,4 +1,4 @@
-import type { MarketLink, MarketStats, VehicleData } from '@autoesperto/types';
+import type { MarketLink, MarketListing, MarketStats, VehicleData } from '@autoesperto/types';
 import { cacheGet, cacheSet } from './cache';
 
 const SUBITO_BASE = 'https://www.subito.it';
@@ -76,6 +76,25 @@ function featNum(ad: SubitoAd, key: string): number | undefined {
   return Number.isFinite(n) && n > 0 ? n : undefined;
 }
 
+function listingFromAd(ad: SubitoAd, index: number): MarketListing | undefined {
+  const price = featNum(ad, '/price');
+  if (!price) return undefined;
+  const relativeUrl = ad.urls?.default;
+  const sourceUrl = relativeUrl
+    ? (relativeUrl.startsWith('http') ? relativeUrl : `${SUBITO_BASE}${relativeUrl}`)
+    : SUBITO_BASE;
+  return {
+    id: `${ad.subject || 'annuncio'}-${index}-${price}`,
+    title: ad.subject || 'Annuncio auto usata',
+    price,
+    km: featNum(ad, '/mileage_scalar') || 0,
+    year: featNum(ad, '/year') || 0,
+    city: ad.geo?.city?.value || ad.geo?.town?.value || ad.geo?.region?.value || '',
+    source: 'subito.it',
+    sourceUrl,
+  };
+}
+
 export async function fetchSubitoMarketStats(
   make: string,
   model: string,
@@ -129,11 +148,18 @@ export async function fetchSubitoMarketStats(
     const years = filtered.map(yearOf).filter((y): y is number => y !== undefined);
 
     if (prices.length < 3) return undefined;
+    const priceAvg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length / 100) * 100;
+
+    const listings = filtered
+      .map(listingFromAd)
+      .filter((listing): listing is MarketListing => Boolean(listing))
+      .sort((a, b) => Math.abs(a.price - priceAvg) - Math.abs(b.price - priceAvg))
+      .slice(0, 3);
 
     const stats: MarketStats = {
       source: 'subito.it',
       total: prices.length,
-      priceAvg: Math.round(prices.reduce((a, b) => a + b, 0) / prices.length / 100) * 100,
+      priceAvg,
       priceMin: Math.min(...prices),
       priceMax: Math.max(...prices),
       kmAvg: kms.length ? Math.round(kms.reduce((a, b) => a + b, 0) / kms.length / 100) * 100 : undefined,
@@ -141,6 +167,7 @@ export async function fetchSubitoMarketStats(
       yearMax: years.length ? Math.max(...years) : undefined,
       url,
       fetchedAt: new Date().toISOString(),
+      listings,
     };
 
     cacheSet(cacheKey, stats, SUBITO_TTL);

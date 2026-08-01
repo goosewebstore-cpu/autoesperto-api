@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { buildReport } from '../services/reportService';
 import { analyzeVehiclePhoto, askAutoEsperto } from '../services/ai';
-import { asyncHandler } from '../http';
+import { asyncHandler, serviceUnavailable } from '../http';
 
 const router = Router();
 
@@ -61,7 +61,12 @@ router.post(
   '/photo-analyze',
   asyncHandler(async (req, res) => {
     const input = photoSchema.parse(req.body);
-    const analysis = await analyzeVehiclePhoto(input);
+    let analysis;
+    try {
+      analysis = await analyzeVehiclePhoto(input);
+    } catch {
+      throw serviceUnavailable('Non riesco a leggere questa foto. Carica una foto nitida dell’auto o del danno, senza usare screenshot troppo piccoli.');
+    }
     res.set('Cache-Control', 'no-store');
     res.json({ success: true, analysis });
   })

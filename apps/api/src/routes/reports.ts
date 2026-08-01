@@ -72,9 +72,9 @@ router.post(
           visible: false,
           category: 'non_chiaro' as const,
           severity: 'media' as const,
-          description: 'Non riesco a distinguere con affidabilità auto o danno in questa immagine.',
+          description: 'Il riconoscimento automatico non ha restituito marca e modello per questa foto.',
         },
-        note: 'L’analisi visiva non è disponibile per questa foto. Prova con una foto esterna nitida, scattata da vicino e senza screenshot; non viene salvata.',
+        note: 'Il riconoscimento visivo non è disponibile in questo momento. La foto non viene salvata: riprova più tardi oppure inserisci marca e modello.',
       };
     }
     res.set('Cache-Control', 'no-store');

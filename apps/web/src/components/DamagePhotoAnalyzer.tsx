@@ -9,7 +9,7 @@ function price(value: number) {
   return value.toLocaleString('it-IT') + ' €';
 }
 
-export default function DamagePhotoAnalyzer({ vehicle }: { vehicle?: VehicleData }) {
+export default function DamagePhotoAnalyzer({ vehicle, compact = false }: { vehicle?: VehicleData; compact?: boolean }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -45,14 +45,14 @@ export default function DamagePhotoAnalyzer({ vehicle }: { vehicle?: VehicleData
   };
 
   return (
-    <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+    <section className={compact ? 'rounded-xl bg-surface-2 border border-border/70 p-4' : 'bg-white rounded-2xl shadow-card border border-border p-6 md:p-7'}>
       <div className="flex items-start justify-between gap-4 mb-2">
         <div>
           <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
             <Camera className="w-4 h-4 text-accent" />
-            {vehicle ? 'Analizza un danno da foto' : 'Riconosci auto e danni da foto'}
+            {vehicle ? 'Analizza un danno da foto' : 'Riconosci l’auto da una foto'}
           </h2>
-          <p className="text-sm text-text-secondary mt-1">Riconosciamo marca, modello se visibile e danni esterni. Non serve inserire la targa.</p>
+          <p className="text-sm text-text-secondary mt-1">Marca, modello se visibile e danni esterni. Non serve la targa.</p>
         </div>
       </div>
 
@@ -63,7 +63,7 @@ export default function DamagePhotoAnalyzer({ vehicle }: { vehicle?: VehicleData
           disabled={loading}
           className="w-full mt-4 rounded-xl border border-dashed border-accent/40 bg-surface-2 px-4 py-5 text-sm font-semibold text-text-primary hover:border-accent hover:bg-accent/5 transition-colors disabled:opacity-60"
         >
-          {loading ? <span className="inline-flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Analisi foto in corso...</span> : <span className="inline-flex items-center gap-2"><Upload className="w-4 h-4 text-accent" /> Carica foto del danno</span>}
+          {loading ? <span className="inline-flex items-center gap-2"><Loader2 className="w-4 h-4 animate-spin" /> Analisi foto in corso...</span> : <span className="inline-flex items-center gap-2"><Upload className="w-4 h-4 text-accent" /> Carica una foto dell’auto</span>}
         </button>
       )}
       <input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(e) => handleFile(e.target.files?.[0])} />

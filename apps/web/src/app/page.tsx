@@ -8,7 +8,6 @@ import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
 import AdSlot from '@/components/AdSlot';
 import CarFinder from '@/components/CarFinder';
-import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 import { POPULAR_MODELS, slugify } from '@/lib/catalogo';
 
@@ -62,7 +61,6 @@ function HomeContent() {
   const handleAnalyze = async (payload: AnalyzePayload) => {
     setLoading(true);
     setError('');
-    setPlateLookupUnavailable(false);
     try {
       const res = await analyzeVehicle(payload);
       if (res.success) {
@@ -71,13 +69,7 @@ function HomeContent() {
       }
     } catch (err: any) {
       const message = err.message || 'Veicolo non trovato. Controlla i dati inseriti.';
-      const lookupUnavailable = Boolean(payload.plate) && /ricerca veicoli|temporaneamente non disponibile|servizio/i.test(message);
-      setPlateLookupUnavailable(lookupUnavailable);
-      setError(
-        lookupUnavailable
-          ? 'La ricerca automatica della targa non è disponibile in questo momento.'
-          : message
-      );
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -86,7 +78,6 @@ function HomeContent() {
   const handleBack = () => {
     setReport(null);
     setError('');
-    setPlateLookupUnavailable(false);
   };
 
   return (
@@ -120,26 +111,21 @@ function HomeContent() {
           <div className="animate-fade-in">
             {/* Hero */}
             <section className="text-center pt-12 md:pt-16 pb-10">
-              <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-violet-600/10 to-indigo-600/10 border border-indigo-500/20 text-indigo-700 text-xs font-semibold mb-5">
-                <Sparkles className="w-3.5 h-3.5" />
-                Analisi potenziata con l&apos;intelligenza artificiale
-              </div>
-              <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-text-primary leading-[1.1] max-w-3xl mx-auto">
-                L&apos;esperto che controlla l&apos;auto prima di comprarla
+              <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold tracking-tight text-text-primary leading-[1.1] max-w-3xl mx-auto">
+                Capisci un&apos;auto prima di comprarla.
               </h1>
               <p className="text-base md:text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed mt-4 px-2">
-                In pochi secondi analizza un&apos;auto usata con l&apos;AI, confronta il prezzo con
-                modelli simili e scopri cosa controllare prima dell&apos;acquisto.
+                Parti da una foto oppure inserisci marca, modello e anno. Ti aiutiamo a capire prezzo, affidabilit&agrave; e controlli importanti.
               </p>
             </section>
 
             {/* Search */}
             <section className="max-w-xl mx-auto pb-6" id="ricerca">
               <SearchForm
-                key={prefill ? 'prefilled' : plateLookupUnavailable ? 'model-fallback' : 'initial'}
+                key={prefill ? 'prefilled' : 'initial'}
                 onAnalyze={handleAnalyze}
                 loading={loading}
-                initialMode={prefill || plateLookupUnavailable ? 'model' : 'plate'}
+                initialMode={prefill ? 'model' : 'photo'}
                 initialMake={prefill?.make}
                 initialModel={prefill?.model}
                 initialYear={prefill?.year ? String(prefill.year) : undefined}
@@ -174,10 +160,6 @@ function HomeContent() {
               )}
             </section>
 
-            <section className="max-w-xl mx-auto pb-8">
-              <DamagePhotoAnalyzer />
-            </section>
-
             {/* How it works */}
             <section id="come-funziona" className="py-14 md:py-16">
               <div className="text-center mb-8">
@@ -186,7 +168,7 @@ function HomeContent() {
               </div>
               <div className="grid md:grid-cols-3 gap-4">
                 {[
-                  { step: '01', title: 'Inserisci i dati', desc: 'Targa oppure marca e modello. Aggiungi chilometri e prezzo se li conosci.' },
+                  { step: '01', title: 'Scegli come iniziare', desc: 'Carica una foto oppure inserisci marca, modello e anno. Aggiungi chilometri e prezzo se li conosci.' },
                   { step: '02', title: 'Analisi automatica', desc: 'Ottieni dati del veicolo, valutazione di affidabilità e stima di mercato.' },
                   { step: '03', title: 'Scegli informato', desc: 'Consigli specifici, punti critici e link agli annunci reali in vendita.' },
                 ].map((item) => (

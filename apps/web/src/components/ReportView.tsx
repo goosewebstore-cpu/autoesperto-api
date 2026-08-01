@@ -3,7 +3,7 @@
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
-  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, Play, MessageCircle,
+  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, MessageCircle,
 } from 'lucide-react';
 import AdSlot from '@/components/AdSlot';
 import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
@@ -56,9 +56,10 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
   const comparisonLabel = comparisonParts.length ? comparisonParts.join(' · ') : 'modello e caratteristiche disponibili';
   const comparisonIsExact = marketComparison && marketComparison.yearMatched && marketComparison.kmMatched;
   const communityQuery = encodeURIComponent(`${vehicle.make} ${vehicle.model}`);
+  const communityHighlights = (reliability.commonIssues?.length ? reliability.commonIssues : reliability.weaknesses).slice(0, 3);
+  const communityUrl = `https://www.reddit.com/search/?q=${communityQuery}&type=link&sort=relevance&t=all`;
   const communityLinks = [
-    { label: 'Video e prove', detail: 'YouTube', href: `https://www.youtube.com/results?search_query=${communityQuery}`, icon: Play },
-    { label: 'Esperienze proprietari', detail: 'Reddit', href: `https://www.reddit.com/search/?q=${communityQuery}&type=link&sort=relevance&t=all`, icon: MessageCircle },
+    { label: 'Discussioni proprietari', detail: 'Reddit', href: communityUrl, icon: MessageCircle },
     { label: 'Gruppi di appassionati', detail: 'Facebook', href: `https://www.facebook.com/search/groups/?q=${communityQuery}`, icon: Users },
   ];
 
@@ -174,6 +175,29 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
       </section>
 
       {/* Ad slot (attivo solo se NEXT_PUBLIC_ADSENSE_CLIENT è configurato) */}
+      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+        <div className="flex items-start justify-between gap-4 mb-4">
+          <div>
+            <h2 className="text-base font-bold text-text-primary">Controlla la community</h2>
+            <p className="text-sm text-text-secondary mt-1">I temi pi&ugrave; ricorrenti su {vehicle.make} {vehicle.model}, utili da approfondire prima di decidere.</p>
+          </div>
+          <MessageCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
+        </div>
+        <div className="grid sm:grid-cols-3 gap-2">
+          {communityHighlights.map((highlight, index) => (
+            <div key={`${highlight}-${index}`} className="rounded-xl bg-surface-2 p-3">
+              <p className="text-[11px] font-semibold uppercase tracking-wide text-text-tertiary mb-1">Da verificare</p>
+              <p className="text-sm font-semibold text-text-primary leading-snug">{highlight}</p>
+            </div>
+          ))}
+        </div>
+        <a href={communityUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-accent hover:underline">
+          Cerca discussioni su {vehicle.make} {vehicle.model}
+          <ExternalLink className="w-3.5 h-3.5" />
+        </a>
+        <p className="text-xs text-text-tertiary mt-3">Le discussioni sono opinioni personali: usale per fare domande pi&ugrave; precise a venditore e meccanico.</p>
+      </section>
+
       <AdSlot slot="0000000000" />
 
       {/* Strengths / weaknesses / advice */}
@@ -580,10 +604,9 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         </section>
       )}
 
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <h2 className="text-base font-bold text-text-primary mb-1 flex items-center gap-2">
-          <Users className="w-4 h-4 text-accent" />
-          Community e prove reali
+      <section className="hidden">
+        <h2>
+          Approfondimenti della community
         </h2>
         <p className="text-sm text-text-secondary mb-4">
           Approfondisci {vehicle.make} {vehicle.model} con le esperienze di proprietari e appassionati. Cerca sempre riscontri tecnici prima di decidere.

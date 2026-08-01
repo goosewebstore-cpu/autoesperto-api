@@ -72,6 +72,8 @@ const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<Pho
 };
 
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
+  const geminiKey = process.env.GEMINI_API_KEY;
+  if (geminiKey) return analyzeVehiclePhotoWithGemini(input, geminiKey);
   const key = process.env.OPENAI_API_KEY;
   if (!key || key === 'mock') throw new Error('Analisi foto non configurata');
 
@@ -120,6 +122,37 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     },
     repairRange: range ? { min: range[0], max: range[1] } : undefined,
     note: 'Stima visiva indicativa: ricambi, verniciatura, sensori e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
+  };
+}
+
+async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: string): Promise<PhotoAnalysisResult> {
+  const match = input.imageData.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,(.+)$/);
+  if (!match) throw new Error('Formato immagine non valido.');
+  const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent', {
+    method: 'POST', signal: AbortSignal.timeout(20000),
+    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+    body: JSON.stringify({
+      contents: [{ parts: [
+        { text: 'Analizza questa foto di auto. Ignora completamente targhe, persone e dati personali. Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":""}}. Riconosci marca e modello quando visibili; descrivi solo danni esterni visibili.' },
+        { inline_data: { mime_type: match[1], data: match[2] } },
+      ] }],
+      generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
+    }),
+  });
+  const data = await response.json() as any;
+  const raw = data.candidates?.[0]?.content?.parts?.map((part: any) => part.text || '').join('');
+  if (!response.ok || !raw) throw new Error(data?.error?.message || `Gemini non ha restituito un risultato (HTTP ${response.status}).`);
+  const parsed = parseJsonContent<any>(raw);
+  const categories = Object.keys(repairRanges);
+  const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';
+  const severity = ['lieve', 'media', 'alta'].includes(parsed?.damage?.severity) ? parsed.damage.severity : 'media';
+  const visible = Boolean(parsed?.damage?.visible) && category !== 'nessun_danno_evidente' && category !== 'non_chiaro';
+  const range = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
+  return {
+    vehicle: { make: typeof parsed?.vehicle?.make === 'string' ? parsed.vehicle.make.slice(0, 50) : undefined, model: typeof parsed?.vehicle?.model === 'string' ? parsed.vehicle.model.slice(0, 50) : undefined, generation: typeof parsed?.vehicle?.generation === 'string' ? parsed.vehicle.generation.slice(0, 80) : undefined, confidence: ['bassa', 'media', 'alta'].includes(parsed?.vehicle?.confidence) ? parsed.vehicle.confidence : 'bassa' },
+    damage: { visible, category, severity, description: typeof parsed?.damage?.description === 'string' ? parsed.damage.description.slice(0, 180) : 'La foto non permette una valutazione affidabile del danno.' },
+    repairRange: range ? { min: range[0], max: range[1] } : undefined,
+    note: 'Stima visiva indicativa: ricambi e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
   };
 }
 

@@ -3,7 +3,7 @@
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
-  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows,
+  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, Play, MessageCircle,
 } from 'lucide-react';
 import AdSlot from '@/components/AdSlot';
 
@@ -54,6 +54,12 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
   ].filter(Boolean);
   const comparisonLabel = comparisonParts.length ? comparisonParts.join(' · ') : 'modello e caratteristiche disponibili';
   const comparisonIsExact = marketComparison && marketComparison.yearMatched && marketComparison.kmMatched;
+  const communityQuery = encodeURIComponent(`${vehicle.make} ${vehicle.model}`);
+  const communityLinks = [
+    { label: 'Video e prove', detail: 'YouTube', href: `https://www.youtube.com/results?search_query=${communityQuery}`, icon: Play },
+    { label: 'Esperienze proprietari', detail: 'Reddit', href: `https://www.reddit.com/search/?q=${communityQuery}&type=link&sort=relevance&t=all`, icon: MessageCircle },
+    { label: 'Gruppi di appassionati', detail: 'Facebook', href: `https://www.facebook.com/search/groups/?q=${communityQuery}`, icon: Users },
+  ];
 
   const specs = [
     { label: 'Marca', value: vehicle.make },
@@ -551,6 +557,40 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           </div>
         </section>
       )}
+
+      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+        <h2 className="text-base font-bold text-text-primary mb-1 flex items-center gap-2">
+          <Users className="w-4 h-4 text-accent" />
+          Community e prove reali
+        </h2>
+        <p className="text-sm text-text-secondary mb-4">
+          Approfondisci {vehicle.make} {vehicle.model} con le esperienze di proprietari e appassionati. Cerca sempre riscontri tecnici prima di decidere.
+        </p>
+        <div className="grid sm:grid-cols-3 gap-2">
+          {communityLinks.map((item) => {
+            const Icon = item.icon;
+            return (
+              <a
+                key={item.detail}
+                href={item.href}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+              >
+                <span className="flex items-center gap-2 min-w-0">
+                  <Icon className="w-4 h-4 text-accent flex-shrink-0" />
+                  <span className="truncate">{item.label}</span>
+                </span>
+                <ExternalLink className="w-4 h-4 text-text-tertiary flex-shrink-0" />
+              </a>
+            );
+          })}
+        </div>
+        <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
+          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+          Le discussioni della community sono opinioni personali: AutoEsperto le propone per approfondire, non come certificazione tecnica.
+        </p>
+      </section>
 
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
         <h2 className="text-base font-bold text-text-primary mb-2 flex items-center gap-2">

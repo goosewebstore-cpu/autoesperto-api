@@ -128,20 +128,31 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
 async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: string): Promise<PhotoAnalysisResult> {
   const match = input.imageData.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,(.+)$/);
   if (!match) throw new Error('Formato immagine non valido.');
-  const response = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-lite:generateContent', {
-    method: 'POST', signal: AbortSignal.timeout(20000),
-    headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-    body: JSON.stringify({
-      contents: [{ parts: [
-        { text: 'Analizza questa foto di auto. Ignora completamente targhe, persone e dati personali. Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":""}}. Riconosci marca e modello quando visibili; descrivi solo danni esterni visibili.' },
-        { inline_data: { mime_type: match[1], data: match[2] } },
-      ] }],
-      generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
-    }),
-  });
-  const data = await response.json() as any;
-  const raw = data.candidates?.[0]?.content?.parts?.map((part: any) => part.text || '').join('');
-  if (!response.ok || !raw) throw new Error(data?.error?.message || `Gemini non ha restituito un risultato (HTTP ${response.status}).`);
+  const configuredModel = process.env.GEMINI_VISION_MODEL?.trim();
+  const models = configuredModel ? [configuredModel] : ['gemini-3.5-flash', 'gemini-3.1-flash-lite'];
+  let raw = '';
+  let lastError = '';
+
+  for (const model of models) {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+      method: 'POST', signal: AbortSignal.timeout(25000),
+      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+      body: JSON.stringify({
+        contents: [{ parts: [
+          { text: 'Sei il riconoscimento visivo di AutoEsperto. Riconosci con attenzione la vettura nella foto usando logo, calandra, fari, carrozzeria e proporzioni. Indica marca, modello e generazione solo quando sono ragionevolmente identificabili; non inventare dettagli. Ignora completamente targhe, persone e dati personali: non leggerli, non trascriverli e non citarli. Descrivi esclusivamente danni esterni chiaramente visibili, senza diagnosticare danni interni, meccanici o incidenti pregressi. Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":""}}.' },
+          { inline_data: { mime_type: match[1], data: match[2] } },
+        ] }],
+        generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
+      }),
+    });
+    const data = await response.json() as any;
+    raw = data.candidates?.[0]?.content?.parts?.map((part: any) => part.text || '').join('') || '';
+    if (response.ok && raw) break;
+    lastError = data?.error?.message || `Gemini non ha restituito un risultato (HTTP ${response.status}).`;
+    raw = '';
+    if (!/(not available|not found|not exist|unsupported|access)/i.test(lastError)) break;
+  }
+  if (!raw) throw new Error(lastError || 'Gemini non ha restituito un risultato.');
   const parsed = parseJsonContent<any>(raw);
   const categories = Object.keys(repairRanges);
   const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';

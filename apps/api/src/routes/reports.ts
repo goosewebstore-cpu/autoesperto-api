@@ -75,7 +75,6 @@ router.post(
           description: 'Il riconoscimento automatico non ha restituito marca e modello per questa foto.',
         },
         note: 'Il riconoscimento visivo non è disponibile in questo momento. La foto non viene salvata: riprova più tardi oppure inserisci marca e modello.',
-        diagnostic: error instanceof Error ? error.message.slice(0, 500) : 'Errore sconosciuto',
       };
     }
     res.set('Cache-Control', 'no-store');

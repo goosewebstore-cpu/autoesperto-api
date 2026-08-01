@@ -19,7 +19,7 @@ interface SearchFormProps {
   initialPrice?: string;
 }
 
-type SearchMode = 'photo' | 'model';
+type SearchMode = 'photo' | 'damage' | 'model';
 
 export default function SearchForm({
   onAnalyze,
@@ -69,7 +69,7 @@ export default function SearchForm({
   return (
     <form onSubmit={handleSubmit} className="animate-fade-in">
       <div className="bg-white rounded-2xl shadow-card border border-border p-4 sm:p-6">
-        <div className="grid grid-cols-2 gap-2 mb-5" role="tablist" aria-label="Metodo di analisi">
+        <div className="grid grid-cols-3 gap-2 mb-5" role="tablist" aria-label="Metodo di analisi">
           <button
             type="button"
             role="tab"
@@ -81,8 +81,12 @@ export default function SearchForm({
                 : 'border-border bg-white text-text-secondary hover:border-accent/40'
             }`}
           >
-            <span className="flex items-center gap-2 text-sm font-bold"><Camera className="w-4 h-4 text-accent" /> Analizza una foto</span>
-            <span className="block mt-1 text-xs font-medium text-text-tertiary">Riconosci auto e danni visibili</span>
+            <span className="flex items-center gap-2 text-sm font-bold"><Camera className="w-4 h-4 text-accent" /> Riconosci auto</span>
+            <span className="block mt-1 text-xs font-medium text-text-tertiary">Marca e modello</span>
+          </button>
+          <button type="button" role="tab" aria-selected={mode === 'damage'} onClick={() => setMode('damage')} className={`rounded-xl border px-3 py-3 text-left transition-all ${mode === 'damage' ? 'border-accent bg-accent/5 text-text-primary shadow-sm' : 'border-border bg-white text-text-secondary hover:border-accent/40'}`}>
+            <span className="flex items-center gap-2 text-sm font-bold"><Camera className="w-4 h-4 text-accent" /> Valuta danno</span>
+            <span className="block mt-1 text-xs font-medium text-text-tertiary">Graffi e parti esterne</span>
           </button>
           <button
             type="button"
@@ -100,8 +104,8 @@ export default function SearchForm({
           </button>
         </div>
 
-        {mode === 'photo' ? (
-          <DamagePhotoAnalyzer compact />
+        {mode === 'photo' || mode === 'damage' ? (
+          <DamagePhotoAnalyzer compact purpose={mode === 'damage' ? 'damage' : 'recognition'} />
         ) : (
           <>
             <div className="mb-4">

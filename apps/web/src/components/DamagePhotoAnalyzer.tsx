@@ -9,7 +9,7 @@ function price(value: number) {
   return value.toLocaleString('it-IT') + ' €';
 }
 
-export default function DamagePhotoAnalyzer({ vehicle, compact = false }: { vehicle?: VehicleData; compact?: boolean }) {
+export default function DamagePhotoAnalyzer({ vehicle, compact = false, purpose = 'recognition' }: { vehicle?: VehicleData; compact?: boolean; purpose?: 'recognition' | 'damage' }) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');

@@ -95,7 +95,10 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   });
   const data = await response.json() as any;
   const raw = data.choices?.[0]?.message?.content;
-  if (!response.ok || !raw) throw new Error('Non riesco a leggere questa foto. Prova con un\'immagine più nitida.');
+  if (!response.ok || !raw) {
+    const providerMessage = typeof data?.error?.message === 'string' ? data.error.message : '';
+    throw new Error(providerMessage || `Il provider visivo non ha restituito un risultato (HTTP ${response.status}).`);
+  }
   const parsed = parseJsonContent<any>(raw);
   const categories = Object.keys(repairRanges);
   const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';

@@ -58,7 +58,7 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
 
 function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
 function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
-function getVisionModel() { return process.env.VISION_MODEL || 'gpt-4.1-mini'; }
+function getVisionModel() { return process.env.VISION_MODEL || 'gpt-4o-mini'; }
 
 const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], [number, number]>> = {
   graffio: { lieve: [120, 280], media: [250, 550], alta: [450, 900] },

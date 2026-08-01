@@ -15,7 +15,7 @@ export function getMarketSearchUrls(vehicle: VehicleData): MarketLink[] {
   return [
     {
       source: 'AutoScout24',
-      url: `https://www.autoscout24.it/risultati/?cy=IT&make=${make}&model=${model}&fregfrom=${year - 2}&fregto=${year + 1}&sort=standard`,
+      url: `https://www.autoscout24.it/risultati/?cy=IT&make=${make}&model=${model}&fregfrom=${year - 1}&fregto=${year + 1}&sort=standard`,
     },
     {
       source: 'Subito.it',
@@ -23,7 +23,7 @@ export function getMarketSearchUrls(vehicle: VehicleData): MarketLink[] {
     },
     {
       source: 'Automobile.it',
-      url: `https://www.automobile.it/annunci/${vehicle.make.toLowerCase()}-${vehicle.model.toLowerCase().replace(/\s+/g, '-')}/?annoDa=${year - 2}&annoA=${year + 1}`,
+      url: `https://www.automobile.it/annunci/${vehicle.make.toLowerCase()}-${vehicle.model.toLowerCase().replace(/\s+/g, '-')}/?annoDa=${year - 1}&annoA=${year + 1}`,
     },
   ];
 }
@@ -98,10 +98,11 @@ function listingFromAd(ad: SubitoAd, index: number): MarketListing | undefined {
 export async function fetchSubitoMarketStats(
   make: string,
   model: string,
-  year?: number
+  year?: number,
+  km?: number
 ): Promise<MarketStats | undefined> {
   const url = getSubitoSearchUrl(make, model);
-  const cacheKey = `subito:${make.toLowerCase()}:${model.toLowerCase()}:${year || 'any'}`;
+  const cacheKey = `subito:${make.toLowerCase()}:${model.toLowerCase()}:${year || 'any'}:${km || 'any'}`;
   const cached = cacheGet<MarketStats>(cacheKey);
   if (cached) return cached;
 
@@ -137,11 +138,22 @@ export async function fetchSubitoMarketStats(
     const kmOf = (ad: SubitoAd) => featNum(ad, '/mileage_scalar');
     const yearOf = (ad: SubitoAd) => featNum(ad, '/year');
 
-    const pool = year ? ads.filter((a) => {
+    const yearPool = year ? ads.filter((a) => {
       const y = yearOf(a);
-      return y !== undefined && y >= year - 4 && y <= year + 2;
+      return y !== undefined && y >= year - 1 && y <= year + 1;
     }) : ads;
-    const filtered = pool.length >= 3 ? pool : ads;
+    const yearMatched = !year || yearPool.length >= 3;
+    const kmTolerance = km ? Math.max(15000, Math.round(km * 0.3)) : 0;
+    const kmPool = km
+      ? yearPool.filter((a) => {
+          const adKm = kmOf(a);
+          return adKm !== undefined && Math.abs(adKm - km) <= kmTolerance;
+        })
+      : yearPool;
+    const kmMatched = !km || kmPool.length >= 3;
+    // Prefer the closest comparable group. When the market is too thin we fall back
+    // gradually and disclose that in the report instead of presenting it as exact.
+    const filtered = kmPool.length >= 3 ? kmPool : yearPool.length >= 3 ? yearPool : ads;
 
     const prices = filtered.map(priceOf).filter((p): p is number => p !== undefined);
     const kms = filtered.map(kmOf).filter((k): k is number => k !== undefined);
@@ -168,6 +180,12 @@ export async function fetchSubitoMarketStats(
       url,
       fetchedAt: new Date().toISOString(),
       listings,
+      comparison: {
+        targetYear: year,
+        targetKm: km,
+        yearMatched,
+        kmMatched,
+      },
     };
 
     cacheSet(cacheKey, stats, SUBITO_TTL);

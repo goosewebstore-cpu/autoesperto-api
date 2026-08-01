@@ -45,10 +45,12 @@ describe('AutoEsperto API (MVP)', () => {
     it('ricerca per modello → report con dataSource model', async () => {
       const r = await req('/reports/analyze', {
         method: 'POST',
-        body: { make: 'BMW', model: 'Serie 3', km: 120000, requestedPrice: 22000 },
+        body: { make: 'BMW', model: 'Serie 3', year: 2016, km: 120000, requestedPrice: 22000 },
       });
       assert.strictEqual(r.status, 200);
       assert.strictEqual(r.data.report.vehicle.dataSource, 'model');
+      assert.strictEqual(r.data.report.vehicle.year, 2016);
+      assert.strictEqual(r.data.report.price.inputYear, 2016);
       assert.ok(r.data.report.reliability.advice.length > 0);
     });
 

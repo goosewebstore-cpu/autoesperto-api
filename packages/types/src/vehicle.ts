@@ -46,6 +46,13 @@ export interface MarketStats {
   url: string;
   fetchedAt: string;
   listings?: MarketListing[];
+  /** Parametri usati per selezionare annunci davvero confrontabili. */
+  comparison?: {
+    targetYear?: number;
+    targetKm?: number;
+    yearMatched: boolean;
+    kmMatched: boolean;
+  };
 }
 
 export interface AlternativeVehicle {
@@ -97,6 +104,7 @@ export interface PriceAnalysis {
   adjustedForKm?: number;
   kmAdjustment?: number;
   inputKm?: number;
+  inputYear?: number;
   requestedPrice?: number;
   priceVsMarketPercent?: number;
   priceLabel?: PriceLabel;

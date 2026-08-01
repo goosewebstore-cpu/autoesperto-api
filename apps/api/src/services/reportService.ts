@@ -13,6 +13,7 @@ export interface ReportInput {
   plate?: string;
   make?: string;
   model?: string;
+  year?: number;
   km?: number;
   requestedPrice?: number;
 }
@@ -42,10 +43,11 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   if (!input.plate) {
     if (!input.make || !input.model) throw badRequest('Inserisci marca e modello');
     const found = searchModel(input.make, input.model);
-    if (found) return found;
+    if (found) return input.year ? { ...found, year: input.year } : found;
     return {
       make: input.make.trim(),
       model: input.model.trim(),
+      year: input.year,
       dataSource: 'model',
     };
   }
@@ -70,7 +72,7 @@ function cacheKeyFor(input: ReportInput): string {
 }
 
 function reportKeyFor(input: ReportInput): string {
-  return `${cacheKeyFor(input)}:${input.km || ''}:${input.requestedPrice || ''}`;
+  return `${cacheKeyFor(input)}:${input.year || ''}:${input.km || ''}:${input.requestedPrice || ''}`;
 }
 
 export async function buildReport(input: ReportInput): Promise<{ report: AutoReport; cached: boolean }> {
@@ -89,9 +91,9 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
   const alternatives = getAlternatives(vehicle.make, vehicle.model).slice(0, 4);
 
   const [marketStats, alternativeStats] = await Promise.all([
-    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year).catch(() => undefined),
+    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km).catch(() => undefined),
     Promise.all(alternatives.map((alt) =>
-      fetchSubitoMarketStats(alt.make, alt.model, alt.year).catch(() => undefined)
+      fetchSubitoMarketStats(alt.make, alt.model, vehicle.year, input.km).catch(() => undefined)
     )),
   ]);
 
@@ -111,6 +113,7 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
       adjustedForKm: adjustedForKm || undefined,
       kmAdjustment: kmAdjustment || undefined,
       inputKm: input.km || undefined,
+      inputYear: vehicle.year,
       requestedPrice: input.requestedPrice,
       priceVsMarketPercent: input.requestedPrice
         ? Math.round(((input.requestedPrice - comparisonValue) / comparisonValue) * 100)

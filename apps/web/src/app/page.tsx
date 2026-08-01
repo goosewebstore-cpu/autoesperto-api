@@ -19,9 +19,11 @@ function usePrefilled(params: URLSearchParams) {
     if (make && model) {
       const km = params.get('km');
       const price = params.get('price');
+      const year = params.get('year');
       ref.current = {
         make,
         model,
+        year: year && !Number.isNaN(Number(year)) ? Number(year) : undefined,
         km: km && !Number.isNaN(Number(km)) ? Number(km) : undefined,
         requestedPrice: price && !Number.isNaN(Number(price)) ? Number(price) : undefined,
       };
@@ -139,6 +141,7 @@ function HomeContent() {
                 initialMode={prefill || plateLookupUnavailable ? 'model' : 'plate'}
                 initialMake={prefill?.make}
                 initialModel={prefill?.model}
+                initialYear={prefill?.year ? String(prefill.year) : undefined}
                 initialKm={prefill?.km ? String(prefill.km) : undefined}
                 initialPrice={prefill?.requestedPrice ? String(prefill.requestedPrice) : undefined}
               />

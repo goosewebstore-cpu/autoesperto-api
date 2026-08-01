@@ -18,6 +18,7 @@ const reportSchema = z
       .optional(),
     make: z.string().trim().min(2).optional(),
     model: z.string().trim().min(1).optional(),
+    year: z.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
     km: z.number().int().min(0).max(1000000).optional(),
     requestedPrice: z.number().int().min(0).max(10000000).optional(),
   })

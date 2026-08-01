@@ -13,6 +13,7 @@ interface SearchFormProps {
   initialMode?: SearchMode;
   initialMake?: string;
   initialModel?: string;
+  initialYear?: string;
   initialKm?: string;
   initialPrice?: string;
 }
@@ -25,6 +26,7 @@ export default function SearchForm({
   initialMode = 'plate',
   initialMake = '',
   initialModel = '',
+  initialYear = '',
   initialKm = '',
   initialPrice = '',
 }: SearchFormProps) {
@@ -32,6 +34,7 @@ export default function SearchForm({
   const [plate, setPlate] = useState('');
   const [make, setMake] = useState(initialMake);
   const [model, setModel] = useState(initialModel);
+  const [year, setYear] = useState(initialYear);
   const [km, setKm] = useState(initialKm);
   const [price, setPrice] = useState(initialPrice);
 
@@ -50,7 +53,7 @@ export default function SearchForm({
   const isSubmitDisabled =
     loading ||
     (mode === 'plate' && plate.trim().length < 5) ||
-    (mode === 'model' && (!make.trim() || !model.trim()));
+    (mode === 'model' && (!make.trim() || !model.trim() || year.length !== 4));
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -59,6 +62,7 @@ export default function SearchForm({
       plate: mode === 'plate' ? plate.trim().toUpperCase() : undefined,
       make: mode === 'model' ? make.trim() : undefined,
       model: mode === 'model' ? model.trim() : undefined,
+      year: mode === 'model' && year ? parseInt(year) : undefined,
       km: km ? parseInt(km) : undefined,
       requestedPrice: price ? parseInt(price) : undefined,
     });
@@ -112,7 +116,7 @@ export default function SearchForm({
             />
           </div>
         ) : (
-          <div className="grid sm:grid-cols-2 gap-3 mb-4">
+          <div className="grid sm:grid-cols-3 gap-3 mb-4">
             <div>
               <label htmlFor="make" className="block text-xs font-semibold text-text-secondary mb-1.5">Marca</label>
               <input
@@ -149,10 +153,32 @@ export default function SearchForm({
                 ))}
               </datalist>
             </div>
+            <div>
+              <label htmlFor="year" className="block text-xs font-semibold text-text-secondary mb-1.5">
+                Anno di immatricolazione <span className="text-text-tertiary font-normal">(per il prezzo preciso)</span>
+              </label>
+              <input
+                id="year"
+                type="number"
+                inputMode="numeric"
+                min="1950"
+                max={new Date().getFullYear() + 1}
+                autoComplete="off"
+                value={year}
+                onChange={(e) => setYear(e.target.value.replace(/\D/g, '').slice(0, 4))}
+                placeholder="Es. 2019"
+                className={inputClass}
+              />
+            </div>
           </div>
         )}
 
         {/* Optional fields */}
+        {mode === 'model' && (
+          <p className="-mt-1 mb-4 text-xs text-text-tertiary">
+            L&apos;anno serve a confrontare auto realmente paragonabili: lo stesso modello può avere un prezzo molto diverso da un anno all&apos;altro.
+          </p>
+        )}
         <div className="grid sm:grid-cols-2 gap-3 mb-5">
           <div>
             <label htmlFor="km" className="block text-xs font-semibold text-text-secondary mb-1.5">

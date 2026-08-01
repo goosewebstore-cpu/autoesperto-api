@@ -47,6 +47,13 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
   const VerdictIcon = verdict.icon;
   const priceLabelCfg = getPriceLabelConfig(price.priceLabel);
   const isModelData = vehicle.dataSource === 'model';
+  const marketComparison = price.market?.comparison;
+  const comparisonParts = [
+    price.inputYear ? `anno ${price.inputYear}` : undefined,
+    price.inputKm ? `circa ${formatKm(price.inputKm)}` : undefined,
+  ].filter(Boolean);
+  const comparisonLabel = comparisonParts.length ? comparisonParts.join(' · ') : 'modello e caratteristiche disponibili';
+  const comparisonIsExact = marketComparison && marketComparison.yearMatched && marketComparison.kmMatched;
 
   const specs = [
     { label: 'Marca', value: vehicle.make },
@@ -370,7 +377,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
             <div className="bg-surface-2 rounded-xl p-4 mb-3 border border-[#e6007e]/20">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-medium text-text-secondary">
-                  Prezzo medio reale degli annunci in vendita
+                  Prezzo medio reale per {comparisonLabel}
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#e6007e]/10 text-[#c4006b] text-[11px] font-semibold">
                   subito.it
@@ -382,6 +389,11 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
               <div className="text-xs text-text-secondary mt-0.5">
                 {formatPrice(price.market.priceMin || 0)} – {formatPrice(price.market.priceMax || 0)} · da {price.market.total} annunci
                 {price.market.yearMin && price.market.yearMax ? ` · ${price.market.yearMin}–${price.market.yearMax}` : ''}
+              </div>
+              <div className="text-[11px] text-text-tertiary mt-1">
+                {comparisonIsExact
+                  ? 'Confronto ristretto agli annunci più simili per anno e chilometraggio.'
+                  : 'Confronto ampliato perché non erano disponibili almeno 3 annunci con anno e km equivalenti.'}
               </div>
               <a
                 href={price.market.url}
@@ -450,8 +462,8 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
           <div className="flex items-start justify-between gap-4 mb-5">
             <div>
-              <h2 className="text-base font-bold text-text-primary">Annunci vicini alla media</h2>
-              <p className="text-sm text-text-secondary mt-1">I tre annunci Subito.it con prezzo più vicino a {formatPrice(price.market.priceAvg || 0)}.</p>
+              <h2 className="text-base font-bold text-text-primary">Annunci più comparabili</h2>
+              <p className="text-sm text-text-secondary mt-1">I tre annunci Subito.it più vicini alla media di {formatPrice(price.market.priceAvg || 0)}, filtrati per {comparisonLabel}.</p>
             </div>
             <span className="shrink-0 rounded-full bg-[#e6007e]/10 px-2.5 py-1 text-[11px] font-semibold text-[#c4006b]">subito.it</span>
           </div>
@@ -484,7 +496,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           </h2>
           <p className="text-xs text-text-tertiary mb-4 flex items-start gap-1.5">
             <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-            Modelli comparabili per prezzo, categoria e utilizzo. Gli annunci sopra sono quelli del modello cercato.
+            Modelli comparabili per prezzo, categoria e utilizzo. Le medie sotto usano {comparisonLabel} per rendere il confronto più equo.
           </p>
           <div className="grid sm:grid-cols-2 gap-3">
             {report.alternatives.map((alt) => {
@@ -519,7 +531,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
                       </span>
                       {market!.yearMin && market!.yearMax && (
                         <span className="text-[11px] text-text-tertiary">
-                          {market!.yearMin}–{market!.yearMax}
+                          {market!.yearMin}–{market!.yearMax}{market!.kmAvg ? ` · ${formatKm(market!.kmAvg)} in media` : ''}
                         </span>
                       )}
                     </div>
@@ -539,6 +551,40 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           </div>
         </section>
       )}
+
+      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+        <h2 className="text-base font-bold text-text-primary mb-2 flex items-center gap-2">
+          <ShieldCheck className="w-4 h-4 text-accent" />
+          Controlli importanti per anno e chilometri
+        </h2>
+        <p className="text-sm text-text-secondary leading-relaxed mb-4">
+          Per una {vehicle.year ? `vettura del ${vehicle.year}` : 'vettura usata'}{price.inputKm ? ` con circa ${formatKm(price.inputKm)}` : ''}, verifica anche le campagne di richiamo e lo storico delle revisioni. Un richiamo dipende dal VIN: anno e modello da soli non bastano per dire se questa specifica auto è coinvolta.
+        </p>
+        <div className="grid sm:grid-cols-2 gap-2">
+          <a
+            href="https://richiami.unraeservizi.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+          >
+            Verifica richiami con VIN
+            <ExternalLink className="w-4 h-4 text-text-tertiary" />
+          </a>
+          <a
+            href="https://www.ilportaledellautomobilista.it/interrogazionistoricorevisioni/spa/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+          >
+            Verifica storico revisioni e km
+            <ExternalLink className="w-4 h-4 text-text-tertiary" />
+          </a>
+        </div>
+        <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
+          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+          Se un chilometraggio di revisione risulta inferiore a una registrazione precedente, chiedi documenti e una verifica professionale: è un&apos;anomalia da approfondire, non una prova automatica di manomissione.
+        </p>
+      </section>
 
       {vehicle.plate && (
         <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">

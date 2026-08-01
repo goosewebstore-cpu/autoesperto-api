@@ -7,6 +7,7 @@ export interface AnalyzePayload {
   plate?: string;
   make?: string;
   model?: string;
+  year?: number;
   km?: number;
   requestedPrice?: number;
 }

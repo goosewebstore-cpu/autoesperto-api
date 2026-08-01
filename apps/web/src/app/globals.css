@@ -16,15 +16,15 @@ html {
 
 body {
   font-family: var(--font-inter), Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  background: #FFFFFF;
-  color: #18181B;
+  background: #F8FAFC;
+  color: #0F172A;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
 }
 
 ::selection {
-  background: #0F172A;
+  background: #2563EB;
   color: #FFFFFF;
 }
 
@@ -50,7 +50,7 @@ body {
   transition: all 0.2s ease;
 }
 .input-premium:focus {
-  box-shadow: 0 0 0 3px rgba(15, 23, 42, 0.1);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.16);
 }
 
 /* Subtle card hover */
@@ -70,7 +70,7 @@ body {
 
 /* Keyboard focus — visible but subtle */
 :focus-visible {
-  outline: 2px solid #0F172A;
+  outline: 2px solid #2563EB;
   outline-offset: 2px;
   border-radius: 4px;
 }

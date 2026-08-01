@@ -111,17 +111,17 @@ export default function SearchForm({
             <div className="grid sm:grid-cols-3 gap-3 mb-4">
               <div>
                 <label htmlFor="make" className="block text-xs font-semibold text-text-secondary mb-1.5">Marca</label>
-                <input id="make" type="text" list="auto-makes" autoComplete="off" value={make} onChange={(event) => setMake(event.target.value)} placeholder="Es. BMW" className={inputClass} />
+                <input id="make" type="text" list="auto-makes" autoComplete="off" value={make} onChange={(event) => setMake(event.target.value)} placeholder="Es. Mazda" className={inputClass} />
                 <datalist id="auto-makes">{brands.map((brand) => <option key={brand} value={brand} />)}</datalist>
               </div>
               <div>
                 <label htmlFor="model" className="block text-xs font-semibold text-text-secondary mb-1.5">Modello</label>
-                <input id="model" type="text" list="auto-models" autoComplete="off" value={model} onChange={(event) => setModel(event.target.value)} placeholder="Es. Serie 3" className={inputClass} />
+                <input id="model" type="text" list="auto-models" autoComplete="off" value={model} onChange={(event) => setModel(event.target.value)} placeholder="Es. CX-3" className={inputClass} />
                 <datalist id="auto-models">{modelsForMake.map((item) => <option key={item} value={item} />)}</datalist>
               </div>
               <div>
                 <label htmlFor="year" className="block text-xs font-semibold text-text-secondary mb-1.5">Anno di immatricolazione</label>
-                <input id="year" type="number" inputMode="numeric" min="1950" max={new Date().getFullYear() + 1} autoComplete="off" value={year} onChange={(event) => setYear(event.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="Es. 2019" className={inputClass} />
+                <input id="year" type="number" inputMode="numeric" min="1950" max={new Date().getFullYear() + 1} autoComplete="off" value={year} onChange={(event) => setYear(event.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="Es. 2016" className={inputClass} />
               </div>
             </div>
             <div className="grid sm:grid-cols-2 gap-3 mb-5">
@@ -130,7 +130,7 @@ export default function SearchForm({
                 <input id="km" type="number" inputMode="numeric" autoComplete="off" value={km} onChange={(event) => setKm(event.target.value.replace(/\D/g, ''))} placeholder="Es. 85000" className={inputClass} />
               </div>
               <div>
-                <label htmlFor="price" className="block text-xs font-semibold text-text-secondary mb-1.5">Prezzo richiesto <span className="text-text-tertiary font-normal">(opzionale)</span></label>
+                <label htmlFor="price" className="block text-xs font-semibold text-text-secondary mb-1.5">Prezzo dell&apos;annuncio <span className="text-text-tertiary font-normal">(facoltativo)</span></label>
                 <input id="price" type="number" inputMode="numeric" autoComplete="off" value={price} onChange={(event) => setPrice(event.target.value.replace(/\D/g, ''))} placeholder="Es. 12000" className={inputClass} />
               </div>
             </div>

@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { buildReport } from '../services/reportService';
 import { analyzeVehiclePhoto, askAutoEsperto } from '../services/ai';
-import { asyncHandler, serviceUnavailable } from '../http';
+import { asyncHandler } from '../http';
 
 const router = Router();
 
@@ -64,8 +64,18 @@ router.post(
     let analysis;
     try {
       analysis = await analyzeVehiclePhoto(input);
-    } catch {
-      throw serviceUnavailable('Non riesco a leggere questa foto. Carica una foto nitida dell’auto o del danno, senza usare screenshot troppo piccoli.');
+    } catch (error) {
+      console.warn('photo analysis unavailable:', error);
+      analysis = {
+        vehicle: { confidence: 'bassa' as const },
+        damage: {
+          visible: false,
+          category: 'non_chiaro' as const,
+          severity: 'media' as const,
+          description: 'Non riesco a distinguere con affidabilità auto o danno in questa immagine.',
+        },
+        note: 'L’analisi visiva non è disponibile per questa foto. Prova con una foto esterna nitida, scattata da vicino e senza screenshot; non viene salvata.',
+      };
     }
     res.set('Cache-Control', 'no-store');
     res.json({ success: true, analysis });

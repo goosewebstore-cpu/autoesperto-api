@@ -560,7 +560,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
         <p className="text-sm text-text-secondary leading-relaxed mb-4">
           Per una {vehicle.year ? `vettura del ${vehicle.year}` : 'vettura usata'}{price.inputKm ? ` con circa ${formatKm(price.inputKm)}` : ''}, verifica anche le campagne di richiamo e lo storico delle revisioni. Un richiamo dipende dal VIN: anno e modello da soli non bastano per dire se questa specifica auto è coinvolta.
         </p>
-        <div className="grid sm:grid-cols-2 gap-2">
+        <div className="grid sm:grid-cols-3 gap-2">
           <a
             href="https://richiami.unraeservizi.com/"
             target="_blank"
@@ -577,6 +577,15 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
             className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
           >
             Verifica storico revisioni e km
+            <ExternalLink className="w-4 h-4 text-text-tertiary" />
+          </a>
+          <a
+            href="https://www.aci.it/servizi/lestratto-cronologico-pra/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
+          >
+            Controlla storico PRA e vincoli
             <ExternalLink className="w-4 h-4 text-text-tertiary" />
           </a>
         </div>

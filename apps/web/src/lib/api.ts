@@ -12,6 +12,13 @@ export interface AnalyzePayload {
   requestedPrice?: number;
 }
 
+export interface PhotoAnalysis {
+  vehicle: { make?: string; model?: string; generation?: string; confidence: 'bassa' | 'media' | 'alta' };
+  damage: { visible: boolean; category: string; severity: string; description: string };
+  repairRange?: { min: number; max: number };
+  note: string;
+}
+
 async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
@@ -44,4 +51,8 @@ export async function analyzeVehicle(payload: AnalyzePayload): Promise<{ success
     method: 'POST',
     body: JSON.stringify(payload),
   });
+}
+
+export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: string; model?: string; year?: number }): Promise<{ success: boolean; analysis: PhotoAnalysis }> {
+  return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) });
 }

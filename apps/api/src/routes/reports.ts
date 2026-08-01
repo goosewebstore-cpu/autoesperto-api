@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { z } from 'zod';
 import { buildReport } from '../services/reportService';
-import { askAutoEsperto } from '../services/ai';
+import { analyzeVehiclePhoto, askAutoEsperto } from '../services/ai';
 import { asyncHandler } from '../http';
 
 const router = Router();
@@ -32,6 +32,11 @@ const askSchema = z.object({
   analysis: z.object({ score: z.number(), verdict: z.string() }).passthrough(),
 });
 
+const photoSchema = z.object({
+  imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
+  vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.number().int().optional() }).optional(),
+});
+
 router.post(
   '/analyze',
   asyncHandler(async (req, res) => {
@@ -49,6 +54,16 @@ router.post(
     const answer = await askAutoEsperto(question, vehicle, analysis);
     res.set('Cache-Control', 'no-store');
     res.json({ success: true, answer });
+  })
+);
+
+router.post(
+  '/photo-analyze',
+  asyncHandler(async (req, res) => {
+    const input = photoSchema.parse(req.body);
+    const analysis = await analyzeVehiclePhoto(input);
+    res.set('Cache-Control', 'no-store');
+    res.json({ success: true, analysis });
   })
 );
 

@@ -8,6 +8,7 @@ import SearchForm from '@/components/SearchForm';
 import ReportView from '@/components/ReportView';
 import AdSlot from '@/components/AdSlot';
 import CarFinder from '@/components/CarFinder';
+import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 import { POPULAR_MODELS, slugify } from '@/lib/catalogo';
 
@@ -171,6 +172,10 @@ function HomeContent() {
                   )}
                 </div>
               )}
+            </section>
+
+            <section className="max-w-xl mx-auto pb-8">
+              <DamagePhotoAnalyzer />
             </section>
 
             {/* How it works */}

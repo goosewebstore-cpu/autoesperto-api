@@ -6,6 +6,7 @@ import {
   Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, Play, MessageCircle,
 } from 'lucide-react';
 import AdSlot from '@/components/AdSlot';
+import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
@@ -310,6 +311,8 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
           ))}
         </div>
       </section>
+
+      <DamagePhotoAnalyzer vehicle={vehicle} />
 
       {/* Engine / transmission / common issues */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">

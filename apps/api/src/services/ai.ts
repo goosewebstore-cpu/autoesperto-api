@@ -9,6 +9,18 @@ export interface AIAnalysisInput {
   requestedPrice?: number;
 }
 
+export interface PhotoAnalysisInput {
+  imageData: string;
+  vehicle?: Partial<Pick<VehicleData, 'make' | 'model' | 'year'>>;
+}
+
+export interface PhotoAnalysisResult {
+  vehicle: { make?: string; model?: string; generation?: string; confidence: 'bassa' | 'media' | 'alta' };
+  damage: { visible: boolean; category: 'graffio' | 'ammaccatura' | 'paraurti' | 'fanale' | 'specchietto' | 'cerchio_gomma' | 'nessun_danno_evidente' | 'non_chiaro'; severity: 'lieve' | 'media' | 'alta'; description: string };
+  repairRange?: { min: number; max: number };
+  note: string;
+}
+
 const AI_ENRICH_ENABLED = process.env.AI_ENRICH === 'true';
 
 function computeReliabilityScore(vehicle: VehicleData, km: number, knowledge: ReturnType<typeof getVehicleKnowledge>): number {
@@ -46,6 +58,66 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
 
 function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
 function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
+
+const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], [number, number]>> = {
+  graffio: { lieve: [120, 280], media: [250, 550], alta: [450, 900] },
+  ammaccatura: { lieve: [150, 350], media: [300, 700], alta: [600, 1400] },
+  paraurti: { lieve: [220, 500], media: [450, 950], alta: [800, 1800] },
+  fanale: { lieve: [120, 300], media: [250, 700], alta: [500, 1500] },
+  specchietto: { lieve: [100, 250], media: [180, 450], alta: [350, 800] },
+  cerchio_gomma: { lieve: [80, 200], media: [160, 450], alta: [300, 900] },
+  nessun_danno_evidente: { lieve: [0, 0], media: [0, 0], alta: [0, 0] },
+  non_chiaro: { lieve: [0, 0], media: [0, 0], alta: [0, 0] },
+};
+
+export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
+  const key = process.env.OPENAI_API_KEY;
+  if (!key || key === 'mock') throw new Error('Analisi foto non configurata');
+
+  const vehicleContext = input.vehicle ? `${input.vehicle.make || ''} ${input.vehicle.model || ''} ${input.vehicle.year || ''}`.trim() : 'non indicato';
+  const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
+    method: 'POST',
+    signal: AbortSignal.timeout(20000),
+    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+    body: JSON.stringify({
+      model: getAIModel(),
+      temperature: 0.1,
+      response_format: { type: 'json_object' },
+      messages: [
+        { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, numeri di targa, persone, indirizzi e ogni altro dato personale: non trascriverli, non dedurli e non citarli. Non diagnosticare motore, telaio, incidenti pregressi, sicurezza o chilometri. Rispondi solo JSON in italiano.' },
+        { role: 'user', content: [
+          { type: 'text', text: `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca/modello/generazione visibili. Poi restituisci {"vehicle":{"make":"","model":"","generation":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.` },
+          { type: 'image_url', image_url: { url: input.imageData, detail: 'low' } },
+        ] },
+      ],
+    }),
+  });
+  const data = await response.json() as any;
+  const raw = data.choices?.[0]?.message?.content;
+  if (!response.ok || !raw) throw new Error('Non riesco a leggere questa foto. Prova con un\'immagine più nitida.');
+  const parsed = parseJsonContent<any>(raw);
+  const categories = Object.keys(repairRanges);
+  const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';
+  const severity = ['lieve', 'media', 'alta'].includes(parsed?.damage?.severity) ? parsed.damage.severity : 'media';
+  const visible = Boolean(parsed?.damage?.visible) && category !== 'nessun_danno_evidente' && category !== 'non_chiaro';
+  const range = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
+  return {
+    vehicle: {
+      make: typeof parsed?.vehicle?.make === 'string' ? parsed.vehicle.make.slice(0, 50) : undefined,
+      model: typeof parsed?.vehicle?.model === 'string' ? parsed.vehicle.model.slice(0, 50) : undefined,
+      generation: typeof parsed?.vehicle?.generation === 'string' ? parsed.vehicle.generation.slice(0, 80) : undefined,
+      confidence: ['bassa', 'media', 'alta'].includes(parsed?.vehicle?.confidence) ? parsed.vehicle.confidence : 'bassa',
+    },
+    damage: {
+      visible,
+      category,
+      severity,
+      description: typeof parsed?.damage?.description === 'string' ? parsed.damage.description.slice(0, 180) : 'La foto non permette una valutazione affidabile del danno.',
+    },
+    repairRange: range ? { min: range[0], max: range[1] } : undefined,
+    note: 'Stima visiva indicativa: ricambi, verniciatura, sensori e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
+  };
+}
 
 const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili/i.test(s);
 

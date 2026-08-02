@@ -57,7 +57,11 @@ export default function VehicleScanner() {
         reader.readAsDataURL(file);
       });
       const photoResponse = await analyzeVehiclePhoto(imageData);
-      const photo = photoResponse.analysis;
+      let photo = photoResponse.analysis;
+      if (!photo.vehicle.make || !photo.vehicle.model) {
+        const retryResponse = await analyzeVehiclePhoto(imageData);
+        photo = retryResponse.analysis;
+      }
       setAnalysis(photo); setStage('vehicle-found');
 
       if (!photo.vehicle.make || !photo.vehicle.model) {

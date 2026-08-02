@@ -40,9 +40,10 @@ function getPriceLabelConfig(label: PriceLabel | undefined) {
 interface ReportViewProps {
   report: AutoReport;
   onBack?: () => void;
+  embedded?: boolean;
 }
 
-export default function ReportView({ report, onBack }: ReportViewProps) {
+export default function ReportView({ report, onBack, embedded = false }: ReportViewProps) {
   const { vehicle, reliability, price } = report;
   const verdict = getVerdictConfig(reliability.verdict);
   const VerdictIcon = verdict.icon;
@@ -79,7 +80,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
   ].filter((s) => s.value);
 
   return (
-    <div className="max-w-3xl mx-auto space-y-5 pb-20 animate-fade-in">
+    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-5 pb-20 animate-fade-in`}>
       {onBack && (
         <button
           onClick={onBack}
@@ -91,7 +92,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
       )}
 
       {/* Header */}
-      <header className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
+      {!embedded && <header className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
         {vehicle.imageUrl && (
           <div className="relative h-56 md:h-72 bg-surface-2">
             <img
@@ -145,7 +146,7 @@ export default function ReportView({ report, onBack }: ReportViewProps) {
             {[vehicle.version, vehicle.year, vehicle.fuel, vehicle.body].filter(Boolean).join(' · ')}
           </p>
         </div>
-      </header>
+      </header>}
 
       {/* Score + verdict */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">

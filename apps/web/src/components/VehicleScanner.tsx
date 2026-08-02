@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { AlertTriangle, Camera, Check, ChevronRight, Heart, Loader2, RotateCcw, ShieldCheck, Sparkles, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { analyzeVehicle, analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
+import ReportView from '@/components/ReportView';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'analysis' | 'result' | 'error';
 
@@ -142,6 +143,12 @@ export default function VehicleScanner() {
 
           <article className="result-card damage-card"><div className="result-card-heading"><div><span className="result-label">Analisi esterna</span><h2>{analysis.damage.visible ? 'Danno visibile rilevato' : 'Nessun danno evidente'}</h2></div>{analysis.damage.visible ? <AlertTriangle className="h-6 w-6 text-amber-500" /> : <Check className="h-6 w-6 text-emerald-600" />}</div><div className="damage-row"><span className={analysis.damage.visible ? 'damage-dot warning' : 'damage-dot good'} /><div><strong>{damageLabels[analysis.damage.category] || 'Area esterna'}</strong><p>{analysis.damage.description}</p>{repairMax > 0 && <span className="damage-price">Riparazione stimata: {euro(repairMin)} – {euro(repairMax)}</span>}</div></div><p className="result-note">{analysis.note}</p></article>
         </div>
+        <div className="scanner-report-intro">
+          <span>Report completo AutoEsperto</span>
+          <h2>Tutti i dettagli della tua auto</h2>
+          <p>Affidabilità, scheda tecnica, motore, cambio, problemi noti, costi futuri, dati di mercato, annunci comparabili e alternative.</p>
+        </div>
+        <ReportView report={report} embedded />
       </section>
     );
   }

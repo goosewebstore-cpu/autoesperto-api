@@ -21,12 +21,31 @@ export function generateMetadata({ params }: PageProps): Metadata {
     title,
     description,
     alternates: { canonical: `/valutazione/${params.make}/` },
+    openGraph: {
+      type: 'website',
+      locale: 'it_IT',
+      title: `${title} | AutoEsperto`,
+      description,
+      url: `/valutazione/${params.make}/`,
+      siteName: 'AutoEsperto',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} usate` }],
+    },
   };
 }
 
 export default function MakeValutazionePage({ params }: PageProps) {
   const make = findMakeBySlug(params.make);
   if (!make) notFound();
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://autoesperto.vercel.app/' },
+      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.vercel.app/valutazione/' },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${params.make}/` },
+    ],
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -101,6 +120,10 @@ export default function MakeValutazionePage({ params }: PageProps) {
           </div>
         </div>
       </footer>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
     </div>
   );
 }

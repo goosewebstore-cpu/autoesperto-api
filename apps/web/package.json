@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@autoesperto/types": "*",
+    "@vercel/analytics": "^2.0.1",
     "jspdf": "^2.5.1",
     "lucide-react": "^0.378.0",
     "next": "14.2.3",

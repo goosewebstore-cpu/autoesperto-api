@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Inter } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/next';
 import './globals.css';
 import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
@@ -10,37 +11,58 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+const siteTitle = 'Analisi auto con AI: danni, valore e preventivo | AutoEsperto';
+const siteDescription =
+  'Carica una foto dell’auto: l’AI riconosce il veicolo, analizza i danni e stima riparazione, valore di mercato e Car Health Score.';
+
 export const metadata: Metadata = {
-  metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000'),
+  metadataBase: new URL(siteUrl),
+  applicationName: 'AutoEsperto',
   title: {
-    default: 'AutoEsperto — L\'esperto che controlla l\'auto prima di comprarla',
+    default: siteTitle,
     template: '%s | AutoEsperto',
   },
-  description:
-    'Analizza un\'auto usata in pochi secondi: dati del veicolo, valutazione di affidabilità, stima di mercato e consigli prima dell\'acquisto.',
+  description: siteDescription,
   keywords: [
-    'auto usata', 'valutazione auto', 'controllo targa', 'affidabilità auto',
-    'prezzo auto usate', 'consigli acquisto auto', 'AutoEsperto',
+    'analisi auto AI', 'scanner auto AI', 'valutazione auto', 'danni auto',
+    'preventivo riparazione auto', 'valore auto usata', 'Car Health Score', 'AutoEsperto',
   ],
+  category: 'automotive',
+  creator: 'AutoEsperto',
+  publisher: 'AutoEsperto',
   manifest: '/manifest.json',
   alternates: { canonical: '/' },
+  icons: {
+    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    apple: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
+  },
   openGraph: {
     type: 'website',
     locale: 'it_IT',
-    title: 'AutoEsperto — L\'esperto che controlla l\'auto prima di comprarla',
-    description:
-      'Analizza un\'auto usata in pochi secondi: dati del veicolo, valutazione di affidabilità, stima di mercato e consigli prima dell\'acquisto.',
+    url: siteUrl,
+    title: siteTitle,
+    description: siteDescription,
     siteName: 'AutoEsperto',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Analisi auto usate' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Analisi completa dell’auto con AI' }],
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'AutoEsperto — L\'esperto che controlla l\'auto prima di comprarla',
-    description:
-      'Analizza un\'auto usata in pochi secondi: dati del veicolo, valutazione di affidabilità, stima di mercato e consigli prima dell\'acquisto.',
+    title: siteTitle,
+    description: siteDescription,
     images: ['/og-image.png'],
   },
-  robots: { index: true, follow: true },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
+  },
   appleWebApp: {
     capable: true,
     statusBarStyle: 'default',
@@ -56,15 +78,14 @@ export const viewport: Viewport = {
 };
 
 function JsonLd() {
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
   const schema = [
     {
       '@context': 'https://schema.org',
       '@type': 'WebSite',
       name: 'AutoEsperto',
+      alternateName: 'Auto Esperto',
       url: siteUrl,
-      description:
-        'Analizza un\'auto usata in pochi secondi: dati del veicolo, valutazione di affidabilità, stima di mercato e consigli prima dell\'acquisto.',
+      description: siteDescription,
       inLanguage: 'it-IT',
     },
     {
@@ -73,6 +94,22 @@ function JsonLd() {
       name: 'AutoEsperto',
       url: siteUrl,
       logo: `${siteUrl}/icon-192.png`,
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'SoftwareApplication',
+      name: 'AutoEsperto',
+      url: siteUrl,
+      description: siteDescription,
+      applicationCategory: 'BusinessApplication',
+      operatingSystem: 'Web',
+      inLanguage: 'it-IT',
+      image: `${siteUrl}/og-image.png`,
+      offers: {
+        '@type': 'Offer',
+        price: '0',
+        priceCurrency: 'EUR',
+      },
     },
   ];
   return (
@@ -94,6 +131,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ServiceWorker />
         <CookieConsent />
         {children}
+        <Analytics />
       </body>
     </html>
   );

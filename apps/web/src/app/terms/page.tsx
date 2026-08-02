@@ -3,6 +3,8 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Termini di Servizio',
+  description: 'Termini e condizioni di utilizzo del servizio AutoEsperto.',
+  alternates: { canonical: '/terms' },
 };
 
 export default function TermsPage() {

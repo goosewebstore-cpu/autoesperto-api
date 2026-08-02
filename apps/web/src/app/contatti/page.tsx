@@ -3,6 +3,8 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Contatti',
+  description: 'Contatta AutoEsperto per assistenza, segnalazioni e collaborazioni.',
+  alternates: { canonical: '/contatti' },
 };
 
 export default function ContactPage() {

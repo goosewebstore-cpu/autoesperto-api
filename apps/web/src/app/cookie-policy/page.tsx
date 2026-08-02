@@ -3,13 +3,15 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Cookie Policy',
+  description: 'Informazioni sui cookie e sulle tecnologie utilizzate da AutoEsperto.',
+  alternates: { canonical: '/cookie-policy' },
 };
 
 export default function CookiePolicyPage() {
   return (
     <LegalPage
       title="Cookie Policy"
-      updated="31 luglio 2026"
+      updated="2 agosto 2026"
       intro="Questa pagina descrive le tipologie di cookie e tecnologie similari utilizzate dal sito AutoEsperto e le modalità per gestirne il consenso, in conformità al Regolamento UE 2016/679 e alla Direttiva 2009/136/CE (c.d. Cookie Law)."
       sections={[
         {
@@ -23,6 +25,13 @@ export default function CookiePolicyPage() {
           paragraphs: [
             'Il sito utilizza cookie tecnici strettamente necessari al funzionamento del servizio (ad esempio per ricordare la preferenza sul consenso ai cookie). Questi cookie non richiedono il consenso dell\'utente.',
             'Il sito non utilizza cookie di prima parte di profilazione.',
+          ],
+        },
+        {
+          heading: 'Statistiche anonime senza cookie',
+          paragraphs: [
+            'AutoEsperto utilizza Vercel Web Analytics per conoscere in forma aggregata le pagine visitate, la provenienza del traffico e il tipo di dispositivo. Il servizio non usa cookie analitici, non memorizza indirizzi IP e non consente di identificare o seguire l’utente tra siti diversi.',
+            'Queste statistiche servono esclusivamente a capire come migliorare il servizio. Non vengono inviati dati inseriti nelle analisi dell’auto né contenuti delle fotografie caricate.',
           ],
         },
         {

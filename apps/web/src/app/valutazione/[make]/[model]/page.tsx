@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 function siteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'http://localhost:3000';
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
 }
 
 export function generateStaticParams() {
@@ -39,6 +39,13 @@ export function generateMetadata({ params }: PageProps): Metadata {
       description,
       url: `${siteUrl()}/valutazione/${params.make}/${params.model}/`,
       siteName: 'AutoEsperto',
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} ${model} usata` }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: ['/og-image.png'],
     },
   };
 }
@@ -77,6 +84,16 @@ export default function ModelValutazionePage({ params }: PageProps) {
       name: f.q,
       acceptedAnswer: { '@type': 'Answer', text: f.a },
     })),
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl()}/` },
+      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: `${siteUrl()}/valutazione/` },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${params.make}/` },
+      { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${params.make}/${params.model}/` },
+    ],
   };
 
   return (
@@ -159,7 +176,7 @@ export default function ModelValutazionePage({ params }: PageProps) {
 
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema]) }}
         />
       </main>
 

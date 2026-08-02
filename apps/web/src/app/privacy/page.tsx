@@ -3,13 +3,15 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Privacy Policy',
+  description: 'Informativa sul trattamento dei dati personali nel servizio AutoEsperto.',
+  alternates: { canonical: '/privacy' },
 };
 
 export default function PrivacyPage() {
   return (
     <LegalPage
       title="Privacy Policy"
-      updated="31 luglio 2026"
+      updated="2 agosto 2026"
       intro="La presente informativa descrive le modalità di trattamento dei dati personali degli utenti del sito AutoEsperto, nel rispetto del Regolamento UE 2016/679 (GDPR) e del D.Lgs. 196/2003 e successive modificazioni."
       sections={[
         {
@@ -37,6 +39,7 @@ export default function PrivacyPage() {
           heading: 'Cookie',
           paragraphs: [
             'Il sito utilizza cookie tecnici essenziali e, previo consenso, cookie di profilazione di terze parti (Google AdSense/Ad Manager). Per i dettagli consultare la Cookie Policy.',
+            'Per misurare visite e pagine consultate utilizziamo Vercel Web Analytics, che raccoglie esclusivamente dati aggregati e anonimizzati senza installare cookie analitici e senza identificare personalmente gli utenti.',
           ],
         },
         {

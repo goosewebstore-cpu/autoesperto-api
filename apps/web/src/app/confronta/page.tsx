@@ -4,11 +4,11 @@ import CompareModels from '@/components/CompareModels';
 export const metadata: Metadata = {
   title: 'Confronta modelli auto usate',
   description: 'Confronta prezzo di mercato, affidabilità e alternative tra due auto usate.',
-  alternates: { canonical: '/confronta/' },
+  alternates: { canonical: '/confronta' },
   openGraph: {
     title: 'Confronta modelli auto usate | AutoEsperto',
     description: 'Confronta prezzo di mercato, affidabilità e alternative tra due auto usate.',
-    url: '/confronta/',
+    url: '/confronta',
   },
 };
 

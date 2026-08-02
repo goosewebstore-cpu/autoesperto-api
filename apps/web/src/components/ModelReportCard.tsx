@@ -141,7 +141,7 @@ export default function ModelReportCard({ make, model }: ModelReportCardProps) {
                 {report.alternatives.map((alt) => (
                   <a
                     key={`${alt.make}-${alt.model}`}
-                    href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}/`}
+                    href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}`}
                     className="bg-white border border-border rounded-xl px-3.5 py-3 text-sm hover:border-accent transition-colors"
                   >
                     <div className="font-semibold text-text-primary truncate">

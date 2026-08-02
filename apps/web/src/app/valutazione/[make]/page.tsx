@@ -20,13 +20,13 @@ export function generateMetadata({ params }: PageProps): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${params.make}/` },
+    alternates: { canonical: `/valutazione/${params.make}` },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
       title: `${title} | AutoEsperto`,
       description,
-      url: `/valutazione/${params.make}/`,
+      url: `/valutazione/${params.make}`,
       siteName: 'AutoEsperto',
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} usate` }],
     },
@@ -42,8 +42,8 @@ export default function MakeValutazionePage({ params }: PageProps) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://autoesperto.vercel.app/' },
-      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.vercel.app/valutazione/' },
-      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${params.make}/` },
+      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.vercel.app/valutazione' },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${params.make}` },
     ],
   };
 
@@ -66,7 +66,7 @@ export default function MakeValutazionePage({ params }: PageProps) {
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex items-center gap-1.5">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <span>/</span>
-          <Link href="/valutazione/" className="hover:text-accent transition-colors">Valutazione</Link>
+          <Link href="/valutazione" className="hover:text-accent transition-colors">Valutazione</Link>
           <span>/</span>
           <span className="text-text-secondary font-medium">{make.name}</span>
         </nav>
@@ -85,7 +85,7 @@ export default function MakeValutazionePage({ params }: PageProps) {
           {make.models.map((model) => (
             <Link
               key={model}
-              href={`/valutazione/${params.make}/${slugify(model)}/`}
+              href={`/valutazione/${params.make}/${slugify(model)}`}
               className="bg-surface-2 hover:bg-border/50 rounded-xl px-3.5 py-3 text-sm font-semibold text-text-primary truncate transition-colors"
             >
               {model}
@@ -94,7 +94,7 @@ export default function MakeValutazionePage({ params }: PageProps) {
         </div>
 
         <Link
-          href="/valutazione/"
+          href="/valutazione"
           className="inline-flex items-center gap-1.5 mt-8 text-sm text-text-secondary hover:text-text-primary transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />

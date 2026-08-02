@@ -7,13 +7,13 @@ export const metadata: Metadata = {
   title: 'Valutazione auto usate: prezzi di mercato per marca e modello',
   description:
     'Quanto costa un\'auto usata? Prezzi medi reali dagli annunci in vendita per ogni marca e modello, con valutazione di affidabilità e punti critici da controllare.',
-  alternates: { canonical: '/valutazione/' },
+  alternates: { canonical: '/valutazione' },
   openGraph: {
     type: 'website',
     locale: 'it_IT',
     title: 'Valutazione auto usate per marca e modello | AutoEsperto',
     description: 'Consulta prezzi indicativi, affidabilità e punti critici delle auto usate per marca e modello.',
-    url: '/valutazione/',
+    url: '/valutazione',
     siteName: 'AutoEsperto',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Valutazione auto usate con AutoEsperto' }],
   },
@@ -58,7 +58,7 @@ export default function ValutazioneIndexPage() {
           {makes.map((make) => (
             <Link
               key={make.name}
-              href={`/valutazione/${make.slug}/`}
+              href={`/valutazione/${make.slug}`}
               className="bg-surface-2 hover:bg-border/50 rounded-xl px-3.5 py-3 text-sm font-semibold text-text-primary transition-colors"
             >
               {make.name}

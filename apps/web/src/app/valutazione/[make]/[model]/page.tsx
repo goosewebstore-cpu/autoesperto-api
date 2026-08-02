@@ -31,13 +31,13 @@ export function generateMetadata({ params }: PageProps): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${params.make}/${params.model}/` },
+    alternates: { canonical: `/valutazione/${params.make}/${params.model}` },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
       title,
       description,
-      url: `${siteUrl()}/valutazione/${params.make}/${params.model}/`,
+      url: `${siteUrl()}/valutazione/${params.make}/${params.model}`,
       siteName: 'AutoEsperto',
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} ${model} usata` }],
     },
@@ -90,9 +90,9 @@ export default function ModelValutazionePage({ params }: PageProps) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl()}/` },
-      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: `${siteUrl()}/valutazione/` },
-      { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${params.make}/` },
-      { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${params.make}/${params.model}/` },
+      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: `${siteUrl()}/valutazione` },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${params.make}` },
+      { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${params.make}/${params.model}` },
     ],
   };
 
@@ -116,7 +116,7 @@ export default function ModelValutazionePage({ params }: PageProps) {
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <span>/</span>
-          <Link href={`/valutazione/${params.make}/`} className="hover:text-accent transition-colors">
+          <Link href={`/valutazione/${params.make}`} className="hover:text-accent transition-colors">
             {make.name}
           </Link>
           <span>/</span>
@@ -124,7 +124,7 @@ export default function ModelValutazionePage({ params }: PageProps) {
         </nav>
 
         <Link
-          href={`/valutazione/${params.make}/`}
+          href={`/valutazione/${params.make}`}
           className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-5"
         >
           <ArrowLeft className="w-4 h-4" />

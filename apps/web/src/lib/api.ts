@@ -13,7 +13,7 @@ export interface AnalyzePayload {
 }
 
 export interface PhotoAnalysis {
-  vehicle: { make?: string; model?: string; generation?: string; confidence: 'bassa' | 'media' | 'alta' };
+  vehicle: { make?: string; model?: string; generation?: string; year?: number; color?: string; bodyType?: string; confidence: 'bassa' | 'media' | 'alta' };
   damage: { visible: boolean; category: string; severity: string; description: string };
   repairRange?: { min: number; max: number };
   note: string;

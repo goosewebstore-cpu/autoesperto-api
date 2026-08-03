@@ -4,6 +4,7 @@ import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import dotenv from 'dotenv';
 import path from 'path';
+import { execSync } from 'child_process';
 import { z } from 'zod';
 
 import reportRoutes from './routes/reports';
@@ -25,6 +26,19 @@ const WEB_URLS = (process.env.WEB_URLS || process.env.WEB_URL || 'http://localho
 
 if (WEB_URLS.length === 1 && WEB_URLS[0] === 'http://localhost:3000') {
   console.warn('[CORS] WEB_URLS non configurato: in produzione imposta WEB_URLS con l\'URL pubblico del sito (es. https://autoesperto.it).');
+}
+
+try {
+  if (process.env.DATABASE_URL && (process.env.DATABASE_SCHEMA_SYNC ?? 'true') !== 'false') {
+    console.log('Synchronizing database schema...');
+    execSync('npx prisma db push --schema=packages/database/prisma/schema.prisma --skip-generate --accept-data-loss', {
+      stdio: 'inherit',
+      timeout: 60000,
+    });
+    console.log('Database schema synchronized.');
+  }
+} catch (error) {
+  console.error('Database schema sync failed:', error instanceof Error ? error.message : error);
 }
 
 app.set('trust proxy', 1);

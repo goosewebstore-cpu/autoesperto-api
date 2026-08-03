@@ -112,7 +112,11 @@ export default function VehicleScanner() {
           <span>Approfondimento AutoEsperto</span>
           <h2>Vuoi tutti i dettagli?</h2>
           <p>Affidabilità del modello, problemi noti, costi futuri, danni visibili, controlli da fare, annunci comparabili e alternative. Il primo risultato resta gratuito; paghi solo se vuoi il report completo.</p>
-          <div className="scanner-locked-preview" aria-hidden="true"><span>Affidabilità · Problemi noti · Costi · Danni · Alternative</span></div>
+          <div className="scanner-locked-preview" aria-hidden="true">
+            <div className="locked-preview-card"><span>Affidabilità del modello</span><strong>8,2 / 10</strong><p>Modello complessivamente affidabile, con alcuni controlli...</p></div>
+            <div className="locked-preview-card"><span>Problemi noti e costi</span><strong>3 punti da controllare</strong><p>Distribuzione, manutenzione e componenti soggetti...</p></div>
+            <div className="locked-preview-card"><span>Verdetto AutoEsperto</span><strong>Valuta con attenzione</strong><p>Controlli consigliati prima di firmare...</p></div>
+          </div>
           <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Approfondisci · 5,99 € <ChevronRight className="h-5 w-5" /></button>
           <small>Pagamento unico. Login richiesto solo per acquistare e conservare il report.</small>
         </div>

@@ -121,7 +121,22 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     const providerMessage = typeof data?.error?.message === 'string' ? data.error.message : '';
     throw new Error(providerMessage || `Il provider visivo non ha restituito un risultato (HTTP ${response.status}).`);
   }
-  const parsed = parseJsonContent<any>(raw);
+  let parsed: any;
+  try {
+    parsed = parseJsonContent<any>(raw);
+  } catch (parseError) {
+    console.warn('Failed to parse vision response as JSON. Raw content (first 500 chars):', raw.slice(0, 500));
+    return {
+      vehicle: { confidence: 'bassa' as const },
+      damage: {
+        visible: false,
+        category: 'non_chiaro' as const,
+        severity: 'media' as const,
+        description: 'Il riconoscimento automatico non ha restituito dati utilizzabili per questa foto.',
+      },
+      note: 'Il riconoscimento visivo non è disponibile in questo momento. La foto non viene salvata: riprova più tardi oppure inserisci marca e modello.',
+    };
+  }
   const categories = Object.keys(repairRanges);
   const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';
   const severity = ['lieve', 'media', 'alta'].includes(parsed?.damage?.severity) ? parsed.damage.severity : 'media';
@@ -366,9 +381,30 @@ function parseJsonContent<T>(content: string): T {
     .replace(/^```(?:json)?\s*/i, '')
     .replace(/\s*```$/, '');
   const start = cleaned.indexOf('{');
-  const end = cleaned.lastIndexOf('}');
-  if (start < 0 || end <= start) throw new Error('Il provider non ha restituito un JSON valido.');
-  return JSON.parse(cleaned.slice(start, end + 1)) as T;
+  if (start < 0) {
+    const arrStart = cleaned.indexOf('[');
+    if (arrStart < 0) throw new Error('Il provider non ha restituito un JSON valido.');
+    const arrEnd = cleaned.lastIndexOf(']');
+    return JSON.parse(cleaned.slice(arrStart, arrEnd + 1)) as T;
+  }
+  let depth = 0;
+  let inString = false;
+  let escape = false;
+  for (let i = start; i < cleaned.length; i++) {
+    const ch = cleaned[i];
+    if (escape) { escape = false; continue; }
+    if (ch === '\\' && inString) { escape = true; continue; }
+    if (ch === '"') { inString = !inString; continue; }
+    if (inString) continue;
+    if (ch === '{') depth++;
+    else if (ch === '}') {
+      depth--;
+      if (depth === 0) {
+        return JSON.parse(cleaned.slice(start, i + 1)) as T;
+      }
+    }
+  }
+  return JSON.parse(cleaned.slice(start)) as T;
 }
 
 export interface AskInput {

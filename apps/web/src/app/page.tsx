@@ -1,13 +1,13 @@
 import HomeClient, { type HomeInitialPayload } from '@/components/HomeClient';
 
 interface HomePageProps {
-  searchParams: {
+  searchParams: Promise<{
     make?: string;
     model?: string;
     year?: string;
     km?: string;
     price?: string;
-  };
+  }>;
 }
 
 function optionalNumber(value?: string) {
@@ -16,16 +16,17 @@ function optionalNumber(value?: string) {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
-export default function Home({ searchParams }: HomePageProps) {
+export default async function Home({ searchParams }: HomePageProps) {
+  const query = await searchParams;
   let initialPayload: HomeInitialPayload = null;
 
-  if (searchParams.make && searchParams.model) {
+  if (query.make && query.model) {
     initialPayload = {
-      make: searchParams.make,
-      model: searchParams.model,
-      year: optionalNumber(searchParams.year),
-      km: optionalNumber(searchParams.km),
-      requestedPrice: optionalNumber(searchParams.price),
+      make: query.make,
+      model: query.model,
+      year: optionalNumber(query.year),
+      km: optionalNumber(query.km),
+      requestedPrice: optionalNumber(query.price),
     };
   }
 

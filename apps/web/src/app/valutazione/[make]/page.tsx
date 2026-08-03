@@ -5,36 +5,38 @@ import { ArrowLeft, Car, Search } from 'lucide-react';
 import { findMakeBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 
 interface PageProps {
-  params: { make: string };
+  params: Promise<{ make: string }>;
 }
 
 export function generateStaticParams() {
   return getAllMakes().map((make) => ({ make: make.slug }));
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const make = findMakeBySlug(params.make);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolved = await params;
+  const make = findMakeBySlug(resolved.make);
   if (!make) return {};
   const title = `Valutazione ${make.name} usata — prezzi di mercato per modello`;
   const description = `Quanto costa una ${make.name} usata? Prezzi medi reali per ogni modello ${make.name}, affidabilità e punti critici da controllare prima dell'acquisto.`;
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${params.make}` },
+    alternates: { canonical: `/valutazione/${resolved.make}` },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
       title: `${title} | AutoEsperto`,
       description,
-      url: `/valutazione/${params.make}`,
+      url: `/valutazione/${resolved.make}`,
       siteName: 'AutoEsperto',
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} usate` }],
     },
   };
 }
 
-export default function MakeValutazionePage({ params }: PageProps) {
-  const make = findMakeBySlug(params.make);
+export default async function MakeValutazionePage({ params }: PageProps) {
+  const resolved = await params;
+  const make = findMakeBySlug(resolved.make);
   if (!make) notFound();
 
   const breadcrumbSchema = {
@@ -43,7 +45,7 @@ export default function MakeValutazionePage({ params }: PageProps) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://autoesperto.vercel.app/' },
       { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.vercel.app/valutazione' },
-      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${params.make}` },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${resolved.make}` },
     ],
   };
 
@@ -85,7 +87,7 @@ export default function MakeValutazionePage({ params }: PageProps) {
           {make.models.map((model) => (
             <Link
               key={model}
-              href={`/valutazione/${params.make}/${slugify(model)}`}
+              href={`/valutazione/${resolved.make}/${slugify(model)}`}
               className="bg-surface-2 hover:bg-border/50 rounded-xl px-3.5 py-3 text-sm font-semibold text-text-primary truncate transition-colors"
             >
               {model}

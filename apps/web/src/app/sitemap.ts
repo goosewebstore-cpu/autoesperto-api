@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/valutazione`, changeFrequency: 'weekly', priority: 0.9 },
     { url: `${base}/confronta`, changeFrequency: 'weekly', priority: 0.8 },
     { url: `${base}/contatti`, changeFrequency: 'yearly', priority: 0.5 },
+    { url: `${base}/lavora-con-noi`, changeFrequency: 'monthly', priority: 0.6 },
     { url: `${base}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${base}/terms`, changeFrequency: 'yearly', priority: 0.3 },
     { url: `${base}/cookie-policy`, changeFrequency: 'yearly', priority: 0.3 },

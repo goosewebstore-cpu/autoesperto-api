@@ -75,8 +75,9 @@ function reportKeyFor(input: ReportInput): string {
   return `${cacheKeyFor(input)}:${input.year || ''}:${input.km || ''}:${input.requestedPrice || ''}`;
 }
 
-export async function buildReport(input: ReportInput): Promise<{ report: AutoReport; cached: boolean }> {
-  const cached = cacheGet<AutoReport>(`report:${reportKeyFor(input)}`);
+export async function buildReport(input: ReportInput, options: { requireDetailedModelAnalysis?: boolean } = {}): Promise<{ report: AutoReport; cached: boolean }> {
+  const cachePrefix = options.requireDetailedModelAnalysis ? 'report:detailed' : 'report';
+  const cached = cacheGet<AutoReport>(`${cachePrefix}:${reportKeyFor(input)}`);
   if (cached) return { report: cached, cached: true };
 
   const vehicle = await resolveVehicle(input);
@@ -101,7 +102,7 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
     vehicle,
     km: input.km,
     requestedPrice: input.requestedPrice,
-  });
+  }, { requireDetailedModelAnalysis: options.requireDetailedModelAnalysis });
 
   const report: AutoReport = {
     vehicle,
@@ -141,6 +142,6 @@ export async function buildReport(input: ReportInput): Promise<{ report: AutoRep
     createdAt: new Date().toISOString(),
   };
 
-  cacheSet(`report:${reportKeyFor(input)}`, report, isModelSearch ? MODEL_REPORT_TTL : PLATE_TTL);
+  cacheSet(`${cachePrefix}:${reportKeyFor(input)}`, report, isModelSearch ? MODEL_REPORT_TTL : PLATE_TTL);
   return { report, cached: false };
 }

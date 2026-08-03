@@ -14,7 +14,7 @@ const inter = Inter({
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
 const siteTitle = 'Analisi auto con AI: danni, valore e preventivo | AutoEsperto';
 const siteDescription =
-  'Carica una foto dell’auto: l’AI riconosce il veicolo, analizza i danni e stima riparazione, valore di mercato e Car Health Score.';
+  'Analizza l’auto da una foto: scopri marca, modello, anno e prezzo indicativo, con un report dettagliato specifico per quel veicolo.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -107,8 +107,9 @@ function JsonLd() {
       image: `${siteUrl}/og-image.png`,
       offers: {
         '@type': 'Offer',
-        price: '0',
+        price: '5.99',
         priceCurrency: 'EUR',
+        description: 'Una analisi completa, pagamento singolo senza abbonamento',
       },
     },
   ];
@@ -122,7 +123,7 @@ function JsonLd() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={inter.variable}>
+    <html lang="it" className={inter.variable} data-scroll-behavior="smooth">
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
       </head>

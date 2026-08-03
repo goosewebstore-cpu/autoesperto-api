@@ -7,7 +7,11 @@ import path from 'path';
 import { z } from 'zod';
 
 import reportRoutes from './routes/reports';
+import authRoutes from './routes/auth';
+import billingRoutes from './routes/billing';
+import analysisRoutes from './routes/analyses';
 import { HttpError } from './http';
+import { stripeWebhook } from './webhook';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
 
@@ -35,6 +39,7 @@ app.use(
     methods: ['GET', 'POST'],
   })
 );
+app.post('/billing/webhook', express.raw({ type: 'application/json' }), stripeWebhook);
 app.use(express.json({ limit: '8mb' }));
 
 const apiLimiter = rateLimit({
@@ -45,6 +50,16 @@ const apiLimiter = rateLimit({
   message: { success: false, error: 'Troppe richieste. Riprova tra un minuto.' },
 });
 app.use('/reports', apiLimiter);
+app.use('/analyses', apiLimiter);
+
+const authLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: { success: false, error: 'Troppi tentativi. Riprova tra qualche minuto.' },
+});
+app.use('/auth', authLimiter);
 
 app.get('/health', (_req, res) => {
   res.set('Cache-Control', 'no-store');
@@ -56,6 +71,9 @@ app.get('/', (_req, res) => {
 });
 
 app.use('/reports', reportRoutes);
+app.use('/auth', authRoutes);
+app.use('/billing', billingRoutes);
+app.use('/analyses', analysisRoutes);
 
 app.use((_req, res) => {
   res.status(404).json({ success: false, error: 'Risorsa non trovata' });

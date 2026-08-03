@@ -1,6 +1,7 @@
 'use client';
 
 import { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import { AlertTriangle, Camera, Check, ChevronRight, Heart, Loader2, RotateCcw, ShieldCheck, Sparkles, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { analyzeVehicle, analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
@@ -8,7 +9,7 @@ import ReportView from '@/components/ReportView';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'analysis' | 'result' | 'error';
 
-const promises = ['Marca', 'Modello', 'Versione', 'Anno', 'Stato estetico', 'Danni presenti', 'Valore di mercato', 'Costi di riparazione'];
+const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Danni visibili', 'Problemi noti', 'Costi da prevedere'];
 
 const damageLabels: Record<string, string> = {
   graffio: 'Graffio sulla carrozzeria',
@@ -25,6 +26,7 @@ const euro = (value: number) => `${Math.max(0, Math.round(value / 100) * 100).to
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 export default function VehicleScanner() {
+  const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<ScannerStage>('idle');
   const [imageUrl, setImageUrl] = useState('');
@@ -92,14 +94,14 @@ export default function VehicleScanner() {
         <div className="scanner-glow scanner-glow-one" /><div className="scanner-glow scanner-glow-two" />
         <div className="scanner-hero-copy">
           <div className="scanner-kicker"><Sparkles className="h-4 w-4" /> Scanner AI per auto</div>
-          <h1>Analisi AI completa<br className="hidden sm:block" /> della tua macchina</h1>
-          <p className="scanner-lead">Scopri in pochi secondi ogni dettaglio visibile del tuo veicolo, il suo valore indicativo e cosa potrebbe costare ripararlo.</p>
+          <h1>Analizza l’auto.<br className="hidden sm:block" /> Scopri modello e prezzo.</h1>
+          <p className="scanner-lead">Da una foto riconosciamo marca, modello e anno indicativo, stimiamo il prezzo e creiamo un’analisi dettagliata fatta apposta per quel modello e quell’anno.</p>
           <div className="scanner-promises" aria-label="Informazioni analizzate">
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
-          <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Analizza la mia macchina <ChevronRight className="h-5 w-5" /></button>
-          <p className="scanner-microcopy">Carica una foto e lascia che l’AI faccia il resto.</p>
-          <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> La foto viene analizzata e non viene salvata.</div>
+          <button type="button" className="scanner-cta" onClick={() => router.push('/account')}><Camera className="h-5 w-5" /> Inizia l’analisi · 5,99 € <ChevronRight className="h-5 w-5" /></button>
+          <p className="scanner-microcopy">Pagamento unico. Nessun abbonamento. Il report resta nella tua area personale.</p>
+          <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
         </div>
         <div className="scanner-hero-visual" aria-hidden="true">
           <div className="scanner-device">

@@ -2,11 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Car, CheckCircle2 } from 'lucide-react';
+import { Car, CheckCircle2, UserRound } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import ReportView from '@/components/ReportView';
 import VehicleScanner from '@/components/VehicleScanner';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
+import AdSlot from '@/components/AdSlot';
 
 export type HomeInitialPayload = AnalyzePayload | null;
 
@@ -55,7 +56,7 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
             <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent"><Car className="h-4 w-4 text-white" /></span>
             <span className="text-lg font-bold tracking-tight text-text-primary">Auto<span className="text-accent">Esperto</span></span>
           </button>
-          {!report && <div className="flex items-center gap-2 text-xs font-semibold text-text-tertiary"><span className="h-2 w-2 rounded-full bg-success" /> AI pronta</div>}
+          {!report && <Link href="/account" className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs font-bold text-text-primary transition hover:border-accent hover:text-accent"><UserRound className="h-4 w-4" /> Area personale</Link>}
         </div>
       </header>
 
@@ -76,6 +77,7 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                 </div>
               ))}
             </section>
+            <AdSlot placement="home" className="py-6" />
           </div>
         )}
       </main>
@@ -88,6 +90,8 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
             <Link href="/privacy" className="hover:text-accent">Privacy</Link>
             <Link href="/cookie-policy" className="hover:text-accent">Cookie</Link>
             <Link href="/contatti" className="hover:text-accent">Contatti</Link>
+            <Link href="/lavora-con-noi" className="hover:text-accent">Lavora con noi</Link>
+            <Link href="/terms" className="hover:text-accent">Termini</Link>
           </nav>
           Le stime di AutoEsperto sono indicative. Danni nascosti o meccanici richiedono sempre un controllo professionale.
         </div>

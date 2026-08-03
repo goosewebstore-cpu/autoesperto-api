@@ -41,9 +41,11 @@ interface ReportViewProps {
   report: AutoReport;
   onBack?: () => void;
   embedded?: boolean;
+  showAds?: boolean;
+  allowPhotoTools?: boolean;
 }
 
-export default function ReportView({ report, onBack, embedded = false }: ReportViewProps) {
+export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true }: ReportViewProps) {
   const { vehicle, reliability, price } = report;
   const verdict = getVerdictConfig(reliability.verdict);
   const VerdictIcon = verdict.icon;
@@ -199,7 +201,7 @@ export default function ReportView({ report, onBack, embedded = false }: ReportV
         <p className="text-xs text-text-tertiary mt-3">Le discussioni sono opinioni personali: usale per fare domande pi&ugrave; precise a venditore e meccanico.</p>
       </section>
 
-      <AdSlot slot="0000000000" />
+      {showAds && <AdSlot placement="report" />}
 
       {/* Strengths / weaknesses / advice */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
@@ -337,7 +339,7 @@ export default function ReportView({ report, onBack, embedded = false }: ReportV
         </div>
       </section>
 
-      <DamagePhotoAnalyzer vehicle={vehicle} />
+      {allowPhotoTools && <DamagePhotoAnalyzer vehicle={vehicle} />}
 
       {/* Engine / transmission / common issues */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">

@@ -11,4 +11,5 @@ export function getConsent(): ConsentChoice {
 export function setConsent(choice: 'accepted' | 'refused'): void {
   if (typeof window === 'undefined') return;
   window.localStorage.setItem(CONSENT_KEY, choice);
+  window.dispatchEvent(new CustomEvent('ae-consent-changed', { detail: choice }));
 }

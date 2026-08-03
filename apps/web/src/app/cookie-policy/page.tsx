@@ -3,7 +3,7 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Cookie Policy',
-  description: 'Informazioni sui cookie e sulle tecnologie utilizzate da AutoEsperto.',
+  description: 'Cookie, strumenti tecnici, preferenze e pubblicità su AutoEsperto.',
   alternates: { canonical: '/cookie-policy' },
 };
 
@@ -12,48 +12,43 @@ export default function CookiePolicyPage() {
     <LegalPage
       title="Cookie Policy"
       updated="2 agosto 2026"
-      intro="Questa pagina descrive le tipologie di cookie e tecnologie similari utilizzate dal sito AutoEsperto e le modalità per gestirne il consenso, in conformità al Regolamento UE 2016/679 e alla Direttiva 2009/136/CE (c.d. Cookie Law)."
+      intro="AutoEsperto separa gli strumenti necessari al servizio da quelli pubblicitari. Le funzioni essenziali restano disponibili anche rifiutando i cookie non necessari."
       sections={[
         {
-          heading: 'Cosa sono i cookie',
+          heading: 'Strumenti necessari',
           paragraphs: [
-            'I cookie sono piccoli file di testo che i siti web salvano sul dispositivo dell\'utente per memorizzare informazioni durante la navigazione.',
+            'Il sito usa memoria locale o tecnologie equivalenti per mantenere la sessione dell’account e ricordare la scelta sui cookie. Sono strumenti necessari per autenticazione, sicurezza e preferenze e non vengono usati per pubblicità comportamentale.',
           ],
         },
         {
-          heading: 'Cookie tecnici',
+          heading: 'Statistiche',
           paragraphs: [
-            'Il sito utilizza cookie tecnici strettamente necessari al funzionamento del servizio (ad esempio per ricordare la preferenza sul consenso ai cookie). Questi cookie non richiedono il consenso dell\'utente.',
-            'Il sito non utilizza cookie di prima parte di profilazione.',
+            'Vercel Web Analytics può raccogliere dati tecnici aggregati sulle pagine visitate e sul dispositivo. Non inviamo ad Analytics fotografie, credenziali, dati di pagamento o contenuto dei report.',
           ],
         },
         {
-          heading: 'Statistiche anonime senza cookie',
+          heading: 'Google AdSense',
           paragraphs: [
-            'AutoEsperto utilizza Vercel Web Analytics per conoscere in forma aggregata le pagine visitate, la provenienza del traffico e il tipo di dispositivo. Il servizio non usa cookie analitici, non memorizza indirizzi IP e non consente di identificare o seguire l’utente tra siti diversi.',
-            'Queste statistiche servono esclusivamente a capire come migliorare il servizio. Non vengono inviati dati inseriti nelle analisi dell’auto né contenuti delle fotografie caricate.',
+            'Gli annunci AdSense sono predisposti ma restano tecnicamente disattivati finché non sono configurati un account approvato, identificativi reali delle unità pubblicitarie e una piattaforma di gestione del consenso certificata da Google per SEE, Regno Unito e Svizzera.',
+            'Quando attivo e autorizzato, Google e i suoi partner possono usare cookie o identificatori per erogare, misurare e, se consentito, personalizzare gli annunci. AdSense viene previsto soltanto sulle pagine pubbliche, non nell’area personale o nel report acquistato.',
           ],
         },
         {
-          heading: 'Cookie di terze parti (Google AdSense)',
+          heading: 'Scelta e revoca',
           paragraphs: [
-            'Il sito può mostrare annunci pubblicitari tramite Google AdSense. Google e i suoi partner utilizzano cookie di profilazione per mostrare annunci basati sulle visite precedenti dell\'utente.',
-            'I cookie AdSense sono di terze parti e vengono attivati solo dopo il consenso espresso dell\'utente tramite l\'apposito banner.',
-            'Per ulteriori informazioni: policies.google.com/technologies/ads e adssettings.google.com (pagina di gestione degli annunci di Google).',
+            'Al primo accesso è possibile accettare oppure rifiutare gli strumenti non necessari. Chiudere il banner mantiene l’impostazione “solo necessari”.',
+            'La scelta può essere modificata in ogni momento tramite il pulsante “Cookie” visibile nel sito. La revoca non pregiudica la liceità dei trattamenti già effettuati e non impedisce l’uso delle funzioni essenziali.',
           ],
         },
         {
-          heading: 'Gestione del consenso',
+          heading: 'Terze parti',
           paragraphs: [
-            'Al primo accesso viene mostrato un banner che consente di accettare o rifiutare i cookie non tecnici. La scelta viene ricordata e può essere modificata in qualsiasi momento.',
-            'È inoltre possibile gestire o disabilitare i cookie direttamente dal browser (Impostazioni → Privacy e sicurezza). La disabilitazione dei cookie non impedisce l\'utilizzo delle funzioni essenziali del sito.',
+            'Le informazioni aggiornate sulle tecnologie pubblicitarie di Google sono disponibili nelle Norme sulla privacy e nelle Impostazioni annunci di Google. La CMP attivata sul sito mostrerà l’elenco aggiornato dei fornitori e delle finalità selezionabili.',
           ],
         },
         {
           heading: 'Contatti',
-          paragraphs: [
-            'Per domande relative alla presente Cookie Policy scrivere a: privacy@autoesperto.it.',
-          ],
+          paragraphs: ['Per richieste relative a cookie e privacy: goosewebstore@gmail.com.'],
         },
       ]}
     />

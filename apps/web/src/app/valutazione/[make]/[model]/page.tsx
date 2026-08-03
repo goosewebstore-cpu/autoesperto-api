@@ -6,7 +6,7 @@ import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/cat
 import ModelReportCard from '@/components/ModelReportCard';
 
 interface PageProps {
-  params: { make: string; model: string };
+  params: Promise<{ make: string; model: string }>;
 }
 
 function siteUrl() {
@@ -19,10 +19,11 @@ export function generateStaticParams() {
   );
 }
 
-export function generateMetadata({ params }: PageProps): Metadata {
-  const make = findMakeBySlug(params.make);
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolved = await params;
+  const make = findMakeBySlug(resolved.make);
   if (!make) return {};
-  const model = findModelBySlug(make, params.model);
+  const model = findModelBySlug(make, resolved.model);
   if (!model) return {};
 
   const title = `Quanto costa una ${make.name} ${model} usata? Prezzo di mercato ${new Date().getFullYear()}`;
@@ -31,13 +32,13 @@ export function generateMetadata({ params }: PageProps): Metadata {
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${params.make}/${params.model}` },
+    alternates: { canonical: `/valutazione/${resolved.make}/${resolved.model}` },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
       title,
       description,
-      url: `${siteUrl()}/valutazione/${params.make}/${params.model}`,
+      url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}`,
       siteName: 'AutoEsperto',
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} ${model} usata` }],
     },
@@ -50,10 +51,11 @@ export function generateMetadata({ params }: PageProps): Metadata {
   };
 }
 
-export default function ModelValutazionePage({ params }: PageProps) {
-  const make = findMakeBySlug(params.make);
+export default async function ModelValutazionePage({ params }: PageProps) {
+  const resolved = await params;
+  const make = findMakeBySlug(resolved.make);
   if (!make) notFound();
-  const model = findModelBySlug(make, params.model);
+  const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
 
   const year = new Date().getFullYear();
@@ -91,8 +93,8 @@ export default function ModelValutazionePage({ params }: PageProps) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl()}/` },
       { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: `${siteUrl()}/valutazione` },
-      { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${params.make}` },
-      { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${params.make}/${params.model}` },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${resolved.make}` },
+      { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}` },
     ],
   };
 
@@ -116,7 +118,7 @@ export default function ModelValutazionePage({ params }: PageProps) {
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <span>/</span>
-          <Link href={`/valutazione/${params.make}`} className="hover:text-accent transition-colors">
+          <Link href={`/valutazione/${resolved.make}`} className="hover:text-accent transition-colors">
             {make.name}
           </Link>
           <span>/</span>
@@ -124,7 +126,7 @@ export default function ModelValutazionePage({ params }: PageProps) {
         </nav>
 
         <Link
-          href={`/valutazione/${params.make}`}
+          href={`/valutazione/${resolved.make}`}
           className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-5"
         >
           <ArrowLeft className="w-4 h-4" />

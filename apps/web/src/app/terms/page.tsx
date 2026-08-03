@@ -3,7 +3,7 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Termini di Servizio',
-  description: 'Termini e condizioni di utilizzo del servizio AutoEsperto.',
+  description: 'Termini del servizio a pagamento AutoEsperto.',
   alternates: { canonical: '/terms' },
 };
 
@@ -11,53 +11,60 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Termini di Servizio"
-      updated="31 luglio 2026"
-      intro="I presenti Termini di Servizio disciplinano l'utilizzo del sito e del servizio AutoEsperto. Utilizzando il servizio l'utente accetta integralmente i presenti termini."
+      updated="2 agosto 2026"
+      intro="I presenti Termini disciplinano l’account, l’acquisto singolo e l’analisi AutoEsperto. Prima di attivare pagamenti reali devono essere pubblicati i dati identificativi, geografici e fiscali completi del venditore."
       sections={[
         {
-          heading: 'Oggetto del servizio',
+          heading: 'Servizio acquistato',
           paragraphs: [
-            'AutoEsperto è un servizio gratuito che fornisce valutazioni indicative su autoveicoli usati, basate sulla targa (dati veicolari ufficiali) o su marca e modello, sul chilometraggio e sul prezzo richiesto inseriti dall\'utente.',
-            'Il report generato comprende informazioni veicolari, una valutazione indicativa di affidabilità, una stima di mercato e consigli generali prima dell\'acquisto.',
+            'L’acquisto include una sola analisi completa per account, senza rinnovo automatico. Il prezzo mostrato prima del pagamento è riferito a tale singola analisi.',
+            'Il report include riconoscimento visivo quando possibile, prezzo indicativo, osservazioni esterne visibili e approfondimenti relativi al modello e all’anno riconosciuti o dichiarati.',
+          ],
+        },
+        {
+          heading: 'Account e disponibilità del report',
+          paragraphs: [
+            'L’utente è responsabile della correttezza dell’email o del telefono utilizzati e della riservatezza della password. Ogni account può generare una sola analisi; dopo la generazione il report resta consultabile nell’area personale finché il servizio e l’account restano attivi.',
+            'Non è consentito creare account multipli per aggirare limiti tecnici, promozioni o misure antifrode.',
+          ],
+        },
+        {
+          heading: 'Pagamento',
+          paragraphs: [
+            'Il pagamento è una tantum ed è elaborato da Stripe. AutoEsperto non conserva i dati completi della carta. L’analisi diventa disponibile solo dopo la conferma del pagamento.',
+            'Un pagamento riuscito non consuma automaticamente l’analisi: il credito viene utilizzato soltanto quando il report viene generato e salvato.',
+          ],
+        },
+        {
+          heading: 'Recesso ed esecuzione immediata',
+          paragraphs: [
+            'Prima della generazione del report si applicano i diritti riconosciuti al consumatore dalla legge, incluso il diritto di recesso quando previsto. Per iniziare l’analisi durante il relativo periodo, l’utente deve chiedere espressamente l’esecuzione immediata.',
+            'Quando il servizio digitale è stato interamente eseguito con il previo consenso espresso dell’utente e con la sua accettazione della perdita del diritto di recesso, il recesso può non essere più esercitabile nei limiti previsti dal Codice del Consumo. Restano fermi i diritti in caso di servizio non conforme o non erogato.',
           ],
         },
         {
           heading: 'Natura delle valutazioni',
           paragraphs: [
-            'Tutte le valutazioni, le stime e i consigli forniti da AutoEsperto hanno carattere puramente indicativo e informativo. Non costituiscono consulenza professionale, perizia tecnica, certificazione di affidabilità né garanzia sullo stato del veicolo.',
-            'Le stime di mercato sono calcolate con modelli statistici su marca, modello, anno e chilometraggio e possono differire dal valore reale di vendita.',
-            'AutoEsperto non effettua ispezioni fisiche del veicolo: prima dell\'acquisto si raccomanda sempre una verifica indipendente da parte di un professionista.',
+            'Le valutazioni sono indicative e informative. Non costituiscono perizia, certificazione, diagnosi meccanica, verifica della storia del veicolo né garanzia sul suo stato o sul prezzo realizzabile.',
+            'Una foto non consente di rilevare danni nascosti, struttura, motore, sicurezza, chilometri reali o incidenti pregressi. Prima di acquistare o riparare un veicolo è necessario rivolgersi a un professionista indipendente.',
           ],
         },
         {
-          heading: 'Uso corretto del servizio',
+          heading: 'Errori e assistenza',
           paragraphs: [
-            'L\'utente si impegna a utilizzare il servizio solo per finalità lecite e a non effettuare richieste automatizzate o in volume che possano compromettere la disponibilità del servizio.',
-            'L\'utente dichiara di avere titolo per richiedere informazioni relative al veicolo oggetto di analisi.',
+            'Se la foto non consente di riconoscere il veicolo, il credito non viene utilizzato e l’utente può riprovare. Se il pagamento è riuscito ma il servizio non viene erogato per un problema tecnico, l’utente può chiedere assistenza o rimborso a goosewebstore@gmail.com.',
           ],
         },
         {
-          heading: 'Disponibilità del servizio',
+          heading: 'Pubblicità e partnership',
           paragraphs: [
-            'Il servizio è fornito "così com\'è" e può essere sospeso o modificato in qualsiasi momento senza preavviso. AutoEsperto non garantisce la continuità, la correttezza o la completezza dei dati restituiti dai fornitori esterni.',
+            'Le pagine pubbliche possono contenere annunci o contenuti sponsorizzati chiaramente identificati. Gli inserzionisti non possono influenzare il verdetto di un report acquistato e non ricevono i dati personali o il contenuto delle analisi.',
           ],
         },
         {
-          heading: 'Proprietà intellettuale',
+          heading: 'Legge applicabile',
           paragraphs: [
-            'Marchio, logo, testi e struttura del sito appartengono al Titolare. È vietata la riproduzione non autorizzata dei contenuti, salvo uso personale e non commerciale.',
-          ],
-        },
-        {
-          heading: 'Limitazione di responsabilità',
-          paragraphs: [
-            'Nel limite massimo consentito dalla legge, il Titolare non risponde di danni diretti o indiretti derivanti dall\'affidamento riposto nelle valutazioni fornite dal servizio o dall\'impossibilità di utilizzarlo.',
-          ],
-        },
-        {
-          heading: 'Legge applicabile e foro',
-          paragraphs: [
-            'I presenti termini sono regolati dalla legge italiana. Per qualsiasi controversia è competente il foro di residenza o domicilio del consumatore, ai sensi di legge.',
+            'I Termini sono regolati dalla legge italiana. Per il consumatore resta competente il foro del luogo di residenza o domicilio nei casi previsti dalla legge.',
           ],
         },
       ]}

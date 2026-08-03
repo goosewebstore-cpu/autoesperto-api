@@ -11,12 +11,14 @@
     "test:watch": "node --import tsx --test --watch test/routes.test.ts"
   },
   "dependencies": {
+    "@autoesperto/database": "*",
     "@autoesperto/types": "*",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "express-rate-limit": "^8.6.1",
     "helmet": "^8.3.0",
+    "stripe": "^18.5.0",
     "zod": "^3.23.0"
   },
   "devDependencies": {

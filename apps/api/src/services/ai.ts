@@ -9,6 +9,10 @@ export interface AIAnalysisInput {
   requestedPrice?: number;
 }
 
+export interface AIAnalysisOptions {
+  requireDetailedModelAnalysis?: boolean;
+}
+
 export interface PhotoAnalysisInput {
   imageData: string;
   vehicle?: Partial<Pick<VehicleData, 'make' | 'model' | 'year'>>;
@@ -185,10 +189,10 @@ function buildAdvice(knowledge: ReturnType<typeof getVehicleKnowledge>, make: st
   return advice;
 }
 
-export async function analyzeVehicle(input: AIAnalysisInput): Promise<ReliabilityAnalysis> {
+export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysisOptions = {}): Promise<ReliabilityAnalysis> {
   const { vehicle } = input;
   const cacheKey = [
-    'analysis',
+    options.requireDetailedModelAnalysis ? 'analysis:detailed' : 'analysis',
     vehicle.make.toLowerCase(),
     vehicle.model.toLowerCase(),
     vehicle.year || '',
@@ -258,16 +262,21 @@ export async function analyzeVehicle(input: AIAnalysisInput): Promise<Reliabilit
   let result = analysis;
 
   const openaiKey = process.env.OPENAI_API_KEY;
-  if (AI_ENRICH_ENABLED && openaiKey && openaiKey !== 'mock') {
+  if ((AI_ENRICH_ENABLED || options.requireDetailedModelAnalysis) && openaiKey && openaiKey !== 'mock') {
     try {
       const enriched = await enrichWithAI(input, result, openaiKey);
       if (enriched) {
         console.log(`AI enrichment per ${vehicle.make} ${vehicle.model}`);
         result = { ...enriched, aiEnhanced: true };
+      } else if (options.requireDetailedModelAnalysis) {
+        throw new Error('Il provider non ha restituito l’analisi specifica del modello.');
       }
     } catch (e: any) {
       console.warn('AI enrichment fallito:', e.message);
+      if (options.requireDetailedModelAnalysis) throw e;
     }
+  } else if (options.requireDetailedModelAnalysis) {
+    throw new Error('L’analisi dettagliata del modello non è configurata in questo momento.');
   }
 
   cacheSet(cacheKey, result, 24 * 60 * 60 * 1000);

@@ -200,11 +200,6 @@ export default function VehicleScanner() {
           <span>Questa è la tua analisi completa gratuita. Per salvarla nel tuo account o crearne un’altra, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">accedi</button>.</span>
         </div>
 
-        <div className="scanner-result-banner !border-amber-200 !bg-amber-50 !text-amber-800">
-          <AlertTriangle className="h-4 w-4 text-amber-600" />
-          <span className="text-amber-800">L'identificazione AI è indicativa e può contenere errori. Verifica sempre con un meccanico prima di acquistare. Carica più foto per migliorare la precisione.</span>
-        </div>
-
         <ReportView report={report} embedded />
       </section>
     );
@@ -302,13 +297,7 @@ export default function VehicleScanner() {
                       <p className="text-sm text-white/80 leading-relaxed">
                         L'AI sta analizzando la foto per identificare marca, modello, anno, colore e stato visivo dell'auto…
                       </p>
-                      <div className="mt-4 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3">
-                        <p className="text-xs text-amber-300 flex items-start gap-1.5">
-                          <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                          <span>L'identificazione AI può essere imprecisa. Carica foto nitide di più angoli (frontale, laterale, posteriore) per migliorare la precisione.</span>
-                        </p>
-                      </div>
-                    </>
+                      </>
                   ) : (
                     <>
                       <div className="flex items-center gap-2 mb-3">
@@ -323,13 +312,7 @@ export default function VehicleScanner() {
                         {scan?.vehicle?.color && <div className="flex justify-between gap-3"><span className="text-white/50">Colore rilevato</span><span className="font-semibold text-right">{scan.vehicle.color}</span></div>}
                         {scan?.vehicle?.bodyType && <div className="flex justify-between gap-3"><span className="text-white/50">Categoria</span><span className="font-semibold text-right">{scan.vehicle.bodyType}</span></div>}
                       </div>
-                      <div className="mt-4 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3">
-                        <p className="text-xs text-amber-300 flex items-start gap-1.5">
-                          <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-                          <span>Risultato indicativo: l'AI può sbagliare. Verifica sempre con ispezione professionale prima di acquistare.</span>
-                        </p>
-                      </div>
-                    </>
+                      </>
                   )}
                 </div>
               )}

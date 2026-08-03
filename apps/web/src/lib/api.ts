@@ -3,6 +3,7 @@ import { getAuthToken } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 const TIMEOUT_MS = 30000;
+const AI_TIMEOUT_MS = 120000;
 
 export interface AnalyzePayload {
   plate?: string;
@@ -60,9 +61,9 @@ export interface StoredAnalysis {
   updatedAt: string;
 }
 
-export async function fetchJson<T>(path: string, options?: RequestInit): Promise<T> {
+export async function fetchJson<T>(path: string, options?: RequestInit, timeoutMs: number = TIMEOUT_MS): Promise<T> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), TIMEOUT_MS);
+  const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
     const token = getAuthToken();
     const res = await fetch(`${API_URL}${path}`, {
@@ -97,11 +98,11 @@ export async function analyzeVehicle(payload: AnalyzePayload): Promise<{ success
 }
 
 export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: string; model?: string; year?: number }): Promise<{ success: boolean; analysis: PhotoAnalysis }> {
-  return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) });
+  return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) }, AI_TIMEOUT_MS);
 }
 
 export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) });
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) }, AI_TIMEOUT_MS);
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {

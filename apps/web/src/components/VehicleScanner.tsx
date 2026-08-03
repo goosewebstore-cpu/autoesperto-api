@@ -54,7 +54,12 @@ export default function VehicleScanner() {
       setStage('result');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
-      setError(err.message || 'Non riesco a completare l’analisi. Riprova con un’altra foto.');
+      const msg = err?.message || '';
+      if (msg.includes('impiegando troppo tempo')) {
+        setError('Il server sta avviandosi (può richiedere fino a 60 secondi la prima volta). Riprova ora che è caldo.');
+      } else {
+        setError(msg || 'Non riesco a completare l’analisi. Riprova con un’altra foto.');
+      }
       setStage('error');
     }
   };

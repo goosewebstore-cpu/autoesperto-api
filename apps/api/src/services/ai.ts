@@ -62,7 +62,13 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
 
 function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
 function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
-function getVisionModel() { return process.env.VISION_MODEL || 'gpt-4o-mini'; }
+function isGroqProvider() {
+  return getAIBaseUrl().includes('api.groq.com') || process.env.OPENAI_API_KEY?.startsWith('gsk_');
+}
+function getVisionModel() {
+  if (process.env.VISION_MODEL) return process.env.VISION_MODEL;
+  return isGroqProvider() ? 'qwen/qwen3.6-27b' : 'gpt-4o-mini';
+}
 
 const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], [number, number]>> = {
   graffio: { lieve: [120, 280], media: [250, 550], alta: [450, 900] },
@@ -77,7 +83,7 @@ const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<Pho
 
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
   const geminiKey = process.env.GEMINI_API_KEY;
-  if (geminiKey) {
+  if (geminiKey && !isGroqProvider()) {
     try {
       return await analyzeVehiclePhotoWithGemini(input, geminiKey);
     } catch (error) {

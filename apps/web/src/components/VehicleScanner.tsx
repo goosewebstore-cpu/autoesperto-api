@@ -216,104 +216,53 @@ export default function VehicleScanner() {
         <div className="relative w-full h-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt="Foto dell’auto in analisi" className="w-full h-full object-cover" />
           {stage !== 'error' && (
-            <div className="absolute inset-0 z-10 flex items-center justify-center p-4">
+            <div className="absolute inset-0 z-10 flex items-end justify-end p-3 pointer-events-none">
               {stage === 'manual-input' ? (
-                <div className="w-full max-w-md rounded-2xl border border-white/20 bg-white/95 p-6 shadow-2xl backdrop-blur-xl scanner-popup-animate">
-                  <div className="flex items-start gap-3 mb-4">
-                    <div className="shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
-                      <AlertTriangle className="h-5 w-5 text-amber-600" />
+                <div className="w-full max-w-xs rounded-xl border border-white/20 bg-white/95 p-4 shadow-2xl backdrop-blur-xl scanner-popup-animate pointer-events-auto">
+                  <div className="flex items-start gap-2 mb-3">
+                    <div className="shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
+                      <AlertTriangle className="h-4 w-4 text-amber-600" />
                     </div>
                     <div>
-                      <h2 className="text-lg font-semibold text-slate-900">Riconoscimento automatico non riuscito</h2>
-                      <p className="text-sm text-slate-600 mt-1 leading-relaxed">
-                        {scan?.message || 'L\'AI non ha identificato l\'auto con sufficiente sicurezza. Inserisci marca e modello per generare comunque il report completo, oppure prova con un\'altra foto.'}
-                      </p>
+                      <h2 className="text-sm font-semibold text-slate-900">Riconoscimento non riuscito</h2>
+                      <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">Inserisci marca e modello per generare il report.</p>
                     </div>
                   </div>
-                  <div className="space-y-3">
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">Marca *</label>
-                      <input
-                        type="text"
-                        value={manualMake}
-                        onChange={(e) => setManualMake(e.target.value)}
-                        placeholder="es. Toyota"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">Modello *</label>
-                      <input
-                        type="text"
-                        value={manualModel}
-                        onChange={(e) => setManualModel(e.target.value)}
-                        placeholder="es. Corolla"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                      />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-slate-700 mb-1">Anno (opzionale)</label>
-                      <input
-                        type="number"
-                        value={manualYear}
-                        onChange={(e) => setManualYear(e.target.value)}
-                        placeholder="es. 2019"
-                        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
-                      />
-                    </div>
-                    {error && (
-                      <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-start gap-2">
-                        <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
-                        <span>{error}</span>
-                      </div>
-                    )}
-                    <div className="flex flex-col gap-2 pt-2">
-                      <button
-                        type="button"
-                        disabled={manualLoading}
-                        onClick={handleManualSubmit}
-                        className="scanner-cta disabled:opacity-60 !mt-0"
-                      >
-                        {manualLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Generazione in corso…</> : <><Sparkles className="h-4 w-4" /> Genera report completo <ChevronRight className="h-4 w-4" /></>}
+                  <div className="space-y-2">
+                    <input type="text" value={manualMake} onChange={(e) => setManualMake(e.target.value)} placeholder="Marca *" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    <input type="text" value={manualModel} onChange={(e) => setManualModel(e.target.value)} placeholder="Modello *" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    <input type="number" value={manualYear} onChange={(e) => setManualYear(e.target.value)} placeholder="Anno (opz.)" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
+                    {error && <p className="text-xs text-red-700">{error}</p>}
+                    <div className="flex gap-2 pt-1">
+                      <button type="button" disabled={manualLoading} onClick={handleManualSubmit} className="scanner-cta disabled:opacity-60 !mt-0 !min-h-[36px] !text-xs !px-3 flex-1">
+                        {manualLoading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> …</> : <><Sparkles className="h-3.5 w-3.5" /> Genera <ChevronRight className="h-3.5 w-3.5" /></>}
                       </button>
-                      <button
-                        type="button"
-                        onClick={() => inputRef.current?.click()}
-                        className="text-sm text-slate-600 hover:text-slate-800 underline underline-offset-2 py-1"
-                      >
-                        Prova con un’altra foto
-                      </button>
+                      <button type="button" onClick={() => inputRef.current?.click()} className="text-xs text-slate-600 hover:text-slate-800 underline underline-offset-2 px-2">Altra foto</button>
                     </div>
                   </div>
                 </div>
+              ) : stage === 'recognition' ? (
+                <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
+                  <div className="flex items-center gap-2 mb-1.5">
+                    <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" />
+                    <span className="text-xs font-bold">Analisi in corso…</span>
+                  </div>
+                  <p className="text-xs text-white/70 leading-snug">Identificazione marca, modello e dettagli visibili.</p>
+                </div>
               ) : (
-                <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-slate-900/85 p-5 text-white shadow-2xl backdrop-blur-md scanner-popup-animate">
-                  {stage === 'recognition' ? (
-                    <>
-                      <div className="flex items-center gap-2 mb-3">
-                        <Sparkles className="h-5 w-5 text-amber-400 animate-pulse" />
-                        <span className="font-bold">Analisi dettagliata e approfondita in corso</span>
-                      </div>
-                      <p className="text-sm text-white/80 leading-relaxed">
-                        L'AI sta analizzando la foto per identificare marca, modello, anno, colore e stato visivo dell'auto…
-                      </p>
-                      </>
-                  ) : (
-                    <>
-                      <div className="flex items-center gap-2 mb-3">
-                        <Check className="h-5 w-5 text-emerald-400" />
-                        <span className="font-bold">Veicolo riconosciuto</span>
-                      </div>
-                      <div className="space-y-1.5 text-sm">
-                        {scan?.vehicle?.make && <div className="flex justify-between gap-3"><span className="text-white/50">Marca</span><span className="font-semibold text-right">{scan.vehicle.make}</span></div>}
-                        {scan?.vehicle?.model && <div className="flex justify-between gap-3"><span className="text-white/50">Modello</span><span className="font-semibold text-right">{scan.vehicle.model}</span></div>}
-                        {scan?.vehicle?.generation && <div className="flex justify-between gap-3"><span className="text-white/50">Versione</span><span className="font-semibold text-right">{scan.vehicle.generation}</span></div>}
-                        {scan?.vehicle?.year && <div className="flex justify-between gap-3"><span className="text-white/50">Anno stimato</span><span className="font-semibold text-right">{scan.vehicle.year}</span></div>}
-                        {scan?.vehicle?.color && <div className="flex justify-between gap-3"><span className="text-white/50">Colore rilevato</span><span className="font-semibold text-right">{scan.vehicle.color}</span></div>}
-                        {scan?.vehicle?.bodyType && <div className="flex justify-between gap-3"><span className="text-white/50">Categoria</span><span className="font-semibold text-right">{scan.vehicle.bodyType}</span></div>}
-                      </div>
-                      </>
-                  )}
+                <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
+                  <div className="flex items-center gap-2 mb-2">
+                    <Check className="h-4 w-4 text-emerald-400" />
+                    <span className="text-xs font-bold">Veicolo riconosciuto</span>
+                  </div>
+                  <div className="space-y-0.5 text-xs">
+                    {scan?.vehicle?.make && <div className="flex justify-between gap-2"><span className="text-white/40">Marca</span><span className="font-semibold text-right">{scan.vehicle.make}</span></div>}
+                    {scan?.vehicle?.model && <div className="flex justify-between gap-2"><span className="text-white/40">Modello</span><span className="font-semibold text-right">{scan.vehicle.model}</span></div>}
+                    {scan?.vehicle?.generation && <div className="flex justify-between gap-2"><span className="text-white/40">Versione</span><span className="font-semibold text-right">{scan.vehicle.generation}</span></div>}
+                    {scan?.vehicle?.year && <div className="flex justify-between gap-2"><span className="text-white/40">Anno</span><span className="font-semibold text-right">{scan.vehicle.year}</span></div>}
+                    {scan?.vehicle?.color && <div className="flex justify-between gap-2"><span className="text-white/40">Colore</span><span className="font-semibold text-right">{scan.vehicle.color}</span></div>}
+                    {scan?.vehicle?.bodyType && <div className="flex justify-between gap-2"><span className="text-white/40">Categoria</span><span className="font-semibold text-right">{scan.vehicle.bodyType}</span></div>}
+                  </div>
                 </div>
               )}
             </div>

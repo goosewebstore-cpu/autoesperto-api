@@ -97,45 +97,62 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   if (!key || key === 'mock') throw new Error('Analisi foto non configurata');
 
   const vehicleContext = input.vehicle ? `${input.vehicle.make || ''} ${input.vehicle.model || ''} ${input.vehicle.year || ''}`.trim() : 'non indicato';
-  const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
-    method: 'POST',
-    signal: AbortSignal.timeout(isGroqProvider() ? 45000 : 20000),
-    headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-    body: JSON.stringify({
-      model: getVisionModel(),
-      temperature: 0.1,
-      ...(isGroqProvider() ? {} : { response_format: { type: 'json_object' } }),
-      max_tokens: 700,
-      messages: [
-         { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, numeri di targa, persone, indirizzi e ogni altro dato personale: non trascriverli, non dedurli e non citarli. Non diagnosticare motore, telaio, incidenti pregressi, sicurezza o chilometri. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo.' },
-        { role: 'user', content: [
-          { type: 'text', text: `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.` },
-          { type: 'image_url', image_url: { url: input.imageData, ...(isGroqProvider() ? {} : { detail: 'low' }) } },
-        ] },
-      ],
-    }),
-  });
-  const data = await response.json() as any;
-  const raw = data.choices?.[0]?.message?.content || data.choices?.[0]?.message?.reasoning_content;
-  if (!response.ok || !raw) {
-    const providerMessage = typeof data?.error?.message === 'string' ? data.error.message : '';
-    throw new Error(providerMessage || `Il provider visivo non ha restituito un risultato (HTTP ${response.status}).`);
+  const isGroq = isGroqProvider();
+  const prompt = `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.`;
+
+  const attempt = async (extra: Record<string, unknown> = {}) => {
+    const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(isGroq ? 45000 : 20000),
+      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model: getVisionModel(),
+        temperature: 0.1,
+        ...(isGroq ? { reasoning_effort: 'none' } : { response_format: { type: 'json_object' } }),
+        ...extra,
+        max_tokens: 900,
+        messages: [
+          { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, persone, indirizzi e dati personali: non trascriverli. Non diagnosticare motore, telaio o danni interni. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo, senza ragionamento.' },
+          { role: 'user', content: [
+            { type: 'text', text: prompt },
+            { type: 'image_url', image_url: { url: input.imageData, ...(isGroq ? {} : { detail: 'low' }) } },
+          ] },
+        ],
+      }),
+    });
+    return response;
+  };
+
+  let response = await attempt();
+  let data = await response.json() as any;
+  if (!response.ok) {
+    const msg = typeof data?.error?.message === 'string' ? data.error.message : `HTTP ${response.status}`;
+    throw new Error(msg);
   }
+
+  let message = data.choices?.[0]?.message;
   let parsed: any;
   try {
-    parsed = parseJsonContent<any>(raw);
-  } catch (parseError) {
-    console.warn('Failed to parse vision response as JSON. Raw content (first 600 chars):', raw.slice(0, 600));
-    return {
-      vehicle: { confidence: 'bassa' as const },
-      damage: {
-        visible: false,
-        category: 'non_chiaro' as const,
-        severity: 'media' as const,
-        description: 'Il riconoscimento automatico non ha restituito dati utilizzabili per questa foto.',
-      },
-      note: 'Il riconoscimento visivo non è disponibile in questo momento. La foto non viene salvata: riprova più tardi oppure inserisci marca e modello.',
-    };
+    parsed = parseJsonContent<any>(message?.content || message?.reasoning || message?.reasoning_content || '');
+  } catch {
+    response = await attempt({ reasoning_format: 'hidden' });
+    data = await response.json() as any;
+    message = data.choices?.[0]?.message;
+    try {
+      parsed = parseJsonContent<any>(message?.content || message?.reasoning || message?.reasoning_content || '');
+    } catch (retryError) {
+      console.warn('Failed to parse vision response as JSON. Content (first 800 chars):', String(message?.content || '').slice(0, 800));
+      return {
+        vehicle: { confidence: 'bassa' as const },
+        damage: {
+          visible: false,
+          category: 'non_chiaro' as const,
+          severity: 'media' as const,
+          description: 'Il riconoscimento automatico non ha restituito dati utilizzabili per questa foto.',
+        },
+        note: 'Il riconoscimento visivo non è disponibile in questo momento. La foto non viene salvata: riprova più tardi oppure inserisci marca e modello.',
+      };
+    }
   }
   const categories = Object.keys(repairRanges);
   const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';
@@ -376,38 +393,34 @@ Fornisci UNA SOLA risposta JSON valida con:
 }
 
 function parseJsonContent<T>(content: string): T {
-  let cleaned = (content || '')
-    .trim()
-    .replace(/^```(?:json)?\s*/i, '')
-    .replace(/\s*```$/, '');
-  cleaned = cleaned
-    .replace(/<(?:think|thinking|reasoning)>[\s\S]*?<\/(?:think|thinking|reasoning)>/gi, '')
-    .replace(/<(?:think|thinking|reasoning)>[\s\S]*$/gi, '');
-  const start = cleaned.indexOf('{');
-  if (start < 0) {
-    const arrStart = cleaned.indexOf('[');
-    if (arrStart < 0) throw new Error('Il provider non ha restituito un JSON valido.');
-    const arrEnd = cleaned.lastIndexOf(']');
-    return JSON.parse(cleaned.slice(arrStart, arrEnd + 1)) as T;
-  }
-  let depth = 0;
-  let inString = false;
-  let escape = false;
-  for (let i = start; i < cleaned.length; i++) {
-    const ch = cleaned[i];
-    if (escape) { escape = false; continue; }
-    if (ch === '\\' && inString) { escape = true; continue; }
-    if (ch === '"') { inString = !inString; continue; }
-    if (inString) continue;
-    if (ch === '{') depth++;
-    else if (ch === '}') {
-      depth--;
-      if (depth === 0) {
-        return JSON.parse(cleaned.slice(start, i + 1)) as T;
+  const cleaned = (content || '').trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
+  for (let i = 0; i < cleaned.length; i++) {
+    if (cleaned[i] !== '{' && cleaned[i] !== '[') continue;
+    const open = cleaned[i];
+    const close = open === '{' ? '}' : ']';
+    let depth = 0;
+    let inString = false;
+    let escape = false;
+    for (let j = i; j < cleaned.length; j++) {
+      const ch = cleaned[j];
+      if (escape) { escape = false; continue; }
+      if (ch === '\\' && inString) { escape = true; continue; }
+      if (ch === '"') { inString = !inString; continue; }
+      if (inString) continue;
+      if (ch === open) depth++;
+      else if (ch === close) {
+        depth--;
+        if (depth === 0) {
+          try {
+            return JSON.parse(cleaned.slice(i, j + 1)) as T;
+          } catch {
+            break;
+          }
+        }
       }
     }
   }
-  return JSON.parse(cleaned.slice(start)) as T;
+  throw new Error('Il provider non ha restituito un JSON valido.');
 }
 
 export interface AskInput {

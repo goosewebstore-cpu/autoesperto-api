@@ -99,7 +99,7 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   const vehicleContext = input.vehicle ? `${input.vehicle.make || ''} ${input.vehicle.model || ''} ${input.vehicle.year || ''}`.trim() : 'non indicato';
   const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
     method: 'POST',
-    signal: AbortSignal.timeout(20000),
+    signal: AbortSignal.timeout(isGroqProvider() ? 45000 : 20000),
     headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
     body: JSON.stringify({
       model: getVisionModel(),
@@ -110,7 +110,7 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
          { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, numeri di targa, persone, indirizzi e ogni altro dato personale: non trascriverli, non dedurli e non citarli. Non diagnosticare motore, telaio, incidenti pregressi, sicurezza o chilometri. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo.' },
         { role: 'user', content: [
           { type: 'text', text: `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.` },
-          { type: 'image_url', image_url: { url: input.imageData, detail: 'low' } },
+          { type: 'image_url', image_url: { url: input.imageData, ...(isGroqProvider() ? {} : { detail: 'low' }) } },
         ] },
       ],
     }),

@@ -2,25 +2,12 @@
 
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, Camera, Check, ChevronRight, Heart, Loader2, RotateCcw, ShieldCheck, Sparkles, Upload } from 'lucide-react';
-import type { AutoReport } from '@autoesperto/types';
-import { analyzeVehicle, analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
-import ReportView from '@/components/ReportView';
+import { AlertTriangle, Camera, Check, ChevronRight, Loader2, RotateCcw, ShieldCheck, Sparkles, Upload } from 'lucide-react';
+import { freeScanVehiclePhoto, type FreeScanResult } from '@/lib/api';
 
-type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'analysis' | 'result' | 'error';
+type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error';
 
-const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Danni visibili', 'Problemi noti', 'Costi da prevedere'];
-
-const damageLabels: Record<string, string> = {
-  graffio: 'Graffio sulla carrozzeria',
-  ammaccatura: 'Ammaccatura',
-  paraurti: 'Paraurti',
-  fanale: 'Gruppo ottico',
-  specchietto: 'Specchietto',
-  cerchio_gomma: 'Cerchio o pneumatico',
-  nessun_danno_evidente: 'Nessun danno evidente',
-  non_chiaro: 'Area non valutabile',
-};
+const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Gratis al primo utilizzo'];
 
 const euro = (value: number) => `${Math.max(0, Math.round(value / 100) * 100).toLocaleString('it-IT')} €`;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -30,19 +17,18 @@ export default function VehicleScanner() {
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<ScannerStage>('idle');
   const [imageUrl, setImageUrl] = useState('');
-  const [analysis, setAnalysis] = useState<PhotoAnalysis | null>(null);
-  const [report, setReport] = useState<AutoReport | null>(null);
+  const [scan, setScan] = useState<FreeScanResult | null>(null);
   const [error, setError] = useState('');
 
   const reset = () => {
     if (imageUrl) URL.revokeObjectURL(imageUrl);
-    setImageUrl(''); setAnalysis(null); setReport(null); setError(''); setStage('idle');
+    setImageUrl(''); setScan(null); setError(''); setStage('idle');
     if (inputRef.current) inputRef.current.value = '';
   };
 
   const handleFile = async (file?: File) => {
     if (!file) return;
-    setError(''); setAnalysis(null); setReport(null);
+    setError(''); setScan(null);
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
       setError('Carica una foto JPG, PNG o WebP.'); setStage('error'); return;
     }
@@ -59,27 +45,12 @@ export default function VehicleScanner() {
         reader.onerror = () => reject(new Error('Impossibile leggere la foto.'));
         reader.readAsDataURL(file);
       });
-      const photoResponse = await analyzeVehiclePhoto(imageData);
-      let photo = photoResponse.analysis;
-      if (!photo.vehicle.make || !photo.vehicle.model) {
-        const retryResponse = await analyzeVehiclePhoto(imageData);
-        photo = retryResponse.analysis;
+      const result = await freeScanVehiclePhoto(imageData);
+      if (!result.recognized || !result.vehicle || !result.price) {
+        throw new Error(result.message || 'Non riesco a riconoscere l’auto con sufficiente sicurezza. Prova una foto nitida di tre quarti.');
       }
-      setAnalysis(photo); setStage('vehicle-found');
-
-      if (!photo.vehicle.make || !photo.vehicle.model) {
-        throw new Error('Non riesco a riconoscere l’auto con sufficiente sicurezza. Prova una foto nitida di tre quarti.');
-      }
-
-      await wait(850);
-      setStage('analysis');
-      const reportResponse = await analyzeVehicle({
-        make: photo.vehicle.make,
-        model: photo.vehicle.model,
-        year: photo.vehicle.year,
-      });
-      setReport(reportResponse.report);
-      await wait(450);
+      setScan(result); setStage('vehicle-found');
+      await wait(500);
       setStage('result');
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err: any) {
@@ -99,8 +70,8 @@ export default function VehicleScanner() {
           <div className="scanner-promises" aria-label="Informazioni analizzate">
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
-          <button type="button" className="scanner-cta" onClick={() => router.push('/account')}><Camera className="h-5 w-5" /> Inizia l’analisi · 5,99 € <ChevronRight className="h-5 w-5" /></button>
-          <p className="scanner-microcopy">Pagamento unico. Nessun abbonamento. Il report resta nella tua area personale.</p>
+           <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
+           <p className="scanner-microcopy">Prima scansione gratuita, senza account. Paghi solo se vuoi il report dettagliato.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
         </div>
         <div className="scanner-hero-visual" aria-hidden="true">
@@ -119,15 +90,11 @@ export default function VehicleScanner() {
     );
   }
 
-  if (stage === 'result' && analysis && report) {
-    const repairMin = analysis.repairRange?.min || 0;
-    const repairMax = analysis.repairRange?.max || 0;
-    const repair = repairMax ? Math.round((repairMin + repairMax) / 2) : 0;
-    const undamagedValue = report.price.adjustedForKm || report.price.estimatedValue;
-    const currentValue = Math.max(0, undamagedValue - repair);
-    const healthPenalty = analysis.damage.visible ? (analysis.damage.severity === 'alta' ? 18 : analysis.damage.severity === 'media' ? 10 : 5) : 0;
-    const healthScore = Math.max(1, Math.min(100, Math.round(report.reliability.score * 10 - healthPenalty)));
-    const vehicleName = [analysis.vehicle.make, analysis.vehicle.model, analysis.vehicle.generation, analysis.vehicle.year].filter(Boolean).join(' ');
+  if (stage === 'result' && scan?.vehicle && scan.price) {
+    const vehicleName = [scan.vehicle.make, scan.vehicle.model].filter(Boolean).join(' ');
+    const year = scan.vehicle.year ? String(scan.vehicle.year) : 'anno non determinato';
+    const market = scan.price.market;
+    const price = market?.priceAvg || scan.price.estimatedValue;
 
     return (
       <section className="scanner-result animate-fade-in">
@@ -135,37 +102,34 @@ export default function VehicleScanner() {
           {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt={`Foto analizzata: ${vehicleName}`} />
           <div className="scanner-result-shade" />
           <button type="button" onClick={reset} className="scanner-reset"><RotateCcw className="h-4 w-4" /> Nuova analisi</button>
-          <div className="scanner-result-title"><span>Analisi completata</span><h1>{vehicleName}</h1><p>Riconoscimento a confidenza {analysis.vehicle.confidence}</p></div>
+          <div className="scanner-result-title"><span>Scansione gratuita completata</span><h1>{vehicleName}</h1><p>Riconoscimento a confidenza {scan.vehicle.confidence}</p></div>
         </div>
 
         <div className="scanner-result-grid">
-          <article className="health-card"><div><span className="result-label">Car Health Score</span><h2><Heart className="h-6 w-6" fill="currentColor" /> {healthScore}<small>/100</small></h2><p>Indice indicativo basato sul modello e sui danni esterni visibili.</p></div><div className="health-ring" style={{ '--health': `${healthScore * 3.6}deg` } as React.CSSProperties}><span>{healthScore}</span></div></article>
-
-          <article className="result-card valuation-card"><span className="result-label">Valutazione AI</span><div className="valuation-list"><div><span>Valore senza danni</span><strong>{euro(undamagedValue)}</strong></div><div><span>Valore attuale indicativo</span><strong>{euro(currentValue)}</strong></div><div><span>Costo riparazione</span><strong>{repairMax ? `${euro(repairMin)} – ${euro(repairMax)}` : 'Non rilevato'}</strong></div><div className="recommended"><span>Prezzo vendita consigliato</span><strong>{euro(currentValue)}</strong></div></div></article>
-
-          <article className="result-card damage-card"><div className="result-card-heading"><div><span className="result-label">Analisi esterna</span><h2>{analysis.damage.visible ? 'Danno visibile rilevato' : 'Nessun danno evidente'}</h2></div>{analysis.damage.visible ? <AlertTriangle className="h-6 w-6 text-amber-500" /> : <Check className="h-6 w-6 text-emerald-600" />}</div><div className="damage-row"><span className={analysis.damage.visible ? 'damage-dot warning' : 'damage-dot good'} /><div><strong>{damageLabels[analysis.damage.category] || 'Area esterna'}</strong><p>{analysis.damage.description}</p>{repairMax > 0 && <span className="damage-price">Riparazione stimata: {euro(repairMin)} – {euro(repairMax)}</span>}</div></div><p className="result-note">{analysis.note}</p></article>
+          <article className="result-card valuation-card"><span className="result-label">Risultato gratuito</span><div className="valuation-list"><div><span>Marca e modello</span><strong>{vehicleName}</strong></div><div><span>Anno indicativo</span><strong>{year}</strong></div><div className="recommended"><span>Prezzo medio indicativo</span><strong>{euro(price)}</strong></div></div><p className="result-note">{market?.total ? `Calcolato su ${market.total} annunci disponibili.` : `Range indicativo: ${euro(scan.price.min)} – ${euro(scan.price.max)}.`}</p></article>
         </div>
-        <div className="scanner-report-intro">
-          <span>Report completo AutoEsperto</span>
-          <h2>Tutti i dettagli della tua auto</h2>
-          <p>Affidabilità, scheda tecnica, motore, cambio, problemi noti, costi futuri, dati di mercato, annunci comparabili e alternative.</p>
+        <div className="scanner-report-intro scanner-locked-report">
+          <span>Approfondimento AutoEsperto</span>
+          <h2>Vuoi tutti i dettagli?</h2>
+          <p>Affidabilità del modello, problemi noti, costi futuri, danni visibili, controlli da fare, annunci comparabili e alternative. Il primo risultato resta gratuito; paghi solo se vuoi il report completo.</p>
+          <div className="scanner-locked-preview" aria-hidden="true"><span>Affidabilità · Problemi noti · Costi · Danni · Alternative</span></div>
+          <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Approfondisci · 5,99 € <ChevronRight className="h-5 w-5" /></button>
+          <small>Pagamento unico. Login richiesto solo per acquistare e conservare il report.</small>
         </div>
-        <ReportView report={report} embedded />
       </section>
     );
   }
 
-  const progress = stage === 'recognition' ? 24 : stage === 'vehicle-found' ? 52 : stage === 'analysis' ? 78 : 0;
-  const discovered = analysis ? [
-    ['Marca trovata', analysis.vehicle.make], ['Modello riconosciuto', analysis.vehicle.model], ['Versione individuata', analysis.vehicle.generation], ['Anno stimato', analysis.vehicle.year], ['Colore rilevato', analysis.vehicle.color], ['Categoria', analysis.vehicle.bodyType],
+  const progress = stage === 'recognition' ? 24 : stage === 'vehicle-found' ? 72 : 0;
+  const discovered = scan?.vehicle ? [
+    ['Marca trovata', scan.vehicle.make], ['Modello riconosciuto', scan.vehicle.model], ['Anno stimato', scan.vehicle.year],
   ].filter((item) => item[1]) : [];
   const checks = [
     ['Identificazione veicolo', stage !== 'recognition'],
-    ['Analisi carrozzeria', Boolean(analysis)],
-    ['Rilevamento danni visibili', Boolean(analysis)],
-    ['Stima riparazione', Boolean(analysis?.repairRange)],
-    ['Valore di mercato', Boolean(report)],
-    ['Car Health Score', Boolean(report)],
+    ['Marca e modello', Boolean(scan?.vehicle?.make && scan.vehicle.model)],
+    ['Anno indicativo', Boolean(scan?.vehicle?.year)],
+    ['Prezzo di mercato', Boolean(scan?.price)],
+    ['Report dettagliato', false],
   ] as const;
 
   return (
@@ -180,9 +144,9 @@ export default function VehicleScanner() {
           <div className="scanner-error"><AlertTriangle className="h-7 w-7" /><h2>Analisi non completata</h2><p>{error}</p><button type="button" onClick={() => inputRef.current?.click()}><Upload className="h-4 w-4" /> Scegli un’altra foto</button></div>
         ) : (
           <>
-            <div className="scanner-stage-label">{stage === 'recognition' ? 'Identificazione veicolo' : stage === 'vehicle-found' ? 'Veicolo riconosciuto' : 'Analisi completa'}</div>
-            <h2>{stage === 'recognition' ? 'Analisi AI in corso…' : stage === 'vehicle-found' ? [analysis?.vehicle.make, analysis?.vehicle.model].filter(Boolean).join(' ') : 'Calcolo valore e stato dell’auto…'}</h2>
-            <p className="scanner-stage-copy">{stage === 'recognition' ? 'Osservo forme, dettagli e componenti visibili.' : stage === 'vehicle-found' ? 'Le informazioni vengono scoperte dalla foto, senza compilazione manuale.' : 'Sto preparando la valutazione finale usando i dati realmente disponibili.'}</p>
+            <div className="scanner-stage-label">{stage === 'recognition' ? 'Scansione gratuita' : 'Veicolo riconosciuto'}</div>
+            <h2>{stage === 'recognition' ? 'Cerco marca, modello e prezzo…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
+            <p className="scanner-stage-copy">{stage === 'recognition' ? 'Il primo risultato è gratuito e non richiede registrazione.' : 'Ora puoi vedere il risultato base senza creare un account.'}</p>
             <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
             {discovered.length > 0 && <div className="discovered-grid">{discovered.map(([label, value]) => <div key={String(label)}><span><Check className="h-3.5 w-3.5" /> {label}</span><strong>{value}</strong></div>)}</div>}
             <div className="scanner-checklist">{checks.map(([label, done]) => <div key={label} className={done ? 'done' : ''}><span>{done ? <Check className="h-3.5 w-3.5" /> : <Loader2 className="h-3.5 w-3.5 animate-spin" />}</span>{label}</div>)}</div>

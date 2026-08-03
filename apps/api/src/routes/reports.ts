@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { z } from 'zod';
 import { buildReport } from '../services/reportService';
 import { analyzeVehiclePhoto, askAutoEsperto } from '../services/ai';
-import { asyncHandler } from '../http';
+import { asyncHandler, serviceUnavailable } from '../http';
 
 const router = Router();
 
@@ -35,6 +35,10 @@ const askSchema = z.object({
 const photoSchema = z.object({
   imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
   vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.number().int().optional() }).optional(),
+});
+
+const freeScanSchema = z.object({
+  imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
 });
 
 router.post(
@@ -79,6 +83,53 @@ router.post(
     }
     res.set('Cache-Control', 'no-store');
     res.json({ success: true, analysis });
+  })
+);
+
+router.post(
+  '/free-scan',
+  asyncHandler(async (req, res) => {
+    const { imageData } = freeScanSchema.parse(req.body);
+    let photo;
+    try {
+      photo = await analyzeVehiclePhoto({ imageData });
+    } catch (error) {
+      console.warn('free scan unavailable:', error);
+      throw serviceUnavailable('Il riconoscimento gratuito non è disponibile in questo momento. Riprova tra poco.');
+    }
+
+    if (!photo.vehicle.make || !photo.vehicle.model) {
+      res.set('Cache-Control', 'no-store');
+      res.json({
+        success: true,
+        recognized: false,
+        message: 'Non riesco a riconoscere marca e modello con sufficiente sicurezza. Prova una foto nitida di tre quarti: non è stato consumato nulla.',
+      });
+      return;
+    }
+
+    let report;
+    try {
+      ({ report } = await buildReport({ make: photo.vehicle.make, model: photo.vehicle.model, year: photo.vehicle.year }));
+    } catch (error) {
+      console.warn('free scan price unavailable:', error);
+      throw serviceUnavailable('Ho riconosciuto il veicolo ma non riesco a calcolare il prezzo in questo momento. Riprova tra poco.');
+    }
+
+    res.set('Cache-Control', 'no-store');
+    res.json({
+      success: true,
+      recognized: true,
+      vehicle: photo.vehicle,
+      price: {
+        estimatedValue: report.price.estimatedValue,
+        min: report.price.min,
+        max: report.price.max,
+        market: report.price.market
+          ? { priceAvg: report.price.market.priceAvg, priceMin: report.price.market.priceMin, priceMax: report.price.market.priceMax, total: report.price.market.total }
+          : undefined,
+      },
+    });
   })
 );
 

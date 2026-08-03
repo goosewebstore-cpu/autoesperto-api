@@ -20,6 +20,19 @@ export interface PhotoAnalysis {
   note: string;
 }
 
+export interface FreeScanResult {
+  success: boolean;
+  recognized: boolean;
+  message?: string;
+  vehicle?: PhotoAnalysis['vehicle'];
+  price?: {
+    estimatedValue: number;
+    min: number;
+    max: number;
+    market?: { priceAvg?: number; priceMin?: number; priceMax?: number; total?: number };
+  };
+}
+
 export interface AccountUser {
   id: string;
   name: string | null;
@@ -85,6 +98,10 @@ export async function analyzeVehicle(payload: AnalyzePayload): Promise<{ success
 
 export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: string; model?: string; year?: number }): Promise<{ success: boolean; analysis: PhotoAnalysis }> {
   return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) });
+}
+
+export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) });
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {

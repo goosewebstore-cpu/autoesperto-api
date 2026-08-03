@@ -104,9 +104,10 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     body: JSON.stringify({
       model: getVisionModel(),
       temperature: 0.1,
-      response_format: { type: 'json_object' },
+      ...(isGroqProvider() ? {} : { response_format: { type: 'json_object' } }),
+      max_tokens: 700,
       messages: [
-        { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, numeri di targa, persone, indirizzi e ogni altro dato personale: non trascriverli, non dedurli e non citarli. Non diagnosticare motore, telaio, incidenti pregressi, sicurezza o chilometri. Rispondi solo JSON in italiano.' },
+         { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, numeri di targa, persone, indirizzi e ogni altro dato personale: non trascriverli, non dedurli e non citarli. Non diagnosticare motore, telaio, incidenti pregressi, sicurezza o chilometri. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo.' },
         { role: 'user', content: [
           { type: 'text', text: `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.` },
           { type: 'image_url', image_url: { url: input.imageData, detail: 'low' } },
@@ -360,11 +361,14 @@ Fornisci UNA SOLA risposta JSON valida con:
 }
 
 function parseJsonContent<T>(content: string): T {
-  const json = content
+  const cleaned = content
     .trim()
     .replace(/^```(?:json)?\s*/i, '')
     .replace(/\s*```$/, '');
-  return JSON.parse(json) as T;
+  const start = cleaned.indexOf('{');
+  const end = cleaned.lastIndexOf('}');
+  if (start < 0 || end <= start) throw new Error('Il provider non ha restituito un JSON valido.');
+  return JSON.parse(cleaned.slice(start, end + 1)) as T;
 }
 
 export interface AskInput {

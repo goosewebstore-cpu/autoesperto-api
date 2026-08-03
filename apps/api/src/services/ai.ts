@@ -16,6 +16,7 @@ export interface AIAnalysisOptions {
 export interface PhotoAnalysisInput {
   imageData: string;
   vehicle?: Partial<Pick<VehicleData, 'make' | 'model' | 'year'>>;
+  aggressive?: boolean;
 }
 
 export interface PhotoAnalysisResult {
@@ -98,7 +99,10 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
 
   const vehicleContext = input.vehicle ? `${input.vehicle.make || ''} ${input.vehicle.model || ''} ${input.vehicle.year || ''}`.trim() : 'non indicato';
   const isGroq = isGroqProvider();
-  const prompt = `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.`;
+  const isAggressive = input.aggressive === true;
+  const prompt = isAggressive
+    ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Anche se non sei completamente sicuro, NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata basata su forme, proporzioni, fanali, griglia e altri dettagli visivi. Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.`
+    : `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.`;
 
   const attempt = async (extra: Record<string, unknown> = {}) => {
     const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
@@ -106,16 +110,18 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
       signal: AbortSignal.timeout(isGroq ? 45000 : 20000),
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
       body: JSON.stringify({
-        model: getVisionModel(),
-        temperature: 0.1,
+        model: isAggressive && !isGroq ? 'gpt-4o' : getVisionModel(),
+        temperature: isAggressive ? 0.4 : 0.1,
         ...(isGroq ? { reasoning_effort: 'none' } : { response_format: { type: 'json_object' } }),
         ...extra,
         max_tokens: 900,
         messages: [
-          { role: 'system', content: 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, persone, indirizzi e dati personali: non trascriverli. Non diagnosticare motore, telaio o danni interni. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo, senza ragionamento.' },
+          { role: 'system', content: isAggressive
+            ? 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Se non sei sicuro, fai comunque una stima ragionata basata su forme, proporzioni e dettagli visivi. Non lasciare mai vuoti make e model. Ignora targhe, persone, indirizzi e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo.'
+            : 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, persone, indirizzi e dati personali: non trascriverli. Non diagnosticare motore, telaio o danni interni. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo, senza ragionamento.' },
           { role: 'user', content: [
             { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: input.imageData, ...(isGroq ? {} : { detail: 'low' }) } },
+            { type: 'image_url', image_url: { url: input.imageData, ...(isGroq || isAggressive ? {} : { detail: 'low' }) } },
           ] },
         ],
       }),

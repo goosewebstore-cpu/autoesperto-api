@@ -24,34 +24,43 @@ const registerSchema = credentialsSchema.extend({
 });
 
 async function accountSummary(userId: string) {
-  const user = await prisma.user.findUnique({
-    where: { id: userId },
-    select: {
-      id: true,
-      name: true,
-      email: true,
-      phone: true,
-      createdAt: true,
-      analysis: { select: { id: true, createdAt: true } },
-      purchases: {
-        where: { status: 'PAID' },
-        orderBy: { paidAt: 'desc' },
-        take: 1,
-        select: { id: true, paidAt: true, amountCents: true, currency: true },
+  const [user, analysisCount] = await Promise.all([
+    prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        phone: true,
+        createdAt: true,
+        analyses: {
+          orderBy: { createdAt: 'desc' },
+          take: 1,
+          select: { id: true, createdAt: true },
+        },
+        purchases: {
+          where: { status: 'PAID' },
+          orderBy: { paidAt: 'desc' },
+          take: 1,
+          select: { id: true, paidAt: true, amountCents: true, currency: true },
+        },
       },
-    },
-  });
+    }),
+    prisma.analysis.count({ where: { userId } }),
+  ]);
   if (!user) throw unauthorized('Account non trovato');
   const paid = user.purchases.length > 0;
   return {
     ...user,
     purchases: undefined,
-    analysis: user.analysis || null,
+    analyses: undefined,
+    analysis: user.analyses[0] || null,
     entitlement: {
       included: 1,
-      used: user.analysis ? 1 : 0,
-      remaining: paid && !user.analysis ? 1 : 0,
+      used: analysisCount,
+      remaining: Math.max(0, (paid ? 999 : 1) - analysisCount),
       paid,
+      freeUsed: analysisCount > 0,
       purchase: user.purchases[0] || null,
     },
   };
@@ -86,6 +95,9 @@ router.post(
       },
     });
     const token = signAuthToken(user.id);
+    void prisma.analyticsEvent.create({
+      data: { type: 'register', path: '/accesso', userId: user.id },
+    }).catch(() => undefined);
     res.status(201).json({ success: true, token, user: await accountSummary(user.id) });
   })
 );
@@ -103,7 +115,10 @@ router.post(
     const user = await prisma.user.findFirst({
       where: identity.email ? { email: identity.email } : { phone: identity.phone },
     });
-    if (!user || !(await verifyPassword(input.password, user.passwordHash))) {
+    const DUMMY_HASH = 'scrypt$00000000000000000000000000000000$0000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000';
+    const storedHashForTiming = user?.passwordHash ?? DUMMY_HASH;
+    const passwordOk = await verifyPassword(input.password, storedHashForTiming);
+    if (!user || !passwordOk) {
       throw unauthorized('Credenziali non corrette');
     }
     const token = signAuthToken(user.id);

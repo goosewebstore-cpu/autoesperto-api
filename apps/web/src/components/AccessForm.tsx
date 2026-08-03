@@ -29,8 +29,9 @@ export default function AccessForm({ nextPath = '/account' }: { nextPath?: strin
         : await loginAccount({ identifier, password });
       setAuthToken(result.token);
       router.replace(destination);
-    } catch (err: any) {
-      setError(err.message || 'Non riesco a completare l’accesso. Riprova.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '';
+      setError(message || 'Non riesco a completare l’accesso. Riprova.');
     } finally {
       setLoading(false);
     }

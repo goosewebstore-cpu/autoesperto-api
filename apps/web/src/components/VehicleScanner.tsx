@@ -2,15 +2,27 @@
 
 import { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, Camera, Check, ChevronRight, Loader2, RotateCcw, ShieldCheck, Sparkles, Upload } from 'lucide-react';
-import { freeScanVehiclePhoto, type FreeScanResult } from '@/lib/api';
+import { AlertTriangle, Camera, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ShieldCheck, Sparkles, Upload, UserRound } from 'lucide-react';
+import type { AutoReport } from '@autoesperto/types';
+import { freeScanVehiclePhoto, analyzeVehicle, type FreeScanResult } from '@/lib/api';
+import ReportView from '@/components/ReportView';
 
-type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error';
+type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'login-required' | 'manual-input';
 
-const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Gratis al primo utilizzo'];
+const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Report completo incluso'];
 
-const euro = (value: number) => `${Math.max(0, Math.round(value / 100) * 100).toLocaleString('it-IT')} €`;
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+const FREE_SCAN_COOKIE = 'ae_free_scan_used';
+
+function hasFreeScanCookie() {
+  if (typeof document === 'undefined') return false;
+  return document.cookie.split('; ').some((c) => c.startsWith(`${FREE_SCAN_COOKIE}=1`));
+}
+
+function setFreeScanCookie() {
+  document.cookie = `${FREE_SCAN_COOKIE}=1; path=/; max-age=31536000; samesite=lax`;
+}
 
 export default function VehicleScanner() {
   const router = useRouter();
@@ -18,17 +30,29 @@ export default function VehicleScanner() {
   const [stage, setStage] = useState<ScannerStage>('idle');
   const [imageUrl, setImageUrl] = useState('');
   const [scan, setScan] = useState<FreeScanResult | null>(null);
+  const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState('');
+  const [manualMake, setManualMake] = useState('');
+  const [manualModel, setManualModel] = useState('');
+  const [manualYear, setManualYear] = useState('');
+  const [manualLoading, setManualLoading] = useState(false);
 
   const reset = () => {
     if (imageUrl) URL.revokeObjectURL(imageUrl);
-    setImageUrl(''); setScan(null); setError(''); setStage('idle');
+    setImageUrl(''); setScan(null); setReport(null); setError(''); setStage('idle');
+    setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
     if (inputRef.current) inputRef.current.value = '';
   };
 
   const handleFile = async (file?: File) => {
     if (!file) return;
-    setError(''); setScan(null);
+    setError(''); setScan(null); setReport(null);
+
+    if (hasFreeScanCookie()) {
+      setStage('login-required');
+      return;
+    }
+
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
       setError('Carica una foto JPG, PNG o WebP.'); setStage('error'); return;
     }
@@ -46,21 +70,67 @@ export default function VehicleScanner() {
         reader.readAsDataURL(file);
       });
       const result = await freeScanVehiclePhoto(imageData);
-      if (!result.recognized || !result.vehicle || !result.price) {
-        throw new Error(result.message || 'Non riesco a riconoscere l’auto con sufficiente sicurezza. Prova una foto nitida di tre quarti.');
+      if (!result.recognized || !result.vehicle || !result.report) {
+        // L'AI non ha riconosciuto: mostra il popup un attimo, poi passa a input manuale
+        await wait(2500);
+        setScan(result);
+        setStage('manual-input');
+        return;
       }
-      setScan(result); setStage('vehicle-found');
-      await wait(500);
+      setFreeScanCookie();
+      setScan(result); setReport(result.report); setStage('vehicle-found');
+      await wait(3500);
       setStage('result');
       window.scrollTo({ top: 0, behavior: 'smooth' });
-    } catch (err: any) {
-      const msg = err?.message || '';
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '';
       if (msg.includes('impiegando troppo tempo')) {
         setError('Il server sta avviandosi (può richiedere fino a 60 secondi la prima volta). Riprova ora che è caldo.');
       } else {
         setError(msg || 'Non riesco a completare l’analisi. Riprova con un’altra foto.');
       }
       setStage('error');
+    }
+  };
+
+  const handleManualSubmit = async () => {
+    if (!manualMake.trim() || !manualModel.trim()) {
+      setError('Inserisci almeno marca e modello.');
+      return;
+    }
+    setManualLoading(true); setError('');
+    try {
+      const year = manualYear.trim() ? Number(manualYear.trim()) : undefined;
+      const result = await analyzeVehicle({
+        make: manualMake.trim(),
+        model: manualModel.trim(),
+        ...(year && !isNaN(year) ? { year } : {}),
+      });
+      setFreeScanCookie();
+      setReport(result.report);
+      setScan({
+        success: true,
+        recognized: true,
+        vehicle: {
+          make: manualMake.trim(),
+          model: manualModel.trim(),
+          year: year && !isNaN(year) ? year : undefined,
+          confidence: 'media',
+        },
+      });
+      setStage('vehicle-found');
+      await wait(2500);
+      setStage('result');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : '';
+      if (msg.includes('impiegando troppo tempo')) {
+        setError('Il server sta avviandosi (può richiedere fino a 60 secondi la prima volta). Riprova ora che è caldo.');
+      } else {
+        setError(msg || 'Errore durante la generazione del report. Riprova.');
+      }
+    } finally {
+      setManualLoading(false);
     }
   };
 
@@ -76,8 +146,12 @@ export default function VehicleScanner() {
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
-           <p className="scanner-microcopy">Prima scansione gratuita, senza account. Paghi solo se vuoi il report dettagliato.</p>
+           <p className="scanner-microcopy">Prima analisi gratuita e completa, senza account. Per una nuova analisi serve il login.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
+          <p className="mt-3 flex items-start gap-2 text-xs text-amber-600 max-w-xl">
+            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+            L'identificazione AI è indicativa e può contenere errori. Per maggiore precisione carica foto nitide da più angoli (frontale, laterale, posteriore).
+          </p>
         </div>
         <div className="scanner-hero-visual" aria-hidden="true">
           <div className="scanner-device">
@@ -95,11 +169,22 @@ export default function VehicleScanner() {
     );
   }
 
-  if (stage === 'result' && scan?.vehicle && scan.price) {
+  if (stage === 'login-required') {
+    return (
+      <section className="scanner-login-required animate-fade-in">
+        <div className="scanner-login-card">
+          <span className="scanner-login-icon"><UserRound className="h-6 w-6" /></span>
+          <h2>La tua analisi gratuita è già stata usata</h2>
+          <p>Accedi o crea un account: avrai una nuova analisi completa gratuita nel tuo account. Solo se vuoi conservare più analisi o salvarla, è richiesto il pagamento.</p>
+          <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Accedi e ottieni un’analisi gratis <ChevronRight className="h-5 w-5" /></button>
+          <small className="scanner-login-note"><LockKeyhole className="h-3.5 w-3.5" /> Nessun addebito per il login. Il pagamento serve solo per salvare le analisi.</small>
+        </div>
+      </section>
+    );
+  }
+
+  if (stage === 'result' && scan?.vehicle && report) {
     const vehicleName = [scan.vehicle.make, scan.vehicle.model].filter(Boolean).join(' ');
-    const year = scan.vehicle.year ? String(scan.vehicle.year) : 'anno non determinato';
-    const market = scan.price.market;
-    const price = market?.priceAvg || scan.price.estimatedValue;
 
     return (
       <section className="scanner-result animate-fade-in">
@@ -107,58 +192,169 @@ export default function VehicleScanner() {
           {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt={`Foto analizzata: ${vehicleName}`} />
           <div className="scanner-result-shade" />
           <button type="button" onClick={reset} className="scanner-reset"><RotateCcw className="h-4 w-4" /> Nuova analisi</button>
-          <div className="scanner-result-title"><span>Scansione gratuita completata</span><h1>{vehicleName}</h1><p>Riconoscimento a confidenza {scan.vehicle.confidence}</p></div>
+          <div className="scanner-result-title"><span>Analisi gratuita completata</span><h1>{vehicleName}</h1><p>Riconoscimento a confidenza {scan.vehicle.confidence}</p></div>
         </div>
 
-        <div className="scanner-result-grid">
-          <article className="result-card valuation-card"><span className="result-label">Risultato gratuito</span><div className="valuation-list"><div><span>Marca e modello</span><strong>{vehicleName}</strong></div><div><span>Anno indicativo</span><strong>{year}</strong></div><div className="recommended"><span>Prezzo medio indicativo</span><strong>{euro(price)}</strong></div></div><p className="result-note">{market?.total ? `Calcolato su ${market.total} annunci disponibili.` : `Range indicativo: ${euro(scan.price.min)} – ${euro(scan.price.max)}.`}</p></article>
+        <div className="scanner-result-banner">
+          <ShieldCheck className="h-4 w-4" />
+          <span>Questa è la tua analisi completa gratuita. Per salvarla nel tuo account o crearne un’altra, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">accedi</button>.</span>
         </div>
-        <div className="scanner-report-intro scanner-locked-report">
-          <span>Approfondimento AutoEsperto</span>
-          <h2>Vuoi tutti i dettagli?</h2>
-          <p>Affidabilità del modello, problemi noti, costi futuri, danni visibili, controlli da fare, annunci comparabili e alternative. Il primo risultato resta gratuito; paghi solo se vuoi il report completo.</p>
-          <div className="scanner-locked-preview" aria-hidden="true">
-            <div className="locked-preview-card"><span>Affidabilità del modello</span><strong>8,2 / 10</strong><p>Modello complessivamente affidabile, con alcuni controlli...</p></div>
-            <div className="locked-preview-card"><span>Problemi noti e costi</span><strong>3 punti da controllare</strong><p>Distribuzione, manutenzione e componenti soggetti...</p></div>
-            <div className="locked-preview-card"><span>Verdetto AutoEsperto</span><strong>Valuta con attenzione</strong><p>Controlli consigliati prima di firmare...</p></div>
-          </div>
-          <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Approfondisci · 5,99 € <ChevronRight className="h-5 w-5" /></button>
-          <small>Pagamento unico. Login richiesto solo per acquistare e conservare il report.</small>
+
+        <div className="scanner-result-banner !border-amber-200 !bg-amber-50 !text-amber-800">
+          <AlertTriangle className="h-4 w-4 text-amber-600" />
+          <span className="text-amber-800">L'identificazione AI è indicativa e può contenere errori. Verifica sempre con un meccanico prima di acquistare. Carica più foto per migliorare la precisione.</span>
         </div>
+
+        <ReportView report={report} embedded />
       </section>
     );
   }
 
-  const progress = stage === 'recognition' ? 24 : stage === 'vehicle-found' ? 72 : 0;
+  const progress = stage === 'recognition' ? 30 : stage === 'vehicle-found' ? 85 : stage === 'manual-input' ? 40 : 0;
   const discovered = scan?.vehicle ? [
     ['Marca trovata', scan.vehicle.make], ['Modello riconosciuto', scan.vehicle.model], ['Anno stimato', scan.vehicle.year],
   ].filter((item) => item[1]) : [];
-  const checks = [
-    ['Identificazione veicolo', stage !== 'recognition'],
-    ['Marca e modello', Boolean(scan?.vehicle?.make && scan.vehicle.model)],
-    ['Anno indicativo', Boolean(scan?.vehicle?.year)],
-    ['Prezzo di mercato', Boolean(scan?.price)],
-    ['Report dettagliato', false],
-  ] as const;
 
   return (
     <section className="scanner-workspace animate-fade-in">
       <div className="scanner-photo-stage">
-        {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt="Foto dell’auto in analisi" />
-        {stage !== 'error' && <><div className="scanner-photo-line" /><div className="scanner-focus focus-one" /><div className="scanner-focus focus-two" /><div className="scanner-focus focus-three" /></>}
+        <div className="relative w-full h-full">
+          {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt="Foto dell’auto in analisi" className="w-full h-full object-cover" />
+          {stage !== 'error' && (
+            <div className="absolute inset-0 z-10 flex items-center justify-center p-4">
+              {stage === 'manual-input' ? (
+                <div className="w-full max-w-md rounded-2xl border border-white/20 bg-white/95 p-6 shadow-2xl backdrop-blur-xl scanner-popup-animate">
+                  <div className="flex items-start gap-3 mb-4">
+                    <div className="shrink-0 w-10 h-10 rounded-full bg-amber-100 flex items-center justify-center">
+                      <AlertTriangle className="h-5 w-5 text-amber-600" />
+                    </div>
+                    <div>
+                      <h2 className="text-lg font-semibold text-slate-900">Riconoscimento automatico non riuscito</h2>
+                      <p className="text-sm text-slate-600 mt-1 leading-relaxed">
+                        {scan?.message || 'L\'AI non ha identificato l\'auto con sufficiente sicurezza. Inserisci marca e modello per generare comunque il report completo, oppure prova con un\'altra foto.'}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="space-y-3">
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Marca *</label>
+                      <input
+                        type="text"
+                        value={manualMake}
+                        onChange={(e) => setManualMake(e.target.value)}
+                        placeholder="es. Toyota"
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Modello *</label>
+                      <input
+                        type="text"
+                        value={manualModel}
+                        onChange={(e) => setManualModel(e.target.value)}
+                        placeholder="es. Corolla"
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-slate-700 mb-1">Anno (opzionale)</label>
+                      <input
+                        type="number"
+                        value={manualYear}
+                        onChange={(e) => setManualYear(e.target.value)}
+                        placeholder="es. 2019"
+                        className="w-full rounded-lg border border-slate-300 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-sky-500 focus:border-sky-500"
+                      />
+                    </div>
+                    {error && (
+                      <div className="rounded-lg bg-red-50 border border-red-200 p-3 text-sm text-red-700 flex items-start gap-2">
+                        <AlertTriangle className="h-4 w-4 shrink-0 mt-0.5" />
+                        <span>{error}</span>
+                      </div>
+                    )}
+                    <div className="flex flex-col gap-2 pt-2">
+                      <button
+                        type="button"
+                        disabled={manualLoading}
+                        onClick={handleManualSubmit}
+                        className="scanner-cta disabled:opacity-60 !mt-0"
+                      >
+                        {manualLoading ? <><Loader2 className="h-4 w-4 animate-spin" /> Generazione in corso…</> : <><Sparkles className="h-4 w-4" /> Genera report completo <ChevronRight className="h-4 w-4" /></>}
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => inputRef.current?.click()}
+                        className="text-sm text-slate-600 hover:text-slate-800 underline underline-offset-2 py-1"
+                      >
+                        Prova con un’altra foto
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className="w-full max-w-sm rounded-2xl border border-white/20 bg-slate-900/85 p-5 text-white shadow-2xl backdrop-blur-md scanner-popup-animate">
+                  {stage === 'recognition' ? (
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <Sparkles className="h-5 w-5 text-amber-400 animate-pulse" />
+                        <span className="font-bold">Analisi dettagliata e approfondita in corso</span>
+                      </div>
+                      <p className="text-sm text-white/80 leading-relaxed">
+                        L'AI sta analizzando la foto per identificare marca, modello, anno, colore e stato visivo dell'auto…
+                      </p>
+                      <div className="mt-4 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3">
+                        <p className="text-xs text-amber-300 flex items-start gap-1.5">
+                          <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                          <span>L'identificazione AI può essere imprecisa. Carica foto nitide di più angoli (frontale, laterale, posteriore) per migliorare la precisione.</span>
+                        </p>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <div className="flex items-center gap-2 mb-3">
+                        <Check className="h-5 w-5 text-emerald-400" />
+                        <span className="font-bold">Veicolo riconosciuto</span>
+                      </div>
+                      <div className="space-y-1.5 text-sm">
+                        {scan?.vehicle?.make && <div className="flex justify-between gap-3"><span className="text-white/50">Marca</span><span className="font-semibold text-right">{scan.vehicle.make}</span></div>}
+                        {scan?.vehicle?.model && <div className="flex justify-between gap-3"><span className="text-white/50">Modello</span><span className="font-semibold text-right">{scan.vehicle.model}</span></div>}
+                        {scan?.vehicle?.generation && <div className="flex justify-between gap-3"><span className="text-white/50">Versione</span><span className="font-semibold text-right">{scan.vehicle.generation}</span></div>}
+                        {scan?.vehicle?.year && <div className="flex justify-between gap-3"><span className="text-white/50">Anno stimato</span><span className="font-semibold text-right">{scan.vehicle.year}</span></div>}
+                        {scan?.vehicle?.color && <div className="flex justify-between gap-3"><span className="text-white/50">Colore rilevato</span><span className="font-semibold text-right">{scan.vehicle.color}</span></div>}
+                        {scan?.vehicle?.bodyType && <div className="flex justify-between gap-3"><span className="text-white/50">Categoria</span><span className="font-semibold text-right">{scan.vehicle.bodyType}</span></div>}
+                      </div>
+                      <div className="mt-4 rounded-lg bg-amber-500/10 border border-amber-500/20 p-3">
+                        <p className="text-xs text-amber-300 flex items-start gap-1.5">
+                          <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
+                          <span>Risultato indicativo: l'AI può sbagliare. Verifica sempre con ispezione professionale prima di acquistare.</span>
+                        </p>
+                      </div>
+                    </>
+                  )}
+                </div>
+              )}
+            </div>
+          )}
+        </div>
         <div className="scanner-photo-badge"><Sparkles className="h-4 w-4" /> AutoEsperto Vision</div>
       </div>
       <div className="scanner-work-panel">
         {stage === 'error' ? (
           <div className="scanner-error"><AlertTriangle className="h-7 w-7" /><h2>Analisi non completata</h2><p>{error}</p><button type="button" onClick={() => inputRef.current?.click()}><Upload className="h-4 w-4" /> Scegli un’altra foto</button></div>
+        ) : stage === 'manual-input' ? (
+          <div className="scanner-manual-side animate-fade-in">
+            <div className="scanner-stage-label">Inserimento manuale</div>
+            <h2>Inserisci marca e modello</h2>
+            <p className="scanner-stage-copy">Compila i dati nel form sopra la foto per generare il report completo comunque.</p>
+            <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
+          </div>
         ) : (
           <>
-            <div className="scanner-stage-label">{stage === 'recognition' ? 'Scansione gratuita' : 'Veicolo riconosciuto'}</div>
-            <h2>{stage === 'recognition' ? 'Cerco marca, modello e prezzo…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
-            <p className="scanner-stage-copy">{stage === 'recognition' ? 'Il primo risultato è gratuito e non richiede registrazione.' : 'Ora puoi vedere il risultato base senza creare un account.'}</p>
+            <div className="scanner-stage-label">{stage === 'recognition' ? 'Analisi gratuita in corso' : 'Veicolo riconosciuto'}</div>
+            <h2>{stage === 'recognition' ? 'Riconoscimento veicolo e preparazione report completo…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
+            <p className="scanner-stage-copy">{stage === 'recognition' ? 'La prima analisi è gratuita e include il report completo.' : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
             <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
             {discovered.length > 0 && <div className="discovered-grid">{discovered.map(([label, value]) => <div key={String(label)}><span><Check className="h-3.5 w-3.5" /> {label}</span><strong>{value}</strong></div>)}</div>}
-            <div className="scanner-checklist">{checks.map(([label, done]) => <div key={label} className={done ? 'done' : ''}><span>{done ? <Check className="h-3.5 w-3.5" /> : <Loader2 className="h-3.5 w-3.5 animate-spin" />}</span>{label}</div>)}</div>
           </>
         )}
       </div>

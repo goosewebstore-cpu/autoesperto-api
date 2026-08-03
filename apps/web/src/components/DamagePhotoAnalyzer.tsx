@@ -38,8 +38,9 @@ export default function DamagePhotoAnalyzer({ vehicle, compact = false, purpose 
     try {
       const response = await analyzeVehiclePhoto(imageData, vehicle);
       setResult(response.analysis);
-    } catch (err: any) {
-      setError(err.message || 'Non riesco ad analizzare la foto. Riprova con un’altra inquadratura.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '';
+      setError(message || 'Non riesco ad analizzare la foto. Riprova con un’altra inquadratura.');
     } finally {
       setLoading(false);
     }

@@ -1,15 +1,44 @@
-import { describe, it } from 'node:test';
+import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert';
+import type { Server } from 'node:http';
+import type { RequestInit } from 'undici';
+import { app } from '../src/app';
 
-const BASE = process.env.TEST_API_URL || 'http://localhost:4000';
+let BASE = process.env.TEST_API_URL || '';
+let server: Server | undefined;
 
-function req(path: string, opts: any = {}) {
-  const headers: any = { 'Content-Type': 'application/json' };
-  return fetch(`${BASE}${path}`, {
-    method: opts.method || 'GET',
-    headers,
-    body: opts.body ? JSON.stringify(opts.body) : undefined,
-  }).then(async (r) => ({ status: r.status, data: await r.json().catch(() => null) }));
+before(async () => {
+  if (BASE) return;
+  await new Promise<void>((resolve) => {
+    server = app.listen(0, () => {
+      const addr = server?.address();
+      const port = typeof addr === 'object' && addr ? addr.port : 0;
+      BASE = `http://127.0.0.1:${port}`;
+      resolve();
+    });
+  });
+});
+
+after(async () => {
+  if (server) await new Promise<void>((resolve) => server!.close(() => resolve()));
+});
+
+interface ReqResult {
+  status: number;
+  data: any;
+}
+
+function req(path: string, opts: { method?: string; body?: unknown } = {}): Promise<ReqResult> {
+  const { method = 'GET', body } = opts;
+  const init: RequestInit = {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: body ? JSON.stringify(body) : undefined,
+  };
+  return fetch(`${BASE}${path}`, init).then(async (r) => ({
+    status: r.status,
+    data: await r.json().catch(() => null),
+  }));
 }
 
 describe('AutoEsperto API (MVP)', () => {
@@ -103,7 +132,7 @@ describe('AutoEsperto API (MVP)', () => {
       assert.ok(r.data.answer.length > 20);
     });
 
-    it('payload non valido → 400', async () => {
+    it('payload non valida → 400', async () => {
       const r = await req('/reports/ask', { method: 'POST', body: { question: '?' } });
       assert.strictEqual(r.status, 400);
     });

@@ -37,8 +37,9 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
         setReport(result.report);
         window.scrollTo({ top: 0, behavior: 'smooth' });
       }
-    } catch (err: any) {
-      setError(err.message || 'Non riesco a creare il report. Riprova tra poco.');
+    } catch (err) {
+      const message = err instanceof Error ? err.message : '';
+      setError(message || 'Non riesco a creare il report. Riprova tra poco.');
     }
   };
 

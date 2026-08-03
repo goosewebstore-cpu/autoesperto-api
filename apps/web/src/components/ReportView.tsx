@@ -150,6 +150,21 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </div>
       </header>}
 
+      {/* Disclaimer AI */}
+      <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 md:p-6">
+        <div className="flex items-start gap-3">
+          <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
+          <div>
+            <h3 className="text-sm font-bold text-amber-900">Disclaimer AI — Risultato indicativo</h3>
+            <p className="mt-1 text-sm text-amber-800 leading-relaxed">
+              Questa analisi è generata da intelligenza artificiale ed è <strong>indicativa</strong>. Può contenere errori su marca, modello, anno, stato visivo o stima di prezzo.
+              Per decisioni d'acquisto, rivolgiti sempre a un professionista per un controllo reale dell'auto.
+              <strong> Carica più foto</strong> (frontale, laterale, posteriore, interni, targa) per migliorare la precisione dell'analisi.
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Score + verdict */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
         <div className="flex flex-col md:flex-row items-start gap-5">
@@ -425,7 +440,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             <div className="bg-surface-2 rounded-xl p-4 mb-3 border border-[#e6007e]/20">
               <div className="flex items-center justify-between mb-1">
                 <span className="text-xs font-medium text-text-secondary">
-                  Prezzo medio richiesto negli annunci per {comparisonLabel}
+                  Prezzo medio reale dagli annunci per {comparisonLabel}
                 </span>
                 <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#e6007e]/10 text-[#c4006b] text-[11px] font-semibold">
                   subito.it
@@ -435,14 +450,21 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
                 {formatPrice(price.market.priceAvg)}
               </div>
               <div className="text-xs text-text-secondary mt-0.5">
-                {formatPrice(price.market.priceMin || 0)} – {formatPrice(price.market.priceMax || 0)} · da {price.market.total} annunci
-                {price.market.yearMin && price.market.yearMax ? ` · ${price.market.yearMin}–${price.market.yearMax}` : ''}
+                Media di {price.market.total} annunci · Range: {formatPrice(price.market.priceMin || 0)} – {formatPrice(price.market.priceMax || 0)}
+                {price.market.yearMin && price.market.yearMax ? ` · anni ${price.market.yearMin}–${price.market.yearMax}` : ''}
               </div>
-              <div className="text-[11px] text-text-tertiary mt-1">
-                {comparisonIsExact
-                  ? 'Confronto ristretto agli annunci più simili per anno e chilometraggio.'
-                  : 'Confronto ampliato perché non erano disponibili almeno 3 annunci con anno e km equivalenti.'}
-              </div>
+              {price.market.comparison?.disclosure && (
+                <p className="text-[11px] text-text-tertiary mt-1.5 leading-relaxed">
+                  {price.market.comparison.disclosure}
+                </p>
+              )}
+              {!price.market.comparison?.disclosure && (
+                <div className="text-[11px] text-text-tertiary mt-1">
+                  {comparisonIsExact
+                    ? 'Confronto ristretto agli annunci più simili per anno e chilometraggio.'
+                    : 'Confronto ampliato perché non erano disponibili almeno 3 annunci con anno e km equivalenti.'}
+                </div>
+              )}
               <a
                 href={price.market.url}
                 target="_blank"
@@ -517,8 +539,10 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
           <div className="flex items-start justify-between gap-4 mb-5">
             <div>
-              <h2 className="text-base font-bold text-text-primary">Annunci più comparabili</h2>
-              <p className="text-sm text-text-secondary mt-1">I tre prezzi richiesti su Subito.it più vicini alla media di {formatPrice(price.market.priceAvg || 0)}, filtrati per {comparisonLabel}.</p>
+              <h2 className="text-base font-bold text-text-primary">Annunci usati per il calcolo</h2>
+              <p className="text-sm text-text-secondary mt-1">
+                Ho confrontato {price.market.total} annunci di {vehicle.make} {vehicle.model} filtrati per {comparisonLabel}: la media è {formatPrice(price.market.priceAvg || 0)}. Sotto vedi quelli più vicini alla media.
+              </p>
             </div>
             <span className="shrink-0 rounded-full bg-[#e6007e]/10 px-2.5 py-1 text-[11px] font-semibold text-[#c4006b]">subito.it</span>
           </div>
@@ -540,6 +564,10 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               );
             })}
           </div>
+          <p className="mt-3 text-[11px] text-text-tertiary flex items-start gap-1.5">
+            <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+            Il prezzo medio è la somma dei prezzi richiesti divisa per il numero di annunci comparabili. È un indicatore di mercato, non una perizia: controlla sempre l&apos;esemplare specifico.
+          </p>
         </section>
       )}
 
@@ -606,39 +634,6 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
           </div>
         </section>
       )}
-
-      <section className="hidden">
-        <h2>
-          Approfondimenti della community
-        </h2>
-        <p className="text-sm text-text-secondary mb-4">
-          Approfondisci {vehicle.make} {vehicle.model} con le esperienze di proprietari e appassionati. Cerca sempre riscontri tecnici prima di decidere.
-        </p>
-        <div className="grid sm:grid-cols-3 gap-2">
-          {communityLinks.map((item) => {
-            const Icon = item.icon;
-            return (
-              <a
-                key={item.detail}
-                href={item.href}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-              >
-                <span className="flex items-center gap-2 min-w-0">
-                  <Icon className="w-4 h-4 text-accent flex-shrink-0" />
-                  <span className="truncate">{item.label}</span>
-                </span>
-                <ExternalLink className="w-4 h-4 text-text-tertiary flex-shrink-0" />
-              </a>
-            );
-          })}
-        </div>
-        <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
-          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-          Le discussioni della community sono opinioni personali: AutoEsperto le propone per approfondire, non come certificazione tecnica.
-        </p>
-      </section>
 
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
         <h2 className="text-base font-bold text-text-primary mb-2 flex items-center gap-2">

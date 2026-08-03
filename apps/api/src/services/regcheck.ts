@@ -4,6 +4,7 @@ import { RegCheckDemoData } from './demoData';
 const API_BASE = 'https://www.regcheck.org.uk/api/reg.asmx';
 const USERNAME = process.env.REGCHECK_USERNAME || 'demo';
 const SERVICE_DOWN_MESSAGE = 'Servizio di ricerca veicoli temporaneamente non disponibile. Riprova più tardi.';
+const DEMO_MODE = USERNAME === 'demo';
 
 export interface RegCheckRawData {
   Description?: string;
@@ -28,16 +29,14 @@ export interface RegCheckRawData {
   Mileage?: string;
 }
 
-let useDemoFallback = USERNAME === 'demo';
-
 export async function lookupPlate(plate: string): Promise<RegCheckRawData> {
   const plateKey = plate.toUpperCase();
-  if (useDemoFallback) {
+  if (DEMO_MODE) {
     const demoData = RegCheckDemoData[plateKey];
     if (demoData) return demoData;
   }
 
-  const apiUrl = `${API_BASE}/CheckItaly?RegistrationNumber=${encodeURIComponent(plate)}&username=${USERNAME}`;
+  const apiUrl = `${API_BASE}/CheckItaly?RegistrationNumber=${encodeURIComponent(plate)}&username=${encodeURIComponent(USERNAME)}`;
   return fetchRegCheck(apiUrl, plateKey);
 }
 
@@ -55,14 +54,11 @@ async function fetchRegCheck(apiUrl: string, plateKey: string): Promise<RegCheck
 
   try {
     const resp = await fetch(apiUrl, { signal: controller.signal });
-    clearTimeout(timeout);
     const text = await resp.text();
 
     if (resp.status === 500 && text.toLowerCase().includes('out of credit')) {
-      useDemoFallback = true;
       const demoData = RegCheckDemoData[plateKey];
       if (demoData) return demoData;
-      console.error('[regcheck] Crediti esauriti per account', USERNAME, '- targa', plateKey);
       throw serviceUnavailable(SERVICE_DOWN_MESSAGE);
     }
 
@@ -71,10 +67,10 @@ async function fetchRegCheck(apiUrl: string, plateKey: string): Promise<RegCheck
     if (!match) throw new Error('Formato risposta non valido');
     return JSON.parse(decodeEntities(match[1]));
   } catch (err) {
-    clearTimeout(timeout);
     if (err instanceof HttpError) throw err;
-    console.error('[regcheck] Errore per targa', plateKey, ':', err instanceof Error ? err.message : err);
     throw serviceUnavailable(SERVICE_DOWN_MESSAGE);
+  } finally {
+    clearTimeout(timeout);
   }
 }
 

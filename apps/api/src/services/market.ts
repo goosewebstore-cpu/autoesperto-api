@@ -3,7 +3,9 @@ import { cacheGet, cacheSet } from './cache';
 
 const SUBITO_BASE = 'https://www.subito.it';
 const SUBITO_TTL = 6 * 60 * 60 * 1000;
-const FETCH_TIMEOUT_MS = 6000;
+const FETCH_TIMEOUT_MS = 8000;
+const TARGET_SAMPLE = 10;
+const MIN_SAMPLE = 3;
 const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
@@ -138,35 +140,55 @@ export async function fetchSubitoMarketStats(
     const kmOf = (ad: SubitoAd) => featNum(ad, '/mileage_scalar');
     const yearOf = (ad: SubitoAd) => featNum(ad, '/year');
 
+    // Selezione progressiva degli annunci confrontabili. Cerchiamo prima lo stesso
+    // anno (±1) e km simili (tolleranza 25%, minimo 15.000 km); se non raggiungiamo
+    // un campione attendibile, allarghiamo in modo controllato e segnaliamo nel report
+    // quale livello è stato usato (non spacciamo per "esatto" un confronto approssimato).
     const yearPool = year ? ads.filter((a) => {
       const y = yearOf(a);
       return y !== undefined && y >= year - 1 && y <= year + 1;
     }) : ads;
-    const yearMatched = !year || yearPool.length >= 3;
-    const kmTolerance = km ? Math.max(15000, Math.round(km * 0.3)) : 0;
+    const yearMatched = !year || yearPool.length >= MIN_SAMPLE;
+
+    const kmTolerance = km ? Math.max(15000, Math.round(km * 0.25)) : 0;
     const kmPool = km
       ? yearPool.filter((a) => {
           const adKm = kmOf(a);
           return adKm !== undefined && Math.abs(adKm - km) <= kmTolerance;
         })
       : yearPool;
-    const kmMatched = !km || kmPool.length >= 3;
-    // Prefer the closest comparable group. When the market is too thin we fall back
-    // gradually and disclose that in the report instead of presenting it as exact.
-    const filtered = kmPool.length >= 3 ? kmPool : yearPool.length >= 3 ? yearPool : ads;
+    const kmMatched = !km || kmPool.length >= MIN_SAMPLE;
+
+    // Scegli il campione più specifico che raggiunga almeno TARGET_SAMPLE annunci;
+    // altrimenti scendi fino al minimo affidabile e dichiaralo.
+    let filtered = kmPool.length >= TARGET_SAMPLE ? kmPool
+      : kmPool.length >= MIN_SAMPLE ? kmPool
+      : yearPool.length >= TARGET_SAMPLE ? yearPool
+      : yearPool.length >= MIN_SAMPLE ? yearPool
+      : ads;
+    let disclosure: string;
+    if (filtered === kmPool && kmPool.length >= TARGET_SAMPLE) {
+      disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} con anno ${year} (±1) e chilometri simili (${km ? `${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km` : 'qualsiasi'}).`;
+    } else if (filtered === kmPool) {
+      disclosure = `Campione ridotto (${kmPool.length} annunci): ho usato quelli con anno ${year} (±1) e km simili, ma non ho trovato almeno ${TARGET_SAMPLE} annunci. Prezzo medio indicativo.`;
+    } else if (filtered === yearPool) {
+      disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model} con anno ${year} (±1). I chilometri non erano abbastanza confrontabili, quindi il confronto resta indicativo.`;
+    } else {
+      disclosure = `Campione ridotto (${ads.length} annunci totali): non ho trovato ${TARGET_SAMPLE} annunci con anno e chilometri confrontabili. Prezzo medio indicativo su tutto il modello.`;
+    }
 
     const prices = filtered.map(priceOf).filter((p): p is number => p !== undefined);
     const kms = filtered.map(kmOf).filter((k): k is number => k !== undefined);
     const years = filtered.map(yearOf).filter((y): y is number => y !== undefined);
 
-    if (prices.length < 3) return undefined;
+    if (prices.length < MIN_SAMPLE) return undefined;
     const priceAvg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length / 100) * 100;
 
     const listings = filtered
       .map(listingFromAd)
       .filter((listing): listing is MarketListing => Boolean(listing))
       .sort((a, b) => Math.abs(a.price - priceAvg) - Math.abs(b.price - priceAvg))
-      .slice(0, 3);
+      .slice(0, 12);
 
     const stats: MarketStats = {
       source: 'subito.it',
@@ -185,6 +207,9 @@ export async function fetchSubitoMarketStats(
         targetKm: km,
         yearMatched,
         kmMatched,
+        sampleSize: prices.length,
+        targetSample: TARGET_SAMPLE,
+        disclosure,
       },
     };
 

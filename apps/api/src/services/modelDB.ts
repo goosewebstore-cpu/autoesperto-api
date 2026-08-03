@@ -99,7 +99,6 @@ const ALIASES: Record<string, string> = {
   'alfa': 'alfa romeo',
   'alfa-romeo': 'alfa romeo',
   'alfaromeo': 'alfa romeo',
-  'serie': '',
 };
 
 function normalizeMake(make: string): string {

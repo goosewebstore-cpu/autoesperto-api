@@ -42,7 +42,7 @@ export function estimateMarketValue(vehicle: VehicleData): { value: number; min:
   base += getFuelAdjust(fuel);
 
   const currentYear = new Date().getFullYear();
-  const age = currentYear - year;
+  const age = Math.max(0, currentYear - year);
   let depreciation = age <= 10 ? 1 - age * 0.05 : 0.5 - (age - 10) * 0.04;
   depreciation = Math.max(0.12, depreciation);
 
@@ -59,7 +59,7 @@ export function estimateMarketValueWithKm(vehicle: VehicleData, km: number): {
   adjustedForKm: number; kmAdjustment: number;
 } {
   const base = estimateMarketValue(vehicle);
-  const kmFactor = Math.max(0.65, 1 - (km - 50000) / 250000);
+  const kmFactor = Math.min(1.1, Math.max(0.65, 1 - (km - 50000) / 250000));
   const adjustedForKm = Math.round(base.value * kmFactor / 100) * 100;
   return {
     ...base,

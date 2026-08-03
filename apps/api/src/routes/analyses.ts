@@ -54,9 +54,12 @@ router.get(
   requireAuth,
   asyncHandler(async (req, res) => {
     const { userId } = (req as AuthenticatedRequest).auth;
-    const analysis = await prisma.analysis.findUnique({ where: { userId } });
+    const analyses = await prisma.analysis.findMany({
+      where: { userId },
+      orderBy: { createdAt: 'desc' },
+    });
     res.set('Cache-Control', 'no-store');
-    res.json({ success: true, analysis: analysis ? storedAnalysis(analysis) : null });
+    res.json({ success: true, analyses: analyses.map(storedAnalysis), analysis: analyses[0] ? storedAnalysis(analyses[0]) : null });
   })
 );
 
@@ -66,12 +69,13 @@ router.post(
   asyncHandler(async (req, res) => {
     const { userId } = (req as AuthenticatedRequest).auth;
     const { imageData } = analysisSchema.parse(req.body);
-    const [paidPurchase, existing] = await Promise.all([
+    const [analysisCount, paidPurchase] = await Promise.all([
+      prisma.analysis.count({ where: { userId } }),
       prisma.purchase.findFirst({ where: { userId, status: 'PAID' }, select: { id: true } }),
-      prisma.analysis.findUnique({ where: { userId }, select: { id: true } }),
     ]);
-    if (!paidPurchase) throw forbidden('Acquista l’analisi prima di procedere.');
-    if (existing) throw conflict('Questo account ha già utilizzato la sua analisi. Il report resta disponibile nell’area personale.');
+    if (analysisCount > 0 && !paidPurchase) {
+      throw forbidden('Hai già usato la tua analisi gratuita. Acquista una nuova analisi per salvarne altre.');
+    }
 
     let photoAnalysis: Awaited<ReturnType<typeof analyzeVehiclePhoto>>;
     try {
@@ -97,27 +101,23 @@ router.post(
     }
     const title = [make, model, photoAnalysis.vehicle.generation, year].filter(Boolean).join(' ');
 
-    try {
-      const analysis = await prisma.analysis.create({
-        data: {
-          userId,
-          title,
-          vehicleJson: JSON.stringify(photoAnalysis.vehicle),
-          photoAnalysisJson: JSON.stringify(photoAnalysis),
-          reportJson: JSON.stringify(report),
-          sourceImageStored: false,
-          immediateExecutionAccepted: true,
-          consentAt: new Date(),
-          termsVersion: '2026-08-02',
-        },
-      });
-      res.status(201).json({ success: true, analysis: storedAnalysis(analysis) });
-    } catch (error) {
-      if ((error as { code?: string })?.code === 'P2002') {
-        throw conflict('Questo account ha già utilizzato la sua analisi.');
-      }
-      throw error;
-    }
+    const analysis = await prisma.analysis.create({
+      data: {
+        userId,
+        title,
+        vehicleJson: JSON.stringify(photoAnalysis.vehicle),
+        photoAnalysisJson: JSON.stringify(photoAnalysis),
+        reportJson: JSON.stringify(report),
+        sourceImageStored: false,
+        immediateExecutionAccepted: true,
+        consentAt: new Date(),
+        termsVersion: '2026-08-02',
+      },
+    });
+    void prisma.analyticsEvent.create({
+      data: { type: 'analysis', path: '/account', meta: JSON.stringify({ make, model }), userId },
+    }).catch(() => undefined);
+    res.status(201).json({ success: true, analysis: storedAnalysis(analysis) });
   })
 );
 

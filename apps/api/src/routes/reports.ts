@@ -1,5 +1,6 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import { prisma } from '@autoesperto/database';
 import { buildReport } from '../services/reportService';
 import { analyzeVehiclePhoto, askAutoEsperto } from '../services/ai';
 import { asyncHandler, serviceUnavailable } from '../http';
@@ -90,11 +91,26 @@ router.post(
   '/free-scan',
   asyncHandler(async (req, res) => {
     const { imageData } = freeScanSchema.parse(req.body);
-    let photo;
+    let photo: Awaited<ReturnType<typeof analyzeVehiclePhoto>> | undefined;
+
+    // Primo tentativo normale
     try {
       photo = await analyzeVehiclePhoto({ imageData });
     } catch (error) {
-      console.warn('free scan unavailable:', error);
+      console.warn('free scan first attempt failed:', error);
+    }
+
+    // Se il primo è fallito o non ha riconosciuto, secondo tentativo aggressive
+    if (!photo?.vehicle?.make || !photo?.vehicle?.model) {
+      try {
+        photo = await analyzeVehiclePhoto({ imageData, aggressive: true });
+      } catch (error) {
+        console.warn('free scan aggressive attempt failed:', error);
+      }
+    }
+
+    // Se il servizio è completamente down
+    if (!photo) {
       throw serviceUnavailable('Il riconoscimento gratuito non è disponibile in questo momento. Riprova tra poco.');
     }
 
@@ -103,7 +119,7 @@ router.post(
       res.json({
         success: true,
         recognized: false,
-        message: 'Non riesco a riconoscere marca e modello con sufficiente sicurezza. Prova una foto nitida di tre quarti: non è stato consumato nulla.',
+        message: 'L\'AI non ha riconosciuto marca e modello con sufficiente sicurezza. Prova una foto nitida di tre quarti, oppure inserisci marca e modello a mano.',
       });
       return;
     }
@@ -113,22 +129,18 @@ router.post(
       ({ report } = await buildReport({ make: photo.vehicle.make, model: photo.vehicle.model, year: photo.vehicle.year }));
     } catch (error) {
       console.warn('free scan price unavailable:', error);
-      throw serviceUnavailable('Ho riconosciuto il veicolo ma non riesco a calcolare il prezzo in questo momento. Riprova tra poco.');
+      throw serviceUnavailable('Veicolo riconosciuto, ma il calcolo del prezzo non è disponibile in questo momento. Riprova tra poco.');
     }
 
     res.set('Cache-Control', 'no-store');
+    void prisma.analyticsEvent.create({
+      data: { type: 'scan', path: '/', meta: JSON.stringify({ make: photo.vehicle.make, model: photo.vehicle.model, recognized: true }) },
+    }).catch(() => undefined);
     res.json({
       success: true,
       recognized: true,
       vehicle: photo.vehicle,
-      price: {
-        estimatedValue: report.price.estimatedValue,
-        min: report.price.min,
-        max: report.price.max,
-        market: report.price.market
-          ? { priceAvg: report.price.market.priceAvg, priceMin: report.price.market.priceMin, priceMax: report.price.market.priceMax, total: report.price.market.total }
-          : undefined,
-      },
+      report,
     });
   })
 );

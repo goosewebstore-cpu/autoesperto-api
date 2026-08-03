@@ -1,4 +1,5 @@
-const STATIC_CACHE = 'autoesperto-static-v4';
+const STATIC_CACHE = 'autoesperto-static-v5';
+const MAX_CACHE_ENTRIES = 80;
 
 const PRECACHE_URLS = [
   '/',
@@ -10,7 +11,7 @@ const PRECACHE_URLS = [
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open(STATIC_CACHE)
-      .then((c) => c.addAll(PRECACHE_URLS))
+      .then((c) => Promise.allSettled(PRECACHE_URLS.map((u) => c.add(u))))
       .then(() => self.skipWaiting())
   );
 });
@@ -25,13 +26,20 @@ self.addEventListener('activate', (e) => {
   );
 });
 
+async function putWithEviction(request, response) {
+  const cache = await caches.open(STATIC_CACHE);
+  await cache.put(request, response);
+  const keys = await cache.keys();
+  if (keys.length > MAX_CACHE_ENTRIES) {
+    await Promise.all(keys.slice(0, keys.length - MAX_CACHE_ENTRIES).map((k) => cache.delete(k)));
+  }
+}
+
 self.addEventListener('fetch', (e) => {
   const url = new URL(e.request.url);
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
 
-  // Service worker e bundle Next devono arrivare sempre dalla rete: altrimenti
-  // un visitatore può restare bloccato su una versione precedente del sito.
   if (url.pathname === '/sw.js' || url.pathname.startsWith('/_next/')) return;
 
   if (e.request.mode === 'navigate') {
@@ -45,7 +53,7 @@ self.addEventListener('fetch', (e) => {
         .then((response) => {
           if (response.ok) {
             const clone = response.clone();
-            caches.open(STATIC_CACHE).then((c) => c.put(e.request, clone));
+            putWithEviction(e.request, clone).catch(() => undefined);
           }
           return response;
         })

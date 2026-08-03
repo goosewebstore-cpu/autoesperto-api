@@ -70,9 +70,12 @@ export default function ModelReportCard({ make, model }: ModelReportCardProps) {
                 {formatPrice(market.priceAvg)}
               </div>
               <div className="text-xs text-text-secondary mt-0.5">
-                Range: {formatPrice(market.priceMin || 0)} – {formatPrice(market.priceMax || 0)} · da {market.total} annunci
+                Media di {market.total} annunci · Range: {formatPrice(market.priceMin || 0)} – {formatPrice(market.priceMax || 0)}
                 {market.yearMin && market.yearMax ? ` · anni ${market.yearMin}–${market.yearMax}` : ''}
               </div>
+              {market.comparison?.disclosure && (
+                <p className="text-[11px] text-text-tertiary mt-1.5 leading-relaxed">{market.comparison.disclosure}</p>
+              )}
               <a
                 href={market.url}
                 target="_blank"

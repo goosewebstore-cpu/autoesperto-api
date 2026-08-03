@@ -52,6 +52,9 @@ export interface MarketStats {
     targetKm?: number;
     yearMatched: boolean;
     kmMatched: boolean;
+    sampleSize?: number;
+    targetSample?: number;
+    disclosure?: string;
   };
 }
 

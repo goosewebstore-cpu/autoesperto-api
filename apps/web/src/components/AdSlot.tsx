@@ -28,7 +28,13 @@ export default function AdSlot({ slot, placement = 'report', className }: AdSlot
 
   useEffect(() => {
     if (!ENABLED || !CLIENT_ID || !resolvedSlot) return;
-    if (consent !== 'accepted') return;
+
+    if (consent !== 'accepted') {
+      const existing = document.querySelector('script[data-autoesperto-adsense]');
+      if (existing) existing.remove();
+      inserted.current = false;
+      return;
+    }
 
     if (!inserted.current) {
       inserted.current = true;

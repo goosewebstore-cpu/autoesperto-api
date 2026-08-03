@@ -15,15 +15,13 @@ router.post(
     const { userId } = (req as AuthenticatedRequest).auth;
     const user = await prisma.user.findUnique({
       where: { id: userId },
-      include: {
-        analysis: { select: { id: true } },
-        purchases: { where: { status: 'PAID' }, take: 1, select: { id: true } },
+      select: {
+        id: true,
+        email: true,
+        phone: true,
       },
     });
     if (!user) throw forbidden('Account non trovato.');
-    if (user.analysis || user.purchases.length) {
-      throw conflict(user.analysis ? 'Hai già utilizzato la tua analisi.' : 'La tua analisi è già stata acquistata.');
-    }
 
     const { amountCents, currency } = getAnalysisPrice();
     const purchase = await prisma.purchase.create({
@@ -60,6 +58,9 @@ router.post(
         success_url: `${webUrl}/account?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${webUrl}/account?checkout=cancelled`,
       });
+      void prisma.analyticsEvent.create({
+        data: { type: 'checkout', path: '/account', userId },
+      }).catch(() => undefined);
       if (!session.url) throw new Error('Stripe non ha restituito il link di pagamento.');
       await prisma.purchase.update({ where: { id: purchase.id }, data: { stripeSessionId: session.id } });
       res.status(201).json({ success: true, url: session.url });

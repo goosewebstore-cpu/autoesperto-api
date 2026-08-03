@@ -26,12 +26,8 @@ export interface FreeScanResult {
   recognized: boolean;
   message?: string;
   vehicle?: PhotoAnalysis['vehicle'];
-  price?: {
-    estimatedValue: number;
-    min: number;
-    max: number;
-    market?: { priceAvg?: number; priceMin?: number; priceMax?: number; total?: number };
-  };
+  report?: AutoReport;
+  needsLogin?: boolean;
 }
 
 export interface AccountUser {
@@ -46,6 +42,7 @@ export interface AccountUser {
     used: number;
     remaining: number;
     paid: boolean;
+    freeUsed: boolean;
     purchase: { id: string; paidAt: string; amountCents: number; currency: string } | null;
   };
 }
@@ -80,8 +77,8 @@ export async function fetchJson<T>(path: string, options?: RequestInit, timeoutM
       throw new Error(err.error || `Errore ${res.status}`);
     }
     return res.json();
-  } catch (err: any) {
-    if (err.name === 'AbortError') {
+  } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') {
       throw new Error('Il servizio sta impiegando troppo tempo. Riprova tra qualche istante.');
     }
     throw err;
@@ -135,7 +132,7 @@ export async function confirmCheckout(sessionId: string) {
 }
 
 export async function getMyAnalysis() {
-  return fetchJson<{ success: true; analysis: StoredAnalysis | null }>('/analyses/me');
+  return fetchJson<{ success: true; analysis: StoredAnalysis | null; analyses: StoredAnalysis[] }>('/analyses/me');
 }
 
 export async function createPaidAnalysis(imageData: string) {
@@ -143,4 +140,18 @@ export async function createPaidAnalysis(imageData: string) {
     method: 'POST',
     body: JSON.stringify({ imageData, immediateExecutionAccepted: true }),
   });
+}
+
+export interface AnalyticsOverview {
+  success: boolean;
+  overview: {
+    totals: { visits: number; scans: number; analyses: number; checkouts: number; registers: number; uniqueVisitors7d: number };
+    last7d: { visits: number; scans: number; analyses: number; checkouts: number; registers: number };
+    last30d: { visits: number; scans: number; analyses: number; checkouts: number; registers: number };
+    visitsByDay: Array<{ key: string; label: string; count: number }>;
+  };
+}
+
+export async function getAnalyticsOverview() {
+  return fetchJson<AnalyticsOverview>('/analytics/overview');
 }

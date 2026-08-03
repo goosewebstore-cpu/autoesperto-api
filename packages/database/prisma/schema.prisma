@@ -25,7 +25,7 @@ model User {
   savedVehicles   SavedVehicle[]
   dealerProfile   DealerProfile?
   purchases       Purchase[]
-  analysis        Analysis?
+  analyses        Analysis[]
 }
 
 model Purchase {
@@ -47,7 +47,7 @@ model Purchase {
 
 model Analysis {
   id                         String    @id @default(cuid())
-  userId                     String    @unique
+  userId                     String
   user                       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
   title                      String
   vehicleJson                String
@@ -59,10 +59,12 @@ model Analysis {
   termsVersion               String    @default("2026-08-02")
   createdAt                  DateTime  @default(now())
   updatedAt                  DateTime  @updatedAt
+
+  @@index([userId])
 }
 
 model Account {
-  id           String  @id @default(cuid())
+id           String  @id @default(cuid())
   userId       String
   user         User    @relation(fields: [userId], references: [id])
   provider     String // "google", "github", etc.
@@ -174,4 +176,18 @@ model DealerListing {
   status      String        @default("ACTIVE")
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
+}
+
+model AnalyticsEvent {
+  id        String   @id @default(cuid())
+  type      String
+  path      String?
+  meta      String?
+  visitorId String?
+  userId    String?
+  duration  Int?
+  createdAt DateTime @default(now())
+
+  @@index([type, createdAt])
+  @@index([visitorId])
 }

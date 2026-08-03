@@ -77,7 +77,16 @@ const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<Pho
 
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
   const geminiKey = process.env.GEMINI_API_KEY;
-  if (geminiKey) return analyzeVehiclePhotoWithGemini(input, geminiKey);
+  if (geminiKey) {
+    try {
+      return await analyzeVehiclePhotoWithGemini(input, geminiKey);
+    } catch (error) {
+      // A free Gemini quota can be exhausted independently of the OpenAI quota.
+      // If OpenAI is configured, use it rather than failing every photo scan.
+      if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'mock') throw error;
+      console.warn('Gemini vision unavailable; falling back to OpenAI vision:', error instanceof Error ? error.message : error);
+    }
+  }
   const key = process.env.OPENAI_API_KEY;
   if (!key || key === 'mock') throw new Error('Analisi foto non configurata');
 

@@ -116,7 +116,7 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     }),
   });
   const data = await response.json() as any;
-  const raw = data.choices?.[0]?.message?.content;
+  const raw = data.choices?.[0]?.message?.content || data.choices?.[0]?.message?.reasoning_content;
   if (!response.ok || !raw) {
     const providerMessage = typeof data?.error?.message === 'string' ? data.error.message : '';
     throw new Error(providerMessage || `Il provider visivo non ha restituito un risultato (HTTP ${response.status}).`);
@@ -125,7 +125,7 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   try {
     parsed = parseJsonContent<any>(raw);
   } catch (parseError) {
-    console.warn('Failed to parse vision response as JSON. Raw content (first 500 chars):', raw.slice(0, 500));
+    console.warn('Failed to parse vision response as JSON. Raw content (first 600 chars):', raw.slice(0, 600));
     return {
       vehicle: { confidence: 'bassa' as const },
       damage: {
@@ -376,10 +376,13 @@ Fornisci UNA SOLA risposta JSON valida con:
 }
 
 function parseJsonContent<T>(content: string): T {
-  const cleaned = content
+  let cleaned = (content || '')
     .trim()
     .replace(/^```(?:json)?\s*/i, '')
     .replace(/\s*```$/, '');
+  cleaned = cleaned
+    .replace(/<(?:think|thinking|reasoning)>[\s\S]*?<\/(?:think|thinking|reasoning)>/gi, '')
+    .replace(/<(?:think|thinking|reasoning)>[\s\S]*$/gi, '');
   const start = cleaned.indexOf('{');
   if (start < 0) {
     const arrStart = cleaned.indexOf('[');

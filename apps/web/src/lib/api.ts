@@ -2,6 +2,7 @@ import type { AutoReport } from '@autoesperto/types';
 import { getAuthToken } from '@/lib/auth';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+export { API_URL };
 const TIMEOUT_MS = 30000;
 const AI_TIMEOUT_MS = 120000;
 
@@ -42,7 +43,9 @@ export interface AccountUser {
     used: number;
     remaining: number;
     paid: boolean;
+    emailVerified: boolean;
     freeUsed: boolean;
+    trialAvailable: boolean;
     purchase: { id: string; paidAt: string; amountCents: number; currency: string } | null;
   };
 }
@@ -114,6 +117,17 @@ export async function loginAccount(input: { identifier: string; password: string
     method: 'POST',
     body: JSON.stringify(input),
   });
+}
+
+export async function verifyEmail(token: string) {
+  return fetchJson<{ success: true; token: string; user: AccountUser }>('/auth/verify-email', {
+    method: 'POST',
+    body: JSON.stringify({ token }),
+  });
+}
+
+export async function resendVerification() {
+  return fetchJson<{ success: true }>('/auth/resend-verification', { method: 'POST', body: '{}' });
 }
 
 export async function getMyAccount() {

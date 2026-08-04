@@ -61,6 +61,89 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
   return { maintenance, fuelCost, insurance };
 }
 
+function deriveCategoryScores(
+  vehicle: VehicleData,
+  baseScore: number,
+  knowledge: ReturnType<typeof getVehicleKnowledge>
+): { engine: number; transmission: number; electronics: number; suspension: number; body: number } {
+  const brand = (vehicle.make || '').toLowerCase();
+  const fuel = (vehicle.fuel || '').toLowerCase();
+  const isPremium = /bmw|mercedes|audi|volvo|lexus|alfa/.test(brand);
+  const isJapanese = /toyota|honda|mazda|nissan|suzuki|lexus|subaru/.test(brand);
+  const isEuropean = /fiat|alfa|lancia|peugeot|renault|citroen|vw|audi|bmw|mercedes|skoda|seat|volvo|opel/.test(brand);
+
+  let engine = baseScore;
+  if (fuel.includes('diesel') && /n47|ea189|tdi.*old/.test(knowledge.engine.toLowerCase())) engine -= 0.5;
+  if (isJapanese) engine += 0.3;
+
+  let transmission = baseScore - 0.3;
+  if (/manuale/.test((vehicle.transmission || '').toLowerCase())) transmission += 0.6;
+  if (/dsg|s.tronic|powershift|edc|tct|dualogic/.test(knowledge.transmission.toLowerCase())) transmission -= 0.6;
+  if (isJapanese) transmission += 0.4;
+
+  let electronics = baseScore - 0.5;
+  if (isPremium) electronics -= 0.4;
+  if (isJapanese) electronics += 0.5;
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - (vehicle.year || currentYear - 5);
+  if (age <= 5) electronics += 0.5;
+
+  let suspension = baseScore - 0.2;
+  if (/(suv|crossover| crossover)/.test((vehicle.body || '').toLowerCase())) suspension -= 0.3;
+
+  let body = baseScore - 0.1;
+  if (/(fiat|peugeot|renault|citroen)/.test(brand)) body += 0.1;
+  if (/(bmw|audi|mercedes)/.test(brand)) body += 0.1;
+
+  const clamp = (v: number) => Math.min(10, Math.max(3, Math.round(v * 10) / 10));
+  return {
+    engine: clamp(engine),
+    transmission: clamp(transmission),
+    electronics: clamp(electronics),
+    suspension: clamp(suspension),
+    body: clamp(body),
+  };
+}
+
+function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; highway: number; combined: number; fuelType?: string } {
+  const f = fuel.toLowerCase();
+  const displacement = parseFloat((vehicle.displacement || '').replace(/[^0-9.]/g, '')) || 1.4;
+  const isDiesel = f.includes('diesel');
+  const isHybrid = f.includes('ibrid');
+  const isElectric = f.includes('elettr') || f.includes('ev');
+  const isGpl = f.includes('gpl') || f.includes('metano');
+
+  if (isElectric) return { city: 16, highway: 13, combined: 14.5, fuelType: 'kWh/100km' };
+
+  const base = isDiesel ? 16 : isHybrid ? 19 : isGpl ? 18 : 17;
+  const displacementFactor = Math.max(0.85, Math.min(1.4, displacement / 1.6));
+  const city = Math.round(base / displacementFactor * 1.15 * 10) / 10;
+  const highway = Math.round(base / displacementFactor * 0.75 * 10) / 10;
+  const combined = Math.round(base / displacementFactor * 0.95 * 10) / 10;
+  return { city, highway, combined, fuelType: 'km/L' };
+}
+
+function deriveTaxAnnual(power: number, fuel: string, year?: number): number {
+  const f = fuel.toLowerCase();
+  if (f.includes('elettr') || f.includes('ev')) return Math.max(40, Math.round(power / 5) * 5);
+  const currentYear = new Date().getFullYear();
+  const age = currentYear - (year || currentYear - 5);
+  const euroClassOk = age <= 15;
+
+  let amount: number;
+  if (power < 60) amount = 120;
+  else if (power < 100) amount = 180;
+  else if (power < 150) amount = 280;
+  else if (power < 200) amount = 420;
+  else if (power < 280) amount = 620;
+  else amount = 850;
+
+  if (f.includes('diesel') && !euroClassOk) amount += 80;
+  if (f.includes('gpl') || f.includes('metano')) amount = Math.round(amount * 0.65);
+
+  return amount;
+}
+
 function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
 function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
 function isGroqProvider() {
@@ -265,6 +348,11 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
   const { verdict, label } = getVerdict(score);
 
   const costs = estimateCosts(vehicle, fuel, power);
+  const consumption = deriveConsumption(vehicle, fuel);
+  const taxAnnual = deriveTaxAnnual(power, fuel, vehicle.year);
+  const serviceIntervalKm = fuel.includes('diesel') ? 20000 : 15000;
+  const categoryScores = deriveCategoryScores(vehicle, score, knowledge);
+
   const { value: estimatedValue } = estimateMarketValue(vehicle);
 
   const future1 = Math.round(estimatedValue * (fuel.includes('diesel') ? 0.82 : 0.85) / 100) * 100;
@@ -299,10 +387,14 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
       : `Cambio ${vehicle.make}: preferire versioni con cambio manuale o automatico con tagliandi documentati.`,
     maintenance: knowledge.maintenance,
     commonIssues: knowledge.common.filter((i: string) => !isGeneric(i)),
+    categoryScores,
     usage: knowledge.bestFor,
     recommendedVersions: knowledge.versionsRecommended,
     versionsToAvoid: knowledge.versionsToAvoid,
     aiEnhanced: false,
+    consumption,
+    taxAnnual,
+    serviceIntervalKm,
     futureCosts: {
       annualMaintenance: costs.maintenance,
       fuelCostPer100Km: costs.fuelCost,

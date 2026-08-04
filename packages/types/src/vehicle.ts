@@ -79,6 +79,13 @@ export interface ReliabilityAnalysis {
   transmission: string;
   maintenance: 'basso' | 'medio' | 'alto' | 'molto alto';
   commonIssues: string[];
+  categoryScores?: {
+    engine: number;
+    transmission: number;
+    electronics: number;
+    suspension: number;
+    body: number;
+  };
   usage: {
     city: string;
     family: string;
@@ -88,6 +95,14 @@ export interface ReliabilityAnalysis {
   recommendedVersions?: string[];
   versionsToAvoid?: string[];
   aiEnhanced?: boolean;
+  consumption?: {
+    city: number;
+    highway: number;
+    combined: number;
+    fuelType?: string;
+  };
+  taxAnnual?: number;
+  serviceIntervalKm?: number;
   futureCosts: {
     annualMaintenance: number;
     fuelCostPer100Km: number;

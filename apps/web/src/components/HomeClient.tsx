@@ -66,7 +66,8 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
           <div className="animate-fade-in">
             <VehicleScanner key={scannerKey} />
             {error && <div role="alert" className="mb-6 rounded-xl border border-danger/20 bg-danger-light px-5 py-4 text-center text-sm font-semibold text-danger">{error}</div>}
-            <section className="grid gap-4 border-y border-border/70 py-8 sm:grid-cols-3">
+            <section className="grid gap-4 border-y border-border/70 py-8 sm:grid-cols-3" aria-label="Come funziona">
+              <h2 className="sr-only">Come funziona AutoEsperto</h2>
               {[
                 ['Una foto', 'Nessun modulo lungo da compilare.'],
                 ['Un’analisi', 'Identità, stato e valore in un solo flusso.'],
@@ -77,6 +78,24 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                   <div><p className="text-sm font-bold text-text-primary">{title}</p><p className="mt-0.5 text-sm text-text-secondary">{text}</p></div>
                 </div>
               ))}
+            </section>
+            <section className="py-8" aria-label="Perché scegliere AutoEsperto">
+              <h2 className="text-center text-2xl font-extrabold tracking-tight text-text-primary">Paghi una volta, ottieni un report completo</h2>
+              <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-text-secondary">La prima analisi è gratuita. Per salvarla o conservarne altre, un pagamento singolo di 5,99 € — niente abbonamento, niente rinnovi automatici.</p>
+              <div className="mt-6 grid gap-4 sm:grid-cols-3">
+                <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
+                  <p className="text-3xl font-extrabold text-accent">5,99 €</p>
+                  <p className="mt-1 text-xs text-text-secondary">Pagamento una tantum per report completo</p>
+                </div>
+                <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
+                  <p className="text-3xl font-extrabold text-accent">GDPR</p>
+                  <p className="mt-1 text-xs text-text-secondary">Consenso cookie esplicito e privacy by design</p>
+                </div>
+                <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
+                  <p className="text-3xl font-extrabold text-accent">Stripe</p>
+                  <p className="mt-1 text-xs text-text-secondary">Pagamenti sicuri, dati carta mai conservati</p>
+                </div>
+              </div>
             </section>
             <AdSlot placement="home" className="py-6" />
           </div>

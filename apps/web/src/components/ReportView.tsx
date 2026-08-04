@@ -7,6 +7,9 @@ import {
 } from 'lucide-react';
 import AdSlot from '@/components/AdSlot';
 import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
+import ReliabilityRadar from '@/components/ReliabilityRadar';
+import DepreciationChart from '@/components/DepreciationChart';
+import KpiCards from '@/components/KpiCards';
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
@@ -190,6 +193,24 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             </p>
           </div>
         </div>
+      </section>
+
+      {/* KPI Cards premium: prezzo, affidabilità, costo annuo, consumo, bollo */}
+      <KpiCards report={report} />
+
+      {/* Grafici: radar affidabilità per categoria + andamento prezzo */}
+      {reliability.categoryScores && (
+        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+          <h2 className="text-base font-bold text-text-primary mb-1">Affidabilità per categoria</h2>
+          <p className="text-sm text-text-secondary mb-4">Punteggio 0-10 per ogni componente: motore, cambio, elettronica, sospensioni e carrozzeria.</p>
+          <ReliabilityRadar categoryScores={reliability.categoryScores} />
+        </section>
+      )}
+
+      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
+        <h2 className="text-base font-bold text-text-primary mb-1">Andamento valore stimato</h2>
+        <p className="text-sm text-text-secondary mb-3">Svalutazione prevista a 1, 3 e 5 anni basata sul valore stimato di mercato.</p>
+        <DepreciationChart price={price} reliability={reliability} />
       </section>
 
       {/* Ad slot (attivo solo se NEXT_PUBLIC_ADSENSE_CLIENT è configurato) */}
@@ -389,6 +410,44 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+        {(reliability.consumption || reliability.taxAnnual || reliability.serviceIntervalKm) && (
+          <div>
+            <h3 className="font-semibold text-text-primary mb-2.5 text-sm flex items-center gap-2">
+              <Fuel className="w-4 h-4 text-accent" />
+              Consumi, bollo e manutenzione
+            </h3>
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
+              {reliability.consumption && (
+                <>
+                  <div className="rounded-lg bg-surface-2 px-3 py-2">
+                    <div className="text-xs text-text-tertiary">Consumo città</div>
+                    <div className="font-bold text-text-primary">{reliability.consumption.city} {reliability.consumption.fuelType || 'km/L'}</div>
+                  </div>
+                  <div className="rounded-lg bg-surface-2 px-3 py-2">
+                    <div className="text-xs text-text-tertiary">Consumo autostrada</div>
+                    <div className="font-bold text-text-primary">{reliability.consumption.highway} {reliability.consumption.fuelType || 'km/L'}</div>
+                  </div>
+                  <div className="rounded-lg bg-surface-2 px-3 py-2">
+                    <div className="text-xs text-text-tertiary">Consumo combinato</div>
+                    <div className="font-bold text-text-primary">{reliability.consumption.combined} {reliability.consumption.fuelType || 'km/L'}</div>
+                  </div>
+                </>
+              )}
+              {reliability.taxAnnual !== undefined && (
+                <div className="rounded-lg bg-surface-2 px-3 py-2">
+                  <div className="text-xs text-text-tertiary">Bollo annuo</div>
+                  <div className="font-bold text-text-primary">{formatPrice(reliability.taxAnnual)}</div>
+                </div>
+              )}
+              {reliability.serviceIntervalKm !== undefined && (
+                <div className="rounded-lg bg-surface-2 px-3 py-2">
+                  <div className="text-xs text-text-tertiary">Tagliando ogni</div>
+                  <div className="font-bold text-text-primary">{formatKm(reliability.serviceIntervalKm)}</div>
+                </div>
+              )}
+            </div>
           </div>
         )}
       </section>

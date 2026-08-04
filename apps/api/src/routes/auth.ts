@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { randomBytes } from 'node:crypto';
 import { prisma } from '@autoesperto/database';
 import { z } from 'zod';
 import { asyncHandler, badRequest, conflict, unauthorized } from '../http';
@@ -10,8 +11,22 @@ import {
   signAuthToken,
   verifyPassword,
 } from '../services/auth';
+import { sendVerificationEmail } from '../services/email';
 
 const router = Router();
+
+const VERIFY_TOKEN_TTL_MS = 24 * 60 * 60 * 1000;
+
+function newVerifyToken(): string {
+  return randomBytes(32).toString('hex');
+}
+
+function getSignupIp(req: { ip: string | undefined; headers: Record<string, string | string[] | undefined> }): string | undefined {
+  const xff = req.headers['x-forwarded-for'];
+  if (typeof xff === 'string') return xff.split(',')[0].trim();
+  if (Array.isArray(xff) && xff.length) return xff[0].trim();
+  return req.ip;
+}
 
 const credentialsSchema = z.object({
   identifier: z.string().trim().min(5).max(160),
@@ -33,6 +48,7 @@ async function accountSummary(userId: string) {
         email: true,
         phone: true,
         createdAt: true,
+        emailVerified: true,
         analyses: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -50,6 +66,8 @@ async function accountSummary(userId: string) {
   ]);
   if (!user) throw unauthorized('Account non trovato');
   const paid = user.purchases.length > 0;
+  const emailVerified = !!user.emailVerified;
+  const trialAvailable = emailVerified && !paid && analysisCount === 0;
   return {
     ...user,
     purchases: undefined,
@@ -60,7 +78,9 @@ async function accountSummary(userId: string) {
       used: analysisCount,
       remaining: Math.max(0, (paid ? 999 : 1) - analysisCount),
       paid,
-      freeUsed: analysisCount > 0,
+      emailVerified,
+      freeUsed: !trialAvailable && !paid,
+      trialAvailable,
       purchase: user.purchases[0] || null,
     },
   };
@@ -84,6 +104,7 @@ router.post(
     if (existing) throw conflict('Esiste già un account con questa email o questo numero.');
 
     const passwordHash = await hashPassword(input.password);
+    const verifyToken = newVerifyToken();
     const user = await prisma.user.create({
       data: {
         name: input.name,
@@ -92,8 +113,13 @@ router.post(
         passwordHash,
         termsAcceptedAt: new Date(),
         termsVersion: '2026-08-02',
+        emailVerifyToken: verifyToken,
+        signupIp: getSignupIp(req) || null,
       },
     });
+    if (identity.email) {
+      void sendVerificationEmail(identity.email, verifyToken).catch(() => undefined);
+    }
     const token = signAuthToken(user.id);
     void prisma.analyticsEvent.create({
       data: { type: 'register', path: '/accesso', userId: user.id },
@@ -133,6 +159,53 @@ router.get(
     const { userId } = (req as AuthenticatedRequest).auth;
     res.set('Cache-Control', 'no-store');
     res.json({ success: true, user: await accountSummary(userId) });
+  })
+);
+
+const verifyEmailSchema = z.object({
+  token: z.string().min(16).max(128),
+});
+
+router.post(
+  '/verify-email',
+  asyncHandler(async (req, res) => {
+    const { token } = verifyEmailSchema.parse(req.body);
+    const user = await prisma.user.findFirst({
+      where: { emailVerifyToken: token },
+      select: { id: true, email: true, emailVerified: true, createdAt: true },
+    });
+    if (!user) throw badRequest('Token non valido o scaduto.');
+    if (user.emailVerified) throw badRequest('Email già verificata.');
+    if (Date.now() - user.createdAt.getTime() > VERIFY_TOKEN_TTL_MS) {
+      throw badRequest('Token scaduto. Richiedi un nuovo link di verifica.');
+    }
+    await prisma.user.update({
+      where: { id: user.id },
+      data: { emailVerified: new Date(), emailVerifyToken: null },
+    });
+    const authToken = signAuthToken(user.id);
+    res.json({ success: true, token: authToken, user: await accountSummary(user.id) });
+  })
+);
+
+router.post(
+  '/resend-verification',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const { userId } = (req as AuthenticatedRequest).auth;
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+      select: { email: true, emailVerified: true, emailVerifyToken: true, createdAt: true },
+    });
+    if (!user) throw unauthorized('Account non trovato');
+    if (user.emailVerified) throw badRequest('Email già verificata.');
+    if (!user.email) throw badRequest('Nessuna email associata a questo account.');
+    const token = user.emailVerifyToken || newVerifyToken();
+    if (!user.emailVerifyToken) {
+      await prisma.user.update({ where: { id: userId }, data: { emailVerifyToken: token } });
+    }
+    void sendVerificationEmail(user.email, token).catch(() => undefined);
+    res.json({ success: true });
   })
 );
 

@@ -1,10 +1,13 @@
 import type { Metadata, Viewport } from 'next';
+import Script from 'next/script';
 import { Inter } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
+import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
+import AdsTracker from '@/components/AdsTracker';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -127,14 +130,22 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="it" className={inter.variable} data-scroll-behavior="smooth">
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4052961089956241"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
       </head>
       <body className="min-h-screen">
         <JsonLd />
         <ServiceWorker />
         <CookieConsent />
         <AnalyticsTracker />
+        <AdsTracker />
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );

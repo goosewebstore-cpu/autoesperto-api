@@ -1,13 +1,24 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { ArrowLeft, Car, Check, Loader2, LockKeyhole } from 'lucide-react';
-import { loginAccount, registerAccount } from '@/lib/api';
+import { ArrowLeft, Car, Check, Loader2, LockKeyhole, MailCheck, AlertTriangle } from 'lucide-react';
+import { loginAccount, registerAccount, verifyEmail, API_URL } from '@/lib/api';
 import { setAuthToken } from '@/lib/auth';
 
-export default function AccessForm({ nextPath = '/account' }: { nextPath?: string }) {
+function GoogleIcon() {
+  return (
+    <svg className="h-5 w-5" viewBox="0 0 48 48" aria-hidden="true">
+      <path fill="#FFC107" d="M43.6 20.1H42V20H24v8h11.3C33.7 32.7 29.2 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.2 6.1 29.4 4 24 4 13 4 4 13 4 24s9 20 20 20 20-9 20-20c0-1.3-.1-2.6-.4-3.9z"/>
+      <path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.9 1.2 8 3l5.7-5.7C34.2 6.1 29.4 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/>
+      <path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/>
+      <path fill="#1976D2" d="M43.6 20.1H42V20H24v8h11.3c-.8 2.3-2.3 4.3-4.1 5.7l6.2 5.2C36.9 40.2 44 34.5 44 24c0-1.3-.1-2.6-.4-3.9z"/>
+    </svg>
+  );
+}
+
+export default function AccessForm({ nextPath = '/account', verifyToken, googleToken, googleErr }: { nextPath?: string; verifyToken?: string; googleToken?: string; googleErr?: string }) {
   const router = useRouter();
   const [mode, setMode] = useState<'login' | 'register'>('register');
   const [name, setName] = useState('');
@@ -16,8 +27,40 @@ export default function AccessForm({ nextPath = '/account' }: { nextPath?: strin
   const [termsAccepted, setTermsAccepted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [verifying, setVerifying] = useState<'idle' | 'loading' | 'ok' | 'error'>('idle');
 
   const destination = nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : '/account';
+
+  useEffect(() => {
+    if (googleToken) {
+      setAuthToken(googleToken);
+      router.replace('/account');
+      return;
+    }
+    if (googleErr) {
+      setError('Accesso con Google non riuscito. Riprova oppure usa email e password.');
+      return;
+    }
+  }, [googleToken, googleErr, router]);
+
+  useEffect(() => {
+    if (!verifyToken) return;
+    let active = true;
+    setVerifying('loading');
+    verifyEmail(verifyToken)
+      .then((result) => {
+        if (!active) return;
+        setAuthToken(result.token);
+        setVerifying('ok');
+        setTimeout(() => router.replace('/account'), 1200);
+      })
+      .catch((err: unknown) => {
+        if (!active) return;
+        setVerifying('error');
+        setError(err instanceof Error ? err.message : 'Verifica non riuscita.');
+      });
+    return () => { active = false; };
+  }, [verifyToken, router]);
 
   const submit = async (event: React.FormEvent) => {
     event.preventDefault();
@@ -36,6 +79,43 @@ export default function AccessForm({ nextPath = '/account' }: { nextPath?: strin
       setLoading(false);
     }
   };
+
+  if (verifying === 'loading') {
+    return (
+      <main className="min-h-screen bg-slate-50 px-5 py-14">
+        <div className="mx-auto max-w-md text-center">
+          <Loader2 className="mx-auto h-8 w-8 animate-spin text-blue-600" />
+          <h1 className="mt-6 text-2xl font-extrabold text-slate-950">Verifica la tua email…</h1>
+          <p className="mt-2 text-sm text-slate-600">Stiamo confermando il tuo indirizzo.</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (verifying === 'ok') {
+    return (
+      <main className="min-h-screen bg-slate-50 px-5 py-14">
+        <div className="mx-auto max-w-md text-center">
+          <MailCheck className="mx-auto h-12 w-12 text-emerald-600" />
+          <h1 className="mt-4 text-2xl font-extrabold text-slate-950">Email verificata!</h1>
+          <p className="mt-2 text-sm text-slate-600">Ti stiamo portando alla tua area personale…</p>
+        </div>
+      </main>
+    );
+  }
+
+  if (verifying === 'error') {
+    return (
+      <main className="min-h-screen bg-slate-50 px-5 py-14">
+        <div className="mx-auto max-w-md text-center">
+          <AlertTriangle className="mx-auto h-12 w-12 text-amber-500" />
+          <h1 className="mt-4 text-2xl font-extrabold text-slate-950">Verifica non riuscita</h1>
+          {error && <p className="mt-2 text-sm text-slate-600">{error}</p>}
+          <Link href="/accesso" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white">Tenta di nuovo l'accesso</Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main className="min-h-screen bg-slate-50 px-5 py-8 sm:py-14">
@@ -58,6 +138,20 @@ export default function AccessForm({ nextPath = '/account' }: { nextPath?: strin
           <div className="mt-6">
             <h1 className="text-2xl font-extrabold tracking-tight text-slate-950">{mode === 'register' ? 'Crea la tua area personale' : 'Bentornato'}</h1>
             <p className="mt-2 text-sm leading-6 text-slate-600">Usa un’email oppure un numero di telefono. Ogni account può acquistare e conservare una sola analisi completa.</p>
+          </div>
+
+          <a
+            href={`${API_URL}/auth/google`}
+            className="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-extrabold text-slate-800 transition hover:bg-slate-50"
+          >
+            <GoogleIcon />
+            Continua con Google
+          </a>
+
+          <div className="mt-5 flex items-center gap-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+            <span className="h-px flex-1 bg-slate-200" />
+            oppure
+            <span className="h-px flex-1 bg-slate-200" />
           </div>
 
           <form onSubmit={submit} className="mt-6 space-y-4">

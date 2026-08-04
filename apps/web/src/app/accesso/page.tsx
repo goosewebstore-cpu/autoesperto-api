@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AccessPage({ searchParams }: { searchParams: Promise<{ next?: string }> }) {
+export default async function AccessPage({ searchParams }: { searchParams: Promise<{ next?: string; verify?: string; google?: string; token?: string; err?: string }> }) {
   const query = await searchParams;
-  return <AccessForm nextPath={query.next || '/account'} />;
+  return <AccessForm nextPath={query.next || '/account'} verifyToken={query.verify} googleToken={query.token} googleErr={query.err} />;
 }

@@ -6,6 +6,7 @@ import { z } from 'zod';
 
 import reportRoutes from './routes/reports';
 import authRoutes from './routes/auth';
+import googleRoutes from './routes/google';
 import billingRoutes from './routes/billing';
 import analysisRoutes from './routes/analyses';
 import analyticsRoutes from './routes/analytics';
@@ -75,6 +76,7 @@ export function createApp(options: AppOptions = {}) {
 
   app.use('/reports', reportRoutes);
   app.use('/auth', authRoutes);
+  app.use('/auth', googleRoutes);
   app.use('/billing', billingRoutes);
   app.use('/analyses', analysisRoutes);
   app.use('/analytics', analyticsRoutes);

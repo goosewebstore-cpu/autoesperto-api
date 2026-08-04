@@ -1,50 +1,53 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Car, HelpCircle, Info, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Car, HelpCircle, Info } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
 
 interface PageProps {
-  params: Promise<{ make: string; model: string }>;
+  params: Promise<{ make: string; model: string; year: string }>;
 }
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEAR_RANGE: number[] = [];
+for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
 }
 
-const CURRENT_YEAR_MODEL = new Date().getFullYear();
-const YEAR_RANGE_LINKS: number[] = [];
-for (let y = CURRENT_YEAR_MODEL; y >= 2015; y--) YEAR_RANGE_LINKS.push(y);
+export const dynamicParams = true;
+export const revalidate = 86400;
 
 export function generateStaticParams() {
-  return getAllMakes().flatMap((make) =>
-    make.models.map((model) => ({ make: make.slug, model: slugify(model) }))
-  );
+  return [];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolved = await params;
+  const yearNum = parseInt(resolved.year, 10);
+  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) return {};
   const make = findMakeBySlug(resolved.make);
   if (!make) return {};
   const model = findModelBySlug(make, resolved.model);
   if (!model) return {};
 
-  const title = `Quanto costa una ${make.name} ${model} usata? Prezzo di mercato ${new Date().getFullYear()}`;
-  const description = `Prezzo medio reale di ${make.name} ${model} usata: valore dagli annunci in vendita, valutazione di affidabilità e punti critici da controllare prima dell'acquisto. Analisi gratuita.`;
+  const title = `${make.name} ${model} ${yearNum} usata: prezzo e valutazione | AutoEsperto`;
+  const description = `Quanto costa una ${make.name} ${model} ${yearNum} usata? Prezzo medio di mercato, affidabilità e punti critici da controllare prima di comprare una ${make.name} ${model} del ${yearNum}.`;
 
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${resolved.make}/${resolved.model}` },
+    alternates: { canonical: `/valutazione/${resolved.make}/${resolved.model}/${resolved.year}` },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
       title,
       description,
-      url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}`,
+      url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`,
       siteName: 'AutoEsperto',
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} ${model} usata` }],
+      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${make.name} ${model} ${yearNum} usata` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -55,30 +58,31 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-export default async function ModelValutazionePage({ params }: PageProps) {
+export default async function ModelYearValutazionePage({ params }: PageProps) {
   const resolved = await params;
+  const yearNum = parseInt(resolved.year, 10);
+  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
   const make = findMakeBySlug(resolved.make);
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
 
-  const year = new Date().getFullYear();
   const faq = [
     {
-      q: `Quanto costa una ${make.name} ${model} usata?`,
-      a: `Il prezzo di una ${make.name} ${model} usata dipende da anno, chilometri, allestimento e condizioni. AutoEsperto analizza gli annunci reali in vendita e mostra il prezzo medio di mercato aggiornato, con il range minimo e massimo.`,
+      q: `Quanto costa una ${make.name} ${model} ${yearNum} usata?`,
+      a: `Il prezzo di una ${make.name} ${model} ${yearNum} usata dipende dai chilometri, dall'allestimento e dalle condizioni. AutoEsperto mostra il prezzo medio di mercato aggiornato agli annunci reali in vendita oggi, con range minimo e massimo.`,
     },
     {
-      q: `Quali sono i problemi più comuni della ${make.name} ${model}?`,
-      a: `Ogni modello ha i suoi punti critici. AutoEsperto valuta l'affidabilità della ${make.name} ${model} e indica le criticità più frequenti da controllare prima dell'acquisto, oltre alle versioni consigliate e a quelle da evitare.`,
+      q: `Qual è il valore di mercato di una ${make.name} ${model} del ${yearNum}?`,
+      a: `Il valore di mercato si calcola confrontando gli annunci reali di ${make.name} ${model} ${yearNum} in vendita. AutoEsperto aggrega questi dati e applica correzioni per chilometri e condizioni, fornendo una stima indicativa trasparente.`,
     },
     {
-      q: `Qual è il prezzo giusto per una ${make.name} ${model} usata nel ${year}?`,
-      a: `Il prezzo giusto è quello in linea con la media degli annunci reali di ${make.name} ${model} in vendita oggi. Confronta il prezzo richiesto con la valutazione di AutoEsperto per capire se è un buon affare, nella media o sopra.`,
+      q: `Cosa controllare prima di comprare una ${make.name} ${model} ${yearNum} usata?`,
+      a: ` Prima di comprare una ${make.name} ${model} del ${yearNum}, verifica: storico tagliandi, revisioni regolari, km coerenti con l'età, usura interna, stato gomme e freni. AutoEsperto segnala anche i problemi noti specifici di questo modello.`,
     },
     {
-      q: `Vale la pena comprare una ${make.name} ${model} usata?`,
-      a: `Dipende da anno, stato e chilometraggio. AutoEsperto ti dà un punteggio di affidabilità, i punti di forza del modello e i consigli da seguire prima dell'acquisto, così puoi decidere con dati reali, non a sensazione.`,
+      q: `La ${make.name} ${model} ${yearNum} è affidabile?`,
+      a: `L'affidabilità dipende dal motore, dal cambio e dalla manutenzione ricevuta. AutoEsperto assegna un punteggio di affidabilità alla ${make.name} ${model} ${yearNum} e indica i punti di forza e le criticità più frequenti.`,
     },
   ];
 
@@ -99,8 +103,11 @@ export default async function ModelValutazionePage({ params }: PageProps) {
       { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: `${siteUrl()}/valutazione` },
       { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${resolved.make}` },
       { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}` },
+      { '@type': 'ListItem', position: 5, name: String(yearNum), item: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}` },
     ],
   };
+
+  const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
 
   return (
     <div className="min-h-screen bg-white">
@@ -118,45 +125,44 @@ export default async function ModelValutazionePage({ params }: PageProps) {
       </header>
 
       <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
-        {/* Breadcrumb */}
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
           <Link href="/" className="hover:text-accent transition-colors">Home</Link>
           <span>/</span>
-          <Link href={`/valutazione/${resolved.make}`} className="hover:text-accent transition-colors">
-            {make.name}
-          </Link>
+          <Link href="/valutazione" className="hover:text-accent transition-colors">Valutazione</Link>
           <span>/</span>
-          <span className="text-text-secondary font-medium">{model}</span>
+          <Link href={`/valutazione/${resolved.make}`} className="hover:text-accent transition-colors">{make.name}</Link>
+          <span>/</span>
+          <Link href={`/valutazione/${resolved.make}/${resolved.model}`} className="hover:text-accent transition-colors">{model}</Link>
+          <span>/</span>
+          <span className="text-text-secondary font-medium">{yearNum}</span>
         </nav>
 
         <Link
-          href={`/valutazione/${resolved.make}`}
+          href={`/valutazione/${resolved.make}/${resolved.model}`}
           className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-5"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Tutti i modelli {make.name}
+          <ArrowLeft className="h-4 w-4" />
+          Tutti gli anni {make.name} {model}
         </Link>
 
-        {/* Hero */}
         <section>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Quanto costa una {make.name} {model} usata?
+            {make.name} {model} {yearNum} usata: prezzo e valutazione
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Il prezzo medio reale di {make.name} {model} usata, calcolato dagli annunci in vendita,
-            con la valutazione di affidabilità e i punti critici da controllare prima dell&apos;acquisto.
+            Quanto costa una {make.name} {model} del {yearNum} usata? Ecco il prezzo medio di mercato,
+            l&apos;affidabilità del modello e i punti critici da controllare prima dell&apos;acquisto.
           </p>
         </section>
 
         <div className="mt-6">
-          <ModelReportCard make={make.name} model={model} />
+          <ModelReportCard make={make.name} model={model} year={yearNum} />
         </div>
 
         <section className="mt-8">
-          <h2 className="text-base font-bold text-text-primary mb-3">Valutazione per anno di {model}</h2>
-          <p className="text-sm text-text-tertiary mb-3">Prezzi e valutazioni specifiche per ogni anno di {make.name} {model}.</p>
+          <h2 className="text-base font-bold text-text-primary mb-3">Altri anni della {make.name} {model}</h2>
           <div className="flex flex-wrap gap-2">
-            {YEAR_RANGE_LINKS.map((y) => (
+            {nearbyYears.map((y) => (
               <Link
                 key={y}
                 href={`/valutazione/${resolved.make}/${resolved.model}/${y}`}
@@ -168,14 +174,13 @@ export default async function ModelValutazionePage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* FAQ */}
         <section className="mt-8">
           <h2 className="text-lg font-bold text-text-primary mb-1 flex items-center gap-2">
             <HelpCircle className="w-5 h-5 text-accent" />
-            Domande frequenti
+            Domande frequenti sulla {make.name} {model} {yearNum}
           </h2>
           <p className="text-sm text-text-tertiary mb-4">
-            Tutto quello che devi sapere prima di comprare una {make.name} {model} usata.
+            Tutto quello che devi sapere prima di comprare una {make.name} {model} del {yearNum}.
           </p>
           <div className="space-y-3">
             {faq.map((f) => (
@@ -190,10 +195,9 @@ export default async function ModelValutazionePage({ params }: PageProps) {
           </div>
         </section>
 
-        {/* Note */}
         <p className="text-xs text-text-tertiary mt-8 flex items-start gap-1.5">
           <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-          Le valutazioni si basano sugli annunci reali in vendita e sui dati disponibili. Non sostituiscono un&apos;ispezione fisica.
+          Le valutazioni sono indicative e basate sui dati di mercato disponibili. Non sostituiscono un&apos;ispezione fisica del veicolo.
         </p>
 
         <script
@@ -218,9 +222,6 @@ export default async function ModelValutazionePage({ params }: PageProps) {
               <Link href="/contatti" className="hover:text-text-primary transition-colors">Contatti</Link>
             </nav>
           </div>
-          <p className="text-xs text-text-tertiary text-center mt-4">
-            AutoEsperto fornisce valutazioni indicative e non sostituisce un&apos;ispezione professionale.
-          </p>
         </div>
       </footer>
     </div>

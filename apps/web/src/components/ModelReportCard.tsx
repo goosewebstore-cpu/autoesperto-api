@@ -12,13 +12,14 @@ import { slugify } from '@/lib/catalogo';
 interface ModelReportCardProps {
   make: string;
   model: string;
+  year?: number;
 }
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
 }
 
-export default function ModelReportCard({ make, model }: ModelReportCardProps) {
+export default function ModelReportCard({ make, model, year }: ModelReportCardProps) {
   const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState(false);
 
@@ -26,7 +27,7 @@ export default function ModelReportCard({ make, model }: ModelReportCardProps) {
     let active = true;
     setReport(null);
     setError(false);
-    analyzeVehicle({ make, model })
+    analyzeVehicle({ make, model, ...(year ? { year } : {}) })
       .then((res) => {
         if (active) setReport(res.report);
       })
@@ -36,7 +37,7 @@ export default function ModelReportCard({ make, model }: ModelReportCardProps) {
     return () => {
       active = false;
     };
-  }, [make, model]);
+  }, [make, model, year]);
 
   if (error) return null;
 

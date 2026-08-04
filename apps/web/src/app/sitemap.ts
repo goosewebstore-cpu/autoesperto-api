@@ -1,6 +1,10 @@
 import type { MetadataRoute } from 'next';
 import { getAllMakes, slugify } from '@/lib/catalogo';
 
+const CURRENT_YEAR = new Date().getFullYear();
+const YEAR_RANGE: number[] = [];
+for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
+
 export default function sitemap(): MetadataRoute.Sitemap {
   const base = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
 
@@ -29,5 +33,15 @@ export default function sitemap(): MetadataRoute.Sitemap {
     }))
   );
 
-  return [...staticPages, ...makePages, ...modelPages];
+  const modelYearPages: MetadataRoute.Sitemap = getAllMakes().flatMap((make) =>
+    make.models.flatMap((model) =>
+      YEAR_RANGE.map((year) => ({
+        url: `${base}/valutazione/${make.slug}/${slugify(model)}/${year}`,
+        changeFrequency: 'monthly' as const,
+        priority: 0.5,
+      }))
+    )
+  );
+
+  return [...staticPages, ...makePages, ...modelPages, ...modelYearPages];
 }

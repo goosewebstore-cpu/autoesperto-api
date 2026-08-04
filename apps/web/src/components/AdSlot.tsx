@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getConsent, type ConsentChoice } from '@/lib/consent';
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || '';
@@ -15,7 +15,6 @@ interface AdSlotProps {
 }
 
 export default function AdSlot({ slot, placement = 'report', className }: AdSlotProps) {
-  const inserted = useRef(false);
   const resolvedSlot = slot || (placement === 'home' ? HOME_SLOT : REPORT_SLOT);
   const [consent, setConsentState] = useState<ConsentChoice>(null);
 
@@ -28,28 +27,11 @@ export default function AdSlot({ slot, placement = 'report', className }: AdSlot
 
   useEffect(() => {
     if (!ENABLED || !CLIENT_ID || !resolvedSlot) return;
-
-    if (consent !== 'accepted') {
-      const existing = document.querySelector('script[data-autoesperto-adsense]');
-      if (existing) existing.remove();
-      inserted.current = false;
-      return;
-    }
-
-    if (!inserted.current) {
-      inserted.current = true;
-      if (!document.querySelector('script[data-autoesperto-adsense]')) {
-        const s = document.createElement('script');
-        s.async = true;
-        s.crossOrigin = 'anonymous';
-        s.dataset.autoespertoAdsense = 'true';
-        s.src = `https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${CLIENT_ID}`;
-        document.head.appendChild(s);
-      }
-    }
+    if (consent !== 'accepted') return;
 
     try {
-      ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+      ((window as unknown as { adsbygoogle?: unknown[] }).adsbygoogle =
+        (window as unknown as { adsbygoogle?: unknown[] }).adsbygoogle || []).push({});
     } catch {
       /* annuncio non pronto */
     }

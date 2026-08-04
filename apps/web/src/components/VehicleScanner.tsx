@@ -6,6 +6,7 @@ import { AlertTriangle, Camera, Check, ChevronRight, Loader2, LockKeyhole, Rotat
 import type { AutoReport } from '@autoesperto/types';
 import { freeScanVehiclePhoto, analyzeVehicle, type FreeScanResult } from '@/lib/api';
 import ReportView from '@/components/ReportView';
+import AnalysisSkeleton from '@/components/AnalysisSkeleton';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'login-required' | 'manual-input';
 

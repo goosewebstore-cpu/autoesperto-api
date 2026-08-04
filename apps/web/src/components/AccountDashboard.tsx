@@ -16,11 +16,13 @@ import {
   Loader2,
   LockKeyhole,
   LogOut,
+  MailCheck,
   ShieldCheck,
   Upload,
 } from 'lucide-react';
 import ReportView from '@/components/ReportView';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
+import { fireAdsPurchase } from '@/components/AdsTracker';
 import {
   type AccountUser,
   type StoredAnalysis,
@@ -29,6 +31,7 @@ import {
   createPaidAnalysis,
   getMyAccount,
   getMyAnalysis,
+  resendVerification,
 } from '@/lib/api';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
@@ -60,6 +63,7 @@ export default function AccountDashboard({ checkout, sessionId }: { checkout?: s
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const [showAnalytics, setShowAnalytics] = useState(false);
+  const [resend, setResend] = useState(false);
 
   const isOwner = user?.email?.toLowerCase() === 'goosewebstore@gmail.com';
 
@@ -84,6 +88,7 @@ export default function AccountDashboard({ checkout, sessionId }: { checkout?: s
           if (!result.paid) throw new Error('Il pagamento non risulta ancora completato. Aggiorna la pagina tra qualche secondo.');
           setMessage('Pagamento confermato. Ora puoi creare la tua analisi.');
           window.history.replaceState(null, '', '/account');
+          fireAdsPurchase(5.99, 'EUR', sessionId);
         } else if (checkout === 'cancelled') {
           setMessage('Pagamento annullato: non è stato addebitato nulla.');
           window.history.replaceState(null, '', '/account');
@@ -182,15 +187,30 @@ export default function AccountDashboard({ checkout, sessionId }: { checkout?: s
       <main className="mx-auto max-w-6xl px-5 py-8 sm:py-12">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div><Link href="/" className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-700"><ArrowLeft className="h-3.5 w-3.5" /> Home</Link><p className="mt-4 text-xs font-extrabold uppercase tracking-[.14em] text-blue-600">Area personale</p><h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Ciao {user.name || 'da AutoEsperto'}</h1><p className="mt-2 text-sm text-slate-600">{user.email || user.phone} · Analisi salvate {user.entitlement.used}</p></div>
-          <div className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-xs font-extrabold ${analysis ? 'bg-emerald-100 text-emerald-700' : !user.entitlement.freeUsed ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-700'}`}><span className="h-2 w-2 rounded-full bg-current" />{analysis ? 'Report salvato' : !user.entitlement.freeUsed ? 'Analisi gratuita disponibile' : 'Analisi disponibili a pagamento'}</div>
+          <div className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-xs font-extrabold ${analysis ? 'bg-emerald-100 text-emerald-700' : user.entitlement.emailVerified === false && user.email ? 'bg-amber-100 text-amber-700' : !user.entitlement.freeUsed ? 'bg-blue-100 text-blue-700' : 'bg-slate-200 text-slate-700'}`}><span className="h-2 w-2 rounded-full bg-current" />{analysis ? 'Report salvato' : user.entitlement.emailVerified === false && user.email ? 'Email da verificare' : !user.entitlement.freeUsed ? 'Analisi gratuita disponibile' : 'Analisi disponibili a pagamento'}</div>
         </div>
 
         {message && <div className="mt-6 rounded-xl border border-blue-200 bg-blue-50 px-4 py-3 text-sm font-semibold text-blue-800">{message}</div>}
         {error && <div role="alert" className="mt-6 flex items-start gap-3 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-semibold text-red-700"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />{error}</div>}
 
+        {user.entitlement && !user.entitlement.emailVerified && user.email && (
+          <div className="mt-6 flex flex-col gap-3 rounded-2xl border border-amber-300 bg-amber-50 px-4 py-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-start gap-3">
+              <MailCheck className="mt-0.5 h-5 w-5 shrink-0 text-amber-600" />
+              <div>
+                <p className="text-sm font-extrabold text-amber-900">Verifica la tua email</p>
+                <p className="mt-0.5 text-xs text-amber-800">L'analisi gratuita si sblocca solo dopo la verifica. Controlla la posta di <strong>{user.email}</strong> (anche spam).</p>
+              </div>
+            </div>
+            <button onClick={() => { setError(''); setResend(true); resendVerification().then(() => setMessage('Email di verifica reinviata. Controlla la posta.')).catch((e: unknown) => setError(e instanceof Error ? e.message : 'Reinvio fallito.')).finally(() => setResend(false)); }} disabled={resend} className="inline-flex items-center gap-2 rounded-lg border border-amber-500 bg-white px-3 py-2 text-xs font-bold text-amber-700 hover:bg-amber-100 disabled:opacity-60">
+              {resend ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <MailCheck className="h-3.5 w-3.5" />} Reinvia email
+            </button>
+          </div>
+        )}
+
         {isOwner && showAnalytics && <AnalyticsDashboard />}
 
-        {!user.entitlement.freeUsed && !analysis && (
+        {!user.entitlement.freeUsed && !analysis && user.entitlement.emailVerified !== false && (
           <section className="mt-8 rounded-3xl border border-slate-200 bg-white p-6 shadow-[0_24px_70px_rgba(15,23,42,.07)] sm:p-9">
             <div className="mx-auto max-w-2xl text-center"><span className="mx-auto grid h-12 w-12 place-items-center rounded-2xl bg-emerald-50 text-emerald-600"><Camera className="h-6 w-6" /></span><h2 className="mt-5 text-2xl font-extrabold tracking-tight text-slate-950">La tua analisi gratuita</h2><p className="mt-2 text-sm leading-6 text-slate-600">Ogni account include una analisi completa gratuita, salvata nel tuo account. Usa una foto nitida di tre quarti, con frontale o posteriore ben visibile. Se il veicolo non viene riconosciuto, l’analisi non viene consumata.</p><label className="mx-auto mt-5 flex max-w-xl cursor-pointer items-start gap-3 rounded-xl border border-slate-200 bg-slate-50 p-4 text-left text-xs leading-5 text-slate-600"><input type="checkbox" checked={immediateExecutionAccepted} onChange={(event) => setImmediateExecutionAccepted(event.target.checked)} className="mt-1 h-4 w-4 rounded border-slate-300 text-blue-600" /><span>Chiedo che l’analisi inizi subito e riconosco che, una volta generato interamente il report digitale, posso perdere il diritto di recesso nei limiti di legge. <Link href="/terms" className="font-bold text-blue-700 hover:underline">Leggi i Termini</Link>.</span></label><button onClick={() => inputRef.current?.click()} disabled={analyzing || !immediateExecutionAccepted} className="mt-5 inline-flex min-h-12 items-center justify-center gap-2 rounded-xl bg-slate-950 px-6 text-sm font-extrabold text-white transition hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-40">{analyzing ? <><Loader2 className="h-4 w-4 animate-spin" /> Analisi in corso…</> : <><Upload className="h-4 w-4" /> Carica la foto dell’auto</>}</button><input ref={inputRef} type="file" accept="image/jpeg,image/png,image/webp" className="hidden" onChange={(event) => analyzeFile(event.target.files?.[0])} /><p className="mt-4 flex items-center justify-center gap-2 text-xs text-slate-500"><ShieldCheck className="h-3.5 w-3.5" /> Salviamo il report, non la fotografia originale.</p></div>
           </section>

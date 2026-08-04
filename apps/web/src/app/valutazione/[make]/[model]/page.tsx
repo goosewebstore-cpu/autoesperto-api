@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Car, HelpCircle, Info, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
 
@@ -47,7 +47,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}`,
       siteName: 'AutoEsperto',
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `Valutazione ${make.name} ${model} usata` }],
+      images: [{ url: `${siteUrl()}/og/${resolved.make}/${slugify(model)}`, width: 1200, height: 630, alt: `Valutazione ${make.name} ${model} usata` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -155,6 +155,39 @@ export default async function ModelValutazionePage({ params }: PageProps) {
         <div className="mt-6">
           <ModelReportCard make={make.name} model={model} />
         </div>
+
+        <section className="mt-6">
+          <p className="text-sm text-text-tertiary mb-3">Condividi questa valutazione:</p>
+          <div className="flex flex-wrap gap-2">
+            <a
+              href={`https://wa.me/?text=${encodeURIComponent(`Quanto costa una ${make.name} ${model} usata?`)} ${encodeURIComponent(`${siteUrl()}/valutazione/${resolved.make}/${slugify(model)}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#25D366] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+            >
+              <MessageCircle className="w-4 h-4" />
+              WhatsApp
+            </a>
+            <a
+              href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(`${siteUrl()}/valutazione/${resolved.make}/${slugify(model)}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-[#1877F2] px-4 py-2 text-sm font-semibold text-white hover:opacity-90 transition-opacity"
+            >
+              <Share2 className="w-4 h-4" />
+              Facebook
+            </a>
+            <a
+              href={`https://twitter.com/intent/tweet?text=${encodeURIComponent(`Quanto costa una ${make.name} ${model} usata?`)}&url=${encodeURIComponent(`${siteUrl()}/valutazione/${resolved.make}/${slugify(model)}`)}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-lg bg-black px-4 py-2 text-sm font-semibold text-white hover:opacity-80 transition-opacity"
+            >
+              <Send className="w-4 h-4" />
+              X
+            </a>
+          </div>
+        </section>
 
         <section className="mt-8">
           <h2 className="text-base font-bold text-text-primary mb-3">Valutazione per anno di {model}</h2>

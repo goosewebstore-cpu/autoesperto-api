@@ -50,7 +50,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       description,
       url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`,
       siteName: 'AutoEsperto',
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: `${make.name} ${model} ${yearNum} usata` }],
+      images: [{ url: `${siteUrl()}/og/${resolved.make}/${slugify(model)}`, width: 1200, height: 630, alt: `${make.name} ${model} ${yearNum} usata` }],
     },
     twitter: {
       card: 'summary_large_image',

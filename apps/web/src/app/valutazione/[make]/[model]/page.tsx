@@ -36,7 +36,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${resolved.make}/${resolved.model}` },
+    alternates: {
+      canonical: `/valutazione/${resolved.make}/${resolved.model}`,
+      languages: { 'it-IT': `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}` },
+    },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
@@ -91,6 +94,7 @@ export default async function ModelValutazionePage({ params }: PageProps) {
       acceptedAnswer: { '@type': 'Answer', text: f.a },
     })),
   };
+  const relatedModels = make.models.filter((m) => m !== model).slice(0, 8);
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -167,6 +171,24 @@ export default async function ModelValutazionePage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        {/* Altri modelli */}
+        {relatedModels.length > 0 && (
+          <section className="mt-8">
+            <h2 className="text-base font-bold text-text-primary mb-3">Altri modelli {make.name}</h2>
+            <div className="flex flex-wrap gap-2">
+              {relatedModels.map((related) => (
+                <Link
+                  key={related}
+                  href={`/valutazione/${resolved.make}/${slugify(related)}`}
+                  className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm font-semibold text-text-primary hover:border-accent hover:text-accent transition-colors"
+                >
+                  {related}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* FAQ */}
         <section className="mt-8">

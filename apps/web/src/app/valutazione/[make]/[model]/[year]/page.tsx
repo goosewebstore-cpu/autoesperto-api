@@ -39,7 +39,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${resolved.make}/${resolved.model}/${resolved.year}` },
+    alternates: {
+      canonical: `/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`,
+      languages: { 'it-IT': `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}` },
+    },
     openGraph: {
       type: 'website',
       locale: 'it_IT',

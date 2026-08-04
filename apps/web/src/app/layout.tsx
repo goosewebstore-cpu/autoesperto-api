@@ -36,7 +36,13 @@ export const metadata: Metadata = {
   creator: 'AutoEsperto',
   publisher: 'AutoEsperto',
   manifest: '/manifest.json',
-  alternates: { canonical: '/' },
+  alternates: {
+    canonical: '/',
+    languages: { 'it-IT': siteUrl },
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
+  },
   icons: {
     icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
     apple: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],

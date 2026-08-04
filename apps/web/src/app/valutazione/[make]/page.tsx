@@ -21,7 +21,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
-    alternates: { canonical: `/valutazione/${resolved.make}` },
+    alternates: {
+      canonical: `/valutazione/${resolved.make}`,
+      languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app'}/valutazione/${resolved.make}` },
+    },
     openGraph: {
       type: 'website',
       locale: 'it_IT',
@@ -47,6 +50,18 @@ export default async function MakeValutazionePage({ params }: PageProps) {
       { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.vercel.app/valutazione' },
       { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${resolved.make}` },
     ],
+  };
+
+  const itemListSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    name: `Modelli ${make.name}`,
+    itemListElement: make.models.map((model, index) => ({
+      '@type': 'ListItem',
+      position: index + 1,
+      name: `${make.name} ${model}`,
+      url: `https://autoesperto.vercel.app/valutazione/${resolved.make}/${slugify(model)}`,
+    })),
   };
 
   return (
@@ -124,7 +139,7 @@ export default async function MakeValutazionePage({ params }: PageProps) {
       </footer>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbSchema, itemListSchema]) }}
       />
     </div>
   );

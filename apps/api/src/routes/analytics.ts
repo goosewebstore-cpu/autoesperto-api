@@ -113,8 +113,8 @@ router.get(
       if (bucket) bucket.count++;
     }
 
-    const byType7d = (type: string) => last7d.find((x) => x.type === type)?._count._all || 0;
-    const byType30d = (type: string) => last30d.find((x) => x.type === type)?._count._all || 0;
+    const byType7d = (type: string) => last7d.find((x: { type: string; _count: { _all: number } }) => x.type === type)?._count._all || 0;
+    const byType30d = (type: string) => last30d.find((x: { type: string; _count: { _all: number } }) => x.type === type)?._count._all || 0;
 
     res.set('Cache-Control', 'no-store');
     res.json({
@@ -126,7 +126,7 @@ router.get(
           analyses: totalAnalyses,
           checkouts: totalCheckouts,
           registers: totalRegisters,
-          uniqueVisitors7d: uniqueVisitors7d.filter((u) => u.visitorId).length,
+          uniqueVisitors7d: uniqueVisitors7d.filter((u: { visitorId: string | null }) => u.visitorId).length,
         },
         last7d: {
           visits: byType7d('visit'),

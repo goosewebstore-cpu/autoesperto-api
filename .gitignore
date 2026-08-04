@@ -12,3 +12,4 @@ web.log
 *.db-journal
 
 .vercel
+packages/database/src/generated/

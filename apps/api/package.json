@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc",
+    "build": "prisma generate --schema=../../packages/database/prisma/schema.prisma && tsc",
     "start": "sh start.sh",
     "lint": "tsc --noEmit",
     "test": "node --import tsx --test test/routes.test.ts",

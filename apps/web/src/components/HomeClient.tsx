@@ -114,6 +114,23 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
             <Link href="/terms" className="hover:text-accent">Termini</Link>
           </nav>
           Le stime di AutoEsperto sono indicative. Danni nascosti o meccanici richiedono sempre un controllo professionale.
+          <div className="mt-5 flex justify-center">
+            <a
+              href="https://www.directorysiti.it"
+              target="_blank"
+              rel="noopener"
+              aria-label="Sito web segnalato da directorysiti.it"
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src="https://www.directorysiti.it/wp-content/uploads/2019/01/logoDirectorySitoSegnalato.png"
+                alt="sito web segnalato da directorysiti.it"
+                width={200}
+                height={150}
+                className="opacity-80 hover:opacity-100"
+              />
+            </a>
+          </div>
         </div>
       </footer>
     </div>

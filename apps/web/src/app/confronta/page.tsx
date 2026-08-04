@@ -4,7 +4,10 @@ import CompareModels from '@/components/CompareModels';
 export const metadata: Metadata = {
   title: 'Confronta modelli auto usate',
   description: 'Confronta prezzo di mercato, affidabilità e alternative tra due auto usate.',
-  alternates: { canonical: '/confronta' },
+  alternates: {
+    canonical: '/confronta',
+    languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app'}/confronta` },
+  },
   openGraph: {
     title: 'Confronta modelli auto usate | AutoEsperto',
     description: 'Confronta prezzo di mercato, affidabilità e alternative tra due auto usate.',

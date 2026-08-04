@@ -1,13 +1,18 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Car, Search } from 'lucide-react';
+import { Car, HelpCircle, Search } from 'lucide-react';
 import { getAllMakes } from '@/lib/catalogo';
+
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
 
 export const metadata: Metadata = {
   title: 'Valutazione auto usate: prezzi di mercato per marca e modello',
   description:
     'Quanto costa un\'auto usata? Prezzi medi reali dagli annunci in vendita per ogni marca e modello, con valutazione di affidabilità e punti critici da controllare.',
-  alternates: { canonical: '/valutazione' },
+  alternates: {
+    canonical: '/valutazione',
+    languages: { 'it-IT': `${siteUrl}/valutazione` },
+  },
   openGraph: {
     type: 'website',
     locale: 'it_IT',
@@ -21,6 +26,35 @@ export const metadata: Metadata = {
 
 export default function ValutazioneIndexPage() {
   const makes = getAllMakes();
+
+  const faq = [
+    {
+      q: 'Come si calcola il valore di un\'auto usata?',
+      a: 'Il valore di un\'auto usata si stima confrontando gli annunci reali in vendita per lo stesso modello, correggendo per anno, chilometraggio, allestimento e condizioni. AutoEsperto aggrega questi dati e mostra un prezzo medio di mercato aggiornato.',
+    },
+    {
+      q: 'Quanto costa un\'auto usata oggi?',
+      a: 'Il prezzo dipende molto da marca, modello, anno e chilometri. Scegli la tua auto nel catalogo per vedere il prezzo medio reale calcolato dagli annunci in vendita, con il range minimo e massimo.',
+    },
+    {
+      q: 'Perché il prezzo indicato può differire dal listino?',
+      a: 'Il listino è un valore di riferimento teorico. Il prezzo di mercato reale cambia in base a domanda e offerta, stato di conservazione, optional e chilometraggio. AutoEsperto usa gli annunci reali, non solo il listino.',
+    },
+    {
+      q: 'Le valutazioni di AutoEsperto sono gratuite?',
+      a: 'Sì, le valutazioni per marca, modello e anno sono gratuite e consultabili senza registrazione. Puoi anche analizzare una foto della tua auto con l\'intelligenza artificiale per un report più dettagliato.',
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -65,6 +99,55 @@ export default function ValutazioneIndexPage() {
             </Link>
           ))}
         </div>
+
+        <section className="mt-10">
+          <h2 className="text-lg font-bold text-text-primary mb-1 flex items-center gap-2">
+            <Search className="w-5 h-5 text-accent" />
+            Come funziona la valutazione
+          </h2>
+          <div className="space-y-3 mt-4">
+            <div className="bg-surface-2 rounded-xl p-4">
+              <h3 className="text-sm font-bold text-text-primary">1. Scegli marca e modello</h3>
+              <p className="text-sm text-text-secondary leading-relaxed mt-1.5">
+                Seleziona la tua auto dal catalogo per accedere alla scheda dedicata con prezzi per ogni anno di produzione.
+              </p>
+            </div>
+            <div className="bg-surface-2 rounded-xl p-4">
+              <h3 className="text-sm font-bold text-text-primary">2. Confronta con gli annunci reali</h3>
+              <p className="text-sm text-text-secondary leading-relaxed mt-1.5">
+                Il prezzo medio è calcolato dagli annunci in vendita, con range minimo e massimo per avere un&apos;idea realistica del mercato.
+              </p>
+            </div>
+            <div className="bg-surface-2 rounded-xl p-4">
+              <h3 className="text-sm font-bold text-text-primary">3. Controlla affidabilità e punti critici</h3>
+              <p className="text-sm text-text-secondary leading-relaxed mt-1.5">
+                Ogni modello include la valutazione di affidabilità e i problemi più frequenti da verificare prima dell&apos;acquisto.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-10">
+          <h2 className="text-lg font-bold text-text-primary mb-1 flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-accent" />
+            Domande frequenti sulla valutazione auto
+          </h2>
+          <div className="space-y-3 mt-4">
+            {faq.map((f) => (
+              <details key={f.q} className="group bg-surface-2 rounded-xl p-4">
+                <summary className="flex items-start justify-between gap-3 text-sm font-semibold text-text-primary cursor-pointer list-none">
+                  {f.q}
+                  <span className="text-accent text-lg leading-none group-open:rotate-45 transition-transform flex-shrink-0">+</span>
+                </summary>
+                <p className="text-sm text-text-secondary leading-relaxed mt-3">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <p className="text-xs text-text-tertiary mt-8">
+          Le valutazioni sono indicative e basate sui dati di mercato disponibili. Non sostituiscono un&apos;ispezione professionale.
+        </p>
       </main>
 
       <footer className="border-t border-border/60 mt-10">
@@ -85,6 +168,10 @@ export default function ValutazioneIndexPage() {
           </div>
         </div>
       </footer>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}
+      />
     </div>
   );
 }

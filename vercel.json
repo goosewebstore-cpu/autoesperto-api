@@ -2,8 +2,8 @@
   "redirects": [
     {
       "source": "/:path*",
-      "has": [{ "type": "host", "value": "www.autoesperto.vercel.app" }],
-      "destination": "https://autoesperto.vercel.app/:path*",
+      "has": [{ "type": "host", "value": "www.autoesperto.it" }],
+      "destination": "https://autoesperto.it/:path*",
       "permanent": true
     }
   ]

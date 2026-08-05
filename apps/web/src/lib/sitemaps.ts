@@ -1,6 +1,6 @@
 import { getAllMakes, slugify } from './catalogo';
 
-export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 export const CURRENT_YEAR = new Date().getFullYear();
 export const YEAR_RANGE: number[] = [];

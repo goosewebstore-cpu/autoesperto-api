@@ -23,7 +23,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     alternates: {
       canonical: `/valutazione/${resolved.make}`,
-      languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app'}/valutazione/${resolved.make}` },
+      languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it'}/valutazione/${resolved.make}` },
     },
     openGraph: {
       type: 'website',
@@ -46,9 +46,9 @@ export default async function MakeValutazionePage({ params }: PageProps) {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
     itemListElement: [
-      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://autoesperto.vercel.app/' },
-      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.vercel.app/valutazione' },
-      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.vercel.app/valutazione/${resolved.make}` },
+      { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://autoesperto.it/' },
+      { '@type': 'ListItem', position: 2, name: 'Valutazione auto', item: 'https://autoesperto.it/valutazione' },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `https://autoesperto.it/valutazione/${resolved.make}` },
     ],
   };
 
@@ -60,7 +60,7 @@ export default async function MakeValutazionePage({ params }: PageProps) {
       '@type': 'ListItem',
       position: index + 1,
       name: `${make.name} ${model}`,
-      url: `https://autoesperto.vercel.app/valutazione/${resolved.make}/${slugify(model)}`,
+      url: `https://autoesperto.it/valutazione/${resolved.make}/${slugify(model)}`,
     })),
   };
 

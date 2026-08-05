@@ -1,7 +1,14 @@
 import type { AutoReport } from '@autoesperto/types';
 import { getAuthToken } from '@/lib/auth';
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+// In produzione il frontend deve continuare a funzionare anche se la variabile
+// Vercel non viene ereditata dopo il cambio dominio. In sviluppo resta valido
+// l'override esplicito verso l'API locale.
+const API_URL = process.env.NEXT_PUBLIC_API_URL || (
+  process.env.NODE_ENV === 'production'
+    ? 'https://autoesperto-api.onrender.com'
+    : 'http://localhost:4000'
+);
 export { API_URL };
 const TIMEOUT_MS = 30000;
 const AI_TIMEOUT_MS = 120000;

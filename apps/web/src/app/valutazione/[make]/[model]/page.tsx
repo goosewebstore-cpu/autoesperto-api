@@ -10,7 +10,7 @@ interface PageProps {
 }
 
 function siteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 }
 
 const CURRENT_YEAR_MODEL = new Date().getFullYear();

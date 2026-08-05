@@ -15,7 +15,7 @@ const inter = Inter({
   variable: '--font-inter',
 });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 const siteTitle = 'Analisi auto con AI: danni, valore e preventivo | AutoEsperto';
 const siteDescription =
   'Analizza l’auto da una foto: scopri marca, modello, anno e prezzo indicativo, con un report dettagliato specifico per quel veicolo.';

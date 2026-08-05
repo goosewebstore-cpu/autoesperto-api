@@ -1,7 +1,7 @@
 const BREVO_API_URL = 'https://api.brevo.com/v3/smtp/email';
 const BREVO_API_KEY = process.env.BREVO_API_KEY || '';
 const BREVO_SENDER = process.env.BREVO_SENDER || 'AutoEsperto <noreply@autoesperto.app>';
-const WEB_URL = process.env.WEB_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+const WEB_URL = process.env.WEB_URL || process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 interface SendEmailInput {
   to: string;

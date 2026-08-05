@@ -102,8 +102,13 @@ export function createApp(options: AppOptions = {}) {
 export const app = createApp();
 
 export function defaultWebUrls(): string[] {
-  return (process.env.WEB_URLS || process.env.WEB_URL || 'http://localhost:3000')
+  const configured = (process.env.WEB_URLS || process.env.WEB_URL || '')
     .split(',')
     .map((u) => u.trim())
     .filter(Boolean);
+
+  // Mantieni il nuovo dominio autorizzato anche durante una transizione in cui
+  // WEB_URLS su Render contiene ancora solo il vecchio host Vercel.
+  const productionUrls = ['https://autoesperto.it', 'https://www.autoesperto.it'];
+  return Array.from(new Set([...configured, ...productionUrls, ...(configured.length ? [] : ['http://localhost:3000'])]));
 }

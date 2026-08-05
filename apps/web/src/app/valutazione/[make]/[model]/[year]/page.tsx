@@ -14,7 +14,7 @@ const YEAR_RANGE: number[] = [];
 for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
 
 function siteUrl() {
-  return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 }
 
 export const dynamicParams = true;

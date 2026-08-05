@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { Car, HelpCircle, Search } from 'lucide-react';
 import { getAllMakes } from '@/lib/catalogo';
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.vercel.app';
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 export const metadata: Metadata = {
   title: 'Valutazione auto usate: prezzi di mercato per marca e modello',

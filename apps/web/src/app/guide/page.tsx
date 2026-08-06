@@ -6,7 +6,7 @@ import { guides } from '@/lib/guides';
 export const metadata: Metadata = {
   title: 'Guide auto usata: valore, vendita e acquisto | AutoEsperto',
   description:
-    'Guide pratiche per comprare e vendere auto usate: come capire se un prezzo è giusto, quali auto si svalutano meno e come vendere al prezzo giusto.',
+    'Guide pratiche per comprare e vendere auto usate: checklist pre-acquisto, auto affidabili, come scoprire incidenti, valutare danni e capire se un prezzo è giusto.',
   alternates: {
     canonical: '/guide',
     languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it'}/guide` },

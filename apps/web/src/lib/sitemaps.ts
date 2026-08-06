@@ -1,4 +1,5 @@
 import { getAllMakes, slugify } from './catalogo';
+import { guides } from './guides';
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
@@ -17,7 +18,14 @@ export interface UrlEntry {
 const staticPages: UrlEntry[] = [
   { url: siteUrl, changeFrequency: 'weekly', priority: 1 },
   { url: `${siteUrl}/valutazione`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/riparazione`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${siteUrl}/confronta`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/guide`, changeFrequency: 'weekly', priority: 0.8 },
+  ...guides.map((guide) => ({
+    url: `${siteUrl}/guide/${guide.slug}`,
+    changeFrequency: 'monthly',
+    priority: 0.7,
+  })),
   { url: `${siteUrl}/contatti`, changeFrequency: 'yearly', priority: 0.5 },
   { url: `${siteUrl}/lavora-con-noi`, changeFrequency: 'monthly', priority: 0.6 },
   { url: `${siteUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
@@ -25,13 +33,13 @@ const staticPages: UrlEntry[] = [
   { url: `${siteUrl}/cookie-policy`, changeFrequency: 'yearly', priority: 0.3 },
 ];
 
-function allYearUrls(): UrlEntry[] {
+function yearUrlsFor(prefix: string): UrlEntry[] {
   const urls: UrlEntry[] = [];
   for (const make of getAllMakes()) {
     for (const model of make.models) {
       for (const year of YEAR_RANGE) {
         urls.push({
-          url: `${siteUrl}/valutazione/${make.slug}/${slugify(model)}/${year}`,
+          url: `${siteUrl}/${prefix}/${make.slug}/${slugify(model)}/${year}`,
           changeFrequency: 'monthly',
           priority: 0.5,
         });
@@ -41,9 +49,28 @@ function allYearUrls(): UrlEntry[] {
   return urls;
 }
 
+const allYearUrls = () => yearUrlsFor('valutazione');
+const allRepairYearUrls = () => yearUrlsFor('riparazione');
+
+function chunked(name: string, urls: UrlEntry[]): UrlEntry[] {
+  const match = /^(\d+)$/.exec(name);
+  if (!match) return [];
+  const start = (Number(match[1]) - 1) * YEAR_CHUNK_SIZE;
+  return urls.slice(start, start + YEAR_CHUNK_SIZE);
+}
+
 export function sitemapNames(): string[] {
-  const chunks = Math.ceil(allYearUrls().length / YEAR_CHUNK_SIZE);
-  return ['static', 'makes', 'models', ...Array.from({ length: chunks }, (_, i) => `years-${i + 1}`)];
+  const valChunks = Math.ceil(allYearUrls().length / YEAR_CHUNK_SIZE);
+  const repChunks = Math.ceil(allRepairYearUrls().length / YEAR_CHUNK_SIZE);
+  return [
+    'static',
+    'makes',
+    'models',
+    'rip-makes',
+    'rip-models',
+    ...Array.from({ length: valChunks }, (_, i) => `years-${i + 1}`),
+    ...Array.from({ length: repChunks }, (_, i) => `rip-years-${i + 1}`),
+  ];
 }
 
 export function buildSitemap(name: string): UrlEntry[] {
@@ -64,11 +91,26 @@ export function buildSitemap(name: string): UrlEntry[] {
           priority: 0.6,
         }))
       );
+    case 'rip-makes':
+      return getAllMakes().map((make) => ({
+        url: `${siteUrl}/riparazione/${make.slug}`,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      }));
+    case 'rip-models':
+      return getAllMakes().flatMap((make) =>
+        make.models.map((model) => ({
+          url: `${siteUrl}/riparazione/${make.slug}/${slugify(model)}`,
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        }))
+      );
     default: {
-      const match = /^years-(\d+)$/.exec(name);
-      if (!match) return [];
-      const start = (Number(match[1]) - 1) * YEAR_CHUNK_SIZE;
-      return allYearUrls().slice(start, start + YEAR_CHUNK_SIZE);
+      const yearsMatch = /^years-(\d+)$/.exec(name);
+      if (yearsMatch) return chunked(yearsMatch[1], allYearUrls());
+      const ripYearsMatch = /^rip-years-(\d+)$/.exec(name);
+      if (ripYearsMatch) return chunked(ripYearsMatch[1], allRepairYearUrls());
+      return [];
     }
   }
 }

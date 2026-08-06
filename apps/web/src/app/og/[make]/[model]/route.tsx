@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og';
 import { findMakeBySlug, findModelBySlug } from '@/lib/catalogo';
+import { siteUrl } from '@/lib/sitemaps';
 
 const ACCENT = '#2563EB';
 const BG = '#0F172A';
@@ -71,7 +72,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ mak
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <div style={{ fontSize: 24, color: '#60A5FA', fontWeight: 800 }}>Valutazione gratuita</div>
           <div style={{ width: 6, height: 6, borderRadius: 999, backgroundColor: '#475569' }} />
-          <div style={{ fontSize: 24, color: '#94A3B8', fontWeight: 700 }}>autoesperto.vercel.app</div>
+          <div style={{ fontSize: 24, color: '#94A3B8', fontWeight: 700 }}>{new URL(siteUrl).host}</div>
         </div>
       </div>
     ),

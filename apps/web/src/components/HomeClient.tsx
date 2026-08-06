@@ -108,6 +108,7 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
         <div className="mx-auto max-w-6xl px-5 py-7 text-center text-xs text-text-tertiary">
           <nav aria-label="Link principali" className="mb-4 flex flex-wrap justify-center gap-x-5 gap-y-2 font-semibold text-text-secondary">
             <Link href="/valutazione" className="hover:text-accent">Valutazione auto</Link>
+            <Link href="/guide" className="hover:text-accent">Guide</Link>
             <Link href="/confronta" className="hover:text-accent">Confronta modelli</Link>
             <Link href="/privacy" className="hover:text-accent">Privacy</Link>
             <Link href="/cookie-policy" className="hover:text-accent">Cookie</Link>

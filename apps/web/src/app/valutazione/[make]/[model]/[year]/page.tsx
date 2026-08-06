@@ -162,6 +162,16 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
           <ModelReportCard make={make.name} model={model} year={yearNum} />
         </div>
 
+        <Link
+          href={`/riparazione/${resolved.make}/${resolved.model}/${resolved.year}`}
+          className="mt-4 flex items-center justify-between rounded-xl border border-border bg-surface-2 p-4 hover:border-accent transition-colors"
+        >
+          <span className="text-sm font-bold text-text-primary">
+            Quanto costa riparare la {make.name} {model} {yearNum}?
+          </span>
+          <span className="text-accent text-sm font-bold">Stima costi →</span>
+        </Link>
+
         <section className="mt-8">
           <h2 className="text-base font-bold text-text-primary mb-3">Altri anni della {make.name} {model}</h2>
           <div className="flex flex-wrap gap-2">

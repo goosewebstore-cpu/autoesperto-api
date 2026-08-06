@@ -2,5 +2,31 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "next build",
   "framework": "nextjs",
-  "regions": ["fra1"]
+  "regions": ["fra1"],
+  "redirects": [
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "www.autoesperto.it" }],
+      "destination": "https://autoesperto.it/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "autoesperto.vercel.app" }],
+      "destination": "https://autoesperto.it/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "autoesperto-goosewebstore-3988s-projects.vercel.app" }],
+      "destination": "https://autoesperto.it/:path*",
+      "permanent": true
+    },
+    {
+      "source": "/:path*",
+      "has": [{ "type": "host", "value": "autoesperto-git-master-goosewebstore-3988s-projects.vercel.app" }],
+      "destination": "https://autoesperto.it/:path*",
+      "permanent": true
+    }
+  ]
 }

@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Car } from 'lucide-react';
-import { getGuide, guides } from '@/lib/guides';
+import { getGuide, guides, GUIDE_CATEGORIES } from '@/lib/guides';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -55,6 +55,21 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     label: 'Scopri quanto vale la tua auto',
     href: '/valutazione',
     description: 'Confronta il preventivo con il valore reale di mercato.',
+  },
+  'prezzo-giusto': {
+    label: 'Verifica il prezzo reale',
+    href: '/valutazione',
+    description: 'Confronta la richiesta del venditore con la media di mercato dagli annunci.',
+  },
+  'passaggio-proprieta': {
+    label: 'Scopri quanto vale la tua auto',
+    href: '/valutazione',
+    description: 'Parti da un valore reale di mercato prima di avviare il passaggio.',
+  },
+  'elettrica-benzina': {
+    label: 'Confronta i valori di mercato',
+    href: '/confronta',
+    description: 'Metti a confronto i modelli che ti interessano su valore e consumi.',
   },
 };
 
@@ -157,10 +172,15 @@ export default async function GuidePage({ params }: PageProps) {
 
         <article>
           <header>
-            <time dateTime={guide.published} className="text-xs font-semibold uppercase tracking-wide text-accent">
-              {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
-            </time>
-            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-2">
+            <div className="flex flex-wrap items-center gap-2.5">
+              <span className="inline-flex items-center rounded-full bg-accent-light px-2.5 py-1 text-xs font-bold text-accent">
+                {GUIDE_CATEGORIES[guide.category].label}
+              </span>
+              <time dateTime={guide.published} className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+                {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+              </time>
+            </div>
+            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-3">
               {guide.title}
             </h1>
             <p className="text-text-secondary text-base leading-relaxed mt-4">{guide.description}</p>

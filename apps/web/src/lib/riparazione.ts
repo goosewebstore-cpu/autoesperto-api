@@ -44,7 +44,7 @@ const CITY_CAR = ['500', 'panda', 'aygo', 'yaris', 'jazz', 'swift', 'i10', 'i20'
 const SUV = ['suv', 'x3', 'x5', 'q2', 'q3', 'q5', 't-roc', 'tiguan', 'c-hr', 'rav4', 'kuga', 'puma', 'captur', 'duster', '2008', '3008', '5008', 'aircross', 'mokka', 'crossland', 'tucson', 'kona', 'sportage', 'stonic', 'qashqai', 'juke', 'vitara', 'cx-3', 'cx-5', 'cx-30', 'gla', 'glc', 'glb', 'x1', 'x2', 'xc40', 'xc60', 'evoque', 'renegade', 'compass', 'stelvio', 'arona', 'ateca', 'kamiq', 'karok', 'karoq', 'kodiaq', 'zs', 'cr-v', 'asx', 'outlander', 'nx', 'cayenne', 'macan', 's-cross', 'swace', 'corolla-cross', 'c-hr', 'proace', '1007', 'c3-aircross', 'captur'];
 const SPORT = ['911', 'cayman', 'boxster', 'miata', 'gt86', 'supra', 'm2', 'm4', 'rs', 'giulia qv', 'type-r', 'gti', 'abarth', 'clio rs', 'megane rs', 'i20 n', 'ypsilon rally'];
 
-function detectSegment(make: string, model: string): SegmentKey {
+export function detectSegment(make: string, model: string): SegmentKey {
   const m = `${make} ${model}`.toLowerCase();
   if (EV_BRANDS.includes(make.toLowerCase())) return 'utility';
   if (SPORT.some((k) => m.includes(k))) return 'sportiva';
@@ -60,7 +60,7 @@ function brandFactor(make: string): number {
   return 1;
 }
 
-const BRAND_FAILURES: Record<string, string[]> = {
+export const BRAND_FAILURES: Record<string, string[]> = {
   fiat: ['Fanaleria che si appanna o accumula condensa', 'Sospensioni anteriori e silent block usurati', 'Distribuzione da controllare scrupolosamente sul 1.3 Multijet', 'Cinghia accessori e tenditore'],
   volkswagen: ['Cambio DSG con strattoni (soprattutto 7 rapporti)', 'Iniettori e pompette diesel sulle versioni TDI', 'Turbocompressore sulle motorizzazioni 1.4/1.6', 'Centraline elettriche e sensori di parcheggio'],
   audi: ['Cambio DSG e trasmissione S-Tronic', 'Sistema di raffreddamento (termostato e pompa acqua)', 'Sospensioni multi-link anteriori costose da sistemare', 'Consumo olio sulle versioni 1.8/2.0 TFSI più datate'],

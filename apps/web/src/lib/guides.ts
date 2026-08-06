@@ -4,11 +4,22 @@ export interface GuideSection {
   list?: string[];
 }
 
+export type GuideCategory = 'acquisto' | 'vendita' | 'valutazione' | 'manutenzione' | 'affidabilita';
+
+export const GUIDE_CATEGORIES: Record<GuideCategory, { label: string }> = {
+  acquisto: { label: 'Acquisto' },
+  vendita: { label: 'Vendita' },
+  valutazione: { label: 'Valutazione' },
+  manutenzione: { label: 'Manutenzione' },
+  affidabilita: { label: 'Affidabilità' },
+};
+
 export interface Guide {
   slug: string;
   title: string;
   description: string;
   published: string;
+  category: GuideCategory;
   sections: GuideSection[];
   cta: string;
 }
@@ -70,6 +81,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'acquisto',
     cta: 'auto-usata-affare',
   },
   {
@@ -107,6 +119,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'valutazione',
     cta: 'auto-svalutazione',
   },
   {
@@ -151,6 +164,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'vendita',
     cta: 'vendere-auto',
   },
   {
@@ -240,6 +254,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'acquisto',
     cta: 'controllare-auto-usata',
   },
   {
@@ -310,6 +325,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'affidabilita',
     cta: 'auto-affidabili-2026',
   },
   {
@@ -382,6 +398,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'acquisto',
     cta: 'auto-incidentata',
   },
   {
@@ -466,6 +483,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'valutazione',
     cta: 'valutare-danno-riparazione',
   },
   {
@@ -519,6 +537,7 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'manutenzione',
     cta: 'stima-riparazione',
   },
   {
@@ -567,7 +586,173 @@ export const guides: Guide[] = [
         ],
       },
     ],
+    category: 'manutenzione',
     cta: 'riparare-o-rottamare',
+  },
+  {
+    slug: 'come-capire-se-prezzo-auto-usata-e-giusto',
+    title: 'Come capire se il prezzo di un\'auto usata è giusto',
+    description:
+      'Prezzo troppo alto o un vero affare? Impara a valutare un\'auto usata confrontando la richiesta con il valore di mercato reale dagli annunci, in pochi minuti e senza strumenti a pagamento.',
+    published: '2026-08-06',
+    category: 'valutazione',
+    sections: [
+      {
+        heading: 'Il problema: "quanto dovrebbe costare?"',
+        paragraphs: [
+          'Quando guardi un annuncio di un\'auto usata, il dubbio è sempre lo stesso: il prezzo è giusto, alto o un affare? Rispondere "a occhio" è quasi impossibile, perché il valore di un\'auto dipende da anno, chilometri, allestimento, storico e — soprattutto — da quanto il mercato sta pagando per esemplari simili in questo momento.',
+          'La buona notizia: capire se un prezzo è giusto è un\'operazione meccanica, fatta di confronti e dati. Ecco il metodo che funziona.',
+        ],
+      },
+      {
+        heading: 'Il primo confronto: stesso modello, stessa annata',
+        paragraphs: [
+          'La base di tutto è il prezzo medio di mercato per lo stesso modello e la stessa annata. Non basta guardare un solo annuncio: serve la media di più auto simili in vendita, così un prezzo fuori scala non distorce il giudizio.',
+          'Su AutoEsperto puoi vedere in pochi secondi il valore medio reale per marca, modello e anno, calcolato dagli annunci in vendita, insieme al range minimo e massimo entro cui si muove il mercato.',
+        ],
+      },
+      {
+        heading: 'Poi affina con chilometri e allestimento',
+        paragraphs: [
+          'Il prezzo medio è il punto di partenza, non il verdetto. Rispetto alla media:',
+        ],
+        list: [
+          'Chilometraggio sotto i 10.000 km/anno: il valore sale del 5–10% rispetto alla media.',
+          'Chilometraggio sopra i 20.000 km/anno: il valore scende del 5–10%.',
+          'Allestimenti alti (cambio automatico, full LED, ADAS): +5–10% se richiesti.',
+          'Storico tagliandi completo e unico proprietario: +5–10%.',
+          'Difetti dichiarati, danni o passaggi frequenti: -5–15%.',
+        ],
+      },
+      {
+        heading: 'La regola dei "tre prezzi"',
+        paragraphs: [
+          'Per decidere se la richiesta è onesta, calcola tre riferimenti: il prezzo medio di mercato, un valore "buono" (medio meno 10%, il tuo obiettivo se compri) e un valore "alto" (medio più 10%, ciò che chiede chi vuole vendere sopra il mercato).',
+          'Se la richiesta sta sopra il prezzo alto, la trattativa parte in salita: ci sono alternative simili a meno. Se sta sotto il valore buono, è probabilmente un affare — ma verifica che non ci siano danni nascosti.',
+        ],
+      },
+      {
+        heading: 'Quando il prezzo "troppo basso" è un campanello d\'allarme',
+        paragraphs: [
+          'Un prezzo molto sotto la media non è sempre un\'occasione. Prima di entusiasmarti, controlla: storico degli incidenti, chilometraggio reale, presenza di ipoteche o fermi amministrativi, e lo stato di carrozzeria e meccanica. Un\'auto svalutata del 20–30% rispetto alla media ha quasi sempre un motivo.',
+          'Il valore medio degli annunci ti dà il riferimento; la verifica dello stato dell\'auto resta un passo obbligato.',
+        ],
+      },
+    ],
+    cta: 'prezzo-giusto',
+  },
+  {
+    slug: 'passaggio-di-proprieta-auto-costi',
+    title: 'Passaggio di proprietà auto 2026: costi, documenti e procedure',
+    description:
+      'Quanto costa davvero il passaggio di proprietà di un\'auto nel 2026, quali documenti servono, chi lo fa (PRA, agenzia, concessionario) e come evitare errori costosi.',
+    published: '2026-08-06',
+    category: 'vendita',
+    sections: [
+      {
+        heading: 'Cos\'è il passaggio di proprietà',
+        paragraphs: [
+          'Il passaggio di proprietà è la procedura con cui un\'auto cambia intestatario presso il PRA (Pubblico Registro Automobilistico). Senza di esso la vendita non è completa: l\'acquirente non è ancora proprietario legale, anche se ha già pagato.',
+          'La pratica può essere fatta da un\'agenzia di pratiche auto, presso lo sportello telematico dell\'Automobilista o, in molti casi, direttamente dal concessionario che vende. Dal 2021 è obbligatoria la modalità telematica.',
+        ],
+      },
+      {
+        heading: 'I costi da mettere in conto nel 2026',
+        paragraphs: [
+          'Il costo totale del passaggio di proprietà si compone di più voci:',
+        ],
+        list: [
+          'Imposta provinciale di trascrizione (IPT): la voce più pesante, varia da provincia a provincia (indicativamente 150–650 €, con tariffe ridotte per veicoli usati o meno inquinanti).',
+          'Tassa automobilistica regionale (bollo): se l\'acquirente paga il bollo in forma di "tassa di circolazione", viene riproporzionata all\'anno in corso.',
+          'Costo della pratica telematica: circa 27 € di diritti PRA.',
+          'Compenso dell\'agenzia di pratiche auto: 50–150 € a seconda dell\'agenzia.',
+          'Imposta di bollo per i documenti, quando prevista.',
+        ],
+      },
+      {
+        heading: 'I documenti necessari',
+        paragraphs: [
+          'Per avviare la pratica servono:',
+        ],
+        list: [
+          'Certificato di proprietà (CDP) e libretto di circolazione firmati dal venditore.',
+          'Documento di identità e codice fiscale di venditore e acquirente.',
+          'Visura PRA aggiornata (se la fai tu) o verifica di assenza di fermo amministrativo e ipoteche.',
+          'Targa originale sul veicolo (nel nuovo passaggio telematico la targa non cambia obbligatoriamente).',
+          'Eventuale procura se una delle parti non può essere presente.',
+        ],
+      },
+      {
+        heading: 'I passaggi più comuni dove si sbaglia',
+        paragraphs: [
+          'Gli errori più frequenti costano tempo e denaro:',
+        ],
+        list: [
+          'Non verificare prima che non ci siano fermi amministrativi o ipoteche sul veicolo.',
+          'Firmare il CDP senza compilare correttamente i dati dell\'acquirente.',
+          'Non controllare che il numero di telaio corrisponda tra libretto e auto.',
+          'Trascurare il controllo della revisione: un\'auto senza revisione valida non è vendibile in regola.',
+          'Dimenticare che l\'acquirente deve pagare il bollo auto pro-quota all\'atto del passaggio.',
+        ],
+      },
+      {
+        heading: 'Come calcolare quanto vale davvero l\'auto prima di vendere',
+        paragraphs: [
+          'Prima di avviare la pratica, stabilisci un prezzo giusto: il valore medio di mercato dagli annunci per il tuo modello e anno è la base più solida per non svendere né chiedere cifre irrealistiche. Su AutoEsperto la verifica è gratuita e richiede pochi secondi.',
+        ],
+      },
+    ],
+    cta: 'passaggio-proprieta',
+  },
+  {
+    slug: 'auto-elettrica-o-benzina-conviene',
+    title: 'Auto elettrica o benzina: quale conviene davvero nel 2026',
+    description:
+      'Costi, autonomia, valore di rivendita e incentivi: il confronto completo tra auto elettrica, ibrida e benzina per capire quale conviene in base al tuo utilizzo.',
+    published: '2026-08-06',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Non esiste "la migliore": esiste la migliore per il tuo uso',
+        paragraphs: [
+          'Elettrica, ibrida o benzina? La risposta cambia in base a dove vivi, quanti chilometri fai ogni anno, se hai un posto auto con ricarica e quanto tempo pensi di tenere l\'auto. Confrontare solo il prezzo di listino è l\'errore più comune: conta il costo totale di possesso.',
+          'Ecco i fattori che pesano davvero, aggiornati al 2026.',
+        ],
+      },
+      {
+        heading: 'Se fai pochi chilometri in città',
+        paragraphs: [
+          'Se percorri meno di 10.000 km all\'anno, prevalentemente in città, la differenza tra benzina e ibrida è minima sui consumi. L\'elettrica può convenire per i parcheggi e l\'accesso alle zone a traffico limitato, ma solo se hai una ricarica comoda (a casa o al lavoro).',
+          'In questo scenario il peso maggiore ce l\'ha il costo iniziale: un\'elettrica costa mediamente il 30–40% in più dell\'equivalente benzina, e il recupero passa dai risparmi sui consumi.',
+        ],
+      },
+      {
+        heading: 'Se fai molti chilometri',
+        paragraphs: [
+          'Oltre i 15.000–20.000 km all\'anno i consumi diventano la voce dominante. Qui l\'ibrida benzina è spesso il miglior compromesso: consuma poco in città e in extraurbano, costa meno dell\'elettrica e non richiede di organizzare la ricarica.',
+          'Per chi può ricaricare a casa e fa lunghi tragitti pianificati, l\'elettrica abbatte molto il costo per km: stimabile tra i 2 e i 5 € per 100 km in casa contro i 9–12 € di un\'auto a benzina.',
+        ],
+      },
+      {
+        heading: 'Costi e incentivi nel 2026',
+        paragraphs: [
+          'I prezzi variano di mese in mese, ma alcune regole restano:',
+        ],
+        list: [
+          'Le elettriche godono ancora di agevolazioni fiscali, esenzione parziale dal bollo in molte regioni e accesso facilitato alle ZTL.',
+          'Le ibride plug-in hanno costi di acquisto vicini alle elettriche ma richiedono di ricaricare per sfruttare i consumi dichiarati: senza ricarica, consumano come una benzina tradizionale.',
+          'Le benzina restano le più economiche all\'acquisto e le più semplici: niente colonnine, niente pianificazione, valore di rivendita più prevedibile.',
+        ],
+      },
+      {
+        heading: 'Il valore di rivendita: cosa dice il mercato dell\'usato',
+        paragraphs: [
+          'L\'usato è il test più onesto per capire cosa conviene. Le ibride di marchi generalisti tengono bene il valore grazie alla domanda costante; le elettriche hanno dinamiche di prezzo più variabili e possono svalutarsi rapidamente se arriva un modello nuovo con più autonomia.',
+          'Prima di scegliere, confronta il valore reale di mercato dei modelli che ti interessano: la differenza tra ciò che si paga oggi e ciò che recupererai alla vendita è il dato che decide la convenienza.',
+        ],
+      },
+    ],
+    cta: 'elettrica-benzina',
   },
 ];
 

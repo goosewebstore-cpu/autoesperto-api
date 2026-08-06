@@ -9,6 +9,8 @@ import VehicleScanner from '@/components/VehicleScanner';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 import { analysisOffer } from '@/lib/pricing';
 import AdSlot from '@/components/AdSlot';
+import GuideCard from '@/components/GuideCard';
+import { guides } from '@/lib/guides';
 
 export type HomeInitialPayload = AnalyzePayload | null;
 
@@ -18,6 +20,7 @@ interface HomeClientProps {
 
 export default function HomeClient({ initialPayload }: HomeClientProps) {
   const offer = analysisOffer();
+  const latestGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 4);
   const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState('');
   const [scannerKey, setScannerKey] = useState(0);
@@ -100,6 +103,20 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
               </div>
             </section>
             <AdSlot placement="home" className="py-6" />
+            <section className="py-8" aria-label="Ultime guide">
+              <div className="flex flex-wrap items-end justify-between gap-3">
+                <div>
+                  <h2 className="text-xl font-extrabold tracking-tight text-text-primary">Guide per comprare e vendere</h2>
+                  <p className="mt-1 text-sm text-text-secondary">Consigli pratici per valutare, acquistare e vendere l&apos;auto usata.</p>
+                </div>
+                <Link href="/guide" className="text-sm font-semibold text-accent hover:text-accent-hover">Tutte le guide →</Link>
+              </div>
+              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+                {latestGuides.map((guide) => (
+                  <GuideCard key={guide.slug} guide={guide} />
+                ))}
+              </div>
+            </section>
           </div>
         )}
       </main>

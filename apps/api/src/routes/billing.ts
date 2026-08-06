@@ -23,7 +23,7 @@ router.post(
     });
     if (!user) throw forbidden('Account non trovato.');
 
-    const { amountCents, currency } = getAnalysisPrice();
+    const { amountCents, currency, promotional } = getAnalysisPrice();
     const purchase = await prisma.purchase.create({
       data: { userId, amountCents, currency, status: 'PENDING' },
     });
@@ -44,8 +44,10 @@ router.post(
               currency,
               unit_amount: amountCents,
               product_data: {
-                name: 'Analisi completa AutoEsperto',
-                description: 'Una analisi AI dettagliata, salvata nel tuo account.',
+                name: promotional ? 'Analisi completa AutoEsperto — prezzo promozionale' : 'Analisi completa AutoEsperto',
+                description: promotional
+                  ? 'Una analisi AI dettagliata, salvata nel tuo account. Promozione a tempo limitato.'
+                  : 'Una analisi AI dettagliata, salvata nel tuo account.',
               },
             },
           },
@@ -80,7 +82,7 @@ router.post(
     const session = await getStripe().checkout.sessions.retrieve(sessionId);
     if (session.metadata?.userId !== userId) throw forbidden('Pagamento non associato a questo account.');
     await recordPaidCheckout(session);
-    res.json({ success: true, paid: session.payment_status === 'paid' });
+    res.json({ success: true, paid: session.payment_status === 'paid', amountCents: session.amount_total || 0, currency: session.currency || 'eur' });
   })
 );
 

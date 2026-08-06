@@ -23,6 +23,7 @@ import {
 import ReportView from '@/components/ReportView';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import { fireAdsPurchase } from '@/components/AdsTracker';
+import { analysisOffer } from '@/lib/pricing';
 import {
   type AccountUser,
   type StoredAnalysis,
@@ -51,6 +52,7 @@ function euro(value: number) {
 }
 
 export default function AccountDashboard({ checkout, sessionId }: { checkout?: string; sessionId?: string }) {
+  const offer = analysisOffer();
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<AccountUser | null>(null);
@@ -88,7 +90,7 @@ export default function AccountDashboard({ checkout, sessionId }: { checkout?: s
           if (!result.paid) throw new Error('Il pagamento non risulta ancora completato. Aggiorna la pagina tra qualche secondo.');
           setMessage('Pagamento confermato. Ora puoi creare la tua analisi.');
           window.history.replaceState(null, '', '/account');
-          fireAdsPurchase(5.99, 'EUR', sessionId);
+          fireAdsPurchase(result.amountCents / 100, result.currency.toUpperCase(), sessionId);
         } else if (checkout === 'cancelled') {
           setMessage('Pagamento annullato: non è stato addebitato nulla.');
           window.history.replaceState(null, '', '/account');
@@ -219,7 +221,7 @@ export default function AccountDashboard({ checkout, sessionId }: { checkout?: s
         {user.entitlement.freeUsed && !analysis && (
           <section className="mt-8 grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_70px_rgba(15,23,42,.07)] lg:grid-cols-[1.15fr_.85fr]">
             <div className="p-6 sm:p-9"><span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700"><FileText className="h-3.5 w-3.5" /> Altre analisi</span><h2 className="mt-5 text-3xl font-extrabold tracking-tight text-slate-950">Salva un’altra analisi, quando ti serve.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">Hai già usato la tua analisi gratuita. Con un acquisto singolo puoi creare e salvare un’altra analisi completa: nessun abbonamento, nessun rinnovo.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{['Una analisi in più', 'Report salvato nell’account', 'PDF scaricabile', 'Nessun rinnovo automatico'].map((item) => <div key={item} className="flex items-center gap-2 text-sm font-bold text-slate-700"><CheckCircle2 className="h-4 w-4 text-emerald-600" />{item}</div>)}</div></div>
-            <div className="flex flex-col justify-center bg-slate-950 p-6 text-white sm:p-9"><p className="text-xs font-extrabold uppercase tracking-[.14em] text-blue-300">Analisi completa</p><div className="mt-3 text-4xl font-extrabold">5,99 €</div><p className="mt-1 text-sm text-slate-400">Pagamento unico · una analisi per acquisto</p><button onClick={startCheckout} disabled={paying} className="mt-7 flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-extrabold text-white transition hover:bg-blue-500 disabled:opacity-60">{paying ? <><Loader2 className="h-4 w-4 animate-spin" /> Apro Stripe…</> : <><CreditCard className="h-4 w-4" /> Acquista in sicurezza</>}</button><p className="mt-4 flex items-center gap-2 text-xs text-slate-400"><LockKeyhole className="h-3.5 w-3.5" /> Pagamento gestito da Stripe. AutoEsperto non vede i dati della carta.</p></div>
+            <div className="flex flex-col justify-center bg-slate-950 p-6 text-white sm:p-9"><p className="text-xs font-extrabold uppercase tracking-[.14em] text-blue-300">Analisi completa</p><div className="mt-3 text-4xl font-extrabold">{offer.displayPrice}</div><p className="mt-1 text-sm text-slate-400">Pagamento unico · una analisi per acquisto{offer.promotional ? ` · promozione fino al ${offer.promoEndsLabel}` : ''}</p><button onClick={startCheckout} disabled={paying} className="mt-7 flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-extrabold text-white transition hover:bg-blue-500 disabled:opacity-60">{paying ? <><Loader2 className="h-4 w-4 animate-spin" /> Apro Stripe…</> : <><CreditCard className="h-4 w-4" /> Acquista in sicurezza</>}</button><p className="mt-4 flex items-center gap-2 text-xs text-slate-400"><LockKeyhole className="h-3.5 w-3.5" /> Pagamento gestito da Stripe. AutoEsperto non vede i dati della carta.</p></div>
           </section>
         )}
 
@@ -227,7 +229,7 @@ export default function AccountDashboard({ checkout, sessionId }: { checkout?: s
           <div className="mt-8">
             <section className="rounded-3xl bg-slate-950 p-6 text-white sm:p-9"><div className="flex flex-col justify-between gap-5 sm:flex-row sm:items-end"><div><p className="text-xs font-extrabold uppercase tracking-[.14em] text-emerald-300">Le tue analisi</p><h2 className="mt-3 text-3xl font-extrabold tracking-tight">{analysis.title}</h2><p className="mt-2 text-sm text-slate-400">Creata il {new Date(analysis.createdAt).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })} · salvata nel tuo account</p></div><div className="flex items-center gap-2 rounded-xl bg-white/10 px-4 py-3 text-sm font-bold"><Check className="h-4 w-4 text-emerald-400" /> {analyses.length} salvate</div></div>
               {user.entitlement.freeUsed && (
-                <button onClick={startCheckout} disabled={paying} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white/10 px-5 text-sm font-extrabold text-white transition hover:bg-white/20 disabled:opacity-60">{paying ? <><Loader2 className="h-4 w-4 animate-spin" /> Apro Stripe…</> : <><CreditCard className="h-4 w-4" /> Aggiungi un’altra analisi · 5,99 €</>}</button>
+                <button onClick={startCheckout} disabled={paying} className="mt-5 inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-white/10 px-5 text-sm font-extrabold text-white transition hover:bg-white/20 disabled:opacity-60">{paying ? <><Loader2 className="h-4 w-4 animate-spin" /> Apro Stripe…</> : <><CreditCard className="h-4 w-4" /> Aggiungi un’altra analisi · {offer.displayPrice}</>}</button>
               )}
             </section>
 

@@ -8,6 +8,7 @@ import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import AdsTracker from '@/components/AdsTracker';
+import { analysisOffer } from '@/lib/pricing';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -117,8 +118,9 @@ function JsonLd() {
       image: `${siteUrl}/og-image.png`,
       offers: {
         '@type': 'Offer',
-        price: '5.99',
+        price: (analysisOffer().amountCents / 100).toFixed(2),
         priceCurrency: 'EUR',
+        priceValidUntil: '2026-08-13',
         description: 'Una analisi completa, pagamento singolo senza abbonamento',
       },
     },

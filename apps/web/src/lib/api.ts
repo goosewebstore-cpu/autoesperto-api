@@ -146,7 +146,7 @@ export async function createCheckout() {
 }
 
 export async function confirmCheckout(sessionId: string) {
-  return fetchJson<{ success: true; paid: boolean }>('/billing/confirm', {
+  return fetchJson<{ success: true; paid: boolean; amountCents: number; currency: string }>('/billing/confirm', {
     method: 'POST',
     body: JSON.stringify({ sessionId }),
   });

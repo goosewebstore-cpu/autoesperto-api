@@ -7,6 +7,7 @@ import type { AutoReport } from '@autoesperto/types';
 import ReportView from '@/components/ReportView';
 import VehicleScanner from '@/components/VehicleScanner';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
+import { analysisOffer } from '@/lib/pricing';
 import AdSlot from '@/components/AdSlot';
 
 export type HomeInitialPayload = AnalyzePayload | null;
@@ -16,6 +17,7 @@ interface HomeClientProps {
 }
 
 export default function HomeClient({ initialPayload }: HomeClientProps) {
+  const offer = analysisOffer();
   const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState('');
   const [scannerKey, setScannerKey] = useState(0);
@@ -81,11 +83,11 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
             </section>
             <section className="py-8" aria-label="Perché scegliere AutoEsperto">
               <h2 className="text-center text-2xl font-extrabold tracking-tight text-text-primary">Paghi una volta, ottieni un report completo</h2>
-              <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-text-secondary">La prima analisi è gratuita. Per salvarla o conservarne altre, un pagamento singolo di 5,99 € — niente abbonamento, niente rinnovi automatici.</p>
+              <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-text-secondary">La prima analisi è gratuita. Per salvarla o conservarne altre, un pagamento singolo di {offer.displayPrice}{offer.promotional ? ` in promozione fino al ${offer.promoEndsLabel}` : ''} — niente abbonamento, niente rinnovi automatici.</p>
               <div className="mt-6 grid gap-4 sm:grid-cols-3">
                 <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
-                  <p className="text-3xl font-extrabold text-accent">5,99 €</p>
-                  <p className="mt-1 text-xs text-text-secondary">Pagamento una tantum per report completo</p>
+                  <p className="text-3xl font-extrabold text-accent">{offer.displayPrice}</p>
+                  <p className="mt-1 text-xs text-text-secondary">Pagamento una tantum per report completo{offer.promotional ? ` · promozione fino al ${offer.promoEndsLabel}` : ''}</p>
                 </div>
                 <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
                   <p className="text-3xl font-extrabold text-accent">GDPR</p>

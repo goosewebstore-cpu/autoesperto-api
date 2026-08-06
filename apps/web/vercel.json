@@ -5,6 +5,30 @@
   "regions": ["fra1"],
   "redirects": [
     {
+      "source": "/",
+      "has": [{ "type": "host", "value": "www.autoesperto.it" }],
+      "destination": "https://autoesperto.it/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "autoesperto.vercel.app" }],
+      "destination": "https://autoesperto.it/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "autoesperto-goosewebstore-3988s-projects.vercel.app" }],
+      "destination": "https://autoesperto.it/",
+      "permanent": true
+    },
+    {
+      "source": "/",
+      "has": [{ "type": "host", "value": "autoesperto-git-master-goosewebstore-3988s-projects.vercel.app" }],
+      "destination": "https://autoesperto.it/",
+      "permanent": true
+    },
+    {
       "source": "/:splat",
       "has": [{ "type": "host", "value": "www.autoesperto.it" }],
       "destination": "https://autoesperto.it/:splat",

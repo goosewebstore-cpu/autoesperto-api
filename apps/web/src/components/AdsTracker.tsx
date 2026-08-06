@@ -48,7 +48,7 @@ function trackPurchase(value: number, currency: string, transactionId?: string) 
   });
 }
 
-export function fireAdsPurchase(value = 5.99, currency = 'EUR', transactionId?: string) {
+export function fireAdsPurchase(value = 1.99, currency = 'EUR', transactionId?: string) {
   if (typeof window === 'undefined') return;
   if (!CONVERSION_ID) return;
   if (getConsent() !== 'accepted') return;

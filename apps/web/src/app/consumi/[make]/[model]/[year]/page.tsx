@@ -1,0 +1,301 @@
+import type { Metadata } from 'next';
+import Link from 'next/link';
+import { notFound } from 'next/navigation';
+import { ArrowLeft, Car, Fuel, Euro, HelpCircle, Info } from 'lucide-react';
+import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
+import { estimateConsumption } from '@/lib/consumi';
+
+interface PageProps {
+  params: Promise<{ make: string; model: string; year: string }>;
+}
+
+const CURRENT_YEAR = new Date().getFullYear();
+const YEAR_RANGE: number[] = [];
+for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
+
+function siteUrl() {
+  return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
+}
+
+export const dynamicParams = true;
+export const revalidate = 86400;
+
+export function generateStaticParams() {
+  return [];
+}
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const resolved = await params;
+  const yearNum = parseInt(resolved.year, 10);
+  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) return {};
+  const make = findMakeBySlug(resolved.make);
+  if (!make) return {};
+  const model = findModelBySlug(make, resolved.model);
+  if (!model) return {};
+
+  const est = estimateConsumption(make.name, model, yearNum);
+  const unit = est.isElectric ? 'kWh' : 'l';
+  const title = `Consumi ${make.name} ${model} ${yearNum}: ${est.combined} ${unit}/100 km | AutoEsperto`;
+  const description = `Consumi ${make.name} ${model} ${yearNum}: ${est.combined} ${unit}/100 km in ciclo combinato (${est.label.toLowerCase()}). Urbano, extraurbano e costo annuo di carburante.`;
+
+  return {
+    title,
+    description,
+    alternates: {
+      canonical: `/consumi/${resolved.make}/${resolved.model}/${resolved.year}`,
+      languages: { 'it-IT': `${siteUrl()}/consumi/${resolved.make}/${resolved.model}/${resolved.year}` },
+    },
+    openGraph: {
+      type: 'website',
+      locale: 'it_IT',
+      title,
+      description,
+      url: `${siteUrl()}/consumi/${resolved.make}/${resolved.model}/${resolved.year}`,
+      siteName: 'AutoEsperto',
+      images: [{ url: `${siteUrl()}/og/${resolved.make}/${slugify(model)}`, width: 1200, height: 630, alt: `${make.name} ${model} ${yearNum} consumi` }],
+    },
+  };
+}
+
+export default async function ConsumiYearPage({ params }: PageProps) {
+  const resolved = await params;
+  const yearNum = parseInt(resolved.year, 10);
+  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
+  const make = findMakeBySlug(resolved.make);
+  if (!make) notFound();
+  const model = findModelBySlug(make, resolved.model);
+  if (!model) notFound();
+
+  const est = estimateConsumption(make.name, model, yearNum);
+  const unit = est.unit === 'kWh/100 km' ? 'kWh/100 km' : 'l/100 km';
+
+  const faq = [
+    {
+      q: `Quanto consuma una ${make.name} ${model} ${yearNum}?`,
+      a: `La ${make.name} ${model} del ${yearNum} consuma in media ${est.combined} ${est.unit === 'kWh/100 km' ? 'kWh' : 'l'} per 100 km in ciclo combinato, ${est.urban} ${est.unit === 'kWh/100 km' ? 'kWh' : 'l'} in urbano e ${est.extraurban} ${est.unit === 'kWh/100 km' ? 'kWh' : 'l'} in extraurbano. Il giudizio è ${est.label.toLowerCase()}: la stima si basa su segmento (${est.segment}), marca ed età del veicolo.`,
+    },
+    {
+      q: `Quanto costa percorrere 100 km con una ${make.name} ${model} ${yearNum}?`,
+      a: `Con la ${make.name} ${model} del ${yearNum} si spendono circa ${est.costPer100km} € ogni 100 km, calcolati sul consumo combinato e sui prezzi medi del ${est.isElectric ? 'kWh domestico' : 'carburante'}.`,
+    },
+    {
+      q: `Quanto costa di ${est.isElectric ? 'ricarica' : 'carburante'} in un anno una ${make.name} ${model} ${yearNum}?`,
+      a: `Su una percorrenza media di 12.000 km all'anno, una ${make.name} ${model} del ${yearNum} costa circa ${est.annualCost} € di ${est.isElectric ? 'ricarica' : 'carburante'} ogni anno.`,
+    },
+    {
+      q: `Come si confrontano i consumi della ${make.name} ${model} ${yearNum} con la media?`,
+      a: `Il consumo combinato di ${est.combined} ${est.unit === 'kWh/100 km' ? 'kWh' : 'l'}/100 km è ${est.label.toLowerCase()} rispetto alla media del segmento ${est.segment}. Valuta il costo annuo stimato di ${est.annualCost} € per capire quanto incide il carburante sul costo di proprietà.`,
+    },
+    {
+      q: `Vale la pena la ${make.name} ${model} ${yearNum} per i consumi?`,
+      a: `La ${make.name} ${model} del ${yearNum} ha consumi ${est.label.toLowerCase()} (${est.combined} ${est.unit === 'kWh/100 km' ? 'kWh' : 'l'}/100 km in combinato). La risposta dipende dal tuo utilizzo: i consumi incidono tanto quanto la manutenzione e il valore di mercato, quindi confronta il costo totale di proprietà prima di decidere.`,
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl()}/` },
+      { '@type': 'ListItem', position: 2, name: 'Consumi auto', item: `${siteUrl()}/consumi` },
+      { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/consumi/${resolved.make}` },
+      { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/consumi/${resolved.make}/${resolved.model}` },
+      { '@type': 'ListItem', position: 5, name: String(yearNum), item: `${siteUrl()}/consumi/${resolved.make}/${resolved.model}/${resolved.year}` },
+    ],
+  };
+
+  const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
+
+  return (
+    <div className="min-h-screen bg-white">
+      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-border/60">
+        <div className="max-w-3xl mx-auto flex items-center justify-between px-5 h-16">
+          <Link href="/" className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
+              <Car className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-lg font-bold tracking-tight text-text-primary">
+              Auto<span className="text-accent">Esperto</span>
+            </span>
+          </Link>
+        </div>
+      </header>
+
+      <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
+        <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
+          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+          <span>/</span>
+          <Link href="/consumi" className="hover:text-accent transition-colors">Consumi</Link>
+          <span>/</span>
+          <Link href={`/consumi/${resolved.make}`} className="hover:text-accent transition-colors">{make.name}</Link>
+          <span>/</span>
+          <Link href={`/consumi/${resolved.make}/${resolved.model}`} className="hover:text-accent transition-colors">{model}</Link>
+          <span>/</span>
+          <span className="text-text-secondary font-medium">{yearNum}</span>
+        </nav>
+
+        <Link
+          href={`/consumi/${resolved.make}/${resolved.model}`}
+          className="inline-flex items-center gap-1.5 text-sm text-text-secondary hover:text-text-primary transition-colors mb-5"
+        >
+          <ArrowLeft className="h-4 w-4" />
+          Tutti gli anni {make.name} {model}
+        </Link>
+
+        <section>
+          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
+            Consumi {make.name} {model} {yearNum}
+          </h1>
+          <p className="text-text-secondary text-base leading-relaxed mt-3">
+            Consumi stimati della {make.name} {model} del {yearNum} in urbano, extraurbano e combinato, con il costo
+            per 100 km e il costo annuo di {est.isElectric ? 'ricarica' : 'carburante'}.
+          </p>
+        </section>
+
+        <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
+          <div className="flex flex-wrap items-center justify-between gap-4">
+            <div>
+              <h2 className="text-sm font-bold text-text-primary">
+                Consumo combinato: {est.combined} {unit}
+              </h2>
+              <p className="text-xs text-text-secondary leading-relaxed mt-1">
+                {est.label} rispetto al segmento ({est.segment}). {est.note}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section className="mt-8 grid gap-4 sm:grid-cols-3">
+          <div className="rounded-2xl border border-border bg-white p-5">
+            <Fuel className="w-6 h-6 text-accent" />
+            <h2 className="text-sm font-bold text-text-primary mt-3">Urbano</h2>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">{est.urban} {unit}</p>
+          </div>
+          <div className="rounded-2xl border border-border bg-white p-5">
+            <Fuel className="w-6 h-6 text-accent" />
+            <h2 className="text-sm font-bold text-text-primary mt-3">Extraurbano</h2>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">{est.extraurban} {unit}</p>
+          </div>
+          <div className="rounded-2xl border border-border bg-white p-5">
+            <Fuel className="w-6 h-6 text-accent" />
+            <h2 className="text-sm font-bold text-text-primary mt-3">Combinato</h2>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">{est.combined} {unit}</p>
+          </div>
+        </section>
+
+        <section className="mt-8 grid gap-4 sm:grid-cols-2">
+          <div className="rounded-2xl border border-border bg-white p-5">
+            <Euro className="w-6 h-6 text-accent" />
+            <h2 className="text-sm font-bold text-text-primary mt-3">Costo per 100 km</h2>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">≈ {est.costPer100km} €</p>
+            <p className="text-xs text-text-secondary leading-relaxed mt-1">
+              {est.isElectric ? 'Costo medio di ricarica domestica.' : 'Calcolato sul prezzo medio della benzina.'}
+            </p>
+          </div>
+          <div className="rounded-2xl border border-border bg-white p-5">
+            <Euro className="w-6 h-6 text-accent" />
+            <h2 className="text-sm font-bold text-text-primary mt-3">Costo annuo (12.000 km)</h2>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">≈ {est.annualCost} €</p>
+            <p className="text-xs text-text-secondary leading-relaxed mt-1">
+              Spesa stimata di {est.isElectric ? 'ricarica' : 'carburante'} su 12.000 km all&apos;anno.
+            </p>
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl bg-accent p-6 text-white">
+          <h2 className="text-lg font-bold">Valore e costi totali prima di comprare</h2>
+          <p className="text-sm text-white/85 leading-relaxed mt-2">
+            I consumi sono solo una parte del costo di proprietà: confrontali con il valore reale di mercato e la
+            manutenzione della {make.name} {model} {yearNum}.
+          </p>
+          <div className="mt-4 flex flex-wrap gap-3">
+            <Link
+              href={`/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`}
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-accent hover:bg-white/90 transition-colors"
+            >
+              Scopri quanto vale oggi
+            </Link>
+            <Link
+              href={`/riparazione/${resolved.make}/${resolved.model}/${resolved.year}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+            >
+              Stima i costi di riparazione
+            </Link>
+          </div>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-base font-bold text-text-primary mb-3">Altri anni della {make.name} {model}</h2>
+          <div className="flex flex-wrap gap-2">
+            {nearbyYears.map((y) => (
+              <Link
+                key={y}
+                href={`/consumi/${resolved.make}/${resolved.model}/${y}`}
+                className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm font-semibold text-text-primary hover:border-accent hover:text-accent transition-colors"
+              >
+                {y}
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-8">
+          <h2 className="text-lg font-bold text-text-primary mb-1 flex items-center gap-2">
+            <HelpCircle className="w-5 h-5 text-accent" />
+            Domande frequenti sui consumi
+          </h2>
+          <div className="space-y-3 mt-4">
+            {faq.map((f) => (
+              <details key={f.q} className="group bg-surface-2 rounded-xl p-4">
+                <summary className="flex items-start justify-between gap-3 text-sm font-semibold text-text-primary cursor-pointer list-none">
+                  {f.q}
+                  <span className="text-accent text-lg leading-none group-open:rotate-45 transition-transform flex-shrink-0">+</span>
+                </summary>
+                <p className="text-sm text-text-secondary leading-relaxed mt-3">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <p className="text-xs text-text-tertiary mt-8 flex items-start gap-1.5">
+          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
+          I consumi sono una stima indicativa basata su segmento, marca ed età del veicolo, con prezzi medi del
+          carburante. I valori reali dipendono da motorizzazione, stile di guida e condizioni d&apos;uso.
+        </p>
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema]) }}
+        />
+      </main>
+
+      <footer className="border-t border-border/60 mt-10">
+        <div className="max-w-3xl mx-auto px-5 py-8">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+            <div className="flex items-center gap-2">
+              <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center">
+                <Car className="w-3.5 h-3.5 text-white" />
+              </div>
+              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
+            </div>
+            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
+              <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione auto</Link>
+              <Link href="/riparazione" className="hover:text-text-primary transition-colors">Costi riparazione</Link>
+              <Link href="/guide" className="hover:text-text-primary transition-colors">Guide</Link>
+              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
+            </nav>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+}

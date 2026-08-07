@@ -20,6 +20,7 @@ const staticPages: UrlEntry[] = [
   { url: `${siteUrl}/valutazione`, changeFrequency: 'weekly', priority: 0.9 },
   { url: `${siteUrl}/riparazione`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${siteUrl}/affidabilita`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/consumi`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${siteUrl}/confronta`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${siteUrl}/guide`, changeFrequency: 'weekly', priority: 0.8 },
   ...guides.map((guide) => ({
@@ -53,6 +54,7 @@ function yearUrlsFor(prefix: string): UrlEntry[] {
 const allYearUrls = () => yearUrlsFor('valutazione');
 const allRepairYearUrls = () => yearUrlsFor('riparazione');
 const allReliabilityYearUrls = () => yearUrlsFor('affidabilita');
+const allConsumptionYearUrls = () => yearUrlsFor('consumi');
 
 function chunked(name: string, urls: UrlEntry[]): UrlEntry[] {
   const match = /^(\d+)$/.exec(name);
@@ -65,6 +67,7 @@ export function sitemapNames(): string[] {
   const valChunks = Math.ceil(allYearUrls().length / YEAR_CHUNK_SIZE);
   const repChunks = Math.ceil(allRepairYearUrls().length / YEAR_CHUNK_SIZE);
   const relChunks = Math.ceil(allReliabilityYearUrls().length / YEAR_CHUNK_SIZE);
+  const consChunks = Math.ceil(allConsumptionYearUrls().length / YEAR_CHUNK_SIZE);
   return [
     'static',
     'makes',
@@ -73,9 +76,12 @@ export function sitemapNames(): string[] {
     'rip-models',
     'aff-makes',
     'aff-models',
+    'cons-makes',
+    'cons-models',
     ...Array.from({ length: valChunks }, (_, i) => `years-${i + 1}`),
     ...Array.from({ length: repChunks }, (_, i) => `rip-years-${i + 1}`),
     ...Array.from({ length: relChunks }, (_, i) => `aff-years-${i + 1}`),
+    ...Array.from({ length: consChunks }, (_, i) => `cons-years-${i + 1}`),
   ];
 }
 
@@ -125,6 +131,20 @@ export function buildSitemap(name: string): UrlEntry[] {
           priority: 0.6,
         }))
       );
+    case 'cons-makes':
+      return getAllMakes().map((make) => ({
+        url: `${siteUrl}/consumi/${make.slug}`,
+        changeFrequency: 'weekly',
+        priority: 0.7,
+      }));
+    case 'cons-models':
+      return getAllMakes().flatMap((make) =>
+        make.models.map((model) => ({
+          url: `${siteUrl}/consumi/${make.slug}/${slugify(model)}`,
+          changeFrequency: 'weekly',
+          priority: 0.6,
+        }))
+      );
     default: {
       const yearsMatch = /^years-(\d+)$/.exec(name);
       if (yearsMatch) return chunked(yearsMatch[1], allYearUrls());
@@ -132,6 +152,8 @@ export function buildSitemap(name: string): UrlEntry[] {
       if (ripYearsMatch) return chunked(ripYearsMatch[1], allRepairYearUrls());
       const affYearsMatch = /^aff-years-(\d+)$/.exec(name);
       if (affYearsMatch) return chunked(affYearsMatch[1], allReliabilityYearUrls());
+      const consYearsMatch = /^cons-years-(\d+)$/.exec(name);
+      if (consYearsMatch) return chunked(consYearsMatch[1], allConsumptionYearUrls());
       return [];
     }
   }

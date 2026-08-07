@@ -71,6 +71,101 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     href: '/confronta',
     description: 'Metti a confronto i modelli che ti interessano su valore e consumi.',
   },
+  'consumi-auto': {
+    label: 'Scopri i consumi del tuo modello',
+    href: '/consumi',
+    description: 'Consumi stimati urbano, extraurbano e combinato con il costo annuo.',
+  },
+  'assicurazione-auto': {
+    label: 'Scopri quanto vale l\'auto',
+    href: '/valutazione',
+    description: 'Parti dal valore reale di mercato per scegliere le coperture giuste.',
+  },
+  'revisione-auto': {
+    label: 'Stima i costi di manutenzione',
+    href: '/riparazione',
+    description: 'Costi di manodopera e ricambi per il tuo modello e anno.',
+  },
+  'garanzia-usato': {
+    label: 'Controlla valore e stato dell\'auto',
+    href: '/valutazione',
+    description: 'Valore di mercato e analisi visiva per negoziare con dati reali.',
+  },
+  'trattare-prezzo': {
+    label: 'Verifica il prezzo reale',
+    href: '/valutazione',
+    description: 'Confronta la richiesta con la media di mercato dagli annunci.',
+  },
+  'permuta-o-vendita': {
+    label: 'Scopri quanto vale la tua auto',
+    href: '/valutazione',
+    description: 'Confronta la permuta con il valore reale di mercato della tua auto.',
+  },
+  'ibride-convengono': {
+    label: 'Confronta i modelli',
+    href: '/confronta',
+    description: 'Metti a confronto ibrida, benzina ed elettrica su valore e consumi.',
+  },
+  'durata-auto': {
+    label: 'Scopri quanto vale la tua auto',
+    href: '/valutazione',
+    description: 'Valore residuo reale e costi futuri per stimare la durata conveniente.',
+  },
+  'auto-estero': {
+    label: 'Analizza l\'auto con l\'AI',
+    href: '/',
+    description: 'Carica una foto e ottieni un report su modello, stato e valore.',
+  },
+  'chilometraggio-reale': {
+    label: 'Analizza lo stato con l\'AI',
+    href: '/',
+    description: 'L\'analisi visiva segnala usura e incongruenze con i km dichiarati.',
+  },
+  'valutazione-auto': {
+    label: 'Scopri quanto vale la tua auto',
+    href: '/valutazione',
+    description: 'Prezzo medio reale dagli annunci per marca, modello e anno.',
+  },
+  'controllo-usato': {
+    label: 'Controlla il prezzo reale dell\'usato',
+    href: '/valutazione',
+    description: 'Confronta la richiesta del venditore con la media di mercato dagli annunci.',
+  },
+  'costi-riparazione': {
+    label: 'Stima i costi di manutenzione',
+    href: '/riparazione',
+    description: 'Costi di manodopera e ricambi per il tuo modello e anno.',
+  },
+  'consumi-modello': {
+    label: 'Scopri i consumi del tuo modello',
+    href: '/consumi',
+    description: 'Consumi urbano, extraurbano e combinato con il costo annuo.',
+  },
+  'confronto-modelli': {
+    label: 'Confronta i modelli che ti interessano',
+    href: '/confronta',
+    description: 'Valore e consumi a confronto per scegliere con dati reali.',
+  },
+  'analisi-ai': {
+    label: 'Analizza l\'auto con l\'AI',
+    href: '/',
+    description: 'Carica una foto e ottieni un report su modello, stato e valore.',
+  },
+  'affidabilita-modello': {
+    label: 'Controlla l\'affidabilità del modello',
+    href: '/affidabilita',
+    description: 'Punteggio, punti deboli e costi di manutenzione per modello e anno.',
+  },
+  'valore-vendita': {
+    label: 'Calcola il valore di vendita',
+    href: '/valutazione',
+    description: 'Parti da dati reali per fissare il prezzo giusto della tua auto.',
+  },
+  'permuta-valutazione': {
+    label: 'Valuta la tua auto per la permuta',
+    href: '/valutazione',
+    description: 'Confronta la valutazione proposta con il valore reale di mercato.',
+  },
 };
 
 export function generateStaticParams() {

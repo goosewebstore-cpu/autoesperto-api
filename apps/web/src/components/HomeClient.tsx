@@ -10,6 +10,7 @@ import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 import { analysisOffer } from '@/lib/pricing';
 import AdSlot from '@/components/AdSlot';
 import GuideCard from '@/components/GuideCard';
+import SiteFooter from '@/components/SiteFooter';
 import { guides } from '@/lib/guides';
 
 export type HomeInitialPayload = AnalyzePayload | null;
@@ -78,27 +79,27 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                 ['Un’analisi', 'Identità, stato e valore in un solo flusso.'],
                 ['Risultati trasparenti', 'Stime e livello di affidabilità sempre visibili.'],
               ].map(([title, text]) => (
-                <div key={title} className="flex gap-3 px-2">
-                  <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-accent" />
-                  <div><p className="text-sm font-bold text-text-primary">{title}</p><p className="mt-0.5 text-sm text-text-secondary">{text}</p></div>
+                <div key={title} className="flex gap-3.5 p-4 rounded-xl bg-white border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all">
+                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
+                  <div><p className="text-sm font-bold text-text-primary">{title}</p><p className="mt-0.5 text-xs leading-relaxed text-text-secondary">{text}</p></div>
                 </div>
               ))}
             </section>
-            <section className="py-8" aria-label="Perché scegliere AutoEsperto">
-              <h2 className="text-center text-2xl font-extrabold tracking-tight text-text-primary">Paghi una volta, ottieni un report completo</h2>
-              <p className="mx-auto mt-2 max-w-2xl text-center text-sm text-text-secondary">La prima analisi è gratuita. Per salvarla o conservarne altre, un pagamento singolo di {offer.displayPrice}{offer.promotional ? ` in promozione fino al ${offer.promoEndsLabel}` : ''} — niente abbonamento, niente rinnovi automatici.</p>
-              <div className="mt-6 grid gap-4 sm:grid-cols-3">
-                <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
-                  <p className="text-3xl font-extrabold text-accent">{offer.displayPrice}</p>
-                  <p className="mt-1 text-xs text-text-secondary">Pagamento una tantum per report completo{offer.promotional ? ` · promozione fino al ${offer.promoEndsLabel}` : ''}</p>
+            <section className="py-10" aria-label="Perché scegliere AutoEsperto">
+              <h2 className="text-center text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">Paghi una volta, ottieni un report completo</h2>
+              <p className="mx-auto mt-2.5 max-w-2xl text-center text-sm text-text-secondary leading-relaxed">La prima analisi è gratuita. Per salvarla o conservarne altre, un pagamento singolo di {offer.displayPrice}{offer.promotional ? ` in promozione fino al ${offer.promoEndsLabel}` : ''} — niente abbonamento, niente rinnovi automatici.</p>
+              <div className="mt-8 grid gap-4 sm:grid-cols-3">
+                <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/50 p-6 text-center shadow-card hover:border-blue-200 transition-all">
+                  <p className="text-3xl font-extrabold text-blue-600">{offer.displayPrice}</p>
+                  <p className="mt-1.5 text-xs text-text-secondary font-medium">Pagamento una tantum per report completo{offer.promotional ? ` · promozione fino al ${offer.promoEndsLabel}` : ''}</p>
                 </div>
-                <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
-                  <p className="text-3xl font-extrabold text-accent">GDPR</p>
-                  <p className="mt-1 text-xs text-text-secondary">Consenso cookie esplicito e privacy by design</p>
+                <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/50 p-6 text-center shadow-card hover:border-blue-200 transition-all">
+                  <p className="text-3xl font-extrabold text-blue-600">GDPR</p>
+                  <p className="mt-1.5 text-xs text-text-secondary font-medium">Consenso cookie esplicito e privacy by design</p>
                 </div>
-                <div className="rounded-xl border border-border/70 bg-white p-5 text-center">
-                  <p className="text-3xl font-extrabold text-accent">Stripe</p>
-                  <p className="mt-1 text-xs text-text-secondary">Pagamenti sicuri, dati carta mai conservati</p>
+                <div className="rounded-2xl border border-slate-200/80 bg-gradient-to-b from-white to-slate-50/50 p-6 text-center shadow-card hover:border-blue-200 transition-all">
+                  <p className="text-3xl font-extrabold text-blue-600">Stripe</p>
+                  <p className="mt-1.5 text-xs text-text-secondary font-medium">Pagamenti sicuri, dati carta mai conservati</p>
                 </div>
               </div>
             </section>
@@ -106,12 +107,12 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
             <section className="py-8" aria-label="Ultime guide">
               <div className="flex flex-wrap items-end justify-between gap-3">
                 <div>
-                  <h2 className="text-xl font-extrabold tracking-tight text-text-primary">Guide per comprare e vendere</h2>
+                  <h2 className="text-xl font-extrabold tracking-tight text-text-primary sm:text-2xl">Guide per comprare e vendere</h2>
                   <p className="mt-1 text-sm text-text-secondary">Consigli pratici per valutare, acquistare e vendere l&apos;auto usata.</p>
                 </div>
-                <Link href="/guide" className="text-sm font-semibold text-accent hover:text-accent-hover">Tutte le guide →</Link>
+                <Link href="/guide" className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors">Tutte le guide →</Link>
               </div>
-              <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
                 {latestGuides.map((guide) => (
                   <GuideCard key={guide.slug} guide={guide} />
                 ))}
@@ -121,38 +122,7 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
         )}
       </main>
 
-      <footer className="mt-8 border-t border-border/70">
-        <div className="mx-auto max-w-6xl px-5 py-7 text-center text-xs text-text-tertiary">
-          <nav aria-label="Link principali" className="mb-4 flex flex-wrap justify-center gap-x-5 gap-y-2 font-semibold text-text-secondary">
-            <Link href="/valutazione" className="hover:text-accent">Valutazione auto</Link>
-            <Link href="/guide" className="hover:text-accent">Guide</Link>
-            <Link href="/confronta" className="hover:text-accent">Confronta modelli</Link>
-            <Link href="/privacy" className="hover:text-accent">Privacy</Link>
-            <Link href="/cookie-policy" className="hover:text-accent">Cookie</Link>
-            <Link href="/contatti" className="hover:text-accent">Contatti</Link>
-            <Link href="/lavora-con-noi" className="hover:text-accent">Lavora con noi</Link>
-            <Link href="/terms" className="hover:text-accent">Termini</Link>
-          </nav>
-          Le stime di AutoEsperto sono indicative. Danni nascosti o meccanici richiedono sempre un controllo professionale.
-          <div className="mt-5 flex justify-center">
-            <a
-              href="https://www.directorysiti.it"
-              target="_blank"
-              rel="noopener"
-              aria-label="Sito web segnalato da directorysiti.it"
-            >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src="https://www.directorysiti.it/wp-content/uploads/2019/01/logoDirectorySitoSegnalato.png"
-                alt="sito web segnalato da directorysiti.it"
-                width={200}
-                height={150}
-                className="opacity-80 hover:opacity-100"
-              />
-            </a>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter variant="full" />
     </div>
   );
 }

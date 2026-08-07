@@ -33,7 +33,7 @@ export default function GuideCard({ guide }: GuideCardProps) {
   return (
     <Link
       href={`/guide/${guide.slug}`}
-      className="group flex h-full flex-col rounded-2xl border border-border bg-white p-5 shadow-card transition-all hover:border-accent hover:shadow-card-hover"
+      className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-300 hover:border-blue-500/50 hover:shadow-card-hover hover:-translate-y-0.5"
     >
       <div className="flex items-center justify-between gap-3">
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ${style.badge}`}>
@@ -44,11 +44,13 @@ export default function GuideCard({ guide }: GuideCardProps) {
           {formatGuideDate(guide.published)}
         </time>
       </div>
-      <h3 className="mt-3 text-base font-bold leading-snug text-text-primary transition-colors group-hover:text-accent">
+      <h3 className="mt-3 text-base font-bold leading-snug text-text-primary transition-colors group-hover:text-blue-600">
         {guide.title}
       </h3>
-      <p className="mt-2 text-sm leading-relaxed text-text-secondary line-clamp-3">{guide.description}</p>
-      <span className="mt-auto pt-4 text-xs font-bold text-accent">Leggi la guida →</span>
+      <p className="mt-2 text-xs leading-relaxed text-text-secondary line-clamp-3">{guide.description}</p>
+      <span className="mt-auto pt-4 text-xs font-bold text-blue-600 flex items-center gap-1 transition-all group-hover:translate-x-1">
+        Leggi la guida <span aria-hidden="true">→</span>
+      </span>
     </Link>
   );
 }

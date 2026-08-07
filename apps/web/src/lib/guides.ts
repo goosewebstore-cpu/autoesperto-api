@@ -3357,6 +3357,342 @@ export const guides: Guide[] = [
     ],
     cta: 'affidabilita-modello',
   },
+  {
+    slug: 'truffa-chilometri-scalati-auto-usata',
+    title: 'Chilometri scalati auto usata: come scoprirli e verificare i km reali nel 2026',
+    description:
+      'La truffa del contachilometri scalato riguarda fino al 20% delle auto usate in Italia. Ecco come verificare i chilometri reali gratuitamente tramite Portale dell\'Automobilista, revisioni, centraline e difetti usura.',
+    published: '2026-08-07',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Quanto è diffusa la truffa dei km legati',
+        paragraphs: [
+          "Scalare i chilometri da un'auto usata è uno dei metodi fraudolenti più diffusi sul mercato dell'usato italiano. Riducendo il chilometraggio di 50.000–100.000 km, un venditore disonesto può aumentare artificialmente il valore di vendita dell'auto anche di 2.000–5.000 euro.",
+          "La buona notizia è che oggi esistono strumenti digitali ufficiali e controlli fisici in grado di smascherare quasi qualsiasi manomissione in pochi minuti.",
+        ],
+      },
+      {
+        heading: '1. Portale dell\'Automobilista e Storico Revisioni',
+        paragraphs: [
+          "Dal 2018 in Italia i centri revisione hanno l'obbligo di registrare il chilometraggio rilevato al momento della revisione ministeriale. Questi dati confluiscono nel Portale dell'Automobilista ed effettuando una ricerca gratuita inserendo la targa del veicolo è possibile accedere allo storico.",
+        ],
+        list: [
+          "Inserisci la targa su 'Portale dell'Automobilista' sotto la voce 'Verifica Ultima Revisione'.",
+          "Confronta i km registrati nell'ultima revisione con quelli dichiarati dal venditore oggi.",
+          "Verifica l'andamento nel tempo: se nella revisione del 2022 l'auto aveva 140.000 km e oggi ne ha 110.000, si tratta di una chiara manomissione.",
+          "Attenzione alle auto importate dall'estero: richiedi lo storico dei tagliandi del paese d'origine o report tipo Carfax.",
+        ],
+      },
+      {
+        heading: '2. Libretto tagliandi e fatture officina',
+        paragraphs: [
+          "Il libretto dei tagliandi originale (tagliandario) deve riportare date, chilometri e timbri delle officine. diffida dai libretti stampati di recente o privi di timbri reali.",
+        ],
+        list: [
+          "Controlla che i km salgano in modo coerente anno dopo anno.",
+          "Richiedi le fatture o ricevute fiscali degli interventi passati (sostituzione pastiglie freni, cambio olio, cinghia distribuzione).",
+          "Chiama l'officina che ha effettuato l'ultimo tagliando per verificare la veridicità delle fatture fornite.",
+        ],
+      },
+      {
+        heading: '3. Diagnosi elettronica OBD e centraline nascoste',
+        paragraphs: [
+          "Molti venditori truffaldini modificano soltanto il numero sul quadro strumenti del cruscotto. Tuttavia, le auto moderne memorizzano il chilometraggio effettivo in diverse altre centraline (ABS, centralina motore ECU, chiave di accensione, cambio automatico, airbag).",
+        ],
+        list: [
+          "Porta l'auto da un elettrauto o meccanico di fiducia per una diagnosi con strumento ufficiale OBD-II.",
+          "Verifica le ore di lavoro del motore nella centralina ECU e dividile per la velocità media stimata (circa 40–50 km/h).",
+          "Nelle auto con cambio automatico, la centralina della trasmissione spesso conserva i km originali indipendentemente dal quadro strumenti.",
+        ],
+      },
+      {
+        heading: '4. Segnali d\'usura incoerenti nell\'abitacolo',
+        paragraphs: [
+          "L'usura dei materiali dell'abitacolo deve essere proporzionata ai chilometri dichiarati. Un'auto con 60.000 km non deve presentare il volante consumato fino al metallo o i pedali usurati.",
+        ],
+        list: [
+          "Volante e pomello del cambio: usura marcata significa solitamente oltre 120.000–150.000 km.",
+          "Gommini dei pedali (frizione e freno): se sostituiti di recente su un'auto 'a pochi km', è sospetto.",
+          "Fianchetto del sedile guidatore: pieghe o tagli nella pelle/tessuto indicano salite e discese frequenti.",
+          "Dischi freno e ammortizzatori: i dischi originali durano solitamente 60.000–80.000 km; se sono già al secondo cambio ma l'auto indica 40.000 km, c'è un'anomalia.",
+        ],
+      },
+      {
+        heading: 'Cosa fare se scopri km scalati dopo l\'acquisto',
+        paragraphs: [
+          "La manomissione del contachilometri costituisce reato di truffa contrattuale (art. 640 c.p.) e difetto di conformità grave ai sensi del Codice del Consumo. Hai diritto alla risoluzione del contratto con restituzione dell'intero importo o a una congrua riduzione del prezzo, oltre all'eventuale risarcimento danni.",
+        ],
+      },
+    ],
+    cta: 'truffa-km',
+  },
+  {
+    slug: 'migliori-auto-usate-neopatentati-2026',
+    title: 'Migliori auto usate per neopatentati 2026: quali modelli scegliere e limiti di legge',
+    description:
+      'Guida alle migliori auto usate per neopatentati nel 2026: i limiti di potenza (kW e kW/t), i modelli più affidabili ed economici da mantenere per i primi anni di guida.',
+    published: '2026-08-07',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'I limiti di legge per i neopatentati in Italia',
+        paragraphs: [
+          "Per il primo anno dal conseguimento della patente B (o tre anni per i limiti di velocità), il Codice della Strada fissa stringenti limiti sulla potenza dei veicoli guidabili dai neopatentati. Acquistare un'auto usata non idonea comporta multe salate e la sospensione della patente.",
+        ],
+        list: [
+          "Rapporto potenza/tara: massimo 55 kW per tonnellata (kW/t) per veicoli M1.",
+          "Potenza massima assoluta: non oltre 70 kW (95 CV).",
+          "Nota per ibride ed elettriche: per le auto elettriche/plug-in il limite di potenza/tara è calcolato in base alla potenza continua (30 minuti) riportata a libretto (P.2).",
+          "Verifica libretto: campo P.2 (kW) e rapporto kW/t riportato nell'ultima pagina del libretto di circolazione.",
+        ],
+      },
+      {
+        heading: 'Le migliori city car usate per neopatentati',
+        paragraphs: [
+          "Le city car rappresentano la scelta ideale per iniziare: dimensioni contenute, costi di assicurazione ridotti, ricambi economici e facilità nei parcheggi urbani.",
+        ],
+        list: [
+          "Fiat Panda 1.2 Fire / 1.0 Hybrid: ricambi ovunque, manutenzione quasi a zero, tenuta del valore imbattibile.",
+          "Lancia Ypsilon 1.2 Fire: elegante, economica ed estremamente diffusa sul mercato dell'usato.",
+          "Toyota Yaris 1.0 VVT-i / 1.5 Hybrid (versioni compatibili): affidabilità al vertice e consumi ridotti.",
+          "Volkswagen Polo 1.0 MPI (55 kW / 75 CV): solida, sicura negli urti e confortevole nei viaggi extraurbani.",
+          "Renault Clio 1.2 16V / 1.0 SCe: ottimo spazio di bagagliaio per il segmento B.",
+        ],
+      },
+      {
+        heading: 'Crossover e piccoli SUV per neopatentati',
+        paragraphs: [
+          "Se cerchi una posizione di guida rialzata e maggiore spazio per il tempo libero, esistono diversi piccoli SUV usati guidabili dai neopatentati.",
+        ],
+        list: [
+          "Renault Captur 1.0 TCe 90 CV / 1.5 dCi 90 CV: versatile e con divanetto posteriore scorrevole.",
+          "Peugeot 2008 1.2 PureTech 82 CV / 1.6 BlueHDi 75 CV: interni moderni e ottima abitabilità.",
+          "Ford EcoSport 1.5 TDCi 95 CV / 1.0 EcoBoost 85 CV: robusto e adatto anche a percorsi extraurbani.",
+          "Dacia Duster 1.6 LPG / 1.5 dCi (versioni da 90 CV): imbattibile per rapporto prezzo/spazio.",
+        ],
+      },
+      {
+        heading: 'Consigli per risparmiare su assicurazione e manutenzione',
+        paragraphs: [
+          "I giovani guidatori affrontano tariffe RC Auto particolarmente elevate. Per abbattere i costi nel primo anno:",
+        ],
+        list: [
+          "Sfrutta la Legge Bersani (RC Familiare) per ereditare la classe di merito di un genitore nello stesso nucleo familiare.",
+          "Scegli motorizzazioni benzina o ibride con cilindrata 1.0–1.2 per pagare una tariffa RC Auto più bassa.",
+          "Sottometti il modello a una verifica preventiva di affidabilità per evitare interventi straordinari costosi nei primi 12 mesi.",
+        ],
+      },
+    ],
+    cta: 'auto-neopatentati',
+  },
+  {
+    slug: 'bollo-auto-2026-calcolo-esenzioni',
+    title: 'Bollo auto 2026: come si calcola, scadenze ed esenzioni regionali',
+    description:
+      'Guida al calcolo del bollo auto nel 2026: tariffe per kW e classe Euro, superbollo, esenzioni per auto ibride, elettriche e storiche nelle principali regioni italiane.',
+    published: '2026-08-07',
+    category: 'valutazione',
+    sections: [
+      {
+        heading: 'Cos\'è la tassa automobilistica e come funziona',
+        paragraphs: [
+          "Il bollo auto (tassa automobilistica) è una tassa di possesso regionale dovuta da chiunque risulti proprietario di un veicolo a motore iscritto al PRA. Il pagamento deve essere effettuato ogni anno entro il mese successivo a quello di scadenza.",
+        ],
+      },
+      {
+        heading: 'Come si calcola l\'importo del bollo auto nel 2026',
+        paragraphs: [
+          "L'importo del bollo si basa sulla potenza del motore espressa in chilowatt (kW) riportata nel campo P.2 del libretto e sulla classe ambientale di omologazione (da Euro 0 a Euro 6).",
+        ],
+        list: [
+          "Euro 4, Euro 5, Euro 6: tariffa base di 2,58 € al kW fino a 100 kW; 3,87 € per ogni kW eccedente i 100 kW.",
+          "Euro 3: 2,70 € al kW fino a 100 kW; 4,05 €/kW oltre i 100 kW.",
+          "Euro 2: 2,80 € al kW fino a 100 kW; 4,20 €/kW oltre i 100 kW.",
+          "Euro 1: 2,90 € al kW fino a 100 kW; 4,35 €/kW oltre i 100 kW.",
+          "Euro 0: 3,00 € al kW fino a 100 kW; 4,50 €/kW oltre i 100 kW.",
+          "Superbollo: per le auto con potenza superiore a 185 kW (252 CV) si applica un'addizionale erariale di 20 € per ogni kW eccedente 185 kW (con riduzione progressiva in base all'età dell'auto).",
+        ],
+      },
+      {
+        heading: 'Esenzioni regionali per auto elettriche e ibride',
+        paragraphs: [
+          "Molte Regioni italiane prevedono importanti agevolazioni fiscali per incentivare la transizione verso veicoli a basse emissioni.",
+        ],
+        list: [
+          "Auto Elettriche 100% (BEV): esenzione totale dal bollo per i primi 5 anni dalla prima immatricolazione in tutta Italia. Dal sesto anno si paga il 25% della tariffa ordinaria (in Lombardia e Piemonte l'esenzione è permanente).",
+          "Auto Ibride (HEV / PHEV): esenzione temporanea dal bollo varia per Regione (es. 3 anni in Lazio, Campania, Liguria e Veneto; 5 anni in Puglia; aliquota ridotta in Emilia-Romagna e Toscana).",
+          "Auto a GPL e Metano monovalenti: riduzione del 75% della tassa automobilistica in gran parte delle Regioni.",
+        ],
+      },
+      {
+        heading: 'Bollo per auto storiche e ultra-trentennali',
+        paragraphs: [
+          "Le auto con più di 30 anni iscritte al PRA sono esenti dal bollo ordinario e pagano una tassa di circolazione forfettaria (circa 28–30 €) solo se utilizzate su pubblica strada. Per le auto tra 20 e 29 anni dotate di certificato di rilevanza storica (CRS), il bollo è ridotto del 50%.",
+        ],
+      },
+    ],
+    cta: 'calcolo-bollo',
+  },
+  {
+    slug: 'garanzia-auto-usata-privato-e-concessionario',
+    title: 'Garanzia auto usata: cosa copre tra privati e in concessionario',
+    description:
+      'Come funziona la garanzia sull\'auto usata nel 2026: differenze tra acquisto da concessionario (garanzia di conformità 12-24 mesi) e acquisto da privato (visto e piaciuto).',
+    published: '2026-08-07',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Garanzia legale da concessionario (Codice del Consumo)',
+        paragraphs: [
+          "Quando acquisti un'auto usata da un venditore professionale (concessionario, salonista o rivenditore), scatta obbligatoriamente la Garanzia Legale di Conformità disciplinata dagli artt. 128 e ss. del Codice del Consumo.",
+        ],
+        list: [
+          "Durata: 24 mesi per legge, riducibili a non meno di 12 mesi con l'accordo espresso dell'acquirente.",
+          "Cosa copre: tutti i difetti non derivanti dal normale uso o dall'usura proporzionata al chilometraggio e all'età dell'auto.",
+          "Presunzione di difetto: se il guasto si manifesta nei primi 12 mesi, si presume fosse già presente al momento della consegna.",
+          "Riparazione a carico del venditore: il ripristino deve avvenire senza spese per il consumatore (ricambi, manodopera e trasporto).",
+        ],
+      },
+      {
+        heading: 'Cosa si intende per "normale usura"',
+        paragraphs: [
+          "La garanzia legale non è una polizza casco. Non copre i componenti soggetti a normale usura chilometrica (pastiglie freni, pneumatici, spazzole tergicristallo, olio) a meno che non si rompano prematuramente per un difetto di fabbricazione.",
+        ],
+      },
+      {
+        heading: 'Vendita tra privati: la clausola "Visto e Piaciuto"',
+        paragraphs: [
+          "Tra privati non si applica il Codice del Consumo, ma le norme del Codice Civile (artt. 1490 e ss.). La vendita avviene solitamente con la formula 'visto e piaciuto nelle condizioni in cui si trova'.",
+        ],
+        list: [
+          "Nessuna garanzia automatica di 12 mesi dopo la consegna.",
+          "Eccezione per vizi occulti dolosi: se il venditore privato ha occultato intenzionalmente un difetto grave noto (es. albero motore incrinato, guarnizione testata bruciata), risponde per vizio occulto con obbligo di risarcimento o riduzione prezzo.",
+          "Consiglio: prima di acquistare da un privato, fai sempre effettuare una diagnosi meccanica preventiva o un'analisi visiva dello stato del veicolo.",
+        ],
+      },
+      {
+        heading: 'Le garanzie commerciali aggiuntive (Polizze di Garanzia)',
+        paragraphs: [
+          "Spesso i concessionari propongono polizze convenzionali o garanzie guasti gestite da compagnie terze (es. Mapfre, Conformgest, NSA). Leggi sempre attentamente il fascicolo informativo per verificare i massimali di spesa, la franchigia a tuo carico e gli organi coperti.",
+        ],
+      },
+    ],
+    cta: 'garanzia-usato',
+  },
+  {
+    slug: 'migliori-suv-usati-qualita-prezzo',
+    title: 'I 10 migliori SUV usati per rapporto qualità-prezzo',
+    description:
+      'Classifica dei 10 migliori SUV e crossover usati da acquistare nel 2026: i modelli più affidabili, spaziosi ed economici nel mercato dell\'usato italiano.',
+    published: '2026-08-07',
+    category: 'valutazione',
+    sections: [
+      {
+        heading: 'Perché i SUV dominano il mercato dell\'usato',
+        paragraphs: [
+          "I Sport Utility Vehicle (SUV) e i Crossover compatti rimangono i veicoli più ricercati in Italia. La posizione di guida rialzata, la facilità di accesso, la sensazione di sicurezza e la modularità del bagagliaio li rendono la prima scelta per famiglie ed esigenze quotidiane.",
+          "Ecco i 10 migliori modelli usati selezionati per affidabilità dimostrata, costi di manutenzione e tenuta del valore sul mercato italiano.",
+        ],
+      },
+      {
+        heading: '1. Nissan Qashqai (2a Gen. 2014–2021)',
+        paragraphs: [
+          "Il punto di riferimento della categoria. Il motore 1.5 dCi da 110/115 CV offre consumi bassissimi (oltre 20 km/l reali), ricambi ampiamente disponibili e grande comfort sulle lunghe percorrenze.",
+        ],
+      },
+      {
+        heading: '2. Toyota C-HR 1.8 Hybrid (dal 2016 in poi)',
+        paragraphs: [
+          "Design audace e sistema Full Hybrid collaudatissimo. Consumi in città inferiori ai 4,2 l/100 km, trasmissione eCVT indistruttibile e costi di manutenzione estremamente prevedibili.",
+        ],
+      },
+      {
+        heading: '3. Peugeot 3008 (2a Gen. dal 2016)',
+        paragraphs: [
+          "Interni di livello premium con l'i-Cockpit, ottimo isolamento acustico e motori diesel 1.5/1.6 BlueHDi molto efficienti per i grandi viaggiatori.",
+        ],
+      },
+      {
+        heading: '4. Dacia Duster (2a Gen. 2018–2023)',
+        paragraphs: [
+          "Il re del rapporto qualità/prezzo. Disponibile con motore GPL di fabbrica (1.0 TCe eco-G) o trazione 4x4 reale con motore 1.5 dCi. Robustezza pura senza fronzoli.",
+        ],
+      },
+      {
+        heading: '5. Volkswagen Tiguan (2a Gen. dal 2016)',
+        paragraphs: [
+          "Spazio interno da prima della classe, finiture eccellenti e motori 2.0 TDI tra i più longevi in assoluto se regolarmente tagliandati.",
+        ],
+      },
+      {
+        heading: '6. Ford Kuga (2a e 3a Gen.)',
+        paragraphs: [
+          "Ottima dinamica di guida grazie al telaio rigido, grande abitabilità e versioni 2.0 TDCi o 2.5 Full Hybrid di grande sostanza.",
+        ],
+      },
+      {
+        heading: '7. Hyundai Tucson / Kia Sportage (dal 2015)',
+        paragraphs: [
+          "Garanzia nativa di 5/7 anni che spesso protegge anche il secondo proprietario. Meccanica solida e dotazione di accessori molto ricca già nelle versioni intermedie.",
+        ],
+      },
+      {
+        heading: '8. Renault Kadjar (2015–2022)',
+        paragraphs: [
+          "Basato sulla stessa piattaforma del Qashqai ma spesso reperibile nell'usato a prezzi compresi tra il 10% e il 15% in meno.",
+        ],
+      },
+      {
+        heading: '9. Mazda CX-5 (2a Gen. dal 2017)',
+        paragraphs: [
+          "Guida coinvolgente, motori 2.0/2.5 benzina Skyactiv-G aspirati molto affidabili e interni rifiniti con materiali di altissima qualità.",
+        ],
+      },
+      {
+        heading: '10. Jeep Renegade / FIAT 500X',
+        paragraphs: [
+          "Le regine delle vendite in Italia. Stile inconfondibile, motori 1.6 Multijet e 1.0 FireFly briosi e rete di assistenza capillare su tutto il territorio nazionale.",
+        ],
+      },
+    ],
+    cta: 'migliori-suv',
+  },
+  {
+    slug: 'incentivi-auto-usate-2026-ecobonus',
+    title: 'Incentivi auto usate ed Ecobonus 2026: come funzionano',
+    description:
+      'Guida agli incentivi per l\'acquisto di auto usate nel 2026: contributi rottamazione, requisiti di classe di emissione Euro 6 e come ottenerli dal concessionario.',
+    published: '2026-08-07',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Come funzionano gli incentivi per l\'usato nel 2026',
+        paragraphs: [
+          "Gli incentivi statali ed ecobonus non riguardano soltanto le vetture nuove di fabbrica. Anche nel 2026 sono previsti contributi statali e regionali destinati all'acquisto di auto usate ad alimentazione ecologica o di recente omologazione (Euro 6D), a fronte della rottamazione di un veicolo inquinante.",
+        ],
+      },
+      {
+        heading: 'Requisiti per accedere al contributo usati',
+        paragraphs: [
+          "Per poter usufruire dell'ecobonus sull'acquisto di un'auto usata occorre soddisfare precisi requisiti stabiliti dal Ministero:",
+        ],
+        list: [
+          "Veicolo acquistato: deve essere di categoria M1, omologato in classe non inferiore a Euro 6D, con emissioni di CO2 entro i limiti previsti dalla fascia di incentivo.",
+          "Prezzo di acquisto: il valore risultante dalle quotazioni medie di mercato non deve superare i 25.000 euro (IVA esclusa).",
+          "Rottamazione obbligatoria: occorre rottamare un veicolo della medesima categoria omologato da Euro 0 a Euro 4 (o Euro 5 in alcune regioni), intestato all'acquirente o a un familiare convivente da almeno 12 mesi.",
+          "Acquisto da rivenditore: la misura è valida unicamente per acquisti effettuati presso concessionari o rivenditori con fattura e applicazione diretta dello sconto in ricevuta.",
+        ],
+      },
+      {
+        heading: 'Bonus regionali cumulabili',
+        paragraphs: [
+          "Diverse Regioni (come Lombardia, Veneto, Piemonte ed Emilia-Romagna) mettono a disposizione bandi regionali per la sostituzione dei veicoli inquinanti con contributi a fondo perduto cumulabili con le agevolazioni nazionali.",
+        ],
+      },
+    ],
+    cta: 'incentivi-usato',
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {

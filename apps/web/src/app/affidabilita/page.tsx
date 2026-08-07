@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Car, Gauge, ShieldCheck, Euro, AlertTriangle, Search } from 'lucide-react';
 import { getAllMakes, POPULAR_MODELS, slugify } from '@/lib/catalogo';
+import SiteFooter from '@/components/SiteFooter';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -152,24 +153,7 @@ export default function AffidabilitaPage() {
         </p>
       </main>
 
-      <footer className="border-t border-border/60 mt-10">
-        <div className="max-w-3xl mx-auto px-5 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center">
-                <Car className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
-            </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
-              <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione auto</Link>
-              <Link href="/riparazione" className="hover:text-text-primary transition-colors">Costi riparazione</Link>
-              <Link href="/guide" className="hover:text-text-primary transition-colors">Guide</Link>
-              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-            </nav>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter variant="compact" />
     </div>
   );
 }

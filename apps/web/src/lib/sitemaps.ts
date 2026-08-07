@@ -33,6 +33,8 @@ const staticPages: UrlEntry[] = [
   { url: `${siteUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
   { url: `${siteUrl}/terms`, changeFrequency: 'yearly', priority: 0.3 },
   { url: `${siteUrl}/cookie-policy`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${siteUrl}/eula`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${siteUrl}/dmca`, changeFrequency: 'yearly', priority: 0.3 },
 ];
 
 function yearUrlsFor(prefix: string): UrlEntry[] {

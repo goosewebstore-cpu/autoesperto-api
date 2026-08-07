@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const make = getAllMakes().find((m) => m.slug === resolved.make);
   if (!make) return {};
 
-  const title = `Costi di riparazione ${make.name}: stime per modello e anno | AutoEsperto`;
+  const title = `Costi di riparazione ${make.name}: stime per modello e anno`;
   const description = `Quanto costa riparare una ${make.name}? Stime di manodopera, ricambi e guasti frequenti per tutti i modelli ${make.name}, anno per anno.`;
 
   return {

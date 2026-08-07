@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const model = findModelBySlug(make, resolved.model);
   if (!model) return {};
 
-  const title = `Quanto costa riparare una ${make.name} ${model} ${yearNum}: stima dei costi | AutoEsperto`;
+  const title = `Quanto costa riparare una ${make.name} ${model} ${yearNum}: stima dei costi`;
   const description = `Costi di riparazione ${make.name} ${model} ${yearNum}: stima di manodopera e ricambi per i guasti più frequenti, manutenzione annua e consiglio su quando conviene ripararla.`;
 
   return {

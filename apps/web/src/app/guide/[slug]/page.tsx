@@ -178,7 +178,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!guide) return {};
 
   return {
-    title: `${guide.title} | AutoEsperto`,
+    title: guide.title,
     description: guide.description,
     alternates: {
       canonical: `/guide/${guide.slug}`,

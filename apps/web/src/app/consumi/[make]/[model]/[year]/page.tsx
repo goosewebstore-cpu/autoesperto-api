@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const est = estimateConsumption(make.name, model, yearNum);
   const unit = est.isElectric ? 'kWh' : 'l';
-  const title = `Consumi ${make.name} ${model} ${yearNum}: ${est.combined} ${unit}/100 km | AutoEsperto`;
+  const title = `Consumi ${make.name} ${model} ${yearNum}: ${est.combined} ${unit}/100 km`;
   const description = `Consumi ${make.name} ${model} ${yearNum}: ${est.combined} ${unit}/100 km in ciclo combinato (${est.label.toLowerCase()}). Urbano, extraurbano e costo annuo di carburante.`;
 
   return {

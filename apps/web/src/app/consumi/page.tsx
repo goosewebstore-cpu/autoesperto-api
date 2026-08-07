@@ -8,7 +8,7 @@ function siteUrl() {
 }
 
 export const metadata: Metadata = {
-  title: 'Consumi auto per marca, modello e anno | AutoEsperto',
+  title: 'Consumi auto per marca, modello e anno',
   description:
     'Consumi stimati di ogni auto in urbano, extraurbano e combinato: litri per 100 km, costo per 100 km e costo annuo, per marca, modello e anno.',
   alternates: {

@@ -8,7 +8,7 @@ function siteUrl() {
 }
 
 export const metadata: Metadata = {
-  title: 'Affidabilità auto per marca, modello e anno | AutoEsperto',
+  title: 'Affidabilità auto per marca, modello e anno',
   description:
     'Punteggio di affidabilità di ogni auto: punti di forza, guasti frequenti e costi di manutenzione per marca, modello e anno, per comprare usato con dati reali.',
   alternates: {

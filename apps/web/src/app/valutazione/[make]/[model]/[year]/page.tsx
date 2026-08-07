@@ -33,7 +33,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const model = findModelBySlug(make, resolved.model);
   if (!model) return {};
 
-  const title = `${make.name} ${model} ${yearNum} usata: prezzo e valutazione | AutoEsperto`;
+  const title = `${make.name} ${model} ${yearNum} usata: prezzo e valutazione`;
   const description = `Quanto costa una ${make.name} ${model} ${yearNum} usata? Prezzo medio di mercato, affidabilità e punti critici da controllare prima di comprare una ${make.name} ${model} del ${yearNum}.`;
 
   return {

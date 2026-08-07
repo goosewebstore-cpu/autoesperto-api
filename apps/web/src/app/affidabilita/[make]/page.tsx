@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const make = getAllMakes().find((m) => m.slug === resolved.make);
   if (!make) return {};
 
-  const title = `Affidabilità auto ${make.name}: punteggi per modello e anno | AutoEsperto`;
+  const title = `Affidabilità auto ${make.name}: punteggi per modello e anno`;
   const description = `Quanto sono affidabili le auto ${make.name}? Punteggio per modello e anno, punti deboli, guasti frequenti e costi di manutenzione.`;
 
   return {

@@ -32,7 +32,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!model) return {};
 
   const est = estimateConsumption(make.name, model, CURRENT_YEAR);
-  const title = `Consumi ${make.name} ${model}: litri per 100 km | AutoEsperto`;
+  const title = `Consumi ${make.name} ${model}: litri per 100 km`;
   const description = `Consumi ${make.name} ${model}: ${est.combined} ${est.unit === 'kWh/100 km' ? 'kWh' : 'l'}/100 km combinati (${est.label.toLowerCase()}). Urbano, extraurbano e costo annuo, anno per anno.`;
 
   return {

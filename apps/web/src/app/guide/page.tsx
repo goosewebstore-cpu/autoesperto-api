@@ -11,7 +11,7 @@ interface GuideIndexPageProps {
 const PAGE_SIZE = 6;
 
 export const metadata: Metadata = {
-  title: 'Guide auto usata: valore, vendita e acquisto | AutoEsperto',
+  title: 'Guide auto usata: valore, vendita e acquisto',
   description:
     'Guide pratiche per comprare e vendere auto usate: checklist pre-acquisto, auto affidabili, come scoprire incidenti, valutare danni e capire se un prezzo è giusto.',
   alternates: {

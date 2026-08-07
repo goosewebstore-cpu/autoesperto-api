@@ -34,7 +34,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!model) return {};
 
   const est = estimateReliability(make.name, model, yearNum);
-  const title = `Affidabilità ${make.name} ${model} ${yearNum}: punteggio e guasti | AutoEsperto`;
+  const title = `Affidabilità ${make.name} ${model} ${yearNum}: punteggio e guasti`;
   const description = `Punteggio di affidabilità ${make.name} ${model} ${yearNum}: ${est.score.toFixed(1)}/10 (${est.label}). Punti deboli, guasti frequenti e costi di manutenzione annui.`;
 
   return {

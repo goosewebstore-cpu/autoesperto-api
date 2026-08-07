@@ -27,7 +27,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const make = getAllMakes().find((m) => m.slug === resolved.make);
   if (!make) return {};
 
-  const title = `Consumi auto ${make.name}: modelli e costo annuo | AutoEsperto`;
+  const title = `Consumi auto ${make.name}: modelli e costo annuo`;
   const description = `Quanto consumano le auto ${make.name}? Consumi urbano, extraurbano e combinato per modello e anno, con il costo annuo di carburante.`;
 
   return {

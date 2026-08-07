@@ -8,7 +8,7 @@ function siteUrl() {
 }
 
 export const metadata: Metadata = {
-  title: 'Costi di riparazione auto: stima per marca, modello e anno | AutoEsperto',
+  title: 'Costi di riparazione auto: stima per marca, modello e anno',
   description:
     'Quanto costa riparare un\'auto? Stime di manodopera e ricambi per marca, modello e anno: guasti più frequenti, manutenzione ordinaria e quando conviene riparare o cambiare auto.',
   alternates: {

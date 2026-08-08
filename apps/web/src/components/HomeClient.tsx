@@ -2,7 +2,11 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { Car, CheckCircle2, UserRound, Sparkles, BarChart3, Shield, Wrench, Fuel, ArrowLeftRight, ChevronRight, Camera } from 'lucide-react';
+import {
+  Car, CheckCircle2, UserRound, Sparkles, BarChart3, Shield,
+  Wrench, Fuel, ArrowLeftRight, ChevronRight, Camera, Star,
+  Zap, Crown, Lock, BookOpen,
+} from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import ReportView from '@/components/ReportView';
 import VehicleScanner from '@/components/VehicleScanner';
@@ -23,48 +27,54 @@ const tools = [
   {
     icon: BarChart3,
     title: 'Valutazione',
-    desc: 'Quanto vale? Stima di mercato basata su annunci reali.',
+    desc: 'Prezzo di mercato reale',
     href: '/valutazione',
     color: 'text-blue-600',
-    bg: 'bg-blue-50',
-    border: 'hover:border-blue-300',
+    bg: 'bg-blue-500/10',
+    ring: 'ring-blue-500/20',
   },
   {
     icon: Shield,
     title: 'Affidabilità',
-    desc: 'Difetti noti, guasti comuni e punteggio affidabilità.',
+    desc: 'Guasti e punteggio',
     href: '/affidabilita',
     color: 'text-emerald-600',
-    bg: 'bg-emerald-50',
-    border: 'hover:border-emerald-300',
+    bg: 'bg-emerald-500/10',
+    ring: 'ring-emerald-500/20',
   },
   {
     icon: Wrench,
-    title: 'Costi riparazione',
-    desc: 'Quanto costa mantenere e riparare quel modello.',
+    title: 'Riparazione',
+    desc: 'Costi manutenzione',
     href: '/riparazione',
     color: 'text-amber-600',
-    bg: 'bg-amber-50',
-    border: 'hover:border-amber-300',
+    bg: 'bg-amber-500/10',
+    ring: 'ring-amber-500/20',
   },
   {
     icon: Fuel,
-    title: 'Consumi reali',
-    desc: 'Consumi in città, autostrada e misti per ogni modello.',
+    title: 'Consumi',
+    desc: 'Consumi reali l/100km',
     href: '/consumi',
     color: 'text-purple-600',
-    bg: 'bg-purple-50',
-    border: 'hover:border-purple-300',
+    bg: 'bg-purple-500/10',
+    ring: 'ring-purple-500/20',
   },
   {
     icon: ArrowLeftRight,
-    title: 'Confronta modelli',
-    desc: 'Metti a confronto due auto fianco a fianco.',
+    title: 'Confronta',
+    desc: 'Due auto a confronto',
     href: '/confronta',
     color: 'text-rose-600',
-    bg: 'bg-rose-50',
-    border: 'hover:border-rose-300',
+    bg: 'bg-rose-500/10',
+    ring: 'ring-rose-500/20',
   },
+];
+
+const steps = [
+  { icon: Camera, label: 'Scatta una foto' },
+  { icon: Sparkles, label: 'L\'AI analizza' },
+  { icon: CheckCircle2, label: 'Report completo' },
 ];
 
 export default function HomeClient({ initialPayload }: HomeClientProps) {
@@ -105,125 +115,138 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="sticky top-0 z-40 border-b border-border/70 bg-white/90 backdrop-blur-lg">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <button onClick={handleBack} className="flex items-center gap-2.5" aria-label="Torna alla home">
-            <span className="grid h-8 w-8 place-items-center rounded-lg bg-accent"><Car className="h-4 w-4 text-white" /></span>
-            <span className="text-lg font-bold tracking-tight text-text-primary">Auto<span className="text-accent">Esperto</span></span>
+      {/* ── HEADER ── */}
+      <header className="home-header">
+        <div className="home-header-inner">
+          <button onClick={handleBack} className="home-logo" aria-label="Torna alla home">
+            <span className="home-logo-icon"><Car className="h-4 w-4 text-white" /></span>
+            <span className="home-logo-text">Auto<span>Esperto</span></span>
           </button>
-          {!report && <Link href="/account" className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-3 py-2 text-xs font-bold text-text-primary transition hover:border-accent hover:text-accent"><UserRound className="h-4 w-4" /> Area personale</Link>}
+          {!report && (
+            <Link href="/account" className="home-account-btn">
+              <UserRound className="h-4 w-4" /> Account
+            </Link>
+          )}
         </div>
       </header>
 
-      <main className="mx-auto max-w-6xl px-5">
-        {report ? <div className="pt-6"><ReportView report={report} onBack={handleBack} /></div> : (
-          <div className="animate-fade-in">
-            {/* ═══════════ HERO: AI Scanner (punto centrale) ═══════════ */}
+      <main>
+        {report ? (
+          <div className="mx-auto max-w-6xl px-5 pt-6">
+            <ReportView report={report} onBack={handleBack} />
+          </div>
+        ) : (
+          <div className="home-page">
+            {/* ═══ HERO: Scanner AI ═══ */}
             <VehicleScanner key={scannerKey} />
-            {error && <div role="alert" className="mb-6 rounded-xl border border-danger/20 bg-danger-light px-5 py-4 text-center text-sm font-semibold text-danger">{error}</div>}
+            {error && (
+              <div role="alert" className="home-error">
+                {error}
+              </div>
+            )}
 
-            {/* ═══════════ COME FUNZIONA ═══════════ */}
-            <section className="grid gap-4 border-y border-border/70 py-8 sm:grid-cols-3" aria-label="Come funziona">
+            {/* ═══ COME FUNZIONA (3 step) ═══ */}
+            <section className="home-steps" aria-label="Come funziona">
               <h2 className="sr-only">Come funziona AutoEsperto</h2>
-              {[
-                ['Una foto, un risultato', 'Riconosciamo marca, modello e prezzo con l\'AI.'],
-                ['Account gratuito', 'Crea un account e analizza le basi di tutte le auto che vuoi.'],
-                ['Premium per chi vuole tutto', 'Report completi, prezzi di mercato reali e zero pubblicità.'],
-              ].map(([title, text]) => (
-                <div key={title} className="flex gap-3.5 p-4 rounded-xl bg-white border border-slate-200/80 shadow-card hover:shadow-card-hover transition-all">
-                  <CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-blue-600" />
-                  <div><p className="text-sm font-bold text-text-primary">{title}</p><p className="mt-0.5 text-xs leading-relaxed text-text-secondary">{text}</p></div>
-                </div>
-              ))}
+              <div className="home-steps-track">
+                {steps.map((step, i) => (
+                  <div key={step.label} className="home-step">
+                    <div className="home-step-num">{i + 1}</div>
+                    <step.icon className="home-step-icon" />
+                    <span className="home-step-label">{step.label}</span>
+                  </div>
+                ))}
+              </div>
             </section>
 
-            {/* ═══════════ STRUMENTI (visibili subito) ═══════════ */}
-            <section className="py-10" aria-label="Strumenti AutoEsperto">
-              <div className="flex flex-col items-center mb-8">
-                <h2 className="text-center text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">Tutti gli strumenti per la tua auto</h2>
-                <p className="mx-auto mt-2.5 max-w-2xl text-center text-sm text-text-secondary leading-relaxed">
-                  Oltre all&apos;analisi AI, esplora valutazioni, affidabilità, costi e confronti per migliaia di modelli.
-                </p>
+            {/* ═══ STRUMENTI ═══ */}
+            <section className="home-section" aria-label="Strumenti">
+              <div className="home-section-head">
+                <h2>Tutti gli strumenti</h2>
+                <p>Esplora valutazioni, affidabilità e costi per ogni modello.</p>
               </div>
-
-              {/* AI Scanner highlight card */}
-              <Link href="/#" className="group relative mb-4 flex items-center gap-5 rounded-2xl border-2 border-accent/30 bg-gradient-to-r from-accent/5 via-white to-accent/5 p-5 sm:p-6 shadow-card hover:shadow-premium transition-all hover:border-accent/60" aria-label="Analisi AI">
-                <div className="shrink-0 grid h-14 w-14 place-items-center rounded-xl bg-accent/10">
-                  <Camera className="h-7 w-7 text-accent" />
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <p className="text-lg font-extrabold text-text-primary">Analisi AI da foto</p>
-                    <span className="inline-flex items-center gap-1 rounded-full bg-accent/10 px-2.5 py-0.5 text-[10px] font-bold text-accent uppercase tracking-wider"><Sparkles className="h-3 w-3" /> Strumento principale</span>
-                  </div>
-                  <p className="text-sm text-text-secondary leading-relaxed">Carica una foto e la nostra AI riconosce il veicolo, stima il prezzo di mercato e genera un report completo in pochi secondi.</p>
-                </div>
-                <ChevronRight className="h-5 w-5 text-accent/40 group-hover:text-accent group-hover:translate-x-1 transition-all shrink-0 hidden sm:block" />
-              </Link>
-
-              {/* Tool cards grid */}
-              <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+              <div className="home-tools-grid">
                 {tools.map((tool) => (
-                  <Link
-                    key={tool.href}
-                    href={tool.href}
-                    className={`group flex items-start gap-4 rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card hover:shadow-card-hover transition-all ${tool.border}`}
-                  >
-                    <div className={`shrink-0 grid h-11 w-11 place-items-center rounded-xl ${tool.bg}`}>
+                  <Link key={tool.href} href={tool.href} className={`home-tool-card ${tool.ring}`}>
+                    <div className={`home-tool-icon ${tool.bg}`}>
                       <tool.icon className={`h-5 w-5 ${tool.color}`} />
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-bold text-text-primary group-hover:text-accent transition-colors">{tool.title}</p>
-                      <p className="mt-0.5 text-xs leading-relaxed text-text-secondary">{tool.desc}</p>
+                    <div className="home-tool-text">
+                      <span className="home-tool-title">{tool.title}</span>
+                      <span className="home-tool-desc">{tool.desc}</span>
                     </div>
-                    <ChevronRight className="h-4 w-4 text-slate-300 group-hover:text-accent group-hover:translate-x-0.5 transition-all shrink-0 mt-1" />
+                    <ChevronRight className="home-tool-arrow" />
                   </Link>
                 ))}
               </div>
             </section>
 
-            {/* ═══════════ PRICING ═══════════ */}
-            <section className="py-10 border-t border-border/70" aria-label="Scegli il tuo piano">
-              <h2 className="text-center text-2xl font-extrabold tracking-tight text-text-primary sm:text-3xl">AutoEsperto è per tutti</h2>
-              <p className="mx-auto mt-2.5 max-w-2xl text-center text-sm text-text-secondary leading-relaxed">Inizia subito con un&apos;analisi completa gratuita senza registrazione. Poi decidi se continuare con l&apos;account base o sbloccare tutto il potenziale con Premium.</p>
-              <div className="mt-8 grid gap-4 sm:grid-cols-3">
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-6 text-center shadow-card hover:border-blue-200 transition-all">
-                  <p className="text-xl font-extrabold text-slate-800">Prova Gratuita</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-500">€0</p>
-                  <p className="mt-2 text-xs text-text-secondary font-medium">1ª analisi completa gratuita, nessuna registrazione richiesta.</p>
+            {/* ═══ ADS ═══ */}
+            <AdSlot placement="banner" className="py-4" />
+
+            {/* ═══ PRICING ═══ */}
+            <section className="home-section" aria-label="Piani">
+              <div className="home-section-head">
+                <h2>Inizia gratis, senza registrazione</h2>
+                <p>La prima analisi è completa e gratuita. Poi scegli il piano che fa per te.</p>
+              </div>
+              <div className="home-pricing-grid">
+                {/* Free */}
+                <div className="home-price-card">
+                  <div className="home-price-badge free"><Zap className="h-3.5 w-3.5" /> Prova</div>
+                  <div className="home-price-amount">€0</div>
+                  <p className="home-price-sub">Nessuna registrazione</p>
+                  <ul className="home-price-features">
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> 1 analisi completa gratis</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Marca, modello, anno</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Prezzo stimato</li>
+                  </ul>
                 </div>
-                <div className="rounded-2xl border border-slate-200/80 bg-white p-6 text-center shadow-card hover:border-blue-200 transition-all">
-                  <p className="text-xl font-extrabold text-blue-600">Registrato</p>
-                  <p className="mt-1 text-2xl font-bold text-slate-500">€0</p>
-                  <p className="mt-2 text-xs text-text-secondary font-medium">Analisi illimitate con dati base (marca, modello, anno).</p>
+                {/* Registrato */}
+                <div className="home-price-card">
+                  <div className="home-price-badge registered"><UserRound className="h-3.5 w-3.5" /> Registrato</div>
+                  <div className="home-price-amount">€0</div>
+                  <p className="home-price-sub">Account gratuito</p>
+                  <ul className="home-price-features">
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Analisi illimitate</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Dati base inclusi</li>
+                    <li><Lock className="h-4 w-4 text-slate-300" /> Report completo bloccato</li>
+                  </ul>
                 </div>
-                <div className="rounded-2xl border border-blue-200 bg-gradient-to-b from-blue-50 to-white p-6 text-center shadow-card shadow-blue-900/5 hover:border-blue-400 transition-all relative overflow-hidden">
-                  <div className="absolute top-0 right-0 p-2"><Sparkles className="w-5 h-5 text-blue-400" /></div>
-                  <p className="text-xl font-extrabold text-blue-600">Premium</p>
-                  <p className="mt-1 text-3xl font-bold text-blue-600">{premium.displayPrice}<span className="text-sm text-slate-500">/mese</span></p>
-                  <p className="mt-2 text-xs text-text-secondary font-medium">Analisi complete illimitate, prezzi reali, no pubblicità.</p>
+                {/* Premium */}
+                <div className="home-price-card premium">
+                  <div className="home-price-badge premium-badge"><Crown className="h-3.5 w-3.5" /> Premium</div>
+                  <div className="home-price-amount">{premium.displayPrice}<span>/mese</span></div>
+                  <p className="home-price-sub">Tutto illimitato</p>
+                  <ul className="home-price-features">
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Analisi complete illimitate</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Prezzi di mercato reali</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Nessuna pubblicità</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Download PDF</li>
+                  </ul>
+                  <Link href="/account" className="home-premium-cta">
+                    Prova Premium <ChevronRight className="h-4 w-4" />
+                  </Link>
                 </div>
               </div>
             </section>
 
-            {/* ═══════════ ADS ═══════════ */}
-            <AdSlot placement="banner" className="py-6" />
-
-            {/* ═══════════ GUIDE ═══════════ */}
-            <section className="py-8" aria-label="Ultime guide">
-              <div className="flex flex-wrap items-end justify-between gap-3">
-                <div>
-                  <h2 className="text-xl font-extrabold tracking-tight text-text-primary sm:text-2xl">Guide per comprare e vendere</h2>
-                  <p className="mt-1 text-sm text-text-secondary">Consigli pratici per valutare, acquistare e vendere l&apos;auto usata.</p>
+            {/* ═══ GUIDE ═══ */}
+            {latestGuides.length > 0 && (
+              <section className="home-section" aria-label="Guide">
+                <div className="home-section-head">
+                  <h2>Guide utili</h2>
+                  <Link href="/guide" className="home-see-all">
+                    <BookOpen className="h-4 w-4" /> Tutte le guide
+                  </Link>
                 </div>
-                <Link href="/guide" className="text-sm font-bold text-blue-600 hover:text-blue-700 transition-colors">Tutte le guide →</Link>
-              </div>
-              <div className="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-                {latestGuides.map((guide) => (
-                  <GuideCard key={guide.slug} guide={guide} />
-                ))}
-              </div>
-            </section>
+                <div className="home-guides-grid">
+                  {latestGuides.map((guide) => (
+                    <GuideCard key={guide.slug} guide={guide} />
+                  ))}
+                </div>
+              </section>
+            )}
           </div>
         )}
       </main>

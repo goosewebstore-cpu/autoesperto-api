@@ -110,6 +110,15 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
     ],
   };
 
+  const carSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${make.name} ${model} ${yearNum}`,
+    brand: { '@type': 'Brand', name: make.name },
+    model: model,
+    vehicleModelDate: String(yearNum),
+  };
+
   const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
 
   return (

@@ -5,17 +5,22 @@ import { getConsent, type ConsentChoice } from '@/lib/consent';
 
 const CLIENT_ID = process.env.NEXT_PUBLIC_ADSENSE_CLIENT || '';
 const ENABLED = process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true';
-const HOME_SLOT = process.env.NEXT_PUBLIC_ADSENSE_HOME_SLOT || '';
-const REPORT_SLOT = process.env.NEXT_PUBLIC_ADSENSE_REPORT_SLOT || '';
+
+const SLOTS = {
+  banner: process.env.NEXT_PUBLIC_ADSENSE_SLOT_BANNER || process.env.NEXT_PUBLIC_ADSENSE_HOME_SLOT || '',
+  in_article: process.env.NEXT_PUBLIC_ADSENSE_SLOT_IN_ARTICLE || '',
+  sidebar: process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR || '',
+  result: process.env.NEXT_PUBLIC_ADSENSE_SLOT_RESULT || process.env.NEXT_PUBLIC_ADSENSE_REPORT_SLOT || '',
+};
 
 interface AdSlotProps {
   slot?: string;
-  placement?: 'home' | 'report';
+  placement?: keyof typeof SLOTS;
   className?: string;
 }
 
-export default function AdSlot({ slot, placement = 'report', className }: AdSlotProps) {
-  const resolvedSlot = slot || (placement === 'home' ? HOME_SLOT : REPORT_SLOT);
+export default function AdSlot({ slot, placement = 'result', className }: AdSlotProps) {
+  const resolvedSlot = slot || SLOTS[placement];
   const [consent, setConsentState] = useState<ConsentChoice>(null);
 
   useEffect(() => {

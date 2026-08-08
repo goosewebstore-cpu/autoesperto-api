@@ -1,12 +1,14 @@
 'use client';
 
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, Camera, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ShieldCheck, Sparkles, Upload, UserRound } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { freeScanVehiclePhoto, analyzeVehicle, type FreeScanResult } from '@/lib/api';
+import { freeScanVehiclePhoto, analyzeVehicle, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
 import ReportView from '@/components/ReportView';
 import AnalysisSkeleton from '@/components/AnalysisSkeleton';
+import { getUserTier, canSeeFullReport, type UserTier } from '@/lib/subscription';
+import { BasicResultView } from '@/components/BasicResultView';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'login-required' | 'manual-input';
 
@@ -37,11 +39,24 @@ export default function VehicleScanner() {
   const [manualModel, setManualModel] = useState('');
   const [manualYear, setManualYear] = useState('');
   const [manualLoading, setManualLoading] = useState(false);
+  const [user, setUser] = useState<AccountUser | null>(null);
+  const [userTier, setUserTier] = useState<UserTier>('anonymous');
+  const [showFullReport, setShowFullReport] = useState(false);
+
+  useEffect(() => {
+    getMyAccount().then(res => {
+      if (res.success && res.user) {
+        setUser(res.user);
+        setUserTier(getUserTier(res.user, hasFreeScanCookie()));
+      }
+    }).catch(() => {});
+  }, []);
 
   const reset = () => {
     if (imageUrl) URL.revokeObjectURL(imageUrl);
     setImageUrl(''); setScan(null); setReport(null); setError(''); setStage('idle');
     setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
+    setShowFullReport(false);
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -49,10 +64,13 @@ export default function VehicleScanner() {
     if (!file) return;
     setError(''); setScan(null); setReport(null);
 
-    if (hasFreeScanCookie()) {
+    const isFirst = !hasFreeScanCookie();
+    if (!isFirst && !user) {
       setStage('login-required');
       return;
     }
+
+    setShowFullReport(canSeeFullReport(userTier, isFirst));
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
       setError('Carica una foto JPG, PNG o WebP.'); setStage('error'); return;
@@ -99,6 +117,10 @@ export default function VehicleScanner() {
       setError('Inserisci almeno marca e modello.');
       return;
     }
+
+    const isFirst = !hasFreeScanCookie();
+    setShowFullReport(canSeeFullReport(userTier, isFirst));
+
     setManualLoading(true); setError('');
     try {
       const year = manualYear.trim() ? Number(manualYear.trim()) : undefined;
@@ -143,11 +165,11 @@ export default function VehicleScanner() {
           <div className="scanner-kicker"><Sparkles className="h-4 w-4" /> Scanner AI per auto</div>
           <h1>Analizza l’auto.<br className="hidden sm:block" /> Scopri modello e prezzo.</h1>
           <p className="scanner-lead">Da una foto riconosciamo marca, modello e anno indicativo, stimiamo il prezzo e creiamo un’analisi dettagliata fatta apposta per quel modello e quell’anno.</p>
-          <div className="scanner-promises" aria-label="Informazioni analizzate">
+           <div className="scanner-promises" aria-label="Informazioni analizzate">
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
-           <p className="scanner-microcopy">Prima analisi gratuita e completa, senza account. Per una nuova analisi serve il login.</p>
+           <p className="scanner-microcopy">Prima analisi completa e gratuita. Per le successive, crea un account gratuito.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
           <p className="mt-3 flex items-start gap-2 text-xs text-amber-600 max-w-xl">
             <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
@@ -175,10 +197,10 @@ export default function VehicleScanner() {
       <section className="scanner-login-required animate-fade-in">
         <div className="scanner-login-card">
           <span className="scanner-login-icon"><UserRound className="h-6 w-6" /></span>
-          <h2>La tua analisi gratuita è già stata usata</h2>
-          <p>Accedi o crea un account: avrai una nuova analisi completa gratuita nel tuo account. Solo se vuoi conservare più analisi o salvarla, è richiesto il pagamento.</p>
-          <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Accedi e ottieni un’analisi gratis <ChevronRight className="h-5 w-5" /></button>
-          <small className="scanner-login-note"><LockKeyhole className="h-3.5 w-3.5" /> Nessun addebito per il login. Il pagamento serve solo per salvare le analisi.</small>
+          <h2>Crea un account gratuito per continuare</h2>
+          <p>Crea un account gratuito per continuare ad analizzare auto. Con l'account gratuito vedrai marca, modello, anno e categoria. Per il report completo, passa a Premium.</p>
+          <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Crea account gratuito <ChevronRight className="h-5 w-5" /></button>
+          <small className="scanner-login-note"><LockKeyhole className="h-3.5 w-3.5" /> La registrazione è rapida e senza costi.</small>
         </div>
       </section>
     );
@@ -198,10 +220,14 @@ export default function VehicleScanner() {
 
         <div className="scanner-result-banner">
           <ShieldCheck className="h-4 w-4" />
-          <span>Questa è la tua analisi completa gratuita. Per salvarla nel tuo account o crearne un’altra, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">accedi</button>.</span>
+          <span>Questa è un'analisi {showFullReport ? 'completa' : 'base'}. Per tutte le funzionalità Premium e per salvare l'analisi nel tuo account, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'accedi'}</button>.</span>
         </div>
 
-        <ReportView report={report} embedded />
+        {showFullReport ? (
+          <ReportView report={report} embedded tier={userTier} />
+        ) : (
+          <BasicResultView report={report} />
+        )}
       </section>
     );
   }

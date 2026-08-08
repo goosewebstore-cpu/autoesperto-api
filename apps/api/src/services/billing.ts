@@ -47,6 +47,53 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
       stripeSessionId: session.id,
       stripePaymentIntentId: paymentIntent || undefined,
       paidAt: purchase.paidAt || new Date(),
+  });
+}
+
+// Premium subscription config
+const PREMIUM_PRICE_CENTS = 999;
+const PREMIUM_CURRENCY = 'eur';
+const PREMIUM_INTERVAL = 'month' as const;
+
+export function getPremiumConfig() {
+  return {
+    amountCents: PREMIUM_PRICE_CENTS,
+    currency: PREMIUM_CURRENCY,
+    interval: PREMIUM_INTERVAL,
+  };
+}
+
+export async function activatePremium(userId: string, stripeSubscriptionId: string, stripeCustomerId: string, stripePriceId: string, renewsAt: Date): Promise<void> {
+  await prisma.subscription.upsert({
+    where: { userId },
+    create: {
+      userId,
+      plan: 'PREMIUM',
+      status: 'ACTIVE',
+      credits: 0,
+      stripeCustomerId,
+      stripeSubscriptionId,
+      stripePriceId,
+      renewsAt,
+    },
+    update: {
+      plan: 'PREMIUM',
+      status: 'ACTIVE',
+      stripeCustomerId,
+      stripeSubscriptionId,
+      stripePriceId,
+      renewsAt,
+      cancelledAt: null,
     },
   });
+}
+
+export async function deactivatePremium(stripeSubscriptionId: string): Promise<void> {
+  const sub = await prisma.subscription.findFirst({ where: { stripeSubscriptionId } });
+  if (sub) {
+    await prisma.subscription.update({
+      where: { id: sub.id },
+      data: { plan: 'FREE', status: 'CANCELLED', cancelledAt: new Date() },
+    });
+  }
 }

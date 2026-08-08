@@ -44,6 +44,12 @@ export interface AccountUser {
   email: string | null;
   phone: string | null;
   createdAt: string;
+  subscription: {
+    plan: string;
+    status: string;
+    renewsAt: string | null;
+    cancelledAt: string | null;
+  } | null;
   analysis: { id: string; createdAt: string } | null;
   entitlement: {
     included: number;
@@ -175,4 +181,16 @@ export interface AnalyticsOverview {
 
 export async function getAnalyticsOverview() {
   return fetchJson<AnalyticsOverview>('/analytics/overview');
+}
+
+export async function createSubscription() {
+  return fetchJson<{ success: true; url: string }>('/billing/subscribe', { method: 'POST', body: '{}' });
+}
+
+export async function cancelSubscription() {
+  return fetchJson<{ success: true }>('/billing/cancel-subscription', { method: 'POST', body: '{}' });
+}
+
+export async function getSubscriptionStatus() {
+  return fetchJson<{ success: true; subscription: { plan: string; status: string; renewsAt: string | null; cancelledAt: string | null } | null }>('/billing/subscription-status');
 }

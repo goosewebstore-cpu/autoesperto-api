@@ -3,7 +3,7 @@ import { prisma } from '@autoesperto/database';
 import { z } from 'zod';
 import { asyncHandler, conflict, forbidden } from '../http';
 import { type AuthenticatedRequest, requireAuth } from '../services/auth';
-import { getAnalysisPrice, getStripe, recordPaidCheckout } from '../services/billing';
+import { getAnalysisPrice, getStripe, recordPaidCheckout, getPremiumConfig } from '../services/billing';
 
 const router = Router();
 const confirmSchema = z.object({ sessionId: z.string().trim().startsWith('cs_').max(255) });
@@ -83,6 +83,84 @@ router.post(
     if (session.metadata?.userId !== userId) throw forbidden('Pagamento non associato a questo account.');
     await recordPaidCheckout(session);
     res.json({ success: true, paid: session.payment_status === 'paid', amountCents: session.amount_total || 0, currency: session.currency || 'eur' });
+  })
+});
+
+// POST /billing/subscribe - Create Stripe subscription checkout
+router.post(
+  '/subscribe',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const { userId } = (req as AuthenticatedRequest).auth;
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, email: true } });
+    if (!user) throw forbidden('Account non trovato.');
+
+    const stripe = getStripe();
+    const config = getPremiumConfig();
+    const webUrl = (process.env.WEB_URL || process.env.WEB_URLS?.split(',')[0] || 'http://localhost:3000').replace(/\/$/, '');
+
+    const session = await stripe.checkout.sessions.create({
+      mode: 'subscription',
+      locale: 'it',
+      client_reference_id: userId,
+      ...(user.email ? { customer_email: user.email } : {}),
+      line_items: [{
+        quantity: 1,
+        price_data: {
+          currency: config.currency,
+          unit_amount: config.amountCents,
+          recurring: { interval: config.interval },
+          product_data: {
+            name: 'AutoEsperto Premium',
+            description: 'Analisi complete illimitate, prezzi di mercato reali, nessuna pubblicità.',
+          },
+        },
+      }],
+      metadata: { userId, product: 'premium_subscription' },
+      subscription_data: { metadata: { userId, product: 'premium_subscription' } },
+      success_url: `${webUrl}/account?subscription=success&session_id={CHECKOUT_SESSION_ID}`,
+      cancel_url: `${webUrl}/account?subscription=cancelled`,
+    });
+
+    if (!session.url) throw new Error('Stripe non ha restituito il link di pagamento.');
+    res.status(201).json({ success: true, url: session.url });
+  })
+);
+
+// POST /billing/cancel-subscription
+router.post(
+  '/cancel-subscription',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const { userId } = (req as AuthenticatedRequest).auth;
+    const sub = await prisma.subscription.findUnique({ where: { userId } });
+    if (!sub || !sub.stripeSubscriptionId) throw forbidden('Nessun abbonamento attivo.');
+
+    const stripe = getStripe();
+    await stripe.subscriptions.update(sub.stripeSubscriptionId, { cancel_at_period_end: true });
+    await prisma.subscription.update({ where: { id: sub.id }, data: { cancelledAt: new Date() } });
+
+    res.json({ success: true });
+  })
+);
+
+// GET /billing/subscription-status
+router.get(
+  '/subscription-status',
+  requireAuth,
+  asyncHandler(async (req, res) => {
+    const { userId } = (req as AuthenticatedRequest).auth;
+    const sub = await prisma.subscription.findUnique({ where: { userId } });
+
+    res.json({
+      success: true,
+      subscription: sub ? {
+        plan: sub.plan,
+        status: sub.status,
+        renewsAt: sub.renewsAt?.toISOString() || null,
+        cancelledAt: sub.cancelledAt?.toISOString() || null,
+      } : null,
+    });
   })
 );
 

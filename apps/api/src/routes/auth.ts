@@ -49,6 +49,7 @@ async function accountSummary(userId: string) {
         phone: true,
         createdAt: true,
         emailVerified: true,
+        subscription: true,
         analyses: {
           orderBy: { createdAt: 'desc' },
           take: 1,
@@ -70,6 +71,12 @@ async function accountSummary(userId: string) {
   const trialAvailable = emailVerified && !paid && analysisCount === 0;
   return {
     ...user,
+    subscription: user.subscription ? {
+      plan: user.subscription.plan,
+      status: user.subscription.status,
+      renewsAt: user.subscription.renewsAt?.toISOString() || null,
+      cancelledAt: user.subscription.cancelledAt?.toISOString() || null,
+    } : null,
     purchases: undefined,
     analyses: undefined,
     analysis: user.analyses[0] || null,

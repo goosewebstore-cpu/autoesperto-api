@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AccountPage({ searchParams }: { searchParams: Promise<{ checkout?: string; session_id?: string }> }) {
+export default async function AccountPage({ searchParams }: { searchParams: Promise<{ checkout?: string; subscription?: string; upgrade?: string; session_id?: string }> }) {
   const query = await searchParams;
-  return <AccountDashboard checkout={query.checkout} sessionId={query.session_id} />;
+  return <AccountDashboard checkout={query.checkout} subscription={query.subscription} upgrade={query.upgrade} sessionId={query.session_id} />;
 }

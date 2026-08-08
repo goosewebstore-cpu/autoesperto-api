@@ -10,6 +10,10 @@ import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
 import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
+import { ShareButton } from '@/components/ShareButton';
+import { SellAdGenerator } from '@/components/SellAdGenerator';
+import { Lock } from 'lucide-react';
+import Link from 'next/link';
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
@@ -46,9 +50,10 @@ interface ReportViewProps {
   embedded?: boolean;
   showAds?: boolean;
   allowPhotoTools?: boolean;
+  tier?: 'anonymous' | 'registered' | 'premium';
 }
 
-export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true }: ReportViewProps) {
+export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true, tier = 'premium' }: ReportViewProps) {
   const { vehicle, reliability, price } = report;
   const verdict = getVerdictConfig(reliability.verdict);
   const VerdictIcon = verdict.icon;
@@ -195,8 +200,36 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </div>
       </section>
 
-      {/* KPI Cards premium: prezzo, affidabilità, costo annuo, consumo, bollo */}
-      <KpiCards report={report} />
+      {tier !== 'premium' ? (
+        <div className="relative mt-8">
+          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center">
+            <div className="rounded-3xl bg-slate-900/95 backdrop-blur-md p-8 sm:p-12 shadow-2xl border border-slate-700 max-w-xl w-full mx-auto">
+              <div className="mx-auto w-16 h-16 rounded-full bg-blue-600/20 flex items-center justify-center mb-6">
+                <Lock className="w-8 h-8 text-blue-500" />
+              </div>
+              <h3 className="text-2xl font-bold text-white mb-4">Sblocca il report completo</h3>
+              <p className="text-slate-300 text-sm mb-8 leading-relaxed">
+                Il tuo piano attuale non include l'accesso ai dati completi. Passa a Premium per visualizzare affidabilità, difetti comuni, andamento del mercato e prezzi reali.
+              </p>
+              <Link
+                href="/account?upgrade=true"
+                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 text-sm font-bold text-white transition hover:bg-blue-500"
+              >
+                Passa a Premium
+              </Link>
+            </div>
+          </div>
+          
+          <div className="space-y-5 blur-[8px] opacity-60 pointer-events-none select-none" aria-hidden="true">
+            <KpiCards report={report} />
+            <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7 h-64" />
+            <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7 h-96" />
+          </div>
+        </div>
+      ) : (
+        <>
+          {/* KPI Cards premium: prezzo, affidabilità, costo annuo, consumo, bollo */}
+          <KpiCards report={report} />
 
       {/* Grafici: radar affidabilità per categoria + andamento prezzo */}
       {reliability.categoryScores && (
@@ -237,7 +270,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         <p className="text-xs text-text-tertiary mt-3">Le discussioni sono opinioni personali: usale per fare domande pi&ugrave; precise a venditore e meccanico.</p>
       </section>
 
-      {showAds && <AdSlot placement="report" />}
+      {showAds && <AdSlot placement="result" />}
 
       {/* Strengths / weaknesses / advice */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
@@ -630,6 +663,11 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </section>
       )}
 
+      {/* Sell Ad Generator Component */}
+      <section className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
+        <SellAdGenerator report={report} />
+      </section>
+
       {report.alternatives && report.alternatives.length > 0 && (
         <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
           <h2 className="text-base font-bold text-text-primary mb-1 flex items-center gap-2">
@@ -797,17 +835,23 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
           <p className="text-sm text-text-secondary mb-4 flex-1">
             Report completo in PDF con dati, valutazione e stima di mercato. Perfetto da portare in concessionaria.
           </p>
-          <button
-            onClick={() => {
-              import('@/components/PDFButton').then((m) => m.downloadPDF(report));
-            }}
-            className="w-full h-11 rounded-xl bg-accent text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-accent-hover active:scale-[0.99] transition-all"
-          >
-            <Download className="w-4 h-4" />
-            Scarica PDF
-          </button>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              onClick={() => {
+                import('@/components/PDFButton').then((m) => m.downloadPDF(report));
+              }}
+              className="w-full h-11 rounded-xl bg-accent text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-accent-hover active:scale-[0.99] transition-all"
+            >
+              <Download className="w-4 h-4 shrink-0" />
+              Scarica PDF
+            </button>
+            <ShareButton title={`Valutazione ${vehicle.make} ${vehicle.model}`} text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`} />
+          </div>
         </div>
       </section>
+      
+      </>
+      )}
 
       {/* Footer note */}
       <p className="text-xs text-text-tertiary flex items-center justify-center gap-1.5 text-center">

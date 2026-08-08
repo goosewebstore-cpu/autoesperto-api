@@ -8,7 +8,7 @@ import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import AdsTracker from '@/components/AdsTracker';
-import { analysisOffer } from '@/lib/pricing';
+import { getPremiumPricing } from '@/lib/pricing';
 
 const inter = Inter({
   subsets: ['latin'],
@@ -118,10 +118,10 @@ function JsonLd() {
       image: `${siteUrl}/og-image.png`,
       offers: {
         '@type': 'Offer',
-        price: (analysisOffer().amountCents / 100).toFixed(2),
+        price: (getPremiumPricing().amountCents / 100).toFixed(2),
         priceCurrency: 'EUR',
-        priceValidUntil: '2026-08-13',
-        description: 'Una analisi completa, pagamento singolo senza abbonamento',
+        priceValidUntil: '2027-01-01',
+        description: 'Abbonamento mensile per analisi illimitate e funzioni Premium',
       },
     },
   ];

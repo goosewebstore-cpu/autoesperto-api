@@ -1,15 +1,12 @@
-const STANDARD_PRICE_CENTS = 599;
-const PROMO_PRICE_CENTS = 199;
-const PROMO_END_AT = '2026-08-13T21:59:59.999Z';
+export const PREMIUM_PRICE_CENTS = 999;
+export const PREMIUM_CURRENCY = 'eur';
+export const PREMIUM_INTERVAL = 'month';
 
-export function analysisOffer(now = new Date()) {
-  const promotional = now.getTime() <= new Date(PROMO_END_AT).getTime();
-  const amountCents = promotional ? PROMO_PRICE_CENTS : STANDARD_PRICE_CENTS;
-
+export function getPremiumPricing() {
   return {
-    amountCents,
-    displayPrice: new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(amountCents / 100),
-    promotional,
-    promoEndsLabel: '13 agosto 2026',
+    amountCents: PREMIUM_PRICE_CENTS,
+    currency: PREMIUM_CURRENCY,
+    interval: PREMIUM_INTERVAL,
+    displayPrice: new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(PREMIUM_PRICE_CENTS / 100),
   };
 }

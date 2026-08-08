@@ -271,11 +271,15 @@ export default async function GuidePage({ params }: PageProps) {
               <span className="inline-flex items-center rounded-full bg-accent-light px-2.5 py-1 text-xs font-bold text-accent">
                 {GUIDE_CATEGORIES[guide.category].label}
               </span>
+              <span className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+                Di Redazione AutoEsperto
+              </span>
+              <span className="text-text-tertiary">·</span>
               <time dateTime={guide.published} className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
                 {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
               </time>
             </div>
-            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-3">
+            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-4">
               {guide.title}
             </h1>
             <p className="text-text-secondary text-base leading-relaxed mt-4">{guide.description}</p>
@@ -302,6 +306,13 @@ export default async function GuidePage({ params }: PageProps) {
                 )}
               </section>
             ))}
+          </div>
+
+          <div className="mt-12 rounded-2xl bg-surface-2 border border-border p-5">
+            <h2 className="text-sm font-bold text-text-primary uppercase tracking-wide">Metodologia e Fonti</h2>
+            <p className="text-xs text-text-secondary leading-relaxed mt-2">
+              Questa guida è stata redatta dal team di esperti di <strong>AutoEsperto</strong>. I dati riportati sulle quotazioni, sull'affidabilità e sui costi di riparazione sono elaborati dal nostro algoritmo proprietario che analizza quotidianamente decine di migliaia di annunci reali, incrociandoli con database di richiami ufficiali (es. Safety Gate UE, NHTSA) e storici di manutenzione.
+            </p>
           </div>
         </article>
 

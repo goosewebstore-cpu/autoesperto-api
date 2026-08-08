@@ -13,17 +13,20 @@ interface ModelReportCardProps {
   make: string;
   model: string;
   year?: number;
+  initialReport?: AutoReport;
 }
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
 }
 
-export default function ModelReportCard({ make, model, year }: ModelReportCardProps) {
-  const [report, setReport] = useState<AutoReport | null>(null);
+export default function ModelReportCard({ make, model, year, initialReport }: ModelReportCardProps) {
+  const [report, setReport] = useState<AutoReport | null>(initialReport || null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
+    if (initialReport) return;
+    
     let active = true;
     setReport(null);
     setError(false);
@@ -37,7 +40,7 @@ export default function ModelReportCard({ make, model, year }: ModelReportCardPr
     return () => {
       active = false;
     };
-  }, [make, model, year]);
+  }, [make, model, year, initialReport]);
 
   if (error) return null;
 

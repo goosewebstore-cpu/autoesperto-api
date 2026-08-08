@@ -1,9 +1,10 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useMemo } from 'react';
 import { GitCompareArrows } from 'lucide-react';
 import ModelReportCard from '@/components/ModelReportCard';
-import { POPULAR_MODELS } from '@/lib/catalogo';
+import { getAllMakes } from '@/lib/catalogo';
+import type { AutoReport } from '@autoesperto/types';
 
 const defaultLeft = 'Fiat|Panda';
 const defaultRight = 'Toyota|Yaris';
@@ -17,11 +18,28 @@ function modelLabel(make: string, model: string) {
   return model.toLowerCase().startsWith(make.toLowerCase()) ? model : `${make} ${model}`;
 }
 
-export default function CompareModels() {
+export default function CompareModels({
+  initialLeftReport,
+  initialRightReport
+}: {
+  initialLeftReport?: AutoReport;
+  initialRightReport?: AutoReport;
+}) {
   const [left, setLeft] = useState(defaultLeft);
   const [right, setRight] = useState(defaultRight);
   const leftModel = splitModel(left);
   const rightModel = splitModel(right);
+
+  const allModels = useMemo(() => {
+    const list: { make: string; model: string; label: string }[] = [];
+    getAllMakes().forEach((m) => {
+      m.models.forEach((mod) => {
+        list.push({ make: m.name, model: mod, label: modelLabel(m.name, mod) });
+      });
+    });
+    // Sort alphabetically by label
+    return list.sort((a, b) => a.label.localeCompare(b.label));
+  }, []);
 
   return (
     <div>
@@ -32,11 +50,11 @@ export default function CompareModels() {
         </div>
         <div className="grid sm:grid-cols-2 gap-3">
           {[{ label: 'Primo modello', value: left, onChange: setLeft }, { label: 'Secondo modello', value: right, onChange: setRight }].map((field) => (
-            <label key={field.label} className="text-sm font-semibold text-text-primary">
+            <label key={field.label} className="text-sm font-semibold text-text-primary flex flex-col">
               {field.label}
-              <select value={field.value} onChange={(event) => field.onChange(event.target.value)} className="mt-2 w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/30">
-                {POPULAR_MODELS.map((item) => (
-                  <option key={`${item.make}|${item.model}`} value={`${item.make}|${item.model}`}>{modelLabel(item.make, item.model)}</option>
+              <select value={field.value} onChange={(event) => field.onChange(event.target.value)} className="mt-2 w-full rounded-xl border border-border bg-white px-3 py-2.5 text-sm text-text-primary focus:outline-none focus:ring-2 focus:ring-accent/30 max-h-48 overflow-y-auto">
+                {allModels.map((item) => (
+                  <option key={`${item.make}|${item.model}`} value={`${item.make}|${item.model}`}>{item.label}</option>
                 ))}
               </select>
             </label>

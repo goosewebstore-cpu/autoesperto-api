@@ -15,21 +15,27 @@ export default function ContactPage() {
       intro="Per assistenza sull’account, sul pagamento, sul report oppure per una proposta commerciale puoi contattare il team AutoEsperto."
       sections={[
         {
+          heading: 'Chi Siamo',
+          paragraphs: [
+            'AutoEsperto è il tuo assistente virtuale per la compravendita di auto usate. Utilizziamo intelligenza artificiale e l\'analisi di migliaia di annunci di mercato per offrirti dati reali, valutazioni imparziali e trasparenza sui costi di riparazione e affidabilità, per aiutarti a scegliere la tua prossima auto in sicurezza.',
+          ],
+        },
+        {
           heading: 'Assistenza e segnalazioni',
           paragraphs: [
-            'Per problemi con il servizio, suggerimenti o segnalazioni di inesattezze nei dati: scrivi a goosewebstore@gmail.com. Rispondiamo di norma entro 2-3 giorni lavorativi.',
+            'Per problemi con il servizio, suggerimenti o segnalazioni di inesattezze nei dati: scrivi a supporto@autoesperto.it. Rispondiamo di norma entro 2-3 giorni lavorativi.',
           ],
         },
         {
           heading: 'Privacy',
           paragraphs: [
-            'Per questioni relative al trattamento dei dati personali: goosewebstore@gmail.com.',
+            'Per questioni relative al trattamento dei dati personali: supporto@autoesperto.it.',
           ],
         },
         {
           heading: 'Pubblicità e collaborazioni',
           paragraphs: [
-            'Per sponsorizzazioni, partnership con officine, periti, concessionari e altri servizi automotive: goosewebstore@gmail.com. Le proposte sono descritte anche nella pagina Lavora con noi.',
+            'Per sponsorizzazioni, partnership con officine, periti, concessionari e altri servizi automotive: supporto@autoesperto.it. Le proposte sono descritte anche nella pagina Lavora con noi.',
           ],
         },
       ]}

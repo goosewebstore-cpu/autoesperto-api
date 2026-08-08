@@ -78,7 +78,7 @@ const steps = [
 ];
 
 export default function HomeClient({ initialPayload }: HomeClientProps) {
-  const premium = getPremiumPricing();
+  const [isAnnual, setIsAnnual] = useState(true);
   const latestGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 4);
   const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState('');
@@ -210,14 +210,26 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                   <ul className="home-price-features">
                     <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Analisi illimitate</li>
                     <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Dati base inclusi</li>
-                    <li><Lock className="h-4 w-4 text-slate-300" /> Report completo bloccato</li>
+                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Storico analisi salvato</li>
                   </ul>
                 </div>
                 {/* Premium */}
                 <div className="home-price-card premium">
                   <div className="home-price-badge premium-badge"><Crown className="h-3.5 w-3.5" /> Premium</div>
-                  <div className="home-price-amount">{premium.displayPrice}<span>/mese</span></div>
-                  <p className="home-price-sub">Tutto illimitato</p>
+                  
+                  <div className="flex bg-slate-100 rounded-lg p-1 mt-4 mb-4">
+                    <button onClick={() => setIsAnnual(false)} className={`flex-1 text-xs font-bold py-1.5 rounded-md transition ${!isAnnual ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}>Mensile</button>
+                    <button onClick={() => setIsAnnual(true)} className={`flex-1 text-xs font-bold py-1.5 rounded-md transition ${isAnnual ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}>Annuale <span className="text-[10px] text-emerald-600 ml-0.5">-33%</span></button>
+                  </div>
+
+                  <div className="home-price-amount">
+                    {isAnnual ? getPremiumPricing('year').monthlyEquivalent : getPremiumPricing('month').displayPrice}
+                    <span>/mese</span>
+                  </div>
+                  {isAnnual && <p className="text-xs text-slate-500 font-medium mt-1">Fatturato annualmente ({getPremiumPricing('year').displayPrice})</p>}
+                  {!isAnnual && <p className="text-xs text-transparent font-medium mt-1 select-none">Spacer</p>}
+                  
+                  <p className="home-price-sub mt-4">Tutto illimitato</p>
                   <ul className="home-price-features">
                     <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Analisi complete illimitate</li>
                     <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Prezzi di mercato reali</li>

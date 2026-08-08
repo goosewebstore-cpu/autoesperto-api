@@ -1,5 +1,8 @@
 import type { Metadata } from 'next';
 import CompareModels from '@/components/CompareModels';
+import { analyzeVehicle } from '@/lib/api';
+
+export const revalidate = 86400; // 1 day cache
 
 export const metadata: Metadata = {
   title: 'Confronta modelli auto usate',
@@ -15,7 +18,20 @@ export const metadata: Metadata = {
   },
 };
 
-export default function ComparePage() {
+export default async function ComparePage() {
+  let initialLeftReport = undefined;
+  let initialRightReport = undefined;
+  try {
+    const [leftRes, rightRes] = await Promise.all([
+      analyzeVehicle({ make: 'Fiat', model: 'Panda' }),
+      analyzeVehicle({ make: 'Toyota', model: 'Yaris' })
+    ]);
+    if (leftRes.success && leftRes.report) initialLeftReport = leftRes.report;
+    if (rightRes.success && rightRes.report) initialRightReport = rightRes.report;
+  } catch (err) {
+    console.warn(`Failed to fetch SSR reports for confronta page`, err);
+  }
+
   return (
     <main className="min-h-screen bg-white">
       <section className="max-w-5xl mx-auto px-5 pt-12 pb-16">
@@ -25,7 +41,7 @@ export default function ComparePage() {
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary">Confronta due modelli prima di scegliere</h1>
           <p className="text-text-secondary mt-3 leading-relaxed">Metti a confronto prezzi reali dagli annunci, affidabilità e punti da controllare. È gratuito.</p>
         </div>
-        <CompareModels />
+        <CompareModels initialLeftReport={initialLeftReport} initialRightReport={initialRightReport} />
       </section>
     </main>
   );

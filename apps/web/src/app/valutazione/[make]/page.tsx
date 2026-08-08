@@ -90,10 +90,10 @@ export default async function MakeValutazionePage({ params }: PageProps) {
 
         <section>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Valutazione {make.name} usata
+            Valutazione {make.name}{" "}usata
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Quanto costa una {make.name} usata? Scegli il modello per vedere il prezzo medio
+            Quanto costa una {make.name}{" "}usata? Scegli il modello per vedere il prezzo medio
             reale dagli annunci in vendita e la valutazione di affidabilità.
           </p>
         </section>

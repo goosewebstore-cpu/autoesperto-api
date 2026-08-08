@@ -184,6 +184,11 @@ export default async function ReliabilityYearPage({ params }: PageProps) {
               </p>
             </div>
           </div>
+          <div className="mt-4 pt-4 border-t border-border">
+            <p className="text-xs text-text-tertiary leading-relaxed">
+              <strong>Nota metodologica:</strong> le valutazioni sono stime basate sull'incrocio di dati di richiami ufficiali, frequenza guasti e recensioni utenti. Non sostituiscono il parere di un meccanico sul singolo veicolo.
+            </p>
+          </div>
         </section>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2">

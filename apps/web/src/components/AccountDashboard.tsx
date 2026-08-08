@@ -53,7 +53,8 @@ function euro(value: number) {
 }
 
 export default function AccountDashboard({ checkout, subscription, upgrade, sessionId }: { checkout?: string; subscription?: string; upgrade?: string; sessionId?: string }) {
-  const premium = getPremiumPricing();
+  const [isAnnual, setIsAnnual] = useState(true);
+  const premium = getPremiumPricing(isAnnual ? 'year' : 'month');
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<AccountUser | null>(null);
@@ -117,7 +118,7 @@ export default function AccountDashboard({ checkout, subscription, upgrade, sess
     setError('');
     setPaying(true);
     try {
-      const result = await createSubscription();
+      const result = await createSubscription(isAnnual ? 'year' : 'month');
       window.location.assign(result.url);
     } catch (err) {
       const message = err instanceof Error ? err.message : '';
@@ -237,8 +238,19 @@ export default function AccountDashboard({ checkout, subscription, upgrade, sess
 
         {userTier !== 'premium' && (
           <section className="mt-8 grid overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_24px_70px_rgba(15,23,42,.07)] lg:grid-cols-[1.15fr_.85fr]">
-            <div className="p-6 sm:p-9"><span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700"><LockKeyhole className="h-3.5 w-3.5" /> Sblocca Premium</span><h2 className="mt-5 text-3xl font-extrabold tracking-tight text-slate-950">Ottieni il massimo da AutoEsperto.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">Il piano Registrato (attuale) include le informazioni base delle analisi. Passa a Premium per sbloccare prezzi reali, difetti frequenti, costi di riparazione e consumi.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{['Analisi complete illimitate', 'Generatore annunci di vendita', 'Zero pubblicità', 'Annulli quando vuoi'].map((item) => <div key={item} className="flex items-center gap-2 text-sm font-bold text-slate-700"><CheckCircle2 className="h-4 w-4 text-emerald-600" />{item}</div>)}</div></div>
-            <div className="flex flex-col justify-center bg-slate-950 p-6 text-white sm:p-9"><p className="text-xs font-extrabold uppercase tracking-[.14em] text-blue-300">Abbonamento Mensile</p><div className="mt-3 text-4xl font-extrabold">{premium.displayPrice}<span className="text-xl text-slate-400 font-medium">/mese</span></div><p className="mt-1 text-sm text-slate-400">Rinnovo automatico. Cancelli online in un clic.</p><button onClick={handleUpgrade} disabled={paying} className="mt-7 flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-extrabold text-white transition hover:bg-blue-500 disabled:opacity-60">{paying ? <><Loader2 className="h-4 w-4 animate-spin" /> Apro Stripe…</> : <><CreditCard className="h-4 w-4" /> Passa a Premium</>}</button><p className="mt-4 flex items-center gap-2 text-xs text-slate-400"><LockKeyhole className="h-3.5 w-3.5 shrink-0" /> Pagamento gestito da Stripe. AutoEsperto non vede i dati della carta.</p></div>
+            <div className="p-6 sm:p-9"><span className="inline-flex items-center gap-2 rounded-full bg-blue-50 px-3 py-1.5 text-xs font-extrabold text-blue-700"><LockKeyhole className="h-3.5 w-3.5" /> Sblocca Premium</span><h2 className="mt-5 text-3xl font-extrabold tracking-tight text-slate-950">Ottieni il massimo da AutoEsperto.</h2><p className="mt-3 max-w-xl text-sm leading-6 text-slate-600">Hai già sbloccato le analisi illimitate con i dati di base! Passa a Premium per scoprire i prezzi reali di mercato, difetti frequenti, costi di riparazione e molto altro.</p><div className="mt-6 grid gap-3 sm:grid-cols-2">{['Analisi complete illimitate', 'Generatore annunci di vendita', 'Zero pubblicità', 'Annulli quando vuoi'].map((item) => <div key={item} className="flex items-center gap-2 text-sm font-bold text-slate-700"><CheckCircle2 className="h-4 w-4 text-emerald-600" />{item}</div>)}</div></div>
+            <div className="flex flex-col justify-center bg-slate-950 p-6 text-white sm:p-9">
+              <div className="flex bg-slate-800 rounded-lg p-1 mb-4">
+                <button onClick={() => setIsAnnual(false)} className={`flex-1 text-xs font-bold py-1.5 rounded-md transition ${!isAnnual ? 'bg-white text-slate-900' : 'text-slate-400'}`}>Mensile</button>
+                <button onClick={() => setIsAnnual(true)} className={`flex-1 text-xs font-bold py-1.5 rounded-md transition ${isAnnual ? 'bg-white text-slate-900' : 'text-slate-400'}`}>Annuale <span className="text-[10px] text-emerald-400 ml-0.5">-33%</span></button>
+              </div>
+              <p className="text-xs font-extrabold uppercase tracking-[.14em] text-blue-300">Abbonamento {isAnnual ? 'Annuale' : 'Mensile'}</p>
+              <div className="mt-3 text-4xl font-extrabold">{isAnnual ? premium.monthlyEquivalent : premium.displayPrice}<span className="text-xl text-slate-400 font-medium">/mese</span></div>
+              {isAnnual && <p className="mt-1 text-sm text-slate-400">Fatturato annualmente ({premium.displayPrice})</p>}
+              <p className="mt-1 text-sm text-slate-400">Rinnovo automatico. Cancelli online in un clic.</p>
+              <button onClick={handleUpgrade} disabled={paying} className="mt-7 flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-extrabold text-white transition hover:bg-blue-500 disabled:opacity-60">{paying ? <><Loader2 className="h-4 w-4 animate-spin" /> Apro Stripe…</> : <><CreditCard className="h-4 w-4" /> Passa a Premium</>}</button>
+              <p className="mt-4 flex items-center gap-2 text-xs text-slate-400"><LockKeyhole className="h-3.5 w-3.5 shrink-0" /> Pagamento gestito da Stripe. AutoEsperto non vede i dati della carta.</p>
+            </div>
           </section>
         )}
 

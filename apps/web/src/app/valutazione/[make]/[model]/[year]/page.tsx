@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, HelpCircle, Info } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
+import { analyzeVehicle } from '@/lib/api';
 
 interface PageProps {
   params: Promise<{ make: string; model: string; year: string }>;
@@ -63,12 +64,20 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
 export default async function ModelYearValutazionePage({ params }: PageProps) {
   const resolved = await params;
-  const yearNum = parseInt(resolved.year, 10);
-  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
   const make = findMakeBySlug(resolved.make);
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
+  const yearNum = parseInt(resolved.year, 10);
+  if (isNaN(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
+
+  let initialReport = undefined;
+  try {
+    const res = await analyzeVehicle({ make: make.name, model, year: yearNum });
+    if (res.success && res.report) initialReport = res.report;
+  } catch (err) {
+    console.warn(`Failed to fetch SSR report for ${make.name} ${model} ${yearNum}`, err);
+  }
 
   const faq = [
     {
@@ -159,16 +168,16 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
 
         <section>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            {make.name} {model} {yearNum} usata: prezzo e valutazione
+            {make.name} {model} {yearNum}{" "}usata: prezzo e valutazione
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Quanto costa una {make.name} {model} del {yearNum} usata? Ecco il prezzo medio di mercato,
+            Quanto costa una {make.name} {model} del {yearNum}{" "}usata? Ecco il prezzo medio di mercato,
             l&apos;affidabilità del modello e i punti critici da controllare prima dell&apos;acquisto.
           </p>
         </section>
 
         <div className="mt-6">
-          <ModelReportCard make={make.name} model={model} year={yearNum} />
+          <ModelReportCard make={make.name} model={model} year={yearNum} initialReport={initialReport} />
         </div>
 
         <Link

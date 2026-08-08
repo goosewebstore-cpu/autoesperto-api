@@ -52,15 +52,15 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
 }
 
 // Premium subscription config
-const PREMIUM_PRICE_CENTS = 999;
+const PREMIUM_PRICE_CENTS_MONTHLY = 999;
+const PREMIUM_PRICE_CENTS_ANNUAL = 7999;
 const PREMIUM_CURRENCY = 'eur';
-const PREMIUM_INTERVAL = 'month' as const;
 
-export function getPremiumConfig() {
+export function getPremiumConfig(interval: 'month' | 'year' = 'month') {
   return {
-    amountCents: PREMIUM_PRICE_CENTS,
+    amountCents: interval === 'year' ? PREMIUM_PRICE_CENTS_ANNUAL : PREMIUM_PRICE_CENTS_MONTHLY,
     currency: PREMIUM_CURRENCY,
-    interval: PREMIUM_INTERVAL,
+    interval: interval,
   };
 }
 

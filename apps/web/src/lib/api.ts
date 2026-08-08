@@ -183,8 +183,8 @@ export async function getAnalyticsOverview() {
   return fetchJson<AnalyticsOverview>('/analytics/overview');
 }
 
-export async function createSubscription() {
-  return fetchJson<{ success: true; url: string }>('/billing/subscribe', { method: 'POST', body: '{}' });
+export async function createSubscription(interval: 'month' | 'year' = 'month') {
+  return fetchJson<{ success: true; url: string }>('/billing/subscribe', { method: 'POST', body: JSON.stringify({ interval }) });
 }
 
 export async function cancelSubscription() {

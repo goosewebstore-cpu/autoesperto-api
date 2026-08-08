@@ -96,7 +96,8 @@ router.post(
     if (!user) throw forbidden('Account non trovato.');
 
     const stripe = getStripe();
-    const config = getPremiumConfig();
+    const interval = req.body.interval === 'year' ? 'year' : 'month';
+    const config = getPremiumConfig(interval);
     const webUrl = (process.env.WEB_URL || process.env.WEB_URLS?.split(',')[0] || 'http://localhost:3000').replace(/\/$/, '');
 
     const session = await stripe.checkout.sessions.create({

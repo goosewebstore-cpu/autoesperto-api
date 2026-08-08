@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
+import { analyzeVehicle } from '@/lib/api';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -16,6 +17,8 @@ function siteUrl() {
 const CURRENT_YEAR_MODEL = new Date().getFullYear();
 const YEAR_RANGE_LINKS: number[] = [];
 for (let y = CURRENT_YEAR_MODEL; y >= 2015; y--) YEAR_RANGE_LINKS.push(y);
+
+export const revalidate = 86400; // 1 giorno
 
 export function generateStaticParams() {
   return getAllMakes().flatMap((make) =>
@@ -64,6 +67,14 @@ export default async function ModelValutazionePage({ params }: PageProps) {
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
+
+  let initialReport = undefined;
+  try {
+    const res = await analyzeVehicle({ make: make.name, model });
+    if (res.success && res.report) initialReport = res.report;
+  } catch (err) {
+    console.warn(`Failed to fetch SSR report for ${make.name} ${model}`, err);
+  }
 
   const year = new Date().getFullYear();
   const faq = [
@@ -144,16 +155,16 @@ export default async function ModelValutazionePage({ params }: PageProps) {
         {/* Hero */}
         <section>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Quanto costa una {make.name} {model} usata?
+            Quanto costa una {make.name} {model}{" "}usata?
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Il prezzo medio reale di {make.name} {model} usata, calcolato dagli annunci in vendita,
+            Il prezzo medio reale di {make.name} {model}{" "}usata, calcolato dagli annunci in vendita,
             con la valutazione di affidabilità e i punti critici da controllare prima dell&apos;acquisto.
           </p>
         </section>
 
         <div className="mt-6">
-          <ModelReportCard make={make.name} model={model} />
+          <ModelReportCard make={make.name} model={model} initialReport={initialReport} />
         </div>
 
         <section className="mt-6">
@@ -230,7 +241,7 @@ export default async function ModelValutazionePage({ params }: PageProps) {
             Domande frequenti
           </h2>
           <p className="text-sm text-text-tertiary mb-4">
-            Tutto quello che devi sapere prima di comprare una {make.name} {model} usata.
+            Tutto quello che devi sapere prima di comprare una {make.name} {model}{" "}usata.
           </p>
           <div className="space-y-3">
             {faq.map((f) => (

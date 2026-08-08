@@ -113,6 +113,15 @@ export default async function ReliabilityYearPage({ params }: PageProps) {
     ],
   };
 
+  const carSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${make.name} ${model} ${yearNum}`,
+    brand: { '@type': 'Brand', name: make.name },
+    model: model,
+    vehicleModelDate: String(yearNum),
+  };
+
   const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
 
   return (
@@ -271,7 +280,7 @@ export default async function ReliabilityYearPage({ params }: PageProps) {
 
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema]) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema, carSchema]) }}
         />
       </main>
 

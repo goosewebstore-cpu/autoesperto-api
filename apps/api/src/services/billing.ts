@@ -47,6 +47,7 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
       stripeSessionId: session.id,
       stripePaymentIntentId: paymentIntent || undefined,
       paidAt: purchase.paidAt || new Date(),
+    },
   });
 }
 

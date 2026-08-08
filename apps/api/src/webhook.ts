@@ -21,7 +21,7 @@ export async function stripeWebhook(req: Request, res: Response): Promise<void> 
       } else if (session.mode === 'subscription' && session.subscription && session.metadata?.userId) {
         const subId = typeof session.subscription === 'string' ? session.subscription : session.subscription.id;
         const customerId = typeof session.customer === 'string' ? session.customer : session.customer?.id || '';
-        const sub = await getStripe().subscriptions.retrieve(subId);
+        const sub = await getStripe().subscriptions.retrieve(subId) as any;
         const renewsAt = new Date(sub.current_period_end * 1000);
         const priceId = sub.items.data[0]?.price.id || '';
         await activatePremium(session.metadata.userId, subId, customerId, priceId, renewsAt);

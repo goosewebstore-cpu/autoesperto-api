@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { prisma } from '@autoesperto/database';
 import { z } from 'zod';
-import { asyncHandler, conflict, forbidden } from '../http';
+import { asyncHandler, forbidden } from '../http';
 import { type AuthenticatedRequest, requireAuth } from '../services/auth';
 import { getAnalysisPrice, getStripe, recordPaidCheckout, getPremiumConfig } from '../services/billing';
 
@@ -44,7 +44,7 @@ router.post(
               currency,
               unit_amount: amountCents,
               product_data: {
-                name: promotional ? 'Analisi completa AutoEsperto — prezzo promozionale' : 'Analisi completa AutoEsperto',
+                name: promotional ? 'Analisi completa AutoEsperto \u2014 prezzo promozionale' : 'Analisi completa AutoEsperto',
                 description: promotional
                   ? 'Una analisi AI dettagliata, salvata nel tuo account. Promozione a tempo limitato.'
                   : 'Una analisi AI dettagliata, salvata nel tuo account.',
@@ -70,7 +70,7 @@ router.post(
       await prisma.purchase.delete({ where: { id: purchase.id } }).catch(() => undefined);
       throw error;
     }
-  })
+  }),
 );
 
 router.post(
@@ -83,8 +83,8 @@ router.post(
     if (session.metadata?.userId !== userId) throw forbidden('Pagamento non associato a questo account.');
     await recordPaidCheckout(session);
     res.json({ success: true, paid: session.payment_status === 'paid', amountCents: session.amount_total || 0, currency: session.currency || 'eur' });
-  })
-});
+  }),
+);
 
 // POST /billing/subscribe - Create Stripe subscription checkout
 router.post(
@@ -112,7 +112,7 @@ router.post(
           recurring: { interval: config.interval },
           product_data: {
             name: 'AutoEsperto Premium',
-            description: 'Analisi complete illimitate, prezzi di mercato reali, nessuna pubblicità.',
+            description: 'Analisi complete illimitate, prezzi di mercato reali, nessuna pubblicita.',
           },
         },
       }],
@@ -124,7 +124,7 @@ router.post(
 
     if (!session.url) throw new Error('Stripe non ha restituito il link di pagamento.');
     res.status(201).json({ success: true, url: session.url });
-  })
+  }),
 );
 
 // POST /billing/cancel-subscription
@@ -141,7 +141,7 @@ router.post(
     await prisma.subscription.update({ where: { id: sub.id }, data: { cancelledAt: new Date() } });
 
     res.json({ success: true });
-  })
+  }),
 );
 
 // GET /billing/subscription-status
@@ -161,7 +161,7 @@ router.get(
         cancelledAt: sub.cancelledAt?.toISOString() || null,
       } : null,
     });
-  })
+  }),
 );
 
 export default router;

@@ -186,7 +186,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 <h1 className="hero-v2-title">Prima di comprare, <em>verifica</em> l'auto.</h1>
                 <p className="hero-v2-sub">
                   Da una foto o da marca e modello: valore, prezzo di mercato, affidabilità e controlli da fare.
-                  Report in pochi secondi, analisi completa e gratuita.
+                  Report in pochi secondi, riconoscimento sempre gratuito.
                 </p>
               </div>
               <div className="hero-v2-strip" aria-hidden="true">
@@ -205,8 +205,8 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 </div>
               )}
               <ul className="search-v2-trust">
-                <li><Check /> Analisi completa e gratuita</li>
-                <li><ShieldCheck /> Nessun dato personale richiesto</li>
+                <li><Check /> Riconoscimento sempre gratuito</li>
+                <li><ShieldCheck /> Report completo con account gratuito</li>
                 <li><BarChart3 /> Dati dagli annunci reali in vendita</li>
               </ul>
               <div className="search-v2-avatars">
@@ -225,7 +225,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 <div className="stat-v2"><strong>{stats.makes}</strong><span>Marchi coperti</span></div>
                 <div className="stat-v2"><strong>{stats.models.toLocaleString('it-IT')}</strong><span>Modelli analizzati</span></div>
                 <div className="stat-v2"><strong>4 voci</strong><span>Prezzo, affidabilità, consumi, riparazioni</span></div>
-                <div className="stat-v2"><strong>100%</strong><span>Analisi completa gratuita</span></div>
+                <div className="stat-v2"><strong>100%</strong><span>Riconoscimento sempre gratuito</span></div>
               </div>
             </section>
 
@@ -366,7 +366,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
               <SmartImg src={U('photo-1544636331-e26879cd4d9b', 1600)} alt="" eager />
               <div className="cta-band-v2-inner">
                 <h2>Pronto a scoprire la verità sull'usato?</h2>
-                <p>Analisi complete e gratuite. Risultati in pochi secondi.</p>
+                <p>Riconoscimento gratuito, report completo con un account. Risultati in pochi secondi.</p>
                 <div className="cta-band-v2-actions">
                   <Link href="/#scanner-section" className="home-hero-cta">Analizza un'auto</Link>
                   <Link href="/valutazione" className="home-hero-cta-secondary">Sfoglia i modelli</Link>

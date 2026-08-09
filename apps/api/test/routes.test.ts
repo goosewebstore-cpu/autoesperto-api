@@ -137,4 +137,27 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.status, 400);
     });
   });
+
+  describe('POST /reports/free-scan', () => {
+    it('input manuale senza account → riconosciuto ma report gated', async () => {
+      const r = await req('/reports/free-scan', {
+        method: 'POST',
+        body: { make: 'BMW', model: 'Serie 3', year: 2016 },
+      });
+      assert.strictEqual(r.status, 200);
+      assert.strictEqual(r.data.success, true);
+      assert.strictEqual(r.data.recognized, true);
+      assert.strictEqual(r.data.vehicle.make, 'BMW');
+      assert.strictEqual(r.data.vehicle.model, 'Serie 3');
+      assert.strictEqual(r.data.report, null);
+      assert.strictEqual(r.data.saved, false);
+      assert.strictEqual(r.data.needsLogin, true);
+      assert.strictEqual(r.data.needsUpgrade, false);
+    });
+
+    it('né foto né marca/modello → 400', async () => {
+      const r = await req('/reports/free-scan', { method: 'POST', body: {} });
+      assert.strictEqual(r.status, 400);
+    });
+  });
 });

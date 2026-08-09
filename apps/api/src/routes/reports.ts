@@ -1,8 +1,12 @@
 import { Router } from 'express';
 import { z } from 'zod';
+import type { Request } from 'express';
 import { prisma } from '@autoesperto/database';
 import { buildReport } from '../services/reportService';
-import { analyzeVehiclePhoto, askAutoEsperto } from '../services/ai';
+import { analyzeVehiclePhoto, askAutoEsperto, type PhotoAnalysisResult } from '../services/ai';
+import { searchModel } from '../services/modelDB';
+import { verifyAuthToken } from '../services/auth';
+import { getAccountEntitlement } from '../services/entitlement';
 import { asyncHandler, serviceUnavailable } from '../http';
 
 const router = Router();
@@ -38,9 +42,49 @@ const photoSchema = z.object({
   vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.number().int().optional() }).optional(),
 });
 
-const freeScanSchema = z.object({
-  imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
-});
+const freeScanSchema = z
+  .object({
+    imageData: z
+      .string()
+      .regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP')
+      .max(7_500_000)
+      .optional(),
+    make: z.string().trim().min(2).optional(),
+    model: z.string().trim().min(1).optional(),
+    year: z.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
+  })
+  .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
+    message: 'Indica una foto oppure marca e modello',
+  });
+
+function getOptionalUserId(req: Request): string | null {
+  const authorization = req.header('authorization') || '';
+  const match = authorization.match(/^Bearer\s+(.+)$/i);
+  if (!match) return null;
+  try {
+    return verifyAuthToken(match[1]).sub;
+  } catch {
+    return null;
+  }
+}
+
+function manualPhotoAnalysis(make: string, model: string, year?: number): PhotoAnalysisResult {
+  return {
+    vehicle: {
+      make,
+      model,
+      year,
+      confidence: 'media',
+    },
+    damage: {
+      visible: false,
+      category: 'non_chiaro',
+      severity: 'media',
+      description: 'Inserimento manuale di marca e modello.',
+    },
+    note: 'Analisi basata su marca e modello inseriti a mano.',
+  };
+}
 
 router.post(
   '/analyze',
@@ -90,57 +134,131 @@ router.post(
 router.post(
   '/free-scan',
   asyncHandler(async (req, res) => {
-    const { imageData } = freeScanSchema.parse(req.body);
-    let photo: Awaited<ReturnType<typeof analyzeVehiclePhoto>> | undefined;
+    const input = freeScanSchema.parse(req.body);
 
-    // Primo tentativo normale
-    try {
-      photo = await analyzeVehiclePhoto({ imageData });
-    } catch (error) {
-      console.warn('free scan first attempt failed:', error);
-    }
+    let photo: PhotoAnalysisResult | undefined;
+    let photoAnalysis: PhotoAnalysisResult;
+    let make: string | undefined;
+    let model: string | undefined;
+    let year: number | undefined;
 
-    // Se il primo è fallito o non ha riconosciuto, secondo tentativo aggressive
-    if (!photo?.vehicle?.make || !photo?.vehicle?.model) {
+    if (input.imageData) {
+      // Primo tentativo normale
       try {
-        photo = await analyzeVehiclePhoto({ imageData, aggressive: true });
+        photo = await analyzeVehiclePhoto({ imageData: input.imageData });
       } catch (error) {
-        console.warn('free scan aggressive attempt failed:', error);
+        console.warn('free scan first attempt failed:', error);
+      }
+
+      // Se il primo è fallito o non ha riconosciuto, secondo tentativo aggressive
+      if (!photo?.vehicle?.make || !photo?.vehicle?.model) {
+        try {
+          photo = await analyzeVehiclePhoto({ imageData: input.imageData, aggressive: true });
+        } catch (error) {
+          console.warn('free scan aggressive attempt failed:', error);
+        }
+      }
+
+      // Se il servizio è completamente down
+      if (!photo) {
+        throw serviceUnavailable('Il riconoscimento gratuito non è disponibile in questo momento. Riprova tra poco.');
+      }
+
+      if (!photo.vehicle.make || !photo.vehicle.model) {
+        res.set('Cache-Control', 'no-store');
+        res.json({
+          success: true,
+          recognized: false,
+          message: 'L\'AI non ha riconosciuto marca e modello con sufficiente sicurezza. Prova una foto nitida di tre quarti, oppure inserisci marca e modello a mano.',
+        });
+        return;
+      }
+      make = photo.vehicle.make;
+      model = photo.vehicle.model;
+      year = photo.vehicle.year;
+      photoAnalysis = photo;
+    } else {
+      make = input.make;
+      model = input.model;
+      year = input.year;
+      const found = searchModel(make!, model!);
+      photoAnalysis = manualPhotoAnalysis(make!, model!, year);
+      if (found && !year) {
+        photoAnalysis.vehicle.year = found.year;
+        year = found.year;
       }
     }
 
-    // Se il servizio è completamente down
-    if (!photo) {
-      throw serviceUnavailable('Il riconoscimento gratuito non è disponibile in questo momento. Riprova tra poco.');
-    }
+    const vehicle = {
+      make,
+      model,
+      generation: photoAnalysis.vehicle.generation,
+      year: photoAnalysis.vehicle.year,
+      color: photoAnalysis.vehicle.color,
+      bodyType: photoAnalysis.vehicle.bodyType,
+      confidence: photoAnalysis.vehicle.confidence,
+    };
 
-    if (!photo.vehicle.make || !photo.vehicle.model) {
+    // L'analisi completa (valore, affidabilità, costi, ecc.) richiede un
+    // account autorizzato: senza login si vede solo il riconoscimento.
+    const userId = getOptionalUserId(req);
+    const entitlement = await getAccountEntitlement(userId);
+
+    if (!entitlement.entitled) {
+      const message = entitlement.needsLogin
+        ? 'Riconosciamo la tua auto. Crea un account gratuito per vedere il report completo e salvarlo nel tuo account.'
+        : !entitlement.emailVerified
+          ? 'La tua analisi gratuita è pronta: verifica la tua email per sbloccarla e salvarla nel tuo account.'
+          : 'Hai già usato la tua analisi gratuita. Passa a Premium per vedere e salvare tutte le analisi complete.';
       res.set('Cache-Control', 'no-store');
       res.json({
         success: true,
-        recognized: false,
-        message: 'L\'AI non ha riconosciuto marca e modello con sufficiente sicurezza. Prova una foto nitida di tre quarti, oppure inserisci marca e modello a mano.',
+        recognized: true,
+        vehicle,
+        report: null,
+        saved: false,
+        needsLogin: entitlement.needsLogin,
+        needsUpgrade: entitlement.needsUpgrade,
+        needsEmailVerification: !entitlement.needsLogin && !entitlement.emailVerified,
+        message,
       });
       return;
     }
 
     let report;
     try {
-      ({ report } = await buildReport({ make: photo.vehicle.make, model: photo.vehicle.model, year: photo.vehicle.year }));
+      ({ report } = await buildReport({ make, model, year }));
     } catch (error) {
       console.warn('free scan price unavailable:', error);
       throw serviceUnavailable('Veicolo riconosciuto, ma il calcolo del prezzo non è disponibile in questo momento. Riprova tra poco.');
     }
 
+    const title = [make, model, photoAnalysis.vehicle.generation, year].filter(Boolean).join(' ');
+    const analysis = await prisma.analysis.create({
+      data: {
+        userId: userId!,
+        title,
+        vehicleJson: JSON.stringify(photoAnalysis.vehicle),
+        photoAnalysisJson: JSON.stringify(photoAnalysis),
+        reportJson: JSON.stringify(report),
+        sourceImageStored: false,
+        immediateExecutionAccepted: true,
+        consentAt: new Date(),
+        termsVersion: '2026-08-02',
+      },
+    });
+
     res.set('Cache-Control', 'no-store');
     void prisma.analyticsEvent.create({
-      data: { type: 'scan', path: '/', meta: JSON.stringify({ make: photo.vehicle.make, model: photo.vehicle.model, recognized: true }) },
+      data: { type: 'scan', path: '/', meta: JSON.stringify({ make, model, recognized: true, saved: true }), userId },
     }).catch(() => undefined);
     res.json({
       success: true,
       recognized: true,
-      vehicle: photo.vehicle,
+      vehicle,
       report,
+      saved: true,
+      analysis: { id: analysis.id, createdAt: analysis.createdAt.toISOString() },
     });
   })
 );

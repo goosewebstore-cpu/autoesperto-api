@@ -36,7 +36,10 @@ export interface FreeScanResult {
   message?: string;
   vehicle?: PhotoAnalysis['vehicle'];
   report?: AutoReport;
+  saved?: boolean;
   needsLogin?: boolean;
+  needsUpgrade?: boolean;
+  needsEmailVerification?: boolean;
 }
 
 export interface AccountUser {
@@ -131,6 +134,10 @@ export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: 
 
 export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
   return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) }, AI_TIMEOUT_MS, true);
+}
+
+export async function freeScanManual(input: { make: string; model: string; year?: number }): Promise<FreeScanResult> {
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, REPORT_TIMEOUT_MS, true);
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {

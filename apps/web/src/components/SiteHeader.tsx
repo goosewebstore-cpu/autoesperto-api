@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Car, ChevronDown, Menu, ScanSearch, UserRound, X } from 'lucide-react';
+import { getAuthToken } from '@/lib/auth';
 
 interface MenuItem {
   label: string;
@@ -39,7 +40,12 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
+  const [signedIn, setSignedIn] = useState(false);
   const headerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    setSignedIn(Boolean(getAuthToken()));
+  }, [pathname]);
 
   useEffect(() => {
     setMenuOpen(false);
@@ -109,9 +115,9 @@ export default function SiteHeader() {
         </nav>
 
         <div className="site-actions">
-          <Link href="/accesso" className="site-account-btn">
+          <Link href={signedIn ? '/account' : '/accesso'} className="site-account-btn">
             <UserRound className="h-4 w-4" />
-            <span className="site-account-label">Accedi</span>
+            <span className="site-account-label">{signedIn ? 'Area personale' : 'Accedi'}</span>
           </Link>
           <Link href="/#scanner-section" className="site-cta">
             <ScanSearch className="h-4 w-4" />
@@ -147,7 +153,7 @@ export default function SiteHeader() {
             <Link href="/guide" className="site-mobile-chip">Guide</Link>
           </div>
           <div className="site-mobile-actions">
-            <Link href="/accesso" className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>Accedi</Link>
+            <Link href={signedIn ? '/account' : '/accesso'} className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>{signedIn ? 'Area personale' : 'Accedi'}</Link>
             <Link href="/#scanner-section" className="home-hero-cta" onClick={() => setMenuOpen(false)}>Analizza ora</Link>
           </div>
         </div>

@@ -4,12 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, RotateCcw, ScanSearch, ShieldCheck, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { API_URL, freeScanVehiclePhoto, analyzeVehicle, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
+import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
 import ReportView from '@/components/ReportView';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
-const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Report completo incluso'];
+const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Salvataggio nel tuo account'];
 
 const SCAN_PHASES = [
   'Foto ricevuta',
@@ -84,14 +84,14 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
         reader.readAsDataURL(file);
       });
       const result = await freeScanVehiclePhoto(imageData);
-      if (!result.recognized || !result.vehicle || !result.report) {
+      if (!result.recognized || !result.vehicle) {
         // L'AI non ha riconosciuto: mostra il popup un attimo, poi passa a input manuale
         await wait(2500);
         setScan(result);
         setStage('manual-input');
         return;
       }
-      setScan(result); setReport(result.report); setStage('vehicle-found');
+      setScan(result); setReport(result.report ?? null); setStage('vehicle-found');
       await wait(3500);
       setStage('result');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -115,22 +115,17 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     setManualLoading(true); setError('');
     try {
       const year = manualYear.trim() ? Number(manualYear.trim()) : undefined;
-      const result = await analyzeVehicle({
+      const result = await freeScanManual({
         make: manualMake.trim(),
         model: manualModel.trim(),
         ...(year && !isNaN(year) ? { year } : {}),
       });
-      setReport(result.report);
-      setScan({
-        success: true,
-        recognized: true,
-        vehicle: {
-          make: manualMake.trim(),
-          model: manualModel.trim(),
-          year: year && !isNaN(year) ? year : undefined,
-          confidence: 'media',
-        },
-      });
+      if (!result.recognized || !result.vehicle) {
+        setError(result.message || 'Non riesco a riconoscere il veicolo. Riprova.');
+        return;
+      }
+      setScan(result);
+      setReport(result.report ?? null);
       setStage('vehicle-found');
       await wait(2500);
       setStage('result');
@@ -184,7 +179,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                   <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
                 ))}
               </div>
-              <p className="scanner-box-micro">Analisi completa e gratuita. Salviamo il report, non la foto.</p>
+              <p className="scanner-box-micro">Riconoscimento sempre gratuito. Per il report completo e salvarlo basta un account gratuito.</p>
             </div>
           ) : (
             <form
@@ -259,7 +254,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
-           <p className="scanner-microcopy">Analisi completa e gratuita. Nessun dato personale richiesto.</p>
+           <p className="scanner-microcopy">Riconoscimento gratuito senza account. Per il report completo e salvarlo basta un account gratuito.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
            <p className="mt-3 flex items-start gap-2 text-xs text-slate-600 max-w-xl">
              <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600" />
@@ -282,24 +277,55 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     );
   }
 
-  if (stage === 'result' && scan?.vehicle && report) {
+  if (stage === 'result' && scan?.vehicle) {
     const vehicleName = [scan.vehicle.make, scan.vehicle.model].filter(Boolean).join(' ');
+    const gated = !report;
 
     return (
       <section className="scanner-result animate-fade-in">
         <div className="scanner-result-hero">
-          {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt={`Foto analizzata: ${vehicleName}`} />
-          <div className="scanner-result-shade" />
+          {imageUrl && (
+            <div className="relative w-full h-full">
+              {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt={`Foto analizzata: ${vehicleName}`} className="w-full h-full object-cover" />
+              <div className="scanner-result-shade" />
+            </div>
+          )}
           <button type="button" onClick={reset} className="scanner-reset"><RotateCcw className="h-4 w-4" /> Nuova analisi</button>
-          <div className="scanner-result-title"><span>Analisi gratuita completata</span><h1>{vehicleName}</h1><p>Riconoscimento a confidenza {scan.vehicle.confidence}</p></div>
+          <div className="scanner-result-title">
+            <span>{gated ? 'Veicolo riconosciuto' : 'Analisi gratuita completata'}</span>
+            <h1>{vehicleName}</h1>
+            <p>Riconoscimento a confidenza {scan.vehicle.confidence}</p>
+          </div>
         </div>
 
-        <div className="scanner-result-banner">
-          <ShieldCheck className="h-4 w-4" />
-          <span>Ecco la tua analisi completa con valore stimato, affidabilità e costi. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'accedi gratis'}</button>.</span>
-        </div>
-
-        <ReportView report={report} embedded tier="premium" />
+        {gated ? (
+          <div className="scanner-gate-card">
+            <div className="scanner-gate-icon"><ShieldCheck className="h-6 w-6" /></div>
+            <h2>{scan.needsUpgrade ? 'Hai gi\u00E0 usato la tua analisi gratuita' : scan.needsEmailVerification ? 'La tua analisi gratuita \u00E8 pronta' : 'Riconosciamo la tua auto'}</h2>
+            <p>{scan.message || (scan.needsUpgrade
+              ? 'Passa a Premium per vedere e salvare tutte le analisi complete.'
+              : 'Crea un account gratuito per vedere il report completo e salvarlo nel tuo account.')}</p>
+            <button
+              type="button"
+              className="scanner-gate-cta"
+              onClick={() => router.push(scan.needsUpgrade ? '/account' : scan.needsEmailVerification ? '/account' : '/accesso?next=/account')}
+            >
+              {scan.needsUpgrade
+                ? <>Vai alla pagina Premium <ArrowRight className="h-4 w-4" /></>
+                : scan.needsEmailVerification
+                  ? <>Verifica la tua email <ArrowRight className="h-4 w-4" /></>
+                  : <>Crea account gratuito <ArrowRight className="h-4 w-4" /></>}
+            </button>
+          </div>
+        ) : (
+          <>
+            <div className="scanner-result-banner">
+              <ShieldCheck className="h-4 w-4" />
+              <span>Ecco la tua analisi completa con valore stimato, affidabilit\u00E0 e costi. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'accedi gratis'}</button>.</span>
+            </div>
+            <ReportView report={report} embedded tier="premium" />
+          </>
+        )}
       </section>
     );
   }

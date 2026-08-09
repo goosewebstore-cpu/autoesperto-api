@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, Camera, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ShieldCheck, Upload, UserRound } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ScanSearch, ShieldCheck, Upload, UserRound } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { freeScanVehiclePhoto, analyzeVehicle, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
 import ReportView from '@/components/ReportView';
@@ -36,10 +36,11 @@ function setFreeScanCookie() {
   document.cookie = `${FREE_SCAN_COOKIE}=1; path=/; max-age=31536000; samesite=lax`;
 }
 
-export default function VehicleScanner() {
+export default function VehicleScanner({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<ScannerStage>('idle');
+  const [tab, setTab] = useState<'foto' | 'manual'>('foto');
   const [imageUrl, setImageUrl] = useState('');
   const [scan, setScan] = useState<FreeScanResult | null>(null);
   const [report, setReport] = useState<AutoReport | null>(null);
@@ -177,6 +178,106 @@ export default function VehicleScanner() {
   };
 
   if (stage === 'idle') {
+    if (embedded) {
+      return (
+        <div className="scanner-box">
+          <div className="scanner-tabs" role="tablist" aria-label="Come vuoi analizzare l'auto">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'foto'}
+              className={`scanner-tab${tab === 'foto' ? ' active' : ''}`}
+              onClick={() => { setTab('foto'); setError(''); }}
+            >
+              <Camera /> Da foto
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'manual'}
+              className={`scanner-tab${tab === 'manual' ? ' active' : ''}`}
+              onClick={() => { setTab('manual'); setError(''); }}
+            >
+              <Car /> Marca e modello
+            </button>
+          </div>
+
+          {tab === 'foto' ? (
+            <div className="scanner-photo-tab">
+              <button type="button" className="scanner-dropzone" onClick={() => inputRef.current?.click()}>
+                <span className="scanner-drop-icon"><Camera className="h-6 w-6" /></span>
+                <span className="scanner-drop-main">Carica una foto dell'auto</span>
+                <span className="scanner-drop-sub">JPG, PNG o WebP · massimo 5 MB</span>
+              </button>
+              <div className="scanner-box-promises" aria-label="Cosa ricevi">
+                {promises.map((item) => (
+                  <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
+                ))}
+              </div>
+              <p className="scanner-box-micro">La prima analisi è completa e gratuita. Salviamo il report, non la foto.</p>
+            </div>
+          ) : (
+            <form
+              className="scanner-manual-form"
+              onSubmit={(event) => { event.preventDefault(); void handleManualSubmit(); }}
+            >
+              <div className="scanner-manual-row">
+                <label className="scanner-field">
+                  <span>Marca *</span>
+                  <input
+                    type="text"
+                    value={manualMake}
+                    onChange={(e) => setManualMake(e.target.value)}
+                    placeholder="es. Fiat"
+                    autoComplete="off"
+                    required
+                  />
+                </label>
+                <label className="scanner-field">
+                  <span>Modello *</span>
+                  <input
+                    type="text"
+                    value={manualModel}
+                    onChange={(e) => setManualModel(e.target.value)}
+                    placeholder="es. Panda"
+                    autoComplete="off"
+                    required
+                  />
+                </label>
+                <label className="scanner-field">
+                  <span>Anno (opz.)</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    value={manualYear}
+                    onChange={(e) => setManualYear(e.target.value)}
+                    placeholder="es. 2018"
+                    min={1900}
+                    max={2100}
+                  />
+                </label>
+              </div>
+              {error && <p className="scanner-box-error" role="alert">{error}</p>}
+              <button type="submit" className="scanner-submit" disabled={manualLoading}>
+                {manualLoading ? (
+                  <><Loader2 className="animate-spin" /> Calcolo in corso…</>
+                ) : (
+                  <><ScanSearch /> Calcola valore <ArrowRight /></>
+                )}
+              </button>
+            </form>
+          )}
+          <input
+            ref={inputRef}
+            className="hidden"
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={(event) => handleFile(event.target.files?.[0])}
+          />
+        </div>
+      );
+    }
+
     return (
       <section className="scanner-hero">
         <div className="scanner-glow scanner-glow-one" /><div className="scanner-glow scanner-glow-two" />

@@ -14,6 +14,15 @@ type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error
 
 const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Report completo incluso'];
 
+const SCAN_PHASES = [
+  'Foto ricevuta',
+  'Identificazione del veicolo',
+  'Analisi del modello',
+  'Valutazione del mercato',
+  'Controllo affidabilità',
+  'Preparazione del report',
+];
+
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const FREE_SCAN_COOKIE = 'ae_free_scan_used';
@@ -42,6 +51,15 @@ export default function VehicleScanner() {
   const [user, setUser] = useState<AccountUser | null>(null);
   const [userTier, setUserTier] = useState<UserTier>('anonymous');
   const [showFullReport, setShowFullReport] = useState(false);
+  const [scanPhase, setScanPhase] = useState(0);
+
+  const analyzing = stage === 'recognition' || stage === 'vehicle-found' || stage === 'manual-input';
+
+  useEffect(() => {
+    if (!analyzing) return;
+    const timers = SCAN_PHASES.map((_, i) => setTimeout(() => setScanPhase(i + 1), 700 * (i + 1)));
+    return () => timers.forEach(clearTimeout);
+  }, [analyzing]);
 
   useEffect(() => {
     getMyAccount().then(res => {
@@ -57,6 +75,7 @@ export default function VehicleScanner() {
     setImageUrl(''); setScan(null); setReport(null); setError(''); setStage('idle');
     setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
     setShowFullReport(false);
+    setScanPhase(0);
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -80,7 +99,7 @@ export default function VehicleScanner() {
     }
 
     const localUrl = URL.createObjectURL(file);
-    setImageUrl(localUrl); setStage('recognition');
+    setImageUrl(localUrl); setStage('recognition'); setScanPhase(0);
     try {
       const imageData = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -162,7 +181,7 @@ export default function VehicleScanner() {
       <section className="scanner-hero">
         <div className="scanner-glow scanner-glow-one" /><div className="scanner-glow scanner-glow-two" />
         <div className="scanner-hero-copy">
-          <div className="scanner-kicker"><Sparkles className="h-4 w-4" /> Scanner AI per auto</div>
+          <div className="scanner-kicker"><Camera className="h-4 w-4" /> Riconoscimento auto da foto</div>
           <h1>Analizza l’auto.<br className="hidden sm:block" /> Scopri modello e prezzo.</h1>
           <p className="scanner-lead">Da una foto riconosciamo marca, modello e anno indicativo, stimiamo il prezzo e creiamo un’analisi dettagliata fatta apposta per quel modello e quell’anno.</p>
            <div className="scanner-promises" aria-label="Informazioni analizzate">
@@ -171,14 +190,14 @@ export default function VehicleScanner() {
            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
            <p className="scanner-microcopy">Prima analisi completa e gratuita. Per le successive, crea un account gratuito.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
-          <p className="mt-3 flex items-start gap-2 text-xs text-amber-600 max-w-xl">
-            <AlertTriangle className="h-3.5 w-3.5 mt-0.5 shrink-0" />
-            L'identificazione AI è indicativa e può contenere errori. Per maggiore precisione carica foto nitide da più angoli (frontale, laterale, posteriore).
-          </p>
+           <p className="mt-3 flex items-start gap-2 text-xs text-slate-600 max-w-xl">
+             <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600" />
+             <span>Per un risultato migliore: auto interamente visibile, buona illuminazione e foto nitida. Il riconoscimento è indicativo e può contenere errori: usa più angoli (frontale, laterale, posteriore).</span>
+           </p>
         </div>
         <div className="scanner-hero-visual" aria-hidden="true">
           <div className="scanner-device">
-            <div className="scanner-device-top"><span /><span>AutoEsperto Vision</span><span /></div>
+            <div className="scanner-device-top"><span /><span>Analisi AutoEsperto</span><span /></div>
             <div className="scanner-car-silhouette">
               <svg viewBox="0 0 620 300" fill="none"><path d="M75 205 103 145l104-28 68-61h153l79 63 63 27 29 59-23 31H99Z" stroke="currentColor" strokeWidth="2"/><path d="m207 117 68-61h153l79 63M103 145l116 23h282l69-22M142 205h385M236 117l-17 51m236-51 46 51" stroke="currentColor" strokeWidth="1.4"/><circle cx="180" cy="217" r="43" stroke="currentColor" strokeWidth="2"/><circle cx="494" cy="217" r="43" stroke="currentColor" strokeWidth="2"/></svg>
               <div className="scanner-demo-line" />
@@ -295,11 +314,11 @@ export default function VehicleScanner() {
             </div>
           )}
         </div>
-        <div className="scanner-photo-badge"><Sparkles className="h-4 w-4" /> AutoEsperto Vision</div>
+        <div className="scanner-photo-badge"><ShieldCheck className="h-4 w-4" /> Analisi AutoEsperto</div>
       </div>
       <div className="scanner-work-panel">
         {stage === 'error' ? (
-          <div className="scanner-error"><AlertTriangle className="h-7 w-7" /><h2>Analisi non completata</h2><p>{error}</p><button type="button" onClick={() => inputRef.current?.click()}><Upload className="h-4 w-4" /> Scegli un’altra foto</button></div>
+          <div className="scanner-error"><AlertTriangle className="h-7 w-7" /><h2>Non siamo riusciti ad analizzare questa foto</h2><p>{error}</p><button type="button" onClick={() => inputRef.current?.click()}><Upload className="h-4 w-4" /> Riprova con un'altra foto</button></div>
         ) : stage === 'manual-input' ? (
           <div className="scanner-manual-side animate-fade-in">
             <div className="scanner-stage-label">Inserimento manuale</div>
@@ -312,6 +331,16 @@ export default function VehicleScanner() {
             <div className="scanner-stage-label">{stage === 'recognition' ? 'Analisi gratuita in corso' : 'Veicolo riconosciuto'}</div>
             <h2>{stage === 'recognition' ? 'Riconoscimento veicolo e preparazione report completo…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
             <p className="scanner-stage-copy">{stage === 'recognition' ? 'La prima analisi è gratuita e include il report completo.' : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
+            <div className="scanner-phases" role="status" aria-live="polite">
+              {SCAN_PHASES.map((phase, i) => (
+                <div key={phase} className={`scanner-phase${i < scanPhase ? ' done' : ''}`}>
+                  <span className="scanner-phase-icon">
+                    {i < scanPhase ? <Check className="h-3.5 w-3.5" /> : <span className="scanner-phase-dot" />}
+                  </span>
+                  {phase}
+                </div>
+              ))}
+            </div>
             <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
             {discovered.length > 0 && <div className="discovered-grid">{discovered.map(([label, value]) => <div key={String(label)}><span><Check className="h-3.5 w-3.5" /> {label}</span><strong>{value}</strong></div>)}</div>}
           </>

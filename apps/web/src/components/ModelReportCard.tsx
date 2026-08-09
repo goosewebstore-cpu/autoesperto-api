@@ -118,7 +118,7 @@ export default function ModelReportCard({ make, model, year, initialReport }: Mo
                     {reliability.aiEnhanced && (
                       <span className="inline-flex items-center gap-1 text-indigo-600 font-semibold">
                         <Sparkles className="w-3 h-3" />
-                        Analisi AI
+                        Analisi dettagliata
                       </span>
                     )}
                     {!reliability.aiEnhanced && 'Affidabilità del modello'}
@@ -134,6 +134,36 @@ export default function ModelReportCard({ make, model, year, initialReport }: Mo
                     </li>
                   ))}
                 </ul>
+              )}
+              <div className={`mt-3 rounded-xl border p-3 ${reliability.verdict === 'BUY' ? 'border-emerald-200 bg-emerald-50' : reliability.verdict === 'NEGOTIATE' ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50'}`}>
+                <div className="text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
+                  Conviene comprarla?
+                </div>
+                <div className={`mt-0.5 text-sm font-extrabold ${reliability.verdict === 'BUY' ? 'text-emerald-700' : reliability.verdict === 'NEGOTIATE' ? 'text-amber-700' : 'text-red-700'}`}>
+                  {reliability.verdict === 'BUY'
+                    ? 'Sì, con i controlli del caso'
+                    : reliability.verdict === 'NEGOTIATE'
+                      ? 'Con attenzione, tratta il prezzo'
+                      : 'Valuta alternative o fai controlli approfonditi'}
+                </div>
+              </div>
+              {(reliability.advice.length > 0 || reliability.commonIssues.length > 0) && (
+                <div className="mt-3 rounded-xl border border-border bg-white p-3">
+                  <h4 className="mb-2 flex items-center gap-1.5 text-xs font-bold text-text-primary">
+                    <AlertTriangle className="w-3.5 h-3.5 text-warning" />
+                    Cosa controllare prima di comprare
+                  </h4>
+                  <ul className="space-y-1.5">
+                    {(reliability.advice.length ? reliability.advice : reliability.commonIssues)
+                      .slice(0, 4)
+                      .map((item, i) => (
+                        <li key={i} className="flex items-start gap-2 text-xs text-text-secondary leading-relaxed">
+                          <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                          {item}
+                        </li>
+                      ))}
+                  </ul>
+                </div>
               )}
             </div>
           )}

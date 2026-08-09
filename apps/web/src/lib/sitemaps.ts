@@ -17,6 +17,8 @@ export interface UrlEntry {
 
 const staticPages: UrlEntry[] = [
   { url: siteUrl, changeFrequency: 'weekly', priority: 1 },
+  { url: `${siteUrl}/compra`, changeFrequency: 'weekly', priority: 0.85 },
+  { url: `${siteUrl}/vendi`, changeFrequency: 'weekly', priority: 0.85 },
   { url: `${siteUrl}/valutazione`, changeFrequency: 'weekly', priority: 0.9 },
   { url: `${siteUrl}/riparazione`, changeFrequency: 'weekly', priority: 0.8 },
   { url: `${siteUrl}/affidabilita`, changeFrequency: 'weekly', priority: 0.8 },

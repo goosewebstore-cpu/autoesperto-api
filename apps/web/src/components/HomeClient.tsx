@@ -15,6 +15,7 @@ import { getPremiumPricing } from '@/lib/pricing';
 import AdSlot from '@/components/AdSlot';
 import GuideCard from '@/components/GuideCard';
 import SiteFooter from '@/components/SiteFooter';
+import SiteHeader from '@/components/SiteHeader';
 import { guides } from '@/lib/guides';
 
 export type HomeInitialPayload = AnalyzePayload | null;
@@ -43,24 +44,6 @@ const tools = [
     ring: 'ring-emerald-500/20',
   },
   {
-    icon: Wrench,
-    title: 'Riparazione',
-    desc: 'Costi manutenzione',
-    href: '/riparazione',
-    color: 'text-amber-600',
-    bg: 'bg-amber-500/10',
-    ring: 'ring-amber-500/20',
-  },
-  {
-    icon: Fuel,
-    title: 'Consumi',
-    desc: 'Consumi reali l/100km',
-    href: '/consumi',
-    color: 'text-purple-600',
-    bg: 'bg-purple-500/10',
-    ring: 'ring-purple-500/20',
-  },
-  {
     icon: ArrowLeftRight,
     title: 'Confronta',
     desc: 'Due auto a confronto',
@@ -69,11 +52,20 @@ const tools = [
     bg: 'bg-rose-500/10',
     ring: 'ring-rose-500/20',
   },
+  {
+    icon: BookOpen,
+    title: 'Guide',
+    desc: 'Consigli per l\'acquisto',
+    href: '/guide',
+    color: 'text-indigo-600',
+    bg: 'bg-indigo-500/10',
+    ring: 'ring-indigo-500/20',
+  },
 ];
 
 const steps = [
   { icon: Camera, label: 'Scatta una foto' },
-  { icon: Sparkles, label: 'L\'AI analizza' },
+  { icon: Sparkles, label: 'Analisi automatica' },
   { icon: CheckCircle2, label: 'Report completo' },
 ];
 
@@ -116,19 +108,18 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
   return (
     <div className="min-h-screen bg-background">
       {/* ── HEADER ── */}
-      <header className="home-header">
-        <div className="home-header-inner">
-          <button onClick={handleBack} className="home-logo" aria-label="Torna alla home">
-            <span className="home-logo-icon"><Car className="h-4 w-4 text-white" /></span>
-            <span className="home-logo-text">Auto<span>Esperto</span></span>
-          </button>
-          {!report && (
-            <Link href="/account" className="home-account-btn">
-              <UserRound className="h-4 w-4" /> Account
-            </Link>
-          )}
-        </div>
-      </header>
+      {report ? (
+        <header className="home-header">
+          <div className="home-header-inner">
+            <button onClick={handleBack} className="home-logo" aria-label="Torna alla home">
+              <span className="home-logo-icon"><Car className="h-4 w-4 text-white" /></span>
+              <span className="home-logo-text">Auto<span>Esperto</span></span>
+            </button>
+          </div>
+        </header>
+      ) : (
+        <SiteHeader />
+      )}
 
       <main>
         {report ? (
@@ -137,25 +128,90 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
           </div>
         ) : (
           <div className="home-page">
-            {/* ═══ HERO: Scanner AI ═══ */}
-            <VehicleScanner key={scannerKey} />
-            {error && (
-              <div role="alert" className="home-error">
-                {error}
+            {/* ═══ NEW HERO ═══ */}
+            <section className="home-hero">
+              <h1>Prima di comprare o vendere un'auto, analizzala.</h1>
+              <p>Carica una foto e scopri che auto è, quanto vale e cosa controllare.</p>
+              <div className="home-hero-actions">
+                <button
+                  onClick={() => {
+                    const scanner = document.getElementById('scanner-section');
+                    if (scanner) scanner.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="home-hero-cta"
+                >
+                  <Camera className="h-5 w-5" /> Analizza la mia auto
+                </button>
+                <button
+                  onClick={() => {
+                    const how = document.getElementById('come-funziona');
+                    if (how) how.scrollIntoView({ behavior: 'smooth' });
+                  }}
+                  className="home-hero-cta-secondary"
+                >
+                  Scopri come funziona
+                </button>
               </div>
-            )}
+              <div className="home-micro-steps">
+                <span>Foto</span> → <span>Analisi</span> → <span>Risultato</span>
+              </div>
+            </section>
 
-            {/* ═══ COME FUNZIONA (3 step) ═══ */}
-            <section className="home-steps" aria-label="Come funziona">
-              <h2 className="sr-only">Come funziona AutoEsperto</h2>
-              <div className="home-steps-track">
-                {steps.map((step, i) => (
-                  <div key={step.label} className="home-step">
-                    <div className="home-step-num">{i + 1}</div>
-                    <step.icon className="home-step-icon" />
-                    <span className="home-step-label">{step.label}</span>
-                  </div>
-                ))}
+            {/* ═══ SECOND PATH BLOCK ═══ */}
+            <section className="home-paths px-5 mx-auto max-w-4xl">
+              <div className="home-path-card">
+                <h3>Hai trovato un'auto e vuoi comprarla?</h3>
+                <p>Inserisci prezzo, chilometri e dati dell'auto. Ti aiutiamo a capire se il prezzo è giusto.</p>
+                <Link href="/compra" className="home-path-cta">
+                  <BarChart3 className="h-4 w-4" /> Controlla un'auto che voglio comprare
+                </Link>
+              </div>
+              <div className="home-path-card">
+                <h3>Vuoi vendere la tua auto?</h3>
+                <p>Scopri quanto puoi chiedere sul mercato attuale con una stima precisa.</p>
+                <Link href="/vendi" className="home-path-cta">
+                  <BarChart3 className="h-4 w-4" /> Voglio vendere la mia auto
+                </Link>
+              </div>
+            </section>
+
+            <div id="scanner-section">
+              {/* ═══ SCANNER ═══ */}
+              <VehicleScanner key={scannerKey} />
+              {error && (
+                <div role="alert" className="home-error">
+                  {error}
+                </div>
+              )}
+            </div>
+
+            {/* ═══ COME FUNZIONA ═══ */}
+            <section id="come-funziona" className="home-section" aria-label="Come funziona">
+              <div className="home-section-head">
+                <h2>Come funziona</h2>
+                <p>Tre passi, pochi secondi.</p>
+              </div>
+              <div className="home-how-grid">
+                <div className="home-how-card">
+                  <span className="home-how-num">1</span>
+                  <h3>Carica una foto o i dati dell&apos;auto</h3>
+                  <p>Una foto dell&apos;auto, oppure marca, modello, anno e chilometri.</p>
+                </div>
+                <div className="home-how-card">
+                  <span className="home-how-num">2</span>
+                  <h3>Confrontiamo con il mercato</h3>
+                  <p>Analizziamo gli annunci reali in vendita per trovare la fascia di prezzo.</p>
+                </div>
+                <div className="home-how-card">
+                  <span className="home-how-num">3</span>
+                  <h3>Leggi il verdetto</h3>
+                  <p>Valore, affidabilità, punti da controllare e prezzo consigliato.</p>
+                </div>
+              </div>
+              <div className="home-trust-strip">
+                <span>Dati dagli annunci reali in vendita</span>
+                <span>Stime trasparenti, con data e campione</span>
+                <span>Nessun dato personale richiesto</span>
               </div>
             </section>
 
@@ -180,9 +236,6 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                 ))}
               </div>
             </section>
-
-            {/* ═══ ADS ═══ */}
-            <AdSlot placement="banner" className="py-4" />
 
             {/* ═══ PRICING ═══ */}
             <section className="home-section" aria-label="Piani">
@@ -259,6 +312,9 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                 </div>
               </section>
             )}
+
+            {/* ═══ ADS ═══ */}
+            <AdSlot placement="banner" className="py-4" />
           </div>
         )}
       </main>

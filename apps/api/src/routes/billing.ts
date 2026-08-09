@@ -46,8 +46,8 @@ router.post(
               product_data: {
                 name: promotional ? 'Analisi completa AutoEsperto \u2014 prezzo promozionale' : 'Analisi completa AutoEsperto',
                 description: promotional
-                  ? 'Una analisi AI dettagliata, salvata nel tuo account. Promozione a tempo limitato.'
-                  : 'Una analisi AI dettagliata, salvata nel tuo account.',
+                  ? 'Un’analisi completa AutoEsperto, salvata nel tuo account. Offerta a tempo limitato.'
+                  : 'Un’analisi completa AutoEsperto, salvata nel tuo account.',
               },
             },
           },
@@ -113,7 +113,7 @@ router.post(
           recurring: { interval: config.interval },
           product_data: {
             name: 'AutoEsperto Premium',
-            description: 'Analisi complete illimitate, prezzi di mercato reali, nessuna pubblicita.',
+            description: 'Analisi complete illimitate, dati di mercato reali, nessuna pubblicita.',
           },
         },
       }],

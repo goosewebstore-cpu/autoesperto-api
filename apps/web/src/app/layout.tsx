@@ -17,9 +17,9 @@ const inter = Inter({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
-const siteTitle = 'Analisi auto con AI: danni, valore e preventivo | AutoEsperto';
+const siteTitle = 'AutoEsperto — Il tuo secondo parere prima di comprare un\'auto usata';
 const siteDescription =
-  'Analizza l’auto da una foto: scopri marca, modello, anno e prezzo indicativo, con un report dettagliato specifico per quel veicolo.';
+  'Scopri quanto vale un\'auto usata, se il prezzo è giusto e cosa controllare prima di comprarla. Analisi gratuita.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -30,7 +30,7 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   keywords: [
-    'analisi auto AI', 'scanner auto AI', 'valutazione auto', 'danni auto',
+    'valutazione auto usata', 'comprare auto usata', 'valutazione auto', 'danni auto',
     'preventivo riparazione auto', 'valore auto usata', 'Car Health Score', 'AutoEsperto',
   ],
   category: 'automotive',

@@ -32,25 +32,8 @@ export default function AffidabilitaPage() {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-border/60">
-        <div className="max-w-3xl mx-auto flex items-center justify-between px-5 h-16">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <Car className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-text-primary">
-              Auto<span className="text-accent">Esperto</span>
-            </span>
-          </Link>
-          <nav className="flex items-center gap-4 text-xs text-text-secondary">
-            <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione</Link>
-            <Link href="/riparazione" className="hover:text-text-primary transition-colors">Riparazione</Link>
-            <Link href="/guide" className="hover:text-text-primary transition-colors">Guide</Link>
-          </nav>
-        </div>
-      </header>
-
-      <main className="max-w-3xl mx-auto px-5 pt-10 pb-20">
+      <SiteHeader />
+      <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
         <section className="text-center">
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
             Quanto è affidabile la tua auto?

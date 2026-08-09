@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SiteHeader from '@/components/SiteHeader';
 import { ArrowLeft, Car, Check, Loader2, LockKeyhole, MailCheck, AlertTriangle } from 'lucide-react';
 import { loginAccount, registerAccount, verifyEmail, API_URL } from '@/lib/api';
 import { setAuthToken } from '@/lib/auth';
@@ -82,43 +83,54 @@ export default function AccessForm({ nextPath = '/account', verifyToken, googleT
 
   if (verifying === 'loading') {
     return (
-      <main className="min-h-screen bg-slate-50 px-5 py-14">
-        <div className="mx-auto max-w-md text-center">
-          <Loader2 className="mx-auto h-8 w-8 animate-spin text-blue-600" />
-          <h1 className="mt-6 text-2xl font-extrabold text-slate-950">Verifica la tua email…</h1>
-          <p className="mt-2 text-sm text-slate-600">Stiamo confermando il tuo indirizzo.</p>
-        </div>
-      </main>
+      <div className="min-h-screen bg-slate-50">
+        <SiteHeader />
+        <main className="grid place-items-center px-5 py-14">
+          <div className="text-center">
+            <Loader2 className="mx-auto h-8 w-8 animate-spin text-blue-600" />
+            <h1 className="mt-6 text-2xl font-extrabold text-slate-950">Verifica la tua email…</h1>
+            <p className="mt-2 text-sm text-slate-600">Stiamo confermando il tuo indirizzo.</p>
+          </div>
+        </main>
+      </div>
     );
   }
 
   if (verifying === 'ok') {
     return (
-      <main className="min-h-screen bg-slate-50 px-5 py-14">
-        <div className="mx-auto max-w-md text-center">
-          <MailCheck className="mx-auto h-12 w-12 text-emerald-600" />
-          <h1 className="mt-4 text-2xl font-extrabold text-slate-950">Email verificata!</h1>
-          <p className="mt-2 text-sm text-slate-600">Ti stiamo portando alla tua area personale…</p>
-        </div>
-      </main>
+      <div className="min-h-screen bg-slate-50">
+        <SiteHeader />
+        <main className="grid place-items-center px-5 py-14">
+          <div className="text-center">
+            <MailCheck className="mx-auto h-12 w-12 text-emerald-600" />
+            <h1 className="mt-4 text-2xl font-extrabold text-slate-950">Email verificata!</h1>
+            <p className="mt-2 text-sm text-slate-600">Ti stiamo portando alla tua area personale…</p>
+          </div>
+        </main>
+      </div>
     );
   }
 
   if (verifying === 'error') {
     return (
-      <main className="min-h-screen bg-slate-50 px-5 py-14">
-        <div className="mx-auto max-w-md text-center">
-          <AlertTriangle className="mx-auto h-12 w-12 text-amber-500" />
-          <h1 className="mt-4 text-2xl font-extrabold text-slate-950">Verifica non riuscita</h1>
-          {error && <p className="mt-2 text-sm text-slate-600">{error}</p>}
-          <Link href="/accesso" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white">Tenta di nuovo l'accesso</Link>
-        </div>
-      </main>
+      <div className="min-h-screen bg-slate-50">
+        <SiteHeader />
+        <main className="grid place-items-center px-5 py-14">
+          <div className="text-center">
+            <AlertTriangle className="mx-auto h-12 w-12 text-amber-500" />
+            <h1 className="mt-4 text-2xl font-extrabold text-slate-950">Verifica non riuscita</h1>
+            {error && <p className="mt-2 text-sm text-slate-600">{error}</p>}
+            <Link href="/accesso" className="mt-5 inline-flex items-center gap-2 rounded-xl bg-slate-950 px-5 py-3 text-sm font-bold text-white">Tenta di nuovo l'accesso</Link>
+          </div>
+        </main>
+      </div>
     );
   }
 
   return (
-    <main className="min-h-screen bg-slate-50 px-5 py-8 sm:py-14">
+    <div className="min-h-screen bg-slate-50">
+      <SiteHeader />
+      <main className="px-5 py-8 sm:py-14">
       <div className="mx-auto max-w-md">
         <Link href="/" className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950">
           <ArrowLeft className="h-4 w-4" /> Torna ad AutoEsperto
@@ -181,5 +193,6 @@ export default function AccessForm({ nextPath = '/account', verifyToken, googleT
         </section>
       </div>
     </main>
+    </div>
   );
 }

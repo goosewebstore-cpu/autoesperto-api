@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import SiteHeader from '@/components/SiteHeader';
 import {
   AlertTriangle,
   ArrowLeft,
@@ -190,17 +191,7 @@ export default function AccountDashboard({ checkout, subscription, upgrade, sess
 
   return (
     <div className="min-h-screen bg-slate-50">
-      <header className="border-b border-slate-200 bg-white">
-        <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-5">
-          <Link href="/" className="flex items-center gap-2.5"><span className="grid h-8 w-8 place-items-center rounded-lg bg-blue-600 text-white"><Car className="h-4 w-4" /></span><span className="font-extrabold text-slate-950">Auto<span className="text-blue-600">Esperto</span></span></Link>
-          <div className="flex items-center gap-3">
-            {isOwner && (
-              <button onClick={() => setShowAnalytics((v) => !v)} className="inline-flex items-center gap-2 rounded-lg border border-slate-200 px-3 py-2 text-sm font-bold text-slate-700 transition hover:border-blue-600 hover:text-blue-700"><BarChart3 className="h-4 w-4" /> {showAnalytics ? 'Chiudi statistiche' : 'Statistiche'}</button>
-            )}
-            <button onClick={logout} className="inline-flex items-center gap-2 text-sm font-semibold text-slate-600 hover:text-slate-950"><LogOut className="h-4 w-4" /> Esci</button>
-          </div>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="mx-auto max-w-6xl px-5 py-8 sm:py-12">
         <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">

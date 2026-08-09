@@ -21,13 +21,15 @@ export default function SiteFooter({ variant = 'compact' }: SiteFooterProps) {
                 </span>
               </div>
               <p className="mt-3 text-xs leading-relaxed text-slate-400">
-                Il consulente italiano per comprare auto usate con consapevolezza. Analisi visiva AI, dati affidabili e stime di mercato.
+                Il tuo secondo parere prima di comprare o vendere un'auto usata. Dati reali, stime trasparenti.
               </p>
             </div>
 
             <div>
               <p className="text-xs font-extrabold uppercase tracking-wider text-slate-400">Strumenti</p>
               <ul className="mt-3 space-y-2 text-xs">
+                <li><Link href="/compra" className="hover:text-white transition-colors">Mi conviene comprarla?</Link></li>
+                <li><Link href="/vendi" className="hover:text-white transition-colors">Quanto vale la mia auto?</Link></li>
                 <li><Link href="/valutazione" className="hover:text-white transition-colors">Valutazione auto usata</Link></li>
                 <li><Link href="/affidabilita" className="hover:text-white transition-colors">Affidabilità e guasti</Link></li>
                 <li><Link href="/riparazione" className="hover:text-white transition-colors">Costi riparazione</Link></li>

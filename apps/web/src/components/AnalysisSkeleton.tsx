@@ -1,50 +1,59 @@
 'use client';
 
-import { Camera, Loader2, Search, Calculator } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Camera, Search, Calculator, Shield, Check, Loader2 } from 'lucide-react';
 
 const PHASES = [
-  { icon: Camera, label: 'Analizzo l\'immagine…' },
-  { icon: Search, label: 'Cerco annunci simili sul mercato…' },
-  { icon: Calculator, label: 'Calcolo costi e affidabilità…' },
+  { icon: Camera, label: 'Foto ricevuta', delay: 0 },
+  { icon: Search, label: 'Identificazione del veicolo', delay: 1200 },
+  { icon: Calculator, label: 'Valutazione del mercato', delay: 2800 },
+  { icon: Shield, label: 'Controllo affidabilità', delay: 4200 },
 ];
 
 export default function AnalysisSkeleton() {
+  const [completedPhases, setCompletedPhases] = useState(0);
+
+  useEffect(() => {
+    const timers = PHASES.map((phase, index) =>
+      setTimeout(() => setCompletedPhases(index + 1), phase.delay)
+    );
+    return () => timers.forEach(clearTimeout);
+  }, []);
+
   return (
-    <div className="mx-auto animate-fade-in px-5 py-8">
-      <div className="mb-6 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <div className="flex items-center gap-3">
-          <Loader2 className="h-5 w-5 animate-spin text-blue-600" />
+    <div className="mx-auto max-w-md animate-fade-in px-5 py-12">
+      <div className="rounded-2xl border border-slate-200 bg-white p-6 shadow-card">
+        <div className="flex items-center gap-3 mb-6">
+          <Loader2 className="h-5 w-5 animate-spin text-accent" />
           <div>
-            <p className="text-sm font-extrabold text-slate-950">Stiamo analizzando l'auto</p>
-            <p className="text-xs text-slate-500">Qualche secondo e avrai il report completo.</p>
+            <p className="text-sm font-extrabold text-slate-950">Analisi in corso…</p>
+            <p className="text-xs text-slate-500">Qualche secondo e avrai il risultato.</p>
           </div>
         </div>
-      </div>
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <div key={i} className="h-24 rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="h-3 w-1/2 rounded bg-slate-200 animate-pulse" />
-            <div className="mt-4 h-6 w-2/3 rounded bg-slate-100 animate-pulse" />
-          </div>
-        ))}
-      </div>
-
-      <div className="mt-6 grid gap-4 lg:grid-cols-[2fr_1fr]">
-        <div className="h-72 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="h-4 w-1/3 rounded bg-slate-200 animate-pulse" />
-          <div className="mt-6 h-56 rounded-xl bg-slate-100 animate-pulse" />
-        </div>
-        <div className="h-72 rounded-2xl border border-slate-200 bg-white p-6 shadow-sm">
-          <div className="h-4 w-1/2 rounded bg-slate-200 animate-pulse" />
-          <div className="mt-6 space-y-3">
-            {PHASES.map((phase, idx) => (
-              <div key={idx} className="flex items-center gap-2 text-xs text-slate-500">
-                <phase.icon className="h-3.5 w-3.5 animate-pulse text-slate-400" />
-                <span className={`animate-pulse ${idx === 0 ? 'font-semibold' : 'opacity-60'}`}>{phase.label}</span>
+        <div className="space-y-3">
+          {PHASES.map((phase, index) => {
+            const Icon = phase.icon;
+            const isDone = index < completedPhases;
+            const isCurrent = index === completedPhases - 1 && completedPhases < PHASES.length;
+            return (
+              <div
+                key={index}
+                className={`flex items-center gap-3 text-sm transition-all duration-300 ${
+                  isDone ? 'text-text-primary' : 'text-text-tertiary'
+                }`}
+              >
+                <span className={`grid h-7 w-7 place-items-center rounded-full transition-all duration-300 ${
+                  isDone ? 'bg-emerald-100 text-emerald-600' : 'bg-slate-100 text-slate-400'
+                }`}>
+                  {isDone ? <Check className="h-3.5 w-3.5" /> : <Icon className="h-3.5 w-3.5" />}
+                </span>
+                <span className={`font-semibold ${isDone ? 'text-text-primary' : ''}`}>
+                  {isDone ? '✓ ' : ''}{phase.label}
+                </span>
               </div>
-            ))}
-          </div>
+            );
+          })}
         </div>
       </div>
     </div>

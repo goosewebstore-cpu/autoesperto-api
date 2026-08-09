@@ -3,8 +3,9 @@
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
-  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, MessageCircle,
+  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
 } from 'lucide-react';
+import ReportSummary from '@/components/ReportSummary';
 import AdSlot from '@/components/AdSlot';
 import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
@@ -101,6 +102,9 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </button>
       )}
 
+      {/* Summary Card - always visible */}
+      <ReportSummary report={report} />
+
       {/* Header */}
       {!embedded && <header className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
         {vehicle.imageUrl && (
@@ -135,11 +139,11 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             </span>
             {reliability.aiEnhanced && (
               <span
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-gradient-to-r from-violet-600 to-indigo-600 text-white"
-                title="Punti di forza, criticità e consigli generati dall'AI sul modello specifico"
+                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-violet-600 text-white"
+                title="Punti di forza, criticità e consigli specifici per questo modello"
               >
                 <Sparkles className="w-3.5 h-3.5" />
-                Analizzato con AI
+                Analisi completa
               </span>
             )}
             {isModelData && (
@@ -163,9 +167,9 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         <div className="flex items-start gap-3">
           <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
           <div>
-            <h3 className="text-sm font-bold text-amber-900">Disclaimer AI — Risultato indicativo</h3>
+            <h3 className="text-sm font-bold text-amber-900">Nota importante — Risultato indicativo</h3>
             <p className="mt-1 text-sm text-amber-800 leading-relaxed">
-              Questa analisi è generata da intelligenza artificiale ed è <strong>indicativa</strong>. Può contenere errori su marca, modello, anno, stato visivo o stima di prezzo.
+              Questa analisi è <strong>indicativa</strong> e basata sui dati di mercato disponibili. Può contenere errori su marca, modello, anno, stato visivo o stima di prezzo.
               Per decisioni d'acquisto, rivolgiti sempre a un professionista per un controllo reale dell'auto.
               <strong> Carica più foto</strong> (frontale, laterale, posteriore, interni, targa) per migliorare la precisione dell'analisi.
             </p>
@@ -198,6 +202,37 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             </p>
           </div>
         </div>
+      </section>
+
+      {/* Metodologia */}
+      <section className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
+        <details className="group">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 md:p-6 text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
+            <span>Come viene calcolato?</span>
+            <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="space-y-3 border-t border-border/60 px-5 py-4 text-sm text-text-secondary leading-relaxed md:px-6">
+            <p>
+              <strong className="font-semibold text-text-primary">Valore:</strong> la stima parte dai prezzi
+              pubblicati negli annunci reali per lo stesso modello. Dove possibile confrontiamo anno e
+              chilometraggio simili e mostriamo il campione usato e la data di aggiornamento. Non è una
+              perizia.
+            </p>
+            <p>
+              <strong className="font-semibold text-text-primary">Affidabilità:</strong> il punteggio 0-10 è
+              costruito dai dati tecnici del modello: motore, cambio, componenti più a rischio e costi di
+              manutenzione attesi.
+            </p>
+            <p>
+              <strong className="font-semibold text-text-primary">Costi:</strong> manutenzione annuale,
+              carburante, bollo e assicurazione sono stime basate sul modello e sul chilometraggio indicato.
+            </p>
+            <p>
+              I dati sono indicativi: un esemplare specifico può valere più o meno della stima. Per decisioni
+              d&apos;acquisto chiedi sempre un controllo fisico.
+            </p>
+          </div>
+        </details>
       </section>
 
       {tier !== 'premium' ? (

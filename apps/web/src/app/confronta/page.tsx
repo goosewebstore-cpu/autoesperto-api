@@ -1,4 +1,6 @@
 import type { Metadata } from 'next';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import CompareModels from '@/components/CompareModels';
 import { analyzeVehicle } from '@/lib/api';
 
@@ -33,8 +35,9 @@ export default async function ComparePage() {
   }
 
   return (
-    <main className="min-h-screen bg-white">
-      <section className="max-w-5xl mx-auto px-5 pt-12 pb-16">
+    <div className="min-h-screen bg-white">
+      <SiteHeader />
+      <main className="max-w-5xl mx-auto px-5 pt-12 pb-16">
         <a href="/" className="text-sm font-semibold text-accent hover:underline">← AutoEsperto</a>
         <div className="max-w-2xl mt-7 mb-8">
           <p className="text-xs font-bold uppercase tracking-[0.16em] text-accent mb-2">Confronto auto</p>
@@ -42,7 +45,8 @@ export default async function ComparePage() {
           <p className="text-text-secondary mt-3 leading-relaxed">Metti a confronto prezzi reali dagli annunci, affidabilità e punti da controllare. È gratuito.</p>
         </div>
         <CompareModels initialLeftReport={initialLeftReport} initialRightReport={initialRightReport} />
-      </section>
-    </main>
+      </main>
+      <SiteFooter variant="full" />
+    </div>
   );
 }

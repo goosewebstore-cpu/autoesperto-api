@@ -12,6 +12,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || (
 export { API_URL };
 const TIMEOUT_MS = 30000;
 const AI_TIMEOUT_MS = 120000;
+const REPORT_TIMEOUT_MS = 90000;
 
 export interface AnalyzePayload {
   plate?: string;
@@ -74,7 +75,19 @@ export interface StoredAnalysis {
   updatedAt: string;
 }
 
-export async function fetchJson<T>(path: string, options?: RequestInit, timeoutMs: number = TIMEOUT_MS): Promise<T> {
+export async function fetchJson<T>(path: string, options?: RequestInit, timeoutMs: number = TIMEOUT_MS, retry = false): Promise<T> {
+  try {
+    return await doFetch<T>(path, options, timeoutMs);
+  } catch (err) {
+    if (retry && err instanceof Error && err.name === 'AbortError') {
+      await new Promise((r) => setTimeout(r, 800));
+      return doFetch<T>(path, options, timeoutMs);
+    }
+    throw err;
+  }
+}
+
+async function doFetch<T>(path: string, options?: RequestInit, timeoutMs: number = TIMEOUT_MS): Promise<T> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -95,7 +108,9 @@ export async function fetchJson<T>(path: string, options?: RequestInit, timeoutM
     return res.json();
   } catch (err) {
     if (err instanceof Error && err.name === 'AbortError') {
-      throw new Error('Il servizio sta impiegando troppo tempo. Riprova tra qualche istante.');
+      const abortError = new Error('Il servizio sta impiegando troppo tempo. Riprova tra qualche istante.');
+      abortError.name = 'AbortError';
+      throw abortError;
     }
     throw err;
   } finally {
@@ -107,15 +122,15 @@ export async function analyzeVehicle(payload: AnalyzePayload): Promise<{ success
   return fetchJson('/reports/analyze', {
     method: 'POST',
     body: JSON.stringify(payload),
-  });
+  }, REPORT_TIMEOUT_MS, true);
 }
 
 export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: string; model?: string; year?: number }): Promise<{ success: boolean; analysis: PhotoAnalysis }> {
-  return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) }, AI_TIMEOUT_MS);
+  return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) }, AI_TIMEOUT_MS, true);
 }
 
 export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) }, AI_TIMEOUT_MS);
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) }, AI_TIMEOUT_MS, true);
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {

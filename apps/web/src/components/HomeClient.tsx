@@ -10,8 +10,12 @@ import {
   Check,
   ChevronRight,
   FileSearch,
+  Fuel,
+  Gauge,
+  GitCompareArrows,
   ScanSearch,
   ShieldCheck,
+  Wrench,
 } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import ReportView from '@/components/ReportView';
@@ -73,6 +77,15 @@ const WHY_LIST = [
   'Affidabilità del modello: guasti e problemi noti',
   'Consumi e costi di riparazione medi',
   'Checklist dei controlli da fare prima dell\u2019acquisto',
+];
+
+const TOOLS = [
+  { icon: Gauge, title: 'Valutazione auto', desc: 'Prezzi di mercato per marca, modello e anno', href: '/valutazione' },
+  { icon: GitCompareArrows, title: 'Confronta modelli', desc: 'Metti due auto faccia a faccia su prezzo e costi', href: '/confronta' },
+  { icon: ShieldCheck, title: 'Affidabilità e guasti', desc: 'Punti deboli e problemi noti del modello', href: '/affidabilita' },
+  { icon: Wrench, title: 'Costi di riparazione', desc: 'Spese medie di manutenzione per modello', href: '/riparazione' },
+  { icon: Fuel, title: 'Consumi reali', desc: 'Consumi dichiarati vs reali su strada', href: '/consumi' },
+  { icon: BarChart3, title: 'Quanto vale la mia auto', desc: 'Scopri a quanto puoi venderla oggi', href: '/vendi' },
 ];
 
 const AVATARS = [
@@ -173,7 +186,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 <h1 className="hero-v2-title">Prima di comprare, <em>verifica</em> l'auto.</h1>
                 <p className="hero-v2-sub">
                   Da una foto o da marca e modello: valore, prezzo di mercato, affidabilità e controlli da fare.
-                  Report in pochi secondi, prima analisi gratuita.
+                  Report in pochi secondi, analisi completa e gratuita.
                 </p>
               </div>
               <div className="hero-v2-strip" aria-hidden="true">
@@ -192,7 +205,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 </div>
               )}
               <ul className="search-v2-trust">
-                <li><Check /> Prima analisi completa e gratuita</li>
+                <li><Check /> Analisi completa e gratuita</li>
                 <li><ShieldCheck /> Nessun dato personale richiesto</li>
                 <li><BarChart3 /> Dati dagli annunci reali in vendita</li>
               </ul>
@@ -212,7 +225,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 <div className="stat-v2"><strong>{stats.makes}</strong><span>Marchi coperti</span></div>
                 <div className="stat-v2"><strong>{stats.models.toLocaleString('it-IT')}</strong><span>Modelli analizzati</span></div>
                 <div className="stat-v2"><strong>4 voci</strong><span>Prezzo, affidabilità, consumi, riparazioni</span></div>
-                <div className="stat-v2"><strong>100%</strong><span>Prima analisi gratuita</span></div>
+                <div className="stat-v2"><strong>100%</strong><span>Analisi completa gratuita</span></div>
               </div>
             </section>
 
@@ -262,6 +275,28 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                     <h3>Leggi il verdetto</h3>
                     <p>Valore, affidabilità, punti da controllare e prezzo consigliato.</p>
                   </div>
+                </div>
+              </div>
+            </section>
+
+            {/* ═══ TOOLS ═══ */}
+            <section className="v2-section" aria-label="Strumenti gratuiti">
+              <div className="home-v2-wrap">
+                <div className="home-section-head">
+                  <h2>Strumenti gratuiti per l'usato</h2>
+                  <p>Valuta, confronta e controlla prima di comprare o vendere.</p>
+                </div>
+                <div className="home-tools-grid">
+                  {TOOLS.map((tool) => (
+                    <Link key={tool.href} href={tool.href} className="home-tool-card">
+                      <span className="home-tool-icon"><tool.icon className="h-5 w-5" /></span>
+                      <span className="home-tool-copy">
+                        <strong>{tool.title}</strong>
+                        <small>{tool.desc}</small>
+                      </span>
+                      <ChevronRight className="home-tool-chev" />
+                    </Link>
+                  ))}
                 </div>
               </div>
             </section>
@@ -331,7 +366,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
               <SmartImg src={U('photo-1544636331-e26879cd4d9b', 1600)} alt="" eager />
               <div className="cta-band-v2-inner">
                 <h2>Pronto a scoprire la verità sull'usato?</h2>
-                <p>La prima analisi è completa e gratuita. Risultati in pochi secondi.</p>
+                <p>Analisi complete e gratuite. Risultati in pochi secondi.</p>
                 <div className="cta-band-v2-actions">
                   <Link href="/#scanner-section" className="home-hero-cta">Analizza un'auto</Link>
                   <Link href="/valutazione" className="home-hero-cta-secondary">Sfoglia i modelli</Link>

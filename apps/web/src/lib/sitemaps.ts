@@ -41,11 +41,15 @@ const staticPages: UrlEntry[] = [
 
 function yearUrlsFor(prefix: string): UrlEntry[] {
   const urls: UrlEntry[] = [];
+  const seen = new Set<string>();
   for (const make of getAllMakes()) {
     for (const model of make.models) {
       for (const year of YEAR_RANGE) {
+        const url = `${siteUrl}/${prefix}/${make.slug}/${slugify(model)}/${year}`;
+        if (seen.has(url)) continue;
+        seen.add(url);
         urls.push({
-          url: `${siteUrl}/${prefix}/${make.slug}/${slugify(model)}/${year}`,
+          url,
           changeFrequency: 'monthly',
           priority: 0.5,
         });
@@ -65,6 +69,17 @@ function chunked(name: string, urls: UrlEntry[]): UrlEntry[] {
   if (!match) return [];
   const start = (Number(match[1]) - 1) * YEAR_CHUNK_SIZE;
   return urls.slice(start, start + YEAR_CHUNK_SIZE);
+}
+
+function uniqueUrls(entries: UrlEntry[]): UrlEntry[] {
+  const seen = new Set<string>();
+  const out: UrlEntry[] = [];
+  for (const entry of entries) {
+    if (seen.has(entry.url)) continue;
+    seen.add(entry.url);
+    out.push(entry);
+  }
+  return out;
 }
 
 export function sitemapNames(): string[] {
@@ -94,60 +109,76 @@ export function buildSitemap(name: string): UrlEntry[] {
     case 'static':
       return staticPages;
     case 'makes':
-      return getAllMakes().map((make) => ({
-        url: `${siteUrl}/valutazione/${make.slug}`,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      }));
-    case 'models':
-      return getAllMakes().flatMap((make) =>
-        make.models.map((model) => ({
-          url: `${siteUrl}/valutazione/${make.slug}/${slugify(model)}`,
+      return uniqueUrls(
+        getAllMakes().map((make) => ({
+          url: `${siteUrl}/valutazione/${make.slug}`,
           changeFrequency: 'weekly',
-          priority: 0.6,
+          priority: 0.7,
         }))
+      );
+    case 'models':
+      return uniqueUrls(
+        getAllMakes().flatMap((make) =>
+          make.models.map((model) => ({
+            url: `${siteUrl}/valutazione/${make.slug}/${slugify(model)}`,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+          }))
+        )
       );
     case 'rip-makes':
-      return getAllMakes().map((make) => ({
-        url: `${siteUrl}/riparazione/${make.slug}`,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      }));
-    case 'rip-models':
-      return getAllMakes().flatMap((make) =>
-        make.models.map((model) => ({
-          url: `${siteUrl}/riparazione/${make.slug}/${slugify(model)}`,
+      return uniqueUrls(
+        getAllMakes().map((make) => ({
+          url: `${siteUrl}/riparazione/${make.slug}`,
           changeFrequency: 'weekly',
-          priority: 0.6,
+          priority: 0.7,
         }))
+      );
+    case 'rip-models':
+      return uniqueUrls(
+        getAllMakes().flatMap((make) =>
+          make.models.map((model) => ({
+            url: `${siteUrl}/riparazione/${make.slug}/${slugify(model)}`,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+          }))
+        )
       );
     case 'aff-makes':
-      return getAllMakes().map((make) => ({
-        url: `${siteUrl}/affidabilita/${make.slug}`,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      }));
-    case 'aff-models':
-      return getAllMakes().flatMap((make) =>
-        make.models.map((model) => ({
-          url: `${siteUrl}/affidabilita/${make.slug}/${slugify(model)}`,
+      return uniqueUrls(
+        getAllMakes().map((make) => ({
+          url: `${siteUrl}/affidabilita/${make.slug}`,
           changeFrequency: 'weekly',
-          priority: 0.6,
+          priority: 0.7,
         }))
       );
+    case 'aff-models':
+      return uniqueUrls(
+        getAllMakes().flatMap((make) =>
+          make.models.map((model) => ({
+            url: `${siteUrl}/affidabilita/${make.slug}/${slugify(model)}`,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+          }))
+        )
+      );
     case 'cons-makes':
-      return getAllMakes().map((make) => ({
-        url: `${siteUrl}/consumi/${make.slug}`,
-        changeFrequency: 'weekly',
-        priority: 0.7,
-      }));
-    case 'cons-models':
-      return getAllMakes().flatMap((make) =>
-        make.models.map((model) => ({
-          url: `${siteUrl}/consumi/${make.slug}/${slugify(model)}`,
+      return uniqueUrls(
+        getAllMakes().map((make) => ({
+          url: `${siteUrl}/consumi/${make.slug}`,
           changeFrequency: 'weekly',
-          priority: 0.6,
+          priority: 0.7,
         }))
+      );
+    case 'cons-models':
+      return uniqueUrls(
+        getAllMakes().flatMap((make) =>
+          make.models.map((model) => ({
+            url: `${siteUrl}/consumi/${make.slug}/${slugify(model)}`,
+            changeFrequency: 'weekly',
+            priority: 0.6,
+          }))
+        )
       );
     default: {
       const yearsMatch = /^years-(\d+)$/.exec(name);

@@ -2,15 +2,12 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ScanSearch, ShieldCheck, Upload, UserRound } from 'lucide-react';
+import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, RotateCcw, ScanSearch, ShieldCheck, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { freeScanVehiclePhoto, analyzeVehicle, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
+import { API_URL, freeScanVehiclePhoto, analyzeVehicle, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
 import ReportView from '@/components/ReportView';
-import AnalysisSkeleton from '@/components/AnalysisSkeleton';
-import { getUserTier, canSeeFullReport, type UserTier } from '@/lib/subscription';
-import { BasicResultView } from '@/components/BasicResultView';
 
-type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'login-required' | 'manual-input';
+type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
 const promises = ['Marca e modello', 'Anno indicativo', 'Prezzo di mercato', 'Report completo incluso'];
 
@@ -24,17 +21,6 @@ const SCAN_PHASES = [
 ];
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
-const FREE_SCAN_COOKIE = 'ae_free_scan_used';
-
-function hasFreeScanCookie() {
-  if (typeof document === 'undefined') return false;
-  return document.cookie.split('; ').some((c) => c.startsWith(`${FREE_SCAN_COOKIE}=1`));
-}
-
-function setFreeScanCookie() {
-  document.cookie = `${FREE_SCAN_COOKIE}=1; path=/; max-age=31536000; samesite=lax`;
-}
 
 export default function VehicleScanner({ embedded = false }: { embedded?: boolean }) {
   const router = useRouter();
@@ -50,8 +36,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
   const [manualYear, setManualYear] = useState('');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
-  const [userTier, setUserTier] = useState<UserTier>('anonymous');
-  const [showFullReport, setShowFullReport] = useState(false);
   const [scanPhase, setScanPhase] = useState(0);
 
   const analyzing = stage === 'recognition' || stage === 'vehicle-found' || stage === 'manual-input';
@@ -63,10 +47,10 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
   }, [analyzing]);
 
   useEffect(() => {
+    fetch(`${API_URL}/health`).catch(() => {});
     getMyAccount().then(res => {
       if (res.success && res.user) {
         setUser(res.user);
-        setUserTier(getUserTier(res.user, hasFreeScanCookie()));
       }
     }).catch(() => {});
   }, []);
@@ -75,7 +59,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     if (imageUrl) URL.revokeObjectURL(imageUrl);
     setImageUrl(''); setScan(null); setReport(null); setError(''); setStage('idle');
     setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
-    setShowFullReport(false);
     setScanPhase(0);
     if (inputRef.current) inputRef.current.value = '';
   };
@@ -83,14 +66,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
   const handleFile = async (file?: File) => {
     if (!file) return;
     setError(''); setScan(null); setReport(null);
-
-    const isFirst = !hasFreeScanCookie();
-    if (!isFirst && !user) {
-      setStage('login-required');
-      return;
-    }
-
-    setShowFullReport(canSeeFullReport(userTier, isFirst));
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
       setError('Carica una foto JPG, PNG o WebP.'); setStage('error'); return;
@@ -116,7 +91,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
         setStage('manual-input');
         return;
       }
-      setFreeScanCookie();
       setScan(result); setReport(result.report); setStage('vehicle-found');
       await wait(3500);
       setStage('result');
@@ -138,9 +112,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
       return;
     }
 
-    const isFirst = !hasFreeScanCookie();
-    setShowFullReport(canSeeFullReport(userTier, isFirst));
-
     setManualLoading(true); setError('');
     try {
       const year = manualYear.trim() ? Number(manualYear.trim()) : undefined;
@@ -149,7 +120,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
         model: manualModel.trim(),
         ...(year && !isNaN(year) ? { year } : {}),
       });
-      setFreeScanCookie();
       setReport(result.report);
       setScan({
         success: true,
@@ -214,7 +184,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                   <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
                 ))}
               </div>
-              <p className="scanner-box-micro">La prima analisi è completa e gratuita. Salviamo il report, non la foto.</p>
+              <p className="scanner-box-micro">Analisi completa e gratuita. Salviamo il report, non la foto.</p>
             </div>
           ) : (
             <form
@@ -289,7 +259,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
-           <p className="scanner-microcopy">Prima analisi completa e gratuita. Per le successive, crea un account gratuito.</p>
+           <p className="scanner-microcopy">Analisi completa e gratuita. Nessun dato personale richiesto.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
            <p className="mt-3 flex items-start gap-2 text-xs text-slate-600 max-w-xl">
              <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600" />
@@ -312,20 +282,6 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     );
   }
 
-  if (stage === 'login-required') {
-    return (
-      <section className="scanner-login-required animate-fade-in">
-        <div className="scanner-login-card">
-          <span className="scanner-login-icon"><UserRound className="h-6 w-6" /></span>
-          <h2>Crea un account gratuito per continuare</h2>
-          <p>Crea un account gratuito per continuare ad analizzare auto. Con l'account gratuito vedrai marca, modello, anno e categoria. Per il report completo, passa a Premium.</p>
-          <button type="button" className="scanner-cta" onClick={() => router.push('/accesso?next=/account')}><ShieldCheck className="h-5 w-5" /> Crea account gratuito <ChevronRight className="h-5 w-5" /></button>
-          <small className="scanner-login-note"><LockKeyhole className="h-3.5 w-3.5" /> La registrazione è rapida e senza costi.</small>
-        </div>
-      </section>
-    );
-  }
-
   if (stage === 'result' && scan?.vehicle && report) {
     const vehicleName = [scan.vehicle.make, scan.vehicle.model].filter(Boolean).join(' ');
 
@@ -340,14 +296,10 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
 
         <div className="scanner-result-banner">
           <ShieldCheck className="h-4 w-4" />
-          <span>Questa è un'analisi {showFullReport ? 'completa' : 'base'}. Per tutte le funzionalità Premium e per salvare l'analisi nel tuo account, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'accedi'}</button>.</span>
+          <span>Ecco la tua analisi completa con valore stimato, affidabilità e costi. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'accedi gratis'}</button>.</span>
         </div>
 
-        {showFullReport ? (
-          <ReportView report={report} embedded tier={userTier} />
-        ) : (
-          <BasicResultView report={report} />
-        )}
+        <ReportView report={report} embedded tier="premium" />
       </section>
     );
   }
@@ -358,7 +310,8 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
   ].filter((item) => item[1]) : [];
 
   return (
-    <section className="scanner-workspace animate-fade-in">
+    <section className={`scanner-workspace animate-fade-in${imageUrl ? '' : ' scanner-workspace-nophoto'}`}>
+      {imageUrl && (
       <div className="scanner-photo-stage">
         <div className="relative w-full h-full">
           {/* eslint-disable-next-line @next/next/no-img-element */}<img src={imageUrl} alt="Foto dell’auto in analisi" className="w-full h-full object-cover" />
@@ -417,6 +370,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
         </div>
         <div className="scanner-photo-badge"><ShieldCheck className="h-4 w-4" /> Analisi AutoEsperto</div>
       </div>
+      )}
       <div className="scanner-work-panel">
         {stage === 'error' ? (
           <div className="scanner-error"><AlertTriangle className="h-7 w-7" /><h2>Non siamo riusciti ad analizzare questa foto</h2><p>{error}</p><button type="button" onClick={() => inputRef.current?.click()}><Upload className="h-4 w-4" /> Riprova con un'altra foto</button></div>
@@ -431,7 +385,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
           <>
             <div className="scanner-stage-label">{stage === 'recognition' ? 'Analisi gratuita in corso' : 'Veicolo riconosciuto'}</div>
             <h2>{stage === 'recognition' ? 'Riconoscimento veicolo e preparazione report completo…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
-            <p className="scanner-stage-copy">{stage === 'recognition' ? 'La prima analisi è gratuita e include il report completo.' : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
+            <p className="scanner-stage-copy">{stage === 'recognition' ? "L'analisi è completa e include prezzo e affidabilità." : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
             <div className="scanner-phases" role="status" aria-live="polite">
               {SCAN_PHASES.map((phase, i) => (
                 <div key={phase} className={`scanner-phase${i < scanPhase ? ' done' : ''}`}>

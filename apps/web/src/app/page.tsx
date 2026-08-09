@@ -1,4 +1,16 @@
+import type { Metadata } from 'next';
 import HomeClient, { type HomeInitialPayload } from '@/components/HomeClient';
+import SiteFooter from '@/components/SiteFooter';
+
+export const metadata: Metadata = {
+  title: 'Analizza l\'auto: vale il prezzo che ti chiedono?',
+  description:
+    'Carica una foto o inserisci i dati dell\'auto. Scopri quanto vale sul mercato, se il prezzo è giusto e cosa controllare prima di comprare o vendere. Report completo in pochi secondi.',
+  alternates: {
+    canonical: '/',
+    languages: { 'it-IT': 'https://autoesperto.it/' },
+  },
+};
 
 interface HomePageProps {
   searchParams: Promise<{
@@ -30,5 +42,10 @@ export default async function Home({ searchParams }: HomePageProps) {
     };
   }
 
-  return <HomeClient initialPayload={initialPayload} />;
+  return (
+    <>
+      <HomeClient initialPayload={initialPayload} />
+      <SiteFooter variant="full" />
+    </>
+  );
 }

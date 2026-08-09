@@ -17,9 +17,9 @@ const inter = Inter({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
-const siteTitle = 'AutoEsperto — Il tuo secondo parere prima di comprare un\'auto usata';
+const siteTitle = 'AutoEsperto — Il tuo secondo parere prima di comprare o vendere un\'auto usata';
 const siteDescription =
-  'Scopri quanto vale un\'auto usata, se il prezzo è giusto e cosa controllare prima di comprarla. Analisi gratuita.';
+  'Scopri quanto vale un\'auto usata, se il prezzo è giusto e cosa controllare prima di comprarla. Analisi gratuita e veloce.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -55,7 +55,7 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     siteName: 'AutoEsperto',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Analisi completa dell’auto con AI' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Analisi completa del valore e affidabilità dell\'auto' }],
   },
   twitter: {
     card: 'summary_large_image',

@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Car, Gauge, ShieldCheck, Euro, AlertTriangle, Search } from 'lucide-react';
 import { getAllMakes, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 import SiteFooter from '@/components/SiteFooter';
+import SiteHeader from '@/components/SiteHeader';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';

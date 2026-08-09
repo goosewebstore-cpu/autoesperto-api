@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { Car, HelpCircle, Search } from 'lucide-react';
@@ -43,7 +44,7 @@ export default function ValutazioneIndexPage() {
     },
     {
       q: 'Le valutazioni di AutoEsperto sono gratuite?',
-      a: 'Sì, le valutazioni per marca, modello e anno sono gratuite e consultabili senza registrazione. Puoi anche analizzare una foto della tua auto con l\'intelligenza artificiale per un report più dettagliato.',
+      a: 'Sì, le valutazioni per marca, modello e anno sono gratuite e consultabili senza registrazione. Puoi anche analizzare una foto della tua auto per un report più dettagliato.',
     },
   ];
 

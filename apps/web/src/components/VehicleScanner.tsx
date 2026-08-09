@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, Camera, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ShieldCheck, Sparkles, Upload, UserRound } from 'lucide-react';
+import { AlertTriangle, Camera, Check, ChevronRight, Loader2, LockKeyhole, RotateCcw, ShieldCheck, Upload, UserRound } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { freeScanVehiclePhoto, analyzeVehicle, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
 import ReportView from '@/components/ReportView';
@@ -281,7 +281,7 @@ export default function VehicleScanner() {
                     {error && <p className="text-xs text-red-700">{error}</p>}
                     <div className="flex gap-2 pt-1">
                       <button type="button" disabled={manualLoading} onClick={handleManualSubmit} className="scanner-cta disabled:opacity-60 !mt-0 !min-h-[36px] !text-xs !px-3 flex-1">
-                        {manualLoading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> …</> : <><Sparkles className="h-3.5 w-3.5" /> Genera <ChevronRight className="h-3.5 w-3.5" /></>}
+                        {manualLoading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> …</> : <>Genera <ChevronRight className="h-3.5 w-3.5" /></>}
                       </button>
                       <button type="button" onClick={() => inputRef.current?.click()} className="text-xs text-slate-600 hover:text-slate-800 underline underline-offset-2 px-2">Altra foto</button>
                     </div>
@@ -290,7 +290,7 @@ export default function VehicleScanner() {
               ) : stage === 'recognition' ? (
                 <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
                   <div className="flex items-center gap-2 mb-1.5">
-                    <Sparkles className="h-4 w-4 text-amber-400 animate-pulse" />
+                    <Loader2 className="h-4 w-4 text-amber-400 animate-spin" />
                     <span className="text-xs font-bold">Analisi in corso…</span>
                   </div>
                   <p className="text-xs text-white/70 leading-snug">Identificazione marca, modello e dettagli visibili.</p>

@@ -3,7 +3,7 @@
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
-  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Sparkles, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
+  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
 } from 'lucide-react';
 import ReportSummary from '@/components/ReportSummary';
 import AdSlot from '@/components/AdSlot';
@@ -142,7 +142,6 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
                 className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-violet-600 text-white"
                 title="Punti di forza, criticità e consigli specifici per questo modello"
               >
-                <Sparkles className="w-3.5 h-3.5" />
                 Analisi completa
               </span>
             )}

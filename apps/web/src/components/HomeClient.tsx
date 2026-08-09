@@ -2,20 +2,13 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import {
-  Car, CheckCircle2, UserRound, Sparkles, BarChart3, Shield,
-  Wrench, Fuel, ArrowLeftRight, ChevronRight, Camera, Star,
-  Zap, Crown, Lock, BookOpen,
-} from 'lucide-react';
+import { Car, BarChart3, Camera, BookOpen } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import ReportView from '@/components/ReportView';
 import VehicleScanner from '@/components/VehicleScanner';
-import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
-import { getPremiumPricing } from '@/lib/pricing';
-import AdSlot from '@/components/AdSlot';
-import GuideCard from '@/components/GuideCard';
-import SiteFooter from '@/components/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
+import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
+import GuideCard from '@/components/GuideCard';
 import { guides } from '@/lib/guides';
 
 export type HomeInitialPayload = AnalyzePayload | null;
@@ -24,53 +17,7 @@ interface HomeClientProps {
   initialPayload: HomeInitialPayload;
 }
 
-const tools = [
-  {
-    icon: BarChart3,
-    title: 'Valutazione',
-    desc: 'Prezzo di mercato reale',
-    href: '/valutazione',
-    color: 'text-blue-600',
-    bg: 'bg-blue-500/10',
-    ring: 'ring-blue-500/20',
-  },
-  {
-    icon: Shield,
-    title: 'Affidabilità',
-    desc: 'Guasti e punteggio',
-    href: '/affidabilita',
-    color: 'text-emerald-600',
-    bg: 'bg-emerald-500/10',
-    ring: 'ring-emerald-500/20',
-  },
-  {
-    icon: ArrowLeftRight,
-    title: 'Confronta',
-    desc: 'Due auto a confronto',
-    href: '/confronta',
-    color: 'text-rose-600',
-    bg: 'bg-rose-500/10',
-    ring: 'ring-rose-500/20',
-  },
-  {
-    icon: BookOpen,
-    title: 'Guide',
-    desc: 'Consigli per l\'acquisto',
-    href: '/guide',
-    color: 'text-indigo-600',
-    bg: 'bg-indigo-500/10',
-    ring: 'ring-indigo-500/20',
-  },
-];
-
-const steps = [
-  { icon: Camera, label: 'Scatta una foto' },
-  { icon: Sparkles, label: 'Analisi automatica' },
-  { icon: CheckCircle2, label: 'Report completo' },
-];
-
 export default function HomeClient({ initialPayload }: HomeClientProps) {
-  const [isAnnual, setIsAnnual] = useState(true);
   const latestGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 4);
   const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState('');
@@ -215,87 +162,6 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
               </div>
             </section>
 
-            {/* ═══ STRUMENTI ═══ */}
-            <section className="home-section" aria-label="Strumenti">
-              <div className="home-section-head">
-                <h2>Tutti gli strumenti</h2>
-                <p>Esplora valutazioni, affidabilità e costi per ogni modello.</p>
-              </div>
-              <div className="home-tools-grid">
-                {tools.map((tool) => (
-                  <Link key={tool.href} href={tool.href} className={`home-tool-card ${tool.ring}`}>
-                    <div className={`home-tool-icon ${tool.bg}`}>
-                      <tool.icon className={`h-5 w-5 ${tool.color}`} />
-                    </div>
-                    <div className="home-tool-text">
-                      <span className="home-tool-title">{tool.title}</span>
-                      <span className="home-tool-desc">{tool.desc}</span>
-                    </div>
-                    <ChevronRight className="home-tool-arrow" />
-                  </Link>
-                ))}
-              </div>
-            </section>
-
-            {/* ═══ PRICING ═══ */}
-            <section className="home-section" aria-label="Piani">
-              <div className="home-section-head">
-                <h2>Inizia gratis, senza registrazione</h2>
-                <p>La prima analisi è completa e gratuita. Poi scegli il piano che fa per te.</p>
-              </div>
-              <div className="home-pricing-grid">
-                {/* Free */}
-                <div className="home-price-card">
-                  <div className="home-price-badge free"><Zap className="h-3.5 w-3.5" /> Prova</div>
-                  <div className="home-price-amount">€0</div>
-                  <p className="home-price-sub">Nessuna registrazione</p>
-                  <ul className="home-price-features">
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> 1 analisi completa gratis</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Marca, modello, anno</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Prezzo stimato</li>
-                  </ul>
-                </div>
-                {/* Registrato */}
-                <div className="home-price-card">
-                  <div className="home-price-badge registered"><UserRound className="h-3.5 w-3.5" /> Registrato</div>
-                  <div className="home-price-amount">€0</div>
-                  <p className="home-price-sub">Account gratuito</p>
-                  <ul className="home-price-features">
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Analisi illimitate</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Dati base inclusi</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Storico analisi salvato</li>
-                  </ul>
-                </div>
-                {/* Premium */}
-                <div className="home-price-card premium">
-                  <div className="home-price-badge premium-badge"><Crown className="h-3.5 w-3.5" /> Premium</div>
-                  
-                  <div className="flex bg-slate-100 rounded-lg p-1 mt-4 mb-4">
-                    <button onClick={() => setIsAnnual(false)} className={`flex-1 text-xs font-bold py-1.5 rounded-md transition ${!isAnnual ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}>Mensile</button>
-                    <button onClick={() => setIsAnnual(true)} className={`flex-1 text-xs font-bold py-1.5 rounded-md transition ${isAnnual ? 'bg-white shadow-sm text-slate-900' : 'text-slate-500'}`}>Annuale <span className="text-[10px] text-emerald-600 ml-0.5">-33%</span></button>
-                  </div>
-
-                  <div className="home-price-amount">
-                    {isAnnual ? getPremiumPricing('year').monthlyEquivalent : getPremiumPricing('month').displayPrice}
-                    <span>/mese</span>
-                  </div>
-                  {isAnnual && <p className="text-xs text-slate-500 font-medium mt-1">Fatturato annualmente ({getPremiumPricing('year').displayPrice})</p>}
-                  {!isAnnual && <p className="text-xs text-transparent font-medium mt-1 select-none">Spacer</p>}
-                  
-                  <p className="home-price-sub mt-4">Tutto illimitato</p>
-                  <ul className="home-price-features">
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Analisi complete illimitate</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Prezzi di mercato reali</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Nessuna pubblicità</li>
-                    <li><CheckCircle2 className="h-4 w-4 text-emerald-500" /> Download PDF</li>
-                  </ul>
-                  <Link href="/account" className="home-premium-cta">
-                    Prova Premium <ChevronRight className="h-4 w-4" />
-                  </Link>
-                </div>
-              </div>
-            </section>
-
             {/* ═══ GUIDE ═══ */}
             {latestGuides.length > 0 && (
               <section className="home-section" aria-label="Guide">
@@ -312,14 +178,9 @@ export default function HomeClient({ initialPayload }: HomeClientProps) {
                 </div>
               </section>
             )}
-
-            {/* ═══ ADS ═══ */}
-            <AdSlot placement="banner" className="py-4" />
           </div>
         )}
-      </main>
-
-      <SiteFooter variant="full" />
+        </main>
     </div>
   );
 }

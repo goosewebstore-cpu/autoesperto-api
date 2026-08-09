@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { Car, ChevronLeft, ChevronRight } from 'lucide-react';
 import { guides, GUIDE_CATEGORIES, type GuideCategory } from '@/lib/guides';
 import GuideCard from '@/components/GuideCard';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 interface GuideIndexPageProps {
   searchParams: Promise<{ categoria?: string; pagina?: string }>;
@@ -150,22 +152,6 @@ export default async function GuideIndexPage({ searchParams }: GuideIndexPagePro
         </section>
       </main>
 
-      <SiteFooter variant=full />
-              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
-            </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
-              <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione auto</Link>
-              <Link href="/riparazione" className="hover:text-text-primary transition-colors">Costi riparazione</Link>
-              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-              <Link href="/cookie-policy" className="hover:text-text-primary transition-colors">Cookie</Link>
-              <Link href="/terms" className="hover:text-text-primary transition-colors">Termini</Link>
-              <Link href="/contatti" className="hover:text-text-primary transition-colors">Contatti</Link>
-            </nav>
-          </div>
-          <p className="text-xs text-text-tertiary text-center mt-4">
-            AutoEsperto fornisce valutazioni indicative e non sostituisce un&apos;ispezione professionale.
-          </p>
-        </div>
       <SiteFooter variant="full" />
     </div>
   );

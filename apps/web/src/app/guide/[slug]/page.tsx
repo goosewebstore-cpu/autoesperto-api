@@ -1,4 +1,4 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Car } from 'lucide-react';
@@ -29,7 +29,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     description: 'Parti da dati reali per fissare il prezzo giusto.',
   },
   'controllare-auto-usata': {
-    label: 'Analizza l\'auto con l\'AI',
+    label: 'Analizza l\'auto da foto',
     href: '/',
     description: 'Carica una foto e ottieni un report su modello, stato e valore.',
   },
@@ -39,7 +39,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     description: 'Metti a confronto due modelli su prezzo, consumi e punti deboli.',
   },
   'auto-incidentata': {
-    label: 'Scansiona l\'auto con l\'AI',
+    label: 'Scansiona l\'auto da foto',
     href: '/',
     description: 'L\'analisi visiva segnala difetti, riparazioni e incongruenze.',
   },
@@ -114,12 +114,12 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     description: 'Valore residuo reale e costi futuri per stimare la durata conveniente.',
   },
   'auto-estero': {
-    label: 'Analizza l\'auto con l\'AI',
+    label: 'Analizza l\'auto da foto',
     href: '/',
     description: 'Carica una foto e ottieni un report su modello, stato e valore.',
   },
   'chilometraggio-reale': {
-    label: 'Analizza lo stato con l\'AI',
+    label: 'Analizza lo stato da foto',
     href: '/',
     description: 'L\'analisi visiva segnala usura e incongruenze con i km dichiarati.',
   },
@@ -149,7 +149,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     description: 'Valore e consumi a confronto per scegliere con dati reali.',
   },
   'analisi-ai': {
-    label: 'Analizza l\'auto con l\'AI',
+    label: 'Analizza l\'auto da foto',
     href: '/',
     description: 'Carica una foto e ottieni un report su modello, stato e valore.',
   },
@@ -336,20 +336,6 @@ export default async function GuidePage({ params }: PageProps) {
         )}
       </main>
 
-      <SiteFooter variant=full />
-              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
-            </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
-              <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione auto</Link>
-              <Link href="/guide" className="hover:text-text-primary transition-colors">Guide</Link>
-              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-text-primary transition-colors">Termini</Link>
-            </nav>
-          </div>
-          <p className="text-xs text-text-tertiary text-center mt-4">
-            AutoEsperto fornisce valutazioni indicative e non sostituisce un&apos;ispezione professionale.
-          </p>
-        </div>
       <SiteFooter variant="full" />
     </div>
   );

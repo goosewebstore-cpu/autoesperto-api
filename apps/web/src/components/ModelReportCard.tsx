@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import {
   CheckCircle2, AlertTriangle, Euro, ExternalLink, GitCompareArrows,
-  Loader2, Search, Sparkles, TrendingUp,
+  Loader2, Search, TrendingUp,
 } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { analyzeVehicle } from '@/lib/api';
@@ -14,22 +14,29 @@ interface ModelReportCardProps {
   model: string;
   year?: number;
   initialReport?: AutoReport;
+  /** Quando true il componente non lancia la propria fetch: la gestisce il genitore. */
+  isLoading?: boolean;
+  hasError?: boolean;
 }
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
 }
 
-export default function ModelReportCard({ make, model, year, initialReport }: ModelReportCardProps) {
+export default function ModelReportCard({ make, model, year, initialReport, isLoading, hasError }: ModelReportCardProps) {
   const [report, setReport] = useState<AutoReport | null>(initialReport || null);
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    if (initialReport) return;
-    
+    if (initialReport) {
+      setReport(initialReport);
+      return;
+    }
+
     let active = true;
     setReport(null);
     setError(false);
+    if (isLoading || hasError) return;
     analyzeVehicle({ make, model, ...(year ? { year } : {}) })
       .then((res) => {
         if (active) setReport(res.report);
@@ -40,9 +47,9 @@ export default function ModelReportCard({ make, model, year, initialReport }: Mo
     return () => {
       active = false;
     };
-  }, [make, model, year, initialReport]);
+  }, [make, model, year, initialReport, isLoading, hasError]);
 
-  if (error) return null;
+  if (error || hasError) return null;
 
   const market = report?.price.market;
   const reliability = report?.reliability;
@@ -117,7 +124,6 @@ export default function ModelReportCard({ make, model, year, initialReport }: Mo
                   <div className="text-xs text-text-secondary mt-0.5">
                     {reliability.aiEnhanced && (
                       <span className="inline-flex items-center gap-1 text-indigo-600 font-semibold">
-                        <Sparkles className="w-3 h-3" />
                         Analisi dettagliata
                       </span>
                     )}

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Copy, Check, Megaphone, Sparkles, ChevronDown, ChevronUp } from 'lucide-react';
+import { Copy, Check, Megaphone, ChevronDown, ChevronUp } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { trackEvent } from '@/lib/analytics';
 
@@ -80,7 +80,7 @@ export function SellAdGenerator({ report }: SellAdGeneratorProps) {
             <Megaphone className="h-5 w-5 text-accent" />
           </div>
           <div className="text-left">
-            <p className="text-sm font-bold text-text-primary flex items-center gap-2">Genera annuncio di vendita <Sparkles className="h-3.5 w-3.5 text-accent" /></p>
+            <p className="text-sm font-bold text-text-primary flex items-center gap-2">Genera annuncio di vendita</p>
             <p className="text-xs text-text-secondary">Testo pronto per Subito, AutoScout24 e Facebook</p>
           </div>
         </div>

@@ -17,7 +17,7 @@ export default function ContactPage() {
         {
           heading: 'Chi Siamo',
           paragraphs: [
-            'AutoEsperto è il tuo assistente virtuale per la compravendita di auto usate. Utilizziamo intelligenza artificiale e l\'analisi di migliaia di annunci di mercato per offrirti dati reali, valutazioni imparziali e trasparenza sui costi di riparazione e affidabilità, per aiutarti a scegliere la tua prossima auto in sicurezza.',
+            'AutoEsperto è il tuo assistente digitale per la compravendita di auto usate. Analizziamo migliaia di annunci di mercato per offrirti dati reali, valutazioni imparziali e trasparenza sui costi di riparazione e affidabilità, per aiutarti a scegliere la tua prossima auto in sicurezza.',
           ],
         },
         {

@@ -1,6 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
-import { Lock, Sparkles, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { Lock, ChevronRight, CheckCircle2 } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { getPremiumPricing } from '@/lib/pricing';
 
@@ -49,9 +49,6 @@ export function BasicResultView({ report }: BasicResultViewProps) {
 
       {/* Premium Upsell Card */}
       <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 to-slate-800 border border-slate-700 shadow-premium-lg p-1 sm:p-2">
-        <div className="absolute top-0 right-0 p-8 opacity-10 pointer-events-none">
-          <Sparkles className="w-48 h-48 text-white" />
-        </div>
         
         <div className="relative bg-slate-900/50 backdrop-blur-xl rounded-xl p-6 sm:p-10 flex flex-col items-center text-center">
           <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center mb-6">

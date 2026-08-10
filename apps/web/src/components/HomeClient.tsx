@@ -206,7 +206,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
               )}
               <ul className="search-v2-trust">
                 <li><Check /> Riconoscimento sempre gratuito</li>
-                <li><ShieldCheck /> Report completo con account gratuito</li>
+                <li><ShieldCheck /> La prima analisi completa è gratuita</li>
                 <li><BarChart3 /> Dati dagli annunci reali in vendita</li>
               </ul>
               <div className="search-v2-avatars">
@@ -366,7 +366,7 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
               <SmartImg src={U('photo-1544636331-e26879cd4d9b', 1600)} alt="" eager />
               <div className="cta-band-v2-inner">
                 <h2>Pronto a scoprire la verità sull'usato?</h2>
-                <p>Riconoscimento gratuito, report completo con un account. Risultati in pochi secondi.</p>
+                <p>Analisi base sempre gratuita, prima analisi completa gratis. Risultati in pochi secondi.</p>
                 <div className="cta-band-v2-actions">
                   <Link href="/#scanner-section" className="home-hero-cta">Analizza un'auto</Link>
                   <Link href="/valutazione" className="home-hero-cta-secondary">Sfoglia i modelli</Link>

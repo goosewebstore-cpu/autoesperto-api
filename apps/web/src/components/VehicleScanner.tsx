@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, RotateCcw, ScanSearch, ShieldCheck, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, type FreeScanResult, type AccountUser } from '@/lib/api';
+import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, markFreeAnalysisUsed, type FreeScanResult, type AccountUser } from '@/lib/api';
 import ReportView from '@/components/ReportView';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
@@ -92,6 +92,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
         return;
       }
       setScan(result); setReport(result.report ?? null); setStage('vehicle-found');
+      if (result.report && result.freeUsed) markFreeAnalysisUsed();
       await wait(3500);
       setStage('result');
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -126,6 +127,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
       }
       setScan(result);
       setReport(result.report ?? null);
+      if (result.report && result.freeUsed) markFreeAnalysisUsed();
       setStage('vehicle-found');
       await wait(2500);
       setStage('result');
@@ -179,7 +181,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                   <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
                 ))}
               </div>
-              <p className="scanner-box-micro">Riconoscimento sempre gratuito. Per il report completo e salvarlo basta un account gratuito.</p>
+              <p className="scanner-box-micro">Analisi base sempre gratuita: marca, modello, anno, colore e tipologia. La prima analisi completa è gratis, poi Premium per continuare.</p>
             </div>
           ) : (
             <form
@@ -254,7 +256,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
-           <p className="scanner-microcopy">Riconoscimento gratuito senza account. Per il report completo e salvarlo basta un account gratuito.</p>
+           <p className="scanner-microcopy">Analisi base sempre gratuita senza account. La prima analisi completa è gratis, poi passa a Premium per continuare.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
            <p className="mt-3 flex items-start gap-2 text-xs text-slate-600 max-w-xl">
              <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600" />
@@ -292,36 +294,61 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
           )}
           <button type="button" onClick={reset} className="scanner-reset"><RotateCcw className="h-4 w-4" /> Nuova analisi</button>
           <div className="scanner-result-title">
-            <span>{gated ? 'Veicolo riconosciuto' : 'Analisi gratuita completata'}</span>
+            <span>{gated ? 'Analisi base gratuita' : 'Analisi completa gratuita'}</span>
             <h1>{vehicleName}</h1>
             <p>Riconoscimento a confidenza {scan.vehicle.confidence}</p>
           </div>
         </div>
 
         {gated ? (
-          <div className="scanner-gate-card">
-            <div className="scanner-gate-icon"><ShieldCheck className="h-6 w-6" /></div>
-            <h2>{scan.needsUpgrade ? 'Hai gi\u00E0 usato la tua analisi gratuita' : scan.needsEmailVerification ? 'La tua analisi gratuita \u00E8 pronta' : 'Riconosciamo la tua auto'}</h2>
-            <p>{scan.message || (scan.needsUpgrade
-              ? 'Passa a Premium per vedere e salvare tutte le analisi complete.'
-              : 'Crea un account gratuito per vedere il report completo e salvarlo nel tuo account.')}</p>
-            <button
-              type="button"
-              className="scanner-gate-cta"
-              onClick={() => router.push(scan.needsUpgrade ? '/account' : scan.needsEmailVerification ? '/account' : '/accesso?next=/account')}
-            >
-              {scan.needsUpgrade
-                ? <>Vai alla pagina Premium <ArrowRight className="h-4 w-4" /></>
-                : scan.needsEmailVerification
-                  ? <>Verifica la tua email <ArrowRight className="h-4 w-4" /></>
-                  : <>Crea account gratuito <ArrowRight className="h-4 w-4" /></>}
-            </button>
-          </div>
+          <>
+            <div className="mt-5 rounded-2xl border border-border bg-surface-2 p-5">
+              <h2 className="text-sm font-bold text-text-primary">Analisi base — sempre gratuita</h2>
+              <p className="mt-1 text-xs text-text-secondary leading-relaxed">
+                Marca, modello, anno, colore e tipologia restano disponibili per tutti, senza account e senza limiti.
+              </p>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {[
+                  ['Marca', scan.vehicle.make],
+                  ['Modello', scan.vehicle.model],
+                  ['Versione', scan.vehicle.generation],
+                  ['Anno', scan.vehicle.year],
+                  ['Colore', scan.vehicle.color],
+                  ['Tipologia', scan.vehicle.bodyType],
+                ]
+                  .filter((item) => item[1])
+                  .map(([label, value]) => (
+                    <div key={String(label)} className="rounded-xl border border-border bg-white p-3">
+                      <span className="block text-[11px] font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
+                      <strong className="mt-1 block text-sm capitalize text-text-primary">{String(value)}</strong>
+                    </div>
+                  ))}
+              </div>
+            </div>
+            <div className="scanner-gate-card">
+              <div className="scanner-gate-icon"><ShieldCheck className="h-6 w-6" /></div>
+              <h2>{scan.needsUpgrade ? 'Hai gi\u00E0 usato la tua analisi gratuita' : scan.needsEmailVerification ? 'La tua analisi gratuita \u00E8 pronta' : 'Riconosciamo la tua auto'}</h2>
+              <p>{scan.message || (scan.needsUpgrade
+                ? 'Passa a Premium per analizzare altre auto con report completo e salvarle tutte.'
+                : 'Crea un account gratuito per vedere il report completo e salvarlo nel tuo account.')}</p>
+              <button
+                type="button"
+                className="scanner-gate-cta"
+                onClick={() => router.push(scan.needsUpgrade ? '/account' : scan.needsEmailVerification ? '/account' : '/accesso?next=/account')}
+              >
+                {scan.needsUpgrade
+                  ? <>Vai alla pagina Premium <ArrowRight className="h-4 w-4" /></>
+                  : scan.needsEmailVerification
+                    ? <>Verifica la tua email <ArrowRight className="h-4 w-4" /></>
+                    : <>Crea account gratuito <ArrowRight className="h-4 w-4" /></>}
+              </button>
+            </div>
+          </>
         ) : (
           <>
             <div className="scanner-result-banner">
               <ShieldCheck className="h-4 w-4" />
-              <span>Ecco la tua analisi completa con valore stimato, affidabilit\u00E0 e costi. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'accedi gratis'}</button>.</span>
+              <span>Ecco la tua analisi completa gratuita con valore stimato, affidabilit\u00E0 e costi. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'crea un account gratuito'}</button>.</span>
             </div>
             <ReportView report={report} embedded tier="premium" />
           </>

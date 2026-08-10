@@ -37,6 +37,7 @@ export interface FreeScanResult {
   vehicle?: PhotoAnalysis['vehicle'];
   report?: AutoReport;
   saved?: boolean;
+  freeUsed?: boolean;
   needsLogin?: boolean;
   needsUpgrade?: boolean;
   needsEmailVerification?: boolean;
@@ -132,12 +133,32 @@ export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: 
   return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) }, AI_TIMEOUT_MS, true);
 }
 
+export const FREE_ANALYSIS_KEY = 'ae_free_analysis_used';
+
+export function hasFreeAnalysis(): boolean {
+  if (typeof window === 'undefined') return false;
+  try {
+    return localStorage.getItem(FREE_ANALYSIS_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function markFreeAnalysisUsed(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(FREE_ANALYSIS_KEY, '1');
+  } catch {
+    // storage non disponibile: il limite non verrà applicato
+  }
+}
+
 export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData }) }, AI_TIMEOUT_MS, true);
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, freeUsed: hasFreeAnalysis() }) }, AI_TIMEOUT_MS, true);
 }
 
 export async function freeScanManual(input: { make: string; model: string; year?: number }): Promise<FreeScanResult> {
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, REPORT_TIMEOUT_MS, true);
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ ...input, freeUsed: hasFreeAnalysis() }) }, REPORT_TIMEOUT_MS, true);
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {

@@ -50,7 +50,7 @@ export function sendVerificationEmail(to: string, token: string): Promise<boolea
 <div style="text-align:center;margin-bottom:24px"><strong style="font-size:22px">AutoEsperto</strong></div>
 <h1 style="font-size:20px">Verifica la tua email</h1>
 <p style="font-size:15px;line-height:1.6">Ciao,</p>
-<p style="font-size:15px;line-height:1.6">Conferma la tua email per attivare l'analisi gratuita inclusa nel tuo account. Senza questa verifica non puoi usare il trial.</p>
+<p style="font-size:15px;line-height:1.6">Conferma la tua email per salvare le tue analisi, gestire l'abbonamento Premium e accedere a tutte le funzioni del tuo account AutoEsperto.</p>
 <p style="margin:28px 0;text-align:center"><a href="${link}" style="display:inline-block;background:#0F172A;color:white;font-weight:bold;padding:14px 28px;border-radius:10px;text-decoration:none">Verifica l'email</a></p>
 <p style="font-size:13px;color:#64748B">Oppure copia questo link:<br><a href="${link}" style="word-break:break-all">${link}</a></p>
 <p style="font-size:13px;color:#64748B;margin-top:32px">Se non hai creato un account su AutoEsperto, ignora questa email.</p>

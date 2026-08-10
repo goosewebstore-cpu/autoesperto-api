@@ -68,7 +68,7 @@ async function accountSummary(userId: string) {
   if (!user) throw unauthorized('Account non trovato');
   const paid = user.purchases.length > 0;
   const emailVerified = !!user.emailVerified;
-  const trialAvailable = emailVerified && !paid && analysisCount === 0;
+  const trialAvailable = !paid && analysisCount === 0;
   return {
     ...user,
     subscription: user.subscription ? {

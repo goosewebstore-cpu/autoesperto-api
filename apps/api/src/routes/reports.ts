@@ -52,6 +52,7 @@ const freeScanSchema = z
     make: z.string().trim().min(2).optional(),
     model: z.string().trim().min(1).optional(),
     year: z.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
+    freeUsed: z.boolean().optional(),
   })
   .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
     message: 'Indica una foto oppure marca e modello',
@@ -199,17 +200,17 @@ router.post(
       confidence: photoAnalysis.vehicle.confidence,
     };
 
-    // L'analisi completa (valore, affidabilità, costi, ecc.) richiede un
-    // account autorizzato: senza login si vede solo il riconoscimento.
+    // Analisi base (marca, modello, anno, colore, tipologia) → sempre gratuita.
+    // Il report completo richiede uno slot gratuito: la prima analisi è gratis
+    // alla prima visita (anonimo, flag dal client) o col primo account;
+    // poi serve Premium.
     const userId = getOptionalUserId(req);
     const entitlement = await getAccountEntitlement(userId);
+    const anonymousFreeSlot = !userId && !input.freeUsed;
+    const freeSlot = userId ? entitlement.freeAvailable : anonymousFreeSlot;
+    const entitled = entitlement.unlimited || freeSlot;
 
-    if (!entitlement.entitled) {
-      const message = entitlement.needsLogin
-        ? 'Riconosciamo la tua auto. Crea un account gratuito per vedere il report completo e salvarlo nel tuo account.'
-        : !entitlement.emailVerified
-          ? 'La tua analisi gratuita è pronta: verifica la tua email per sbloccarla e salvarla nel tuo account.'
-          : 'Hai già usato la tua analisi gratuita. Passa a Premium per vedere e salvare tutte le analisi complete.';
+    if (!entitled) {
       res.set('Cache-Control', 'no-store');
       res.json({
         success: true,
@@ -217,10 +218,10 @@ router.post(
         vehicle,
         report: null,
         saved: false,
-        needsLogin: entitlement.needsLogin,
-        needsUpgrade: entitlement.needsUpgrade,
-        needsEmailVerification: !entitlement.needsLogin && !entitlement.emailVerified,
-        message,
+        needsLogin: false,
+        needsUpgrade: true,
+        needsEmailVerification: false,
+        message: 'L\'analisi base (marca, modello, anno, colore e tipologia) è sempre gratuita. Per un\'altra analisi completa passa a Premium.',
       });
       return;
     }
@@ -234,31 +235,41 @@ router.post(
     }
 
     const title = [make, model, photoAnalysis.vehicle.generation, year].filter(Boolean).join(' ');
-    const analysis = await prisma.analysis.create({
-      data: {
-        userId: userId!,
-        title,
-        vehicleJson: JSON.stringify(photoAnalysis.vehicle),
-        photoAnalysisJson: JSON.stringify(photoAnalysis),
-        reportJson: JSON.stringify(report),
-        sourceImageStored: false,
-        immediateExecutionAccepted: true,
-        consentAt: new Date(),
-        termsVersion: '2026-08-02',
-      },
-    });
+
+    // Il salvataggio richiede un account: l'anonimo riceve il report ma non
+    // può salvarlo (il client segna lo slot gratuito come consumato).
+    let saved = false;
+    let analysis: { id: string; createdAt: Date } | null = null;
+    if (userId && entitlement.entitled) {
+      const stored = await prisma.analysis.create({
+        data: {
+          userId,
+          title,
+          vehicleJson: JSON.stringify(photoAnalysis.vehicle),
+          photoAnalysisJson: JSON.stringify(photoAnalysis),
+          reportJson: JSON.stringify(report),
+          sourceImageStored: false,
+          immediateExecutionAccepted: true,
+          consentAt: new Date(),
+          termsVersion: '2026-08-02',
+        },
+      });
+      saved = true;
+      analysis = { id: stored.id, createdAt: stored.createdAt };
+    }
 
     res.set('Cache-Control', 'no-store');
     void prisma.analyticsEvent.create({
-      data: { type: 'scan', path: '/', meta: JSON.stringify({ make, model, recognized: true, saved: true }), userId },
+      data: { type: 'scan', path: '/', meta: JSON.stringify({ make, model, recognized: true, saved }), userId },
     }).catch(() => undefined);
     res.json({
       success: true,
       recognized: true,
       vehicle,
       report,
-      saved: true,
-      analysis: { id: analysis.id, createdAt: analysis.createdAt.toISOString() },
+      saved,
+      freeUsed: !userId,
+      analysis: analysis ? { id: analysis.id, createdAt: analysis.createdAt.toISOString() } : undefined,
     });
   })
 );

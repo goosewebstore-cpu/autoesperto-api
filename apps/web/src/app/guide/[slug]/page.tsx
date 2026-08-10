@@ -4,7 +4,8 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { getGuide, guides, GUIDE_CATEGORIES } from '@/lib/guides';
+import { getGuide, guides, GUIDE_CATEGORIES, type Guide } from '@/lib/guides';
+import { getAllMakes, getModelSlug, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -199,11 +200,56 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
+function normalize(value: string): string {
+  return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+const MAKE_ALIASES: Record<string, string[]> = {
+  Volkswagen: ['vw'],
+  'Mercedes-Benz': ['mercedes'],
+  'Alfa Romeo': ['alfa'],
+};
+
+const SAFE_BARE_MODELS = new Set([
+  'Panda', 'Golf', 'Yaris', 'Corolla', 'RAV4', 'C-HR', 'Aygo', 'Fiesta', 'Puma', 'Kuga',
+  'Clio', 'Captur', 'Megane', 'Duster', 'Sandero', 'Jogger', 'Logan', 'Picanto', 'Rio',
+  'Ceed', 'Stonic', 'Qashqai', 'Juke', 'Micra', 'Swift', 'Vitara', 'Ignis', 'CX-3', 'CX-5',
+  'Tiguan', 'T-Cross', 'T-Roc', 'Ibiza', 'Leon', 'Arona', 'Ateca', 'Fabia', 'Octavia',
+  'Kamiq', 'Karoq', 'Kodiaq', 'Tucson', 'Kona', 'i10', 'i20', 'i30', 'Astra', 'Mokka',
+  'Crossland', 'Giulia', 'Giulietta', 'Stelvio', 'Renegade', 'Compass', 'Evoque', 'Ypsilon',
+  'XC40', 'XC60', 'V40', 'Model 3', 'Model Y', 'MG4', 'ZS', 'Civic', 'Jazz', 'CR-V',
+  'ASX', 'Outlander', 'NX', 'Cayenne', 'Macan', 'Fortwo', '500X',
+]);
+
+function isMentioned(text: string, name: string): boolean {
+  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  return new RegExp(`(^|[^a-z0-9])${escaped}(?![a-z0-9-])`).test(text);
+}
+
+function getMentionedModels(guide: Guide): Array<{ make: string; model: string }> {
+  const text = normalize(
+    guide.sections
+      .flatMap((section) => [section.heading, ...section.paragraphs, ...(section.list ?? [])])
+      .join(' ')
+  );
+  const catalog = new Map(getAllMakes().map((make) => [make.slug, new Set(make.models.map(getModelSlug))]));
+  return POPULAR_MODELS.filter((item) => {
+    const makeSlug = slugify(item.make);
+    const modelSlug = slugify(item.model);
+    const inCatalog = catalog.get(makeSlug)?.has(modelSlug) ?? false;
+    if (!inCatalog) return false;
+    const names = [normalize(`${item.make} ${item.model}`), ...(MAKE_ALIASES[item.make] ?? []).map((alias) => normalize(`${alias} ${item.model}`))];
+    if (names.some((name) => isMentioned(text, name))) return true;
+    return SAFE_BARE_MODELS.has(item.model) && isMentioned(text, normalize(item.model));
+  }).slice(0, 6);
+}
+
 export default async function GuidePage({ params }: PageProps) {
   const { slug } = await params;
   const guide = getGuide(slug);
   if (!guide) notFound();
 
+  const mentionedModels = getMentionedModels(guide);
   const cta = guideCtas[guide.cta] ?? guideCtas['auto-usata-affare'];
   const otherGuides = guides.filter((g) => g.slug !== guide.slug).slice(0, 3);
 
@@ -305,6 +351,30 @@ export default async function GuidePage({ params }: PageProps) {
             </p>
           </div>
         </article>
+
+        {mentionedModels.length > 0 && (
+          <section className="mt-12" aria-label="Auto citate in questa guida">
+            <h2 className="text-lg font-bold text-text-primary">Auto citate in questa guida</h2>
+            <p className="text-sm text-text-secondary mt-1">Approfondisci valore di mercato, affidabilità e costi dei modelli citati.</p>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {mentionedModels.map(({ make, model }) => {
+                const makeSlug = slugify(make);
+                const modelSlug = slugify(model);
+                return (
+                  <div key={`${makeSlug}/${modelSlug}`} className="rounded-xl border border-border bg-surface-2 p-4">
+                    <h3 className="text-sm font-bold text-text-primary">{make} {model}</h3>
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-accent">
+                      <Link href={`/valutazione/${makeSlug}/${modelSlug}`} className="hover:underline">Valutazione</Link>
+                      <Link href={`/affidabilita/${makeSlug}/${modelSlug}`} className="hover:underline">Affidabilità</Link>
+                      <Link href={`/riparazione/${makeSlug}/${modelSlug}`} className="hover:underline">Costi di riparazione</Link>
+                      <Link href={`/consumi/${makeSlug}/${modelSlug}`} className="hover:underline">Consumi</Link>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        )}
 
         <section className="mt-12 rounded-2xl bg-accent p-6 text-white">
           <h2 className="text-lg font-bold">{cta.label}</h2>

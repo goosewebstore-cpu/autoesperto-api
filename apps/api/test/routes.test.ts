@@ -139,7 +139,7 @@ describe('AutoEsperto API (MVP)', () => {
   });
 
   describe('POST /reports/free-scan', () => {
-    it('input manuale senza account → riconosciuto ma report gated', async () => {
+    it('input manuale senza account (prima visita) → report completo gratuito, non salvato', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016 },
@@ -149,10 +149,24 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.data.recognized, true);
       assert.strictEqual(r.data.vehicle.make, 'BMW');
       assert.strictEqual(r.data.vehicle.model, 'Serie 3');
+      assert.ok(r.data.report);
+      assert.strictEqual(r.data.saved, false);
+      assert.strictEqual(r.data.freeUsed, true);
+    });
+
+    it('input manuale senza account con freeUsed → report gated, solo analisi base', async () => {
+      const r = await req('/reports/free-scan', {
+        method: 'POST',
+        body: { make: 'BMW', model: 'Serie 3', year: 2016, freeUsed: true },
+      });
+      assert.strictEqual(r.status, 200);
+      assert.strictEqual(r.data.success, true);
+      assert.strictEqual(r.data.recognized, true);
+      assert.strictEqual(r.data.vehicle.make, 'BMW');
       assert.strictEqual(r.data.report, null);
       assert.strictEqual(r.data.saved, false);
-      assert.strictEqual(r.data.needsLogin, true);
-      assert.strictEqual(r.data.needsUpgrade, false);
+      assert.strictEqual(r.data.needsUpgrade, true);
+      assert.match(r.data.message, /sempre gratuita/i);
     });
 
     it('né foto né marca/modello → 400', async () => {

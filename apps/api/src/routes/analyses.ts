@@ -69,12 +69,14 @@ router.post(
   asyncHandler(async (req, res) => {
     const { userId } = (req as AuthenticatedRequest).auth;
     const { imageData } = analysisSchema.parse(req.body);
-    const [analysisCount, paidPurchase] = await Promise.all([
+    const [analysisCount, paidPurchase, subscription] = await Promise.all([
       prisma.analysis.count({ where: { userId } }),
       prisma.purchase.findFirst({ where: { userId, status: 'PAID' }, select: { id: true } }),
+      prisma.user.findUnique({ where: { id: userId }, select: { subscription: { select: { plan: true, status: true } } } }),
     ]);
-    if (analysisCount > 0 && !paidPurchase) {
-      throw forbidden('Hai già usato la tua analisi gratuita. Acquista una nuova analisi per salvarne altre.');
+    const premiumActive = subscription?.subscription?.plan === 'PREMIUM' && subscription?.subscription?.status === 'ACTIVE';
+    if (analysisCount > 0 && !paidPurchase && !premiumActive) {
+      throw forbidden('Hai già usato la tua analisi gratuita. Passa a Premium per salvare e analizzare altre auto senza limiti.');
     }
 
     let photoAnalysis: Awaited<ReturnType<typeof analyzeVehiclePhoto>>;

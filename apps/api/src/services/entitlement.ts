@@ -13,10 +13,12 @@ export interface AccountEntitlement {
 }
 
 /**
- * L'analisi completa richiede un account con email verificata e, per la
- * prima analisi gratuita, un solo salvataggio. Chi ha pagato o è Premium ha
- * accesso illimitato. Chi non è autenticato o non ha più slot gratuiti deve
- * accedere / fare upgrade prima di vedere il report completo.
+ * Regole di accesso al report completo:
+ * - Premium / acquisti → accesso illimitato
+ * - primo account registrato (analysisCount === 0) → 1 analisi completa gratuita
+ *   (nessuna verifica email richiesta per usarla)
+ * - anonimo → la prima analisi completa è gratuita (tracciata dal client),
+ *   poi solo analisi base finché non si abbonano
  */
 export async function getAccountEntitlement(userId: string | null): Promise<AccountEntitlement> {
   if (!userId) {
@@ -63,7 +65,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
   const premium = user.subscription?.plan === 'PREMIUM' && user.subscription?.status === 'ACTIVE';
   const emailVerified = !!user.emailVerified;
   const unlimited = paid || premium;
-  const freeAvailable = emailVerified && !unlimited && analysisCount === 0;
+  const freeAvailable = !unlimited && analysisCount === 0;
   const entitled = unlimited || freeAvailable;
 
   return {

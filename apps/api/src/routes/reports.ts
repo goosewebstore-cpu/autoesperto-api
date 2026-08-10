@@ -220,10 +220,12 @@ router.post(
       const marketStats = await fetchSubitoMarketStats(make!, model!, year, undefined).catch(() => undefined);
       const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
       if (marketStats?.priceAvg && marketSample >= 2) {
+        const estimated = Math.round(marketStats.priceAvg / 100) * 100;
+        const spread = Math.round((estimated * 0.2) / 100) * 100;
         value = {
-          estimated: Math.round(marketStats.priceAvg / 100) * 100,
-          min: marketStats.priceMin ? Math.round(marketStats.priceMin / 100) * 100 : estimate.min,
-          max: marketStats.priceMax ? Math.round(marketStats.priceMax / 100) * 100 : estimate.max,
+          estimated,
+          min: marketStats.priceMin ? Math.max(Math.round(marketStats.priceMin / 100) * 100, estimated - spread) : estimated - spread,
+          max: marketStats.priceMax ? Math.min(Math.round(marketStats.priceMax / 100) * 100, estimated + spread) : estimated + spread,
           source: 'market',
         };
       }

@@ -107,8 +107,10 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
   let finalMax = max;
   if (useMarket && marketStats) {
     finalValue = Math.round(marketStats.priceAvg! / 100) * 100;
-    finalMin = marketStats.priceMin ? Math.round(marketStats.priceMin / 100) * 100 : finalValue - Math.round((finalValue * 0.1) / 100) * 100;
-    finalMax = marketStats.priceMax ? Math.round(marketStats.priceMax / 100) * 100 : finalValue + Math.round((finalValue * 0.1) / 100) * 100;
+    const spread = Math.round((finalValue * 0.2) / 100) * 100;
+    // Range reale ma con spread contenuto: gli annunci estremi sporcano min/max.
+    finalMin = marketStats.priceMin ? Math.max(Math.round(marketStats.priceMin / 100) * 100, finalValue - spread) : finalValue - spread;
+    finalMax = marketStats.priceMax ? Math.min(Math.round(marketStats.priceMax / 100) * 100, finalValue + spread) : finalValue + spread;
     // Il campione è già filtrato per km: niente ulteriore aggiustamento.
     comparisonValue = finalValue;
   }

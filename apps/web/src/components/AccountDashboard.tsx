@@ -201,9 +201,14 @@ export default function AccountDashboard({ checkout, subscription, upgrade, sess
             <h1 className="mt-2 text-3xl font-extrabold tracking-tight text-slate-950">Ciao {user.name || 'da AutoEsperto'}</h1>
             <p className="mt-2 text-sm text-slate-600">{user.email || user.phone} · Analisi salvate {analyses.length}</p>
           </div>
-          <div className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-xs font-extrabold ${userTier === 'premium' ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-700'}`}>
-            <span className="h-2 w-2 rounded-full bg-current" />
-            {userTier === 'premium' ? 'Premium Attivo' : user.entitlement.emailVerified === false && user.email ? 'Email da verificare' : 'Piano Gratuito / Registrato'}
+          <div className="flex items-center gap-2">
+            <button onClick={logout} className="inline-flex items-center gap-2 rounded-full border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-slate-700 transition hover:border-red-300 hover:bg-red-50 hover:text-red-600">
+              <LogOut className="h-3.5 w-3.5" /> Esci
+            </button>
+            <div className={`inline-flex w-fit items-center gap-2 rounded-full px-3 py-1.5 text-xs font-extrabold ${userTier === 'premium' ? 'bg-amber-100 text-amber-700' : 'bg-slate-200 text-slate-700'}`}>
+              <span className="h-2 w-2 rounded-full bg-current" />
+              {userTier === 'premium' ? 'Premium Attivo' : user.entitlement.emailVerified === false && user.email ? 'Email da verificare' : 'Piano Gratuito / Registrato'}
+            </div>
           </div>
         </div>
 

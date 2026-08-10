@@ -87,7 +87,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     ? estimateMarketValueWithKm(vehicle, input.km)
     : { ...estimateMarketValue(vehicle), adjustedForKm: 0, kmAdjustment: 0 };
 
-  const comparisonValue = adjustedForKm > 0 ? adjustedForKm : value;
+  let comparisonValue = adjustedForKm > 0 ? adjustedForKm : value;
 
   const alternatives = getAlternatives(vehicle.make, vehicle.model).slice(0, 4);
 
@@ -97,6 +97,21 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       fetchSubitoMarketStats(alt.make, alt.model, vehicle.year, input.km).catch(() => undefined)
     )),
   ]);
+
+  // Se gli annunci reali restituiscono un prezzo medio attendibile, il valore
+  // stimato usa il mercato reale (già filtrato per anno e km confrontabili).
+  const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
+  const useMarket = Boolean(marketStats?.priceAvg && marketSample >= 2);
+  let finalValue = value;
+  let finalMin = min;
+  let finalMax = max;
+  if (useMarket && marketStats) {
+    finalValue = Math.round(marketStats.priceAvg! / 100) * 100;
+    finalMin = marketStats.priceMin ? Math.round(marketStats.priceMin / 100) * 100 : finalValue - Math.round((finalValue * 0.1) / 100) * 100;
+    finalMax = marketStats.priceMax ? Math.round(marketStats.priceMax / 100) * 100 : finalValue + Math.round((finalValue * 0.1) / 100) * 100;
+    // Il campione è già filtrato per km: niente ulteriore aggiustamento.
+    comparisonValue = finalValue;
+  }
 
   const reliability = await analyzeVehicle({
     vehicle,
@@ -108,11 +123,11 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     vehicle,
     reliability,
     price: {
-      estimatedValue: value,
-      min,
-      max,
-      adjustedForKm: adjustedForKm || undefined,
-      kmAdjustment: kmAdjustment || undefined,
+      estimatedValue: useMarket ? finalValue : comparisonValue,
+      min: finalMin,
+      max: finalMax,
+      adjustedForKm: useMarket ? undefined : (adjustedForKm || undefined),
+      kmAdjustment: useMarket ? undefined : (kmAdjustment || undefined),
       inputKm: input.km || undefined,
       inputYear: vehicle.year,
       requestedPrice: input.requestedPrice,
@@ -120,7 +135,11 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
         ? Math.round(((input.requestedPrice - comparisonValue) / comparisonValue) * 100)
         : undefined,
       priceLabel: input.requestedPrice ? priceLabelFor(input.requestedPrice, comparisonValue) : undefined,
-      comment: buildPriceComment(input.requestedPrice, comparisonValue, input.km),
+      comment: useMarket && !input.requestedPrice
+        ? (input.km
+          ? `Prezzo medio reale da ${marketStats!.total} annunci simili su ${marketStats!.source} (filtro anno e km confrontabili). Inserisci il prezzo richiesto per il confronto.`
+          : `Prezzo medio reale da ${marketStats!.total} annunci simili su ${marketStats!.source}. Inserisci il prezzo richiesto per il confronto.`)
+        : buildPriceComment(input.requestedPrice, comparisonValue, input.km),
       marketUrls: getMarketSearchUrls(vehicle),
       market: marketStats,
     },

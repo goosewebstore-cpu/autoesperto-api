@@ -36,6 +36,7 @@ export interface FreeScanResult {
   message?: string;
   vehicle?: PhotoAnalysis['vehicle'];
   report?: AutoReport;
+  value?: { estimated: number; min: number; max: number; source: 'stima' | 'market' };
   saved?: boolean;
   freeUsed?: boolean;
   needsLogin?: boolean;

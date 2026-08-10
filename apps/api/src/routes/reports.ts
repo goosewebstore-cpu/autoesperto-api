@@ -3,6 +3,8 @@ import { z } from 'zod';
 import type { Request } from 'express';
 import { prisma } from '@autoesperto/database';
 import { buildReport } from '../services/reportService';
+import { estimateMarketValue } from '../services/pricing';
+import { fetchSubitoMarketStats } from '../services/market';
 import { analyzeVehiclePhoto, askAutoEsperto, type PhotoAnalysisResult } from '../services/ai';
 import { searchModel } from '../services/modelDB';
 import { verifyAuthToken } from '../services/auth';
@@ -211,17 +213,32 @@ router.post(
     const entitled = entitlement.unlimited || freeSlot;
 
     if (!entitled) {
+      const estimate = estimateMarketValue({ make: make!, model: model!, year, body: vehicle.bodyType });
+      let value: { estimated: number; min: number; max: number; source: 'stima' | 'market' } = {
+        estimated: estimate.value, min: estimate.min, max: estimate.max, source: 'stima',
+      };
+      const marketStats = await fetchSubitoMarketStats(make!, model!, year, undefined).catch(() => undefined);
+      const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
+      if (marketStats?.priceAvg && marketSample >= 2) {
+        value = {
+          estimated: Math.round(marketStats.priceAvg / 100) * 100,
+          min: marketStats.priceMin ? Math.round(marketStats.priceMin / 100) * 100 : estimate.min,
+          max: marketStats.priceMax ? Math.round(marketStats.priceMax / 100) * 100 : estimate.max,
+          source: 'market',
+        };
+      }
       res.set('Cache-Control', 'no-store');
       res.json({
         success: true,
         recognized: true,
         vehicle,
         report: null,
+        value,
         saved: false,
         needsLogin: false,
         needsUpgrade: true,
         needsEmailVerification: false,
-        message: 'L\'analisi base (marca, modello, anno, colore e tipologia) è sempre gratuita. Per un\'altra analisi completa passa a Premium.',
+        message: 'L\'analisi base (marca, modello, anno, colore, tipologia e valore stimato) è sempre gratuita. Per un\'altra analisi completa passa a Premium.',
       });
       return;
     }

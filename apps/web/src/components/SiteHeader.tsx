@@ -2,9 +2,9 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
-import { Car, ChevronDown, Menu, ScanSearch, UserRound, X } from 'lucide-react';
-import { getAuthToken } from '@/lib/auth';
+import { usePathname, useRouter } from 'next/navigation';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X } from 'lucide-react';
+import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
 interface MenuItem {
   label: string;
@@ -38,9 +38,11 @@ const DIRECT_LINKS = [
 
 export default function SiteHeader() {
   const pathname = usePathname();
+  const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdown, setDropdown] = useState(false);
-  const [signedIn, setSignedIn] = useState(false);
+  const [userMenu, setUserMenu] = useState(false);
+  const [signedIn, setSignedIn] = useState(() => typeof window !== 'undefined' && Boolean(getAuthToken()));
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -50,17 +52,27 @@ export default function SiteHeader() {
   useEffect(() => {
     setMenuOpen(false);
     setDropdown(false);
+    setUserMenu(false);
   }, [pathname]);
 
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setDropdown(false);
+        setUserMenu(false);
       }
     };
     document.addEventListener('mousedown', onPointerDown);
     return () => document.removeEventListener('mousedown', onPointerDown);
   }, []);
+
+  const handleLogout = () => {
+    clearAuthToken();
+    setSignedIn(false);
+    setUserMenu(false);
+    setMenuOpen(false);
+    router.push('/');
+  };
 
   const isActive = (href: string) =>
     href !== '/#' && (pathname === href || pathname.startsWith(`${href}/`));
@@ -115,10 +127,31 @@ export default function SiteHeader() {
         </nav>
 
         <div className="site-actions">
-          <Link href={signedIn ? '/account' : '/accesso'} className="site-account-btn">
-            <UserRound className="h-4 w-4" />
-            <span className="site-account-label">{signedIn ? 'Area personale' : 'Accedi'}</span>
-          </Link>
+          <div className={`site-user${userMenu ? ' open' : ''}`}>
+            <button
+              type="button"
+              className="site-account-btn"
+              aria-haspopup={signedIn ? 'menu' : undefined}
+              aria-expanded={signedIn ? userMenu : undefined}
+              onClick={() => (signedIn ? setUserMenu((value) => !value) : router.push('/accesso'))}
+            >
+              <UserRound className="h-4 w-4" />
+              <span className="site-account-label">{signedIn ? 'Area personale' : 'Accedi'}</span>
+              {signedIn && <ChevronDown className="site-nav-chev" />}
+            </button>
+            {signedIn && userMenu && (
+              <div className="site-user-menu" role="menu">
+                <Link href="/account" className="site-user-menu-link" role="menuitem">
+                  <UserRound className="h-4 w-4" />
+                  <span>Area personale</span>
+                </Link>
+                <button type="button" onClick={handleLogout} className="site-user-menu-link site-user-menu-logout" role="menuitem">
+                  <LogOut className="h-4 w-4" />
+                  <span>Esci</span>
+                </button>
+              </div>
+            )}
+          </div>
           <Link href="/#scanner-section" className="site-cta">
             <ScanSearch className="h-4 w-4" />
             <span className="site-cta-label">Analizza ora</span>
@@ -153,7 +186,14 @@ export default function SiteHeader() {
             <Link href="/guide" className="site-mobile-chip">Guide</Link>
           </div>
           <div className="site-mobile-actions">
-            <Link href={signedIn ? '/account' : '/accesso'} className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>{signedIn ? 'Area personale' : 'Accedi'}</Link>
+            {signedIn ? (
+              <>
+                <Link href="/account" className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>Area personale</Link>
+                <button onClick={handleLogout} className="site-mobile-logout"><LogOut className="h-4 w-4" /> Esci dall'account</button>
+              </>
+            ) : (
+              <Link href="/accesso" className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>Accedi</Link>
+            )}
             <Link href="/#scanner-section" className="home-hero-cta" onClick={() => setMenuOpen(false)}>Analizza ora</Link>
           </div>
         </div>

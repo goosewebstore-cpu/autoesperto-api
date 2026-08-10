@@ -154,7 +154,7 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.data.freeUsed, true);
     });
 
-    it('input manuale senza account con freeUsed → report gated, solo analisi base', async () => {
+    it('input manuale senza account con freeUsed → report gated, solo analisi base con valore stimato', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016, freeUsed: true },
@@ -166,6 +166,10 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.data.report, null);
       assert.strictEqual(r.data.saved, false);
       assert.strictEqual(r.data.needsUpgrade, true);
+      assert.ok(r.data.value, 'la risposta gated include il valore stimato');
+      assert.ok(r.data.value.estimated > 0, 'valore stimato positivo');
+      assert.ok(r.data.value.min < r.data.value.estimated && r.data.value.estimated < r.data.value.max);
+      assert.ok(['stima', 'market'].includes(r.data.value.source), `source valida, ottenuto ${r.data.value.source}`);
       assert.match(r.data.message, /sempre gratuita/i);
     });
 

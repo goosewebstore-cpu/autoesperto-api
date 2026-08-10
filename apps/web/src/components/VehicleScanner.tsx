@@ -305,7 +305,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
             <div className="mt-5 rounded-2xl border border-border bg-surface-2 p-5">
               <h2 className="text-sm font-bold text-text-primary">Analisi base — sempre gratuita</h2>
               <p className="mt-1 text-xs text-text-secondary leading-relaxed">
-                Marca, modello, anno, colore e tipologia restano disponibili per tutti, senza account e senza limiti.
+                Marca, modello, anno, colore, tipologia e valore stimato restano disponibili per tutti, senza account e senza limiti.
               </p>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {[
@@ -324,6 +324,20 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                     </div>
                   ))}
               </div>
+              {scan.value && (
+                <div className="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-xl border border-emerald-200 bg-emerald-50 p-4">
+                  <div>
+                    <span className="block text-[11px] font-bold uppercase tracking-wide text-emerald-700">Valore stimato</span>
+                    <strong className="mt-1 block text-2xl font-extrabold text-emerald-900">≈ {scan.value.estimated.toLocaleString('it-IT')} €</strong>
+                    <span className="mt-1 block text-xs text-emerald-700">
+                      Fascia di mercato: {scan.value.min.toLocaleString('it-IT')} – {scan.value.max.toLocaleString('it-IT')} €
+                    </span>
+                  </div>
+                  <span className="rounded-full bg-emerald-600 px-3 py-1 text-[11px] font-bold text-white">
+                    {scan.value.source === 'market' ? 'Da annunci reali' : 'Stima indicativa'}
+                  </span>
+                </div>
+              )}
             </div>
             <div className="scanner-gate-card">
               <div className="scanner-gate-icon"><ShieldCheck className="h-6 w-6" /></div>

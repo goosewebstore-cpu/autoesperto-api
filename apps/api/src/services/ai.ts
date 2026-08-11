@@ -21,8 +21,19 @@ export interface PhotoAnalysisInput {
 
 export interface PhotoAnalysisResult {
   vehicle: { make?: string; model?: string; generation?: string; year?: number; color?: string; bodyType?: string; confidence: 'bassa' | 'media' | 'alta' };
-  damage: { visible: boolean; category: 'graffio' | 'ammaccatura' | 'paraurti' | 'fanale' | 'specchietto' | 'cerchio_gomma' | 'nessun_danno_evidente' | 'non_chiaro'; severity: 'lieve' | 'media' | 'alta'; description: string };
+  damage: {
+    visible: boolean;
+    category: 'graffio' | 'ammaccatura' | 'paraurti' | 'fanale' | 'specchietto' | 'cerchio_gomma' | 'vetro' | 'carrozzeria' | 'nessun_danno_evidente' | 'non_chiaro';
+    severity: 'lieve' | 'media' | 'alta';
+    description: string;
+    /** Zona del veicolo interessata (es. "paraurti anteriore sinistro"). */
+    area?: string;
+    /** Come intervenire (es. "Lucidatura e ritocco", "Sostituzione componente"). */
+    repairHint?: string;
+  };
   repairRange?: { min: number; max: number };
+  /** Giorni di officina stimati, quando l'analisi è di tipo "danni". */
+  estimatedTimeDays?: number;
   note: string;
 }
 
@@ -161,8 +172,23 @@ const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<Pho
   fanale: { lieve: [120, 300], media: [250, 700], alta: [500, 1500] },
   specchietto: { lieve: [100, 250], media: [180, 450], alta: [350, 800] },
   cerchio_gomma: { lieve: [80, 200], media: [160, 450], alta: [300, 900] },
+  vetro: { lieve: [150, 400], media: [300, 800], alta: [600, 1800] },
+  carrozzeria: { lieve: [200, 450], media: [400, 900], alta: [700, 1600] },
   nessun_danno_evidente: { lieve: [0, 0], media: [0, 0], alta: [0, 0] },
   non_chiaro: { lieve: [0, 0], media: [0, 0], alta: [0, 0] },
+};
+
+const repairDays: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], number>> = {
+  graffio: { lieve: 1, media: 2, alta: 3 },
+  ammaccatura: { lieve: 1, media: 2, alta: 4 },
+  paraurti: { lieve: 1, media: 3, alta: 5 },
+  fanale: { lieve: 1, media: 2, alta: 3 },
+  specchietto: { lieve: 1, media: 2, alta: 3 },
+  cerchio_gomma: { lieve: 1, media: 1, alta: 2 },
+  vetro: { lieve: 1, media: 2, alta: 3 },
+  carrozzeria: { lieve: 2, media: 4, alta: 7 },
+  nessun_danno_evidente: { lieve: 0, media: 0, alta: 0 },
+  non_chiaro: { lieve: 0, media: 0, alta: 0 },
 };
 
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
@@ -184,8 +210,8 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   const isGroq = isGroqProvider();
   const isAggressive = input.aggressive === true;
   const prompt = isAggressive
-    ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Anche se non sei completamente sicuro, NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata basata su forme, proporzioni, fanali, griglia e altri dettagli visivi. Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.`
-    : `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri"}}.`;
+    ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Anche se non sei completamente sicuro, NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata basata su forme, proporzioni, fanali, griglia e altri dettagli visivi. Per eventuali danni esterni visibili indica anche "area" (zona del veicolo, es. "paraurti anteriore sinistro") e "repairHint" (come intervenire, es. "Lucidatura e ritocco", "Sostituzione componente"). Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`
+    : `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Per eventuali danni esterni visibili indica anche "area" (zona del veicolo, es. "parafango posteriore destro") e "repairHint" (come intervenire, es. "Verniciatura e stuccatura", "Sostituzione fanale"). Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`;
 
   const attempt = async (extra: Record<string, unknown> = {}) => {
     const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
@@ -263,8 +289,11 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
       category,
       severity,
       description: typeof parsed?.damage?.description === 'string' ? parsed.damage.description.slice(0, 180) : 'La foto non permette una valutazione affidabile del danno.',
+      area: typeof parsed?.damage?.area === 'string' ? parsed.damage.area.slice(0, 80) : undefined,
+      repairHint: typeof parsed?.damage?.repairHint === 'string' ? parsed.damage.repairHint.slice(0, 120) : undefined,
     },
     repairRange: range ? { min: range[0], max: range[1] } : undefined,
+    estimatedTimeDays: visible ? repairDays[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined,
     note: 'Stima visiva indicativa: ricambi, verniciatura, sensori e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
   };
 }
@@ -283,7 +312,7 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
         contents: [{ parts: [
-          { text: 'Sei il riconoscimento visivo di AutoEsperto. Riconosci con attenzione la vettura nella foto usando logo, calandra, fari, carrozzeria e proporzioni. Indica marca, modello, generazione, anno indicativo, colore e tipo di carrozzeria solo quando sono ragionevolmente identificabili; ometti i campi incerti e non inventare dettagli. Ignora completamente targhe, persone e dati personali: non leggerli, non trascriverli e non citarli. Descrivi esclusivamente danni esterni chiaramente visibili, senza diagnosticare danni interni, meccanici o incidenti pregressi. Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":""}}.' },
+          { text: 'Sei il riconoscimento visivo di AutoEsperto. Riconosci con attenzione la vettura nella foto usando logo, calandra, fari, carrozzeria e proporzioni. Indica marca, modello, generazione, anno indicativo, colore e tipo di carrozzeria solo quando sono ragionevolmente identificabili; ometti i campi incerti e non inventare dettagli. Ignora completamente targhe, persone e dati personali: non leggerli, non trascriverli e non citarli. Descrivi esclusivamente danni esterni chiaramente visibili, senza diagnosticare danni interni, meccanici o incidenti pregressi. Per eventuali danni visibili indica "area" (zona del veicolo) e "repairHint" (come intervenire). Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"","area":"","repairHint":""}}.' },
           { inline_data: { mime_type: match[1], data: match[2] } },
         ] }],
         generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
@@ -305,8 +334,16 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   const range = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
   return {
     vehicle: { make: typeof parsed?.vehicle?.make === 'string' ? parsed.vehicle.make.slice(0, 50) : undefined, model: typeof parsed?.vehicle?.model === 'string' ? parsed.vehicle.model.slice(0, 50) : undefined, generation: typeof parsed?.vehicle?.generation === 'string' ? parsed.vehicle.generation.slice(0, 80) : undefined, year: Number.isInteger(parsed?.vehicle?.year) && parsed.vehicle.year >= 1950 && parsed.vehicle.year <= new Date().getFullYear() + 1 ? parsed.vehicle.year : undefined, color: typeof parsed?.vehicle?.color === 'string' ? parsed.vehicle.color.slice(0, 40) : undefined, bodyType: typeof parsed?.vehicle?.bodyType === 'string' ? parsed.vehicle.bodyType.slice(0, 50) : undefined, confidence: ['bassa', 'media', 'alta'].includes(parsed?.vehicle?.confidence) ? parsed.vehicle.confidence : 'bassa' },
-    damage: { visible, category, severity, description: typeof parsed?.damage?.description === 'string' ? parsed.damage.description.slice(0, 180) : 'La foto non permette una valutazione affidabile del danno.' },
+    damage: {
+      visible,
+      category,
+      severity,
+      description: typeof parsed?.damage?.description === 'string' ? parsed.damage.description.slice(0, 180) : 'La foto non permette una valutazione affidabile del danno.',
+      area: typeof parsed?.damage?.area === 'string' ? parsed.damage.area.slice(0, 80) : undefined,
+      repairHint: typeof parsed?.damage?.repairHint === 'string' ? parsed.damage.repairHint.slice(0, 120) : undefined,
+    },
     repairRange: range ? { min: range[0], max: range[1] } : undefined,
+    estimatedTimeDays: visible ? repairDays[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined,
     note: 'Stima visiva indicativa: ricambi e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
   };
 }

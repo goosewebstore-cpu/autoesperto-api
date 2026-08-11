@@ -8,6 +8,7 @@ import {
 import ReportSummary from '@/components/ReportSummary';
 import AdSlot from '@/components/AdSlot';
 import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
+import DamageCheckTool from '@/components/DamageCheckTool';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
 import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
@@ -273,6 +274,9 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
           <ReliabilityRadar categoryScores={reliability.categoryScores} />
         </section>
       )}
+
+      {/* Controllo danni: disponibile solo nell'analisi completa */}
+      {allowPhotoTools && <DamageCheckTool vehicle={vehicle} />}
 
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
         <h2 className="text-base font-bold text-text-primary mb-1">Andamento valore stimato</h2>

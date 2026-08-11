@@ -88,7 +88,6 @@ function manualPhotoAnalysis(make: string, model: string, year?: number): PhotoA
     note: 'Analisi basata su marca e modello inseriti a mano.',
   };
 }
-
 router.post(
   '/analyze',
   asyncHandler(async (req, res) => {

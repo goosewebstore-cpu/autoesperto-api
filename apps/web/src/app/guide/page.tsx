@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Car, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { guides, GUIDE_CATEGORIES, type GuideCategory } from '@/lib/guides';
 import GuideCard from '@/components/GuideCard';
 import SiteHeader from '@/components/SiteHeader';
@@ -12,14 +12,36 @@ interface GuideIndexPageProps {
 }
 
 const PAGE_SIZE = 6;
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 export const metadata: Metadata = {
-  title: 'Guide auto usata: valore, vendita e acquisto',
+  title: 'Guide auto usata: quotazioni, acquisto e vendita | AutoEsperto',
   description:
-    'Guide pratiche per comprare e vendere auto usate: checklist pre-acquisto, auto affidabili, come scoprire incidenti, valutare danni e capire se un prezzo è giusto.',
+    'Guide pratiche e dati reali di mercato per comprare e vendere auto usate: checklist pre-acquisto, modelli affidabili, verifica incidenti e costi di riparazione.',
+  robots: {
+    index: true,
+    follow: true,
+    'max-image-preview': 'large',
+    'max-snippet': -1,
+  },
   alternates: {
-    canonical: '/guide',
-    languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it'}/guide` },
+    canonical: `${siteUrl}/guide`,
+    languages: { 'it-IT': `${siteUrl}/guide` },
+  },
+  openGraph: {
+    type: 'website',
+    locale: 'it_IT',
+    title: 'Guide auto usata: quotazioni, acquisto e vendita | AutoEsperto',
+    description: 'Guide pratiche e dati reali di mercato per comprare e vendere auto usate.',
+    url: `${siteUrl}/guide`,
+    siteName: 'AutoEsperto',
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Guide AutoEsperto' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Guide auto usata: quotazioni, acquisto e vendita | AutoEsperto',
+    description: 'Guide pratiche e dati reali di mercato per comprare e vendere auto usate.',
+    images: ['/og-image.png'],
   },
 };
 
@@ -46,6 +68,42 @@ export default async function GuideIndexPage({ searchParams }: GuideIndexPagePro
     return qs ? `/guide?${qs}` : '/guide';
   };
 
+  const collectionSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Guide AutoUsata AutoEsperto',
+    description: metadata.description,
+    url: `${siteUrl}/guide`,
+    publisher: {
+      '@type': 'Organization',
+      name: 'AutoEsperto',
+      url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/og-image.png`,
+      },
+    },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: pageItems.length,
+      itemListElement: pageItems.map((guide, idx) => ({
+        '@type': 'ListItem',
+        position: (current - 1) * PAGE_SIZE + idx + 1,
+        url: `${siteUrl}/guide/${guide.slug}`,
+        name: guide.title,
+      })),
+    },
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Guide', item: `${siteUrl}/guide` },
+    ],
+  };
+
   const categoryChips = (
     <>
       {Object.entries(GUIDE_CATEGORIES).map(([key, { label }]) => {
@@ -70,11 +128,20 @@ export default async function GuideIndexPage({ searchParams }: GuideIndexPagePro
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+
       <main className="max-w-5xl mx-auto px-5 pt-8 pb-20">
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4">
-          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-          <span> / </span>
-          <span className="text-text-secondary font-medium">Guide</span>
+          <ol className="inline-flex items-center gap-1.5">
+            <li>
+              <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+            </li>
+            <li>/</li>
+            <li>
+              <span className="text-text-secondary font-medium">Guide</span>
+            </li>
+          </ol>
         </nav>
 
         <section>

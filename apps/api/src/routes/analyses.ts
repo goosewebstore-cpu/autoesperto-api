@@ -6,6 +6,7 @@ import { asyncHandler, badRequest, conflict, forbidden, serviceUnavailable } fro
 import { type AuthenticatedRequest, requireAuth } from '../services/auth';
 import { analyzeVehiclePhoto } from '../services/ai';
 import { buildReport } from '../services/reportService';
+import { isOwnerEmail } from '../services/owner';
 
 const router = Router();
 
@@ -72,10 +73,10 @@ router.post(
     const [analysisCount, paidPurchase, subscription] = await Promise.all([
       prisma.analysis.count({ where: { userId } }),
       prisma.purchase.findFirst({ where: { userId, status: 'PAID' }, select: { id: true } }),
-      prisma.user.findUnique({ where: { id: userId }, select: { subscription: { select: { plan: true, status: true } } } }),
+      prisma.user.findUnique({ where: { id: userId }, select: { email: true, subscription: { select: { plan: true, status: true } } } }),
     ]);
     const premiumActive = subscription?.subscription?.plan === 'PREMIUM' && subscription?.subscription?.status === 'ACTIVE';
-    if (analysisCount > 0 && !paidPurchase && !premiumActive) {
+    if (analysisCount > 0 && !paidPurchase && !premiumActive && !isOwnerEmail(subscription?.email)) {
       throw forbidden('Hai già usato la tua analisi gratuita. Passa a Premium per salvare e analizzare altre auto senza limiti.');
     }
 

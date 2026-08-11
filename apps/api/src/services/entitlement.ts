@@ -1,4 +1,5 @@
 import { prisma } from '@autoesperto/database';
+import { isOwnerEmail } from './owner';
 
 export interface AccountEntitlement {
   entitled: boolean;
@@ -10,6 +11,7 @@ export interface AccountEntitlement {
   analysisCount: number;
   needsLogin: boolean;
   needsUpgrade: boolean;
+  owner: boolean;
 }
 
 /**
@@ -32,6 +34,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
       analysisCount: 0,
       needsLogin: true,
       needsUpgrade: false,
+      owner: false,
     };
   }
 
@@ -39,6 +42,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     prisma.user.findUnique({
       where: { id: userId },
       select: {
+        email: true,
         emailVerified: true,
         purchases: { where: { status: 'PAID' }, select: { id: true }, take: 1 },
         subscription: { select: { plan: true, status: true } },
@@ -58,13 +62,15 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
       analysisCount: 0,
       needsLogin: true,
       needsUpgrade: false,
+      owner: false,
     };
   }
 
+  const owner = isOwnerEmail(user.email);
   const paid = user.purchases.length > 0;
   const premium = user.subscription?.plan === 'PREMIUM' && user.subscription?.status === 'ACTIVE';
   const emailVerified = !!user.emailVerified;
-  const unlimited = paid || premium;
+  const unlimited = owner || paid || premium;
   const freeAvailable = !unlimited && analysisCount === 0;
   const entitled = unlimited || freeAvailable;
 
@@ -78,5 +84,6 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     analysisCount,
     needsLogin: false,
     needsUpgrade: !entitled,
+    owner,
   };
 }

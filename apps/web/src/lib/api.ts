@@ -67,6 +67,7 @@ export interface AccountUser {
     emailVerified: boolean;
     freeUsed: boolean;
     trialAvailable: boolean;
+    owner?: boolean;
     purchase: { id: string; paidAt: string; amountCents: number; currency: string } | null;
   };
 }

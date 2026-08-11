@@ -12,6 +12,7 @@ import {
   verifyPassword,
 } from '../services/auth';
 import { sendVerificationEmail } from '../services/email';
+import { isOwnerEmail } from '../services/owner';
 
 const router = Router();
 
@@ -66,7 +67,8 @@ async function accountSummary(userId: string) {
     prisma.analysis.count({ where: { userId } }),
   ]);
   if (!user) throw unauthorized('Account non trovato');
-  const paid = user.purchases.length > 0;
+  const owner = isOwnerEmail(user.email);
+  const paid = user.purchases.length > 0 || owner;
   const emailVerified = !!user.emailVerified;
   const trialAvailable = !paid && analysisCount === 0;
   return {
@@ -81,13 +83,14 @@ async function accountSummary(userId: string) {
     analyses: undefined,
     analysis: user.analyses[0] || null,
     entitlement: {
-      included: 1,
+      included: paid ? 999 : 1,
       used: analysisCount,
       remaining: Math.max(0, (paid ? 999 : 1) - analysisCount),
       paid,
       emailVerified,
       freeUsed: !trialAvailable && !paid,
       trialAvailable,
+      owner,
       purchase: user.purchases[0] || null,
     },
   };

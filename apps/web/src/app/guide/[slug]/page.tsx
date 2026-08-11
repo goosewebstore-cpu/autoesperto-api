@@ -1,11 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Car } from 'lucide-react';
+import { ArrowLeft, BookOpen, Calendar, CheckCircle2, Clock, List, Share2, ShieldCheck, Sparkles } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import AdInArticle from '@/components/ads/AdInArticle';
 import AdBanner from '@/components/ads/AdBanner';
+import ArticleInteractiveBar, { ArticleFeedbackBox } from '@/components/ArticleInteractiveBar';
 import { getGuide, guides, GUIDE_CATEGORIES, type Guide } from '@/lib/guides';
 import { getAllMakes, getModelSlug, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 
@@ -182,28 +183,92 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   const guide = getGuide(slug);
   if (!guide) return {};
 
+  const fullUrl = `${siteUrl}/guide/${guide.slug}`;
+
   return {
-    title: guide.title,
+    title: `${guide.title} | AutoEsperto`,
     description: guide.description,
+    robots: {
+      index: true,
+      follow: true,
+      'max-image-preview': 'large',
+      'max-snippet': -1,
+      'max-video-preview': -1,
+    },
     alternates: {
-      canonical: `/guide/${guide.slug}`,
-      languages: { 'it-IT': `${siteUrl}/guide/${guide.slug}` },
+      canonical: fullUrl,
+      languages: { 'it-IT': fullUrl },
     },
     openGraph: {
       type: 'article',
       locale: 'it_IT',
       title: guide.title,
       description: guide.description,
-      url: `${siteUrl}/guide/${guide.slug}`,
+      url: fullUrl,
       siteName: 'AutoEsperto',
       publishedTime: guide.published,
+      modifiedTime: guide.published,
+      authors: ['Redazione AutoEsperto'],
+      section: GUIDE_CATEGORIES[guide.category].label,
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: guide.title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: guide.title,
+      description: guide.description,
+      images: ['/og-image.png'],
     },
   };
 }
 
 function normalize(value: string): string {
   return value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+}
+
+function slugifyHeading(text: string): string {
+  return text
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^a-z0-9\s-]/g, '')
+    .trim()
+    .replace(/\s+/g, '-');
+}
+
+function countWords(guide: Guide): number {
+  let count = guide.title.split(/\s+/).length + guide.description.split(/\s+/).length;
+  for (const s of guide.sections) {
+    count += s.heading.split(/\s+/).length;
+    for (const p of s.paragraphs) {
+      count += p.split(/\s+/).length;
+    }
+    if (s.list) {
+      for (const item of s.list) {
+        count += item.split(/\s+/).length;
+      }
+    }
+  }
+  return count;
+}
+
+function extractFaqs(guide: Guide): Array<{ question: string; answer: string }> {
+  const faqs: Array<{ question: string; answer: string }> = [];
+  const questionStarters = ['come', 'quanto', 'perché', 'perche', 'quale', 'cosa', 'quando', 'chi', 'dove'];
+
+  for (const section of guide.sections) {
+    const heading = section.heading.trim();
+    const lower = heading.toLowerCase();
+    const isQuestion = heading.endsWith('?') || questionStarters.some((starter) => lower.startsWith(starter));
+
+    if (isQuestion && section.paragraphs.length > 0) {
+      const answer = section.paragraphs.join(' ') + (section.list ? ' ' + section.list.join('. ') : '');
+      faqs.push({
+        question: heading.replace(/^\d+\.\s*/, ''),
+        answer: answer.replace(/\s+/g, ' ').trim(),
+      });
+    }
+  }
+  return faqs;
 }
 
 const MAKE_ALIASES: Record<string, string[]> = {
@@ -254,6 +319,10 @@ export default async function GuidePage({ params }: PageProps) {
   const mentionedModels = getMentionedModels(guide);
   const cta = guideCtas[guide.cta] ?? guideCtas['auto-usata-affare'];
   const otherGuides = guides.filter((g) => g.slug !== guide.slug).slice(0, 3);
+  const wordCount = countWords(guide);
+  const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
+  const faqs = extractFaqs(guide);
+  const fullUrl = `${siteUrl}/guide/${guide.slug}`;
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -261,13 +330,43 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.description,
     datePublished: guide.published,
-    author: { '@type': 'Organization', name: 'AutoEsperto' },
+    dateModified: guide.published,
+    inLanguage: 'it-IT',
+    wordCount,
+    timeRequired: `PT${readingTimeMinutes}M`,
+    speakable: {
+      '@type': 'SpeakableSpecification',
+      cssSelector: ['.article-summary', 'h1', '.key-takeaways'],
+    },
+    about: [
+      { '@type': 'Thing', name: 'Auto usata', sameAs: 'https://it.wikipedia.org/wiki/Autovettura' },
+      { '@type': 'Thing', name: 'Quotazione automobile', sameAs: 'https://it.wikipedia.org/wiki/Valutazione' },
+    ],
+    isBasedOn: [
+      'https://www.mit.gov.it/',
+      'https://ec.europa.eu/safety-gate',
+    ],
+    author: {
+      '@type': 'Organization',
+      name: 'Redazione AutoEsperto',
+      url: `${siteUrl}/lavora-con-noi`,
+    },
     publisher: {
       '@type': 'Organization',
       name: 'AutoEsperto',
-      logo: { '@type': 'ImageObject', url: `${siteUrl}/og-image.png` },
+      url: siteUrl,
+      logo: {
+        '@type': 'ImageObject',
+        url: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+      },
     },
-    mainEntityOfPage: `${siteUrl}/guide/${guide.slug}`,
+    mainEntityOfPage: {
+      '@type': 'WebPage',
+      '@id': fullUrl,
+    },
+    image: [`${siteUrl}/og-image.png`],
   };
 
   const breadcrumbSchema = {
@@ -276,23 +375,54 @@ export default async function GuidePage({ params }: PageProps) {
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
       { '@type': 'ListItem', position: 2, name: 'Guide', item: `${siteUrl}/guide` },
-      { '@type': 'ListItem', position: 3, name: guide.title, item: `${siteUrl}/guide/${guide.slug}` },
+      { '@type': 'ListItem', position: 3, name: guide.title, item: fullUrl },
     ],
   };
+
+  const faqSchema = faqs.length > 0 ? {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((faq) => ({
+      '@type': 'Question',
+      name: faq.question,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: faq.answer,
+      },
+    })),
+  } : null;
+
+  const tocItems = guide.sections.map((sec) => ({
+    heading: sec.heading,
+    id: slugifyHeading(sec.heading),
+  }));
 
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader />
+      <ArticleInteractiveBar title={guide.title} url={fullUrl} />
+
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+      {faqSchema && (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      )}
 
       <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4">
-          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-          <span> / </span>
-          <Link href="/guide" className="hover:text-accent transition-colors">Guide</Link>
-          <span> / </span>
-          <span className="text-text-secondary font-medium line-clamp-1">{guide.title}</span>
+          <ol className="inline-flex items-center gap-1.5 flex-wrap">
+            <li>
+              <Link href="/" className="hover:text-accent transition-colors">Home</Link>
+            </li>
+            <li>/</li>
+            <li>
+              <Link href="/guide" className="hover:text-accent transition-colors">Guide</Link>
+            </li>
+            <li>/</li>
+            <li>
+              <span className="text-text-secondary font-medium line-clamp-1">{guide.title}</span>
+            </li>
+          </ol>
         </nav>
 
         <Link
@@ -303,54 +433,121 @@ export default async function GuidePage({ params }: PageProps) {
           Tutte le guide
         </Link>
 
-        <article>
-          <header>
+        <article itemScope itemType="https://schema.org/Article">
+          <header className="border-b border-border/60 pb-6 mb-8">
             <div className="flex flex-wrap items-center gap-2.5">
               <span className="inline-flex items-center rounded-full bg-accent-light px-2.5 py-1 text-xs font-bold text-accent">
                 {GUIDE_CATEGORIES[guide.category].label}
               </span>
-              <span className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
+              <span className="text-xs font-semibold text-text-tertiary">
                 Di Redazione AutoEsperto
               </span>
               <span className="text-text-tertiary">·</span>
-              <time dateTime={guide.published} className="text-xs font-semibold uppercase tracking-wide text-text-tertiary">
-                {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
-              </time>
+              <div className="flex items-center gap-1 text-xs text-text-tertiary font-medium">
+                <Calendar className="w-3.5 h-3.5" />
+                <time dateTime={guide.published} itemProp="datePublished">
+                  {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+                </time>
+              </div>
+              <span className="text-text-tertiary">·</span>
+              <div className="flex items-center gap-1 text-xs text-text-tertiary font-medium">
+                <Clock className="w-3.5 h-3.5 text-accent" />
+                <span>{readingTimeMinutes} min lettura</span>
+              </div>
             </div>
-            <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-4">
+
+            <h1 itemProp="headline" className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-4">
               {guide.title}
             </h1>
-            <p className="text-text-secondary text-base leading-relaxed mt-4">{guide.description}</p>
+            <p itemProp="description" className="article-summary text-text-secondary text-base leading-relaxed mt-4">
+              {guide.description}
+            </p>
           </header>
 
-          <div className="mt-10 space-y-10">
-            {guide.sections.map((section, index) => (
-              <section key={section.heading}>
-                <h2 className="text-xl font-bold text-text-primary">{section.heading}</h2>
-                {section.paragraphs.map((paragraph) => (
-                  <p key={paragraph.slice(0, 40)} className="text-text-secondary text-base leading-relaxed mt-3">
-                    {paragraph}
-                  </p>
+          {/* Highlights / Key Takeaways Box for Featured Snippet & GEO AI Overviews */}
+          {guide.sections.length > 0 && (
+            <div className="key-takeaways my-6 rounded-2xl bg-accent-light/40 border border-accent/20 p-5">
+              <div className="flex items-center gap-2 text-sm font-bold text-accent uppercase tracking-wide mb-3">
+                <Sparkles className="w-4 h-4" />
+                <span>In sintesi - Punti chiave per la ricerca</span>
+              </div>
+              <ul className="space-y-2.5 text-sm text-text-primary leading-relaxed">
+                {guide.sections.slice(0, 4).map((sec) => (
+                  <li key={sec.heading} className="flex items-start gap-2.5">
+                    <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                    <span>
+                      <strong className="font-semibold">{sec.heading.replace(/^\d+\.\s*/, '')}:</strong>{' '}
+                      {sec.paragraphs[0] ? sec.paragraphs[0] : ''}
+                    </span>
+                  </li>
                 ))}
-                {section.list && (
-                  <ul className="mt-4 space-y-2">
-                    {section.list.map((item) => (
-                      <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
-                        <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                )}
-                {index === 1 && guide.sections.length > 3 && <AdInArticle />}
-              </section>
-            ))}
+              </ul>
+            </div>
+          )}
+
+          {/* Table of Contents / Indice dei contenuti for SERP Anchor Jump Links */}
+          {tocItems.length > 1 && (
+            <nav aria-label="Indice dei contenuti" className="my-8 rounded-2xl bg-surface-2 border border-border p-5">
+              <div className="flex items-center gap-2 text-sm font-bold text-text-primary uppercase tracking-wide border-b border-border/60 pb-3 mb-3">
+                <List className="w-4 h-4 text-accent" />
+                <span>Indice della guida</span>
+              </div>
+              <ol className="space-y-2 text-sm text-text-secondary">
+                {tocItems.map((item, idx) => (
+                  <li key={item.id} className="flex items-start gap-2.5">
+                    <span className="font-semibold text-accent/90 text-xs shrink-0 mt-0.5">{idx + 1}.</span>
+                    <a
+                      href={`#${item.id}`}
+                      className="hover:text-accent hover:underline transition-colors leading-snug"
+                    >
+                      {item.heading}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )}
+
+          <div itemProp="articleBody" className="mt-8 space-y-10">
+            {guide.sections.map((section, index) => {
+              const sectionId = slugifyHeading(section.heading);
+              return (
+                <section key={section.heading} id={sectionId} className="scroll-mt-20">
+                  <h2 className="text-xl font-bold text-text-primary">
+                    <a href={`#${sectionId}`} className="hover:text-accent transition-colors">
+                      {section.heading}
+                    </a>
+                  </h2>
+                  {section.paragraphs.map((paragraph) => (
+                    <p key={paragraph.slice(0, 40)} className="text-text-secondary text-base leading-relaxed mt-3">
+                      {paragraph}
+                    </p>
+                  ))}
+                  {section.list && (
+                    <ul className="mt-4 space-y-2">
+                      {section.list.map((item) => (
+                        <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                          <span>{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                  {index === 1 && guide.sections.length > 3 && <AdInArticle />}
+                </section>
+              );
+            })}
           </div>
 
-          <div className="mt-12 rounded-2xl bg-surface-2 border border-border p-5">
-            <h2 className="text-sm font-bold text-text-primary uppercase tracking-wide">Metodologia e Fonti</h2>
-            <p className="text-xs text-text-secondary leading-relaxed mt-2">
-              Questa guida è stata redatta dal team di esperti di <strong>AutoEsperto</strong>. I dati riportati sulle quotazioni, sull'affidabilità e sui costi di riparazione sono elaborati dal nostro algoritmo proprietario che analizza quotidianamente decine di migliaia di annunci reali, incrociandoli con database di richiami ufficiali (es. Safety Gate UE, NHTSA) e storici di manutenzione.
+          <ArticleFeedbackBox />
+
+          <div className="mt-10 rounded-2xl bg-surface-2 border border-border p-5">
+            <div className="flex items-center gap-2 text-sm font-bold text-text-primary uppercase tracking-wide">
+              <ShieldCheck className="w-4 h-4 text-accent" />
+              <span>Metodologia & Fonti Ufficiali</span>
+            </div>
+            <p className="text-xs text-text-secondary leading-relaxed mt-2.5">
+              Questa guida è stata redatta dal team di esperti di <strong>AutoEsperto</strong> e verificata sul mercato automotive italiano 2026. I dati sulle quotazioni, sull&apos;affidabilità e sui costi di riparazione sono elaborati dal nostro algoritmo proprietario che analizza quotidianamente oltre 10.000+ annunci reali, incrociandoli con banche dati di richiami ufficiali (Safety Gate UE, NHTSA) e storici di manutenzione.
             </p>
           </div>
         </article>
@@ -393,7 +590,7 @@ export default async function GuidePage({ params }: PageProps) {
         {otherGuides.length > 0 && (
           <section className="mt-12">
             <AdBanner />
-            <h2 className="text-lg font-bold text-text-primary mt-8">Altre guide</h2>
+            <h2 className="text-lg font-bold text-text-primary mt-8">Altre guide correlate</h2>
             <div className="mt-4 grid gap-3">
               {otherGuides.map((other) => (
                 <Link

@@ -131,7 +131,13 @@ function verdictColors(verdict: string): { bg: [number, number, number]; text: [
 }
 
 function fillPolygon(doc: import('jspdf').jsPDF, pts: number[], style: 'F' | 'S' | 'FD'): void {
-  (doc as unknown as { polygon: (p: number[], s: string) => void }).polygon(pts, style);
+  if (pts.length < 6) return;
+  let path = `M ${pts[0]} ${pts[1]}`;
+  for (let i = 2; i < pts.length; i += 2) {
+    path += ` L ${pts[i]} ${pts[i + 1]}`;
+  }
+  path += ' Z';
+  (doc as unknown as { path: (p: string, s?: string) => void }).path(path, style);
 }
 
 function drawCar(doc: import('jspdf').jsPDF, cx: number, cy: number, w: number): void {

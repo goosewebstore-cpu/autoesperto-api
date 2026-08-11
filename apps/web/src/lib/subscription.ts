@@ -14,7 +14,7 @@ export function getUserTier(user: AccountUser | null, hasFreeScan: boolean): Use
   // We need to extend AccountUser type to include subscription, which we'll do when modifying api.ts/types
   // For now we cast to any or assume it's there
   const u = user as any;
-  if (u.subscription?.plan === 'PREMIUM' && u.subscription?.status === 'ACTIVE') return 'premium';
+  if ((u.subscription?.plan === 'PREMIUM' && u.subscription?.status === 'ACTIVE') || u.entitlement?.owner) return 'premium';
   return 'registered';
 }
 

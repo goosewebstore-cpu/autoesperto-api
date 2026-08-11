@@ -3,6 +3,7 @@ import { prisma } from '@autoesperto/database';
 import { z } from 'zod';
 import { asyncHandler, forbidden, unauthorized } from '../http';
 import { type AuthenticatedRequest, requireAuth } from '../services/auth';
+import { isOwnerEmail } from '../services/owner';
 
 const router = Router();
 
@@ -13,12 +14,6 @@ const trackSchema = z.object({
   visitorId: z.string().max(120).optional(),
   duration: z.number().int().min(0).max(86400).optional(),
 });
-
-function isOwnerEmail(email: string | null | undefined): boolean {
-  if (!email) return false;
-  const owner = process.env.OWNER_EMAIL || 'goosewebstore@gmail.com';
-  return email.toLowerCase() === owner.toLowerCase();
-}
 
 router.post(
   '/track',

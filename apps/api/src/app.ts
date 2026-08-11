@@ -24,10 +24,20 @@ export function createApp(options: AppOptions = {}) {
   app.set('trust proxy', 1);
 
   app.use(helmet({ contentSecurityPolicy: false }));
+  const isAllowedOrigin = (origin: string) => {
+    if (!origin || webUrls.includes(origin)) return true;
+    // I deploy di anteprima di Vercel usano sottodomini *.vercel.app
+    // (es. autoesperto-xxxxx-goosewebstore-3988s-projects.vercel.app).
+    // Li autorizziamo solo quando il sottodominio appartiene a questo progetto,
+    // così anteprime e preview non rompono il riconoscimento foto.
+    if (origin.endsWith('-goosewebstore-3988s-projects.vercel.app')) return true;
+    return false;
+  };
+
   app.use(
     cors({
       origin(origin, callback) {
-        if (!origin || webUrls.includes(origin)) return callback(null, true);
+        if (!origin || isAllowedOrigin(origin)) return callback(null, true);
         return callback(new HttpError(403, 'Origine non consentita'));
       },
       methods: ['GET', 'POST'],

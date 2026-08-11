@@ -84,12 +84,13 @@ export default function AccountDashboard({ checkout, subscription, upgrade, sess
     let active = true;
     const bootstrap = async () => {
       if (!getAuthToken()) {
-        router.replace('/accesso?next=/account');
+        router.replace(`/accesso?next=${encodeURIComponent('/account?upgrade=true')}`);
         return;
       }
       try {
         if (subscription === 'success' && sessionId) {
           setMessage('Abbonamento Premium attivato con successo! Ora hai accesso illimitato alle analisi complete.');
+          fireAdsPurchase(premium.amountCents / 100, premium.currency.toUpperCase(), sessionId);
           window.history.replaceState(null, '', '/account');
         } else if (subscription === 'cancelled') {
           setMessage('Attivazione abbonamento annullata.');

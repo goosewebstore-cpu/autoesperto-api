@@ -4,6 +4,7 @@ import { Car, Fuel, Euro, Gauge, TrendingDown, Search } from 'lucide-react';
 import { getAllMakes, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import AdBanner from '@/components/ads/AdBanner';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -44,6 +45,8 @@ export default function ConsumiPage() {
             quanto spendi di carburante in un anno.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-8 rounded-2xl bg-accent p-6 text-white">
           <div className="flex items-center gap-3">

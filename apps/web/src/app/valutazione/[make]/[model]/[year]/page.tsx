@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, HelpCircle, Info } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
-import { analyzeVehicle } from '@/lib/api';
+import AdBanner from '@/components/ads/AdBanner';
+import { getSsrReport } from '@/lib/ssrReports';
+import { POPULAR_MODELS } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string; year: string }>;
@@ -72,11 +74,9 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
   if (isNaN(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
 
   let initialReport = undefined;
-  try {
-    const res = await analyzeVehicle({ make: make.name, model, year: yearNum });
-    if (res.success && res.report) initialReport = res.report;
-  } catch (err) {
-    console.warn(`Failed to fetch SSR report for ${make.name} ${model} ${yearNum}`, err);
+  const isPopular = POPULAR_MODELS.some((p) => slugify(p.make) === resolved.make && slugify(p.model) === resolved.model);
+  if (isPopular) {
+    initialReport = await getSsrReport(make.name, model, yearNum);
   }
 
   const faq = [
@@ -189,6 +189,8 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
           </span>
           <span className="text-accent text-sm font-bold">Stima costi →</span>
         </Link>
+
+        <AdBanner />
 
         <section className="mt-8">
           <h2 className="text-base font-bold text-text-primary mb-3">Altri anni della {make.name} {model}</h2>

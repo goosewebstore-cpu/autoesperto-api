@@ -2,9 +2,35 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
+import { getConsent } from '@/lib/consent';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || '';
 const VISITOR_KEY = 'ae_visitor_id';
+
+declare global {
+  interface Window {
+    dataLayer: unknown[];
+    gtag: (...args: unknown[]) => void;
+  }
+}
+
+function loadGtag() {
+  if (typeof window === 'undefined') return;
+  if (typeof (window as unknown as { gtag?: unknown }).gtag === 'function') return;
+
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function gtag(...args: unknown[]) {
+    window.dataLayer.push(args);
+  };
+  window.gtag('js', new Date());
+  window.gtag('config', GA4_ID, { anonymize_ip: true });
+
+  const s = document.createElement('script');
+  s.async = true;
+  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
+  document.head.appendChild(s);
+}
 
 function getVisitorId(): string {
   if (typeof window === 'undefined') return '';
@@ -23,6 +49,28 @@ function getVisitorId(): string {
 export default function AnalyticsTracker() {
   const pathname = usePathname();
   const sessionRef = useRef<{ path: string; start: number; leaveSent: boolean } | null>(null);
+  const lastGaPage = useRef('');
+
+  useEffect(() => {
+    if (!GA4_ID || getConsent() !== 'accepted') return;
+    loadGtag();
+    const onConsent = (event: Event) => {
+      if ((event as CustomEvent<string>).detail === 'accepted') loadGtag();
+    };
+    window.addEventListener('ae-consent-changed', onConsent);
+    return () => window.removeEventListener('ae-consent-changed', onConsent);
+  }, []);
+
+  useEffect(() => {
+    if (!GA4_ID || getConsent() !== 'accepted') return;
+    if (lastGaPage.current === pathname) return;
+    lastGaPage.current = pathname;
+    loadGtag();
+    window.gtag('event', 'page_view', {
+      page_path: pathname,
+      page_title: document.title,
+    });
+  }, [pathname]);
 
   useEffect(() => {
     const visitorId = getVisitorId();

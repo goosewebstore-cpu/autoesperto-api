@@ -1,10 +1,11 @@
-﻿import type { Metadata } from 'next';
+import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Car, ChevronLeft, ChevronRight } from 'lucide-react';
 import { guides, GUIDE_CATEGORIES, type GuideCategory } from '@/lib/guides';
 import GuideCard from '@/components/GuideCard';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface GuideIndexPageProps {
   searchParams: Promise<{ categoria?: string; pagina?: string }>;
@@ -105,6 +106,8 @@ export default async function GuideIndexPage({ searchParams }: GuideIndexPagePro
             <GuideCard key={guide.slug} guide={guide} />
           ))}
         </div>
+
+        <AdBanner />
 
         {totalPages > 1 && (
           <nav aria-label="Paginazione guide" className="mt-10 flex items-center justify-center gap-4">

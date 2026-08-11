@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, Fuel, Euro } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import { estimateConsumption } from '@/lib/consumi';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -117,6 +118,8 @@ export default async function ConsumiModelPage({ params }: PageProps) {
             per 100 km e il costo annuo, anno per anno.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
           <div className="flex flex-wrap items-center justify-between gap-4">

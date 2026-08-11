@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import SellCheck from '@/components/SellCheck';
 import SiteHeader from '@/components/SiteHeader';
+import AdBanner from '@/components/ads/AdBanner';
 import SiteFooter from '@/components/SiteFooter';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -29,6 +30,7 @@ export default function VendiPage() {
     <div className="min-h-screen bg-background">
       <SiteHeader />
       <main className="mx-auto max-w-3xl px-5 pt-10 pb-20">
+        <AdBanner />
         <SellCheck />
       </main>
       <SiteFooter variant="full" />

@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
-import { analyzeVehicle } from '@/lib/api';
+import AdBanner from '@/components/ads/AdBanner';
+import { getSsrReport } from '@/lib/ssrReports';
+import { POPULAR_MODELS } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -69,11 +71,9 @@ export default async function ModelValutazionePage({ params }: PageProps) {
   if (!model) notFound();
 
   let initialReport = undefined;
-  try {
-    const res = await analyzeVehicle({ make: make.name, model });
-    if (res.success && res.report) initialReport = res.report;
-  } catch (err) {
-    console.warn(`Failed to fetch SSR report for ${make.name} ${model}`, err);
+  const isPopular = POPULAR_MODELS.some((p) => slugify(p.make) === resolved.make && slugify(p.model) === resolved.model);
+  if (isPopular) {
+    initialReport = await getSsrReport(make.name, model);
   }
 
   const year = new Date().getFullYear();
@@ -215,6 +215,8 @@ export default async function ModelValutazionePage({ params }: PageProps) {
             ))}
           </div>
         </section>
+
+        <AdBanner />
 
         {/* Altri modelli */}
         {relatedModels.length > 0 && (

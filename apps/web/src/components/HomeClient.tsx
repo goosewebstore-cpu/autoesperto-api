@@ -9,10 +9,12 @@ import {
   Car,
   Check,
   ChevronRight,
+  Crown,
   FileSearch,
   Fuel,
   Gauge,
   GitCompareArrows,
+  LockKeyhole,
   ScanSearch,
   ShieldCheck,
   Wrench,
@@ -21,10 +23,13 @@ import type { AutoReport } from '@autoesperto/types';
 import ReportView from '@/components/ReportView';
 import VehicleScanner from '@/components/VehicleScanner';
 import SiteHeader from '@/components/SiteHeader';
+import AdBanner from '@/components/ads/AdBanner';
 import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
 import GuideCard from '@/components/GuideCard';
 import { guides } from '@/lib/guides';
 import { POPULAR_MODELS } from '@/lib/popular';
+import { getPremiumPricing } from '@/lib/pricing';
+import { trackEvent } from '@/lib/analytics';
 
 export type HomeInitialPayload = AnalyzePayload | null;
 
@@ -249,6 +254,11 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
               </div>
             </section>
 
+            {/* ═══ ADS ═══ */}
+            <div className="home-v2-wrap">
+              <AdBanner />
+            </div>
+
             {/* ═══ COME FUNZIONA ═══ */}
             <section className="v2-section" id="come-funziona" aria-label="Come funziona">
               <div className="home-v2-wrap">
@@ -301,6 +311,44 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
               </div>
             </section>
 
+            {/* ═══ PREMIUM ═══ */}
+            <section className="v2-section" aria-label="Abbonamento Premium">
+              <div className="home-v2-wrap">
+                <div className="home-section-head">
+                  <h2>AutoEsperto <span className="inline-flex items-center gap-1 text-amber-500"><Crown className="h-5 w-5" /> Premium</span></h2>
+                  <p>La prima analisi completa è gratis. Dopo, tutto ciò che serve per decidere.</p>
+                </div>
+                <div className="mt-8 grid gap-6 lg:grid-cols-2">
+                  <div className="rounded-2xl border border-border bg-surface-2 p-6 md:p-7">
+                    <ul className="space-y-3.5">
+                      {['Analisi complete illimitate', 'Generatore annunci di vendita', 'Zero pubblicità', 'Annulli quando vuoi, senza penali'].map((item) => (
+                        <li key={item} className="flex items-start gap-2.5 text-sm font-semibold text-text-primary">
+                          <span className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-3 w-3" /></span>
+                          {item}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="flex flex-col justify-center rounded-2xl bg-slate-950 p-6 text-white md:p-7">
+                    <p className="text-xs font-extrabold uppercase tracking-[.14em] text-blue-300">Abbonamento mensile</p>
+                    <div className="mt-3 flex items-baseline gap-1.5">
+                      <span className="text-4xl font-extrabold">{new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(getPremiumPricing('month').amountCents / 100)}</span>
+                      <span className="text-xl font-medium text-slate-400">/mese</span>
+                    </div>
+                    <p className="mt-2 text-sm text-slate-400">Rinnovo automatico. Cancelli online in un clic.</p>
+                    <Link
+                      href="/account?upgrade=true"
+                      onClick={() => trackEvent('premium_cta_clicked', { feature: 'home_pricing' })}
+                      className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-extrabold text-white transition hover:bg-blue-500"
+                    >
+                      <LockKeyhole className="h-4 w-4" /> Passa a Premium
+                    </Link>
+                    <p className="mt-3 text-center text-[11px] text-slate-500">Pagamento gestito da Stripe. I dati della carta non passano da AutoEsperto.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
             {/* ═══ POPULAR MODELS ═══ */}
             <section className="v2-section" aria-label="Modelli più cercati">
               <div className="home-v2-wrap">
@@ -317,6 +365,11 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
                 </div>
               </div>
             </section>
+
+            {/* ═══ ADS ═══ */}
+            <div className="home-v2-wrap">
+              <AdBanner />
+            </div>
 
             {/* ═══ WHY ═══ */}
             <section className="v2-section" aria-label="Perché fidarsi">

@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Car } from 'lucide-react';
 import { getAllMakes, slugify } from '@/lib/catalogo';
 import { estimateRepair } from '@/lib/riparazione';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface PageProps {
   params: Promise<{ make: string }>;
@@ -84,9 +85,11 @@ export default async function RepairMakePage({ params }: PageProps) {
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
             Quanto costa riparare una {make.name}? Scegli il modello per vedere la stima dei costi di manodopera, i ricambi
-            più soggetti a usura e i guasti più frequenti, anno per anno.
+            soggetti a usura e i guasti più frequenti, anno per anno.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-8">
           <h2 className="text-lg font-bold text-text-primary mb-3">Modelli {make.name}</h2>

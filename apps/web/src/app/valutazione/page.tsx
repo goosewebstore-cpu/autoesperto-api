@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import AdBanner from '@/components/ads/AdBanner';
 import { Car, HelpCircle, Search } from 'lucide-react';
 import { getAllMakes } from '@/lib/catalogo';
 
@@ -78,6 +79,8 @@ export default function ValutazioneIndexPage() {
             dagli annunci in vendita, con affidabilità e punti critici da controllare.
           </p>
         </section>
+
+        <AdBanner />
 
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {makes.map((make) => (

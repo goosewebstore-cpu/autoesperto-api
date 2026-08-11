@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, Gauge } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import { estimateReliability } from '@/lib/affidabilita';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -117,6 +118,8 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
             manutenzione per ogni anno.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
           <div className="flex items-center gap-4">

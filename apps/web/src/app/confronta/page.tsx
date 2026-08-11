@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import AdBanner from '@/components/ads/AdBanner';
 import CompareModels from '@/components/CompareModels';
 import { analyzeVehicle } from '@/lib/api';
 
@@ -44,6 +45,9 @@ export default async function ComparePage() {
           <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary">Confronta due modelli prima di scegliere</h1>
           <p className="text-text-secondary mt-3 leading-relaxed">Metti a confronto prezzi reali dagli annunci, affidabilità e punti da controllare. È gratuito.</p>
         </div>
+
+        <AdBanner />
+
         <CompareModels initialLeftReport={initialLeftReport} initialRightReport={initialRightReport} />
       </main>
       <SiteFooter variant="full" />

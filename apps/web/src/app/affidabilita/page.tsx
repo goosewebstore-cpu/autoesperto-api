@@ -4,6 +4,7 @@ import { Car, Gauge, ShieldCheck, Euro, AlertTriangle, Search } from 'lucide-rea
 import { getAllMakes, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 import SiteFooter from '@/components/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
+import AdBanner from '@/components/ads/AdBanner';
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -44,6 +45,8 @@ export default function AffidabilitaPage() {
             e a cosa prestare attenzione prima di comprare usato.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-8 rounded-2xl bg-accent p-6 text-white">
           <div className="flex items-center gap-3">

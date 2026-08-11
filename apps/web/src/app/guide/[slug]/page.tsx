@@ -4,6 +4,8 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import AdInArticle from '@/components/ads/AdInArticle';
+import AdBanner from '@/components/ads/AdBanner';
 import { getGuide, guides, GUIDE_CATEGORIES, type Guide } from '@/lib/guides';
 import { getAllMakes, getModelSlug, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 
@@ -322,7 +324,7 @@ export default async function GuidePage({ params }: PageProps) {
           </header>
 
           <div className="mt-10 space-y-10">
-            {guide.sections.map((section) => (
+            {guide.sections.map((section, index) => (
               <section key={section.heading}>
                 <h2 className="text-xl font-bold text-text-primary">{section.heading}</h2>
                 {section.paragraphs.map((paragraph) => (
@@ -340,6 +342,7 @@ export default async function GuidePage({ params }: PageProps) {
                     ))}
                   </ul>
                 )}
+                {index === 1 && guide.sections.length > 3 && <AdInArticle />}
               </section>
             ))}
           </div>
@@ -389,7 +392,8 @@ export default async function GuidePage({ params }: PageProps) {
 
         {otherGuides.length > 0 && (
           <section className="mt-12">
-            <h2 className="text-lg font-bold text-text-primary">Altre guide</h2>
+            <AdBanner />
+            <h2 className="text-lg font-bold text-text-primary mt-8">Altre guide</h2>
             <div className="mt-4 grid gap-3">
               {otherGuides.map((other) => (
                 <Link

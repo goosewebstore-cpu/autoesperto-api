@@ -3693,6 +3693,2170 @@ export const guides: Guide[] = [
     ],
     cta: 'incentivi-usato',
   },
+  {
+    slug: 'auto-nuova-o-usata-conviene',
+    title: 'Auto nuova o usata: quale conviene davvero nel 2026',
+    description:
+      'Conviene comprare un\'auto nuova o usata? Il confronto completo su svalutazione, garanzia, incentivi e costo totale di possesso per capire quale scelta è giusta per te.',
+    published: '2026-08-10',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'La domanda sbagliata: "nuova o usata"',
+        paragraphs: [
+          'La vera domanda non è se conviene il nuovo o l\'usato, ma quale conviene per il tuo utilizzo: chilometri all\'anno, budget, durata di possesso e città in cui vivi. La stessa persona può trovare conveniente un\'auto nuova oggi e un\'usata di 3 anni tra cinque anni.',
+          'Il dato che decide tutto è il costo totale di possesso, non il prezzo di acquisto: svalutazione, assicurazione, manutenzione, carburante e valore alla rivendita pesano spesso più dello sconto iniziale.',
+        ],
+      },
+      {
+        heading: 'Quando conviene l\'auto nuova',
+        paragraphs: [
+          'L\'auto nuova conviene quando sfrutti i suoi tre vantaggi esclusivi:',
+        ],
+        list: [
+          'Incentivi e sconti da rottamazione: contributi statali e regionali che l\'usato non ha, o ha in forma ridotta.',
+          'Garanzia piena: di solito 2 anni estendibili, con copertura totale e assistenza in rete.',
+          'Zero sorprese: nessuno storico da verificare, personalizzazione completa di colore e allestimento.',
+        ],
+      },
+      {
+        heading: 'Quando conviene l\'auto usata',
+        paragraphs: [
+          'L\'usato conviene quando il prezzo è il fattore dominante o quando i chilometri annuali sono pochi. Il vantaggio principale è la svalutazione già assorbita: un\'auto di 3 anni ha già perso in media il 35–45% del valore a nuovo, e tu non paghi quella perdita.',
+          'Su un budget di 15.000 euro, il nuovo compra una city car base; l\'usato di 3–4 anni compra un\'utilitaria top o una compatta media con pochi chilometri.',
+        ],
+      },
+      {
+        heading: 'La fascia d\'oro: l\'usato recente (2–4 anni)',
+        paragraphs: [
+          'Il compromesso migliore per la maggior parte delle persone è l\'usato recente: 2–4 anni, pochi chilometri, ancora in garanzia residua o estendibile. Ha già subito la parte più ripida della svalutazione, mantiene la tecnologia moderna e i costi di manutenzione bassi.',
+          'Modelli come Toyota Yaris ibrida, Fiat Panda o VW Golf di 2–3 anni sono tra i più cercati proprio perché combinano prezzo già scontato e vita utile ancora lunga.',
+        ],
+      },
+      {
+        heading: 'Il calcolo che decide per te',
+        paragraphs: [
+          'Prima di scegliere, confronta i numeri reali: il valore di mercato attuale del modello nuovo e dell\'usato che ti interessa, la differenza di prezzo, il costo assicurativo e di manutenzione per i prossimi 3 anni e il valore residuo alla rivendita.',
+          'Su AutoEsperto puoi verificare gratuitamente il prezzo medio reale di un\'usata dagli annunci in vendita: confrontalo con il listino del nuovo e avrai la risposta con i numeri in mano, non a sensazione.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'noleggio-lungo-termine-o-acquisto',
+    title: 'Noleggio a lungo termine o acquisto: quale conviene nel 2026',
+    description:
+      'Noleggio a lungo termine o comprare un\'auto? Canoni, km inclusi, anticipo e valore residuo: il confronto economico completo per decidere con i numeri.',
+    published: '2026-08-10',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Come funziona il noleggio a lungo termine',
+        paragraphs: [
+          'Nel noleggio a lungo termine (NLT) paghi un canone mensile fisso per usare un\'auto per 24–60 mesi, con un numero di chilometri annui concordato. Il canone comprende in genere manutenzione ordinaria, assicurazione RC e kasko, soccorso stradale, bollo e gestione di tutto.',
+          'A fine contratto restituisci l\'auto: non ne diventi mai proprietario. È il modello più diffuso per le aziende, ma dal 2020 circa è cresciuto molto anche tra i privati.',
+        ],
+      },
+      {
+        heading: 'Quando il noleggio conviene davvero',
+        paragraphs: [
+          'Il noleggio a lungo termine conviene quando:',
+        ],
+        list: [
+          'Vuoi una rata tutto incluso, prevedibile al centesimo, senza sorprese in officina.',
+          'Percorri un chilometraggio medio e stabile (10.000–25.000 km/anno), senza superare i km inclusi.',
+          'Cambi auto ogni 3–4 anni e non vuoi occuparti della vendita dell\'usato.',
+          'Puoi dedurre il canone se usi l\'auto anche per lavoro con partita IVA.',
+          'Vuoi un\'auto recente con garanzia sempre attiva e tecnologia aggiornata.',
+        ],
+      },
+      {
+        heading: 'Quando conviene comprare',
+        paragraphs: [
+          'L\'acquisto conviene quando tieni l\'auto a lungo: dopo il periodo del canone, l\'auto è tua e continua a funzionare senza costi mensili. Su una vita di 8–10 anni, acquistare e mantenere costa in genere meno che noleggiare in continuazione.',
+          'Conviene anche se percorri pochissimi chilometri o se il tuo budget non regge un canone mensile, e soprattutto se scegli l\'usato: nessun canone si avvicina al costo di un\'usata di 4–5 anni ben scelta.',
+        ],
+      },
+      {
+        heading: 'Le insidie da leggere prima di firmare',
+        paragraphs: [
+          'Il canone basso nasconde spesso condizioni da verificare con attenzione:',
+        ],
+        list: [
+          'Superamento dei km inclusi: le penali a fine contratto vanno da 0,05 a 0,20 €/km in più.',
+          'Anticipo iniziale: più alto è l\'anticipo, più basso è il canone, ma rischi di più se smetti prima.',
+          'Penali di recesso anticipato: uscire prima dei 24–36 mesi ha costi molto alti.',
+          'Usura del veicolo: a fine contratto ogni graffio oltre il "normale" viene addebitato.',
+          'Assicurazione inclusa ma con franchigie: in caso di sinistro paghi la franchigia.',
+        ],
+      },
+      {
+        heading: 'Il confronto con i numeri',
+        paragraphs: [
+          'Per capire quale strada conviene, confronta il costo totale del noleggio (anticipo + canoni + penali previste) con il costo totale di possesso dell\'auto scelta: prezzo, manutenzione, assicurazione e valore residuo alla vendita.',
+          'Su AutoEsperto puoi verificare il valore di mercato e i costi di manutenzione dell\'auto che vorresti comprare, e confrontare due modelli: è il modo più rapido per costruire il tuo confronto economico con dati reali.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'auto-km-0-conviene',
+    title: 'Auto km 0: cosa significa e quando conviene comprarla',
+    description:
+      'Cosa sono le auto km 0, perché costano meno del nuovo, quali controlli fare e quando sono davvero un affare: guida all\'acquisto 2026.',
+    published: '2026-08-10',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Cos\'è un\'auto km 0',
+        paragraphs: [
+          'Un\'auto km 0 è un veicolo già immatricolato ma mai usato (o usato per pochi chilometri di prova). Il concessionario la immatricola a proprio nome per raggiungere gli obiettivi di vendita mensili o di fine anno, e poi la rivende come "nuova ma immatricolata": è a tutti gli effetti un\'auto nuova con un passaggio di proprietà già avvenuto.',
+          'La differenza rispetto a un\'auto "usata" vera è il chilometraggio: le km 0 hanno in genere meno di 500–1.000 km e non hanno subito alcun utilizzo reale.',
+        ],
+      },
+      {
+        heading: 'Perché le km 0 costano meno',
+        paragraphs: [
+          'Il vantaggio è doppio per il concessionario e per te:',
+        ],
+        list: [
+          'Svalutazione già assorbita: con l\'immatricolazione l\'auto perde subito una quota del valore a nuovo, e il concessionario la scarica sul prezzo.',
+          'Sconti tipici: 10–20% rispetto al listino del nuovo, a seconda di modello, allestimento e urgenza di smaltire il parco.',
+          'Pronta consegna: non aspetti mesi di attesa come sul nuovo in ordine.',
+          'Omologazione e garanzia: resta la garanzia costruttore piena, spesso appena iniziata.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare prima di comprare una km 0',
+        paragraphs: [
+          'Una km 0 non è un\'auto qualsiasi: controlla con attenzione i dati di immatricolazione e lo stato reale del veicolo.',
+        ],
+        list: [
+          'Data di prima immatricolazione: se supera i 6 mesi o i 6.000 km, ai fini fiscali è già usata (niente IVA agevolata su alcune configurazioni).',
+          'Garanzia residua: se è immatricolata da molti mesi, parte della garanzia è già consumata.',
+          'Chilometri realmente percorsi: guarda il contachilometri e chiedi i km di prova dichiarati.',
+          'Allestimento e dotazioni: le km 0 sono spesso parco in stock: verificare che l\'allestimento sia quello che vuoi, senza "sconti" su optional non richiesti.',
+          'Passaggi di proprietà: il veicolo risulta intestato al concessionario: controlla che non abbia avuto altri proprietari intermedi.',
+        ],
+      },
+      {
+        heading: 'Le insidie da non sottovalutare',
+        paragraphs: [
+          'Il prezzo "da km 0" può nascondere un\'auto invenduta da mesi, con batteria scarica o pneumatici di stazionamento. Controlla lo stato reale come faresti con un\'usata: telaio, battistrada, interni e documenti.',
+          'E confronta sempre: a volte una km 0 scontata del 10% costa più di un\'usata di 1–2 anni con 15.000 km, che ha ancora tutta la garanzia e un prezzo di listino inferiore.',
+        ],
+      },
+      {
+        heading: 'Come capire se è un affare',
+        paragraphs: [
+          'Usa i dati: verifica il prezzo medio di mercato di un\'usata recente dello stesso modello (1–3 anni) su AutoEsperto e confrontalo con il prezzo della km 0. Se la differenza è piccola, la km 0 con garanzia piena è la scelta migliore; se è grande, l\'usato recente batte la km 0.',
+        ],
+      },
+    ],
+    cta: 'prezzo-giusto',
+  },
+  {
+    slug: 'leasing-auto-privati-come-funziona',
+    title: 'Leasing auto per privati: come funziona e quando conviene',
+    description:
+      'Canoni, anticipo, maxirata e riscatto finale: come funziona il leasing per i privati, quanto costa davvero e quando conviene rispetto ad acquisto e finanziamento.',
+    published: '2026-08-10',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Cos\'è il leasing auto',
+        paragraphs: [
+          'Il leasing (o locazione finanziaria) è un contratto in cui una società finanziaria compra l\'auto e te la concede in uso per 24–48 mesi, dietro pagamento di un canone periodico. A fine contratto hai tre opzioni: riscattare l\'auto pagando il valore residuo, restituirla o rinnovare il contratto su un\'altra vettura.',
+          'Per anni è stato riservato alle imprese; da qualche anno è disponibile anche per i privati e sta crescendo molto, soprattutto sulle auto nuove ed elettriche.',
+        ],
+      },
+      {
+        heading: 'Come è strutturato il contratto',
+        paragraphs: [
+          'Il contratto tipico si compone di tre parti:',
+        ],
+        list: [
+          'Anticipo: una somma iniziale (0–30% del valore) che abbassa i canoni successivi.',
+          'Canoni mensili: il costo dell\'uso nel periodo, che include o meno assicurazione e manutenzione secondo l\'offerta.',
+          'Maxirata finale (riscatto): il valore residuo da pagare a fine contratto per diventare proprietario: di solito il 30–45% del valore iniziale.',
+        ],
+      },
+      {
+        heading: 'Il costo totale e come leggerlo',
+        paragraphs: [
+          'Come per ogni finanziamento, il numero da guardare è il TAEG: include interessi, spese di istruttoria e altri oneri. Per capire quanto paghi in più, somma anticipo + tutti i canoni + maxirata e confronta il totale con il prezzo di acquisto in contanti.',
+          'Esempio realistico: su un\'auto da 25.000 €, anticipo di 5.000 €, canoni di 300 € per 36 mesi e riscatto di 10.000 €, il totale supera il prezzo di acquisto di 800–2.000 € secondo il tasso: è il costo del "pagare in comode rate".',
+        ],
+      },
+      {
+        heading: 'Quando conviene il leasing',
+        paragraphs: [
+          'Il leasing conviene se:',
+        ],
+        list: [
+          'Vuoi un\'auto nuova con rata contenuta e puoi permetterti il riscatto a fine contratto.',
+          'Hai partita IVA e puoi dedurre i canoni (per i privati puri la deducibilità non c\'è).',
+          'Vuoi cambiare auto ogni 2–3 anni senza gestire la vendita dell\'usato.',
+          'Preferisci una rata con opzioni tutto incluso (manutenzione, assicurazione, soccorso).',
+        ],
+      },
+      {
+        heading: 'Le cose da controllare prima di firmare',
+        paragraphs: [
+          'Leggi con attenzione: la durata minima del contratto (in genere 24–36 mesi), le penali per recesso anticipato, il limite di chilometraggio e le penali di superamento, lo stato richiesto a fine contratto e chi è responsabile di bollo, assicurazione e manutenzione.',
+          'E ricorda la regola generale: il leasing ha senso sull\'auto nuova, quasi mai sull\'usato, dove un finanziamento classico o l\'acquisto diretto costano meno.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'fermo-amministrativo-auto-come-verificare',
+    title: 'Fermo amministrativo auto: come verificarlo prima dell\'acquisto',
+    description:
+      'Cos\'è il fermo amministrativo, perché è pericoloso comprare un\'auto che ce l\'ha, come verificarlo con visura e report e come si toglie.',
+    published: '2026-08-10',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Cos\'è il fermo amministrativo',
+        paragraphs: [
+          'Il fermo amministrativo è un vincolo iscritto al Pubblico Registro Automobilistico (PRA) quando il proprietario non ha pagato debiti verso la pubblica amministrazione: bollo auto, multe, cartelle esattoriali o contributi. Dal momento dell\'iscrizione, l\'auto non può circolare su strada pubblica e risulta bloccata fino al pagamento del debito.',
+          'È diverso dall\'ipoteca (che garantisce un mutuo o un finanziamento) e dal sequestro giudiziario: è la misura più frequente e la più sottovalutata da chi compra usato.',
+        ],
+      },
+      {
+        heading: 'Perché è pericoloso acquistare un\'auto con fermo',
+        paragraphs: [
+          'Il fermo segue l\'auto, non il proprietario: se compri un veicolo con fermo iscritto, ti ritrovi un\'auto che non puoi usare, immatricolare a tuo nome senza risolvere il problema e che può essere confiscata in caso di controllo.',
+          'Peggio ancora: per togliere il fermo devi pagare tu il debito del precedente proprietario (o convincerlo a farlo): se il venditore è sparito, il costo è tuo.',
+        ],
+      },
+      {
+        heading: 'Come verificarlo prima di comprare',
+        paragraphs: [
+          'Il controllo è semplice, economico e obbligatorio prima di qualsiasi acquisto:',
+        ],
+        list: [
+          'Visura PRA: richiedila con targa o telaio (circa 6 € via ACI o agenzie di pratiche): rivela fermi, ipoteche, pignoramenti e passaggi di proprietà.',
+          'Report storico su targa (Carfax, autoDNA e simili): oltre al fermo mostrano incidenti, km e danni.',
+          'Portale dell\'Automobilista: per verifiche su revisione e dati del veicolo.',
+          'Controllo documenti: il libretto e il certificato di proprietà non riportano i fermi, quindi non basta guardarli: serve la visura.',
+        ],
+      },
+      {
+        heading: 'Si può comprare o vendere un\'auto con fermo?',
+        paragraphs: [
+          'Vendere un\'auto con fermo non è illegale di per sé, ma il venditore deve dichiararlo e l\'acquirente deve essere consapevole che l\'auto non potrà circolare né essere intestata finché il fermo non viene cancellato.',
+          'In pratica: o il venditore regolarizza prima del passaggio, o il prezzo deve essere drasticamente scontato, e comunque il rischio non vale il risparmio: se il fermo non si cancella, l\'auto vale solo come pezzi.',
+        ],
+      },
+      {
+        heading: 'Come si toglie il fermo',
+        paragraphs: [
+          'Il fermo si cancella pagando il debito (anche in rate tramite l\'agente della riscossione) e attendendo la revoca formale, che viene comunicata al PRA. Dopo la revoca, con il certificato di regolarità puoi fare il passaggio di proprietà.',
+          'La lezione pratica: la visura costa pochi euro e pochi minuti. Fallo sempre, come prima verifica, prima di firmare qualsiasi compromesso.',
+        ],
+      },
+    ],
+    cta: 'controllo-usato',
+  },
+  {
+    slug: 'auto-elettrica-usata-cosa-controllare',
+    title: 'Auto elettrica usata: cosa controllare prima di comprare',
+    description:
+      'Batteria, autonomia reale, garanzia residua e valore di rivendita: la checklist per comprare un\'auto elettrica usata senza brutte sorprese.',
+    published: '2026-08-10',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Perché l\'usato elettrico è (spesso) un affare',
+        paragraphs: [
+          'Le auto elettriche si svalutano più rapidamente delle benzina e delle ibride: sul mercato italiano si trovano esemplari di 3–4 anni con prezzi molto scontati rispetto al listino. Per chi ha la ricarica a casa, il costo per chilometro è bassissimo, e il mercato dell\'usato elettrico sta diventando una vera opportunità.',
+          'Il rovescio della medaglia: la tecnologia si evolve in fretta e la batteria è il componente più caro. Sapere cosa controllare fa la differenza tra un affare e un salasso.',
+        ],
+      },
+      {
+        heading: 'La batteria è la cosa più importante',
+        paragraphs: [
+          'La batteria di trazione è il cuore e il componente più costoso (sostituirla costa in genere 8.000–20.000 €). Prima di comprare:',
+        ],
+        list: [
+          'Verifica lo stato di salute (SOH) della batteria: molti modelli lo mostrano dal menu di servizio o dall\'app; sotto l\'85–90% di SOH l\'autonomia reale scende in modo sensibile.',
+          'Controlla l\'autonomia reale a pieno carico in condizioni reali, non quella dichiarata da nuova.',
+          'Verifica la garanzia residua della batteria: molti costruttori la coprono 8 anni/160.000 km: la garanzia segue l\'auto.',
+          'Chiedi lo storico delle ricariche: ricariche rapide frequenti al 100% degradano più in fretta.',
+          'Controlla che non ci siano richiami aperti o campagne di aggiornamento della batteria.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare sul resto dell\'auto',
+        paragraphs: [
+          'Oltre alla batteria, l\'usato elettrico va controllato come un\'usata normale, con alcune differenze:',
+        ],
+        list: [
+          'Motore e inverter: raramente si guastano, ma in caso di guasto i costi non sono banali: chiedi lo storico degli interventi.',
+          'Freni: con la frenata rigenerativa si consumano meno, ma vanno controllati come su ogni auto.',
+          'Pneumatici: le elettriche sono pesanti e consumano le gomme più in fretta: controlla il battistrada.',
+          'Sospensioni: peso maggiore significa più usura su ammortizzatori e bracci.',
+          'Ricarica: verifica che il cavo di ricarica sia incluso e che la presa domestica (se la usi) sia adatta.',
+        ],
+      },
+      {
+        heading: 'I costi da mettere in conto',
+        paragraphs: [
+          'Il costo di gestione di un\'elettrica usata è in genere più basso di una termica: meno manutenzione ordinaria, bollo ridotto o esente in molte regioni, accesso alle ZTL. In cambio considera: assicurazione spesso più cara, ricarica alle colonnine pubbliche che può costare come la benzina, e una svalutazione che resta imprevedibile.',
+          'Il confronto più utile è tra lo stesso modello a benzina, ibrida ed elettrica usato: i consumi e il valore residuo dicono quale conviene per i tuoi chilometri.',
+        ],
+      },
+      {
+        heading: 'Come verificare il valore reale',
+        paragraphs: [
+          'Prima di trattare, verifica il prezzo medio di mercato del modello elettrico specifico (marca, modello, anno e batteria) confrontandolo con gli annunci reali. Su AutoEsperto puoi vedere il valore medio di un\'usata elettrica in pochi secondi e confrontarlo con l\'equivalente ibrida o benzina: è il dato che decide la convenienza.',
+        ],
+      },
+    ],
+    cta: 'controllare-auto-usata',
+  },
+  {
+    slug: 'classe-euro-ztl-divieti-circolazione',
+    title: 'Classe Euro e ZTL: dove può circolare la tua auto',
+    description:
+      'Classe Euro: cosa indica, dove trovarla sul libretto e quali divieti di circolazione e ZTL si applicano a diesel, benzina, GPL e ibride. Guida aggiornata 2026.',
+    published: '2026-08-10',
+    category: 'valutazione',
+    sections: [
+      {
+        heading: 'Cos\'è la classe Euro',
+        paragraphs: [
+          'La classe Euro indica il livello di emissioni del veicolo, da Euro 0 (le più vecchie e inquinanti) a Euro 6 (le più recenti). Viene assegnata al momento dell\'omologazione e dipende dal rispetto dei limiti di emissione europei vigenti in quell\'anno.',
+          'Non è un dettaglio tecnico: decide dove puoi circolare, quanto paghi di bollo in alcune regioni e quanto vale l\'auto sul mercato dell\'usato.',
+        ],
+      },
+      {
+        heading: 'Dove trovare la classe Euro sul libretto',
+        paragraphs: [
+          'Sul libretto di circolazione la classe Euro è indicata nella voce V.9 ("Normativa di riferimento"), con sigle tipo "Euro 6d", "Euro 6d-TEMP", "Euro 5" e così via. Sui documenti più recenti può essere presente anche la menzione della normativa specifica come "2020/2" o simili.',
+          'Se non la trovi o hai dubbi, puoi verificarla sul Portale dell\'Automobilista con targa o telaio, oppure tramite una visura PRA.',
+        ],
+      },
+      {
+        heading: 'I divieti che stanno arrivando',
+        paragraphs: [
+          'Le grandi città italiane stanno progressivamente limitando la circolazione dei diesel:',
+        ],
+        list: [
+          'Milano Area C/B: divieti progressivi per i diesel fino a Euro 5, con date che si aggiornano ogni anno.',
+          'Torino, Bologna, Firenze e Roma: blocchi stagionali o permanenti per i diesel Euro 4 e precedenti.',
+          'ZTL a targa alternata o a pagamento in molti centri storici.',
+          'Aree verdi a livello regionale (Piemonte, Lombardia, Emilia-Romagna): paletti per diesel Euro 3–5.',
+          'Alcune città escludono completamente i diesel dai centri storici nei weekend.',
+        ],
+      },
+      {
+        heading: 'Quali auto restano "libere"',
+        paragraphs: [
+          'I benzina Euro 4 e superiori sono in genere ammessi quasi ovunque; le ibride (full e plug-in) e le elettriche hanno accesso libero o facilitato alla maggior parte delle ZTL; le GPL e metano Euro 4+ sono ammesse in molte aree dove il diesel è bloccato.',
+          'Prima di comprare, verifica sempre le ordinanze della tua città e di quelle in cui pensi di viaggiare: le date dei divieti si aggiornano spesso e le auto "diesel Euro 5" valgono molto meno dove non possono circolare.',
+        ],
+      },
+      {
+        heading: 'L\'impatto sul valore dell\'usato',
+        paragraphs: [
+          'La classe Euro è oggi uno dei fattori che incide di più sul valore di rivendita: un diesel Euro 4–5 in una città con blocchi è quasi invendibile, mentre una benzina o ibrida Euro 6 tiene il valore. Il consiglio: prima di valutare o acquistare, controlla la classe Euro insieme al prezzo medio di mercato del modello.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'auto-gpl-metano-usate-convengono',
+    title: 'Auto a GPL e metano usate: costi, vantaggi e cosa controllare',
+    description:
+      'Quanto si risparmia con GPL e metano sull\'usato, quali impianti esistono, cosa controllare prima dell\'acquisto e quanto incidono su bollo, assicurazione e ZTL.',
+    published: '2026-08-11',
+    category: 'valutazione',
+    sections: [
+      {
+        heading: 'Perché GPL e metano convengono ancora',
+        paragraphs: [
+          'Il GPL costa circa il 40–50% in meno della benzina e il metano anche di più: per chi percorre molti chilometri, la differenza sul pieno si sente ogni mese. Sul mercato dell\'usato si trovano molte auto bifuel già installate, che evitano il costo della trasformazione (1.500–2.500 € su un\'auto nuova).',
+          'In più, GPL e metano Euro 4+ sono ammessi in molte ZTL dove il diesel è bloccato, e in alcune regioni godono di sconti sul bollo.',
+        ],
+      },
+      {
+        heading: 'Le differenze tra GPL e metano',
+        paragraphs: [
+          'Il GPL è più diffuso e ha una rete di distribuzione capillare; il metano ha un costo al kg più basso e consumi ancora più contenuti, ma le stazioni di rifornimento sono meno frequenti (soprattutto al Sud). L\'autonomia dipende dal serbatoio e spesso si combina con il pieno di benzina.',
+          'Sull\'usato il metano è più raro e tende a essere più economico da trovare, ma la rete di rifornimento è il vero limite: valutalo in base a dove vivi e guidi.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare su un\'usato a GPL o metano',
+        paragraphs: [
+          'Un impianto a gas richiede controlli specifici che una benzina normale non ha:',
+        ],
+        list: [
+          'Revisione periodica del serbatoio: la bombola GPL va verificata ogni 10 anni (con sostituzione a fine vita); il serbatoio metano ogni 4 anni con test a pressione.',
+          'Scadenza della bombola: se si avvicina o è scaduta, i costi di sostituzione sono 300–800 €: usali come leva sul prezzo.',
+          'Certificazione dell\'impianto: deve essere a norma (EC 661/2009 o precedente), con documentazione dell\'installatore.',
+          'Funzionamento a gas: fai una prova su strada con il commutatore in posizione gas: strattoni o stalli indicano riduttori o iniettori da rifare.',
+          'Libretto aggiornato: l\'impianto deve risultare annotato sui documenti di circolazione.',
+        ],
+      },
+      {
+        heading: 'Costi di gestione da conoscere',
+        paragraphs: [
+          'La manutenzione di un\'impianto GPL/metano è contenuta ma va prevista: filtri gas da sostituire periodicamente, riduttore che invecchia e può costare 200–400 €, e iniettori che prima o poi si rifanno. In compenso, freni e motore tendono a durare bene su percorsi urbani.',
+          'Per il metano il risparmio è massimo con molti chilometri; sotto i 10.000 km/anno la differenza con una benzina si assottiglia e il peso del serbatoio e lo spazio perso nel bagagliaio contano di più.',
+        ],
+      },
+      {
+        heading: 'Quanto si risparmia davvero',
+        paragraphs: [
+          'La regola pratica: con 15.000 km/anno, un\'auto a GPL risparmia in genere 600–900 € l\'anno di carburante rispetto alla stessa auto a benzina; a metano anche di più. Con la stessa percorrenza, in 3–4 anni il risparmio ripaga ampiamente la differenza di prezzo tra usato a gas e usato a benzina.',
+          'Prima di comprare, confronta consumi e costi reali del modello specifico (urbano, extraurbano e combinato) e verifica il valore di mercato dell\'esemplare: un\'usata GPL ben mantenuta vale spesso più di una benzina equivalente proprio per il risparmio che garantisce.',
+        ],
+      },
+    ],
+    cta: 'consumi-modello',
+  },
+  {
+    slug: 'quando-conviene-comprare-auto',
+    title: 'Quando conviene comprare un\'auto: il momento giusto dell\'anno',
+    description:
+      'Fine anno, fine trimestre, lancio di nuovi modelli: i periodi in cui i prezzi scendono davvero e come sfruttare il calendario per trattare meglio.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Il prezzo cambia con il calendario',
+        paragraphs: [
+          'Il prezzo di un\'auto non è una costante: cambia con le stagioni, gli obiettivi di vendita dei concessionari e il lancio di nuovi modelli. Chi compra nel momento giusto può ottenere sconti del 10–20% senza nemmeno trattare; chi compra nel momento sbagliato paga il pieno.',
+          'Le dinamiche sono diverse tra nuovo e usato, ma la regola di fondo è una sola: i venditori scendono di prezzo quando hanno bisogno di vendere.',
+        ],
+      },
+      {
+        heading: 'Il momento migliore per il nuovo',
+        paragraphs: [
+          'Per l\'auto nuova il momento migliore è la fine del periodo di budget dei concessionari:',
+        ],
+        list: [
+          'Fine mese: i venditori chiudono i conti mensili e preferiscono scontare a una consegna veloce.',
+          'Fine trimestre e fine anno: i concessionari devono raggiungere gli obiettivi delle case e svendono parco e km 0.',
+          'Lancio di un restyling o di un nuovo modello: la versione precedente viene scontata anche del 15–20%.',
+          'Novembre–dicembre: i saldi di fine anno sugli invenduti sono i più aggressivi.',
+        ],
+      },
+      {
+        heading: 'Il momento migliore per l\'usato',
+        paragraphs: [
+          'Sull\'usato le dinamiche sono più morbide ma esistono:',
+        ],
+        list: [
+          'Inverno: la domanda cala (specialmente per convertibili e auto sportive), e i privati che devono vendere scendono di prezzo.',
+          'Dopo i saldi del nuovo: chi non ha trovato sconti sul nuovo ripiega sull\'usato recente, aumentando la concorrenza: compra prima.',
+          'Cambio di stagione: auto invernali (4x4, catene) e estive (convertibili) seguono curve di domanda opposte.',
+          'Fine anno: anche i privati vogliono chiudere prima delle feste: prezzi più trattabili su auto invendute da mesi.',
+        ],
+      },
+      {
+        heading: 'Come usare i dati per comprare nel momento giusto',
+        paragraphs: [
+          'Il calendario da solo non basta: il prezzo giusto si vede dai dati. Controlla il prezzo medio di mercato del modello che ti interessa (marca, modello, anno) e segui l\'andamento per qualche settimana: se la media scende, è il momento di fare l\'offerta; se sale, aspetta.',
+          'La trattativa migliore si fa quando hai in mano il valore reale di mercato: il venditore che conosce i prezzi reali degli annunci simili non può sparare cifre senza fondamento.',
+        ],
+      },
+      {
+        heading: 'Il momento sbagliato: quando evitare',
+        paragraphs: [
+          'Evita di comprare quando la domanda è massima e l\'offerta scarsa: a inizio estate per i modelli richiesti, a settembre per i SUV "da famiglie", e nei giorni di lancio di un modello molto atteso, quando i prezzi dell\'usato di quello stesso modello salgono per qualche settimana.',
+          'Pazienza e calendario: aspettare 3–4 settimane può valere centinaia di euro di differenza.',
+        ],
+      },
+    ],
+    cta: 'prezzo-giusto',
+  },
+  {
+    slug: 'vendere-auto-incidentata-cosa-fare',
+    title: 'Come vendere un\'auto incidentata senza svenderla',
+    description:
+      'Si può vendere un\'auto incidentata? Quanto vale, chi la compra e come fare un annuncio onesto che massimizzi il ricavato: guida pratica alla vendita.',
+    published: '2026-08-11',
+    category: 'vendita',
+    sections: [
+      {
+        heading: 'Sì, si può vendere: ma con regole precise',
+        paragraphs: [
+          'Vendere un\'auto incidentata è legale, a una condizione non negoziabile: dichiarare per iscritto tutti i danni. Se nascondi un incidente strutturale e il compratore lo scopre, rischi la risoluzione del contratto, il risarcimento dei danni e anche conseguenze penali per truffa.',
+          'L\'onestà, inoltre, è la tua arma di vendita: chi compra un\'auto con danni dichiarati sa cosa compra e non avrà pretese successive.',
+        ],
+      },
+      {
+        heading: 'Quanto vale davvero un\'auto incidentata',
+        paragraphs: [
+          'Il valore dipende dal tipo di danno:',
+        ],
+        list: [
+          'Danno cosmetico (graffi, ammaccature su paraurti): sconto del 2–5% rispetto al valore di mercato.',
+          'Danno funzionale (fari, sospensioni, parabrezza): sconto del 5–15%, pari al costo della riparazione.',
+          'Danno strutturale (telaio, longheroni): sconto del 20–40%: l\'auto resta vendibile ma solo a chi la vuole riparare.',
+          'Auto non riparabile (airbag esplosi, telaio piegato): vale il solo valore di recupero come pezzi o da demolire: 300–1.500 €.',
+        ],
+      },
+      {
+        heading: 'A chi vendere: le tre strade',
+        paragraphs: [
+          'Per un\'auto incidentata hai tre canali, con valori molto diversi:',
+        ],
+        list: [
+          'Privato: il ricavato migliore se i danni sono riparabili e dichiarati, ma richiede tempo e trattativa.',
+          'Concessionario o autosalone: prende l\'auto in permuta o a ritiro, scontando il danno ma gestendo tutto: comodo e veloce.',
+          'Compratori di incidentate e demolitori: la soluzione più rapida per auto con danni gravi, ma pagano il minimo (spesso 10–30% del valore).',
+        ],
+      },
+      {
+        heading: 'Come preparare la vendita',
+        paragraphs: [
+          'Per massimizzare il ricavato:',
+        ],
+        list: [
+          'Documenta i danni con foto chiare e oneste: le foto da tutti i lati aumentano la fiducia e le visite.',
+          'Raccogli lo storico: tagliandi, revisioni e fatture di eventuali riparazioni aumentano il valore.',
+          'Fai riparare i danni piccoli e economici (un paraurti, una portiera): l\'investimento torna quasi sempre.',
+          'Per i danni strutturali, chiedi un preventivo scritto: ti serve per calcolare lo sconto onesto sul prezzo.',
+        ],
+      },
+      {
+        heading: 'Il prezzo giusto: come calcolarlo',
+        paragraphs: [
+          'Il punto di partenza è sempre il valore di mercato dell\'auto senza danni: stessa marca, modello, anno e chilometraggio. Da quel valore sottrai il costo di riparazione (se la fai fare al compratore) o uno sconto proporzionale al danno, e fissi il prezzo di partenza con un piccolo margine di trattativa.',
+          'Su AutoEsperto puoi verificare gratuitamente il valore medio di mercato dell\'esemplare senza danni: da lì inizia il tuo calcolo e la tua trattativa.',
+        ],
+      },
+    ],
+    cta: 'valore-vendita',
+  },
+  {
+    slug: 'furgoni-veicoli-commerciali-usati',
+    title: 'Furgoni e veicoli commerciali usati: guida all\'acquisto',
+    description:
+      'Come comprare un furgone usato senza rischi: chilometraggio reale, usura, allestimenti, documenti e controlli specifici dei veicoli commerciali.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'I furgoni usati sono un\'altra specie',
+        paragraphs: [
+          'Un furgone usato non è un\'auto più grande: è un veicolo che ha probabilmente lavorato, con un\'usura concentrata su motore, frizione, sospensioni e pianale che i chilometri da soli non raccontano. Un furgone di 100.000 km può valere più o meno di uno di 60.000 km: dipende da come è stato usato.',
+          'Il punto di partenza è sempre lo stesso: verificare i dati prima, guardare il veicolo dopo.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare prima dell\'acquisto',
+        paragraphs: [
+          'Ai controlli classici di un\'usata si aggiungono quelli specifici dei commerciali:',
+        ],
+        list: [
+          'Chilometraggio reale: i furgoni sono tra i veicoli con più km scalati: confronta le revisioni (registrano i km) e i tagliandi.',
+          'Usura del pianale di carico: ammaccature, fori o ruggine indicano uso pesante e carichi non protetti.',
+          'Portellone e portiere scorrevoli: i meccanismi si usurano con l\'uso quotidiano di carico e scarico.',
+          'Frizione e cambio: la guida commerciale (molte manovre, carichi) li stressa molto: prova su strada con il mezzo carico.',
+          'Motore: fai un test a freddo e a caldo, controlla fumi e livello olio: un furgone trascurato tradisce subito.',
+          'Documenti: targa, telaio, revisione valida e coincidenza tra libretto e veicolo.',
+        ],
+      },
+      {
+        heading: 'Allestimenti e versatilità',
+        paragraphs: [
+          'Il valore di un furgone dipende molto dall\'allestimento: cassonato, furgone a tetto alto, pianale ribassato, celle frigorifere o attrezzature interne cambiano prezzo e destinazione. Verifica che l\'allestimento sia quello dichiarato e che eventuali modifiche (allestitori) risultino regolarmente annotate sui documenti.',
+          'Chiedi sempre lo storico degli interventi di manutenzione: su un mezzo da lavoro, la regolarità della manutenzione vale più del chilometraggio.',
+        ],
+      },
+      {
+        heading: 'Documenti, fiscale e passaggio',
+        paragraphs: [
+          'Per i veicoli commerciali (categoria N) la normativa è diversa dalle autovetture: verifica la categoria di omologazione, la portata, la classe Euro (per le restrizioni urbane) e l\'eventuale agevolazione fiscale se compri con partita IVA. Il passaggio di proprietà segue la procedura standard PRA, ma per i mezzi commerciali controlla anche fermi amministrativi e ipoteche: sono più frequenti che sulle auto.',
+        ],
+      },
+      {
+        heading: 'Come valutare un furgone usato',
+        paragraphs: [
+          'Come per le auto, il riferimento è il valore medio di mercato di esemplari simili (marca, modello, anno, motorizzazione): i furgoni più richiesti come Fiat Ducato, Ford Transit, Renault Kangoo o VW Caddy tengono meglio il valore proprio per la domanda costante dei lavoratori.',
+          'Verifica il prezzo medio di mercato del modello prima di trattare: un furgone da lavoro si compra con la testa, e i dati ti evitano di pagare l\'usura nascosta.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'migliori-city-car-usate',
+    title: 'Le migliori city car usate: quali scegliere per la città',
+    description:
+      'City car usate: quali modelli tengono il valore, costano poco da mantenere e sono ideali per la città. Confronto, controlli e prezzi medi di mercato.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Cosa rende buona una city car usata',
+        paragraphs: [
+          'Una city car deve fare poche cose, ma farle bene: consumare poco nel traffico, costare poco di assicurazione e manutenzione, parcheggiare ovunque e non svalutarsi in fretta. Sul mercato dell\'usato, i modelli che rispettano queste regole si riconoscono dalla domanda costante: si rivendono in pochi giorni.',
+          'In più, le city car compatte sono tra le auto più affidabili in assoluto: meccanica semplice, pochi optional complessi, ricambi economici.',
+        ],
+      },
+      {
+        heading: 'I modelli che funzionano meglio',
+        paragraphs: [
+          'Sul mercato italiano queste sono le city car usate con la domanda più solida:',
+        ],
+        list: [
+          'Fiat Panda: la più diffusa, ricambi ovunque, manutenzione molto economica: un\'usata tra le più semplici da gestire.',
+          'Toyota Yaris (anche ibrida): consumi bassissimi in città, affidabilità eccellente, valore di rivendita alto.',
+          'Suzuki Swift: leggera e agile, motore collaudato, costi contenuti.',
+          'Fiat 500: icona di stile con domanda costante: tiene il valore meglio di molte rivali, ma occhio al prezzo richiesto.',
+          'Hyundai i10 e Kia Picanto: garanzia solida e meccanica semplice, ottime come prima auto.',
+        ],
+      },
+      {
+        heading: 'Quanto costa mantenerle',
+        paragraphs: [
+          'Il punto di forza delle city car è il costo di gestione: assicurazione in classe bassa, tagliando annuale tra 100 e 200 €, consumi tra i 5 e i 6 litri per 100 km in città per la benzina, meno per l\'ibrida. Le gomme piccole costano poco e la frizione (intervento più caro ricorrente) parte da 400–600 €.',
+          'Per questo, su una city car, un prezzo d\'acquisto anche di 1.000 € sopra la media è spesso compensato in pochi anni dal risparmio di gestione.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare prima dell\'acquisto',
+        paragraphs: [
+          'Le city car economiche attraggono acquirenti che le trattano male:',
+        ],
+        list: [
+          'Chilometraggio reale: confronta le revisioni (registrano i km) e l\'usura di volante, pedali e sedili.',
+          'Ruggine su sottoscocca e passaruota: le utilitarie usate in città e sulle strade salate soffrono molto.',
+          'Frizione usurata: nelle city car usate per lavoro è la prima cosa a cedere.',
+          'Stato dei tagliandi: una manutenzione saltata su un\'auto economica si paga subito.',
+          'Controlla sempre il valore medio di mercato del modello e anno specifico: il prezzo "da passione" è il rischio più diffuso su Fiat 500 e modelli iconici.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'auto-7-posti-usate-guida',
+    title: 'Auto 7 posti usate: come scegliere la giusta per la famiglia',
+    description:
+      'SUV, monovolume e multispazio 7 posti usati: spazio, sicurezza, consumi e costo di gestione. Guida alla scelta per famiglie numerose senza brutte sorprese.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: '7 posti "veri" o occasionali?',
+        paragraphs: [
+          'La prima domanda è quanto userai davvero la terza fila: i 7 posti "veri" (con sedili grandi e spazio per adulti) sono tipici di monovolume e alcuni SUV di grandi dimensioni; molti SUV compatti offrono una terza fila ripiegabile, adatta solo a bambini e per tragitti brevi.',
+          'Decidi prima l\'uso: se i 7 posti servono ogni giorno, serve un\'auto vera; se servono una volta al mese, un SUV con terza fila a scomparsa è più pratico, più economico e più facile da parcheggiare.',
+        ],
+      },
+      {
+        heading: 'I modelli più sensati sull\'usato',
+        paragraphs: [
+          'Sul mercato italiano i 7 posti usati più richiesti sono:',
+        ],
+        list: [
+          'Skoda Kodiaq: spazio generoso, motori collaudati, ottimo rapporto qualità-prezzo.',
+          'Dacia Jogger: il 7 posti più economico in assoluto, semplice e conveniente da mantenere.',
+          'Ford Galaxy / S-Max: veri monovolume con terza fila comoda, ottimi sul lungo periodo.',
+          'Renault Espace e Grand Scenic: comfort da monovolume, buona disponibilità sull\'usato.',
+          'Volkswagen Touran e Sharan: riferimento per famiglie, affidabilità solida e ricambi ovunque.',
+          'Mercedes Classe B e BMW 2 Series Active Tourer (7 posti): premium ma con costi di gestione più alti.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare su un 7 posti usato',
+        paragraphs: [
+          'Un\'auto per famiglie ha usi e usure particolari:',
+        ],
+        list: [
+          'Interni: sedili, rivestimenti e ganci di fissaggio mostrano subito se è stata usata con bambini: odori e usura sono la prova.',
+          'Terza fila: verifica che si apra, si chiuda e si ripieghi correttamente.',
+          'Capitolato carichi: i 7 posti a pieno carico pesano: controlla freni, ammortizzatori e pneumatici.',
+          'Chilometraggio e revisioni: una famiglia che fa scuola e vacanze accumula km reali: verifica la coerenza.',
+          'Portellone e scorrimento sedili: i meccanismi più usati sono i primi a cedere.',
+        ],
+      },
+      {
+        heading: 'Consumi e costi di gestione da mettere in conto',
+        paragraphs: [
+          'Un\'auto 7 posti pesa e consuma: conta su medie di 6–8 litri per 100 km per le termiche, meno per le ibride; il costo di pneumatici (taglie grandi) e freni è più alto di una city car. Prima dell\'acquisto verifica i consumi reali del modello specifico e il costo medio di manutenzione per anno, così il budget familiare non ha sorprese.',
+        ],
+      },
+      {
+        heading: 'Il valore che conta: confronta prima di scegliere',
+        paragraphs: [
+          'I 7 posti usati si svalutano in modo molto diverso: i modelli più richiesti (Kodiaq, Touran) tengono bene il valore, quelli meno desiderati si possono trovare a prezzi molto bassi ma con costi di gestione più alti. Verifica il prezzo medio di mercato dei modelli che ti interessano e confrontali: la differenza di prezzo tra due 7 posti equivalenti può superare i 5.000 €.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'auto-usate-pendolari-autostrada',
+    title: 'Auto usate per pendolari e autostrada: quale scegliere',
+    description:
+      'Chilometri tutti i giorni? Le caratteristiche giuste per un\'auto da pendolare: consumi reali in autostrada, comfort, affidabilità e quale motore conviene davvero.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'L\'auto del pendolare è un\'altra cosa',
+        paragraphs: [
+          'Chi percorre 20.000–40.000 km l\'anno per lavoro ha esigenze specifiche: consumi bassi a velocità di crociera, comfort sui lunghi tragitti, sedili che non stancano, affidabilità che non fa restare a piedi e costi di manutenzione prevedibili. Scegliere un\'auto "da città" per fare autostrada ogni giorno è il primo errore.',
+          'I dati che contano: consumo a 120–130 km/h, dotazione di comfort (cruise control, sedili regolabili), livello di rumorosità e cilindrata adeguata al carico.',
+        ],
+      },
+      {
+        heading: 'Quale motore per chi fa autostrada',
+        paragraphs: [
+          'Il motore è la scelta più importante:',
+        ],
+        list: [
+          'Diesel: ancora il re dei lunghi tragitti: consuma poco a velocità costante e ha coppia per le riprese. Sulle usate di 5+ anni i prezzi sono scesi molto per via dei blocchi urbani, ma fuori città il vantaggio resta.',
+          'Benzina turbo (1.0–1.5 TSI e simili): consumi buoni in extraurbano, più semplici e meno costosi da mantenere: ottima scelta sotto i 25.000 km/anno.',
+          'Ibrida non plug-in: comoda e parsimoniosa, ma in autostrada il vantaggio si assottiglia: si comporta come una benzina.',
+          'Elettrica: sensata solo con percorrenze pianificate e ricarica disponibile a entrambe le estremità del tragitto.',
+        ],
+      },
+      {
+        heading: 'I modelli giusti da valutare sull\'usato',
+        paragraphs: [
+          'Per il pendolarismo autostradale questi modelli usati sono tra i più sensati:',
+        ],
+        list: [
+          'Skoda Octavia: spazio, comfort e consumi contenuti, riferimento assoluto del segmento.',
+          'Volkswagen Golf: meccanica collaudata, assistenza ovunque, motori TSI e TDI di lunga storia.',
+          'Toyota Corolla ibrida: affidabilità eccellente e consumi bassi, con terza generazione di ibrida ormai matura.',
+          'Audi A3 e BMW Serie 1: comfort superiore e buoni consumi, ma con ricambi e manutenzione premium.',
+          'Ford Focus e Peugeot 308: piattaforme collaudate, prezzi usato spesso competitivi.',
+        ],
+      },
+      {
+        heading: 'Cosa controllare su un\'auto da pendolare usata',
+        paragraphs: [
+          'Un\'auto usata per molti km l\'anno ha un\'usura particolare:',
+        ],
+        list: [
+          'Chilometraggio coerente: 30.000 km/anno sono normali per un pendolare: verifica con le revisioni.',
+          'Usura di sedile guida, volante e pedali: alta con i km reali.',
+          'Storico tagliandi: un pendolare serio ha la manutenzione in ordine: i tagliandi annuali sono la prova.',
+          'Freni e pneumatici: su auto da 100.000+ km possono essere al limite: includi il costo di sostituzione nella trattativa.',
+          'Distribuzione: su molti motori va fatta tra i 60.000 e i 120.000 km: verifica se è già stata fatta.',
+        ],
+      },
+      {
+        heading: 'Il calcolo del costo per chilometro',
+        paragraphs: [
+          'Per un pendolare, la differenza tra 5 e 7 litri/100 km vale centinaia di euro l\'anno: 25.000 km con 6 €/litro di risparmio sono 1.500 € di carburante. Controlla i consumi reali del modello (urbano, extraurbano e combinato) prima dell\'acquisto e confronta il costo annuo del carburante insieme al valore di mercato: è il modo più rapido per capire quale auto conviene davvero.',
+        ],
+      },
+    ],
+    cta: 'consumi-modello',
+  },
+  {
+    slug: 'spie-cruscotto-significato-guida',
+    title: 'Spie del cruscotto: significato di tutte le luci di avviso',
+    description:
+      'Spia motore, olio, batteria, ABS, pressione gomme: il significato di tutte le spie del cruscotto e cosa fare quando si accendono, senza farsi prendere dal panico.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Spie rosse, gialle e verdi: cosa cambia',
+        paragraphs: [
+          'Il colore della spia dice subito la gravità: le spie rosse indicano un problema che richiede di fermarsi subito (olio, freni, batteria); le gialle/ambra indicano un\'anomalia da controllare al più presto ma senza fermarsi di colpo; le verdi e blu sono informative (luci accese, cruise control attivo).',
+          'Conoscere la differenza evita sia il panico ingiustificato sia la sottovalutazione di un problema serio.',
+        ],
+      },
+      {
+        heading: 'Le spie rosse: quando fermarsi subito',
+        paragraphs: [
+          'Queste spie richiedono attenzione immediata:',
+        ],
+        list: [
+          'Spia olio (lattina): pressione olio insufficiente: spegni il motore subito e controlla il livello, altrimenti rischi il grippaggio.',
+          'Spia freni (cerchio con punto esclamativo): livello liquido freni o freno a mano inserito: non guidare se il livello è basso.',
+          'Spia batteria: l\'alternatore non carica: puoi proseguire brevemente, ma la batteria si scarica: dirigiti verso un\'officina.',
+          'Spia temperatura (termometro): liquido di raffreddamento troppo caldo: fermati e lascia raffreddare, rischio di guarnizione testata.',
+          'Spia serbatoio: ultimo livello carburante: per alcuni motori (diesel e GDI) guidare a secco danneggia l\'impianto.',
+        ],
+      },
+      {
+        heading: 'Le spie gialle: da controllare presto',
+        paragraphs: [
+          'Le spie ambra segnalano problemi che possono aspettare qualche giorno, non mesi:',
+        ],
+        list: [
+          'Spia motore (motore stilizzato): anomalia al motore o alle emissioni: la più comune, i motivi vanno da una sonda ai gas di scarico a problemi più seri: una diagnosi con l\'auto diagnostico (30–50 €) chiarisce subito.',
+          'Spia ABS: il sistema antibloccaggio è fuori uso: i freni funzionano ma senza ABS: non aspettare per l\'intervento.',
+          'Spia pressione pneumatici (ferro di cavallo): gonfiaggio da verificare: spesso basta il gonfiaggio per spegnerla.',
+          'Spia ESP/controllo stabilità: sistema disattivato o guasto: controlla il pulsante prima di pensare al guasto.',
+          'Spia AIRBAG: gli airbag sono disattivati: va riparato al più presto per ragioni di sicurezza.',
+        ],
+      },
+      {
+        heading: 'Le spie verdi e blu: niente paura',
+        paragraphs: [
+          'Le spie verdi (fari, luci di posizione, abbaglianti blu, cruise control, frenata rigenerativa sulle ibride) informano su funzioni attive: non richiedono interventi. Se una spia verde resta accesa quando la funzione è disattivata, può essere un\'anomalia del sensore: da verificare in officina.',
+        ],
+      },
+      {
+        heading: 'Cosa fare quando si accende una spia',
+        paragraphs: [
+          'La regola d\'oro: non ignorare mai una spia, ma non farti neanche prendere dal panico. Se è rossa, fermati in sicurezza e controlla il manuale; se è gialla, prenota una diagnosi al più presto. La diagnosi computerizzata in officina (o con un adattatore OBD da 20–40 €) legge il codice di errore e dice esattamente cosa cercare.',
+          'E ricorda: sulle auto usate, una spia che resta accesa dopo l\'acquisto è un motivo valido per rientrare nella garanzia se l\'acquisto è avvenuto da un professionista.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'quanto-durano-freni-auto',
+    title: 'Freni auto: quanto durano pastiglie e dischi, quando cambiarli',
+    description:
+      'Pastiglie e dischi freno: durata in km, segnali di usura, costi di sostituzione e come capire quando è il momento di cambiarli prima che sia tardi.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Quanto durano davvero i freni',
+        paragraphs: [
+          'La durata dei freni dipende da tre fattori: stile di guida, tipo di percorso e peso dell\'auto. In linea di massima le pastiglie anteriori durano 30.000–50.000 km, i dischi anteriori 50.000–80.000 km, e dietro si arriva spesso al doppio perché lavorano meno.',
+          'Un\'ibrida con frenata rigenerativa può triplicare la durata delle pastiglie: l\'elettrico frena al posto dei dischi. Al contrario, la guida in città con frenate continue consuma i freni molto più dell\'autostrada.',
+        ],
+      },
+      {
+        heading: 'I segnali che i freni sono a fine vita',
+        paragraphs: [
+          'I sintomi più comuni di pastiglie o dischi usurati:',
+        ],
+        list: [
+          'Sfregamento metallico in frenata: il classico "fischio" quando le pastiglie toccano il limite.',
+          'Spia freni accesa: molte auto hanno un sensore di usura che accende la spia.',
+          'Vibrazione al volante in frenata: tipico di dischi deformati (per surriscaldamento o usura).',
+          'Auto che tira da un lato in frenata: possibile usura irregolare o pinza bloccata.',
+          'Percorso di frenata più lungo: se l\'auto "non frena come prima", controlla subito.',
+        ],
+      },
+      {
+        heading: 'Quanto costa sostituirli',
+        paragraphs: [
+          'I costi indicativi sul mercato italiano per un\'auto di segmento medio:',
+        ],
+        list: [
+          'Pastiglie anteriori (solo materiale e manodopera): 120–250 € per asse.',
+          'Dischi + pastiglie anteriori: 250–500 € per asse.',
+          'Freni posteriori: 20–30% in meno per l\'asse.',
+          'Su segmenti premium o con freni sportivi (carboceramici), i costi possono triplicare: verifica sempre il prezzo per il tuo modello specifico.',
+        ],
+      },
+      {
+        heading: 'Come controllare l\'usura da solo',
+        paragraphs: [
+          'Alcuni controlli puoi farli da solo: guarda attraverso i raggi del cerchio lo spessore delle pastiglie (sotto i 3–4 mm di ferodo sono da cambiare), ascolta rumori in frenata e senti eventuali vibrazioni al volante. Se la spia freni si accende, non rimandare: la sostituzione è quasi sempre già "scaduta".',
+        ],
+      },
+      {
+        heading: 'I freni sull\'usato: prima dell\'acquisto',
+        paragraphs: [
+          'Quando compri un\'usata, ispeziona i freni: un\'auto con 50.000 km che ha già i dischi al limite ha un costo nascosto di 300–500 €. Usa questo dato nella trattativa: sapere che i freni sono da fare è un argomento concreto per abbassare il prezzo, e la stima del costo di sostituzione del tuo modello specifico ti dà la cifra esatta.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'ammortizzatori-auto-quando-cambiarli',
+    title: 'Ammortizzatori auto: quando cambiarli e quanto costano',
+    description:
+      'Ammortizzatori usurati: segnali, durata in km, costi di sostituzione e perché guidare con sospensioni a fine vita è pericoloso oltre che scomodo.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Cosa fanno gli ammortizzatori',
+        paragraphs: [
+          'Gli ammortizzatori controllano le oscillazioni delle sospensioni: tengono le ruote a contatto con l\'asfalto, garantiscono stabilità in curva e frenata e filtrano le buche. Usurati, allungano lo spazio di frenata, destabilizzano l\'auto in curva e rendono il viaggio scomodo.',
+          'Il problema è che si usurano gradualmente: chi guida ogni giorno non se ne accorge finché il degrado non è avanzato.',
+        ],
+      },
+      {
+        heading: 'Quando vanno cambiati',
+        paragraphs: [
+          'Non esiste una scadenza fissa, ma ci sono parametri di riferimento:',
+        ],
+        list: [
+          'In genere tra 80.000 e 120.000 km, o dopo 6–8 anni: la taratura decade anche senza km (guarnizioni, olio interno).',
+          'Se noti l\'auto che "rimbalza" sulle buche o che si assesta con più oscillazioni del normale.',
+          'In frenata: se il muso "tuffa" in modo eccessivo o l\'auto sembra instabile.',
+          'Usura irregolare dei pneumatici: un segno tipico di ammortizzatori a fine vita.',
+          'Rumori dalle sospensioni su dossi (oltre ai silent block).',
+        ],
+      },
+      {
+        heading: 'Il costo della sostituzione',
+        paragraphs: [
+          'La sostituzione si fa sempre per asse (entrambi gli ammortizzatori anteriori o posteriori insieme):',
+        ],
+        list: [
+          'Segmento piccolo: 200–350 € per asse, ammortizzatori e manodopera.',
+          'Segmento medio: 300–500 € per asse.',
+          'SUV e segmenti superiori: 400–800 € per asse (alcuni richiedono taratura elettronica).',
+          'Auto con sospensioni adattive o aria: i costi salgono sensibilmente: verifica il preventivo sul tuo modello specifico.',
+        ],
+      },
+      {
+        heading: "Il test semplice che puoi fare da solo",
+        paragraphs: [
+          'Premi con forza sul cofano dell\'auto ferma e rilascia: se l\'auto torna su e rimbalza più di una volta e mezza prima di assestarsi, gli ammortizzatori sono probabilmente usurati. È un test indicativo: la verifica definitiva si fa in officina con il banco prova o l\'ispezione visiva delle perdite d\'olio.',
+        ],
+      },
+      {
+        heading: 'Ammortizzatori e acquisto usato',
+        paragraphs: [
+          'Su un\'usata di 100.000+ km, la condizione delle sospensioni è un punto di trattativa reale: la sostituzione di un asse costa 300–800 €. Controlla anche i silent block e i bracci delle sospensioni, che con gli anni diventano fonte di rumori. Conoscere i costi di riparazione del modello specifico ti permette di fare un\'offerta corretta senza sorprese dopo l\'acquisto.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'ruggine-auto-come-riconoscerla',
+    title: 'Ruggine sull\'auto: come riconoscerla, trattarla e prevenire',
+    description:
+      'Ruggine su sottoscocca, passaruota e portiere: come riconoscerla nelle fasi iniziali, come fermarla e quanto costa intervenire prima che svaluti l\'auto.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Perché la ruggine è il nemico più silenzioso',
+        paragraphs: [
+          'La ruggine parte quasi sempre da un punto invisibile: un graffio, un sassolino che ha scavato la vernice, la salatura delle strade invernali o l\'umidità che ristagna tra le lamiere. Non fa rumore, non accende spie, ma nel giro di anni può compromettere la struttura e tagliare drasticamente il valore dell\'auto.',
+          'Riconoscerla presto è la differenza tra un intervento da 100–300 € e una carrozzeria da migliaia di euro.',
+        ],
+      },
+      {
+        heading: 'Le zone più colpite da controllare',
+        paragraphs: [
+          'La ruggine non si distribuisce a caso: attacca prima le zone più esposte:',
+        ],
+        list: [
+          'Passaruota: dove sabbia, sale e umidità si accumulano.',
+          'Sottoscocca e longheroni: la zona più critica per la struttura.',
+          'Bordi delle portiere e del cofano: dove la piega della lamiera espone il metallo.',
+          'Montanti e raccordi dei parafanghi.',
+          'Zone dietro i paraurti e i fascioni, dove la vernice si scrosta per i sassolini.',
+          'Bassofondo del bagagliaio e sedi delle cerniere.',
+        ],
+      },
+      {
+        heading: 'Come riconoscerla nelle fasi iniziali',
+        paragraphs: [
+          'Le fasi della ruggine:',
+        ],
+        list: [
+          'Bolle sotto la vernice: piccole protuberanze sulla superficie: la corrosione è già partita sotto.',
+          'Scrostamenti con alone rossastro: la lamiera è esposta e sta ossidando.',
+          'Punti marroni sulla vernice (ruggine "di superficie"): deriva spesso da residui ferrosi: spesso rimovibile con una lucidatura.',
+          'Sotto l\'auto: cercala con una torcia su longheroni, bracci e punti di saldatura: è la più pericolosa perché invisibile dall\'alto.',
+        ],
+      },
+      {
+        heading: 'Come trattarla e quanto costa',
+        paragraphs: [
+          'Il trattamento dipende dallo stadio:',
+        ],
+        list: [
+          'Ruggine superficiale: carteggiatura, antiruggine e ritocco vernice: 50–150 € per punto.',
+          'Bolle sotto la vernice: carteggiatura fino al metallo, trattamento, stuccatura e verniciatura: 150–400 € a pannello.',
+          'Ruggine penetrata (fori): richiede saldatura e verniciatura: da 500 € a migliaia, e spesso non è più un intervento conveniente.',
+          'Trattamento antiruggine preventivo su auto nuove o appena acquistate: 300–800 € e vale anni di protezione.',
+        ],
+      },
+      {
+        heading: 'Prevenzione: le regole che funzionano',
+        paragraphs: [
+          'Garage o comunque riparo quando possibile, lavaggio regolare in inverno (soprattutto del sottoscocca, dove il sale si accumula), controllo e trattamento immediato di graffi e sassolini, e un giro annuale di controllo del sottoscocca: in officina basta un sollevatore e una torcia.',
+        ],
+      },
+      {
+        heading: 'La ruggine al momento dell\'acquisto',
+        paragraphs: [
+          'Quando valuti un\'usata, la ruggine è un argomento di trattativa concreto: bolle sui pannelli o ruggine sul sottoscocca meritano uno sconto pari al costo del trattamento (e oltre, se la struttura è coinvolta). Un\'auto con 10+ anni usata in zone umide o costiere va ispezionata con attenzione: la carrozzeria compromessa riduce il valore in modo molto più marcato della sola meccanica.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'catene-neve-obbligatorie-legge',
+    title: 'Catene da neve e gomme invernali: cosa dice la legge',
+    description:
+      'Quando sono obbligatorie le catene da neve o le gomme invernali, dove scatta l\'obbligo, multe e sanzioni, e come scegliere tra catene, calze e pneumatici 4 stagioni.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'L\'obbligo invernale: cosa prevede la legge',
+        paragraphs: [
+          'In Italia, dal 15 novembre al 15 aprile (con proroghe per le zone alpine), chi circola su strade con ordinanza di obbligo deve avere o pneumatici invernali (M+S con codice 3PMSF) o catene a bordo: basta una delle due. L\'obbligo vale per tutti i veicoli: auto, furgoni e moto.',
+          'La norma di riferimento è l\'art. 6 del Codice della Strada con le ordinanze dei singoli enti: ogni provincia emana le proprie ordinanze, ma il periodo standard è lo stesso ovunque.',
+        ],
+      },
+      {
+        heading: 'Dove scatta l\'obbligo',
+        paragraphs: [
+          'L\'obbligo non vale ovunque, ma su tutte le strade in cui un\'ordinanza lo prevede:',
+        ],
+        list: [
+          'Valichi e strade di montagna con ordinanza specifica.',
+          'Strade extraurbane segnalate con l\'apposito pannello "catene a bordo obbligatorie".',
+          'Autostrade e tangenziali delle regioni alpine e appenniniche (Piemonte, Valle d\'Aosta, Lombardia, Trentino, Alto Adige, Veneto, Friuli e altre).',
+          'Alcune città e centri storici in caso di nevicate: controlla le ordinanze locali.',
+        ],
+      },
+      {
+        heading: 'Multe e sanzioni',
+        paragraphs: [
+          'Circolare su una strada con obbligo attivo senza gomme invernali né catene a bordo comporta:',
+        ],
+        list: [
+          'Multa da 87 a 344 € (se la strada è extraurbana), ridotta del 30% se pagata entro 5 giorni.',
+          'In caso di violazione in presenza di neve: può essere disposto anche il fermo del veicolo finché non viene messo in regola.',
+          'La multa è personale: vale per il conducente, non per il proprietario.',
+        ],
+      },
+      {
+        heading: 'Catene, calze o gomme invernali?',
+        paragraphs: [
+          'La scelta dipende dal tuo uso:',
+        ],
+        list: [
+          'Gomme invernali: la soluzione migliore se guidi spesso in montagna o con freddo intenso: tenuta superiore sotto i 7 °C, ma da montare tra novembre e aprile.',
+          'Gomme 4 stagioni: un compromesso per chi guida prevalentemente in pianura e vuole una sola soluzione tutto l\'anno (certificate M+S e 3PMSF valgono per l\'obbligo).',
+          'Catene da neve: obbligatorie da avere a bordo, fondamentali per le emergenze: in acciaio (robuste) o a rombo (più facili da montare), costano 50–150 €.',
+          'Calze da neve: adatte solo a neve leggera e a bassa velocità: non sempre accettate dalle ordinanze: verifica prima.',
+        ],
+      },
+      {
+        heading: 'Consigli pratici per l\'inverno',
+        paragraphs: [
+          'Controlla lo stato e il battistrada delle gomme prima della stagione fredda (il limite legale è 1,6 mm ma sotto i 3 mm la tenuta sulla neve cala molto), monta le invernali su tutte e quattro le ruote (mai solo due), e tieni in auto il giubbotto riflettente e una pala per l\'emergenza.',
+          'E ricorda: le gomme invernali non sono un\'opzione solo di sicurezza: sono anche una condizione legale sulle strade con obbligo, con multe che partono da 87 €.',
+        ],
+      },
+    ],
+    cta: 'revisione-auto',
+  },
+  {
+    slug: 'donazione-auto-costi-procedura',
+    title: 'Donazione di un\'auto: costi, documenti e procedure',
+    description:
+      'Come donare un\'auto a un familiare: costi, documenti necessari, passaggio di proprietà e quando conviene la donazione invece della vendita simbolica.',
+    published: '2026-08-11',
+    category: 'vendita',
+    sections: [
+      {
+        heading: 'Cos\'è la donazione di un\'auto',
+        paragraphs: [
+          'La donazione è un atto con cui trasferisci la proprietà dell\'auto a un\'altra persona senza corrispettivo economico. È la soluzione tipica tra genitori e figli (prima auto per i neopatentati) o tra coniugi: permette di intestare il veicolo a chi lo usa davvero.',
+          'Come ogni atto che trasferisce la proprietà, richiede il passaggio di proprietà al PRA: il passaggio è obbligatorio, non può essere "rimandato a voce".',
+        ],
+      },
+      {
+        heading: 'Quanto costa donare un\'auto',
+        paragraphs: [
+          'I costi della donazione sono simili a quelli di una vendita:',
+        ],
+        list: [
+          'Imposta provinciale di trascrizione (IPT): 150–650 € a seconda della provincia.',
+          'Diritti PRA per la pratica telematica: circa 27 €.',
+          'Compenso dell\'agenzia di pratiche auto (se non la fai da solo): 50–150 €.',
+          'Imposta di donazione: in genere non si paga tra parenti stretti (franchigia molto alta), ma verifica sempre con un professionista per il tuo caso.',
+          'Tassa di bollo sui documenti, quando prevista.',
+        ],
+      },
+      {
+        heading: 'I documenti necessari',
+        paragraphs: [
+          'Per la donazione servono gli stessi documenti di un passaggio normale:',
+        ],
+        list: [
+          'Certificato di proprietà (CDP) e libretto di circolazione firmati dal donante.',
+          'Documento di identità e codice fiscale di donante e donatario.',
+          'Visura PRA per verificare l\'assenza di fermi amministrativi e ipoteche.',
+          'Eventuale procura se una delle parti non può presentarsi.',
+          'Se serve, la dichiarazione di non parentela (per il trattamento fiscale) con i dati anagrafici.',
+        ],
+      },
+      {
+        heading: 'Donazione o vendita simbolica?',
+        paragraphs: [
+          'Molti "vendono" l\'auto a un euro ai familiari per risparmiare: è una pratica diffusa, ma attenzione: se il valore reale è diverso dal prezzo dichiarato, l\'Agenzia delle Entrate può riqualificare l\'operazione come donazione e applicare le imposte del caso.',
+          'La donazione formale, invece, ha una disciplina fiscale chiara: tra coniugi e parenti in linea retta (figli, genitori) le agevolazioni rendono il costo quasi sempre inferiore a una vendita reale.',
+        ],
+      },
+      {
+        heading: 'Il passaggio che completa l\'operazione',
+        paragraphs: [
+          'Dopo la firma della pratica, il passaggio di proprietà va formalizzato entro 30 giorni: dal momento della trascrizione, il donatario è il proprietario a tutti gli effetti e gli passano anche bollo, assicurazione e responsabilità. Controlla che la revisione sia valida prima di donare e valuta sempre il valore di mercato dell\'auto: ti serve per impostare correttamente la pratica e per evitare contestazioni fiscali.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'auto-ereditata-cosa-fare',
+    title: 'Auto ereditata: successione, passaggio di proprietà e bollo',
+    description:
+      'Cosa fare quando si eredita un\'auto: dichiarazione di successione, passaggio di proprietà, bollo, assicurazione e tutte le scadenze da non perdere.',
+    published: '2026-08-11',
+    category: 'vendita',
+    sections: [
+      {
+        heading: 'I passaggi da fare in ordine',
+        paragraphs: [
+          'Ereditare un\'auto non è complicato ma ha scadenze precise: la successione (la dichiarazione dell\'eredità) va presentata entro 12 mesi dal decesso, e il passaggio di proprietà al PRA va fatto entro 60 giorni dal momento in cui il veicolo entra nel patrimonio ereditario.',
+          'Finché il passaggio non è fatto, il veicolo resta intestato al defunto: guidarlo così è irregolare e rischia sanzioni.',
+        ],
+      },
+      {
+        heading: 'La dichiarazione di successione',
+        paragraphs: [
+          'La successione si presenta all\'Agenzia delle Entrate con il modello 4 (o 5): in essa va indicata anche l\'auto, con il suo valore di mercato. Per gli eredi in linea retta (figli, coniuge) l\'imposta di successione non si paga fino a franchigie elevate: nella maggior parte dei casi l\'unico costo è la pratica.',
+          'Se il valore dell\'auto supera la franchigia, l\'imposta è del 4% (eredi in linea retta) sul valore eccedente: la valutazione corretta dell\'auto è quindi un dato concreto da non improvvisare.',
+        ],
+      },
+      {
+        heading: 'Il passaggio di proprietà agli eredi',
+        paragraphs: [
+          'Una volta fatta la successione, il passaggio di proprietà segue la procedura standard:',
+        ],
+        list: [
+          'Costi: IPT provinciale (150–650 €) + diritti PRA (circa 27 €) + eventuale agenzia (50–150 €).',
+          'Documenti: certificato di proprietà, libretto, atto di successione o attestazione dell\'eredità.',
+          'Per le eredità tra familiari stretti, in molte province l\'IPT è ridotta: verifica con l\'agenzia di pratiche.',
+          'Il passaggio va fatto entro 60 giorni dal momento in cui l\'auto entra nell\'eredità.',
+        ],
+      },
+      {
+        heading: 'Bollo, assicurazione e revisione',
+        paragraphs: [
+          'Il bollo: se il defunto aveva già pagato per l\'anno, l\'erede non paga fino alla scadenza; altrimenti il bollo va pagato pro-quota. L\'assicurazione: la polizza va riallineata immediatamente (l\'erede può subentrare o stipularne una nuova): guidare un\'auto ereditata senza assicurazione è una violazione grave.',
+          'Controlla anche la revisione: se è scaduta o in scadenza, va rinnovata prima di circolare, e se non passa, la riparazione è a carico dell\'erede: includila nei costi.',
+        ],
+      },
+      {
+        heading: 'Tenere o vendere?',
+        paragraphs: [
+          'Se l\'auto non ti serve o è troppo vecchia per il tuo uso, puoi venderla subito: in quel caso il valore di mercato va comunque dichiarato in successione, e la vendita successiva segue le normali regole. Il consiglio pratico: verifica prima il valore reale di mercato del modello e anno, ti serve sia per la dichiarazione di successione sia per capire se conviene tenerla, venderla o rottamarla.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'come-pagare-auto-usata-sicurezza',
+    title: 'Come pagare un\'auto usata in sicurezza: metodi e trucchi',
+    description:
+      'Bonifico, assegno circolare, contanti o agenzia: i metodi di pagamento sicuri per comprare un\'auto usata da privato, gli acconti da evitare e le regole anti-truffa.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'La regola d\'oro: si paga dopo, non prima',
+        paragraphs: [
+          'La regola che elimina la maggior parte delle truffe è una sola: il pagamento avviene quando l\'operazione è completa, cioè a passaggio di proprietà fatto (o contestualmente, in agenzia di pratiche, davanti al professionista che firma la pratica). Chi chiede acconti "per riservare l\'auto", per "spese di spedizione" o verso conti esteri sta quasi certamente truffando.',
+          'Un venditore serio non ha fretta di incassare prima che tu veda, provi e verifichi l\'auto.',
+        ],
+      },
+      {
+        heading: 'I metodi di pagamento sicuri',
+        paragraphs: [
+          'I metodi consigliati, in ordine di sicurezza:',
+        ],
+        list: [
+          'Bonifico bancario: tracciato, verificabile e con la possibilità di recuperare i fondi in caso di frode denunciata: il metodo più usato e consigliato.',
+          'Assegno circolare: emesso dalla banca a nome del venditore: il pagamento è garantito dalla banca stessa (verifica che sia non trasferibile e intestato correttamente).',
+          'Pagamento in agenzia di pratiche auto: ti occupi del passaggio e paghi lì, di fronte al professionista: la soluzione più protetta per entrambe le parti.',
+          'Contanti: possibile entro i limiti di legge, ma senza tracciabilità: sconsigliato sopra poche migliaia di euro.',
+        ],
+      },
+      {
+        heading: 'Gli acconti: quando sono leciti',
+        paragraphs: [
+          'Un piccolo acconto (5–10%) può essere lecito se firmate un compromesso scritto che vincola il venditore, ma è sempre un rischio: prima di qualsiasi anticipo devi aver visto l\'auto, fatto la prova su strada, verificato i documenti e la visura PRA.',
+          'Le richieste tipiche delle truffe sono: acconto immediato per "tenere il prezzo", bonifici verso carte prepagate o conti esteri, pagamento tramite servizi di trasferimento istantaneo non tracciabili, o acquisti "a distanza" con sole foto.',
+        ],
+      },
+      {
+        heading: 'Le verifiche da fare prima di pagare',
+        paragraphs: [
+          'Prima di trasferire un euro:',
+        ],
+        list: [
+          'Verifica la visura PRA: nessun fermo, ipoteca o pignoramento sull\'auto.',
+          'Controlla che targa, telaio e libretto coincidano con l\'auto che hai davanti.',
+          'Fai la prova su strada e controlla lo stato reale (o l\'analisi visiva con una foto).',
+          'Verifica il valore medio di mercato: un prezzo molto sotto la media è un campanello d\'allarme.',
+          'Scrivi un documento di vendita completo, firmato da entrambi, con prezzo e dati del veicolo.',
+        ],
+      },
+      {
+        heading: 'E se qualcosa va storto?',
+        paragraphs: [
+          'Se hai pagato e l\'auto non ti è stata consegnata o non corrisponde a quanto dichiarato, denuncia subito: bonifici e assegni circolari sono tracciabili, e la querela alla polizia postale o alle forze dell\'ordine può bloccare i fondi. Conserva sempre ricevute, conversazioni e annunci: sono le prove che fanno la differenza.',
+        ],
+      },
+    ],
+    cta: 'controllo-usato',
+  },
+  {
+    slug: 'come-leggere-libretto-di-circolazione',
+    title: 'Come leggere il libretto di circolazione: tutte le voci',
+    description:
+      'Libretto di circolazione: significato di tutte le voci (voci tecniche, classi Euro, pesi, potenza) e come verificare che i dati corrispondano all\'auto prima dell\'acquisto.',
+    published: '2026-08-11',
+    category: 'acquisto',
+    sections: [
+      {
+        heading: 'Cos\'è il libretto di circolazione',
+        paragraphs: [
+          'Il libretto di circolazione (oggi Carta di Circolazione, in molti casi unificata nel Documento Unico con il certificato di proprietà) è il documento che identifica il veicolo e ne descrive le caratteristiche tecniche e legali. È il primo documento da leggere quando valuti un\'auto usata: quasi tutte le incoerenze si scoprono lì.',
+          'Le voci del libretto seguono una numerazione standard europea (voci A, B, C...): conoscerle ti permette di verificare in due minuti se l\'auto corrisponde a quanto dichiarato.',
+        ],
+      },
+      {
+        heading: 'Le voci di identificazione del veicolo',
+        paragraphs: [
+          'Le voci principali da controllare per identificare l\'auto:',
+        ],
+        list: [
+          'A: targa del veicolo: deve coincidere con quella montata sull\'auto.',
+          'B: data di prima immatricolazione: da lì partono età, garanzia e svalutazione.',
+          'C.1 e C.1.a: cognome e nome del proprietario: verifica che sia il venditore (o il concessionario).',
+          'E: numero di telaio (VIN): il controllo più importante: deve combaciare con quello stampigliato sul veicolo.',
+          'D.1 e D.2: marca e tipo: la denominazione commerciale del modello.',
+        ],
+      },
+      {
+        heading: 'Le voci tecniche che contano',
+        paragraphs: [
+          'Le voci tecniche dicono com\'è fatta l\'auto:',
+        ],
+        list: [
+          'P.1: cilindrata (cm³).',
+          'P.2: potenza in kW: da verificare anche per superbollo (oltre 185 kW) e limiti neopatentati.',
+          'P.3: tipo di alimentazione: benzina, diesel, ibrida, elettrica, GPL, metano.',
+          'V.9: classe Euro di omologazione: decide accessi a ZTL e blocchi del traffico.',
+          'F.1/F.2: massa massima e a vuoto: per il rapporto potenza/peso dei neopatentati e per i carichi.',
+          'Q: rapporto potenza/massa, utile per le verifiche di legge.',
+        ],
+      },
+      {
+        heading: 'Le verifiche incrociate da fare prima dell\'acquisto',
+        paragraphs: [
+          'Il libretto non basta da solo: va incrociato con l\'auto fisica e con la visura:',
+        ],
+        list: [
+          'Confronta il VIN del libretto (voce E) con quello stampigliato su cruscotto, montante e vano motore.',
+          'Verifica che la targa montata corrisponda alla voce A.',
+          'Controlla che la cilindrata e la potenza corrispondano al modello dichiarato: alterazioni possibili su allestimenti e motori.',
+          'Confronta la classe Euro (V.9) con l\'anno di immatricolazione: incoerenze possibili su auto importate.',
+          'Occhio a documenti "rifatti" o danneggiati: un libretto recentemente ristampato va verificato con la visura.',
+        ],
+      },
+      {
+        heading: 'Perché il libretto incide sul valore',
+        paragraphs: [
+          'Le voci del libretto determinano valore e costi: la classe Euro incide su circolazione e prezzo di rivendita, la potenza su bollo e superbollo, l\'alimentazione su incentivi e limiti. Prima di valutare o comprare, leggi il libretto insieme ai dati di mercato: un\'auto con classe Euro bassa o potenza che comporta superbollo può costare più di quanto sembri.',
+        ],
+      },
+    ],
+    cta: 'controllo-usato',
+  },
+  {
+    slug: 'start-stop-come-funziona-problemi',
+    title: 'Start&Stop: come funziona, a cosa serve e problemi comuni',
+    description:
+      'Il sistema Start&Stop spegne il motore in sosta per risparmiare carburante: come funziona, quando si disattiva, problemi comuni e perché serve una batteria dedicata.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Cos\'è e come funziona lo Start&Stop',
+        paragraphs: [
+          'Lo Start&Stop spegne automaticamente il motore quando l\'auto si ferma (semaforo, traffico, sosta breve) e lo riaccende quando rilasci il freno o premi la frizione. Lo scopo è evitare il consumo di carburante a motore acceso da fermo: nelle percorrenze urbane può far risparmiare il 5–10% di carburante.',
+          'Il sistema è presente sulla maggior parte delle auto moderne a benzina e diesel: l\'avviamento è gestito da un motorino rinforzato o da un generatore-starter (BSG) e da una batteria dedicata.',
+        ],
+      },
+      {
+        heading: 'Quando NON si attiva',
+        paragraphs: [
+          'Lo Start&Stop è intelligente: si disattiva da solo quando le condizioni non sono ideali:',
+        ],
+        list: [
+          'Batteria carica sotto una certa soglia: il sistema la protegge non spegnendo il motore.',
+          'Temperatura motore non ottimale: motore freddo o troppo caldo.',
+          'Clima in funzione con richiesta massima: per non compromettere l\'aria condizionata.',
+          'Pendenza rilevante: per evitare di ripartire in salita a motore spento.',
+          'Parabrezza in sbrinamento o spia di funzione attiva.',
+          'In alcune auto con cambio manuale: se non premi la frizione a fondo.',
+        ],
+      },
+      {
+        heading: 'La batteria dedicata: l\'errore più comune',
+        paragraphs: [
+          'Le auto con Start&Stop hanno bisogno di una batteria speciale (EFB o AGM), più resistente ai cicli di scarica continui. Sostituirla con una batteria normale economica è l\'errore più diffuso: la batteria standard si degrada in pochi mesi e lo Start&Stop smette di funzionare.',
+          'I costi: una batteria EFB costa 100–180 €, una AGM 150–300 €, montaggio incluso. Sull\'usato, verifica sempre l\'età e il tipo di batteria: una batteria vecchia è un costo immediato da mettere in conto.',
+        ],
+      },
+      {
+        heading: 'Problemi e falsi miti',
+        paragraphs: [
+          'I problemi più comuni segnalati dai proprietari:',
+        ],
+        list: [
+          'Start&Stop che non si attiva mai: quasi sempre batteria in declino o soglia non raggiunta.',
+          'Spegnimenti bruschi o riavvii tardivi: possibili problemi al motorino di avviamento o al sensore.',
+          'Vibrazioni all\'avviamento: motorino di avviamento rinforzato usurato (costo 200–500 €).',
+          'Falso mito: "consuma più di quanto risparmia" — non è vero nei cicli urbani reali, dove il risparmio è misurato e documentato.',
+          'Falso mito: "spegne il motore in modo dannoso" — i motori moderni sono progettati per migliaia di cicli di avviamento.',
+        ],
+      },
+      {
+        heading: 'Come conviverci al meglio',
+        paragraphs: [
+          'Se il sistema ti infastidisce, quasi tutte le auto hanno un pulsante per disattivarlo (va ripetuto a ogni avvio): disattivarlo non è dannoso, ma rinunci al risparmio. In città, invece, lascialo attivo: nei percorsi stop-and-go è il modo più semplice per ridurre i consumi senza cambiare nulla.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'auto-non-parte-cosa-fare',
+    title: 'L\'auto non parte: cause, diagnosi e soluzioni',
+    description:
+      'Auto che non si avvia? Le cause più comuni (batteria, motorino, candele, chiave) e cosa fare: cavi, booster, spinta e quando chiamare il soccorso stradale.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Il primo ascolto: cosa fa l\'auto quando giri la chiave',
+        paragraphs: [
+          'Il comportamento dell\'auto all\'avvio dice già molto sulla causa:',
+        ],
+        list: [
+          'Niente di niente, quadro spento: batteria completamente scarica, morsetti corrosi o contatto della chiave.',
+          'Clic, clic, clic (senza giro motore): batteria quasi scarica o motorino di avviamento bloccato.',
+          'Giro motore lento e faticoso: batteria in declino o troppo fredda.',
+          'Gira veloce ma non parte: manca carburante, scintilla (candele) o c\'è un\'anomalia elettronica (spia motore).',
+          'Parte e si spegne subito: possibili problemi di alimentazione, immobilitizzatore o chiave non riconosciuta.',
+        ],
+      },
+      {
+        heading: 'Batteria scarica: come avviare con i cavi',
+        paragraphs: [
+          'La causa più frequente è la batteria: ecco come procedere in sicurezza:',
+        ],
+        list: [
+          'Parcheggia l\'auto "donatrice" vicino (senza che si tocchino) e spegni entrambi i motori.',
+          'Collega il cavo rosso al polo positivo della batteria scarica e poi al positivo della donatrice.',
+          'Collega il cavo nero al negativo della donatrice e poi a una massa metallica dell\'auto scarica (mai al polo negativo della batteria).',
+          'Avvia la donatrice, aspetta 1–2 minuti, poi avvia l\'auto scarica.',
+          'Togli i cavi in ordine inverso e tieni il motore acceso 15–20 minuti (o guida) per ricaricare.',
+        ],
+      },
+      {
+        heading: 'Alternative: booster, spinta e soccorso',
+        paragraphs: [
+          'I booster (batterie portatili tipo "power bank" per auto, 40–120 €) avviano l\'auto senza bisogno di un\'altra vettura: vanno caricati e conservati a bordo. La spinta funziona solo con cambio manuale: inserisci la seconda, premi la frizione, spingi e lascia la frizione quando prendi velocità.',
+          'Se l\'auto non parte dopo i tentativi o il problema si ripete, non insistere: chiama il soccorso stradale (incluso in quasi tutte le polizze assicurative): il guasto può essere al motorino di avviamento, all\'alternatore o all\'elettronica.',
+        ],
+      },
+      {
+        heading: 'Perché non parte (causa non batteria)',
+        paragraphs: [
+          'Se la batteria è a posto ma l\'auto non parte:',
+        ],
+        list: [
+          'Candele usurate o iniettori sporchi (benzina), candelette (diesel): costo 100–300 €.',
+          'Pompa carburante in silenzio: senti il ronzio all\'accensione: se manca, è un guasto da officina.',
+          'Immobilizzatore o chiave non riconosciuta: prova con la seconda chiave.',
+          'Sensore di posizione (crankshaft) o centralina: richiede diagnosi elettronica.',
+          'Spia motore accesa con mancato avvio: non forzare, meglio la diagnosi.',
+        ],
+      },
+      {
+        heading: 'Prevenzione: la batteria non muore per caso',
+        paragraphs: [
+          'Le batterie durano in media 4–6 anni: dopo i 4 anni i freddi invernali e le soste lunghe le mettono alla prova. Previeni: controlla i morsetti ogni tanto (se hanno il "bicarbonato" bianco, puliscili), evita di lasciare consumatori accesi a motore spento, e sui percorsi brevi ripetuti ricarica la batteria ogni tanto con un caricabatterie.',
+          'Quando compri un\'usata, chiedi l\'età della batteria: una batteria vicina alla fine è un costo immediato di 100–300 € da scontare sul prezzo.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'auto-si-surriscalda-cosa-fare',
+    title: 'L\'auto si surriscalda: cosa fare subito e cause',
+    description:
+      'Indicatore temperatura in rosso? Cosa fare per non rovinare il motore, le cause del surriscaldamento (liquido, termostato, ventola) e come prevenirlo.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'La prima regola: fermarsi',
+        paragraphs: [
+          'Quando l\'indicatore della temperatura entra in zona rossa (o si accende la spia), la priorità assoluta è spegnere il motore e fermarsi in sicurezza: il surriscaldamento prolungato deforma la testata, rompe la guarnizione e può rovinare il motore in modo irreparabile (costi da 1.500 a 5.000+ €).',
+          'Appena possibile, fermati al sicuro, spegni il motore e apri il cofano solo dopo che si è raffreddato: il vapore e il liquido bollente possono ustionare.',
+        ],
+      },
+      {
+        heading: 'Cosa NON fare assolutamente',
+        paragraphs: [
+          'Gli errori più pericolosi in caso di surriscaldamento:',
+        ],
+        list: [
+          'Non aprire il tappo del radiatore a motore caldo: il liquido esce a pressione e scotta.',
+          'Non versare acqua fredda sul motore caldo: lo shock termico può crepare le parti in ghisa.',
+          'Non ripartire "per arrivare a casa" con la spia accesa: è il modo più rapido di rovinare il motore.',
+          'Non ignorare l\'indicatore "perché è sempre stato così": a 110–120 °C il motore è già in sofferenza.',
+        ],
+      },
+      {
+        heading: 'Le cause più comuni',
+        paragraphs: [
+          'Dopo il raffreddamento, le cause tipiche del surriscaldamento:',
+        ],
+        list: [
+          'Liquido di raffreddamento insufficiente: livello basso per perdite o evaporazione.',
+          'Termostato bloccato chiuso: il liquido non circola verso il radiatore (costo 80–200 €).',
+          'Ventola di raffreddamento non funzionante (fusibile, sensore, motore ventola).',
+          'Pompa dell\'acqua usurata: perde o non spinge il liquido (costo 200–500 €).',
+          'Radiatore intasato o ostruito (anche da detriti o insetti).',
+          'Cinghia o catena di distribuzione in ritardo (raro ma grave).',
+        ],
+      },
+      {
+        heading: 'Come fare il rabbocco corretto',
+        paragraphs: [
+          'A motore completamente freddo, controlla il livello nel vaso di espansione e rabbocca con il liquido di raffreddamento specifico (mai acqua sola: il liquido protegge da corrosione e congelamento). Se il livello scende di nuovo in fretta, c\'è una perdita: cerca macchie sotto l\'auto e vapore dal motore.',
+          'Regola pratica: una perdita di liquido non va mai "sistemata" con il solo rabbocco: ogni litro perso è una goccia di guasto che si sta allargando.',
+        ],
+      },
+      {
+        heading: 'Prevenzione sul lungo periodo',
+        paragraphs: [
+          'Il liquido di raffreddamento va sostituito secondo i tempi della casa (in genere ogni 4–6 anni o 60.000–100.000 km): con il tempo perde le proprietà anticorrosive. Controlla il livello almeno a ogni cambio stagione e, sull\'usato, verifica che lo storico dei tagliandi includa il cambio liquido: un\'auto che ha sempre usato acqua invece di liquido è un rischio noto.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'rumori-auto-diagnosi-significato',
+    title: 'Rumori dell\'auto: cosa indicano e come diagnosticarli',
+    description:
+      'Fischi, ticchettii, stridori, sferragliamenti: il significato dei rumori dell\'auto, quando sono normali e quando richiedono un intervento in officina.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'L\'auto parla: impariamo ad ascoltarla',
+        paragraphs: [
+          'I rumori sono il primo segnale di usura di un\'auto: saperli riconoscere permette di intervenire quando l\'intervento costa poco, invece che quando il guasto è ormai serio. La regola base: un rumore nuovo, che prima non c\'era, va sempre indagato.',
+          'Annota quando appare il rumore: a freddo o a caldo, in frenata, in curva, a velocità costante o in accelerazione: è l\'informazione più utile per il meccanico.',
+        ],
+      },
+      {
+        heading: 'I rumori in frenata',
+        paragraphs: [
+          'I rumori quando premi il freno sono tra i più facili da interpretare:',
+        ],
+        list: [
+          'Sfregamento metallico acuto: pastiglie a fine vita (il sensore metallico tocca il disco): sostituzione urgente.',
+          'Stridio in frenata su auto ferma da poco (umidità/ruggine sui dischi): spesso normale, sparisce dopo poche frenate.',
+          'Ticchettio ritmico in rotazione: pietra o corpo estraneo tra pastiglia e disco: controlla subito.',
+          'Vibrazione al volante in frenata: dischi deformati: vanno rettificati o sostituiti.',
+        ],
+      },
+      {
+        heading: 'Rumori da motore e trasmissione',
+        paragraphs: [
+          'Sotto il cofano i rumori raccontano molto:',
+        ],
+        list: [
+          'Ticchettio metallico a caldo: può essere il gioco delle valvole (normale su alcuni motori) o un problema di lubrificazione: controlla il livello olio.',
+          'Fischio in accelerazione: spesso la cinghia (accessori o distribuzione) o il tenditore: va controllato, una cinghia rotta lascia a piedi.',
+          'Fruscio o "soffio" dallo scarico: marmitta o collettore forati: costo 200–600 € secondo il pezzo.',
+          'Stridio della cinghia a freddo: tipico della cinghia degli accessori usurata o bagnata: sparisce a caldo ma va sostituita.',
+          'Rumore sordo in accelerazione in curva: possibile problema ai semiassi (giunti omocinetici).',
+        ],
+      },
+      {
+        heading: 'Rumori da sospensioni e sterzo',
+        paragraphs: [
+          'I rumori che arrivano dalle ruote o dalle sospensioni:',
+        ],
+        list: [
+          'Rumore "scuotendo" su dossi e buche: silent block, bracci o ammortizzatori usurati.',
+          'Stridio o cigolio in curva: barra antirollio o boccole a secco.',
+          'Ticchettio in curva a bassa velocità: giunto omocinetico del semiasse a fine vita.',
+          'Rumore di rotolamento che cresce con la velocità: cuscinetto della ruota usurato (va sostituito prima che si blocchi).',
+          'Stridio dello sterzo a ruote ferme: servosterzo o cremagliera da controllare.',
+        ],
+      },
+      {
+        heading: 'Quando è "normale" e quando no',
+        paragraphs: [
+          'Alcuni rumori sono fisiologici: il ticchettio degli iniettori diesel a freddo, il fruscio aerodinamico ad alta velocità, il rumore dei pneumatici invernali. Altri sono sempre un segnale: qualsiasi rumore nuovo, crescente o accompagnato da spie accese va diagnosticato.',
+          'Il modo più economico per capire: una diagnosi in officina (30–60 €) che identifica la causa senza intervento: conoscerla prima ti permette di confrontare i preventivi e scegliere quando intervenire.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'lavare-auto-correttamente',
+    title: 'Lavare l\'auto correttamente: guida al lavaggio fai da te',
+    description:
+      'Come lavare l\'auto senza rovinare la vernice: prodotti, tecnica, cerchi, interni e gli errori che lasciano aloni e micrograffi.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Perché il lavaggio conta anche per il valore',
+        paragraphs: [
+          'Un\'auto pulita non è solo più bella: la vernice ben tenuta protegge dalla ruggine e dallo sbiadimento, e un\'auto curata si vende più in fretta e a prezzo migliore. Ma un lavaggio fatto male può fare più danni del fango: spugne sporche, detersivi sbagliati e sole pieno lasciano micrograffi e aloni.',
+          'La regola d\'oro: mai lavare un\'auto sporca con movimenti circolari e mai su vernice calda.',
+        ],
+      },
+      {
+        heading: 'La tecnica del lavaggio a mano',
+        paragraphs: [
+          'Il metodo che rispetta la vernice:',
+        ],
+        list: [
+          'Pre-lavaggio: sciacqua abbondantemente l\'auto per togliere sabbia e polvere prima di toccarla con la spugna.',
+          'Detersivo specifico auto (mai sapone per piatti: sgrassa e toglie la cera).',
+          'Spugna o guanto in microfibra con movimenti rettilinei, dal tetto verso il basso.',
+          'Sciacqua per pannello, non tutta l\'auto insieme: il detersivo non deve asciugare sulla vernice.',
+          'Asciugatura con pelle di daino o panno in microfibra pulito: l\'asciugatura all\'aria lascia aloni calcarei.',
+        ],
+      },
+      {
+        heading: 'Cerchi, interni e vetri',
+        paragraphs: [
+          'Le zone che si rovinano di più con il lavaggio:',
+        ],
+        list: [
+          'Cerchi: i detersivi acidi per cerchi vanno usati con cautela (corrodono i cerchi in lega): meglio un detergente neutro e una spazzola dedicata.',
+          'Vetri: mai lo stesso panno usato per la carrozzeria: usa un panno specifico e prodotti per vetri, all\'interno con movimenti orizzontali e all\'esterno verticali (per individuare gli aloni).',
+          'Interni: aspirazione prima, poi panni in microfibra leggermente inumiditi; niente prodotti siliconici sugli interni (attirano la polvere e rendono il cruscotto riflettente).',
+          'Tappetini: lavali e asciugali fuori dall\'auto per evitare l\'umidità in abitacolo.',
+        ],
+      },
+      {
+        heading: 'Gli errori che costano caro',
+        paragraphs: [
+          'Gli errori più comuni che rovinano la vernice:',
+        ],
+        list: [
+          'Lavare al sole: i detersivi asciugano in fretta e lasciano aloni e macchie.',
+          'Usare spugne e panni sporchi di sabbia: è la causa principale dei micrograffi a ragnatela.',
+          'Lavaggio in autolavaggio "a rulli" su auto con vernice delicata: accettabile, ma preferisci i tunnel con lavaggio a getto (touchless).',
+          'Non asciugare mai: il calcare dell\'acqua lascia aloni permanenti sulla vernice.',
+          'Usare la pressione alta su guarnizioni, fari e sensori: l\'acqua può infiltrarsi.',
+        ],
+      },
+      {
+        heading: 'Cera e protezione: la manutenzione che paga',
+        paragraphs: [
+          'La cera protegge la vernice e la fa durare: un trattamento con cera o sealant due volte l\'anno (costo 20–50 € fai da te) mantiene brillantezza e protegge da raggi UV e inquinamento. Un\'auto con vernice in ottime condizioni vale più di una con la stessa meccanica ma la carrozzeria rovinata: la differenza si vede anche in fase di valutazione.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'preparare-auto-viaggio-lungo',
+    title: 'Preparare l\'auto per un viaggio lungo: checklist completa',
+    description:
+      'Controlli da fare prima di un viaggio lungo: gomme, freni, liquidi, clima, documenti e attrezzatura di emergenza. La checklist per partire sereni.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Perché i viaggi lunghi mettono alla prova l\'auto',
+        paragraphs: [
+          'Un viaggio lungo porta l\'auto a lavorare per ore a regime costante, con carico pieno e temperature magari estreme: è il test più impegnativo dopo la guida in città. La maggior parte dei guasti in viaggio si può prevenire con 30 minuti di controlli prima di partire.',
+          'La regola: controlla ciò che si surriscalda, ciò che si consuma e ciò che deve frenare.',
+        ],
+      },
+      {
+        heading: 'La checklist meccanica',
+        paragraphs: [
+          'Prima di partire, verifica:',
+        ],
+        list: [
+          'Pneumatici: pressione (anche quella della ruota di scorta) e battistrada: su un viaggio in autostrada un\'auto scarica aumenta consumi e rischio forature.',
+          'Liquido di raffreddamento: livello e integrità dei tubi: il primo motivo di fermo in estate.',
+          'Olio motore: livello tra minimo e massimo, con i km al limite considera il cambio prima di partire.',
+          'Freni: se senti rumori o il pedale è "lungo", falli controllare prima, non durante.',
+          'Lavavetri e tergicristalli: le strade lunghe si sporcano in fretta.',
+          'Climatizzatore: verifica che raffreddi prima del viaggio: una ricarica costa 50–100 € e va fatta in officina.',
+        ],
+      },
+      {
+        heading: 'Documenti e attrezzatura',
+        paragraphs: [
+          'Controlla che ci sia tutto, e in regola:',
+        ],
+        list: [
+          'Libretto di circolazione, patente e assicurazione valida (polizza o documento).',
+          'Revisione non scaduta: è obbligatoria e controllata sulle strade.',
+          'Triangolo, giubbotto riflettente e kit di pronto soccorso (obbligatori in Italia).',
+          'Cavi di avviamento, torcia, guanti e acqua: l\'attrezzatura di base per le emergenze.',
+          'Catene a bordo se attraversi zone con obbligo invernale (o trasportale in montagna fuori stagione).',
+          'Se viaggi all\'estero: estintore e attrezzature richieste dal paese di destinazione.',
+        ],
+      },
+      {
+        heading: 'Il carico: le regole di sicurezza',
+        paragraphs: [
+          'Il carico influisce su consumi, frenata e stabilità:',
+        ],
+        list: [
+          'Non superare la massa massima indicata sul libretto: a pieno carico la frenata si allunga.',
+          'Carico pesante in basso e verso il centro, mai appoggiato sul lunotto.',
+          'Bagagliaio pieno fino al tetto? Ripartisci il peso e blocca gli oggetti che potrebbero muoversi in caso di frenata brusca.',
+          'Portabagagli al tetto: aumenta i consumi del 10–20% in autostrada: usa il portapacchi solo quando serve.',
+          'Mai oggetti sciolti in abitacolo: in caso di frenata brusca diventano proiettili.',
+        ],
+      },
+      {
+        heading: 'Durante il viaggio',
+        paragraphs: [
+          'Nei primi 15 minuti ascolta l\'auto: rumori nuovi o spie accese in quel momento si risolvono prima di arrivare. Fermati ogni 2 ore (il limite di attenzione, oltre che la prudenza), e se senti vibrazioni, fumi o la temperatura sale, fermati subito: il guasto che si ferma in tempo costa cento volte meno di quello che si aggrava.',
+        ],
+      },
+    ],
+    cta: 'revisione-auto',
+  },
+  {
+    slug: 'adblue-cosa-sapere-diesel',
+    title: 'AdBlue: cos\'è, quando rabboccare e problemi comuni',
+    description:
+      'AdBlue nei diesel moderni: a cosa serve, quando rabboccare, quanto costa, e cosa succede se finisce. Guida pratica senza ansie.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Cos\'è l\'AdBlue',
+        paragraphs: [
+          'L\'AdBlue è un liquido a base di urea (soluzione al 32,5%) iniettato nel sistema di scarico dei diesel moderni (sistema SCR) per abbattere gli ossidi di azoto: i gas passano attraverso un catalizzatore dove l\'urea li trasforma in azoto e vapore acqueo, innocui.',
+          'I diesel Euro 6 hanno tutti il sistema SCR: senza AdBlue, il motore non è in grado di rispettare le emissioni e l\'auto prima o poi si rifiuta di partire.',
+        ],
+      },
+      {
+        heading: 'Quando e come rabboccare',
+        paragraphs: [
+          'Il consumo di AdBlue è proporzionale al diesel: in media 1 litro ogni 1.000 km, ma varia molto con il tipo di guida (più ne consuma in autostrada e a pieno carico). Il tappo del serbatoio AdBlue è di solito accanto a quello del gasolio, con il colore blu.',
+          'Rabbocca quando l\'auto te lo segnala (spia o messaggio con i km rimanenti): l\'AdBlue si trova in taniche da 1,5–10 litri al supermercato, in stazioni di servizio e in officina (costo 0,7–1 €/litro in tanica, meno alla pompa).',
+        ],
+      },
+      {
+        heading: 'Cosa succede se finisce',
+        paragraphs: [
+          'L\'auto non si ferma all\'improvviso: prima avvisa con un conto alla rovescia dei km, poi riduce progressivamente la potenza (modalità "limp home") e infine, se ignori tutto, si rifiuta di ripartire dopo lo spegnimento: non è un guasto, è un blocco di sicurezza anti-inquinamento.',
+          'La regola: mai ignorare l\'avviso di AdBlue. Rabboccare a metà serbatoio costa 15–30 € e toglie ogni rischio di restare fermi nel momento peggiore.',
+        ],
+      },
+      {
+        heading: 'I problemi comuni del sistema SCR',
+        paragraphs: [
+          'Quando i problemi ci sono, di solito sono questi:',
+        ],
+        list: [
+          'Spia del sistema emissioni accesa: sensore di qualità AdBlue o livello: spesso si risolve con un rabbocco o con la diagnosi.',
+          'Cristallizzazione dell\'urea: se l\'AdBlue si deposita (auto ferma a lungo o rabbocco di qualità scadente), può intasare l\'iniettore.',
+          'Iniettore AdBlue intasato o difettoso: costo di sostituzione 300–700 € con manodopera.',
+          'Sensore di livello difettoso: segnala AdBlue basso anche a serbatoio pieno.',
+          'Guasto del catalizzatore SCR: l\'intervento più costoso (1.500–3.000 €): raro se l\'impianto è mantenuto.',
+        ],
+      },
+      {
+        heading: 'AdBlue e usato: cosa verificare',
+        paragraphs: [
+          'Quando compri un diesel Euro 6 usato, controlla che l\'auto non abbia il sistema SCR "disattivato" o un "emulator" (manomissione illegale, oltre che motivo di bocciatura alla revisione): i segnali sono un consumo di AdBlue nullo o la mancanza di adesivi ufficiali. Chiedi lo storico del rabbocco e controlla che la spia del sistema emissioni sia spenta a caldo.',
+          'E ricorda: un\'auto con SCR efficiente consuma un litro di AdBlue ogni mille km: se il proprietario dice di non averlo mai rabboccato, qualcosa non torna.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'guida-pioggia-neve-ghiaccio',
+    title: 'Guidare con pioggia, neve e ghiaccio: tecniche e sicurezza',
+    description:
+      'Aquaplaning, distanze di sicurezza, partenza sul ghiaccio e frenata corretta: le tecniche per guidare in sicurezza con maltempo e le attrezzature giuste.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Le distanze: il problema numero uno',
+        paragraphs: [
+          'Sul bagnato lo spazio di frenata raddoppia rispetto all\'asciutto: a 50 km/h servono circa 25–30 metri di frenata su asciutto e 45–60 sul bagnato. Sulla neve compatta si arriva a triplicare: la prima regola del maltempo è aumentare la distanza dal veicolo che precede e ridurre la velocità.',
+          'La regola dei 4 secondi: scegli un punto di riferimento e conta: se lo raggiungi in meno di 4 secondi, sei troppo vicino.',
+        ],
+      },
+      {
+        heading: 'L\'aquaplaning: come uscirne',
+        paragraphs: [
+          'L\'aquaplaning si verifica quando il pneumatico non riesce a evacuare l\'acqua e l\'auto "galleggia": lo sterzo diventa leggero e l\'auto non risponde. Come comportarsi:',
+        ],
+        list: [
+          'Non frenare bruscamente: rilascia delicatamente l\'acceleratore.',
+          'Non girare il volante bruscamente: mantieni la traiettoria dritta.',
+          'Non agitarsi sui freni: l\'ABS va tenuto premuto solo se serve davvero.',
+          'Togli il piede dall\'acceleratore e aspetta che il contatto torni: l\'aquaplaning dura pochi secondi.',
+          'Prevenzione: battistrada sopra i 3 mm e velocità adeguata all\'acqua (più l\'acqua è alta, più devi ridurre).',
+        ],
+      },
+      {
+        heading: 'Partenza e guida su neve e ghiaccio',
+        paragraphs: [
+          'Le tecniche per muoversi sulla neve:',
+        ],
+        list: [
+          'Partenza: inserisci la seconda marcia (sul ghiaccio) e rilascia la frizione con dolcezza: la coppia ridotta evita il pattinamento.',
+          'Frenata: freni con il motore (scalata) e poi con il pedale a pulsazioni leggere: l\'ABS e l\'ESP fanno il resto se li lasci lavorare.',
+          'Curve: entra largo, rallenta prima della curva e accelera delicatamente in uscita: mai frenare in curva.',
+          'Salite: acquista velocità prima della salita e non fermarti a metà: ripartire su una salita innevata è quasi impossibile.',
+          'In salita su ghiaccio con due ruote motrici: non forzare: se l\'auto non sale, non insistere: perdi aderenza e controllo.',
+        ],
+      },
+      {
+        heading: 'L\'attrezzatura che fa la differenza',
+        paragraphs: [
+          'Gomme invernali o 4 stagioni con marcatura 3PMSF (obbligatorie dove previsto dalle ordinanze), catene o calze a bordo, e poi: lavavetri antigelo, raschietto, sbrinatore e una pala piccola. Controlla anche i tergicristalli e le luci: la visibilità è la tua prima protezione.',
+          'Con ghiaccio visibile o black ice, la velocità prudente è l\'unica vera difesa: nessun sistema elettronico vince la fisica.',
+        ],
+      },
+      {
+        heading: 'Il comportamento in caso di sbandata',
+        paragraphs: [
+          'Se l\'auto inizia a sbandare, il primo istinto è sbagliare: guarda dove vuoi andare, non dove stai andando, riduci gradualmente l\'acceleratore e correggi con il volante con piccoli movimenti nella direzione dello sbandamento. Con l\'ESP attivo, l\'elettronica interviene da sola: non lottare contro di essa, accompagnala.',
+        ],
+      },
+    ],
+    cta: 'revisione-auto',
+  },
+  {
+    slug: 'incidente-stradale-cosa-fare',
+    title: 'Incidente stradale: cosa fare, in ordine e senza errori',
+    description:
+      'Cosa fare subito dopo un incidente: sicurezza, soccorsi, constatazione amichevole, denuncia, perizia e i tempi per non perdere diritti.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'I primi 60 secondi: sicurezza',
+        paragraphs: [
+          'La priorità assoluta dopo un incidente è la sicurezza, non la discussione: metti la freccia di emergenza, fermati in sicurezza se possibile, indossa il giubbotto riflettente, posiziona il triangolo (obbligatorio fuori dai centri abitati) e chiama i soccorsi se ci sono feriti (112) o se la strada è bloccata.',
+          'Se ci sono feriti: non spostarli (salvo pericolo imminente come incendio), non togliere il casco ai motociclisti, e mantieni la calma: le informazioni raccolte nei primi minuti valgono più di qualsiasi discussione.',
+        ],
+      },
+      {
+        heading: 'La constatazione amichevole (CID)',
+        paragraphs: [
+          'La constatazione amichevole (modulo blu) è il documento che descrive le dinamiche dell\'incidente: compilala con cura sul posto, possibilmente con l\'altro conducente, indicando: luogo e ora, dati dei veicoli e delle polizze, danni visibili e una descrizione semplice e sincera della dinamica.',
+          'Regole d\'oro: firma solo ciò che è vero (non firmare "per accontentare"), segna le caselle dei testimoni se presenti, e scatta foto del luogo, dei veicoli e delle posizioni: sono la prova più forte in caso di contestazione.',
+        ],
+      },
+      {
+        heading: 'Quando denunciare e quali tempi',
+        paragraphs: [
+          'La denuncia di sinistro alla propria assicurazione va fatta entro 3 giorni dall\'incidente (la polizza indica il termine, spesso 3 giorni): con la constatazione amichevole firmata, la denuncia è rapida e permette il risarcimento diretto se l\'altro veicolo è assicurato.',
+          'Senza constatazione firmata o in caso di contestazione, la denuncia va comunque fatta e l\'incidente va gestito con la compagnia, che valuterà le responsabilità. Se ci sono feriti gravi o il conducente è fuggito: denuncia alle forze dell\'ordine, sempre.',
+        ],
+      },
+      {
+        heading: 'La perizia e il risarcimento',
+        paragraphs: [
+          'Dopo la denuncia, la compagnia valuta i danni: per danni alla carrozzeria superiori alle soglie previste (o contestati), può nominare un perito che visiona il veicolo (perizia mobile) e definisce l\'importo del risarcimento. Se non condividi la valutazione, puoi far stimare i danni da un perito di parte o da un carrozziere di fiducia.',
+          'Su un\'usata, un incidente dichiarato influisce sul valore: se hai diritto a un risarcimento, fai includere anche la svalutazione del veicolo quando il danno è strutturale.',
+        ],
+      },
+      {
+        heading: 'Gli errori che costano cari',
+        paragraphs: [
+          'Gli errori più comuni dopo un incidente:',
+        ],
+        list: [
+          'Lasciare la scena senza constatazione: la tua parola contro la sua vale pochissimo.',
+          'Firmare un CID con dinamica non veritiera "per sbrigarsi": ammettere colpe che non hai.',
+          'Dichiarare danni non visibili o non veri: la compagnia verifica e può decadere dal risarcimento.',
+          'Non fotografare la scena: senza prove, le ricostruzioni si perdono.',
+          'Aspettare settimane per la denuncia: rischi di perdere diritti e rimborsi.',
+        ],
+      },
+    ],
+    cta: 'analisi-ai',
+  },
+  {
+    slug: 'multe-contestazione-punti-patente',
+    title: 'Multe auto: pagamento scontato, punti patente e contestazione',
+    description:
+      'Come funzionano le multe: pagamento entro 5 giorni, decurtazione punti, termini di notifica e come contestare un verbale. Guida pratica 2026.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'La regola dei 5 giorni: lo sconto',
+        paragraphs: [
+          'La maggior parte delle multe (eccesso di velocità, divieti di sosta, semaforo rosso) prevede lo sconto del 30% se il pagamento avviene entro 5 giorni dalla notifica o dalla contestazione immediata. Oltre i 5 giorni si paga l\'importo pieno entro i termini (in genere 60 giorni dalla notifica, 30 per alcune violazioni).',
+          'Esempio: una multa da 173 € piena costa 121,10 € entro 5 giorni: ricordarlo può valere decine di euro a verbale.',
+        ],
+      },
+      {
+        heading: 'La decurtazione dei punti',
+        paragraphs: [
+          'Alle multe di competenza si collega la decurtazione dei punti della patente: la maggior parte delle violazioni (velocità, semaforo, uso del cellulare) comporta la sottrazione di 2–10 punti. Il titolare della patente può indicare un conducente diverso (in tal caso i punti vengono tolti a lui) tramite comunicazione alla motorizzazione: la scelta va fatta entro i termini indicati nel verbale.',
+          'Se i punti finiscono (sotto 20 si è in "patente a punti ridotta", sotto 0 si perde la patente): controlla sempre il saldo punti sul Portale dell\'Automobilista.',
+        ],
+      },
+      {
+        heading: 'La notifica: se è invalida, la multa cade',
+        paragraphs: [
+          'Il verbale va notificato entro 90 giorni (per le violazioni con accertamento diretto) o 360 giorni (per le rilevazioni strumentali come gli autovelox senza contestazione immediata). La notifica deve avvenire al domicilio risultante dal PRA o dall\'anagrafe: un verbale notificato tardi o a un indirizzo errato è impugnabile.',
+          'Controlla sempre la data di notifica e la validità dei dati: errori formali (targa errata, indirizzo sbagliato) sono il motivo di impugnazione più frequente.',
+        ],
+      },
+      {
+        heading: 'Come contestare una multa',
+        paragraphs: [
+          'La contestazione si fa con il ricorso:',
+        ],
+        list: [
+          'Al giudice di pace (entro 30 giorni dalla notifica, senza spese di lite se si vince).',
+          'Al prefetto (entro 60 giorni, con le stesse possibilità di impugnazione).',
+          'Ricorso telematico o tramite avvocato: per importi rilevanti o violazioni tecniche (autovelox non omologato, segnaletica illeggibile) conviene un professionista.',
+          'Il ricorso sospende il termine di pagamento: non pagare prima di ricorrere (il pagamento equivale ad accettazione).',
+        ],
+      },
+      {
+        heading: 'Multe e acquisto di un\'usata',
+        paragraphs: [
+          'Le multe non pagate seguono il proprietario, ma possono "aggrapparsi" al veicolo: una cartella esattoriale non pagata può trasformarsi in fermo amministrativo. Per questo, prima di comprare un\'usata, la visura PRA (che rivela fermi e ipoteche) è un passaggio obbligato: costa pochi euro e ti evita di ereditare le multe del precedente proprietario insieme all\'auto.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'rinnovo-patente-scadenze',
+    title: 'Rinnovo patente: scadenze, visite mediche e costi nel 2026',
+    description:
+      'Ogni quanto si rinnova la patente, quali visite mediche servono, dove si fa (ASL, autoscuola, portale) e quanto costa: la guida completa al rinnovo 2026.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Le scadenze per età',
+        paragraphs: [
+          'La validità della patente dipende dall\'età: fino a 50 anni si rinnova ogni 10 anni, dai 50 ai 70 ogni 5, dai 70 agli 80 ogni 3, e oltre gli 80 ogni 2 anni (con eventuale periodo più breve in base alle valutazioni del medico). La scadenza è indicata sulla patente stessa: non serve aspettare il sollecito.',
+          'Guidare con la patente scaduta comporta una multa (che va da circa 160 a 640 € secondo i casi) e il rischio del sequestro del veicolo.',
+        ],
+      },
+      {
+        heading: 'La visita medica',
+        paragraphs: [
+          'Il rinnovo richiede l\'accertamento dei requisiti fisici e psichici, che si svolge:',
+        ],
+        list: [
+          'Presso la Commissione medica locale (ASL): per la maggior parte dei casi, con appuntamento.',
+          'Presso medici autorizzati (autoscuole, ambulatori convenzionati, medici di base abilitati): più rapidi, con tariffa libera.',
+          'Il certificato medico va presentato insieme alla domanda di rinnovo entro la scadenza.',
+          'In caso di patologie rilevanti (diabete, epilessia, problemi visivi), la Commissione può prescrivere limitazioni o validità più brevi.',
+        ],
+      },
+      {
+        heading: 'Quanto costa rinnovare',
+        paragraphs: [
+          'I costi del rinnovo si compongono di più voci:',
+        ],
+        list: [
+          'Tariffa statale per la patente (dal 2026): circa 26 € di diritti di emissione del documento.',
+          'Costo della visita medica: 40–80 € a seconda del medico.',
+          'Costo della pratica presso autoscuola o agenzia: 20–50 € se non la fai da solo.',
+          'Totale indicativo: 80–150 €, variabile per regione e struttura scelta.',
+        ],
+      },
+      {
+        heading: 'Le modalità: dove e come',
+        paragraphs: [
+          'Il rinnovo si può fare:',
+        ],
+        list: [
+          'Online sul Portale dell\'Automobilista (se hai SPID/CIE): invii la domanda, la visita va fatta comunque di persona.',
+          'Presso una motorizzazione: prenotazione online, tempi variabili.',
+          'Presso autoscuole e agenzie di pratiche auto abilitate: la soluzione più rapida: porti il certificato e risolvi tutto in un\'unica sede.',
+          'Agenzie autorizzate all\'emissione diretta: con la visita medica integrata, esci con la patente nuova.',
+        ],
+      },
+      {
+        heading: 'Quando farlo: i consigli pratici',
+        paragraphs: [
+          'Non aspettare l\'ultimo mese: nei periodi di punta (estate, inverno) gli appuntamenti si saturano. Prenota la visita medica con 2–3 mesi di anticipo sulla scadenza: la domanda di rinnovo si può presentare già 6 mesi prima della scadenza. E se viaggi all\'estero: porta sempre con te la patente in corso di validità: la patente scaduta non è accettata nei controlli dei paesi esteri, anche se il rinnovo è in corso.',
+        ],
+      },
+    ],
+    cta: 'revisione-auto',
+  },
+  {
+    slug: 'officina-preventivi-confronto',
+    title: 'Officina: come confrontare i preventivi ed evitare sorprese',
+    description:
+      'Preventivi di riparazione: cosa devono contenere, come confrontare manodopera e ricambi, le voci da contestare e i segnali di un\'officina poco trasparente.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Il preventivo scritto è un diritto',
+        paragraphs: [
+          'Prima di qualsiasi intervento non banale, hai diritto a un preventivo scritto e dettagliato: la legge impone all\'officina di comunicare preventivamente il costo presunto dell\'intervento e di non superarlo senza il tuo consenso (se il preventivo è a "consumo", devi essere avvisato prima che l\'importo venga superato).',
+          'Un preventivo fatto solo a voce non ti tutela: chiedi sempre carta (o email) con la scomposizione di manodopera e ricambi.',
+        ],
+      },
+      {
+        heading: 'Le voci da leggere nel preventivo',
+        paragraphs: [
+          'Un preventivo onesto contiene:',
+        ],
+        list: [
+          'Manodopera: ore previste per tariffa oraria: la tariffa varia tra 45 e 75 €/ora a seconda di regione e tipo di officina.',
+          'Ricambi: marca (originale, equivalente, ricondizionato) e prezzo per singolo pezzo: la differenza tra ricambio originale ed equivalente può superare il 40%.',
+          'Voce "smontaggio e rimontaggio": se prevista, deve essere indicata: è un\'aggiunta frequente a fine lavoro.',
+          'IVA: verificata, e detraibile solo se paghi con strumenti tracciabili.',
+          'Termini di consegna e validità del preventivo: un preventivo "aperto" non è un preventivo.',
+        ],
+      },
+      {
+        heading: 'Come confrontare più preventivi',
+        paragraphs: [
+          'Il confronto corretto si fa a parità di contenuti:',
+        ],
+        list: [
+          'Chiedi a tutte le officine di indicare gli stessi ricambi (originali o equivalenti): confrontare un preventivo con ricambi originali e uno con equivalenti non ha senso.',
+          'Verifica la tariffa oraria e le ore stimate: un\'officina che "stima 2 ore" e una che ne stima 6 sullo stesso lavoro sono molto diverse.',
+          'Considera la garanzia sul lavoro: le officine serie garantiscono l\'intervento (spesso 12–24 mesi su manodopera e ricambi).',
+          'Non scegliere solo sul prezzo: la qualità del lavoro e la reputazione pesano quanto lo sconto.',
+        ],
+      },
+      {
+        heading: 'I segnali di un\'officina da evitare',
+        paragraphs: [
+          'Diffida di:',
+        ],
+        list: [
+          'Chi non vuole mettere per iscritto il preventivo.',
+          'Chi consiglia interventi "di prevenzione" non richiesti senza spiegazioni tecniche.',
+          'Chi aggiunge voci a fine lavoro senza averti chiamato prima.',
+          'Chi usa solo ricambi non tracciabili o non certificati.',
+          'Chi consegna l\'auto senza la fattura o con la fattura senza la scomposizione delle voci.',
+        ],
+      },
+      {
+        heading: 'L\'autorizzazione che ti protegge',
+        paragraphs: [
+          'Per gli interventi oltre i 200 € (soglia che varia per attività), la legge prevede la forma scritta del consenso: firma solo quando hai letto e capito tutte le voci. Se il preventivo supera il valore dell\'auto, la regola del 50–70% che abbiamo visto per "riparare o rottamare" ti dice quando conviene fermarsi: i preventivi servono anche a capire che forse non vale la pena riparare.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
+  {
+    slug: 'chiavi-auto-perse-cosa-fare',
+    title: 'Chiavi auto perse o smarrite: cosa fare e quanto costa',
+    description:
+      'Chiave auto persa o rotta: cosa fare subito, quanto costa un duplicato, chiave elettronica e transponder, e come proteggersi da costi e rischi.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'I primi passi: non farti prendere dal panico',
+        paragraphs: [
+          'Chiave persa o smarrita? La prima cosa da fare è controllare bene dove pensi di averla lasciata (tasca, borsa, portafoglio, sotto i sedili) e poi valutare i danni: se la chiave è caduta fuori casa, il rischio maggiore non è il costo del duplicato, ma il furto dell\'auto: se il portachiavi ha targa o documenti, considera l\'auto a rischio.',
+          'Se la chiave è andata persa in un luogo pubblico o c\'è il rischio che qualcuno possa usarla, l\'intervento più prudente è far disattivare la chiave dal sistema della casa (molti sistemi lo permettono) e ordinare una nuova.',
+        ],
+      },
+      {
+        heading: 'Quanto costa un duplicato',
+        paragraphs: [
+          'Il costo dipende dal tipo di chiave:',
+        ],
+        list: [
+          'Chiave meccanica classica (senza elettronica): 15–50 €, tagliata da un fabbro o da un\'officina specializzata.',
+          'Chiave con transponder (chip): 80–200 €: il chip va "copiato" e programmato con l\'auto.',
+          'Chiave elettronica con telecomando: 150–400 € secondo la marca, programmazione inclusa.',
+          'Chiave smart (avviamento senza chiave, "keyless"): 250–600 €: la più costosa, richiede la casa o un\'officina autorizzata con attrezzatura specifica.',
+          'Chiave persa in un\'auto con sistema keyless: in alcuni modelli servono procedure di sicurezza che portano i costi ancora più in alto.',
+        ],
+      },
+      {
+        heading: 'Dove rivolgersi',
+        paragraphs: [
+          'Le strade per ottenere una nuova chiave:',
+        ],
+        list: [
+          'Concessionario ufficiale della marca: la soluzione più sicura (programmazione garantita) ma la più costosa.',
+          'Officine specializzate in chiavi auto e codificazione: spesso costano il 30–50% in meno del concessionario.',
+          'Servizi di "chiave a domicilio" (fabbro automobilistico): utili se sei bloccato fuori casa, con costi di trasferta.',
+          'Ordine online con codice di taglio: possibile per chiavi meccaniche, meno per quelle elettroniche.',
+        ],
+      },
+      {
+        heading: 'Cosa serve per fare il duplicato',
+        paragraphs: [
+          'Per il duplicato servono di solito: il libretto di circolazione e la carta d\'identità (prova che sei il proprietario), la chiave originale quando è ancora disponibile (per la copia), e in alcuni casi il codice segreto della chiave (il "codice segreto" indicato nel libretto o nella scheda della casa).',
+          'Per le chiavi elettroniche la programmazione va fatta con l\'auto presente: se la chiave è solo persa, il veicolo deve essere accessibile.',
+        ],
+      },
+      {
+        heading: 'Prevenzione: la chiave di riserva è un\'assicurazione',
+        paragraphs: [
+          'La regola più economica è non trovarsi mai con zero chiavi: il duplicato di riserva fatto subito (quando la chiave originale esiste ancora) costa molto meno di una chiave nuova dopo la perdita. Conservala in un posto sicuro fuori casa, mai in auto (sarebbe inutile).',
+          'E quando compri un\'usata, verifica quante chiavi vengono consegnate: un\'auto con una sola chiave vale meno, perché il costo di una seconda chiave (fino a 400 €) è un costo reale da considerare nella valutazione.',
+        ],
+      },
+    ],
+    cta: 'valutazione-auto',
+  },
+  {
+    slug: 'soccorso-stradale-come-funziona',
+    title: 'Soccorso stradale: come funziona, costi e quando attivarlo',
+    description:
+      'Soccorso stradale: cosa copre l\'assistenza in polizza, quanto costa senza copertura, quando attivarlo e cosa fare mentre aspetti il carroattrezzi.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Cos\'è il soccorso stradale',
+        paragraphs: [
+          'Il soccorso stradale (o assistenza stradale) è il servizio che interviene quando un\'auto è ferma per guasto o incidente: soccorso sul posto, tentativo di riparazione rapida, e se necessario il trasporto del veicolo all\'officina più vicina o alla destinazione scelta, insieme al soccorso dei passeggeri.',
+          'È incluso in quasi tutte le polizze assicurative (come garanzia accessoria) e in molti contratti di assistenza: avere la copertura giusta trasforma una giornata rovinata in un inconveniente di mezz\'ora.',
+        ],
+      },
+      {
+        heading: 'Cosa copre (e cosa no)',
+        paragraphs: [
+          'La copertura tipica del soccorso stradale include:',
+        ],
+        list: [
+          'Soccorso sul luogo del guasto e tentativo di riparazione rapida.',
+          'Traino del veicolo (fino a un limite di km, in genere 50–100 km, oltre si paga il sovrapprezzo).',
+          'Trasporto dei passeggeri (di solito fino alla destinazione, entro certi limiti).',
+          'Soccorso in caso di incidente, anche con auto non guidabile.',
+          'Soccorso su strada o in autostrada: verificare che la copertura includa l\'autostrada (alcune escludono i tratti a pedaggio).',
+        ],
+      },
+      {
+        heading: 'Quanto costa senza copertura',
+        paragraphs: [
+          'Senza assistenza attiva, il soccorso stradale si paga a prezzo pieno:',
+        ],
+        list: [
+          'Intervento su strada urbana: 80–150 €.',
+          'Intervento su autostrada: 150–300 € (il pedaggio del tratto resta a carico).',
+          'Traino con carroattrezzi oltre i km inclusi: 2–5 €/km.',
+          'Soccorso notturno o nei festivi: maggiorazione del 30–50%.',
+          'Per confronto: la garanzia di assistenza stradale in polizza costa in genere 20–60 €/anno.',
+        ],
+      },
+      {
+        heading: 'Quando attivarlo (e quando no)',
+        paragraphs: [
+          'Attiva il soccorso quando:',
+          'Non serve il carroattrezzi per una foratura risolvibile con la ruota di scorta o un guasto che puoi gestire in sicurezza: usare il soccorso quando non serve allunga i tempi e, senza copertura, i costi.',
+        ],
+        list: [
+          'L\'auto non riparte e non puoi risolvere da solo (batteria, chiave, guasto).',
+          'C\'è un incidente con veicolo non marciante.',
+          'Sei in una zona pericolosa (autostrada, strada di montagna) e restare fermo è un rischio.',
+          'Il guasto riguarda sicurezza (freni, sterzo, pneumatico che si gonfia).',
+        ],
+      },
+      {
+        heading: 'Cosa fare mentre aspetti',
+        paragraphs: [
+          'Auto ferma in autostrada: giubbotto riflettente, triangolo a 100 metri (in curva anche di più), tutti fuori dall\'auto dietro la barriera, e contatta il soccorso dal telefono: su autostrada il riferimento è il 112 (o il pannello SOS con la progressiva chilometrica). Mai restare in auto su una corsia di marcia.',
+          'Prima di firmare qualsiasi intervento, verifica che il servizio sia quello previsto dalla tua polizza e chiedi il costo se la copertura non è attiva: la chiarezza prima evita contestazioni dopo.',
+        ],
+      },
+    ],
+    cta: 'assicurazione-auto',
+  },
+  {
+    slug: 'fumo-dallo-scarico-significato',
+    title: 'Fumo dallo scarico: cosa indica il colore',
+    description:
+      'Fumo bianco, blu o nero dallo scarico: il colore rivela il problema (guarnizione, olio, carburante). Come diagnosticare e quanto costa riparare.',
+    published: '2026-08-11',
+    category: 'manutenzione',
+    sections: [
+      {
+        heading: 'Il colore del fumo parla',
+        paragraphs: [
+          'Il fumo dallo scarico è uno dei segnali diagnostici più informativi di un\'auto: il colore rivela cosa brucia male nel motore, e conoscere la differenza evita sia di ignorare un guasto grave sia di spendere soldi per un problema inesistente.',
+          'Importante: valuta il fumo a motore caldo e a regime, non quello al primo avvio a freddo: un filo di vapore bianco nei primi minuti può essere normale (condensa), e un pennacchio scuro in accelerazione violenta può essere solo un\'iniezione troppo ricca.',
+        ],
+      },
+      {
+        heading: 'Fumo bianco: attenzione al liquido di raffreddamento',
+        paragraphs: [
+          'Il fumo bianco denso e persistente, con odore dolciastro, è il segnale più grave: indica che il liquido di raffreddamento entra nella camera di combustione, tipicamente per una guarnizione della testata bruciata o una testata deformata. Se è accompagnato da calo del liquido e temperatura instabile, il problema è confermato.',
+          'Costi: la sostituzione della guarnizione della testata parte da 800–1.500 €; se la testata è deformata o crepata, si arriva a 2.000–4.000 €. Prima di spendere, però, verifica anche i punti più semplici: un\'iniezione di urea (AdBlue) difettosa può produrre un pennacchio biancastro molto simile.',
+        ],
+      },
+      {
+        heading: 'Fumo blu: l\'olio brucia',
+        paragraphs: [
+          'Il fumo blu o grigio-bluastro indica che l\'olio motore entra nella camera di combustione: le cause tipiche sono fasce elastiche usurate (motore con molti km o surriscaldato), guide delle valvole logore o turbina che perde olio. Tipicamente appare in accelerazione (fasce) o in rilascio/freno motore (guide valvole).',
+          'Il problema non è solo estetico: bruciare olio consuma lubrificante e aumenta le emissioni: il controllo del livello olio diventa frequente e il motore rischia danni se il livello scende troppo. La riparazione dipende dalla causa: da 300–600 € (turbina) a 1.500–3.000 € (rifacimento fasce e testata).',
+        ],
+      },
+      {
+        heading: 'Fumo nero: miscela troppo ricca',
+        paragraphs: [
+          'Il fumo nero indica carburante non bruciato, tipico di un\'iniezione troppo ricca: sui diesel è il problema più frequente (iniettori sporchi o usurati, EGR intasata, filtro intasato); sui benzina può dipendere da sonde lambda o sensori di flusso d\'aria in avaria.',
+          'Oltre al fumo, la miscela ricca consuma di più, sporca il motore e, sui diesel, intasa il filtro antiparticolato (DPF). La diagnosi elettronica (30–60 €) individua la causa: la pulizia degli iniettori costa 100–300 €, la sostituzione 400–1.200 € secondo i pezzi.',
+        ],
+      },
+      {
+        heading: 'Il caso innocuo: il vapore a freddo',
+        paragraphs: [
+          'Un filo di vapore bianco che sparisce dopo pochi minuti a freddo è normale: è condensa nello scarico freddo, più evidente nei mesi invernali. Anche qualche goccia d\'acqua dallo scarico è fisiologica. Diventa un problema solo quando il fumo è denso, persistente e accompagnato da perdita di liquido o di potenza.',
+        ],
+      },
+      {
+        heading: 'Fumo e acquisto usato: cosa fare',
+        paragraphs: [
+          'Quando provi un\'usata, guarda lo scarico a motore caldo: un pennacchio blu o bianco persistente è un difetto da far emergere prima della trattativa, perché i costi di riparazione possono superare di gran lunga lo sconto chiesto. Porta l\'auto su un tratto in accelerazione e controlla lo specchietto: il fumo racconta anni di storia in pochi secondi.',
+        ],
+      },
+    ],
+    cta: 'costi-riparazione',
+  },
 ];
 
 export function getGuide(slug: string): Guide | undefined {

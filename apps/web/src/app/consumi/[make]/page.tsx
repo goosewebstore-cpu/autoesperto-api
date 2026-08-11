@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { Car } from 'lucide-react';
 import { getAllMakes, slugify } from '@/lib/catalogo';
 import { estimateConsumption } from '@/lib/consumi';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface PageProps {
   params: Promise<{ make: string }>;
@@ -87,6 +88,8 @@ export default async function ConsumiMakePage({ params }: PageProps) {
             combinato, con il costo annuo di carburante, anno per anno.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-8">
           <h2 className="text-lg font-bold text-text-primary mb-3">Modelli {make.name}</h2>

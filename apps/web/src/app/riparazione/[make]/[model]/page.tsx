@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, Wrench } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import { estimateRepair } from '@/lib/riparazione';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -115,6 +116,8 @@ export default async function RepairModelPage({ params }: PageProps) {
             e i costi di manutenzione ordinaria.
           </p>
         </section>
+
+        <AdBanner />
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
           <div className="flex items-start gap-3">

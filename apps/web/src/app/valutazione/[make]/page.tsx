@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, Search } from 'lucide-react';
 import { findMakeBySlug, getAllMakes, slugify } from '@/lib/catalogo';
+import AdBanner from '@/components/ads/AdBanner';
 
 interface PageProps {
   params: Promise<{ make: string }>;
@@ -97,6 +98,8 @@ export default async function MakeValutazionePage({ params }: PageProps) {
             reale dagli annunci in vendita e la valutazione di affidabilità.
           </p>
         </section>
+
+        <AdBanner />
 
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {make.models.map((model) => (

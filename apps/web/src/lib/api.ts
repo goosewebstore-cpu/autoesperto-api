@@ -11,8 +11,9 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || (
 );
 export { API_URL };
 const TIMEOUT_MS = 30000;
-const AI_TIMEOUT_MS = 120000;
+const AI_TIMEOUT_MS = 180000;
 const REPORT_TIMEOUT_MS = 90000;
+const WARMUP_TIMEOUT_MS = 90000;
 
 export interface AnalyzePayload {
   plate?: string;
@@ -154,7 +155,21 @@ export function markFreeAnalysisUsed(): void {
   }
 }
 
+export async function warmUpApi(): Promise<boolean> {
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), WARMUP_TIMEOUT_MS);
+  try {
+    const res = await fetch(`${API_URL}/health`, { signal: controller.signal, cache: 'no-store' });
+    return res.ok;
+  } catch {
+    return false;
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
 export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
+  await warmUpApi();
   return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, freeUsed: hasFreeAnalysis() }) }, AI_TIMEOUT_MS, true);
 }
 

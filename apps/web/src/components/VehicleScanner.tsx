@@ -99,7 +99,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
       if (msg.includes('impiegando troppo tempo')) {
-        setError('Il server sta avviandosi (può richiedere fino a 60 secondi la prima volta). Riprova ora che è caldo.');
+        setError('Il server si sta riattivando (può richiedere fino a un paio di minuti la prima volta). Riprova ora che è caldo.');
       } else {
         setError(msg || 'Non riesco a completare l’analisi. Riprova con un’altra foto.');
       }

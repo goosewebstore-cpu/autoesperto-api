@@ -5,12 +5,14 @@ import { Car, Search } from 'lucide-react';
 import ConditionAssessment from '@/components/ConditionAssessment';
 import { analyzeVehicle } from '@/lib/api';
 import catalogo from '@/lib/catalogo.json';
+import type { AutoReport } from '@autoesperto/types';
 
 export default function ConditionPage() {
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [estimatedValue, setEstimatedValue] = useState<number | null>(null);
+  const [report, setReport] = useState<AutoReport | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -38,6 +40,7 @@ export default function ConditionPage() {
         model: model.trim(),
         year: parseInt(year, 10),
       });
+      setReport(res.report);
       setEstimatedValue(res.report.price.estimatedValue);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore nel calcolo del valore. Riprova.');
@@ -65,6 +68,7 @@ export default function ConditionPage() {
             type="button"
             onClick={() => {
               setEstimatedValue(null);
+              setReport(null);
               setError('');
             }}
             className="text-xs font-semibold text-accent hover:underline flex-shrink-0"
@@ -75,6 +79,7 @@ export default function ConditionPage() {
         <ConditionAssessment
           estimatedValue={estimatedValue}
           vehicle={{ make: make.trim(), model: model.trim(), year: parseInt(year, 10) }}
+          report={report || undefined}
         />
       </div>
     );

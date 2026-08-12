@@ -279,6 +279,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         <ConditionAssessment
           estimatedValue={price.estimatedValue}
           vehicle={{ make: vehicle.make, model: vehicle.model, year: vehicle.year }}
+          report={report}
         />
       )}
 

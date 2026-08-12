@@ -362,7 +362,11 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
           <>
             <div className="scanner-result-banner">
               <ShieldCheck className="h-4 w-4" />
-              <span>Ecco la tua analisi completa gratuita con valore stimato, affidabilit\u00E0 e costi. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">{user ? 'gestisci abbonamento' : 'crea un account gratuito'}</button>.</span>
+              {user ? (
+                <span>Ecco la tua analisi gratuita. Per sbloccare tutte le funzioni di dettaglio e l&apos;affidabilità completa, <button type="button" onClick={() => router.push('/account?upgrade=true')} className="scanner-result-banner-link">passa a Premium</button>.</span>
+              ) : (
+                <span>Ecco la tua analisi gratuita. Per salvarla nel tuo account e sbloccare tutte le funzioni, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">crea un account gratuito</button>.</span>
+              )}
             </div>
             <ReportView report={report} embedded tier="premium" />
           </>

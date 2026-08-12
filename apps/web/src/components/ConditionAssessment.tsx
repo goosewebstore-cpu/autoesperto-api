@@ -24,8 +24,10 @@ import {
   TrendingDown,
   TrendingUp,
   Minus,
+  Download,
 } from 'lucide-react';
 import { analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
+import type { AutoReport } from '@autoesperto/types';
 
 const MAX_PHOTOS = 4;
 
@@ -291,9 +293,10 @@ interface ConditionAssessmentProps {
   estimatedValue: number;
   /** Vehicle info for context */
   vehicle?: { make?: string; model?: string; year?: number; km?: number };
+  report?: AutoReport;
 }
 
-export default function ConditionAssessment({ estimatedValue, vehicle }: ConditionAssessmentProps) {
+export default function ConditionAssessment({ estimatedValue, vehicle, report }: ConditionAssessmentProps) {
   const currentYear = new Date().getFullYear();
   const initialYear = vehicle?.year && vehicle.year > 1950 ? vehicle.year : currentYear - 5;
   const initialKm = vehicle?.km && vehicle.km > 0 ? vehicle.km : 120000;
@@ -312,10 +315,17 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
   // DIY vs Mechanic toggle
   const [costMode, setCostMode] = useState<'diy' | 'mechanic'>('mechanic');
 
+  // Store links visibility state ("solamente se la chiedono")
+  const [openStoreLinks, setOpenStoreLinks] = useState<Record<string, boolean>>({});
+
   // AI Assistant state
   const [aiQuestion, setAiQuestion] = useState('');
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
+
+  const toggleStoreLinks = (id: string) => {
+    setOpenStoreLinks((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   // ── Correct market valuation ──
   const newCarBasePrice = reverseBasePrice(estimatedValue, vehicle?.year);
@@ -455,14 +465,72 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
   const newerStandardKm = Math.max(10000, newerAge * 12000);
   const olderKmFactor = Math.min(1.12, Math.max(0.70, 1 - ((olderKm - olderStandardKm) / 300000)));
   const newerKmFactor = Math.min(1.12, Math.max(0.70, 1 - ((newerKm - newerStandardKm) / 300000)));
-  const olderPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(olderAge) * olderKmFactor / 50) * 50);
-  const newerPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(newerAge) * newerKmFactor / 50) * 50);
+  const olderPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(olderAge) * olderKmFactor * conditionMultiplier / 50) * 50);
+  const newerPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(newerAge) * newerKmFactor * conditionMultiplier / 50) * 50);
 
   const similarCars = [
     { model: `${make} ${model} (${year})`, km: `${km.toLocaleString('it-IT')} km`, price: ricalculatedValue },
     { model: `${make} ${model} (${olderYear})`, km: `${olderKm.toLocaleString('it-IT')} km`, price: olderPrice },
     { model: `${make} ${model} (${newerYear})`, km: `${newerKm.toLocaleString('it-IT')} km`, price: newerPrice },
   ];
+
+  const handleDownloadPDF = async () => {
+    if (!report) return;
+    const { downloadPDF } = await import('@/components/PDFButton');
+
+    const items: any[] = [];
+    
+    selectedLights.forEach((lightId) => {
+      const opt = DASHBOARD_LIGHTS_OPTIONS.find((l) => l.id === lightId);
+      if (opt) {
+        items.push({
+          type: 'spia',
+          label: opt.label,
+          detail: opt.urgencyNote,
+          diyCost: `${price(opt.diyMin)}–${price(opt.diyMax)}`,
+          mechCost: `${price(opt.mechMin)}–${price(opt.mechMax)}`,
+          urgencyLabel: opt.urgency === 'high' ? 'Urgente' : 'Da verificare',
+          canDiy: opt.canDiy,
+        });
+      }
+    });
+
+    results.filter(r => r.analysis.damage.visible).forEach((r) => {
+      const costs = getDamageRepairCost(r.analysis.damage.category);
+      items.push({
+        type: 'danno',
+        label: categoryLabel(r.analysis.damage.category),
+        detail: r.analysis.damage.description,
+        diyCost: `${price(costs.diyMin)}–${price(costs.diyMax)}`,
+        mechCost: `${price(costs.mechMin)}–${price(costs.mechMax)}`,
+        canDiy: costs.canDiy,
+      });
+    });
+
+    const accidentHistoryLabel = 
+      accidentHistory === 'none' ? 'Nessun incidente rilevato' :
+      accidentHistory === 'minor' ? 'Lievi urti (Graffi o piccoli urti)' :
+      accidentHistory === 'medium' ? 'Medio (Sostituzione lamiere/paraurti)' :
+      'Grave (Strutturale / Airbag esplosi)';
+
+    const conditionData = {
+      refinedYear: year,
+      refinedKm: km,
+      accidentHistoryLabel,
+      costModeLabel: costMode === 'diy' ? 'Fai-da-te (solo ricambi)' : 'Meccanico (ricambi + manodopera)',
+      recalculatedValue: ricalculatedValue,
+      verdictLabel: verdictInfo.label,
+      verdictDescription: verdictInfo.description,
+      verdictType: verdictInfo.verdict,
+      totalDiyMin: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).diyMin, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.diyMin || 0); }, 0),
+      totalDiyMax: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).diyMax, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.diyMax || 0); }, 0),
+      totalMechMin: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).mechMin, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.mechMin || 0); }, 0),
+      totalMechMax: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).mechMax, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.mechMax || 0); }, 0),
+      items,
+    };
+
+    downloadPDF(report, conditionData);
+  };
 
   return (
     <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7 space-y-6">
@@ -713,9 +781,21 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
                       </span>
                     )}
                   </div>
-                  {/* Multi-store links */}
-                  <div className="ml-4.5">
-                    <StoreLinks query={opt.ebayQuery} make={vehicle?.make} model={vehicle?.model} />
+                  {/* Find spare parts toggle button */}
+                  <div className="ml-4.5 mt-2">
+                    <button
+                      type="button"
+                      onClick={() => toggleStoreLinks(lightId)}
+                      className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-slate-100 hover:bg-slate-200 text-slate-700 text-[11px] font-bold transition-colors"
+                    >
+                      <Store className="w-3.5 h-3.5 text-slate-500 mr-1" />
+                      {openStoreLinks[lightId] ? 'Nascondi link ricambi' : 'Trova ricambi online (eBay, Autodoc...)'}
+                    </button>
+                    {openStoreLinks[lightId] && (
+                      <div className="mt-2 pl-2 border-l border-slate-200 animate-fade-in">
+                        <StoreLinks query={opt.ebayQuery} make={vehicle?.make} model={vehicle?.model} />
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -787,8 +867,22 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
                             )}
                           </div>
 
-                          {/* Multi-store links */}
-                          <StoreLinks query={damageQuery} make={vehicle?.make} model={vehicle?.model} />
+                          {/* Find spare parts toggle button */}
+                          <div className="mt-2">
+                            <button
+                              type="button"
+                              onClick={() => toggleStoreLinks(r.id)}
+                              className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold transition-colors"
+                            >
+                              <Store className="w-3.5 h-3.5 text-slate-500 mr-1.5" />
+                              {openStoreLinks[r.id] ? 'Nascondi link ricambi' : 'Trova ricambi online (eBay, Autodoc...)'}
+                            </button>
+                            {openStoreLinks[r.id] && (
+                              <div className="mt-2 pl-2 border-l border-slate-200 animate-fade-in">
+                                <StoreLinks query={damageQuery} make={vehicle?.make} model={vehicle?.model} />
+                              </div>
+                            )}
+                          </div>
                         </>
                       ) : (
                         <div className="flex items-center gap-2">
@@ -859,6 +953,19 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
             <strong className="text-text-secondary">Nota Manodopera &amp; Meccanica:</strong> Le stime coprono il valore medio dei pezzi di ricambio e della manodopera. I prezzi reali variano in base alla zona e all&apos;officina. Per interventi complessi, richiedi sempre un preventivo scritto.
           </p>
         </div>
+
+        {report && (
+          <div className="border-t border-black/5 pt-3.5 flex justify-end">
+            <button
+              type="button"
+              onClick={handleDownloadPDF}
+              className="inline-flex h-9 items-center gap-1.5 px-4 rounded-lg bg-accent hover:bg-accent-hover text-white text-xs font-bold transition-all active:scale-[0.98] shadow-sm"
+            >
+              <Download className="w-3.5 h-3.5" />
+              Scarica Report Aggiornato (PDF)
+            </button>
+          </div>
+        )}
       </div>
 
       {/* ── Interactive AI Assistant Widget ── */}

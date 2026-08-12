@@ -2,6 +2,30 @@
 
 import type { AutoReport } from '@autoesperto/types';
 
+export interface PDFConditionData {
+  refinedYear: number;
+  refinedKm: number;
+  accidentHistoryLabel: string;
+  costModeLabel: string;
+  recalculatedValue: number;
+  verdictLabel: string;
+  verdictDescription: string;
+  verdictType: 'repair' | 'evaluate' | 'sell';
+  totalDiyMin: number;
+  totalDiyMax: number;
+  totalMechMin: number;
+  totalMechMax: number;
+  items: Array<{
+    type: 'spia' | 'danno';
+    label: string;
+    detail?: string;
+    diyCost: string;
+    mechCost: string;
+    urgencyLabel?: string;
+    canDiy: boolean;
+  }>;
+}
+
 interface PdfWriter {
   doc: import('jspdf').jsPDF;
   y: number;
@@ -849,7 +873,90 @@ function drawDataNotes(doc: import('jspdf').jsPDF, report: AutoReport): void {
   }
 }
 
-export async function downloadPDF(report: AutoReport) {
+function drawConditionPage(doc: import('jspdf').jsPDF, data: PDFConditionData): void {
+  const w: PdfWriter = { doc, y: 25 };
+  sectionTitle(w, 'Stato del veicolo e stima ripristini');
+
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(C.dark[0], C.dark[1], C.dark[2]);
+  writeLine(w, 'Dati inseriti per la valutazione dello stato:', MARGIN, 6, CONTENT_W);
+  w.y += 2;
+
+  const specs: Array<[string, string]> = [
+    ['Anno immatricolazione', String(data.refinedYear)],
+    ['Chilometraggio reale', `${data.refinedKm.toLocaleString('it-IT')} km`],
+    ['Storico incidenti', data.accidentHistoryLabel],
+    ['Modalita di calcolo selezionata', data.costModeLabel],
+  ];
+  specTable(w, specs);
+  w.y += 4;
+
+  // Recalculated value banner
+  box(w, MARGIN, w.y, CONTENT_W, 20, [239, 246, 255]); // light blue
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(C.primary[0], C.primary[1], C.primary[2]);
+  doc.text('VALORE DI MERCATO RICALCOLATO PER ANNO & KM:', MARGIN + 6, w.y + 6);
+  doc.setFontSize(14);
+  doc.text(euro(data.recalculatedValue), MARGIN + 6, w.y + 14);
+  w.y += 24;
+
+  // Verdict banner
+  let vColor = C.success;
+  let vBg = C.successBg;
+  if (data.verdictType === 'evaluate') {
+    vColor = C.warning;
+    vBg = C.warningBg;
+  } else if (data.verdictType === 'sell') {
+    vColor = C.danger;
+    vBg = C.dangerBg;
+  }
+  
+  box(w, MARGIN, w.y, CONTENT_W, 26, vBg);
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(vColor[0], vColor[1], vColor[2]);
+  doc.text(`VERDETTO CONVENIENZA: ${data.verdictLabel.toUpperCase()}`, MARGIN + 6, w.y + 7);
+  doc.setFont('helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
+  const descLines = doc.splitTextToSize(data.verdictDescription, CONTENT_W - 12);
+  let dy = w.y + 13;
+  descLines.slice(0, 3).forEach((line: string) => {
+    doc.text(line, MARGIN + 6, dy);
+    dy += 4.5;
+  });
+  w.y += 32;
+
+  // Cost comparison summary
+  sectionTitle(w, 'Confronto costi di ripristino totali');
+  
+  const compRows: Array<[string, string]> = [
+    ['Fai-da-te (solo ricambi)', `${euro(data.totalDiyMin)} – ${euro(data.totalDiyMax)}`],
+    ['Meccanico (ricambi + manodopera)', `${euro(data.totalMechMin)} – ${euro(data.totalMechMax)}`],
+  ];
+  costTable(w, compRows, MARGIN + 2, 188);
+  w.y += 2;
+
+  // List of damage/warning items
+  if (data.items.length > 0) {
+    sectionTitle(w, 'Dettaglio componenti e ricambi stimati');
+    
+    const itemsRows: Array<[string, string]> = data.items.map(item => {
+      const typeLabel = item.type === 'spia' ? '[Spia]' : '[Danno]';
+      const name = `${typeLabel} ${item.label}`;
+      const costRange = data.costModeLabel.includes('Fai-da-te') ? item.diyCost : item.mechCost;
+      return [name, costRange];
+    });
+    costTable(w, itemsRows, MARGIN + 2, 188);
+  } else {
+    w.y += 2;
+    writeLine(w, 'Nessuna spia o danno estetico inserito. Il veicolo risulta privo di anomalie evidenti.', MARGIN, 6, CONTENT_W);
+  }
+}
+
+export async function downloadPDF(report: AutoReport, conditionData?: PDFConditionData) {
   try {
     const { jsPDF } = await import('jspdf');
     const doc = new jsPDF();
@@ -863,6 +970,11 @@ export async function downloadPDF(report: AutoReport) {
 
     doc.addPage();
     drawSintesi(doc, report);
+
+    if (conditionData) {
+      doc.addPage();
+      drawConditionPage(doc, conditionData);
+    }
 
     doc.addPage();
     drawReliability(doc, report);

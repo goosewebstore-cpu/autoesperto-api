@@ -24,7 +24,11 @@ function clientCredentials() {
 }
 
 function redirectUri() {
-  return process.env.GOOGLE_REDIRECT_URI?.trim() || 'http://localhost:4000/auth/google/callback';
+  const envUri = process.env.GOOGLE_REDIRECT_URI?.trim();
+  if (envUri && !envUri.includes('vercel.app')) {
+    return envUri;
+  }
+  return 'https://autoesperto-api.onrender.com/auth/google/callback';
 }
 
 function frontendUrl() {

@@ -432,12 +432,21 @@ async function loadLogoDataUrl(): Promise<string | null> {
 }
 
 function drawLogo(doc: import('jspdf').jsPDF, logoData: string | null, x: number, y: number, w: number): void {
-  if (!logoData) return;
-  try {
-    doc.addImage(logoData, 'PNG', x, y, w, w, undefined, 'FAST');
-  } catch {
-    // Il logo è un'aggiunta estetica: se non è caricabile il PDF resta valido.
+  if (logoData) {
+    try {
+      doc.addImage(logoData, 'PNG', x, y, w, w, undefined, 'FAST');
+      return;
+    } catch {
+      // fallback to vector logo
+    }
   }
+  // Vector badge fallback: AutoEsperto Shield
+  doc.setFillColor(37, 99, 235);
+  doc.roundedRect(x, y, w, w, 2.5, 2.5, 'F');
+  doc.setTextColor(255, 255, 255);
+  doc.setFontSize(Math.round(w * 0.5));
+  doc.setFont('helvetica', 'bold');
+  doc.text('AE', x + w / 2, y + w * 0.7, { align: 'center' });
 }
 
 function drawCover(doc: import('jspdf').jsPDF, report: AutoReport, dateLabel: string, logoData: string | null): void {
@@ -867,10 +876,25 @@ export async function downloadPDF(report: AutoReport) {
     doc.addPage();
     drawDataNotes(doc, report);
 
-    // ── Footer su tutte le pagine ──
+    // ── Header & Footer su tutte le pagine ──
     const pageCount = doc.getNumberOfPages();
     for (let i = 1; i <= pageCount; i++) {
       doc.setPage(i);
+      if (i > 1) {
+        drawLogo(doc, logoData, MARGIN, 8, 7);
+        doc.setFontSize(9);
+        doc.setFont('helvetica', 'bold');
+        doc.setTextColor(C.dark[0], C.dark[1], C.dark[2]);
+        doc.text('AUTOESPERTO', MARGIN + 9, 13);
+        doc.setFontSize(8);
+        doc.setFont('helvetica', 'normal');
+        doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+        doc.text(`${vehicle.make} ${vehicle.model} · Report Analisi`, 190, 13, { align: 'right' });
+        doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
+        doc.setLineWidth(0.3);
+        doc.line(MARGIN, 16, 190, 16);
+      }
+
       doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
       doc.setLineWidth(0.3);
       doc.line(MARGIN, 284, 190, 284);

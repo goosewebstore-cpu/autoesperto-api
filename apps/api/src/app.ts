@@ -10,6 +10,7 @@ import googleRoutes from './routes/google';
 import billingRoutes from './routes/billing';
 import analysisRoutes from './routes/analyses';
 import analyticsRoutes from './routes/analytics';
+import assistantRoutes from './routes/assistant';
 import { HttpError } from './http';
 import { stripeWebhook } from './webhook';
 
@@ -90,6 +91,7 @@ export function createApp(options: AppOptions = {}) {
   app.use('/billing', billingRoutes);
   app.use('/analyses', analysisRoutes);
   app.use('/analytics', analyticsRoutes);
+  app.use('/assistant', assistantRoutes);
 
   app.use((_req, res) => {
     res.status(404).json({ success: false, error: 'Risorsa non trovata' });

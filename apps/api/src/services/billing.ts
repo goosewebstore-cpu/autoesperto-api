@@ -52,8 +52,8 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
 }
 
 // Premium subscription config
-const PREMIUM_PRICE_CENTS_MONTHLY = 999;
-const PREMIUM_PRICE_CENTS_ANNUAL = 7999;
+const PREMIUM_PRICE_CENTS_MONTHLY = 499; // 4,99 € / mese
+const PREMIUM_PRICE_CENTS_ANNUAL = 4190;  // 41,90 € / anno (~30% sconto)
 const PREMIUM_CURRENCY = 'eur';
 
 export function getPremiumConfig(interval: 'month' | 'year' = 'month') {

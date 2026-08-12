@@ -155,10 +155,12 @@ export default function CompareModels({
 
     const lCons = lRel.consumption?.combined;
     const rCons = rRel.consumption?.combined;
+    const lUnit = lRel.consumption?.fuelType || 'l/100 km';
+    const rUnit = rRel.consumption?.fuelType || 'l/100 km';
     rows.push({
       label: 'Consumi combinati',
-      left: lCons != null ? `${lCons.toLocaleString('it-IT')} l/100 km` : '—',
-      right: rCons != null ? `${rCons.toLocaleString('it-IT')} l/100 km` : '—',
+      left: lCons != null ? `${lCons.toLocaleString('it-IT')} ${lUnit}` : '—',
+      right: rCons != null ? `${rCons.toLocaleString('it-IT')} ${rUnit}` : '—',
       better: sideWinner(lCons, rCons, (v) => v),
     });
     rows.push({

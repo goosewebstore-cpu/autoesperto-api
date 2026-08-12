@@ -31,6 +31,7 @@ export default function SiteFooter({ variant = 'compact' }: SiteFooterProps) {
                 <li><Link href="/compra" className="hover:text-white transition-colors">Mi conviene comprarla?</Link></li>
                 <li><Link href="/vendi" className="hover:text-white transition-colors">Quanto vale la mia auto?</Link></li>
                 <li><Link href="/valutazione" className="hover:text-white transition-colors">Valutazione auto usata</Link></li>
+                <li><Link href="/condizione" className="hover:text-white transition-colors">Valuta condizione (riparare o vendere)</Link></li>
                 <li><Link href="/affidabilita" className="hover:text-white transition-colors">Affidabilità e guasti</Link></li>
                 <li><Link href="/riparazione" className="hover:text-white transition-colors">Costi riparazione</Link></li>
                 <li><Link href="/consumi" className="hover:text-white transition-colors">Consumi reali</Link></li>

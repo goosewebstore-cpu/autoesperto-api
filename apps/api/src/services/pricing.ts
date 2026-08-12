@@ -54,6 +54,8 @@ const MODEL_PRICE: Record<string, number> = {
   'opel insignia': 40000, 'opel adam': 16500, 'opel crossland': 27000, 'opel zafira': 34000,
   'opel meriva': 22000, 'opel corsa-e': 35000, 'opel vectra': 30000, 'opel combo': 28000,
   'opel vivaro': 35000, 'opel antara': 30000, 'opel frontera': 24000,
+  // LTI / London Taxis International
+  'lti tx4': 38000, 'lti tx2': 34000, 'lti tx1': 30000, 'london taxis international tx4': 38000,
   // Peugeot
   'peugeot 208': 22000, 'peugeot 308': 30000, 'peugeot 2008': 30000, 'peugeot 3008': 40500,
   'peugeot 5008': 45000, 'peugeot 508': 46000, 'peugeot 108': 16000, 'peugeot 206': 17500,
@@ -226,6 +228,8 @@ function normalizeMake(make: string): string {
   if (m.startsWith('rolls')) return 'rolls royce';
   if (m.startsWith('volks') || m.startsWith('vokswagen')) return 'volkswagen';
   if (m === 'lancia') return 'lancia';
+  if (m === 'vauxhall') return 'opel';
+  if (m.includes('london taxi') || m.startsWith('lti')) return 'lti';
   return m;
 }
 
@@ -249,7 +253,15 @@ function findModelPrice(make: string, model: string): number | undefined {
 function findBrandBase(make: string): number {
   const makeNorm = normalizeMake(make);
   const key = Object.keys(BRAND_BASE).find(k => makeNorm.startsWith(k));
-  return key ? BRAND_BASE[key] : 24000;
+  if (key) return BRAND_BASE[key];
+
+  let hash = 0;
+  for (let i = 0; i < makeNorm.length; i++) {
+    hash = (hash << 5) - hash + makeNorm.charCodeAt(i);
+    hash |= 0;
+  }
+  const bases = [21000, 26000, 31000, 24000, 28000, 35000];
+  return bases[Math.abs(hash) % bases.length];
 }
 
 function getBodyAdjust(body: string): number {

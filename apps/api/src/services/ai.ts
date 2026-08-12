@@ -118,7 +118,11 @@ function deriveCategoryScores(
 
 function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; highway: number; combined: number; fuelType?: string } {
   const f = fuel.toLowerCase();
-  const displacement = parseFloat((vehicle.displacement || '').replace(/[^0-9.]/g, '')) || 1.4;
+  const makeNorm = (vehicle.make || '').toLowerCase();
+  let hash = 0;
+  for (let i = 0; i < makeNorm.length; i++) hash += makeNorm.charCodeAt(i);
+
+  const displacement = parseFloat((vehicle.displacement || '').replace(/[^0-9.]/g, '')) || (1.2 + (hash % 8) * 0.2);
   const isDiesel = f.includes('diesel');
   const isHybrid = f.includes('ibrid');
   const isElectric = f.includes('elettr') || f.includes('ev');
@@ -126,12 +130,14 @@ function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; 
 
   if (isElectric) return { city: 16, highway: 13, combined: 14.5, fuelType: 'kWh/100km' };
 
-  const base = isDiesel ? 16 : isHybrid ? 19 : isGpl ? 18 : 17;
-  const displacementFactor = Math.max(0.85, Math.min(1.4, displacement / 1.6));
-  const city = Math.round(base / displacementFactor * 1.15 * 10) / 10;
-  const highway = Math.round(base / displacementFactor * 0.75 * 10) / 10;
-  const combined = Math.round(base / displacementFactor * 0.95 * 10) / 10;
-  return { city, highway, combined, fuelType: 'km/L' };
+  // Consumption in L/100 km
+  const baseL100 = isDiesel ? 5.2 : isHybrid ? 4.5 : isGpl ? 7.0 : 6.2;
+  const displacementFactor = Math.max(0.85, Math.min(1.6, displacement / 1.4));
+  const combined = Math.round(baseL100 * displacementFactor * 10) / 10;
+  const city = Math.round(combined * 1.25 * 10) / 10;
+  const highway = Math.round(combined * 0.82 * 10) / 10;
+
+  return { city, highway, combined, fuelType: 'l/100 km' };
 }
 
 function deriveTaxAnnual(power: number, fuel: string, year?: number): number {

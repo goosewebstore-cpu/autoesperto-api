@@ -7,8 +7,7 @@ import {
 } from 'lucide-react';
 import ReportSummary from '@/components/ReportSummary';
 import AdSlot from '@/components/AdSlot';
-import DamagePhotoAnalyzer from '@/components/DamagePhotoAnalyzer';
-import DamageCheckTool from '@/components/DamageCheckTool';
+import ConditionAssessment from '@/components/ConditionAssessment';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
 import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
@@ -276,7 +275,12 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
       )}
 
       {/* Controllo danni: disponibile solo nell'analisi completa */}
-      {allowPhotoTools && <DamageCheckTool vehicle={vehicle} />}
+      {allowPhotoTools && (
+        <ConditionAssessment
+          estimatedValue={price.estimatedValue}
+          vehicle={{ make: vehicle.make, model: vehicle.model, year: vehicle.year }}
+        />
+      )}
 
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
         <h2 className="text-base font-bold text-text-primary mb-1">Andamento valore stimato</h2>
@@ -445,8 +449,6 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
           ))}
         </div>
       </section>
-
-      {allowPhotoTools && <DamagePhotoAnalyzer vehicle={vehicle} />}
 
       {/* Engine / transmission / common issues */}
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">

@@ -264,6 +264,15 @@ const KM_LEVEL_STYLE: Record<string, { bg: string; text: string; bar: string }> 
   high:    { bg: 'bg-amber-50',   text: 'text-amber-700',   bar: 'bg-amber-500' },
 };
 
+const OPTIONS_LIST = [
+  { id: 'leather', label: 'Interni in Pelle' },
+  { id: 'led', label: 'Fari LED / Xenon' },
+  { id: 'navigation', label: 'Navigatore GPS' },
+  { id: 'sunroof', label: 'Tetto Apribile' },
+  { id: 'sensors', label: 'Sensori + Telecamera' },
+  { id: 'alloy_wheels', label: 'Cerchi in Lega Extra' },
+];
+
 /* ── Store link button component ── */
 function StoreLinks({ query, make, model }: { query: string; make?: string; model?: string }) {
   return (
@@ -312,6 +321,12 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
   const [selectedLights, setSelectedLights] = useState<string[]>([]);
   const [accidentHistory, setAccidentHistory] = useState<string>('none');
 
+  // Professional refinement options (AutoScout24 style)
+  const [serviceHistory, setServiceHistory] = useState<string>('regular');
+  const [previousOwners, setPreviousOwners] = useState<string>('1');
+  const [interiorCondition, setInteriorCondition] = useState<string>('good');
+  const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
+
   // DIY vs Mechanic toggle
   const [costMode, setCostMode] = useState<'diy' | 'mechanic'>('mechanic');
 
@@ -327,19 +342,54 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
     setOpenStoreLinks((prev) => ({ ...prev, [id]: !prev[id] }));
   };
 
+  const toggleOption = (id: string) => {
+    setSelectedOptions((prev) =>
+      prev.includes(id) ? prev.filter((o) => o !== id) : [...prev, id]
+    );
+  };
+
   // ── Correct market valuation ──
   const newCarBasePrice = reverseBasePrice(estimatedValue, vehicle?.year);
   const userAge = Math.max(0, currentYear - (year || initialYear));
   const ageResidual = getResidual(userAge);
   const standardKm = Math.max(10000, userAge * 12000);
   const kmDelta = km - standardKm;
-  const kmFactor = Math.min(1.12, Math.max(0.70, 1 - (kmDelta / 300000)));
+
+  // Stiffer, more realistic KM factor (divisor 180,000, wider range [0.45, 1.45])
+  const kmFactor = Math.min(1.45, Math.max(0.45, 1 - (kmDelta / 180000)));
+
   const lightsPenalty = selectedLights.length * 0.03;
   let accidentPenalty = 0;
   if (accidentHistory === 'minor') accidentPenalty = 0.06;
   if (accidentHistory === 'medium') accidentPenalty = 0.14;
   if (accidentHistory === 'severe') accidentPenalty = 0.25;
-  const conditionMultiplier = Math.max(0.50, (1 - lightsPenalty - accidentPenalty));
+
+  // Tagliandi bonus/malus
+  let serviceBonus = 0;
+  if (serviceHistory === 'regular') serviceBonus = 0.06;
+  if (serviceHistory === 'none') serviceBonus = -0.10;
+
+  // Proprietari bonus/malus
+  let ownerBonus = 0;
+  if (previousOwners === '1') ownerBonus = 0.05;
+  if (previousOwners === '3+') ownerBonus = -0.08;
+
+  // Interni bonus/malus
+  let interiorBonus = 0;
+  if (interiorCondition === 'excellent') interiorBonus = 0.04;
+  if (interiorCondition === 'worn') interiorBonus = -0.06;
+  if (interiorCondition === 'damaged') interiorBonus = -0.15;
+
+  // Optional bonus
+  let optionsBonus = 0;
+  if (selectedOptions.includes('leather')) optionsBonus += 0.03;
+  if (selectedOptions.includes('led')) optionsBonus += 0.02;
+  if (selectedOptions.includes('navigation')) optionsBonus += 0.02;
+  if (selectedOptions.includes('sunroof')) optionsBonus += 0.03;
+  if (selectedOptions.includes('sensors')) optionsBonus += 0.02;
+  if (selectedOptions.includes('alloy_wheels')) optionsBonus += 0.02;
+
+  const conditionMultiplier = Math.max(0.40, (1 - lightsPenalty - accidentPenalty + serviceBonus + ownerBonus + interiorBonus + optionsBonus));
   const ricalculatedValue = Math.max(1500, Math.round(newCarBasePrice * ageResidual * kmFactor * conditionMultiplier / 50) * 50);
 
   // KM usage analysis
@@ -513,6 +563,27 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
       accidentHistory === 'medium' ? 'Medio (Sostituzione lamiere/paraurti)' :
       'Grave (Strutturale / Airbag esplosi)';
 
+    const serviceHistoryLabel =
+      serviceHistory === 'regular' ? 'Regolari e documentati' :
+      serviceHistory === 'partial' ? 'Parziali / Alcuni tagliandi' :
+      'Nessuna documentazione';
+
+    const previousOwnersLabel =
+      previousOwners === '1' ? 'Unico proprietario' :
+      previousOwners === '2' ? 'Due proprietari' :
+      'Tre o più proprietari';
+
+    const interiorConditionLabel =
+      interiorCondition === 'excellent' ? 'Ottimo / Come nuovi' :
+      interiorCondition === 'good' ? 'Buono / Standard' :
+      interiorCondition === 'worn' ? 'Usurati / Segni d\'usura' :
+      'Danneggiati / Strappati';
+
+    const optionsListLabels = selectedOptions.map(optId => {
+      const found = OPTIONS_LIST.find(o => o.id === optId);
+      return found ? found.label : optId;
+    });
+
     const conditionData = {
       refinedYear: year,
       refinedKm: km,
@@ -526,6 +597,10 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
       totalDiyMax: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).diyMax, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.diyMax || 0); }, 0),
       totalMechMin: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).mechMin, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.mechMin || 0); }, 0),
       totalMechMax: damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).mechMax, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.mechMax || 0); }, 0),
+      serviceHistoryLabel,
+      previousOwnersLabel,
+      interiorConditionLabel,
+      optionsListLabels,
       items,
     };
 
@@ -617,18 +692,86 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
         </div>
 
         {/* Incident History */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary mb-1">Storico Incidenti</label>
+            <select
+              value={accidentHistory}
+              onChange={(e) => setAccidentHistory(e.target.value)}
+              className="w-full text-sm font-semibold border border-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-accent"
+            >
+              <option value="none">Nessun incidente rilevato</option>
+              <option value="minor">Lievi urti (Graffi o piccoli urti da parcheggio)</option>
+              <option value="medium">Medio (Sostituzione paraurti/lamiere esterne)</option>
+              <option value="severe">Grave (Strutturale / Airbag esplosi)</option>
+            </select>
+          </div>
+
+          {/* Service History */}
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary mb-1">Cronologia Tagliandi</label>
+            <select
+              value={serviceHistory}
+              onChange={(e) => setServiceHistory(e.target.value)}
+              className="w-full text-sm font-semibold border border-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-accent"
+            >
+              <option value="regular">Regolari e certificati (+6% valore)</option>
+              <option value="partial">Parziali / Storico incompleto (+0%)</option>
+              <option value="none">Nessun tagliando documentato (-10% valore)</option>
+            </select>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          {/* Previous Owners */}
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary mb-1">Numero Proprietari Precedenti</label>
+            <select
+              value={previousOwners}
+              onChange={(e) => setPreviousOwners(e.target.value)}
+              className="w-full text-sm font-semibold border border-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-accent"
+            >
+              <option value="1">Unico proprietario (+5% valore)</option>
+              <option value="2">2 proprietari (+0%)</option>
+              <option value="3+">3 o più proprietari (-8% valore)</option>
+            </select>
+          </div>
+
+          {/* Interior Condition */}
+          <div>
+            <label className="block text-xs font-semibold text-text-secondary mb-1">Stato degli Interni</label>
+            <select
+              value={interiorCondition}
+              onChange={(e) => setInteriorCondition(e.target.value)}
+              className="w-full text-sm font-semibold border border-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-accent"
+            >
+              <option value="excellent">Ottimo stato / Come nuovi (+4% valore)</option>
+              <option value="good">Buono / Usura normale (+0%)</option>
+              <option value="worn">Usurati (Macchie o piccoli strappi) (-6% valore)</option>
+              <option value="damaged">Molto danneggiati / Strappati (-15% valore)</option>
+            </select>
+          </div>
+        </div>
+
+        {/* Key Equipment Option Chips */}
         <div>
-          <label className="block text-xs font-semibold text-text-secondary mb-1">Storico Incidenti</label>
-          <select
-            value={accidentHistory}
-            onChange={(e) => setAccidentHistory(e.target.value)}
-            className="w-full text-sm font-semibold border border-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-accent"
-          >
-            <option value="none">Nessun incidente rilevato</option>
-            <option value="minor">Lievi urti (Graffi o piccoli urti da parcheggio)</option>
-            <option value="medium">Medio (Sostituzione paraurti/lamiere esterne)</option>
-            <option value="severe">Grave (Strutturale / Airbag esplosi)</option>
-          </select>
+          <label className="block text-xs font-semibold text-text-secondary mb-1.5">Optional Installati (Aggiungono valore)</label>
+          <div className="flex flex-wrap gap-2">
+            {OPTIONS_LIST.map((opt) => {
+              const active = selectedOptions.includes(opt.id);
+              return (
+                <button
+                  key={opt.id}
+                  type="button"
+                  onClick={() => toggleOption(opt.id)}
+                  className={`text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-colors ${active ? 'bg-blue-100 text-blue-900 border-blue-300 font-bold shadow-sm' : 'bg-white text-text-secondary border-border hover:bg-slate-50'}`}
+                >
+                  {active && <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block mr-1.5" />}
+                  {opt.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
 
         {/* Dynamic Adjusted Market Value Banner */}

@@ -15,6 +15,10 @@ export interface PDFConditionData {
   totalDiyMax: number;
   totalMechMin: number;
   totalMechMax: number;
+  serviceHistoryLabel: string;
+  previousOwnersLabel: string;
+  interiorConditionLabel: string;
+  optionsListLabels: string[];
   items: Array<{
     type: 'spia' | 'danno';
     label: string;
@@ -156,12 +160,27 @@ function verdictColors(verdict: string): { bg: [number, number, number]; text: [
 
 function fillPolygon(doc: import('jspdf').jsPDF, pts: number[], style: 'F' | 'S' | 'FD'): void {
   if (pts.length < 6) return;
-  let path = `M ${pts[0]} ${pts[1]}`;
-  for (let i = 2; i < pts.length; i += 2) {
-    path += ` L ${pts[i]} ${pts[i + 1]}`;
+  const d = doc as any;
+  if (typeof d.path === 'function') {
+    let path = `M ${pts[0]} ${pts[1]}`;
+    for (let i = 2; i < pts.length; i += 2) {
+      path += ` L ${pts[i]} ${pts[i + 1]}`;
+    }
+    path += ' Z';
+    try {
+      d.path(path, style);
+      return;
+    } catch {
+      // fallback to vector drawing
+    }
   }
-  path += ' Z';
-  (doc as unknown as { path: (p: string, s?: string) => void }).path(path, style);
+
+  // Safe vector outline drawing fallback
+  doc.setLineWidth(0.4);
+  for (let i = 0; i < pts.length - 2; i += 2) {
+    doc.line(pts[i], pts[i + 1], pts[i + 2], pts[i + 3]);
+  }
+  doc.line(pts[pts.length - 2], pts[pts.length - 1], pts[0], pts[1]);
 }
 
 function drawCar(doc: import('jspdf').jsPDF, cx: number, cy: number, w: number): void {
@@ -214,29 +233,59 @@ function drawRadar(
 ): void {
   const n = labels.length;
   const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
+  
+  // Concentric regular pentagon grid rings (standard lines)
+  doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
+  doc.setLineWidth(0.3);
   for (const frac of [0.25, 0.5, 0.75, 1]) {
-    const pts: number[] = [];
     for (let i = 0; i < n; i++) {
-      pts.push(cx + R * frac * Math.cos(angle(i)), cy + R * frac * Math.sin(angle(i)));
+      const nextIdx = (i + 1) % n;
+      const x1 = cx + R * frac * Math.cos(angle(i));
+      const y1 = cy + R * frac * Math.sin(angle(i));
+      const x2 = cx + R * frac * Math.cos(angle(nextIdx));
+      const y2 = cy + R * frac * Math.sin(angle(nextIdx));
+      doc.line(x1, y1, x2, y2);
     }
-    doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
-    doc.setLineWidth(0.3);
-    fillPolygon(doc, pts, 'S');
   }
+
+  // Grid axis lines
   doc.setDrawColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
   doc.setLineWidth(0.3);
   for (let i = 0; i < n; i++) {
     doc.line(cx, cy, cx + R * Math.cos(angle(i)), cy + R * Math.sin(angle(i)));
   }
-  const dataPts: number[] = [];
+
+  // Calculate data points
+  const dataPts: Array<{ x: number; y: number }> = [];
   for (let i = 0; i < n; i++) {
     const f = Math.max(0, Math.min(1, scores[i] / 10));
-    dataPts.push(cx + R * f * Math.cos(angle(i)), cy + R * f * Math.sin(angle(i)));
+    dataPts.push({
+      x: cx + R * f * Math.cos(angle(i)),
+      y: cy + R * f * Math.sin(angle(i)),
+    });
   }
+
+  // Draw filled radar data area using standard triangles
   doc.setFillColor(C.primaryLight[0], C.primaryLight[1], C.primaryLight[2]);
+  for (let i = 0; i < n; i++) {
+    const nextIdx = (i + 1) % n;
+    doc.triangle(
+      cx, cy,
+      dataPts[i].x, dataPts[i].y,
+      dataPts[nextIdx].x, dataPts[nextIdx].y,
+      'F'
+    );
+  }
+
+  // Draw border outline lines around data area
   doc.setDrawColor(C.primary[0], C.primary[1], C.primary[2]);
   doc.setLineWidth(0.7);
-  fillPolygon(doc, dataPts, 'FD');
+  for (let i = 0; i < n; i++) {
+    const nextIdx = (i + 1) % n;
+    doc.line(dataPts[i].x, dataPts[i].y, dataPts[nextIdx].x, dataPts[nextIdx].y);
+  }
+
+  // Labels
   for (let i = 0; i < n; i++) {
     const a = angle(i);
     const lx = cx + R * 1.22 * Math.cos(a);
@@ -275,14 +324,28 @@ function drawDepreciation(
     doc.text(v.toLocaleString('it-IT'), x - 3, py(v) + 2, { align: 'right' });
   }
 
-  const pts: number[] = [];
-  values.forEach((v, i) => {
-    pts.push(px(xs[i]), py(v));
-  });
+  // Draw filled area segments (rect + triangle for each segment)
   doc.setFillColor(C.primaryLight[0], C.primaryLight[1], C.primaryLight[2]);
+  for (let i = 0; i < 3; i++) {
+    const x1 = px(xs[i]);
+    const x2 = px(xs[i+1]);
+    const y1 = py(values[i]);
+    const y2 = py(values[i+1]);
+    const bottomY = y + plotH;
+    const minCleanY = Math.max(y1, y2);
+    
+    // Bottom rectangle
+    doc.rect(x1, minCleanY, x2 - x1, bottomY - minCleanY, 'F');
+    // Top triangle
+    doc.triangle(x1, y1, x2, y2, y1 < y2 ? x1 : x2, minCleanY, 'F');
+  }
+
+  // Draw outline border stroke for the depreciation trend line
   doc.setDrawColor(C.primary[0], C.primary[1], C.primary[2]);
   doc.setLineWidth(0.8);
-  fillPolygon(doc, [x, y + plotH, ...pts, x + plotW, y + plotH], 'FD');
+  for (let i = 0; i < 3; i++) {
+    doc.line(px(xs[i]), py(values[i]), px(xs[i+1]), py(values[i+1]));
+  }
 
   doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
   values.forEach((v, i) => {
@@ -887,7 +950,11 @@ function drawConditionPage(doc: import('jspdf').jsPDF, data: PDFConditionData): 
     ['Anno immatricolazione', String(data.refinedYear)],
     ['Chilometraggio reale', `${data.refinedKm.toLocaleString('it-IT')} km`],
     ['Storico incidenti', data.accidentHistoryLabel],
-    ['Modalita di calcolo selezionata', data.costModeLabel],
+    ['Tagliandi certificati', data.serviceHistoryLabel],
+    ['Proprietari precedenti', data.previousOwnersLabel],
+    ['Stato interni', data.interiorConditionLabel],
+    ['Optional rilevanti', data.optionsListLabels.length > 0 ? data.optionsListLabels.join(', ') : 'Nessuno'],
+    ['Calcolo costi', data.costModeLabel],
   ];
   specTable(w, specs);
   w.y += 4;

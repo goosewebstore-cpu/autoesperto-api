@@ -8,20 +8,22 @@ import {
   Clock,
   ExternalLink,
   Gauge,
-  Hammer,
-  HelpCircle,
   Loader2,
   MapPin,
-  MessageSquare,
   Plus,
   Send,
   ShieldAlert,
-  ShieldCheck,
   Sparkles,
-  Trash2,
   Upload,
   Wrench,
   X,
+  Hammer,
+  Store,
+  User,
+  Info,
+  TrendingDown,
+  TrendingUp,
+  Minus,
 } from 'lucide-react';
 import { analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
 
@@ -91,10 +93,192 @@ function getVerdict(totalMin: number, totalMax: number, carValue: number): { ver
   };
 }
 
-function getEbaySearchUrl(category: string, make?: string, model?: string) {
-  const label = categoryLabel(category);
-  const query = `ricambi ${label} ${make || ''} ${model || ''}`.trim();
-  return `https://www.ebay.it/sch/i.html?_nkw=${encodeURIComponent(query)}`;
+/* ── Multi-store search URL generators ── */
+function getEbayUrl(query: string, make?: string, model?: string) {
+  const full = `ricambi ${query} ${make || ''} ${model || ''}`.trim();
+  return `https://www.ebay.it/sch/i.html?_nkw=${encodeURIComponent(full)}`;
+}
+
+function getAutodocUrl(query: string, make?: string, model?: string) {
+  const full = `${query} ${make || ''} ${model || ''}`.trim();
+  return `https://www.autodoc.it/ricerca?keyword=${encodeURIComponent(full)}`;
+}
+
+function getOscaroUrl(query: string, make?: string, model?: string) {
+  const full = `${query} ${make || ''} ${model || ''}`.trim();
+  return `https://www.oscaro.it/ricerca?q=${encodeURIComponent(full)}`;
+}
+
+const STORE_BUTTONS = [
+  { name: 'eBay', color: 'bg-blue-600 hover:bg-blue-700', getUrl: getEbayUrl },
+  { name: 'Autodoc', color: 'bg-orange-500 hover:bg-orange-600', getUrl: getAutodocUrl },
+  { name: 'Oscaro', color: 'bg-emerald-600 hover:bg-emerald-700', getUrl: getOscaroUrl },
+] as const;
+
+/* ── Depreciation curve matching backend (pricing.ts) ── */
+const DEPRECIATION_CURVE: Array<[number, number]> = [
+  [0, 1.0], [1, 0.82], [2, 0.74], [3, 0.67], [4, 0.63], [5, 0.58], [6, 0.56], [7, 0.51],
+  [8, 0.46], [9, 0.42], [10, 0.38], [11, 0.35], [12, 0.32], [13, 0.30], [14, 0.28], [15, 0.26],
+];
+
+function getResidual(age: number): number {
+  const clamped = Math.max(0, age);
+  if (clamped >= 15) return Math.max(0.12, 0.26 - (clamped - 15) * 0.015);
+  let residual = DEPRECIATION_CURVE[0][1];
+  for (const [ageAt, value] of DEPRECIATION_CURVE) {
+    if (ageAt <= clamped) residual = value;
+    else break;
+  }
+  return residual;
+}
+
+function reverseBasePrice(estimatedValue: number, vehicleYear: number | undefined): number {
+  const currentYear = new Date().getFullYear();
+  const originalAge = Math.max(0, currentYear - (vehicleYear || currentYear - 5));
+  const originalResidual = getResidual(originalAge);
+  const base = originalResidual > 0.05 ? estimatedValue / originalResidual : estimatedValue;
+  return Math.max(8000, base);
+}
+
+/* ── Repair cost database: DIY (parts only) vs Mechanic (parts + labor) ── */
+interface RepairCostEntry {
+  diyMin: number;
+  diyMax: number;
+  mechMin: number;
+  mechMax: number;
+  canDiy: boolean;
+  diyDifficulty: 'facile' | 'medio' | 'difficile';
+}
+
+const DAMAGE_REPAIR_COSTS: Record<string, RepairCostEntry> = {
+  graffio:            { diyMin: 12, diyMax: 45,   mechMin: 120, mechMax: 300,  canDiy: true,  diyDifficulty: 'facile' },
+  ammaccatura:        { diyMin: 25, diyMax: 80,   mechMin: 180, mechMax: 500,  canDiy: true,  diyDifficulty: 'medio' },
+  paraurti:           { diyMin: 60, diyMax: 250,  mechMin: 300, mechMax: 750,  canDiy: true,  diyDifficulty: 'medio' },
+  fanale:             { diyMin: 40, diyMax: 180,  mechMin: 120, mechMax: 350,  canDiy: true,  diyDifficulty: 'facile' },
+  specchietto:        { diyMin: 25, diyMax: 120,  mechMin: 80,  mechMax: 250,  canDiy: true,  diyDifficulty: 'facile' },
+  cerchio_gomma:      { diyMin: 40, diyMax: 200,  mechMin: 100, mechMax: 350,  canDiy: true,  diyDifficulty: 'medio' },
+  vetro:              { diyMin: 60, diyMax: 250,  mechMin: 180, mechMax: 500,  canDiy: false, diyDifficulty: 'difficile' },
+  carrozzeria:        { diyMin: 100, diyMax: 400, mechMin: 500, mechMax: 1500, canDiy: false, diyDifficulty: 'difficile' },
+  nessun_danno_evidente: { diyMin: 0, diyMax: 0, mechMin: 0,   mechMax: 0,    canDiy: true,  diyDifficulty: 'facile' },
+  non_chiaro:         { diyMin: 50, diyMax: 200,  mechMin: 150, mechMax: 500,  canDiy: false, diyDifficulty: 'difficile' },
+};
+
+function getDamageRepairCost(category: string): RepairCostEntry {
+  return DAMAGE_REPAIR_COSTS[category] || DAMAGE_REPAIR_COSTS['non_chiaro'];
+}
+
+/* ── Dashboard lights with DIY vs Mechanic and urgency levels ── */
+type Urgency = 'high' | 'medium' | 'low';
+
+interface DashboardLightOption {
+  id: string;
+  label: string;
+  diyMin: number;
+  diyMax: number;
+  mechMin: number;
+  mechMax: number;
+  canDiy: boolean;
+  urgency: Urgency;
+  urgencyNote: string;
+  ebayQuery: string;
+  autodocQuery: string;
+}
+
+const DASHBOARD_LIGHTS_OPTIONS: DashboardLightOption[] = [
+  {
+    id: 'spia_motore', label: 'Spia Motore (Check Engine)',
+    diyMin: 15, diyMax: 80, mechMin: 80, mechMax: 350,
+    canDiy: false, urgency: 'medium',
+    urgencyNote: 'Portare in officina per diagnosi OBD2. Potrebbe essere un sensore economico o un problema più serio.',
+    ebayQuery: 'sensore sonda lambda valvola egr',
+    autodocQuery: 'sonda lambda sensore motore',
+  },
+  {
+    id: 'spia_abs', label: 'Spia ABS / ESP',
+    diyMin: 20, diyMax: 70, mechMin: 60, mechMax: 250,
+    canDiy: true, urgency: 'medium',
+    urgencyNote: 'L\'ABS non funziona: frenata d\'emergenza compromessa. Far controllare il sensore ruota.',
+    ebayQuery: 'sensore abs pompa abs',
+    autodocQuery: 'sensore abs',
+  },
+  {
+    id: 'spia_freni', label: 'Spia Freni / Pastiglie',
+    diyMin: 25, diyMax: 80, mechMin: 80, mechMax: 220,
+    canDiy: true, urgency: 'high',
+    urgencyNote: '⚠️ Fermare l\'auto se la spia lampeggia! Verificare livello liquido freni e usura pastiglie.',
+    ebayQuery: 'pastiglie freni dischi freni',
+    autodocQuery: 'pastiglie freno dischi freno',
+  },
+  {
+    id: 'spia_airbag', label: 'Spia Airbag',
+    diyMin: 30, diyMax: 90, mechMin: 90, mechMax: 350,
+    canDiy: false, urgency: 'medium',
+    urgencyNote: 'Airbag potrebbe non attivarsi in caso di incidente. Diagnosi in officina necessaria.',
+    ebayQuery: 'sensore airbag contatto strisciante',
+    autodocQuery: 'sensore airbag molla orologio',
+  },
+  {
+    id: 'spia_fap', label: 'Spia DPF / FAP intasato',
+    diyMin: 15, diyMax: 45, mechMin: 150, mechMax: 550,
+    canDiy: false, urgency: 'medium',
+    urgencyNote: 'Effettuare un viaggio autostradale a 3000 rpm per 20 min. Se persiste, lavaggio FAP in officina.',
+    ebayQuery: 'liquido fap sensore pressione fap additivo dpf',
+    autodocQuery: 'additivo fap filtro particolato',
+  },
+  {
+    id: 'spia_batteria', label: 'Spia Batteria / Alternatore',
+    diyMin: 60, diyMax: 150, mechMin: 120, mechMax: 350,
+    canDiy: true, urgency: 'high',
+    urgencyNote: '⚠️ Rischio di rimanere a piedi! Controllare batteria e alternatore il prima possibile.',
+    ebayQuery: 'alternatore batteria auto',
+    autodocQuery: 'alternatore batteria',
+  },
+];
+
+const URGENCY_CONFIG: Record<Urgency, { label: string; dot: string; bg: string; text: string }> = {
+  high:   { label: 'Urgente',      dot: 'bg-red-500',    bg: 'bg-red-50',    text: 'text-red-700' },
+  medium: { label: 'Da verificare', dot: 'bg-amber-500',  bg: 'bg-amber-50',  text: 'text-amber-700' },
+  low:    { label: 'Non urgente',  dot: 'bg-green-500',  bg: 'bg-green-50',  text: 'text-green-700' },
+};
+
+/* ── KM usage level calculator ── */
+function getKmUsageLevel(km: number, age: number): { level: 'low' | 'average' | 'high'; message: string; icon: typeof TrendingDown } {
+  const avgKmPerYear = 12000;
+  const expectedKm = Math.max(10000, age * avgKmPerYear);
+  const ratio = km / expectedKm;
+
+  if (ratio < 0.75) {
+    return { level: 'low', message: `Chilometraggio basso per l'età (media attesa: ~${expectedKm.toLocaleString('it-IT')} km)`, icon: TrendingDown };
+  }
+  if (ratio > 1.25) {
+    return { level: 'high', message: `Chilometraggio superiore alla media (media attesa: ~${expectedKm.toLocaleString('it-IT')} km)`, icon: TrendingUp };
+  }
+  return { level: 'average', message: `Chilometraggio nella media per un'auto del ${new Date().getFullYear() - age} (~${avgKmPerYear.toLocaleString('it-IT')} km/anno)`, icon: Minus };
+}
+
+const KM_LEVEL_STYLE: Record<string, { bg: string; text: string; bar: string }> = {
+  low:     { bg: 'bg-emerald-50', text: 'text-emerald-700', bar: 'bg-emerald-500' },
+  average: { bg: 'bg-blue-50',    text: 'text-blue-700',    bar: 'bg-blue-500' },
+  high:    { bg: 'bg-amber-50',   text: 'text-amber-700',   bar: 'bg-amber-500' },
+};
+
+/* ── Store link button component ── */
+function StoreLinks({ query, make, model }: { query: string; make?: string; model?: string }) {
+  return (
+    <div className="flex flex-wrap gap-1.5">
+      {STORE_BUTTONS.map((store) => (
+        <a
+          key={store.name}
+          href={store.getUrl(query, make, model)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className={`inline-flex items-center gap-1 px-2 py-1 rounded text-white text-[10px] font-bold transition-colors ${store.color}`}
+        >
+          {store.name} <ExternalLink className="w-2.5 h-2.5" />
+        </a>
+      ))}
+    </div>
+  );
 }
 
 interface DamageResult {
@@ -103,20 +287,11 @@ interface DamageResult {
 }
 
 interface ConditionAssessmentProps {
-  /** Estimated vehicle market value */
+  /** Estimated vehicle market value (already depreciated by backend) */
   estimatedValue: number;
   /** Vehicle info for context */
   vehicle?: { make?: string; model?: string; year?: number; km?: number };
 }
-
-const DASHBOARD_LIGHTS_OPTIONS = [
-  { id: 'spia_motore', label: 'Spia Motore (Check Engine)', costMin: 80, costMax: 350, ebayQuery: 'sensore sonda lambda valvola egr' },
-  { id: 'spia_abs', label: 'Spia ABS / ESP', costMin: 60, costMax: 220, ebayQuery: 'sensore abs pompa abs' },
-  { id: 'spia_freni', label: 'Spia Freni / Pastiglie', costMin: 50, costMax: 180, ebayQuery: 'pastiglie freni dischi freni' },
-  { id: 'spia_airbag', label: 'Spia Airbag', costMin: 90, costMax: 300, ebayQuery: 'sensore airbag contatto strisciante' },
-  { id: 'spia_fap', label: 'Spia DPF / FAP intasato', costMin: 120, costMax: 450, ebayQuery: 'liquido fap sensore pressione fap' },
-  { id: 'spia_batteria', label: 'Spia Batteria / Alternatore', costMin: 90, costMax: 280, ebayQuery: 'alternatore batteria auto' },
-];
 
 export default function ConditionAssessment({ estimatedValue, vehicle }: ConditionAssessmentProps) {
   const currentYear = new Date().getFullYear();
@@ -134,30 +309,33 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
   const [selectedLights, setSelectedLights] = useState<string[]>([]);
   const [accidentHistory, setAccidentHistory] = useState<string>('none');
 
+  // DIY vs Mechanic toggle
+  const [costMode, setCostMode] = useState<'diy' | 'mechanic'>('mechanic');
+
   // AI Assistant state
   const [aiQuestion, setAiQuestion] = useState('');
   const [aiAnswer, setAiAnswer] = useState<string | null>(null);
   const [aiLoading, setAiLoading] = useState(false);
 
-  // Calculate real market valuation based on precise year and km
-  const baseValue = estimatedValue > 0 ? estimatedValue : 12500;
-  const age = Math.max(0, currentYear - (year || initialYear));
-  
-  // Real depreciation adjustment
-  let ageFactor = Math.pow(0.93, Math.min(age, 15));
-  let kmFactor = Math.max(0.45, Math.min(1.20, 1 - ((km - 60000) / 250000)));
-  
-  // Light penalties
-  let lightsPenalty = selectedLights.length * 0.035;
-  
-  // Accident penalties
+  // ── Correct market valuation ──
+  const newCarBasePrice = reverseBasePrice(estimatedValue, vehicle?.year);
+  const userAge = Math.max(0, currentYear - (year || initialYear));
+  const ageResidual = getResidual(userAge);
+  const standardKm = Math.max(10000, userAge * 12000);
+  const kmDelta = km - standardKm;
+  const kmFactor = Math.min(1.12, Math.max(0.70, 1 - (kmDelta / 300000)));
+  const lightsPenalty = selectedLights.length * 0.03;
   let accidentPenalty = 0;
-  if (accidentHistory === 'minor') accidentPenalty = 0.08;
-  if (accidentHistory === 'medium') accidentPenalty = 0.16;
-  if (accidentHistory === 'severe') accidentPenalty = 0.28;
+  if (accidentHistory === 'minor') accidentPenalty = 0.06;
+  if (accidentHistory === 'medium') accidentPenalty = 0.14;
+  if (accidentHistory === 'severe') accidentPenalty = 0.25;
+  const conditionMultiplier = Math.max(0.50, (1 - lightsPenalty - accidentPenalty));
+  const ricalculatedValue = Math.max(1500, Math.round(newCarBasePrice * ageResidual * kmFactor * conditionMultiplier / 50) * 50);
 
-  const totalMultiplier = Math.max(0.25, ageFactor * kmFactor * (1 - lightsPenalty - accidentPenalty));
-  const ricalculatedValue = Math.max(800, Math.round(baseValue * totalMultiplier / 50) * 50);
+  // KM usage analysis
+  const kmUsage = getKmUsageLevel(km, userAge);
+  const kmStyle = KM_LEVEL_STYLE[kmUsage.level];
+  const KmIcon = kmUsage.icon;
 
   const handleFile = async (file?: File) => {
     if (!file) return;
@@ -231,30 +409,59 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
   };
 
   const damagedResults = results.filter((r) => r.analysis.damage.visible);
-  
-  // Calculate total costs from photos + dashboard lights
-  let totalMin = damagedResults.reduce((sum, r) => sum + (r.analysis.repairRange?.min ?? 0), 0);
-  let totalMax = damagedResults.reduce((sum, r) => sum + (r.analysis.repairRange?.max ?? 0), 0);
+
+  // Calculate total costs based on cost mode
+  let totalMin = 0;
+  let totalMax = 0;
+
+  damagedResults.forEach((r) => {
+    const costs = getDamageRepairCost(r.analysis.damage.category);
+    if (costMode === 'diy') {
+      totalMin += costs.diyMin;
+      totalMax += costs.diyMax;
+    } else {
+      totalMin += costs.mechMin;
+      totalMax += costs.mechMax;
+    }
+  });
 
   selectedLights.forEach((lightId) => {
     const opt = DASHBOARD_LIGHTS_OPTIONS.find((l) => l.id === lightId);
     if (opt) {
-      totalMin += opt.costMin;
-      totalMax += opt.costMax;
+      if (costMode === 'diy') {
+        totalMin += opt.diyMin;
+        totalMax += opt.diyMax;
+      } else {
+        totalMin += opt.mechMin;
+        totalMax += opt.mechMax;
+      }
     }
   });
 
-  const hasDamages = damagedResults.length > 0 || selectedLights.length > 0;
   const canAddMore = results.length < MAX_PHOTOS;
-
   const verdictInfo = getVerdict(totalMin, totalMax, ricalculatedValue);
   const VerdictIcon = verdictInfo.verdict === 'repair' ? CheckCircle2 : verdictInfo.verdict === 'evaluate' ? AlertTriangle : ShieldAlert;
 
-  // Similar market cars calculation
+  // ── Similar market cars ──
+  const make = vehicle?.make || 'Auto';
+  const model = vehicle?.model || 'usata';
+  const olderYear = Math.max(2000, year - 1);
+  const newerYear = Math.min(currentYear, year + 1);
+  const olderKm = km + 18000;
+  const newerKm = Math.max(5000, km - 20000);
+  const olderAge = Math.max(0, currentYear - olderYear);
+  const newerAge = Math.max(0, currentYear - newerYear);
+  const olderStandardKm = Math.max(10000, olderAge * 12000);
+  const newerStandardKm = Math.max(10000, newerAge * 12000);
+  const olderKmFactor = Math.min(1.12, Math.max(0.70, 1 - ((olderKm - olderStandardKm) / 300000)));
+  const newerKmFactor = Math.min(1.12, Math.max(0.70, 1 - ((newerKm - newerStandardKm) / 300000)));
+  const olderPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(olderAge) * olderKmFactor / 50) * 50);
+  const newerPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(newerAge) * newerKmFactor / 50) * 50);
+
   const similarCars = [
-    { model: `${vehicle?.make || 'Auto'} ${vehicle?.model || 'usata'} (${year})`, km: `${km.toLocaleString('it-IT')} km`, price: ricalculatedValue },
-    { model: `${vehicle?.make || 'Auto'} ${vehicle?.model || 'usata'} (${Math.max(2000, year - 1)})`, km: `${(km + 15000).toLocaleString('it-IT')} km`, price: Math.round(ricalculatedValue * 0.91) },
-    { model: `${vehicle?.make || 'Auto'} ${vehicle?.model || 'usata'} (${year + 1})`, km: `${Math.max(10000, km - 15000).toLocaleString('it-IT')} km`, price: Math.round(ricalculatedValue * 1.09) },
+    { model: `${make} ${model} (${year})`, km: `${km.toLocaleString('it-IT')} km`, price: ricalculatedValue },
+    { model: `${make} ${model} (${olderYear})`, km: `${olderKm.toLocaleString('it-IT')} km`, price: olderPrice },
+    { model: `${make} ${model} (${newerYear})`, km: `${newerKm.toLocaleString('it-IT')} km`, price: newerPrice },
   ];
 
   return (
@@ -263,10 +470,10 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
         <div>
           <h2 className="text-base font-bold text-text-primary flex items-center gap-2">
             <ShieldAlert className="w-5 h-5 text-accent" />
-            Valutazione Condizione & Stima Ricambi
+            Valutazione Condizione &amp; Stima Ricambi
           </h2>
           <p className="text-sm text-text-secondary mt-1">
-            Inserisci anno e chilometraggio reale per ricalcolare il valore preciso dell&apos;auto e trovare i ricambi su eBay.
+            Personalizza anno e chilometraggio, seleziona spie o incidenti, carica foto dei danni e trova subito i ricambi su eBay, Autodoc e Oscaro.
           </p>
         </div>
       </div>
@@ -300,7 +507,23 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
               onChange={(e) => setKm(Math.max(0, Number(e.target.value)))}
               className="w-full text-sm font-semibold border border-border rounded-lg px-3 py-2 bg-white focus:outline-none focus:border-accent"
             />
+            {/* KM Slider */}
+            <input
+              type="range"
+              min="0"
+              max="400000"
+              step="5000"
+              value={km}
+              onChange={(e) => setKm(Number(e.target.value))}
+              className="w-full h-1.5 mt-2 appearance-none bg-slate-200 rounded-full cursor-pointer accent-accent"
+            />
           </div>
+        </div>
+
+        {/* KM Usage Indicator */}
+        <div className={`flex items-center gap-2 px-3 py-2 rounded-lg ${kmStyle.bg}`}>
+          <KmIcon className={`w-4 h-4 ${kmStyle.text} flex-shrink-0`} />
+          <p className={`text-xs font-medium ${kmStyle.text}`}>{kmUsage.message}</p>
         </div>
 
         {/* Dashboard Lights */}
@@ -309,13 +532,15 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
           <div className="flex flex-wrap gap-2">
             {DASHBOARD_LIGHTS_OPTIONS.map((light) => {
               const active = selectedLights.includes(light.id);
+              const urg = URGENCY_CONFIG[light.urgency];
               return (
                 <button
                   key={light.id}
                   type="button"
                   onClick={() => toggleLight(light.id)}
-                  className={`text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-colors ${active ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold shadow-sm' : 'bg-white text-text-secondary border-border hover:bg-slate-50'}`}
+                  className={`text-xs px-2.5 py-1.5 rounded-lg border font-medium transition-colors flex items-center gap-1.5 ${active ? 'bg-amber-100 text-amber-900 border-amber-300 font-bold shadow-sm' : 'bg-white text-text-secondary border-border hover:bg-slate-50'}`}
                 >
+                  {active && <span className={`w-2 h-2 rounded-full ${urg.dot} flex-shrink-0`} />}
                   {light.label}
                 </button>
               );
@@ -339,27 +564,76 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
         </div>
 
         {/* Dynamic Adjusted Market Value Banner */}
-        <div className="bg-white rounded-xl p-4 border border-accent/20 shadow-sm space-y-2">
+        <div className="bg-white rounded-xl p-4 border border-accent/20 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-bold text-text-secondary">Valore di mercato stimato per anno {year} e {km.toLocaleString('it-IT')} km:</span>
             <span className="text-xl font-black text-accent">{price(ricalculatedValue)}</span>
           </div>
 
-          {/* Integrated Similar Market Cars */}
-          <div className="border-t border-slate-100 pt-2.5 mt-2">
+          {/* Breakdown bar */}
+          <div className="space-y-1">
+            <div className="flex items-center gap-2 text-[11px] text-text-tertiary flex-wrap">
+              <span>Prezzo da nuovo: ~{price(newCarBasePrice)}</span>
+              <span>·</span>
+              <span>Residuo età: {Math.round(ageResidual * 100)}%</span>
+              <span>·</span>
+              <span>Fattore KM: {Math.round(kmFactor * 100)}%</span>
+              {conditionMultiplier < 1 && (
+                <>
+                  <span>·</span>
+                  <span>Condizione: -{Math.round((1 - conditionMultiplier) * 100)}%</span>
+                </>
+              )}
+            </div>
+            <div className="w-full h-2 bg-slate-100 rounded-full overflow-hidden">
+              <div
+                className="h-full rounded-full bg-gradient-to-r from-accent to-blue-400 transition-all duration-500"
+                style={{ width: `${Math.max(5, Math.min(100, (ricalculatedValue / newCarBasePrice) * 100))}%` }}
+              />
+            </div>
+          </div>
+
+          {/* Similar Market Cars */}
+          <div className="border-t border-slate-100 pt-2.5">
             <p className="text-[11px] font-bold text-text-tertiary uppercase tracking-wider mb-2">
               Confronto con auto simili in vendita sul mercato
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
               {similarCars.map((item, idx) => (
-                <div key={idx} className="bg-surface-2 p-2.5 rounded-lg border border-border/80">
+                <div key={idx} className={`p-2.5 rounded-lg border ${idx === 0 ? 'bg-accent/5 border-accent/30' : 'bg-surface-2 border-border/80'}`}>
                   <p className="text-xs font-bold text-text-primary truncate">{item.model}</p>
                   <p className="text-[11px] text-text-secondary mt-0.5">{item.km}</p>
-                  <p className="text-xs font-extrabold text-accent mt-1">{price(item.price)}</p>
+                  <p className={`text-sm font-extrabold mt-1 ${idx === 0 ? 'text-accent' : 'text-text-primary'}`}>{price(item.price)}</p>
                 </div>
               ))}
             </div>
           </div>
+        </div>
+      </div>
+
+      {/* ── DIY vs Mechanic Toggle ── */}
+      <div className="flex items-center justify-between bg-surface-2 rounded-xl p-3 border border-border">
+        <div className="flex items-center gap-2">
+          <Info className="w-4 h-4 text-accent" />
+          <span className="text-xs font-bold text-text-secondary">Modalità costo stimato:</span>
+        </div>
+        <div className="flex rounded-lg border border-border overflow-hidden">
+          <button
+            type="button"
+            onClick={() => setCostMode('diy')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-colors ${costMode === 'diy' ? 'bg-emerald-600 text-white' : 'bg-white text-text-secondary hover:bg-slate-50'}`}
+          >
+            <Hammer className="w-3.5 h-3.5" />
+            Fai-da-te (solo ricambi)
+          </button>
+          <button
+            type="button"
+            onClick={() => setCostMode('mechanic')}
+            className={`flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold transition-colors ${costMode === 'mechanic' ? 'bg-blue-600 text-white' : 'bg-white text-text-secondary hover:bg-slate-50'}`}
+          >
+            <Store className="w-3.5 h-3.5" />
+            Meccanico (ricambi + manodopera)
+          </button>
         </div>
       </div>
 
@@ -396,32 +670,53 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
 
       {error && <p role="alert" className="mt-3 text-sm text-rose-600 font-semibold">{error}</p>}
 
-      {/* Selected Dashboard Lights Spare Parts List */}
+      {/* ── Selected Dashboard Lights: DIY vs Mechanic ── */}
       {selectedLights.length > 0 && (
         <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-4 space-y-3">
           <h4 className="text-xs font-bold text-amber-900 uppercase tracking-wide flex items-center gap-1.5">
             <AlertTriangle className="w-4 h-4 text-amber-600" />
-            Ricambi Stimati per Spie Cruscotto Accese
+            Spie Attive — Ricambi &amp; Costi di Riparazione
           </h4>
-          <div className="space-y-2">
+          <div className="space-y-2.5">
             {selectedLights.map((lightId) => {
               const opt = DASHBOARD_LIGHTS_OPTIONS.find((l) => l.id === lightId);
               if (!opt) return null;
-              const ebayUrl = `https://www.ebay.it/sch/i.html?_nkw=${encodeURIComponent(`ricambi ${opt.ebayQuery} ${vehicle?.make || ''} ${vehicle?.model || ''}`)}`;
+              const urg = URGENCY_CONFIG[opt.urgency];
+              const costMin = costMode === 'diy' ? opt.diyMin : opt.mechMin;
+              const costMax = costMode === 'diy' ? opt.diyMax : opt.mechMax;
+
               return (
-                <div key={lightId} className="flex flex-wrap items-center justify-between bg-white p-2.5 rounded-lg border border-amber-200 text-xs gap-2">
-                  <div>
-                    <span className="font-bold text-slate-900">{opt.label}</span>
-                    <span className="ml-2 text-slate-500">Stima pezzo: {price(opt.costMin)}–{price(opt.costMax)}</span>
+                <div key={lightId} className="bg-white p-3 rounded-lg border border-amber-200 space-y-2">
+                  <div className="flex items-start justify-between gap-2">
+                    <div>
+                      <div className="flex items-center gap-2">
+                        <span className={`w-2.5 h-2.5 rounded-full ${urg.dot} flex-shrink-0`} />
+                        <span className="text-xs font-bold text-slate-900">{opt.label}</span>
+                        <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded ${urg.bg} ${urg.text}`}>{urg.label}</span>
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-1 ml-4.5">{opt.urgencyNote}</p>
+                    </div>
+                    <div className="text-right flex-shrink-0">
+                      <p className="text-sm font-extrabold text-slate-900">{price(costMin)}–{price(costMax)}</p>
+                      <p className="text-[10px] text-slate-400">{costMode === 'diy' ? 'Solo ricambi' : 'Ricambi + manodopera'}</p>
+                    </div>
                   </div>
-                  <a
-                    href={ebayUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 px-2.5 py-1 rounded bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors"
-                  >
-                    Trova su eBay <ExternalLink className="w-3 h-3" />
-                  </a>
+                  {/* DIY feasibility badge */}
+                  <div className="flex items-center gap-2 ml-4.5">
+                    {opt.canDiy ? (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                        <Hammer className="w-3 h-3" /> Fattibile fai-da-te
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                        <Store className="w-3 h-3" /> Serve meccanico/officina
+                      </span>
+                    )}
+                  </div>
+                  {/* Multi-store links */}
+                  <div className="ml-4.5">
+                    <StoreLinks query={opt.ebayQuery} make={vehicle?.make} model={vehicle?.model} />
+                  </div>
                 </div>
               );
             })}
@@ -429,13 +724,17 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
         </div>
       )}
 
-      {/* Individual damage results with eBay Spare Parts Link */}
+      {/* ── Damage results with DIY vs Mechanic costs ── */}
       {results.length > 0 && (
         <div className="space-y-3">
           {results.map((r, idx) => {
             const isDamaged = r.analysis.damage.visible;
             const sev = severityConfig(r.analysis.damage.severity);
-            const ebayUrl = getEbaySearchUrl(r.analysis.damage.category, vehicle?.make, vehicle?.model);
+            const costs = getDamageRepairCost(r.analysis.damage.category);
+            const costMin = costMode === 'diy' ? costs.diyMin : costs.mechMin;
+            const costMax = costMode === 'diy' ? costs.diyMax : costs.mechMax;
+            const damageQuery = categoryLabel(r.analysis.damage.category);
+
             return (
               <div key={r.id} className={`rounded-xl border p-4 ${isDamaged ? 'border-amber-200 bg-amber-50/50' : 'border-border bg-surface-2'}`}>
                 <div className="flex items-start justify-between gap-3">
@@ -443,7 +742,7 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 text-xs font-bold ${isDamaged ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'}`}>
                       {idx + 1}
                     </div>
-                    <div className="min-w-0">
+                    <div className="min-w-0 space-y-2">
                       {isDamaged ? (
                         <>
                           <p className="text-sm font-bold text-text-primary">
@@ -451,19 +750,22 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
                             <span className={`ml-2 text-xs px-2 py-0.5 rounded-full border ${sev.badge}`}>{sev.label}</span>
                           </p>
                           {r.analysis.damage.area && (
-                            <p className="text-xs text-text-secondary mt-1 flex items-center gap-1">
+                            <p className="text-xs text-text-secondary flex items-center gap-1">
                               <MapPin className="w-3 h-3 text-text-tertiary flex-shrink-0" />
                               {r.analysis.damage.area}
                             </p>
                           )}
-                          <p className="text-xs text-text-secondary mt-1">{r.analysis.damage.description}</p>
-                          <div className="flex flex-wrap items-center gap-3 mt-2">
-                            {r.analysis.repairRange && (
-                              <span className="inline-flex items-center gap-1 text-sm font-extrabold text-text-primary">
-                                <Wrench className="w-3.5 h-3.5 text-accent" />
-                                {price(r.analysis.repairRange.min)}–{price(r.analysis.repairRange.max)}
-                              </span>
-                            )}
+                          <p className="text-xs text-text-secondary">{r.analysis.damage.description}</p>
+
+                          {/* Cost breakdown */}
+                          <div className="flex flex-wrap items-center gap-3">
+                            <span className="inline-flex items-center gap-1 text-sm font-extrabold text-text-primary">
+                              <Wrench className="w-3.5 h-3.5 text-accent" />
+                              {price(costMin)}–{price(costMax)}
+                            </span>
+                            <span className="text-[10px] text-text-tertiary">
+                              {costMode === 'diy' ? '(solo ricambi)' : '(ricambi + manodopera)'}
+                            </span>
                             {r.analysis.estimatedTimeDays != null && r.analysis.estimatedTimeDays > 0 && (
                               <span className="inline-flex items-center gap-1 text-xs text-text-secondary">
                                 <Clock className="w-3 h-3" />
@@ -472,17 +774,21 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
                             )}
                           </div>
 
-                          {/* eBay Spare Parts Link Button */}
-                          <div className="mt-3">
-                            <a
-                              href={ebayUrl}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold transition-colors shadow-sm"
-                            >
-                              Trova ricambio su eBay <ExternalLink className="w-3 h-3" />
-                            </a>
+                          {/* DIY feasibility */}
+                          <div className="flex items-center gap-2">
+                            {costs.canDiy ? (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full border border-emerald-200">
+                                <Hammer className="w-3 h-3" /> Fattibile fai-da-te ({costs.diyDifficulty})
+                              </span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-[10px] font-bold text-blue-700 bg-blue-50 px-2 py-0.5 rounded-full border border-blue-200">
+                                <Store className="w-3 h-3" /> Serve carrozziere/meccanico
+                              </span>
+                            )}
                           </div>
+
+                          {/* Multi-store links */}
+                          <StoreLinks query={damageQuery} make={vehicle?.make} model={vehicle?.model} />
                         </>
                       ) : (
                         <div className="flex items-center gap-2">
@@ -507,7 +813,7 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
         </div>
       )}
 
-      {/* Summary + Verdict */}
+      {/* ── Summary + Verdict ── */}
       <div className={`rounded-2xl border ${verdictInfo.borderColor} ${verdictInfo.bgColor} p-5 space-y-4`}>
         <div className="flex items-start gap-3">
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${verdictInfo.verdict === 'repair' ? 'bg-emerald-600 text-white' : verdictInfo.verdict === 'evaluate' ? 'bg-amber-500 text-white' : 'bg-rose-600 text-white'}`}>
@@ -520,60 +826,77 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
           </div>
         </div>
 
+        {/* Cost comparison box */}
+        {(damagedResults.length > 0 || selectedLights.length > 0) && (
+          <div className="border-t border-black/5 pt-3 grid grid-cols-2 gap-3">
+            <div className="bg-emerald-50/80 rounded-lg p-3 border border-emerald-200/60">
+              <p className="text-[10px] font-bold text-emerald-600 uppercase tracking-wide flex items-center gap-1">
+                <Hammer className="w-3 h-3" /> Fai-da-te
+              </p>
+              <p className="text-sm font-extrabold text-emerald-800 mt-1">
+                {price(damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).diyMin, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.diyMin || 0); }, 0))}
+                –
+                {price(damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).diyMax, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.diyMax || 0); }, 0))}
+              </p>
+              <p className="text-[10px] text-emerald-600 mt-0.5">Solo ricambi, lavoro tuo</p>
+            </div>
+            <div className="bg-blue-50/80 rounded-lg p-3 border border-blue-200/60">
+              <p className="text-[10px] font-bold text-blue-600 uppercase tracking-wide flex items-center gap-1">
+                <Store className="w-3 h-3" /> Meccanico
+              </p>
+              <p className="text-sm font-extrabold text-blue-800 mt-1">
+                {price(damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).mechMin, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.mechMin || 0); }, 0))}
+                –
+                {price(damagedResults.reduce((s, r) => s + getDamageRepairCost(r.analysis.damage.category).mechMax, 0) + selectedLights.reduce((s, id) => { const o = DASHBOARD_LIGHTS_OPTIONS.find(l => l.id === id); return s + (o?.mechMax || 0); }, 0))}
+              </p>
+              <p className="text-[10px] text-blue-600 mt-0.5">Ricambi + manodopera officina</p>
+            </div>
+          </div>
+        )}
+
         <div className="border-t border-black/5 pt-3">
           <p className="text-xs text-text-tertiary">
-            <strong className="text-text-secondary">Nota Manodopera & Meccanica:</strong> Le stime coprono il valore medio dei pezzi di ricambio. Per interventi alla meccanica o al motore, è necessario calcolare anche la manodopera specializzata dell&apos;officina.
+            <strong className="text-text-secondary">Nota Manodopera &amp; Meccanica:</strong> Le stime coprono il valore medio dei pezzi di ricambio e della manodopera. I prezzi reali variano in base alla zona e all&apos;officina. Per interventi complessi, richiedi sempre un preventivo scritto.
           </p>
         </div>
       </div>
 
-      {/* Interactive AI Assistant Widget */}
+      {/* ── Interactive AI Assistant Widget ── */}
       <div className="rounded-xl border border-blue-200 bg-blue-50/50 p-4 space-y-3">
         <div className="flex items-center gap-2">
           <Bot className="w-5 h-5 text-blue-600" />
           <h3 className="text-sm font-bold text-blue-900">Chiedi all&apos;Esperto AI AutoEsperto</h3>
         </div>
         <p className="text-xs text-blue-700">
-          Hai un dubbio su costi, sostituzione componenti o su come procedere? Fai una domanda live all&apos;AI:
+          Hai un dubbio su costi, sostituzione componenti o su come procedere? Fai una domanda:
         </p>
 
         {/* Quick chip buttons */}
         <div className="flex flex-wrap gap-1.5">
-          <button
-            type="button"
-            onClick={() => askAiAssistant('Faro opaco vs rotto')}
-            className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-blue-200 text-blue-800 hover:bg-blue-100 font-medium"
-          >
-            Faro opaco vs rotto
-          </button>
-          <button
-            type="button"
-            onClick={() => askAiAssistant('Come trovare i codici OEM dei ricambi su eBay?')}
-            className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-blue-200 text-blue-800 hover:bg-blue-100 font-medium"
-          >
-            Ricerca codici OEM eBay
-          </button>
-          <button
-            type="button"
-            onClick={() => askAiAssistant('Quali spie del cruscotto richiedono stop immediato?')}
-            className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-blue-200 text-blue-800 hover:bg-blue-100 font-medium"
-          >
-            Spie pericolose
-          </button>
-          <button
-            type="button"
-            onClick={() => askAiAssistant('Quanto costa cambiare o ritoccare il colore del paraurti?')}
-            className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-blue-200 text-blue-800 hover:bg-blue-100 font-medium"
-          >
-            Cambio o ritocco colore
-          </button>
+          {[
+            { label: 'Costo catena distribuzione', q: `Quanto costa cambiare la catena di distribuzione su ${make} ${model}?` },
+            { label: 'Freni: posso fare da solo?', q: `Posso cambiare le pastiglie dei freni da solo su ${make} ${model}?` },
+            { label: 'Spia motore accesa', q: `La spia motore è accesa su ${make} ${model} ${year}: cosa può essere?` },
+            { label: 'Dove comprare ricambi', q: `Dove trovo i ricambi migliori per ${make} ${model} online?` },
+            { label: 'Costo carrozziere', q: `Quanto costa riparare un paraurti dal carrozziere per ${make} ${model}?` },
+            { label: 'Controlli prima di comprare', q: `Cosa controllare prima di comprare una ${make} ${model} usata?` },
+          ].map((chip) => (
+            <button
+              key={chip.label}
+              type="button"
+              onClick={() => askAiAssistant(chip.q)}
+              className="text-[11px] px-2.5 py-1 rounded-full bg-white border border-blue-200 text-blue-800 hover:bg-blue-100 font-medium"
+            >
+              {chip.label}
+            </button>
+          ))}
         </div>
 
         {/* Input form */}
         <div className="flex gap-2">
           <input
             type="text"
-            placeholder="Scrivi qui la tua domanda (es. cambiare colore del paraurti?)"
+            placeholder="Scrivi qui la tua domanda (es. quanto costa cambiare la frizione?)"
             value={aiQuestion}
             onChange={(e) => setAiQuestion(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && askAiAssistant()}
@@ -595,13 +918,13 @@ export default function ConditionAssessment({ estimatedValue, vehicle }: Conditi
             <p className="font-bold text-blue-900 flex items-center gap-1">
               <Sparkles className="w-3.5 h-3.5 text-blue-600" /> Risposta dell&apos;Esperto:
             </p>
-            <p className="leading-relaxed text-slate-700">{aiAnswer}</p>
+            <p className="leading-relaxed text-slate-700 whitespace-pre-line">{aiAnswer}</p>
           </div>
         )}
       </div>
 
       <p className="text-xs text-text-tertiary">
-        Le foto non vengono pubblicate. I dati ricalcolati forniscono una stima di mercato indicativa basata su anno e chilometraggio.
+        Le foto non vengono pubblicate. I costi indicati sono stime basate su medie di mercato per ricambi e manodopera. I prezzi reali possono variare.
       </p>
     </section>
   );

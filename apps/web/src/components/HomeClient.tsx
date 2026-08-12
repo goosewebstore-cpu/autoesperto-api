@@ -1,7 +1,8 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
+import { useSearchParams } from 'next/navigation';
 import {
   BarChart3,
   BookOpen,
@@ -39,8 +40,36 @@ interface HomeStats {
 }
 
 interface HomeClientProps {
-  initialPayload: HomeInitialPayload;
   stats: HomeStats;
+}
+
+function optionalNumber(value: string | null) {
+  if (!value) return undefined;
+  const parsed = Number(value);
+  return Number.isFinite(parsed) ? parsed : undefined;
+}
+
+function PrefillHandler({ onAnalyze }: { onAnalyze: (payload: AnalyzePayload) => void }) {
+  const searchParams = useSearchParams();
+  const ranRef = useRef(false);
+
+  useEffect(() => {
+    if (ranRef.current) return;
+    const make = searchParams.get('make');
+    const model = searchParams.get('model');
+    if (make && model) {
+      ranRef.current = true;
+      onAnalyze({
+        make,
+        model,
+        year: optionalNumber(searchParams.get('year')),
+        km: optionalNumber(searchParams.get('km')),
+        requestedPrice: optionalNumber(searchParams.get('price')),
+      });
+    }
+  }, [searchParams, onAnalyze]);
+
+  return null;
 }
 
 const U = (id: string, w = 800) =>
@@ -126,20 +155,11 @@ function SmartImg({
   );
 }
 
-export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
+export default function HomeClient({ stats }: HomeClientProps) {
   const latestGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 4);
   const [report, setReport] = useState<AutoReport | null>(null);
   const [error, setError] = useState('');
   const [scannerKey, setScannerKey] = useState(0);
-  const prefilledRef = useRef(initialPayload);
-
-  useEffect(() => {
-    if (prefilledRef.current) {
-      void handleAnalyze(prefilledRef.current);
-      prefilledRef.current = null;
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const handleAnalyze = async (payload: AnalyzePayload) => {
     setError('');
@@ -163,6 +183,9 @@ export default function HomeClient({ initialPayload, stats }: HomeClientProps) {
 
   return (
     <div className="min-h-screen bg-background">
+      <Suspense fallback={null}>
+        <PrefillHandler onAnalyze={handleAnalyze} />
+      </Suspense>
       {/* ── HEADER ── */}
       {report ? (
         <header className="home-header">

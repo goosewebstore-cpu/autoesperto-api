@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import {
   AlertTriangle,
@@ -53,10 +53,14 @@ function euro(value: number) {
   return `${value.toLocaleString('it-IT')} €`;
 }
 
-export default function AccountDashboard({ checkout, subscription, upgrade, sessionId }: { checkout?: string; subscription?: string; upgrade?: string; sessionId?: string }) {
+export default function AccountDashboard() {
   const [isAnnual, setIsAnnual] = useState(true);
   const premium = getPremiumPricing(isAnnual ? 'year' : 'month');
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const subscription = searchParams.get('subscription') || undefined;
+  const upgrade = searchParams.get('upgrade') || undefined;
+  const sessionId = searchParams.get('session_id') || undefined;
   const inputRef = useRef<HTMLInputElement>(null);
   const [user, setUser] = useState<AccountUser | null>(null);
   const [analysis, setAnalysis] = useState<StoredAnalysis | null>(null);

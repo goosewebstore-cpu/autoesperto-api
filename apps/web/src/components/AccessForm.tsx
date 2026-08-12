@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import { ArrowLeft, Car, Check, Loader2, LockKeyhole, MailCheck, AlertTriangle } from 'lucide-react';
 import { loginAccount, registerAccount, verifyEmail, API_URL } from '@/lib/api';
@@ -19,8 +19,13 @@ function GoogleIcon() {
   );
 }
 
-export default function AccessForm({ nextPath = '/account', verifyToken, googleToken, googleErr }: { nextPath?: string; verifyToken?: string; googleToken?: string; googleErr?: string }) {
+export default function AccessForm() {
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const nextPath = searchParams.get('next') || '/account';
+  const verifyToken = searchParams.get('verify') || undefined;
+  const googleToken = searchParams.get('token') || undefined;
+  const googleErr = searchParams.get('err') || undefined;
   const [mode, setMode] = useState<'login' | 'register'>('register');
   const [name, setName] = useState('');
   const [identifier, setIdentifier] = useState('');

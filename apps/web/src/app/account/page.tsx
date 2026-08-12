@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import AccountDashboard from '@/components/AccountDashboard';
 
 export const metadata: Metadata = {
@@ -7,7 +8,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AccountPage({ searchParams }: { searchParams: Promise<{ checkout?: string; subscription?: string; upgrade?: string; session_id?: string }> }) {
-  const query = await searchParams;
-  return <AccountDashboard checkout={query.checkout} subscription={query.subscription} upgrade={query.upgrade} sessionId={query.session_id} />;
+export default function AccountPage() {
+  return (
+    <Suspense fallback={null}>
+      <AccountDashboard />
+    </Suspense>
+  );
 }

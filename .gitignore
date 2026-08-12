@@ -6,6 +6,14 @@ out/
 *.tsbuildinfo
 .DS_Store
 data/
+node_modules/
+.next/
+dist/
+out/
+.env
+*.tsbuildinfo
+.DS_Store
+data/
 api.log
 web.log
 *.db
@@ -13,3 +21,5 @@ web.log
 
 .vercel
 packages/database/src/generated/
+.open-next/
+.wrangler/

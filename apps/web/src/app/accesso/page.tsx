@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { Suspense } from 'react';
 import AccessForm from '@/components/AccessForm';
 
 export const metadata: Metadata = {
@@ -7,7 +8,10 @@ export const metadata: Metadata = {
   robots: { index: false, follow: false },
 };
 
-export default async function AccessPage({ searchParams }: { searchParams: Promise<{ next?: string; verify?: string; google?: string; token?: string; err?: string }> }) {
-  const query = await searchParams;
-  return <AccessForm nextPath={query.next || '/account'} verifyToken={query.verify} googleToken={query.token} googleErr={query.err} />;
+export default function AccessPage() {
+  return (
+    <Suspense fallback={null}>
+      <AccessForm />
+    </Suspense>
+  );
 }

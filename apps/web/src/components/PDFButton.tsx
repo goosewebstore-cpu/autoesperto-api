@@ -184,43 +184,24 @@ function fillPolygon(doc: import('jspdf').jsPDF, pts: number[], style: 'F' | 'S'
 }
 
 function drawCar(doc: import('jspdf').jsPDF, cx: number, cy: number, w: number): void {
-  const s = w / 100;
-  const P = (pts: Array<[number, number]>) => pts.map(([px, py]) => [cx + (px - 50) * s, cy + (py - 20) * s]);
-  const flat = (pts: Array<[number, number]>) => P(pts).flat();
-  doc.setFillColor(C.surface[0], C.surface[1], C.surface[2]);
-  doc.roundedRect(cx - w / 2 - 6, cy + 17.5, w + 12, 5, 2.5, 2.5, 'F');
-  doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
-  fillPolygon(
-    doc,
-    flat([
-      [2, 32],
-      [4, 20],
-      [12, 11],
-      [40, 6],
-      [72, 6],
-      [88, 19],
-      [97, 32],
-    ]),
-    'F'
-  );
-  doc.setFillColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
-  fillPolygon(
-    doc,
-    flat([
-      [16, 12],
-      [38, 8.5],
-      [66, 8.5],
-      [78, 17],
-      [20, 17],
-    ]),
-    'F'
-  );
-  doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
-  doc.circle(cx + (78 - 50) * s, cy + (32 - 20) * s, 6.2 * s, 'F');
-  doc.circle(cx + (22 - 50) * s, cy + (32 - 20) * s, 6.2 * s, 'F');
-  doc.setFillColor(255, 255, 255);
-  doc.circle(cx + (78 - 50) * s, cy + (32 - 20) * s, 2.4 * s, 'F');
-  doc.circle(cx + (22 - 50) * s, cy + (32 - 20) * s, 2.4 * s, 'F');
+  // Renders a premium certification seal instead of the cartoonish car graphic
+  doc.setDrawColor(226, 232, 240);
+  doc.setLineWidth(0.5);
+  doc.circle(cx, cy, 24, 'S');
+  doc.circle(cx, cy, 18, 'S');
+
+  doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
+  doc.circle(cx, cy, 14, 'F');
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.setFontSize(16);
+  doc.text('AE', cx, cy + 4.5, { align: 'center' });
+
+  doc.setFontSize(7.5);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
+  doc.text('ANALISI CERTIFICATA', cx, cy + 22, { align: 'center' });
 }
 
 function drawRadar(

@@ -146,9 +146,19 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       market: marketStats,
     },
     alternatives: alternatives.map((alt, i) => {
-      const est = estimateMarketValue(alt);
+      const altVehicle = {
+        ...alt,
+        year: vehicle.year,
+        fuel: vehicle.fuel,
+        body: vehicle.body,
+      };
+      const est = input.km
+        ? estimateMarketValueWithKm(altVehicle, input.km)
+        : estimateMarketValue(altVehicle);
+
       const market = alternativeStats[i];
-      if (market && market.priceAvg) {
+      // Only use crawled market price if it successfully matched the specific target year (±1 year)
+      if (market && market.priceAvg && market.comparison?.yearMatched) {
         return {
           make: alt.make,
           model: alt.model,
@@ -158,7 +168,14 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
           market,
         };
       }
-      return { make: alt.make, model: alt.model, estimatedValue: est.value, estimatedMin: est.min, estimatedMax: est.max };
+      return {
+        make: alt.make,
+        model: alt.model,
+        estimatedValue: est.value,
+        estimatedMin: est.min,
+        estimatedMax: est.max,
+        market: market || undefined,
+      };
     }),
     createdAt: new Date().toISOString(),
   };

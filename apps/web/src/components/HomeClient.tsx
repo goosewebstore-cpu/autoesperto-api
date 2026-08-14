@@ -5,42 +5,24 @@ import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
   BarChart3,
-  BookOpen,
   Camera,
-  Car,
   Check,
   ChevronRight,
-  Crown,
-  FileSearch,
   Fuel,
   Gauge,
-  GitCompareArrows,
-  LockKeyhole,
   ScanSearch,
-  ShieldCheck,
-  Wrench,
+  ShieldAlert,
+  Tag,
 } from 'lucide-react';
-import type { AutoReport } from '@autoesperto/types';
-import ReportView from '@/components/ReportView';
 import VehicleScanner from '@/components/VehicleScanner';
 import SiteHeader from '@/components/SiteHeader';
-import AdBanner from '@/components/ads/AdBanner';
-import { analyzeVehicle, type AnalyzePayload } from '@/lib/api';
-import GuideCard from '@/components/GuideCard';
-import { guides } from '@/lib/guides';
-import { POPULAR_MODELS } from '@/lib/popular';
-import { getPremiumPricing } from '@/lib/pricing';
+import BuyVerdictCard, { type VerdictData } from '@/components/BuyVerdictCard';
 import { trackEvent } from '@/lib/analytics';
+import { getReportPricing, getPremiumPricing } from '@/lib/pricing';
+import { type AnalyzePayload } from '@/lib/api';
 
-export type HomeInitialPayload = AnalyzePayload | null;
-
-interface HomeStats {
-  makes: number;
-  models: number;
-}
-
-interface HomeClientProps {
-  stats: HomeStats;
+export interface HomeClientProps {
+  stats: { makes: number; models: number };
 }
 
 function optionalNumber(value: string | null) {
@@ -49,7 +31,7 @@ function optionalNumber(value: string | null) {
   return Number.isFinite(parsed) ? parsed : undefined;
 }
 
-function PrefillHandler({ onAnalyze }: { onAnalyze: (payload: AnalyzePayload) => void }) {
+function PrefillHandler({ onPrefill }: { onPrefill: (payload: AnalyzePayload) => void }) {
   const searchParams = useSearchParams();
   const ranRef = useRef(false);
 
@@ -59,7 +41,7 @@ function PrefillHandler({ onAnalyze }: { onAnalyze: (payload: AnalyzePayload) =>
     const model = searchParams.get('model');
     if (make && model) {
       ranRef.current = true;
-      onAnalyze({
+      onPrefill({
         make,
         model,
         year: optionalNumber(searchParams.get('year')),
@@ -67,390 +49,233 @@ function PrefillHandler({ onAnalyze }: { onAnalyze: (payload: AnalyzePayload) =>
         requestedPrice: optionalNumber(searchParams.get('price')),
       });
     }
-  }, [searchParams, onAnalyze]);
+  }, [searchParams, onPrefill]);
 
   return null;
 }
 
-const U = (id: string, w = 800) =>
-  `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${w}&q=75`;
+const EXAMPLE_VERDICT: VerdictData = {
+  label: 'BUON AFFARE',
+  tone: 'good',
+  score: 82,
+  requestedPrice: 17900,
+  estimated: 17500,
+  min: 16800,
+  max: 18200,
+  percent: 2.3,
+  checks: ['Pneumatici', 'Frizione', 'Manutenzione', 'Carrozzeria'],
+  recommendedPrice: 17000,
+  negotiationMin: 16500,
+  negotiationMax: 17000,
+  finalVerdict: 'La comprerei, ma proverei a trattare il prezzo.',
+};
 
-const OCCASIONS = [
+const BENEFITS = [
   {
-    img: U('photo-1494976388531-d1058494cdd8'),
-    title: 'Prima di comprare da un privato',
-    text: 'Scopri se il prezzo è giusto e quali controlli fare sull\u2019esemplare.',
-    href: '/compra',
-    cta: 'Controlla un\u2019auto',
+    icon: Gauge,
+    title: 'Valore',
+    desc: 'Scopri quanto vale davvero l\u2019auto che stai guardando, con una fascia di mercato stimata sugli annunci reali.',
   },
   {
-    img: U('photo-1489824904134-891ab64532f1'),
-    title: 'In concessionaria, prima di firmare',
-    text: 'Arriva alla trattativa con la fascia di prezzo corretta in mano.',
-    href: '/valutazione',
-    cta: 'Stima il valore',
+    icon: Tag,
+    title: 'Prezzo',
+    desc: 'Confronta il prezzo richiesto con il valore di mercato e scopri se è un buon affare, caro o nella norma.',
   },
   {
-    img: U('photo-1503376780353-7e6692767b70'),
-    title: 'Prima di vendere la tua auto',
-    text: 'Scopri quanto puoi chiedere davvero sul mercato attuale.',
-    href: '/vendi',
-    cta: 'Quanto vale?',
+    icon: ShieldAlert,
+    title: 'Rischi',
+    desc: 'Punti deboli del modello, problemi noti e i controlli da fare prima di firmare qualsiasi cosa.',
   },
   {
-    img: U('photo-1449965408869-eaa3f722e40d'),
-    title: 'Per trattare il prezzo',
-    text: 'Usa la fascia di mercato del modello come base di negoziazione.',
-    href: '/valutazione',
-    cta: 'Vedi i prezzi',
+    icon: Fuel,
+    title: 'Costi',
+    desc: 'Consumi reali, manutenzione e riparazioni medie: quanto ti costerà tenerla, non solo comprarla.',
   },
 ];
 
-const WHY_LIST = [
-  'Prezzo di mercato calcolato sugli annunci reali in vendita',
-  'Affidabilità del modello: guasti e problemi noti',
-  'Consumi e costi di riparazione medi',
-  'Checklist dei controlli da fare prima dell\u2019acquisto',
+const HOW_IT_WORKS = [
+  {
+    num: '1',
+    icon: Camera,
+    title: 'Inserisci i dati dell\u2019auto',
+    desc: 'Marca, modello, anno e chilometraggio. Oppure una foto: riconosciamo noi il veicolo.',
+  },
+  {
+    num: '2',
+    icon: BarChart3,
+    title: 'La confrontiamo con il mercato',
+    desc: 'Incrociamo gli annunci reali in vendita, le schede tecniche e i problemi noti del modello.',
+  },
+  {
+    num: '3',
+    icon: Check,
+    title: 'Ricevi il verdetto',
+    desc: 'BUON AFFARE, TRATTA o EVITALA: punteggio, differenza rispetto al mercato e cosa controllare.',
+  },
 ];
 
-const TOOLS = [
-  { icon: Gauge, title: 'Valutazione auto', desc: 'Prezzi di mercato per marca, modello e anno', href: '/valutazione' },
-  { icon: GitCompareArrows, title: 'Confronta modelli', desc: 'Metti due auto faccia a faccia su prezzo e costi', href: '/confronta' },
-  { icon: ShieldCheck, title: 'Affidabilità e guasti', desc: 'Punti deboli e problemi noti del modello', href: '/affidabilita' },
-  { icon: Wrench, title: 'Costi di riparazione', desc: 'Spese medie di manutenzione per modello', href: '/riparazione' },
-  { icon: Fuel, title: 'Consumi reali', desc: 'Consumi dichiarati vs reali su strada', href: '/consumi' },
-  { icon: BarChart3, title: 'Quanto vale la mia auto', desc: 'Scopri a quanto puoi venderla oggi', href: '/vendi' },
+const FAQS = [
+  {
+    q: '\u00C8 gratis analizzare un\u2019auto?',
+    a: 'S\u00EC: il riconoscimento e l\u2019analisi base (marca, modello, anno, colore e valore stimato) sono sempre gratuiti. La prima analisi completa \u00E8 gratis. Dopo puoi scegliere un report singolo o Premium.',
+  },
+  {
+    q: 'Da dove vengono i dati?',
+    a: 'Dagli annunci reali in vendita in Italia, incrociati con le schede tecniche, i richiami ufficiali e i costi di manutenzione medi del modello.',
+  },
+  {
+    q: 'Cosa mi dice il verdetto?',
+    a: 'Se l\u2019auto \u00E8 un buon affare, se conviene trattare il prezzo o evitarla. Ricevi un punteggio su 100, la differenza rispetto al valore di mercato, i controlli da fare e l\u2019obiettivo di trattativa.',
+  },
+  {
+    q: 'Il riconoscimento da foto \u00E8 affidabile?',
+    a: 'Per i modelli pi\u00F9 comuni s\u00EC. Se non \u00E8 sicuro al 100%, ti chiediamo di inserire marca e modello a mano. La foto non viene salvata.',
+  },
+  {
+    q: 'Posso annullare Premium quando voglio?',
+    a: 'S\u00EC, in un clic dall\u2019area personale, senza penali e senza storie.',
+  },
+  {
+    q: 'Cosa succede dopo l\u2019acquisto del report?',
+    a: 'L\u2019analisi completa viene salvata nel tuo account e resta consultabile quando vuoi. Niente scadenze, niente sorprese.',
+  },
 ];
-
-const AVATARS = [
-  { initial: 'M', color: '#2563EB' },
-  { initial: 'G', color: '#16A34A' },
-  { initial: 'S', color: '#D97706' },
-  { initial: 'L', color: '#7C3AED' },
-  { initial: 'R', color: '#0F172A' },
-];
-
-function SmartImg({
-  src,
-  alt,
-  className = '',
-  eager = false,
-}: {
-  src: string;
-  alt: string;
-  className?: string;
-  eager?: boolean;
-}) {
-  const [failed, setFailed] = useState(false);
-  if (failed) return <div className={`${className} smart-img-fallback`} role="presentation" />;
-  /* eslint-disable-next-line @next/next/no-img-element */
-  return (
-    <img
-      src={src}
-      alt={alt}
-      className={className}
-      loading={eager ? 'eager' : 'lazy'}
-      onError={() => setFailed(true)}
-    />
-  );
-}
 
 export default function HomeClient({ stats }: HomeClientProps) {
-  const latestGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 4);
-  const [report, setReport] = useState<AutoReport | null>(null);
-  const [error, setError] = useState('');
-  const [scannerKey, setScannerKey] = useState(0);
+  const [initialPayload, setInitialPayload] = useState<AnalyzePayload | null>(null);
+  const reportPrice = getReportPricing().displayPrice;
+  const premiumPrice = getPremiumPricing('month').displayPrice;
 
-  const handleAnalyze = async (payload: AnalyzePayload) => {
-    setError('');
-    try {
-      const result = await analyzeVehicle(payload);
-      if (result.success) {
-        setReport(result.report);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    } catch (err) {
-      const message = err instanceof Error ? err.message : '';
-      setError(message || 'Non riesco a creare il report. Riprova tra poco.');
-    }
-  };
-
-  const handleBack = () => {
-    setReport(null);
-    setError('');
-    setScannerKey((value) => value + 1);
+  const handlePrefill = (payload: AnalyzePayload) => {
+    setInitialPayload(payload);
   };
 
   return (
     <div className="min-h-screen bg-background">
       <Suspense fallback={null}>
-        <PrefillHandler onAnalyze={handleAnalyze} />
+        <PrefillHandler onPrefill={handlePrefill} />
       </Suspense>
-      {/* ── HEADER ── */}
-      {report ? (
-        <header className="home-header">
-          <div className="home-header-inner">
-            <button onClick={handleBack} className="home-logo" aria-label="Torna alla home">
-              <span className="home-logo-icon"><Car className="h-4 w-4 text-white" /></span>
-              <span className="home-logo-text">Auto<span>Esperto</span></span>
-            </button>
-          </div>
-        </header>
-      ) : (
-        <SiteHeader />
-      )}
+
+      <SiteHeader />
 
       <main>
-        {report ? (
-          <div className="mx-auto max-w-6xl px-5 pt-6">
-            <ReportView report={report} onBack={handleBack} />
+        {/* ─── HERO ─── */}
+        <section className="hero-v2">
+          <div className="hero-v2-inner">
+            <div className="hero-v2-kicker"><ScanSearch className="h-3.5 w-3.5" /> Compreresti questa auto?</div>
+            <h1 className="hero-v2-title">
+              Hai trovato un&apos;auto usata?
+              <br />
+              <em>Scopri se vale davvero</em> quello che chiedono.
+            </h1>
+            <p className="hero-v2-sub">
+              Analizza prezzo, valore, problemi e costi prima di comprarla. Verdetto in pochi secondi: BUON AFFARE, TRATTA o EVITALA.
+            </p>
+            <div className="home-hero-actions">
+              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('premium_viewed', { feature: 'hero_cta' })}>
+                Analizza un&apos;auto <ChevronRight className="h-4 w-4" />
+              </a>
+            </div>
+            <p className="home-micro-steps">
+              Prima analisi gratis · Report da {reportPrice} · Premium {premiumPrice}/mese
+            </p>
           </div>
-        ) : (
-          <>
-            {/* ═══ HERO ═══ */}
-            <section className="hero-v2">
-              <div className="hero-v2-inner">
-                <div className="hero-v2-kicker"><ScanSearch className="h-3.5 w-3.5" /> Verifica l'usato prima di comprare o vendere</div>
-                <h1 className="hero-v2-title">Prima di comprare, <em>verifica</em> l'auto.</h1>
-                <p className="hero-v2-sub">
-                  Da una foto o da marca e modello: valore, prezzo di mercato, affidabilità e controlli da fare.
-                  Report in pochi secondi, riconoscimento sempre gratuito.
-                </p>
-              </div>
-              <div className="hero-v2-strip" aria-hidden="true">
-                <SmartImg src={U('photo-1555215695-3004980ad54e', 640)} alt="" />
-                <SmartImg src={U('photo-1533473359331-0135ef1b58bf', 640)} alt="" />
-                <SmartImg src={U('photo-1552519507-da3b142c6e3d', 640)} alt="" />
-              </div>
-            </section>
+        </section>
 
-            {/* ═══ SEARCH BOX ═══ */}
-            <section className="search-v2" id="scanner-section" aria-label="Analizza un'auto">
-              <VehicleScanner key={scannerKey} embedded />
-              {error && (
-                <div role="alert" className="home-error">
-                  {error}
-                </div>
-              )}
-              <ul className="search-v2-trust">
-                <li><Check /> Riconoscimento sempre gratuito</li>
-                <li><ShieldCheck /> La prima analisi completa è gratuita</li>
-                <li><BarChart3 /> Dati dagli annunci reali in vendita</li>
-              </ul>
-              <div className="search-v2-avatars">
-                <span className="avatar-v2" style={{ background: AVATARS[0].color }} aria-hidden="true">M</span>
-                <span className="avatar-v2" style={{ background: AVATARS[1].color }} aria-hidden="true">G</span>
-                <span className="avatar-v2" style={{ background: AVATARS[2].color }} aria-hidden="true">S</span>
-                <span className="avatar-v2" style={{ background: AVATARS[3].color }} aria-hidden="true">L</span>
-                <span className="avatar-v2" style={{ background: AVATARS[4].color }} aria-hidden="true">R</span>
-                <p><strong>+2.000 automobilisti</strong> ogni settimana usano AutoEsperto</p>
-              </div>
-            </section>
+        {/* ─── FORM / SCANNER ─── */}
+        <section className="search-v2" id="scanner-section" aria-label="Analizza un'auto">
+          <VehicleScanner embedded initialPayload={initialPayload ?? undefined} />
+          <ul className="search-v2-trust">
+            <li><Check /> Riconoscimento sempre gratuito</li>
+            <li><Check /> Prima analisi completa gratuita</li>
+            <li><Check /> Dati da {stats.makes} marchi e {stats.models.toLocaleString('it-IT')} modelli</li>
+          </ul>
+        </section>
 
-            {/* ═══ STATS ═══ */}
-            <section className="stats-v2" aria-label="Numeri di AutoEsperto">
-              <div className="stats-v2-inner">
-                <div className="stat-v2"><strong>{stats.makes}</strong><span>Marchi coperti</span></div>
-                <div className="stat-v2"><strong>{stats.models.toLocaleString('it-IT')}</strong><span>Modelli analizzati</span></div>
-                <div className="stat-v2"><strong>4 voci</strong><span>Prezzo, affidabilità, consumi, riparazioni</span></div>
-                <div className="stat-v2"><strong>100%</strong><span>Riconoscimento sempre gratuito</span></div>
-              </div>
-            </section>
-
-            {/* ═══ OCCASIONS ═══ */}
-            <section className="v2-section" aria-label="Quando usare AutoEsperto">
-              <div className="home-v2-wrap">
-                <div className="home-section-head">
-                  <h2>In quali occasioni ti aiuta</h2>
-                  <p>La verità sull'usato prima di ogni decisione importante.</p>
-                </div>
-                <div className="occasions-v2-scroller">
-                  {OCCASIONS.map((item) => (
-                    <article key={item.title} className="occasions-v2-card">
-                      <SmartImg src={item.img} alt={item.title} />
-                      <h3>{item.title}</h3>
-                      <p>{item.text}</p>
-                      <Link href={item.href}>{item.cta} <ChevronRight /></Link>
-                    </article>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* ═══ ADS ═══ */}
-            <div className="home-v2-wrap">
-              <AdBanner />
+        {/* ─── MINI ESEMPIO ─── */}
+        <section className="v2-section" id="esempio" aria-label="Esempio di verdetto">
+          <div className="home-v2-wrap">
+            <div className="home-section-head">
+              <h2>Compreresti questa auto?</h2>
+              <p>Esempio di verdetto: BMW Serie 1, 2018, 85.000 km.</p>
             </div>
-
-            {/* ═══ COME FUNZIONA ═══ */}
-            <section className="v2-section" id="come-funziona" aria-label="Come funziona">
-              <div className="home-v2-wrap">
-                <div className="home-section-head">
-                  <h2>Come funziona</h2>
-                  <p>Tre passi, pochi secondi.</p>
-                </div>
-                <div className="home-how-grid">
-                  <div className="home-how-card">
-                    <span className="home-how-num">1</span>
-                    <Camera className="home-how-icon" />
-                    <h3>Carica una foto o i dati dell&apos;auto</h3>
-                    <p>Una foto dell&apos;auto, oppure marca, modello, anno e chilometri.</p>
-                  </div>
-                  <div className="home-how-card">
-                    <span className="home-how-num">2</span>
-                    <BarChart3 className="home-how-icon" />
-                    <h3>Confrontiamo con il mercato</h3>
-                    <p>Analizziamo gli annunci reali in vendita per trovare la fascia di prezzo.</p>
-                  </div>
-                  <div className="home-how-card">
-                    <span className="home-how-num">3</span>
-                    <FileSearch className="home-how-icon" />
-                    <h3>Leggi il verdetto</h3>
-                    <p>Valore, affidabilità, punti da controllare e prezzo consigliato.</p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* ═══ TOOLS ═══ */}
-            <section className="v2-section" aria-label="Strumenti gratuiti">
-              <div className="home-v2-wrap">
-                <div className="home-section-head">
-                  <h2>Strumenti gratuiti per l'usato</h2>
-                  <p>Valuta, confronta e controlla prima di comprare o vendere.</p>
-                </div>
-                <div className="home-tools-grid">
-                  {TOOLS.map((tool) => (
-                    <Link key={tool.href} href={tool.href} className="home-tool-card">
-                      <span className="home-tool-icon"><tool.icon className="h-5 w-5" /></span>
-                      <span className="home-tool-copy">
-                        <strong>{tool.title}</strong>
-                        <small>{tool.desc}</small>
-                      </span>
-                      <ChevronRight className="home-tool-chev" />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* ═══ PREMIUM ═══ */}
-            <section className="v2-section" aria-label="Abbonamento Premium">
-              <div className="home-v2-wrap">
-                <div className="home-section-head">
-                  <h2>AutoEsperto <span className="inline-flex items-center gap-1 text-amber-500"><Crown className="h-5 w-5" /> Premium</span></h2>
-                  <p>La prima analisi completa è gratis. Dopo, tutto ciò che serve per decidere.</p>
-                </div>
-                <div className="mt-8 grid gap-6 lg:grid-cols-2">
-                  <div className="rounded-2xl border border-border bg-surface-2 p-6 md:p-7">
-                    <ul className="space-y-3.5">
-                      {['Analisi complete illimitate', 'Generatore annunci di vendita', 'Zero pubblicità', 'Annulli quando vuoi, senza penali'].map((item) => (
-                        <li key={item} className="flex items-start gap-2.5 text-sm font-semibold text-text-primary">
-                          <span className="mt-0.5 grid h-5 w-5 flex-shrink-0 place-items-center rounded-full bg-emerald-100 text-emerald-700"><Check className="h-3 w-3" /></span>
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="flex flex-col justify-center rounded-2xl bg-slate-950 p-6 text-white md:p-7">
-                    <p className="text-xs font-extrabold uppercase tracking-[.14em] text-blue-300">Abbonamento mensile</p>
-                    <div className="mt-3 flex items-baseline gap-1.5">
-                      <span className="text-4xl font-extrabold">{new Intl.NumberFormat('it-IT', { style: 'currency', currency: 'EUR' }).format(getPremiumPricing('month').amountCents / 100)}</span>
-                      <span className="text-xl font-medium text-slate-400">/mese</span>
-                    </div>
-                    <p className="mt-2 text-sm text-slate-400">Rinnovo automatico. Cancelli online in un clic.</p>
-                    <Link
-                      href="/account?upgrade=true"
-                      onClick={() => trackEvent('premium_cta_clicked', { feature: 'home_pricing' })}
-                      className="mt-6 inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 text-sm font-extrabold text-white transition hover:bg-blue-500"
-                    >
-                      <LockKeyhole className="h-4 w-4" /> Passa a Premium
-                    </Link>
-                    <p className="mt-3 text-center text-[11px] text-slate-500">Pagamento gestito da Stripe. I dati della carta non passano da AutoEsperto.</p>
-                  </div>
-                </div>
-              </div>
-            </section>
-
-            {/* ═══ POPULAR MODELS ═══ */}
-            <section className="v2-section" aria-label="Modelli più cercati">
-              <div className="home-v2-wrap">
-                <div className="home-section-head">
-                  <h2>I modelli più cercati</h2>
-                  <p>Accedi subito alla valutazione completa del modello.</p>
-                </div>
-                <div className="popular-v2">
-                  {POPULAR_MODELS.slice(0, 16).map((item) => (
-                    <Link key={item.href} href={item.href} className="popular-v2-chip">
-                      {item.make} {item.model} <ChevronRight />
-                    </Link>
-                  ))}
-                </div>
-              </div>
-            </section>
-
-            {/* ═══ ADS ═══ */}
-            <div className="home-v2-wrap">
-              <AdBanner />
+            <div className="mx-auto max-w-3xl">
+              <BuyVerdictCard verdict={EXAMPLE_VERDICT} />
+              <p className="mt-3 text-center text-xs font-semibold text-slate-400">
+                Esempio illustrativo. Prova con la tua auto sopra <ChevronRight className="inline h-3.5 w-3.5" />
+              </p>
             </div>
+          </div>
+        </section>
 
-            {/* ═══ WHY ═══ */}
-            <section className="v2-section" aria-label="Perché fidarsi">
-              <div className="home-v2-wrap">
-                <div className="why-v2">
-                  <div className="why-v2-visual" aria-hidden="true">
-                    <SmartImg src={U('photo-1553440569-bcc63803a83d')} alt="" className="why-v2-photo why-v2-photo-a" />
-                    <SmartImg src={U('photo-1511919884226-fd3cad34687c', 640)} alt="" className="why-v2-photo why-v2-photo-b" />
-                  </div>
-                  <div className="why-v2-copy">
-                    <h2>Un report onesto, basato sui dati.</h2>
-                    <p>Ogni analisi confronta il modello con i dati reali del mercato italiano dell'usato.</p>
-                    <ul className="why-v2-list">
-                      {WHY_LIST.map((item) => (
-                        <li key={item}><Check /> {item}</li>
-                      ))}
-                    </ul>
-                    <Link href="/guide" className="why-v2-link">
-                      Leggi le guide sull'usato <ChevronRight />
-                    </Link>
-                  </div>
-                </div>
-              </div>
-            </section>
+        {/* ─── 4 BENEFICI ─── */}
+        <section className="v2-section" aria-label="Cosa ottieni">
+          <div className="home-v2-wrap">
+            <div className="home-section-head">
+              <h2>Prima di decidere, guarda tutto</h2>
+              <p>Non solo il prezzo: tutta la verit\u00E0 su quell\u2019esemplare.</p>
+            </div>
+            <div className="home-benefits-grid">
+              {BENEFITS.map((benefit) => (
+                <article key={benefit.title} className="home-benefit-card">
+                  <span className="home-benefit-icon"><benefit.icon className="h-5 w-5" /></span>
+                  <h3>{benefit.title}</h3>
+                  <p>{benefit.desc}</p>
+                </article>
+              ))}
+            </div>
+          </div>
+        </section>
 
-            {/* ═══ GUIDE ═══ */}
-            {latestGuides.length > 0 && (
-              <section className="v2-section" aria-label="Guide">
-                <div className="home-v2-wrap">
-                  <div className="home-section-head">
-                    <h2>Guide utili</h2>
-                    <Link href="/guide" className="home-see-all">
-                      <BookOpen className="h-4 w-4" /> Tutte le guide
-                    </Link>
-                  </div>
-                  <div className="home-guides-grid">
-                    {latestGuides.map((guide) => (
-                      <GuideCard key={guide.slug} guide={guide} />
-                    ))}
-                  </div>
+        {/* ─── COME FUNZIONA ─── */}
+        <section className="v2-section" id="come-funziona" aria-label="Come funziona">
+          <div className="home-v2-wrap">
+            <div className="home-section-head">
+              <h2>Come funziona</h2>
+              <p>Tre passi, pochi secondi.</p>
+            </div>
+            <div className="home-how-grid">
+              {HOW_IT_WORKS.map((step) => (
+                <div key={step.num} className="home-how-card">
+                  <span className="home-how-num">{step.num}</span>
+                  <step.icon className="home-how-icon" />
+                  <h3>{step.title}</h3>
+                  <p>{step.desc}</p>
                 </div>
-              </section>
-            )}
+              ))}
+            </div>
+          </div>
+        </section>
 
-            {/* ═══ CTA BAND ═══ */}
-            <section className="cta-band-v2" aria-label="Inizia ora">
-              <SmartImg src={U('photo-1544636331-e26879cd4d9b', 1600)} alt="" eager />
-              <div className="cta-band-v2-inner">
-                <h2>Pronto a scoprire la verità sull'usato?</h2>
-                <p>Analisi base sempre gratuita, prima analisi completa gratis. Risultati in pochi secondi.</p>
-                <div className="cta-band-v2-actions">
-                  <Link href="/#scanner-section" className="home-hero-cta">Analizza un'auto</Link>
-                  <Link href="/valutazione" className="home-hero-cta-secondary">Sfoglia i modelli</Link>
-                </div>
-              </div>
-            </section>
-          </>
-        )}
+        {/* ─── CTA BAND ─── */}
+        <section className="cta-band-v2" aria-label="Inizia ora">
+          <div className="cta-band-v2-inner">
+            <h2>Hai trovato un&apos;auto?</h2>
+            <p>Verifica se \u00E8 un buon affare prima di comprarla.</p>
+            <div className="cta-band-v2-actions">
+              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('premium_viewed', { feature: 'cta_band' })}>
+                Analizza un&apos;auto <ChevronRight className="h-4 w-4" />
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── FAQ ─── */}
+        <section className="v2-section" aria-label="Domande frequenti">
+          <div className="home-v2-wrap">
+            <div className="home-section-head">
+              <h2>Domande frequenti</h2>
+            </div>
+            <div className="home-faq">
+              {FAQS.map((faq) => (
+                <details key={faq.q} className="home-faq-item">
+                  <summary>{faq.q}</summary>
+                  <p>{faq.a}</p>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );

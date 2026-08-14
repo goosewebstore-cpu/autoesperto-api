@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Car, Gauge } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Car, Gauge } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import { estimateReliability } from '@/lib/affidabilita';
 import AdBanner from '@/components/ads/AdBanner';
@@ -195,6 +195,19 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
               );
             })}
           </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl bg-slate-950 p-6 text-white">
+          <h2 className="text-lg font-extrabold tracking-tight">Hai trovato questa auto?</h2>
+          <p className="mt-1.5 text-sm text-slate-300 leading-relaxed">
+            Scopri se vale davvero quello che chiedono: confronta prezzo richiesto, valore di mercato e controlli da fare prima di comprarla.
+          </p>
+          <Link
+            href={`/?make=${encodeURIComponent(make.name)}&model=${encodeURIComponent(model)}#scanner-section`}
+            className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-extrabold text-slate-950 transition hover:bg-slate-200"
+          >
+            Analizza questa auto <ArrowRight className="h-4 w-4" />
+          </Link>
         </section>
 
         <section className="mt-8 rounded-2xl bg-accent p-6 text-white">

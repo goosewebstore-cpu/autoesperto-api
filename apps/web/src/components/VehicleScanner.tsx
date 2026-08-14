@@ -4,8 +4,12 @@ import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, RotateCcw, ScanSearch, ShieldCheck, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, markFreeAnalysisUsed, type FreeScanResult, type AccountUser } from '@/lib/api';
+import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, markFreeAnalysisUsed, createCheckout, saveLastAttempt, clearLastAttempt, type FreeScanResult, type AccountUser, type AnalyzePayload } from '@/lib/api';
+import { getAuthToken } from '@/lib/auth';
+import { trackEvent } from '@/lib/analytics';
 import ReportView from '@/components/ReportView';
+import BuyVerdictCard from '@/components/BuyVerdictCard';
+import { verdictFromGated } from '@/lib/verdict';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
@@ -22,7 +26,7 @@ const SCAN_PHASES = [
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
-export default function VehicleScanner({ embedded = false }: { embedded?: boolean }) {
+export default function VehicleScanner({ embedded = false, initialPayload }: { embedded?: boolean; initialPayload?: AnalyzePayload }) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<ScannerStage>('idle');
@@ -34,6 +38,8 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
   const [manualMake, setManualMake] = useState('');
   const [manualModel, setManualModel] = useState('');
   const [manualYear, setManualYear] = useState('');
+  const [manualKm, setManualKm] = useState('');
+  const [manualPrice, setManualPrice] = useState('');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
   const [scanPhase, setScanPhase] = useState(0);
@@ -55,17 +61,72 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     }).catch(() => {});
   }, []);
 
+  useEffect(() => {
+    if (stage === 'result' && scan?.vehicle && !report) {
+      trackEvent('report_offer_viewed', { make: scan.vehicle.make, model: scan.vehicle.model });
+    }
+  }, [stage, scan, report]);
+
+  useEffect(() => {
+    if (!initialPayload?.make || !initialPayload?.model) return;
+    setTab('manual');
+    setManualMake(initialPayload.make);
+    setManualModel(initialPayload.model);
+    if (initialPayload.year) setManualYear(String(initialPayload.year));
+    if (initialPayload.km) setManualKm(String(initialPayload.km));
+    if (initialPayload.requestedPrice) setManualPrice(String(initialPayload.requestedPrice));
+    const timer = setTimeout(() => {
+      void handleManualSubmit({
+        make: initialPayload.make,
+        model: initialPayload.model,
+        year: initialPayload.year,
+        km: initialPayload.km,
+        requestedPrice: initialPayload.requestedPrice,
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const reset = () => {
     if (imageUrl) URL.revokeObjectURL(imageUrl);
     setImageUrl(''); setScan(null); setReport(null); setError(''); setStage('idle');
     setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
+    setManualKm(''); setManualPrice('');
     setScanPhase(0);
     if (inputRef.current) inputRef.current.value = '';
+  };
+
+  const handleBuyReport = async () => {
+    trackEvent('report_purchase_started', {
+      make: manualMake || scan?.vehicle?.make,
+      model: manualModel || scan?.vehicle?.model,
+    });
+    if (!getAuthToken()) {
+      router.push('/accesso?next=/account?report=checkout');
+      return;
+    }
+    try {
+      const res = await createCheckout();
+      window.location.href = res.url;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Non riesco ad avviare il pagamento. Riprova.';
+      setError(msg);
+    }
+  };
+
+  const handlePremium = () => {
+    trackEvent('premium_checkout_started', {
+      make: manualMake || scan?.vehicle?.make,
+      model: manualModel || scan?.vehicle?.model,
+    });
+    router.push('/account?upgrade=true');
   };
 
   const handleFile = async (file?: File) => {
     if (!file) return;
     setError(''); setScan(null); setReport(null);
+    trackEvent('car_image_uploaded');
 
     if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) {
       setError('Carica una foto JPG, PNG o WebP.'); setStage('error'); return;
@@ -76,6 +137,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
 
     const localUrl = URL.createObjectURL(file);
     setImageUrl(localUrl); setStage('recognition'); setScanPhase(0);
+    trackEvent('analysis_started', { analysis_type: 'photo' });
     try {
       const imageData = await new Promise<string>((resolve, reject) => {
         const reader = new FileReader();
@@ -92,9 +154,17 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
         return;
       }
       setScan(result); setReport(result.report ?? null); setStage('vehicle-found');
+      trackEvent('car_selected', { make: result.vehicle.make, model: result.vehicle.model });
       if (result.report && result.freeUsed) markFreeAnalysisUsed();
+      if (result.report) {
+        clearLastAttempt();
+      } else {
+        saveLastAttempt({ make: result.vehicle.make ?? '', model: result.vehicle.model ?? '' });
+      }
       await wait(3500);
       setStage('result');
+      trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
+      trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
@@ -107,19 +177,26 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
     }
   };
 
-  const handleManualSubmit = async () => {
-    if (!manualMake.trim() || !manualModel.trim()) {
+  const handleManualSubmit = async (overrides?: { make?: string; model?: string; year?: number; km?: number; requestedPrice?: number }) => {
+    const make = overrides?.make?.trim() || manualMake.trim();
+    const model = overrides?.model?.trim() || manualModel.trim();
+    if (!make || !model) {
       setError('Inserisci almeno marca e modello.');
       return;
     }
 
     setManualLoading(true); setError('');
+    trackEvent('analysis_started', { analysis_type: 'manual', make, model });
     try {
-      const year = manualYear.trim() ? Number(manualYear.trim()) : undefined;
+      const year = overrides?.year ?? (manualYear.trim() ? Number(manualYear.trim()) : undefined);
+      const km = overrides?.km ?? (manualKm.trim() ? Number(manualKm.trim()) : undefined);
+      const requestedPrice = overrides?.requestedPrice ?? (manualPrice.trim() ? Number(manualPrice.trim()) : undefined);
       const result = await freeScanManual({
-        make: manualMake.trim(),
-        model: manualModel.trim(),
+        make,
+        model,
         ...(year && !isNaN(year) ? { year } : {}),
+        ...(km && !isNaN(km) ? { km } : {}),
+        ...(requestedPrice && !isNaN(requestedPrice) ? { requestedPrice } : {}),
       });
       if (!result.recognized || !result.vehicle) {
         setError(result.message || 'Non riesco a riconoscere il veicolo. Riprova.');
@@ -127,10 +204,24 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
       }
       setScan(result);
       setReport(result.report ?? null);
+      trackEvent('car_selected', { make: result.vehicle.make, model: result.vehicle.model });
       if (result.report && result.freeUsed) markFreeAnalysisUsed();
+      if (result.report) {
+        clearLastAttempt();
+      } else {
+        saveLastAttempt({
+          make: result.vehicle.make ?? make,
+          model: result.vehicle.model ?? model,
+          year,
+          km,
+          requestedPrice,
+        });
+      }
       setStage('vehicle-found');
       await wait(2500);
       setStage('result');
+      trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
+      trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
@@ -223,6 +314,30 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                     max={2100}
                   />
                 </label>
+                <label className="scanner-field">
+                  <span>Km (opz.)</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    value={manualKm}
+                    onChange={(e) => setManualKm(e.target.value)}
+                    placeholder="es. 85000"
+                    min={0}
+                    max={1000000}
+                  />
+                </label>
+                <label className="scanner-field">
+                  <span>Prezzo richiesto (opz.)</span>
+                  <input
+                    type="number"
+                    inputMode="numeric"
+                    value={manualPrice}
+                    onChange={(e) => setManualPrice(e.target.value)}
+                    placeholder="es. 17900"
+                    min={0}
+                    max={10000000}
+                  />
+                </label>
               </div>
               {error && <p className="scanner-box-error" role="alert">{error}</p>}
               <button type="submit" className="scanner-submit" disabled={manualLoading}>
@@ -282,6 +397,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
   if (stage === 'result' && scan?.vehicle) {
     const vehicleName = [scan.vehicle.make, scan.vehicle.model].filter(Boolean).join(' ');
     const gated = !report;
+    const requestedPrice = manualPrice.trim() ? Number(manualPrice.trim()) : undefined;
 
     return (
       <section className="scanner-result animate-fade-in">
@@ -338,24 +454,15 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                   </span>
                 </div>
               )}
+              {error && <p className="mt-3 text-center text-xs font-semibold text-red-600" role="alert">{error}</p>}
             </div>
-            <div className="scanner-gate-card">
-              <div className="scanner-gate-icon"><ShieldCheck className="h-6 w-6" /></div>
-              <h2>{scan.needsUpgrade ? 'Hai gi\u00E0 usato la tua analisi gratuita' : scan.needsEmailVerification ? 'La tua analisi gratuita \u00E8 pronta' : 'Riconosciamo la tua auto'}</h2>
-              <p>{scan.message || (scan.needsUpgrade
-                ? 'Passa a Premium per analizzare altre auto con report completo e salvarle tutte.'
-                : 'Crea un account gratuito per vedere il report completo e salvarlo nel tuo account.')}</p>
-              <button
-                type="button"
-                className="scanner-gate-cta"
-                onClick={() => router.push(scan.needsUpgrade ? '/account' : scan.needsEmailVerification ? '/account' : '/accesso?next=/account')}
-              >
-                {scan.needsUpgrade
-                  ? <>Vai alla pagina Premium <ArrowRight className="h-4 w-4" /></>
-                  : scan.needsEmailVerification
-                    ? <>Verifica la tua email <ArrowRight className="h-4 w-4" /></>
-                    : <>Crea account gratuito <ArrowRight className="h-4 w-4" /></>}
-              </button>
+            <div className="mt-5">
+              <BuyVerdictCard
+                verdict={verdictFromGated(scan, requestedPrice)}
+                locked
+                onBuyReport={handleBuyReport}
+                onPremium={handlePremium}
+              />
             </div>
           </>
         ) : (
@@ -405,7 +512,7 @@ export default function VehicleScanner({ embedded = false }: { embedded?: boolea
                     <input type="number" value={manualYear} onChange={(e) => setManualYear(e.target.value)} placeholder="Anno (opz.)" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
                     {error && <p className="text-xs text-red-700">{error}</p>}
                     <div className="flex gap-2 pt-1">
-                      <button type="button" disabled={manualLoading} onClick={handleManualSubmit} className="scanner-cta disabled:opacity-60 !mt-0 !min-h-[36px] !text-xs !px-3 flex-1">
+                      <button type="button" disabled={manualLoading} onClick={() => handleManualSubmit()} className="scanner-cta disabled:opacity-60 !mt-0 !min-h-[36px] !text-xs !px-3 flex-1">
                         {manualLoading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> …</> : <>Genera <ChevronRight className="h-3.5 w-3.5" /></>}
                       </button>
                       <button type="button" onClick={() => inputRef.current?.click()} className="text-xs text-slate-600 hover:text-slate-800 underline underline-offset-2 px-2">Altra foto</button>

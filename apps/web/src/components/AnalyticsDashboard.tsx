@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import {
-  Activity, AlertTriangle, BarChart3, CreditCard, Eye, FileText, Loader2, ScanLine, UserPlus,
+  Activity, AlertTriangle, BarChart3, CreditCard, Eye, FileText, Loader2, ScanLine, Star, TrendingUp, UserPlus,
 } from 'lucide-react';
 import { getAnalyticsOverview, type AnalyticsOverview } from '@/lib/api';
 
@@ -40,8 +40,9 @@ export default function AnalyticsDashboard() {
     return <div role="alert" className="mt-8 flex items-start gap-3 rounded-2xl border border-red-200 bg-red-50 p-5 text-sm font-semibold text-red-700"><AlertTriangle className="mt-0.5 h-5 w-5 shrink-0" /> {error || 'Statistiche non disponibili.'}</div>;
   }
 
-  const { totals, last7d, last30d, visitsByDay } = data.overview;
+  const { totals, last7d, last30d, funnel7d, visitsByDay } = data.overview;
   const maxDay = Math.max(1, ...visitsByDay.map((d) => d.count));
+  const maxFunnel = Math.max(1, ...funnel7d.map((f) => f.count));
 
   return (
     <div className="mt-8 space-y-6">
@@ -58,6 +59,34 @@ export default function AnalyticsDashboard() {
         <StatCard icon={CreditCard} label="Checkout avviati" value={totals.checkouts} accent="text-amber-600" />
         <StatCard icon={UserPlus} label="Registrazioni" value={totals.registers} accent="text-rose-600" />
         <StatCard icon={Activity} label="Visitatori unici (7g)" value={totals.uniqueVisitors7d} accent="text-cyan-600" />
+        <StatCard icon={TrendingUp} label="Pagamenti completati" value={totals.purchases} accent="text-emerald-600" />
+        <StatCard icon={Star} label="Abbonati Premium" value={totals.premiumSubscribers} accent="text-amber-600" />
+        <StatCard icon={Eye} label="Page view" value={totals.pageViews} accent="text-blue-600" />
+      </section>
+
+      <section className="rounded-2xl border border-slate-200 bg-white p-6">
+        <h3 className="text-sm font-extrabold text-slate-950">Funnel di conversione · ultimi 7 giorni</h3>
+        <p className="mt-1 text-xs text-slate-500">Dal primo contatto al pagamento. La percentuale è il tasso di passaggio tra i due step consecutivi.</p>
+        <div className="mt-5 space-y-3">
+          {funnel7d.map((f, i) => (
+            <div key={f.step}>
+              <div className="flex items-center justify-between text-xs">
+                <span className="font-bold text-slate-700">{f.step}</span>
+                <span className="text-slate-500">
+                  <span className="font-extrabold text-slate-950 number-mono">{f.count.toLocaleString('it-IT')}</span>
+                  {i > 0 && <span className="ml-2 text-emerald-600">↳ {f.conversion.toLocaleString('it-IT')}%</span>}
+                  <span className="ml-1 text-slate-400">({f.overall.toLocaleString('it-IT')}% sul totale)</span>
+                </span>
+              </div>
+              <div className="mt-1.5 h-2.5 w-full rounded-full bg-slate-100">
+                <div
+                  className={`h-full rounded-full ${i === 0 ? 'bg-blue-600' : i >= funnel7d.length - 1 ? 'bg-emerald-500' : 'bg-blue-400'}`}
+                  style={{ width: `${Math.max(2, (f.count / maxFunnel) * 100)}%` }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
       </section>
 
       <section className="rounded-2xl border border-slate-200 bg-white p-6">
@@ -76,7 +105,7 @@ export default function AnalyticsDashboard() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <h3 className="text-sm font-extrabold text-slate-950">Ultimi 7 giorni</h3>
           <dl className="mt-4 space-y-2 text-sm">
-            {[['Visite', last7d.visits], ['Scansioni', last7d.scans], ['Analisi salvate', last7d.analyses], ['Checkout', last7d.checkouts], ['Registrazioni', last7d.registers]].map(([label, value]) => (
+            {[['Visite', last7d.visits], ['Analisi avviate', last7d.analysesStarted], ['Risultati visti', last7d.resultsViewed], ['Offerte report viste', last7d.reportOffersViewed], ['Acquisti report avviati', last7d.reportPurchasesStarted], ['Checkout Premium', last7d.premiumCheckoutsStarted], ['Pagamenti completati', last7d.purchases], ['Registrazioni', last7d.registers]].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between border-b border-slate-100 pb-2 last:border-0">
                 <dt className="text-slate-600">{label}</dt>
                 <dd className="font-extrabold text-slate-950 number-mono">{(value as number).toLocaleString('it-IT')}</dd>
@@ -87,7 +116,7 @@ export default function AnalyticsDashboard() {
         <div className="rounded-2xl border border-slate-200 bg-white p-6">
           <h3 className="text-sm font-extrabold text-slate-950">Ultimi 30 giorni</h3>
           <dl className="mt-4 space-y-2 text-sm">
-            {[['Visite', last30d.visits], ['Scansioni', last30d.scans], ['Analisi salvate', last30d.analyses], ['Checkout', last30d.checkouts], ['Registrazioni', last30d.registers]].map(([label, value]) => (
+            {[['Visite', last30d.visits], ['Analisi avviate', last30d.analysesStarted], ['Risultati visti', last30d.resultsViewed], ['Offerte report viste', last30d.reportOffersViewed], ['Acquisti report avviati', last30d.reportPurchasesStarted], ['Checkout Premium', last30d.premiumCheckoutsStarted], ['Pagamenti completati', last30d.purchases], ['Registrazioni', last30d.registers]].map(([label, value]) => (
               <div key={label} className="flex items-center justify-between border-b border-slate-100 pb-2 last:border-0">
                 <dt className="text-slate-600">{label}</dt>
                 <dd className="font-extrabold text-slate-950 number-mono">{(value as number).toLocaleString('it-IT')}</dd>

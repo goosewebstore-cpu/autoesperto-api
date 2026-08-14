@@ -207,7 +207,7 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
           )}
 
           <a
-            href={`/?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}#ricerca`}
+            href={`/?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}#scanner-section`}
             className="w-full h-12 rounded-xl bg-accent text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-accent-hover active:scale-[0.99] transition-all"
           >
             <Search className="w-4 h-4" />

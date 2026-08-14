@@ -54,11 +54,20 @@ const freeScanSchema = z
     make: z.string().trim().min(2).optional(),
     model: z.string().trim().min(1).optional(),
     year: z.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
+    km: z.number().int().min(0).max(1000000).optional(),
+    requestedPrice: z.number().int().min(0).max(10000000).optional(),
     freeUsed: z.boolean().optional(),
   })
   .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
     message: 'Indica una foto oppure marca e modello',
   });
+
+function priceVerdict(requestedPrice: number, estimated: number): { label: string; tone: 'good' | 'fair' | 'high'; percent: number } {
+  const percent = estimated > 0 ? ((requestedPrice - estimated) / estimated) * 100 : 0;
+  if (requestedPrice <= estimated * 1.03) return { label: 'BUON AFFARE', tone: 'good', percent };
+  if (requestedPrice <= estimated * 1.1) return { label: 'TRATTA', tone: 'fair', percent };
+  return { label: 'EVITALA', tone: 'high', percent };
+}
 
 function getOptionalUserId(req: Request): string | null {
   const authorization = req.header('authorization') || '';
@@ -209,7 +218,7 @@ router.post(
     const entitlement = await getAccountEntitlement(userId);
     const anonymousFreeSlot = !userId && !input.freeUsed;
     const freeSlot = userId ? entitlement.freeAvailable : anonymousFreeSlot;
-    const entitled = entitlement.unlimited || freeSlot;
+    const entitled = userId ? entitlement.entitled : anonymousFreeSlot;
 
     if (!entitled) {
       const estimate = estimateMarketValue({ make: make!, model: model!, year, body: vehicle.bodyType });
@@ -229,24 +238,29 @@ router.post(
         };
       }
       res.set('Cache-Control', 'no-store');
+      const priceCheck =
+        input.requestedPrice != null && value.estimated > 0
+          ? priceVerdict(input.requestedPrice, value.estimated)
+          : undefined;
       res.json({
         success: true,
         recognized: true,
         vehicle,
         report: null,
         value,
+        priceCheck,
         saved: false,
         needsLogin: false,
         needsUpgrade: true,
         needsEmailVerification: false,
-        message: 'L\'analisi base (marca, modello, anno, colore, tipologia e valore stimato) è sempre gratuita. Per un\'altra analisi completa passa a Premium.',
+        message: 'L\'analisi base (marca, modello, anno, colore, tipologia e valore stimato) è sempre gratuita. Per il verdetto completo sblocca il report o passa a Premium.',
       });
       return;
     }
 
     let report;
     try {
-      ({ report } = await buildReport({ make, model, year }));
+      ({ report } = await buildReport({ make, model, year, km: input.km, requestedPrice: input.requestedPrice }));
     } catch (error) {
       console.warn('free scan price unavailable:', error);
       throw serviceUnavailable('Veicolo riconosciuto, ma il calcolo del prezzo non è disponibile in questo momento. Riprova tra poco.');

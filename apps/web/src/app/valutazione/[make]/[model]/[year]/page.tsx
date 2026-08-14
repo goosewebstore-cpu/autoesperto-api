@@ -42,6 +42,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: false, follow: true },
     alternates: {
       canonical: `/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`,
       languages: { 'it-IT': `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}` },
@@ -73,11 +74,8 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
   const yearNum = parseInt(resolved.year, 10);
   if (isNaN(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
 
-  let initialReport = undefined;
   const isPopular = POPULAR_MODELS.some((p) => slugify(p.make) === resolved.make && slugify(p.model) === resolved.model);
-  if (isPopular) {
-    initialReport = await getSsrReport(make.name, model, yearNum);
-  }
+  const initialReport = await getSsrReport(make.name, model, yearNum, isPopular);
 
   const faq = [
     {
@@ -119,6 +117,8 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
     ],
   };
 
+  const price = initialReport?.price;
+  const displayedPrice = price ? (price.market?.priceAvg ?? price.estimatedValue) : undefined;
   const carSchema = {
     '@context': 'https://schema.org',
     '@type': 'Car',
@@ -126,6 +126,17 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
     brand: { '@type': 'Brand', name: make.name },
     model: model,
     vehicleModelDate: String(yearNum),
+    ...(displayedPrice
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            price: displayedPrice,
+            availability: 'https://schema.org/InStock',
+            url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`,
+          },
+        }
+      : {}),
   };
 
   const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);

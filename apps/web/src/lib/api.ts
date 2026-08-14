@@ -39,6 +39,7 @@ export interface FreeScanResult {
   vehicle?: PhotoAnalysis['vehicle'];
   report?: AutoReport;
   value?: { estimated: number; min: number; max: number; source: 'stima' | 'market' };
+  priceCheck?: { label: 'BUON AFFARE' | 'TRATTA' | 'EVITALA'; tone: 'good' | 'fair' | 'high'; percent: number };
   saved?: boolean;
   freeUsed?: boolean;
   needsLogin?: boolean;
@@ -157,6 +158,44 @@ export function markFreeAnalysisUsed(): void {
   }
 }
 
+export const LAST_ATTEMPT_KEY = 'ae_last_attempt';
+
+export interface LastAttempt {
+  make: string;
+  model: string;
+  year?: number;
+  km?: number;
+  requestedPrice?: number;
+}
+
+export function getLastAttempt(): LastAttempt | null {
+  if (typeof window === 'undefined') return null;
+  try {
+    const raw = localStorage.getItem(LAST_ATTEMPT_KEY);
+    return raw ? (JSON.parse(raw) as LastAttempt) : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveLastAttempt(attempt: LastAttempt): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.setItem(LAST_ATTEMPT_KEY, JSON.stringify(attempt));
+  } catch {
+    // storage non disponibile: niente salvataggio
+  }
+}
+
+export function clearLastAttempt(): void {
+  if (typeof window === 'undefined') return;
+  try {
+    localStorage.removeItem(LAST_ATTEMPT_KEY);
+  } catch {
+    // ignore
+  }
+}
+
 export async function warmUpApi(): Promise<boolean> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), WARMUP_TIMEOUT_MS);
@@ -170,12 +209,12 @@ export async function warmUpApi(): Promise<boolean> {
   }
 }
 
-export async function freeScanVehiclePhoto(imageData: string): Promise<FreeScanResult> {
+export async function freeScanVehiclePhoto(imageData: string, extra: { km?: number; requestedPrice?: number } = {}): Promise<FreeScanResult> {
   await warmUpApi();
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, freeUsed: hasFreeAnalysis() }) }, AI_TIMEOUT_MS, true);
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, freeUsed: hasFreeAnalysis(), ...extra }) }, AI_TIMEOUT_MS, true);
 }
 
-export async function freeScanManual(input: { make: string; model: string; year?: number }): Promise<FreeScanResult> {
+export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number }): Promise<FreeScanResult> {
   return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ ...input, freeUsed: hasFreeAnalysis() }) }, REPORT_TIMEOUT_MS, true);
 }
 
@@ -233,11 +272,27 @@ export async function createPaidAnalysis(imageData: string) {
 export interface AnalyticsOverview {
   success: boolean;
   overview: {
-    totals: { visits: number; scans: number; analyses: number; checkouts: number; registers: number; uniqueVisitors7d: number };
-    last7d: { visits: number; scans: number; analyses: number; checkouts: number; registers: number };
-    last30d: { visits: number; scans: number; analyses: number; checkouts: number; registers: number };
+    totals: { visits: number; scans: number; analyses: number; checkouts: number; registers: number; uniqueVisitors7d: number; pageViews: number; purchases: number; premiumSubscribers: number };
+    last7d: AnalyticsPeriod;
+    last30d: AnalyticsPeriod;
+    funnel7d: Array<{ step: string; count: number; conversion: number; overall: number }>;
     visitsByDay: Array<{ key: string; label: string; count: number }>;
   };
+}
+
+interface AnalyticsPeriod {
+  visits: number;
+  scans: number;
+  analyses: number;
+  checkouts: number;
+  registers: number;
+  pageViews: number;
+  analysesStarted: number;
+  resultsViewed: number;
+  reportOffersViewed: number;
+  reportPurchasesStarted: number;
+  premiumCheckoutsStarted: number;
+  purchases: number;
 }
 
 export async function getAnalyticsOverview() {

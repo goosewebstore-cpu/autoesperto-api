@@ -40,6 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: false, follow: true },
     alternates: {
       canonical: `/affidabilita/${resolved.make}/${resolved.model}/${resolved.year}`,
       languages: { 'it-IT': `${siteUrl()}/affidabilita/${resolved.make}/${resolved.model}/${resolved.year}` },

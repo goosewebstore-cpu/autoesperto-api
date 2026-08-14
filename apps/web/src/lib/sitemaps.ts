@@ -3,12 +3,6 @@ import { guides } from './guides';
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
-export const CURRENT_YEAR = new Date().getFullYear();
-export const YEAR_RANGE: number[] = [];
-for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
-
-const YEAR_CHUNK_SIZE = 25000;
-
 export interface UrlEntry {
   url: string;
   changeFrequency: string;
@@ -39,38 +33,6 @@ const staticPages: UrlEntry[] = [
   { url: `${siteUrl}/dmca`, changeFrequency: 'yearly', priority: 0.3 },
 ];
 
-function yearUrlsFor(prefix: string): UrlEntry[] {
-  const urls: UrlEntry[] = [];
-  const seen = new Set<string>();
-  for (const make of getAllMakes()) {
-    for (const model of make.models) {
-      for (const year of YEAR_RANGE) {
-        const url = `${siteUrl}/${prefix}/${make.slug}/${slugify(model)}/${year}`;
-        if (seen.has(url)) continue;
-        seen.add(url);
-        urls.push({
-          url,
-          changeFrequency: 'monthly',
-          priority: 0.5,
-        });
-      }
-    }
-  }
-  return urls;
-}
-
-const allYearUrls = () => yearUrlsFor('valutazione');
-const allRepairYearUrls = () => yearUrlsFor('riparazione');
-const allReliabilityYearUrls = () => yearUrlsFor('affidabilita');
-const allConsumptionYearUrls = () => yearUrlsFor('consumi');
-
-function chunked(name: string, urls: UrlEntry[]): UrlEntry[] {
-  const match = /^(\d+)$/.exec(name);
-  if (!match) return [];
-  const start = (Number(match[1]) - 1) * YEAR_CHUNK_SIZE;
-  return urls.slice(start, start + YEAR_CHUNK_SIZE);
-}
-
 function uniqueUrls(entries: UrlEntry[]): UrlEntry[] {
   const seen = new Set<string>();
   const out: UrlEntry[] = [];
@@ -83,10 +45,6 @@ function uniqueUrls(entries: UrlEntry[]): UrlEntry[] {
 }
 
 export function sitemapNames(): string[] {
-  const valChunks = Math.ceil(allYearUrls().length / YEAR_CHUNK_SIZE);
-  const repChunks = Math.ceil(allRepairYearUrls().length / YEAR_CHUNK_SIZE);
-  const relChunks = Math.ceil(allReliabilityYearUrls().length / YEAR_CHUNK_SIZE);
-  const consChunks = Math.ceil(allConsumptionYearUrls().length / YEAR_CHUNK_SIZE);
   return [
     'static',
     'makes',
@@ -97,10 +55,6 @@ export function sitemapNames(): string[] {
     'aff-models',
     'cons-makes',
     'cons-models',
-    ...Array.from({ length: valChunks }, (_, i) => `years-${i + 1}`),
-    ...Array.from({ length: repChunks }, (_, i) => `rip-years-${i + 1}`),
-    ...Array.from({ length: relChunks }, (_, i) => `aff-years-${i + 1}`),
-    ...Array.from({ length: consChunks }, (_, i) => `cons-years-${i + 1}`),
   ];
 }
 
@@ -180,17 +134,8 @@ export function buildSitemap(name: string): UrlEntry[] {
           }))
         )
       );
-    default: {
-      const yearsMatch = /^years-(\d+)$/.exec(name);
-      if (yearsMatch) return chunked(yearsMatch[1], allYearUrls());
-      const ripYearsMatch = /^rip-years-(\d+)$/.exec(name);
-      if (ripYearsMatch) return chunked(ripYearsMatch[1], allRepairYearUrls());
-      const affYearsMatch = /^aff-years-(\d+)$/.exec(name);
-      if (affYearsMatch) return chunked(affYearsMatch[1], allReliabilityYearUrls());
-      const consYearsMatch = /^cons-years-(\d+)$/.exec(name);
-      if (consYearsMatch) return chunked(consYearsMatch[1], allConsumptionYearUrls());
+    default:
       return [];
-    }
   }
 }
 

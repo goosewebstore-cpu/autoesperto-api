@@ -7,8 +7,19 @@ import { isOwnerEmail } from '../services/owner';
 
 const router = Router();
 
+// Eventi funnel: i vecchi eventi (visit/scan/analysis/checkout/login/register)
+// restano validi per retrocompatibilità; i nuovi eventi coprono l'intero funnel
+// di conversione: analisi → risultato → offerta report → pagamento.
 const trackSchema = z.object({
-  type: z.enum(['visit', 'scan', 'analysis', 'checkout', 'login', 'register']),
+  type: z.enum([
+    'visit', 'scan', 'analysis', 'checkout', 'login', 'register',
+    'page_view', 'search_car', 'photo_upload', 'car_selected', 'car_image_uploaded',
+    'analysis_started', 'analysis_completed', 'result_viewed',
+    'premium_viewed', 'premium_cta_clicked', 'premium_subscribed',
+    'report_offer_viewed', 'report_purchase_started', 'premium_checkout_started',
+    'purchase_completed', 'pdf_requested', 'share_clicked',
+    'sell_ad_generated', 'ad_impression', 'compare_started', 'guide_read', 'account_created',
+  ]),
   path: z.string().max(300).optional(),
   meta: z.string().max(2000).optional(),
   visitorId: z.string().max(120).optional(),
@@ -111,6 +122,21 @@ router.get(
     const byType7d = (type: string) => last7d.find((x: { type: string; _count: { _all: number } }) => x.type === type)?._count._all || 0;
     const byType30d = (type: string) => last30d.find((x: { type: string; _count: { _all: number } }) => x.type === type)?._count._all || 0;
 
+    const pct = (n: number, d: number) => (d > 0 ? Math.round((n / d) * 1000) / 10 : 0);
+    const funnel7d = [
+      { step: 'Visite', count: byType7d('visit') },
+      { step: 'Analisi avviate', count: byType7d('analysis_started') },
+      { step: 'Analisi completate', count: byType7d('analysis_completed') },
+      { step: 'Risultato visto', count: byType7d('result_viewed') },
+      { step: 'Offerta report vista', count: byType7d('report_offer_viewed') },
+      { step: 'Pagamenti completati', count: byType7d('purchase_completed') },
+    ];
+    const funnelWithPct = funnel7d.map((f, i) => ({
+      ...f,
+      conversion: i === 0 ? 100 : pct(f.count, funnel7d[i - 1].count),
+      overall: pct(f.count, funnel7d[0].count),
+    }));
+
     res.set('Cache-Control', 'no-store');
     res.json({
       success: true,
@@ -122,6 +148,9 @@ router.get(
           checkouts: totalCheckouts,
           registers: totalRegisters,
           uniqueVisitors7d: uniqueVisitors7d.filter((u: { visitorId: string | null }) => u.visitorId).length,
+          pageViews: await prisma.analyticsEvent.count({ where: { type: 'page_view' } }),
+          purchases: await prisma.analyticsEvent.count({ where: { type: 'purchase_completed' } }),
+          premiumSubscribers: await prisma.analyticsEvent.count({ where: { type: 'premium_subscribed' } }),
         },
         last7d: {
           visits: byType7d('visit'),
@@ -129,6 +158,13 @@ router.get(
           analyses: byType7d('analysis'),
           checkouts: byType7d('checkout'),
           registers: byType7d('register'),
+          pageViews: byType7d('page_view'),
+          analysesStarted: byType7d('analysis_started'),
+          resultsViewed: byType7d('result_viewed'),
+          reportOffersViewed: byType7d('report_offer_viewed'),
+          reportPurchasesStarted: byType7d('report_purchase_started'),
+          premiumCheckoutsStarted: byType7d('premium_checkout_started'),
+          purchases: byType7d('purchase_completed'),
         },
         last30d: {
           visits: byType30d('visit'),
@@ -136,7 +172,15 @@ router.get(
           analyses: byType30d('analysis'),
           checkouts: byType30d('checkout'),
           registers: byType30d('register'),
+          pageViews: byType30d('page_view'),
+          analysesStarted: byType30d('analysis_started'),
+          resultsViewed: byType30d('result_viewed'),
+          reportOffersViewed: byType30d('report_offer_viewed'),
+          reportPurchasesStarted: byType30d('report_purchase_started'),
+          premiumCheckoutsStarted: byType30d('premium_checkout_started'),
+          purchases: byType30d('purchase_completed'),
         },
+        funnel7d: funnelWithPct,
         visitsByDay: days,
       },
     });

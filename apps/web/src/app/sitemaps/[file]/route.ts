@@ -12,5 +12,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ fil
   const name = file.replace(/\.xml$/, '');
   const urls = buildSitemap(name);
   if (urls.length === 0) return new Response('Not found', { status: 404 });
-  return new Response(toXml(urls), { headers: { 'Content-Type': 'application/xml; charset=utf-8' } });
+  return new Response(toXml(urls), {
+    headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=86400' },
+  });
 }

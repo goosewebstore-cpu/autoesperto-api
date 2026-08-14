@@ -4,6 +4,7 @@ import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
   Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
+  Crown, FileText,
 } from 'lucide-react';
 import ReportSummary from '@/components/ReportSummary';
 import AdSlot from '@/components/AdSlot';
@@ -15,6 +16,11 @@ import { ShareButton } from '@/components/ShareButton';
 import { SellAdGenerator } from '@/components/SellAdGenerator';
 import { Lock } from 'lucide-react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { createCheckout } from '@/lib/api';
+import { getAuthToken } from '@/lib/auth';
+import { trackEvent } from '@/lib/analytics';
+import { getReportPricing, getPremiumPricing } from '@/lib/pricing';
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
@@ -55,7 +61,23 @@ interface ReportViewProps {
 }
 
 export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true, tier = 'premium' }: ReportViewProps) {
+  const router = useRouter();
   const { vehicle, reliability, price } = report;
+  const reportPrice = getReportPricing().displayPrice;
+  const premiumPrice = getPremiumPricing('month').displayPrice;
+
+  const handleBuyReport = () => {
+    trackEvent('report_purchase_started', { source: 'report_view_paywall' });
+    if (!getAuthToken()) {
+      router.push('/accesso?next=/account?report=checkout');
+      return;
+    }
+    createCheckout()
+      .then((res) => { window.location.assign(res.url); })
+      .catch((err: unknown) => {
+        if (err instanceof Error && err.message) alert(err.message);
+      });
+  };
   const verdict = getVerdictConfig(reliability.verdict);
   const VerdictIcon = verdict.icon;
   const priceLabelCfg = getPriceLabelConfig(price.priceLabel);
@@ -243,14 +265,25 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               </div>
               <h3 className="text-2xl font-bold text-white mb-4">Sblocca il report completo</h3>
               <p className="text-slate-300 text-sm mb-8 leading-relaxed">
-                Il tuo piano attuale non include l'accesso ai dati completi. Passa a Premium per visualizzare affidabilità, difetti comuni, andamento del mercato e prezzi reali.
+                Il tuo piano attuale non include l'accesso ai dati completi. Compra un report singolo o passa a Premium per vedere affidabilità, difetti comuni, andamento del mercato e prezzi reali.
               </p>
-              <Link
-                href="/account?upgrade=true"
-                className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-8 text-sm font-bold text-white transition hover:bg-blue-500"
-              >
-                Passa a Premium
-              </Link>
+              <div className="grid gap-3 sm:grid-cols-2">
+                <button
+                  type="button"
+                  onClick={handleBuyReport}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-bold text-white transition hover:bg-blue-500"
+                >
+                  <FileText className="h-4 w-4" /> Report · {reportPrice}
+                </button>
+                <Link
+                  href="/account?upgrade=true"
+                  onClick={() => trackEvent('premium_checkout_started', { source: 'report_view_paywall' })}
+                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-600 px-6 text-sm font-bold text-white transition hover:bg-slate-800"
+                >
+                  <Crown className="h-4 w-4" /> Premium · {premiumPrice}/mese
+                </Link>
+              </div>
+              <p className="mt-4 text-xs text-slate-400">Un solo report {reportPrice} · Analisi illimitate con Premium {premiumPrice}/mese.</p>
             </div>
           </div>
           

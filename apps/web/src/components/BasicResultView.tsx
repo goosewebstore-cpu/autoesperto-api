@@ -1,8 +1,14 @@
+'use client';
+
 import React from 'react';
 import Link from 'next/link';
-import { Lock, ChevronRight, CheckCircle2 } from 'lucide-react';
+import { useRouter } from 'next/navigation';
+import { Lock, ChevronRight, CheckCircle2, FileText, Crown } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { getPremiumPricing } from '@/lib/pricing';
+import { getPremiumPricing, getReportPricing } from '@/lib/pricing';
+import { createCheckout } from '@/lib/api';
+import { getAuthToken } from '@/lib/auth';
+import { trackEvent } from '@/lib/analytics';
 
 interface BasicResultViewProps {
   report: AutoReport;
@@ -10,6 +16,21 @@ interface BasicResultViewProps {
 
 export function BasicResultView({ report }: BasicResultViewProps) {
   const pricing = getPremiumPricing();
+  const reportPrice = getReportPricing().displayPrice;
+  const router = useRouter();
+
+  const handleBuyReport = () => {
+    trackEvent('report_purchase_started', { source: 'basic_result_view' });
+    if (!getAuthToken()) {
+      router.push('/accesso?next=/account?report=checkout');
+      return;
+    }
+    createCheckout()
+      .then((res) => { window.location.assign(res.url); })
+      .catch((err: unknown) => {
+        if (err instanceof Error && err.message) alert(err.message);
+      });
+  };
   
   return (
     <div className="max-w-4xl mx-auto py-8 px-4 sm:px-6 lg:px-8 space-y-8 animate-fade-in">
@@ -79,16 +100,27 @@ export function BasicResultView({ report }: BasicResultViewProps) {
             ))}
           </div>
           
-          <Link
-            href="/account?upgrade=true"
-            className="group relative inline-flex items-center justify-center gap-2 px-8 py-4 bg-accent hover:bg-accent-hover text-white text-lg font-bold rounded-xl transition-all hover:scale-105 hover:shadow-glow-accent"
-          >
-            <span>Passa a Premium — {pricing.displayPrice}/mese</span>
-            <ChevronRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
+          <div className="grid sm:grid-cols-2 gap-3 w-full max-w-xl">
+            <button
+              type="button"
+              onClick={handleBuyReport}
+              className="group inline-flex items-center justify-center gap-2 px-6 py-4 bg-accent hover:bg-accent-hover text-white text-base font-bold rounded-xl transition-all hover:scale-105 hover:shadow-glow-accent"
+            >
+              <FileText className="w-5 h-5" />
+              Report completo · {reportPrice}
+            </button>
+            <Link
+              href="/account?upgrade=true"
+              onClick={() => trackEvent('premium_checkout_started', { source: 'basic_result_view' })}
+              className="group inline-flex items-center justify-center gap-2 px-6 py-4 border border-slate-500 hover:border-white text-white text-base font-bold rounded-xl transition-all hover:bg-white/10"
+            >
+              <Crown className="w-5 h-5" />
+              Premium · {pricing.displayPrice}/mese
+            </Link>
+          </div>
           
           <p className="text-slate-400 text-sm mt-6">
-            Annulla quando vuoi. Report illimitati per tutte le auto.
+            Un solo report {reportPrice} o analisi illimitate con Premium. Annulla quando vuoi.
           </p>
         </div>
       </div>

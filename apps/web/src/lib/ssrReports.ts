@@ -2,6 +2,7 @@ import fs from 'fs';
 import path from 'path';
 import type { AutoReport } from '@autoesperto/types';
 import { API_URL } from '@/lib/api';
+import { buildLocalReport } from '@/lib/stima';
 
 const CACHE_DIR = path.join(process.cwd(), '.next', 'cache', 'ssr-reports');
 const CACHE_TTL_MS = 7 * 24 * 60 * 60 * 1000;
@@ -54,7 +55,7 @@ function writeMemory(key: string, report: AutoReport): void {
   }
 }
 
-export async function getSsrReport(make: string, model: string, year?: number): Promise<AutoReport | undefined> {
+export async function getSsrReport(make: string, model: string, year?: number, preferApi = false): Promise<AutoReport> {
   const key = keyFor(make, model, year);
   const fromMemory = readMemory(key);
   if (fromMemory) return fromMemory;
@@ -64,25 +65,29 @@ export async function getSsrReport(make: string, model: string, year?: number): 
     return fromDisk;
   }
 
-  try {
-    const controller = new AbortController();
-    const timer = setTimeout(() => controller.abort(), 15000);
-    const res = await fetch(`${API_URL}/reports/analyze`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ make, model, ...(year ? { year } : {}) }),
-      signal: controller.signal,
-    });
-    clearTimeout(timer);
-    if (!res.ok) return undefined;
-    const data = (await res.json()) as { success?: boolean; report?: AutoReport };
-    if (data.success && data.report) {
-      writeMemory(key, data.report);
-      writeToDisk(key, data.report);
-      return data.report;
+  if (preferApi) {
+    try {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 15000);
+      const res = await fetch(`${API_URL}/reports/analyze`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ make, model, ...(year ? { year } : {}) }),
+        signal: controller.signal,
+      });
+      clearTimeout(timer);
+      if (res.ok) {
+        const data = (await res.json()) as { success?: boolean; report?: AutoReport };
+        if (data.success && data.report) {
+          writeMemory(key, data.report);
+          writeToDisk(key, data.report);
+          return data.report;
+        }
+      }
+    } catch {
+      /* l'API non è raggiungibile: si usa la stima locale */
     }
-    return undefined;
-  } catch {
-    return undefined;
   }
+
+  return buildLocalReport(make, model, year);
 }

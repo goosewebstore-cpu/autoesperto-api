@@ -4,9 +4,9 @@ import SiteFooter from '@/components/SiteFooter';
 import { getAllMakes } from '@/lib/catalogo';
 
 export const metadata: Metadata = {
-  title: 'Prima di comprare, verifica l\'auto: prezzo, affidabilità e controlli',
+  title: 'Hai trovato un\'auto usata? Scopri se vale davvero quello che chiedono',
   description:
-    'Da una foto o da marca e modello: scopri quanto vale un\'auto usata, se il prezzo è giusto e cosa controllare prima di comprare o vendere. Report completo in pochi secondi, prima analisi gratuita.',
+    'Analizza prezzo, valore, problemi e costi prima di comprare un\'auto usata. Verdetto in pochi secondi: BUON AFFARE, TRATTA o EVITALA. Prima analisi completa gratuita.',
   alternates: {
     canonical: '/',
     languages: { 'it-IT': 'https://autoesperto.it/' },

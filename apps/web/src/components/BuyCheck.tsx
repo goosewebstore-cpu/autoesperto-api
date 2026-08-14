@@ -2,10 +2,15 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { AlertTriangle, Car, CheckCircle2, Loader2, RotateCcw, Search } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { analyzeVehicle } from '@/lib/api';
+import { freeScanManual, markFreeAnalysisUsed, createCheckout, saveLastAttempt, type FreeScanResult } from '@/lib/api';
+import { getAuthToken } from '@/lib/auth';
+import { trackEvent } from '@/lib/analytics';
 import { getAllMakes, slugify } from '@/lib/catalogo';
+import BuyVerdictCard from '@/components/BuyVerdictCard';
+import { verdictFromGated } from '@/lib/verdict';
 
 interface BuyVerdict {
   tone: 'green' | 'amber' | 'red';
@@ -81,6 +86,9 @@ export default function BuyCheck() {
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [error, setError] = useState('');
   const [report, setReport] = useState<AutoReport | null>(null);
+  const [scan, setScan] = useState<FreeScanResult | null>(null);
+  const [paying, setPaying] = useState(false);
+  const router = useRouter();
 
   const brands = useMemo(() => getAllMakes(), []);
 
@@ -102,27 +110,73 @@ export default function BuyCheck() {
     return () => timers.forEach(clearTimeout);
   }, [loading]);
 
+  useEffect(() => {
+    if (scan && !report) {
+      trackEvent('report_offer_viewed', { make: scan.vehicle?.make, model: scan.vehicle?.model });
+    }
+  }, [scan, report]);
+
+  const handleBuyReport = async () => {
+    trackEvent('report_purchase_started', { make: scan?.vehicle?.make, model: scan?.vehicle?.model });
+    if (!getAuthToken()) {
+      router.push('/accesso?next=/account?report=checkout');
+      return;
+    }
+    setPaying(true);
+    try {
+      const res = await createCheckout();
+      window.location.href = res.url;
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : 'Non riesco ad avviare il pagamento. Riprova.';
+      setError(msg);
+      setPaying(false);
+    }
+  };
+
+  const handlePremium = () => {
+    trackEvent('premium_checkout_started', { make: scan?.vehicle?.make, model: scan?.vehicle?.model });
+    router.push('/account?upgrade=true');
+  };
+
   const handleSubmit = async (event: React.FormEvent) => {
     event.preventDefault();
     if (!canSubmit) return;
     setError('');
     setReport(null);
+    setScan(null);
     setPhaseIndex(0);
     setLoading(true);
+    trackEvent('analysis_started', { analysis_type: 'manual', make: make.trim(), model: model.trim() });
     try {
-      const result = await analyzeVehicle({
+      const kmNum = km.trim() ? Number.parseInt(km, 10) : undefined;
+      const priceNum = Number.parseInt(price, 10);
+      const result = await freeScanManual({
         make: make.trim(),
         model: model.trim(),
         year: Number.parseInt(year, 10),
-        km: km.trim() ? Number.parseInt(km, 10) : undefined,
-        requestedPrice: Number.parseInt(price, 10),
+        ...(kmNum ? { km: kmNum } : {}),
+        ...(priceNum ? { requestedPrice: priceNum } : {}),
       });
-      if (result.success && result.report) {
-        setReport(result.report);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      } else {
-        setError('Non siamo riusciti a generare il verdetto. Riprova.');
+      if (!result.recognized) {
+        setError(result.message || 'Non siamo riusciti a generare il verdetto. Riprova.');
+        return;
       }
+      if (result.report) {
+        setReport(result.report);
+        if (result.freeUsed) markFreeAnalysisUsed();
+      } else {
+        setScan(result);
+        saveLastAttempt({
+          make: result.vehicle?.make ?? make.trim(),
+          model: result.vehicle?.model ?? model.trim(),
+          year: Number.parseInt(year, 10),
+          km: kmNum,
+          requestedPrice: priceNum,
+        });
+      }
+      trackEvent('analysis_completed', { make: result.vehicle?.make, model: result.vehicle?.model });
+      trackEvent('result_viewed', { make: result.vehicle?.make, model: result.vehicle?.model });
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       const message = err instanceof Error ? err.message : '';
       setError(
@@ -135,9 +189,63 @@ export default function BuyCheck() {
 
   const handleReset = () => {
     setReport(null);
+    setScan(null);
     setError('');
     setPhaseIndex(0);
+    setPaying(false);
   };
+
+  if (scan && !report) {
+    const requestedPrice = price.trim() ? Number.parseInt(price, 10) : undefined;
+
+    return (
+      <div className="animate-fade-in space-y-5">
+        <div className="flex items-start justify-between gap-3">
+          <div>
+            <p className="text-xs font-bold uppercase tracking-wider text-accent">
+              Sto per comprare questa auto
+            </p>
+            <h1 className="mt-1 text-2xl md:text-3xl font-extrabold tracking-tight text-text-primary">
+              {scan.vehicle?.make} {scan.vehicle?.model}
+            </h1>
+            <p className="mt-1 text-sm text-text-secondary">
+              {[scan.vehicle?.year, scan.value?.source === 'market' ? 'valutazione dagli annunci reali' : 'valutazione stimata'].filter(Boolean).join(' · ')}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={handleReset}
+            disabled={paying}
+            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-xs font-semibold text-text-secondary hover:border-accent hover:text-accent transition-colors"
+          >
+            <RotateCcw className="h-3.5 w-3.5" /> Nuova verifica
+          </button>
+        </div>
+
+        <BuyVerdictCard
+          verdict={verdictFromGated(scan, requestedPrice)}
+          locked
+          onBuyReport={handleBuyReport}
+          onPremium={handlePremium}
+        />
+
+        {error && (
+          <div role="alert" className="flex items-start gap-3 rounded-2xl border border-amber-200 bg-amber-50 p-4">
+            <AlertTriangle className="h-5 w-5 text-amber-600 shrink-0 mt-0.5" />
+            <p className="text-sm text-amber-800 leading-relaxed">{error}</p>
+          </div>
+        )}
+
+        <div className="mt-4 flex items-center gap-3 rounded-2xl border border-border bg-white p-4 text-sm text-text-secondary">
+          <Car className="h-5 w-5 text-accent shrink-0" />
+          <p>
+            Il verdetto combina il valore di mercato (dagli annunci in vendita) e l&apos;affidabilità del
+            modello. È indicativo: non sostituisce un&apos;ispezione fisica.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (report) {
     const v = getBuyVerdict(report.price, report.reliability);

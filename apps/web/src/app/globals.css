@@ -625,6 +625,87 @@ body {
   .home-how-grid { grid-template-columns: repeat(3, 1fr); }
 }
 
+/* ─── BENEFIT (perché AutoEsperto) ─── */
+.home-benefits-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+@media (min-width: 640px) {
+  .home-benefits-grid { grid-template-columns: repeat(2, 1fr); }
+}
+.home-benefit-card {
+  padding: 1.1rem 1.15rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  background: #fff;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.home-benefit-card:hover {
+  border-color: #bfdbfe;
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.06);
+}
+.home-benefit-icon {
+  display: grid;
+  place-items: center;
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  background: #eff6ff;
+  color: #2563eb;
+  margin-bottom: 0.7rem;
+}
+.home-benefit-card h3 {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.01em;
+}
+.home-benefit-card p {
+  margin-top: 0.3rem;
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ─── FAQ ─── */
+.home-faq {
+  display: grid;
+  gap: 0.6rem;
+}
+.home-faq-item {
+  border: 1px solid #e2e8f0;
+  border-radius: 14px;
+  background: #fff;
+  padding: 0.85rem 1rem;
+}
+.home-faq-item summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  cursor: pointer;
+  list-style: none;
+  font-size: 0.9rem;
+  font-weight: 750;
+  color: #0f172a;
+}
+.home-faq-item summary::-webkit-details-marker { display: none; }
+.home-faq-item summary::after {
+  content: '+';
+  flex-shrink: 0;
+  font-size: 1.15rem;
+  line-height: 1;
+  color: #2563eb;
+  transition: transform 0.2s;
+}
+.home-faq-item[open] summary::after { transform: rotate(45deg); }
+.home-faq-item p {
+  margin-top: 0.55rem;
+  font-size: 0.84rem;
+  color: #64748b;
+  line-height: 1.55;
+}
+
 /* ─── STRUMENTI GRATUITI ─── */
 .home-tools-grid {
   display: grid;

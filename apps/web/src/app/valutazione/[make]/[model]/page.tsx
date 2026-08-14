@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
-import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
+import { ArrowLeft, ArrowRight, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
+import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import ModelReportCard from '@/components/ModelReportCard';
 import AdBanner from '@/components/ads/AdBanner';
 import { getSsrReport } from '@/lib/ssrReports';
@@ -18,14 +18,13 @@ function siteUrl() {
 
 const CURRENT_YEAR_MODEL = new Date().getFullYear();
 const YEAR_RANGE_LINKS: number[] = [];
-for (let y = CURRENT_YEAR_MODEL; y >= 2015; y--) YEAR_RANGE_LINKS.push(y);
+for (let y = CURRENT_YEAR_MODEL; y > CURRENT_YEAR_MODEL - 5; y--) YEAR_RANGE_LINKS.push(y);
 
+export const dynamicParams = true;
 export const revalidate = 86400; // 1 giorno
 
 export function generateStaticParams() {
-  return getAllMakes().flatMap((make) =>
-    make.models.map((model) => ({ make: make.slug, model: slugify(model) }))
-  );
+  return [];
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
@@ -70,11 +69,8 @@ export default async function ModelValutazionePage({ params }: PageProps) {
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
 
-  let initialReport = undefined;
   const isPopular = POPULAR_MODELS.some((p) => slugify(p.make) === resolved.make && slugify(p.model) === resolved.model);
-  if (isPopular) {
-    initialReport = await getSsrReport(make.name, model);
-  }
+  const initialReport = await getSsrReport(make.name, model, undefined, isPopular);
 
   const year = new Date().getFullYear();
   const faq = [
@@ -115,6 +111,27 @@ export default async function ModelValutazionePage({ params }: PageProps) {
       { '@type': 'ListItem', position: 3, name: make.name, item: `${siteUrl()}/valutazione/${resolved.make}` },
       { '@type': 'ListItem', position: 4, name: model, item: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}` },
     ],
+  };
+  const price = initialReport?.price;
+  const displayedPrice = price ? (price.market?.priceAvg ?? price.estimatedValue) : undefined;
+  const carSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${make.name} ${model} usata`,
+    brand: { '@type': 'Brand', name: make.name },
+    model: model,
+    description: `Valutazione e prezzo di mercato della ${make.name} ${model} usata: affidabilità, punti critici e range di prezzo.`,
+    ...(displayedPrice
+      ? {
+          offers: {
+            '@type': 'Offer',
+            priceCurrency: 'EUR',
+            price: displayedPrice,
+            availability: 'https://schema.org/InStock',
+            url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}`,
+          },
+        }
+      : {}),
   };
 
   return (
@@ -167,6 +184,19 @@ export default async function ModelValutazionePage({ params }: PageProps) {
           <ModelReportCard make={make.name} model={model} initialReport={initialReport} />
         </div>
 
+        <section className="mt-6 rounded-2xl bg-slate-950 p-6 text-white">
+          <h2 className="text-lg font-extrabold tracking-tight">Hai trovato questa auto?</h2>
+          <p className="mt-1.5 text-sm text-slate-300 leading-relaxed">
+            Scopri se vale davvero quello che chiedono: confronta prezzo richiesto, valore di mercato e controlli da fare prima di comprarla.
+          </p>
+          <Link
+            href={`/?make=${encodeURIComponent(make.name)}&model=${encodeURIComponent(model)}#scanner-section`}
+            className="mt-4 inline-flex h-11 items-center justify-center gap-2 rounded-xl bg-white px-5 text-sm font-extrabold text-slate-950 transition hover:bg-slate-200"
+          >
+            Analizza questa auto <ArrowRight className="h-4 w-4" />
+          </Link>
+        </section>
+
         <section className="mt-6">
           <p className="text-sm text-text-tertiary mb-3">Condividi questa valutazione:</p>
           <div className="flex flex-wrap gap-2">
@@ -202,7 +232,7 @@ export default async function ModelValutazionePage({ params }: PageProps) {
 
         <section className="mt-8">
           <h2 className="text-base font-bold text-text-primary mb-3">Valutazione per anno di {model}</h2>
-          <p className="text-sm text-text-tertiary mb-3">Prezzi e valutazioni specifiche per ogni anno di {make.name} {model}.</p>
+          <p className="text-sm text-text-tertiary mb-3">Prezzi e valutazioni specifiche per gli anni più recenti di {make.name} {model}.</p>
           <div className="flex flex-wrap gap-2">
             {YEAR_RANGE_LINKS.map((y) => (
               <Link
@@ -266,7 +296,7 @@ export default async function ModelValutazionePage({ params }: PageProps) {
 
         <script
           type="application/ld+json"
-          dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema]) }}
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema, carSchema]) }}
         />
       </main>
 

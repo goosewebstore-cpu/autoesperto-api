@@ -154,7 +154,7 @@ export default function AccessForm() {
 
           <div className="mt-6">
             <h1 className="text-2xl font-extrabold tracking-tight text-slate-950">{mode === 'register' ? 'Crea la tua area personale' : 'Bentornato'}</h1>
-            <p className="mt-2 text-sm leading-6 text-slate-600">Usa un’email oppure un numero di telefono. Ogni account può acquistare e conservare una sola analisi completa.</p>
+            <p className="mt-2 text-sm leading-6 text-slate-600">Usa un’email oppure un numero di telefono. Gratis: salva le tue analisi complete e ritrovale quando vuoi.</p>
           </div>
 
           <a

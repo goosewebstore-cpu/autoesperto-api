@@ -4,7 +4,7 @@ import AccessForm from '@/components/AccessForm';
 
 export const metadata: Metadata = {
   title: 'Accedi o crea il tuo account',
-  description: 'Crea l’area personale AutoEsperto per acquistare e conservare la tua analisi auto.',
+  description: 'Crea l’area personale AutoEsperto per salvare e conservare le tue analisi auto, gratis.',
   robots: { index: false, follow: false },
 };
 

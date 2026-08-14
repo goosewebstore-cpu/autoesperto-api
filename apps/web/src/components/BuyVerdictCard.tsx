@@ -1,7 +1,6 @@
 'use client';
 
-import { BadgeCheck, CheckCircle2, Crown, FileText, Gauge, ShieldAlert, XCircle } from 'lucide-react';
-import { getReportPricing, getPremiumPricing } from '@/lib/pricing';
+import { BadgeCheck, CheckCircle2, Gauge, ShieldAlert, XCircle } from 'lucide-react';
 
 export type VerdictTone = 'good' | 'fair' | 'high';
 export type VerdictLabel = 'BUON AFFARE' | 'TRATTA' | 'EVITALA';
@@ -24,9 +23,6 @@ export interface VerdictData {
 
 interface BuyVerdictCardProps {
   verdict: VerdictData;
-  locked?: boolean;
-  onBuyReport?: () => void;
-  onPremium?: () => void;
 }
 
 const TONE_STYLES: Record<VerdictTone, { bg: string; text: string; ring: string; softBg: string; label: string }> = {
@@ -53,11 +49,9 @@ function Row({ label, value, strong }: { label: string; value: string; strong?: 
   );
 }
 
-export default function BuyVerdictCard({ verdict, locked, onBuyReport, onPremium }: BuyVerdictCardProps) {
+export default function BuyVerdictCard({ verdict }: BuyVerdictCardProps) {
   const tone = TONE_STYLES[verdict.tone];
   const Icon = TONE_ICON[verdict.tone];
-  const reportPrice = getReportPricing().displayPrice;
-  const premiumPrice = getPremiumPricing('month').displayPrice;
 
   return (
     <div className="overflow-hidden rounded-3xl border border-slate-200 bg-white shadow-[0_20px_60px_rgba(15,23,42,0.08)]">
@@ -117,39 +111,6 @@ export default function BuyVerdictCard({ verdict, locked, onBuyReport, onPremium
           ))}
         </ul>
       </div>
-
-      {locked && (
-        <div className="border-t border-slate-100 bg-slate-50/70 px-6 py-6 sm:px-7">
-          <div className="flex items-center gap-2 text-[0.68rem] font-extrabold uppercase tracking-[0.1em] text-slate-400">
-            <FileText className="h-3.5 w-3.5" />
-            Scopri tutto il report
-          </div>
-          <p className="mt-1.5 text-sm text-slate-600">
-            Clicchi, chilometraggio, costi di manutenzione e il verdetto completo su questa auto.
-          </p>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2">
-            <button
-              type="button"
-              onClick={onBuyReport}
-              className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl bg-slate-950 px-4 text-sm font-extrabold text-white shadow-[0_12px_28px_rgba(15,23,42,0.22)] transition hover:-translate-y-0.5"
-            >
-              <FileText className="h-4 w-4" />
-              Report completo · {reportPrice}
-            </button>
-            <button
-              type="button"
-              onClick={onPremium}
-              className="inline-flex min-h-[52px] items-center justify-center gap-2 rounded-2xl border border-blue-200 bg-white px-4 text-sm font-extrabold text-blue-700 transition hover:border-blue-300 hover:bg-blue-50"
-            >
-              <Crown className="h-4 w-4" />
-              Premium · {premiumPrice}/mese
-            </button>
-          </div>
-          <p className="mt-3 text-center text-xs font-medium text-slate-400">
-            Un solo report: {reportPrice}. Analisi illimitate: Premium {premiumPrice}/mese.
-          </p>
-        </div>
-      )}
     </div>
   );
 }

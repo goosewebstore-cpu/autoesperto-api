@@ -139,7 +139,7 @@ describe('AutoEsperto API (MVP)', () => {
   });
 
   describe('POST /reports/free-scan', () => {
-    it('input manuale senza account (prima visita) → report completo gratuito, non salvato', async () => {
+    it('input manuale senza account → report completo gratuito, non salvato', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016 },
@@ -150,11 +150,12 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.data.vehicle.make, 'BMW');
       assert.strictEqual(r.data.vehicle.model, 'Serie 3');
       assert.ok(r.data.report);
+      assert.ok(r.data.report.reliability.score > 0);
       assert.strictEqual(r.data.saved, false);
       assert.strictEqual(r.data.freeUsed, true);
     });
 
-    it('input manuale senza account con freeUsed → report gated, solo analisi base con valore stimato', async () => {
+    it('input manuale senza account con freeUsed → report completo comunque (tutto gratis)', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016, freeUsed: true },
@@ -163,14 +164,10 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.data.success, true);
       assert.strictEqual(r.data.recognized, true);
       assert.strictEqual(r.data.vehicle.make, 'BMW');
-      assert.strictEqual(r.data.report, null);
+      assert.ok(r.data.report, 'il report è completo e sempre gratuito');
+      assert.ok(r.data.report.reliability.score > 0);
       assert.strictEqual(r.data.saved, false);
-      assert.strictEqual(r.data.needsUpgrade, true);
-      assert.ok(r.data.value, 'la risposta gated include il valore stimato');
-      assert.ok(r.data.value.estimated > 0, 'valore stimato positivo');
-      assert.ok(r.data.value.min < r.data.value.estimated && r.data.value.estimated < r.data.value.max);
-      assert.ok(['stima', 'market'].includes(r.data.value.source), `source valida, ottenuto ${r.data.value.source}`);
-      assert.match(r.data.message, /sempre gratuita/i);
+      assert.strictEqual(r.data.needsUpgrade, undefined);
     });
 
     it('né foto né marca/modello → 400', async () => {

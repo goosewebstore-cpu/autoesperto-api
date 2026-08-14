@@ -4,7 +4,6 @@ import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
   Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
-  Crown, FileText,
 } from 'lucide-react';
 import ReportSummary from '@/components/ReportSummary';
 import AdSlot from '@/components/AdSlot';
@@ -14,13 +13,6 @@ import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
 import { ShareButton } from '@/components/ShareButton';
 import { SellAdGenerator } from '@/components/SellAdGenerator';
-import { Lock } from 'lucide-react';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { createCheckout } from '@/lib/api';
-import { getAuthToken } from '@/lib/auth';
-import { trackEvent } from '@/lib/analytics';
-import { getReportPricing, getPremiumPricing } from '@/lib/pricing';
 
 function formatPrice(n: number) {
   return n.toLocaleString('it-IT') + ' €';
@@ -57,27 +49,11 @@ interface ReportViewProps {
   embedded?: boolean;
   showAds?: boolean;
   allowPhotoTools?: boolean;
-  tier?: 'anonymous' | 'registered' | 'premium';
 }
 
-export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true, tier = 'premium' }: ReportViewProps) {
-  const router = useRouter();
+export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true }: ReportViewProps) {
   const { vehicle, reliability, price } = report;
-  const reportPrice = getReportPricing().displayPrice;
-  const premiumPrice = getPremiumPricing('month').displayPrice;
 
-  const handleBuyReport = () => {
-    trackEvent('report_purchase_started', { source: 'report_view_paywall' });
-    if (!getAuthToken()) {
-      router.push('/accesso?next=/account?report=checkout');
-      return;
-    }
-    createCheckout()
-      .then((res) => { window.location.assign(res.url); })
-      .catch((err: unknown) => {
-        if (err instanceof Error && err.message) alert(err.message);
-      });
-  };
   const verdict = getVerdictConfig(reliability.verdict);
   const VerdictIcon = verdict.icon;
   const priceLabelCfg = getPriceLabelConfig(price.priceLabel);
@@ -256,47 +232,8 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </details>
       </section>
 
-      {tier !== 'premium' ? (
-        <div className="relative mt-8">
-          <div className="absolute inset-0 z-10 flex flex-col items-center justify-center p-6 text-center">
-            <div className="rounded-3xl bg-slate-900/95 backdrop-blur-md p-8 sm:p-12 shadow-2xl border border-slate-700 max-w-xl w-full mx-auto">
-              <div className="mx-auto w-16 h-16 rounded-full bg-blue-600/20 flex items-center justify-center mb-6">
-                <Lock className="w-8 h-8 text-blue-500" />
-              </div>
-              <h3 className="text-2xl font-bold text-white mb-4">Sblocca il report completo</h3>
-              <p className="text-slate-300 text-sm mb-8 leading-relaxed">
-                Il tuo piano attuale non include l'accesso ai dati completi. Compra un report singolo o passa a Premium per vedere affidabilità, difetti comuni, andamento del mercato e prezzi reali.
-              </p>
-              <div className="grid gap-3 sm:grid-cols-2">
-                <button
-                  type="button"
-                  onClick={handleBuyReport}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 text-sm font-bold text-white transition hover:bg-blue-500"
-                >
-                  <FileText className="h-4 w-4" /> Report · {reportPrice}
-                </button>
-                <Link
-                  href="/account?upgrade=true"
-                  onClick={() => trackEvent('premium_checkout_started', { source: 'report_view_paywall' })}
-                  className="inline-flex h-12 items-center justify-center gap-2 rounded-xl border border-slate-600 px-6 text-sm font-bold text-white transition hover:bg-slate-800"
-                >
-                  <Crown className="h-4 w-4" /> Premium · {premiumPrice}/mese
-                </Link>
-              </div>
-              <p className="mt-4 text-xs text-slate-400">Un solo report {reportPrice} · Analisi illimitate con Premium {premiumPrice}/mese.</p>
-            </div>
-          </div>
-          
-          <div className="space-y-5 blur-[8px] opacity-60 pointer-events-none select-none" aria-hidden="true">
-            <KpiCards report={report} />
-            <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7 h-64" />
-            <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7 h-96" />
-          </div>
-        </div>
-      ) : (
-        <>
-          {/* KPI Cards premium: prezzo, affidabilità, costo annuo, consumo, bollo */}
-          <KpiCards report={report} />
+      {/* KPI Cards: prezzo, affidabilità, costo annuo, consumo, bollo */}
+      <KpiCards report={report} />
 
       {/* Grafici: radar affidabilità per categoria + andamento prezzo */}
       {reliability.categoryScores && (
@@ -923,9 +860,6 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
           </div>
         </div>
       </section>
-      
-      </>
-      )}
 
       {/* Footer note */}
       <p className="text-xs text-text-tertiary flex items-center justify-center gap-1.5 text-center">

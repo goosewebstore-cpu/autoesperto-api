@@ -3,12 +3,9 @@ import { z } from 'zod';
 import type { Request } from 'express';
 import { prisma } from '@autoesperto/database';
 import { buildReport } from '../services/reportService';
-import { estimateMarketValue } from '../services/pricing';
-import { fetchSubitoMarketStats } from '../services/market';
 import { analyzeVehiclePhoto, askAutoEsperto, type PhotoAnalysisResult } from '../services/ai';
 import { searchModel } from '../services/modelDB';
 import { verifyAuthToken } from '../services/auth';
-import { getAccountEntitlement } from '../services/entitlement';
 import { asyncHandler, serviceUnavailable } from '../http';
 
 const router = Router();
@@ -61,13 +58,6 @@ const freeScanSchema = z
   .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
     message: 'Indica una foto oppure marca e modello',
   });
-
-function priceVerdict(requestedPrice: number, estimated: number): { label: string; tone: 'good' | 'fair' | 'high'; percent: number } {
-  const percent = estimated > 0 ? ((requestedPrice - estimated) / estimated) * 100 : 0;
-  if (requestedPrice <= estimated * 1.03) return { label: 'BUON AFFARE', tone: 'good', percent };
-  if (requestedPrice <= estimated * 1.1) return { label: 'TRATTA', tone: 'fair', percent };
-  return { label: 'EVITALA', tone: 'high', percent };
-}
 
 function getOptionalUserId(req: Request): string | null {
   const authorization = req.header('authorization') || '';
@@ -210,53 +200,10 @@ router.post(
       confidence: photoAnalysis.vehicle.confidence,
     };
 
-    // Analisi base (marca, modello, anno, colore, tipologia) → sempre gratuita.
-    // Il report completo richiede uno slot gratuito: la prima analisi è gratis
-    // alla prima visita (anonimo, flag dal client) o col primo account;
-    // poi serve Premium.
+    // Analisi base e report completo sempre gratuiti.
+    // Il salvataggio richiede un account: l'anonimo riceve il report completo
+    // ma senza account non può conservarlo nelle proprie analisi.
     const userId = getOptionalUserId(req);
-    const entitlement = await getAccountEntitlement(userId);
-    const anonymousFreeSlot = !userId && !input.freeUsed;
-    const freeSlot = userId ? entitlement.freeAvailable : anonymousFreeSlot;
-    const entitled = userId ? entitlement.entitled : anonymousFreeSlot;
-
-    if (!entitled) {
-      const estimate = estimateMarketValue({ make: make!, model: model!, year, body: vehicle.bodyType });
-      let value: { estimated: number; min: number; max: number; source: 'stima' | 'market' } = {
-        estimated: estimate.value, min: estimate.min, max: estimate.max, source: 'stima',
-      };
-      const marketStats = await fetchSubitoMarketStats(make!, model!, year, undefined).catch(() => undefined);
-      const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
-      if (marketStats?.priceAvg && marketSample >= 2) {
-        const estimated = Math.round(marketStats.priceAvg / 100) * 100;
-        const spread = Math.round((estimated * 0.2) / 100) * 100;
-        value = {
-          estimated,
-          min: marketStats.priceMin ? Math.max(Math.round(marketStats.priceMin / 100) * 100, estimated - spread) : estimated - spread,
-          max: marketStats.priceMax ? Math.min(Math.round(marketStats.priceMax / 100) * 100, estimated + spread) : estimated + spread,
-          source: 'market',
-        };
-      }
-      res.set('Cache-Control', 'no-store');
-      const priceCheck =
-        input.requestedPrice != null && value.estimated > 0
-          ? priceVerdict(input.requestedPrice, value.estimated)
-          : undefined;
-      res.json({
-        success: true,
-        recognized: true,
-        vehicle,
-        report: null,
-        value,
-        priceCheck,
-        saved: false,
-        needsLogin: false,
-        needsUpgrade: true,
-        needsEmailVerification: false,
-        message: 'L\'analisi base (marca, modello, anno, colore, tipologia e valore stimato) è sempre gratuita. Per il verdetto completo sblocca il report o passa a Premium.',
-      });
-      return;
-    }
 
     let report;
     try {
@@ -268,11 +215,9 @@ router.post(
 
     const title = [make, model, photoAnalysis.vehicle.generation, year].filter(Boolean).join(' ');
 
-    // Il salvataggio richiede un account: l'anonimo riceve il report ma non
-    // può salvarlo (il client segna lo slot gratuito come consumato).
     let saved = false;
     let analysis: { id: string; createdAt: Date } | null = null;
-    if (userId && entitlement.entitled) {
+    if (userId) {
       const stored = await prisma.analysis.create({
         data: {
           userId,

@@ -18,7 +18,6 @@ import VehicleScanner from '@/components/VehicleScanner';
 import SiteHeader from '@/components/SiteHeader';
 import BuyVerdictCard, { type VerdictData } from '@/components/BuyVerdictCard';
 import { trackEvent } from '@/lib/analytics';
-import { getReportPricing, getPremiumPricing } from '@/lib/pricing';
 import { type AnalyzePayload } from '@/lib/api';
 
 export interface HomeClientProps {
@@ -117,7 +116,7 @@ const HOW_IT_WORKS = [
 const FAQS = [
   {
     q: '\u00C8 gratis analizzare un\u2019auto?',
-    a: 'S\u00EC: il riconoscimento e l\u2019analisi base (marca, modello, anno, colore e valore stimato) sono sempre gratuiti. La prima analisi completa \u00E8 gratis. Dopo puoi scegliere un report singolo o Premium.',
+    a: 'S\u00EC: l\u2019analisi completa \u00E8 sempre gratuita, senza account e senza limiti. Nessun pagamento, nessun abbonamento. Un account gratuito serve solo se vuoi salvare le analisi e ritrovarle quando vuoi.',
   },
   {
     q: 'Da dove vengono i dati?',
@@ -129,22 +128,20 @@ const FAQS = [
   },
   {
     q: 'Il riconoscimento da foto \u00E8 affidabile?',
-    a: 'Per i modelli pi\u00F9 comuni s\u00EC. Se non \u00E8 sicuro al 100%, ti chiediamo di inserire marca e modello a mano. La foto non viene salvata.',
+    a: 'Per i modelli pi\u00F9 comuni s\u00EC. Caricare pi\u00F9 foto (frontale, laterale, posteriore) migliora la precisione. Se non \u00E8 sicuro, ti chiediamo di inserire marca e modello a mano. La foto non viene salvata.',
   },
   {
-    q: 'Posso annullare Premium quando voglio?',
-    a: 'S\u00EC, in un clic dall\u2019area personale, senza penali e senza storie.',
+    q: 'Devo registrarmi per analizzare un\u2019auto?',
+    a: 'No. Puoi analizzare subito, senza registrazione. Un account gratuito ti permette solo di salvare le analisi e ritrovarle in un secondo momento.',
   },
   {
-    q: 'Cosa succede dopo l\u2019acquisto del report?',
-    a: 'L\u2019analisi completa viene salvata nel tuo account e resta consultabile quando vuoi. Niente scadenze, niente sorprese.',
+    q: 'Salvate le mie foto?',
+    a: 'No: salviamo solo il report con i dati e le valutazioni. La fotografia originale non viene conservata.',
   },
 ];
 
 export default function HomeClient({ stats }: HomeClientProps) {
   const [initialPayload, setInitialPayload] = useState<AnalyzePayload | null>(null);
-  const reportPrice = getReportPricing().displayPrice;
-  const premiumPrice = getPremiumPricing('month').displayPrice;
 
   const handlePrefill = (payload: AnalyzePayload) => {
     setInitialPayload(payload);
@@ -172,12 +169,12 @@ export default function HomeClient({ stats }: HomeClientProps) {
               Analizza prezzo, valore, problemi e costi prima di comprarla. Verdetto in pochi secondi: BUON AFFARE, TRATTA o EVITALA.
             </p>
             <div className="home-hero-actions">
-              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('premium_viewed', { feature: 'hero_cta' })}>
+              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('search_car', { feature: 'hero_cta' })}>
                 Analizza un&apos;auto <ChevronRight className="h-4 w-4" />
               </a>
             </div>
             <p className="home-micro-steps">
-              Prima analisi gratis · Report da {reportPrice} · Premium {premiumPrice}/mese
+              Analisi completa gratuita · Nessuna registrazione richiesta · Salvataggio con account gratuito
             </p>
           </div>
         </section>
@@ -186,8 +183,8 @@ export default function HomeClient({ stats }: HomeClientProps) {
         <section className="search-v2" id="scanner-section" aria-label="Analizza un'auto">
           <VehicleScanner embedded initialPayload={initialPayload ?? undefined} />
           <ul className="search-v2-trust">
-            <li><Check /> Riconoscimento sempre gratuito</li>
-            <li><Check /> Prima analisi completa gratuita</li>
+            <li><Check /> Analisi completa sempre gratuita</li>
+            <li><Check /> Più foto per un riconoscimento più preciso</li>
             <li><Check /> Dati da {stats.makes} marchi e {stats.models.toLocaleString('it-IT')} modelli</li>
           </ul>
         </section>
@@ -253,7 +250,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
             <h2>Hai trovato un&apos;auto?</h2>
             <p>Verifica se \u00E8 un buon affare prima di comprarla.</p>
             <div className="cta-band-v2-actions">
-              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('premium_viewed', { feature: 'cta_band' })}>
+              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('search_car', { feature: 'cta_band' })}>
                 Analizza un&apos;auto <ChevronRight className="h-4 w-4" />
               </a>
             </div>

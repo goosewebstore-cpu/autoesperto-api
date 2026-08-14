@@ -11,7 +11,6 @@ const NAV_LINKS = [
   { label: 'Valuta auto', href: '/valutazione' },
   { label: 'Confronta', href: '/confronta' },
   { label: 'Guide', href: '/guide' },
-  { label: 'Premium', href: '/account?upgrade=true' },
 ];
 
 export default function SiteHeader() {

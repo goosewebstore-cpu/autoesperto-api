@@ -31,7 +31,7 @@ const LEGAL_LINKS = [
 export default function SiteFooter({ variant = 'compact' }: SiteFooterProps) {
   if (variant === 'full') {
     return (
-      <footer className="mt-16 border-t border-slate-200 bg-slate-50 text-slate-600">
+      <footer className="mt-16 border-t border-slate-200 bg-white text-slate-600">
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-8">
           <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr] pb-10 border-b border-slate-200">
             <div>
@@ -106,7 +106,7 @@ export default function SiteFooter({ variant = 'compact' }: SiteFooterProps) {
   }
 
   return (
-    <footer className="mt-12 border-t border-slate-200 bg-slate-50">
+    <footer className="mt-12 border-t border-slate-200 bg-white">
       <div className="mx-auto max-w-4xl px-5 py-8">
         <div className="flex flex-col items-center justify-between gap-4 sm:flex-row">
           <div className="flex items-center gap-2">

@@ -576,12 +576,12 @@ export default async function GuidePage({ params }: PageProps) {
           </section>
         )}
 
-        <section className="mt-12 rounded-2xl bg-accent p-6 text-white">
-          <h2 className="text-lg font-bold">{cta.label}</h2>
-          <p className="text-sm text-white/85 leading-relaxed mt-2">{cta.description}</p>
+        <section className="mt-12 rounded-2xl border border-blue-100 bg-blue-50">
+          <h2 className="text-lg font-bold text-text-primary">{cta.label}</h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-2">{cta.description}</p>
           <Link
             href={cta.href}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-accent hover:bg-white/90 transition-colors"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
           >
             {cta.label}
           </Link>

@@ -1,4 +1,4 @@
-import { BRAND_FAILURES, detectSegment, estimateRepair, type SegmentKey } from './riparazione';
+import { BRAND_FAILURES, BOUTIQUE_SPORT_MAKES, detectSegment, estimateRepair, type SegmentKey } from './riparazione';
 
 export interface ReliabilityEstimate {
   make: string;
@@ -39,8 +39,8 @@ const SEGMENT_STRENGTHS: Record<SegmentKey, string[]> = {
     'Costi di manutenzione tra i più bassi',
   ],
   utility: [
-    'Buon equilibrio tra solidità e costi',
-    'Rete di assistenza capillare in Italia',
+    'Meccanica semplice e costi nella media del segmento',
+    'Ricambi e manutenzione reperibili senza lunghe attese',
   ],
   berlina: [
     'Motori collaudati e guida stabile',
@@ -128,6 +128,10 @@ function verdictFor(score: number): string {
 
 function verdictNoteFor(score: number, make: string, model: string, age: number): string {
   const full = `${make} ${model}`;
+  const makeNorm = make.toLowerCase();
+  if (BOUTIQUE_SPORT_MAKES.some((b) => makeNorm.includes(b))) {
+    return `Dati specifici di affidabilità non disponibili per la ${full}: la stima è basata sul segmento sportivo e sul marchio, non su statistiche verificate di questo modello.`;
+  }
   if (score >= 8) return `La ${full} è tra le vetture più solide del suo segmento: con la manutenzione ordinaria, anche con ${age} anni alle spalle, i rischi di guasti importanti restano contenuti.`;
   if (score >= 7) return `La ${full} ha un'affidabilità nella media del suo segmento: ben mantenuta regge bene gli anni, ma conviene seguire i controlli sui punti noti (freni, sospensioni, distribuzione).`;
   return `La ${full} richiede più attenzione alla manutenzione preventiva: alcuni punti deboli del modello vanno controllati con regolarità per evitare riparazioni costose.`;

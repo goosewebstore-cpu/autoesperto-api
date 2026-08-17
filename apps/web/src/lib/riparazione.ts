@@ -31,6 +31,7 @@ export interface RepairEstimate {
 
 const PREMIUM_BRANDS = ['audi', 'bmw', 'mercedes-benz', 'mercedes', 'lexus', 'land rover', 'range rover', 'porsche', 'volvo', 'alfa romeo', 'mini', 'jeep'];
 const EV_BRANDS = ['tesla', 'mg'];
+export const BOUTIQUE_SPORT_MAKES = ['mclaren', 'pagani', 'bugatti', 'koenigsegg', 'ferrari', 'lamborghini', 'aston martin', 'lotus', 'noble', 'tvr', 'spyker', 'morgan', 'saleen', 'zenvo', 'apollo', 'gumpert', 'rimac', 'de tomaso', 'bizzarrini', 'maserati', 'rolls royce', 'bentley', 'maybach', 'brabus', 'porsche'];
 
 const SEGMENTS: Record<SegmentKey, SegmentDef> = {
   citycar: { key: 'citycar', label: 'city car', laborRate: 52, partsFactor: 1, yearlyMaintenance: [300, 520] },
@@ -46,7 +47,9 @@ const SPORT = ['911', 'cayman', 'boxster', 'miata', 'gt86', 'supra', 'm2', 'm4',
 
 export function detectSegment(make: string, model: string): SegmentKey {
   const m = `${make} ${model}`.toLowerCase();
-  if (EV_BRANDS.includes(make.toLowerCase())) return 'utility';
+  const makeNorm = make.toLowerCase();
+  if (BOUTIQUE_SPORT_MAKES.some((b) => makeNorm.includes(b))) return 'sportiva';
+  if (EV_BRANDS.includes(makeNorm)) return 'utility';
   if (SPORT.some((k) => m.includes(k))) return 'sportiva';
   if (SUV.some((k) => m.includes(k))) return 'suv';
   if (CITY_CAR.some((k) => m.includes(k))) return 'citycar';

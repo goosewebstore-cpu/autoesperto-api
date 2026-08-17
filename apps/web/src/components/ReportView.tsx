@@ -6,6 +6,7 @@ import {
   Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
 } from 'lucide-react';
 import ReportSummary from '@/components/ReportSummary';
+import ReportScoreHero from '@/components/ReportScoreHero';
 import AdSlot from '@/components/AdSlot';
 import ConditionAssessment from '@/components/ConditionAssessment';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
@@ -174,32 +175,8 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </div>
       </section>
 
-      {/* Score + verdict */}
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <div className="flex flex-col md:flex-row items-start gap-5">
-          <div className={`flex-shrink-0 w-20 h-20 rounded-2xl flex items-center justify-center ${verdict.bg} border ${verdict.border}`}>
-            <VerdictIcon className={`w-10 h-10 ${verdict.text}`} />
-          </div>
-          <div className="flex-1 min-w-0">
-            <div className="flex items-baseline gap-2 mb-1">
-              <span className="text-4xl font-extrabold text-text-primary number-mono">
-                {reliability.score.toFixed(1)}
-                <span className="text-lg font-medium text-text-secondary">/10</span>
-              </span>
-              <span className={`px-2.5 py-1 rounded-lg text-sm font-semibold text-white ${verdict.badge}`}>
-                {reliability.verdictLabel}
-              </span>
-            </div>
-            <p className="text-text-secondary leading-relaxed">{reliability.summary}</p>
-            <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
-              <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-              {isModelData
-                ? 'Valutazione basata sul modello e sulle informazioni fornite. Verifica l\'esemplare specifico prima dell\'acquisto.'
-                : 'Valutazione indicativa basata sui dati disponibili e sulle informazioni fornite. Non sostituisce un\'ispezione fisica.'}
-            </p>
-          </div>
-        </div>
-      </section>
+      {/* Score + verdetto */}
+      <ReportScoreHero report={report} isModelData={isModelData} />
 
       {/* Metodologia */}
       <section className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">

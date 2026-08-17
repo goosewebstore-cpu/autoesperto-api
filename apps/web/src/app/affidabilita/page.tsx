@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Car, Gauge, ShieldCheck, Euro, AlertTriangle, Search } from 'lucide-react';
+import { Gauge, ShieldCheck, Euro, AlertTriangle, Search } from 'lucide-react';
 import { getAllMakes, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 import SiteFooter from '@/components/SiteFooter';
 import SiteHeader from '@/components/SiteHeader';
+import PageHero from '@/components/PageHero';
 import AdBanner from '@/components/ads/AdBanner';
 
 function siteUrl() {
@@ -13,7 +14,7 @@ function siteUrl() {
 export const metadata: Metadata = {
   title: 'Affidabilità auto per marca, modello e anno',
   description:
-    'Punteggio di affidabilità di ogni auto: punti di forza, guasti frequenti e costi di manutenzione per marca, modello e anno, per comprare usato con dati reali.',
+    'Punteggio di affidabilità per marca, modello e anno: guasti frequenti, punti di forza e costi di manutenzione.',
   alternates: {
     canonical: '/affidabilita',
     languages: { 'it-IT': `${siteUrl()}/affidabilita` },
@@ -35,25 +36,25 @@ export default function AffidabilitaPage() {
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader />
-      <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
-        <section className="text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Quanto è affidabile la tua auto?
-          </h1>
-          <p className="text-text-secondary text-base leading-relaxed mt-4 max-w-xl mx-auto">
-            Punteggio di affidabilità per marca, modello e anno: punti di forza, guasti frequenti, costi di manutenzione
-            e a cosa prestare attenzione prima di comprare usato.
-          </p>
-        </section>
-
+      <PageHero
+        crumb="Affidabilità"
+        photo="https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=1600&q=80"
+        title="Quanto è affidabile un'auto usata?"
+      >
+        <p>
+          Punteggio per marca, modello e anno: punti di forza, guasti frequenti, manutenzione
+          e controlli prima dell&apos;acquisto.
+        </p>
+      </PageHero>
+      <main className="page-body narrow">
         <AdBanner />
 
-        <section className="mt-8 rounded-2xl bg-accent p-6 text-white">
+        <section className="mt-8 rounded-2xl bg-white border border-border p-6 shadow-card">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 shrink-0 rounded-xl bg-white/15 flex items-center justify-center">
-              <Search className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-50 flex items-center justify-center">
+              <Search className="w-5 h-5 text-accent" />
             </div>
-            <p className="text-sm text-white/90">Scegli la marca e il modello per vedere il punteggio di affidabilità.</p>
+            <p className="text-sm font-medium text-text-secondary">Scegli la marca e il modello per vedere il punteggio di affidabilità.</p>
           </div>
         </section>
 
@@ -114,22 +115,21 @@ export default function AffidabilitaPage() {
             <Euro className="w-6 h-6 text-accent" />
             <h3 className="text-sm font-bold text-text-primary mt-3">Manutenzione annua</h3>
             <p className="text-xs text-text-secondary leading-relaxed mt-1">
-              Quanto spendi in media ogni anno in tagliandi, consumabili e piccoli interventi.
+              Spesa media annua per tagliandi, consumabili e piccoli interventi.
             </p>
           </div>
         </section>
 
-        <section className="mt-12 rounded-2xl bg-accent p-6 text-white">
-          <h2 className="text-lg font-bold">Verifica anche il valore di mercato</h2>
-          <p className="text-sm text-white/85 leading-relaxed mt-2">
-            Affidabilità e valore vanno di pari passo: controlla il prezzo medio reale del modello che ti interessa,
-            calcolato dagli annunci in vendita.
+        <section className="mt-12 rounded-2xl border border-blue-100 bg-blue-50 p-6">
+          <h2 className="text-lg font-bold text-text-primary">Verifica anche il valore di mercato</h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-2">
+            Controlla il prezzo medio reale del modello, calcolato dagli annunci in vendita.
           </p>
           <Link
             href="/valutazione"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-accent hover:bg-white/90 transition-colors"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
           >
-            Valuta la tua auto gratis
+            Valuta un&apos;auto gratis
           </Link>
         </section>
 

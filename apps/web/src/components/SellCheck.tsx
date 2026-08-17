@@ -160,7 +160,7 @@ export default function SellCheck() {
                 Vendita veloce
               </div>
               <p className="mt-1 text-[11px] leading-snug text-text-tertiary">
-                Per chiudere in fretta e attirare più contatti
+                Per chiudere in fretta e attirare contatti
               </p>
             </div>
             <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
@@ -202,8 +202,7 @@ export default function SellCheck() {
         Voglio vendere la mia auto
       </h1>
       <p className="mt-2 text-sm text-text-secondary leading-relaxed">
-        Inserisci i dati della tua auto: ti diciamo quanto vale, il prezzo migliore da mettere
-        e come preparare l&apos;annuncio.
+        Inserisci i dati: valore, prezzo da impostare e annuncio pronto.
       </p>
 
       <form

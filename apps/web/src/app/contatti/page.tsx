@@ -12,12 +12,12 @@ export default function ContactPage() {
     <LegalPage
       title="Contatti"
       updated="2 agosto 2026"
-      intro="Per assistenza sull’account, sul pagamento, sul report oppure per una proposta commerciale puoi contattare il team AutoEsperto."
+      intro="Per assistenza su account, pagamento o report, o per proposte commerciali, contatta il team AutoEsperto."
       sections={[
         {
           heading: 'Chi Siamo',
           paragraphs: [
-            'AutoEsperto è il tuo assistente digitale per la compravendita di auto usate. Analizziamo migliaia di annunci di mercato per offrirti dati reali, valutazioni imparziali e trasparenza sui costi di riparazione e affidabilità, per aiutarti a scegliere la tua prossima auto in sicurezza.',
+            'AutoEsperto valuta auto usate in modo gratuito: prezzo di mercato, affidabilità e costi di riparazione calcolati su annunci reali.',
           ],
         },
         {

@@ -131,6 +131,11 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
                   </div>
                 </div>
               </div>
+              {reliability.summary && (
+                <p className="mt-3 text-xs text-text-secondary leading-relaxed">
+                  {reliability.summary}
+                </p>
+              )}
               {reliability.strengths.length > 0 && (
                 <ul className="mt-3 space-y-1.5">
                   {reliability.strengths.slice(0, 3).map((s, i) => (
@@ -206,13 +211,21 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
             </div>
           )}
 
-          <a
-            href={`/?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}#scanner-section`}
-            className="w-full h-12 rounded-xl bg-accent text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-accent-hover active:scale-[0.99] transition-all"
-          >
-            <Search className="w-4 h-4" />
-            Analisi completa gratuita di {make} {model}
-          </a>
+          <div className="rounded-2xl border border-accent/20 bg-accent-light p-4 text-center">
+            <h3 className="text-sm font-extrabold text-text-primary">
+              Hai trovato una {make} {model} in vendita?
+            </h3>
+            <p className="mt-0.5 text-xs text-text-secondary leading-relaxed">
+              Controlla prezzo, affidabilità e cosa guardare sull&apos;esemplare prima di contattare il venditore.
+            </p>
+            <a
+              href={`/?make=${encodeURIComponent(make)}&model=${encodeURIComponent(model)}#scanner-section`}
+              className="home-hero-cta w-full mt-3 !min-h-[44px]"
+            >
+              <Search className="w-4 h-4" />
+              Controlla questa {model} gratis <ExternalLink className="w-3.5 h-3.5" />
+            </a>
+          </div>
 
           <p className="text-[11px] text-text-tertiary flex items-start gap-1.5">
             <AlertTriangle className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />

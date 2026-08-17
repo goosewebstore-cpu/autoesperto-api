@@ -22,7 +22,9 @@ export type AnalyticsEvent =
   | 'ad_impression'
   | 'compare_started'
   | 'guide_read'
-  | 'account_created';
+  | 'account_created'
+  | 'tool_click'
+  | 'sell_cta';
 
 export function trackEvent(event: AnalyticsEvent, meta?: Record<string, unknown>): void {
   if (typeof window === 'undefined') return;

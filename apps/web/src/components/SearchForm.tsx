@@ -109,7 +109,7 @@ export default function SearchForm({
         ) : (
           <>
             <div className="mb-4">
-              <p className="text-sm font-semibold text-text-primary">Raccontaci quale auto stai valutando</p>
+              <p className="text-sm font-semibold text-text-primary">Quale auto stai valutando?</p>
               <p className="text-xs text-text-secondary mt-1">L&apos;anno &egrave; necessario: cambia prezzo, generazione e controlli da fare.</p>
             </div>
             <div className="grid sm:grid-cols-3 gap-3 mb-4">

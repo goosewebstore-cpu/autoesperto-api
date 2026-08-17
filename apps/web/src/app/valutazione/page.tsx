@@ -2,16 +2,17 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import PageHero from '@/components/PageHero';
 import AdBanner from '@/components/ads/AdBanner';
-import { Car, HelpCircle, Search } from 'lucide-react';
+import { HelpCircle, Search } from 'lucide-react';
 import { getAllMakes } from '@/lib/catalogo';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 export const metadata: Metadata = {
-  title: 'Valutazione auto usate: prezzi di mercato per marca e modello',
+  title: 'Valutazione auto usate: prezzi per modello',
   description:
-    'Quanto costa un\'auto usata? Prezzi medi reali dagli annunci in vendita per ogni marca e modello, con valutazione di affidabilità e punti critici da controllare.',
+    'Prezzi medi reali dagli annunci per ogni marca e modello, con affidabilità e punti critici da controllare prima dell\'acquisto.',
   alternates: {
     canonical: '/valutazione',
     languages: { 'it-IT': `${siteUrl}/valutazione` },
@@ -19,8 +20,8 @@ export const metadata: Metadata = {
   openGraph: {
     type: 'website',
     locale: 'it_IT',
-    title: 'Valutazione auto usate per marca e modello | AutoEsperto',
-    description: 'Consulta prezzi indicativi, affidabilità e punti critici delle auto usate per marca e modello.',
+    title: 'Valutazione auto usate: prezzi per modello',
+    description: 'Prezzi, affidabilità e punti critici delle auto usate per marca e modello.',
     url: '/valutazione',
     siteName: 'AutoEsperto',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Valutazione auto usate con AutoEsperto' }],
@@ -33,19 +34,19 @@ export default function ValutazioneIndexPage() {
   const faq = [
     {
       q: 'Come si calcola il valore di un\'auto usata?',
-      a: 'Il valore di un\'auto usata si stima confrontando gli annunci reali in vendita per lo stesso modello, correggendo per anno, chilometraggio, allestimento e condizioni. AutoEsperto aggrega questi dati e mostra un prezzo medio di mercato aggiornato.',
+      a: 'Si stima confrontando gli annunci reali per lo stesso modello, correggendo per anno, chilometraggio, allestimento e condizioni.',
     },
     {
       q: 'Quanto costa un\'auto usata oggi?',
-      a: 'Il prezzo dipende molto da marca, modello, anno e chilometri. Scegli la tua auto nel catalogo per vedere il prezzo medio reale calcolato dagli annunci in vendita, con il range minimo e massimo.',
+      a: 'Dipende da marca, modello, anno e chilometri. Nel catalogo trovi il prezzo medio reale con range minimo e massimo.',
     },
     {
       q: 'Perché il prezzo indicato può differire dal listino?',
-      a: 'Il listino è un valore di riferimento teorico. Il prezzo di mercato reale cambia in base a domanda e offerta, stato di conservazione, optional e chilometraggio. AutoEsperto usa gli annunci reali, non solo il listino.',
+      a: 'Il listino è un valore teorico. Il prezzo di mercato dipende da domanda, offerta, condizioni e chilometraggio.',
     },
     {
       q: 'Le valutazioni di AutoEsperto sono gratuite?',
-      a: 'Sì, le valutazioni per marca, modello e anno sono gratuite e consultabili senza registrazione. Puoi anche analizzare una foto della tua auto per un report più dettagliato.',
+      a: 'Sì, per marca, modello e anno sono gratuite, senza registrazione. Con una foto ottieni un report più dettagliato.',
     },
   ];
 
@@ -63,23 +64,18 @@ export default function ValutazioneIndexPage() {
     <div className="min-h-screen bg-white">
       <SiteHeader />
 
-      <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
-        <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex items-center gap-1.5">
-          <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-          <span>/</span>
-          <span className="text-text-secondary font-medium">Valutazione</span>
-        </nav>
+      <PageHero
+        crumb="Valutazione"
+        photo="https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&w=1600&q=80"
+        title="Valutazione auto usate: prezzi di mercato"
+      >
+        <p>
+          Prezzo medio reale per ogni modello, calcolato dagli annunci in vendita,
+          con affidabilità e punti critici.
+        </p>
+      </PageHero>
 
-        <section>
-          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Valutazione auto usate: prezzi di mercato
-          </h1>
-          <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Scegli la marca per vedere il prezzo medio reale di ogni modello, calcolato
-            dagli annunci in vendita, con affidabilità e punti critici da controllare.
-          </p>
-        </section>
-
+      <main className="page-body narrow">
         <AdBanner />
 
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2.5">
@@ -103,19 +99,19 @@ export default function ValutazioneIndexPage() {
             <div className="bg-surface-2 rounded-xl p-4">
               <h3 className="text-sm font-bold text-text-primary">1. Scegli marca e modello</h3>
               <p className="text-sm text-text-secondary leading-relaxed mt-1.5">
-                Seleziona la tua auto dal catalogo per accedere alla scheda dedicata con prezzi per ogni anno di produzione.
+                Seleziona un modello dal catalogo. Ogni scheda mostra i prezzi per anno di produzione.
               </p>
             </div>
             <div className="bg-surface-2 rounded-xl p-4">
               <h3 className="text-sm font-bold text-text-primary">2. Confronta con gli annunci reali</h3>
               <p className="text-sm text-text-secondary leading-relaxed mt-1.5">
-                Il prezzo medio è calcolato dagli annunci in vendita, con range minimo e massimo per avere un&apos;idea realistica del mercato.
+                Prezzo medio dagli annunci in vendita, con range minimo e massimo.
               </p>
             </div>
             <div className="bg-surface-2 rounded-xl p-4">
               <h3 className="text-sm font-bold text-text-primary">3. Controlla affidabilità e punti critici</h3>
               <p className="text-sm text-text-secondary leading-relaxed mt-1.5">
-                Ogni modello include la valutazione di affidabilità e i problemi più frequenti da verificare prima dell&apos;acquisto.
+                Affidabilità e problemi più frequenti da verificare prima dell&apos;acquisto.
               </p>
             </div>
           </div>

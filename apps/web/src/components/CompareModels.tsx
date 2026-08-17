@@ -5,6 +5,7 @@ import { CheckCircle2, GitCompareArrows, Trophy } from 'lucide-react';
 import ModelReportCard from '@/components/ModelReportCard';
 import { getAllMakes } from '@/lib/catalogo';
 import { analyzeVehicle } from '@/lib/api';
+import { computeScores } from '@/lib/score';
 import type { AutoReport } from '@autoesperto/types';
 
 const defaultLeft = 'Fiat|Panda';
@@ -131,6 +132,14 @@ export default function CompareModels({
   if (canCompare) {
     const lp = marketPrice(leftReport);
     const rp = marketPrice(rightReport);
+    const lScores = computeScores(leftReport);
+    const rScores = computeScores(rightReport);
+    rows.push({
+      label: 'Punteggio AutoEsperto',
+      left: `${lScores.overall} / 100`,
+      right: `${rScores.overall} / 100`,
+      better: sideWinner(lScores.overall, rScores.overall, (v) => -v),
+    });
     rows.push({
       label: 'Prezzo medio',
       left: formatPrice(lp),
@@ -170,19 +179,28 @@ export default function CompareModels({
       better: sideWinner(lRel.verdict, rRel.verdict, (v) => VERDICT_RANK[v] ?? 3),
     });
 
-    const relDiff = lRel.score - rRel.score;
-    if (relDiff >= 0.3) winner = 'left';
-    else if (relDiff <= -0.3) winner = 'right';
+    const scoreDiff = lScores.overall - rScores.overall;
+    if (scoreDiff >= 4) winner = 'left';
+    else if (scoreDiff <= -4) winner = 'right';
     else {
-      const pricePct = (lp - rp) / ((lp + rp) / 2);
-      if (pricePct > 0.02) winner = 'right';
-      else if (pricePct < -0.02) winner = 'left';
-      else winner = sideWinner(lRel.verdict, rRel.verdict, (v) => VERDICT_RANK[v] ?? 3);
+      const relDiff = lRel.score - rRel.score;
+      if (relDiff >= 0.3) winner = 'left';
+      else if (relDiff <= -0.3) winner = 'right';
+      else {
+        const pricePct = (lp - rp) / ((lp + rp) / 2);
+        if (pricePct > 0.02) winner = 'right';
+        else if (pricePct < -0.02) winner = 'left';
+        else winner = sideWinner(lRel.verdict, rRel.verdict, (v) => VERDICT_RANK[v] ?? 3);
+      }
     }
 
     reasons = rows
       .filter((row) => row.better !== 'tie')
-      .map((row) => `${row.label}: meglio ${row.better === 'left' ? labelLeft : labelRight}`);
+      .map((row) =>
+        row.label === 'Punteggio AutoEsperto'
+          ? `Punteggio AutoEsperto: ${lScores.overall} vs ${rScores.overall} — meglio ${row.better === 'left' ? labelLeft : labelRight}`
+          : `${row.label}: meglio ${row.better === 'left' ? labelLeft : labelRight}`
+      );
   }
 
   const winnerText = winner === 'left' ? labelLeft : winner === 'right' ? labelRight : null;

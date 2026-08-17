@@ -1,10 +1,12 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { Car } from 'lucide-react';
+import { } from 'lucide-react';
 import { getAllMakes, slugify } from '@/lib/catalogo';
 import { estimateReliability } from '@/lib/affidabilita';
 import AdBanner from '@/components/ads/AdBanner';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 interface PageProps {
   params: Promise<{ make: string }>;
@@ -57,18 +59,7 @@ export default async function ReliabilityMakePage({ params }: PageProps) {
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-border/60">
-        <div className="max-w-3xl mx-auto flex items-center justify-between px-5 h-16">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <Car className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-text-primary">
-              Auto<span className="text-accent">Esperto</span>
-            </span>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
@@ -131,24 +122,7 @@ export default async function ReliabilityMakePage({ params }: PageProps) {
         />
       </main>
 
-      <footer className="border-t border-border/60 mt-10">
-        <div className="max-w-3xl mx-auto px-5 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center">
-                <Car className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
-            </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
-              <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione auto</Link>
-              <Link href="/riparazione" className="hover:text-text-primary transition-colors">Costi riparazione</Link>
-              <Link href="/guide" className="hover:text-text-primary transition-colors">Guide</Link>
-              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-            </nav>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter variant="compact" />
     </div>
   );
 }

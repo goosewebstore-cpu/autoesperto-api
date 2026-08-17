@@ -1,6 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import { Inter } from 'next/font/google';
+import { Outfit, DM_Sans } from 'next/font/google';
 import { Analytics } from '@vercel/analytics/next';
 import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
@@ -9,16 +9,24 @@ import CookieConsent from '@/components/CookieConsent';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import AdsTracker from '@/components/AdsTracker';
 
-const inter = Inter({
+const outfit = Outfit({
   subsets: ['latin'],
   display: 'swap',
-  variable: '--font-inter',
+  variable: '--font-outfit',
+  weight: ['400', '500', '600', '700', '800', '900'],
+});
+
+const dmSans = DM_Sans({
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-dm-sans',
+  weight: ['400', '500', '600', '700'],
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
-const siteTitle = 'AutoEsperto — Valuta la tua auto gratis: prezzo reale, affidabilità e analisi danni';
+const siteTitle = 'AutoEsperto: valutazione auto usate gratis';
 const siteDescription =
-  'Scopri gratis quanto vale la tua auto, controlla affidabilità e analizza danni e costi di riparazione con una foto. Veloce, gratuito e senza registrazione.';
+  'Valutazione auto usate gratuita: prezzo di mercato, affidabilità, consumi e costi di riparazione. Verdetto in pochi secondi, senza registrazione.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -29,8 +37,9 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   keywords: [
-    'valutazione auto usata', 'comprare auto usata', 'valutazione auto', 'danni auto',
-    'preventivo riparazione auto', 'valore auto usata', 'Car Health Score', 'AutoEsperto',
+    'valutazione auto usata', 'quanto vale la mia auto', 'comprare auto usata', 'valutazione auto',
+    'preventivo riparazione auto', 'valore auto usata', 'affidabilità auto', 'consumi auto',
+    'AutoEsperto',
   ],
   category: 'automotive',
   creator: 'AutoEsperto',
@@ -54,7 +63,7 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     siteName: 'AutoEsperto',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Valuta la tua auto gratis: prezzo, affidabilità e analisi danni da foto' }],
+    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Valutazione auto gratis: prezzo, affidabilità e danni da foto' }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -84,7 +93,7 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   viewportFit: 'cover',
-  themeColor: '#0F172A',
+  themeColor: '#ffffff',
 };
 
 function JsonLd() {
@@ -133,7 +142,7 @@ function JsonLd() {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="it" className={inter.variable} data-scroll-behavior="smooth">
+    <html lang="it" className={`${outfit.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
         {process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true' && process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (

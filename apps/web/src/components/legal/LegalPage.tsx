@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { ArrowLeft, FileText, Scale } from 'lucide-react';
 import SiteFooter from '@/components/SiteFooter';
+import SiteHeader from '@/components/SiteHeader';
 
 interface LegalSection {
   heading: string;
@@ -31,8 +32,10 @@ export default function LegalPage({ title, updated, intro, sections }: LegalPage
     );
 
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col justify-between">
-      <main className="max-w-3xl mx-auto px-5 py-10 w-full animate-fade-in">
+    <div className="min-h-screen bg-background flex flex-col justify-between">
+      <div>
+        <SiteHeader />
+        <main className="max-w-3xl mx-auto px-5 py-10 w-full animate-fade-in">
         <Link
           href="/"
           className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-500 hover:text-blue-600 transition-colors mb-6"
@@ -73,7 +76,8 @@ export default function LegalPage({ title, updated, intro, sections }: LegalPage
             </section>
           ))}
         </div>
-      </main>
+        </main>
+      </div>
 
       <SiteFooter variant="compact" />
     </div>

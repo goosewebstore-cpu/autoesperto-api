@@ -31,7 +31,7 @@ function getBuyVerdict(price: AutoReport['price'], reliability: AutoReport['reli
       tone: 'red',
       label: 'Non conviene',
       description:
-        'Questo modello presenta problemi importanti o un rapporto prezzo/condizioni sfavorevole. Prima di proseguire, fai controlli approfonditi o valuta alternative.',
+        'Problemi importanti o rapporto prezzo/condizioni sfavorevole. Fai controlli approfonditi o valuta alternative.',
     };
   }
 
@@ -40,7 +40,7 @@ function getBuyVerdict(price: AutoReport['price'], reliability: AutoReport['reli
       tone: 'green',
       label: 'Conviene',
       description:
-        'Prezzo in linea o sotto la fascia stimata del mercato e modello valutato in modo positivo. Verifica comunque l\u2019esemplare specifico prima di concludere.',
+        'Prezzo in linea o sotto la media di mercato, modello affidabile. Verifica l\u2019esemplare prima di concludere.',
     };
   }
 
@@ -49,7 +49,7 @@ function getBuyVerdict(price: AutoReport['price'], reliability: AutoReport['reli
       tone: 'amber',
       label: 'Prezzo da trattare',
       description:
-        'L\u2019auto può essere interessante, ma il prezzo richiesto è superiore alla fascia stimata del mercato. Usa il prezzo consigliato come base di trattativa.',
+        'Prezzo richiesto sopra la fascia di mercato. Usa il prezzo consigliato come base di trattativa.',
     };
   }
 
@@ -57,7 +57,7 @@ function getBuyVerdict(price: AutoReport['price'], reliability: AutoReport['reli
     tone: 'amber',
     label: 'Attenzione',
     description:
-      'Auto interessante, ma ci sono aspetti da controllare prima di concludere. Verifica i punti sotto e tratta sul prezzo se serve.',
+      'Auto interessante, con aspetti da verificare prima di concludere.',
   };
 }
 
@@ -362,8 +362,7 @@ export default function BuyCheck() {
         Sto per comprare questa auto
       </h1>
       <p className="mt-2 text-sm text-text-secondary leading-relaxed">
-        Inserisci i dati dell&apos;auto e il prezzo richiesto. Ti diciamo se conviene, quanto vale
-        e cosa controllare prima di concludere.
+        Inserisci dati e prezzo richiesto. Verdetto su conviene o no, valore e cosa controllare.
       </p>
 
       <form
@@ -464,7 +463,7 @@ export default function BuyCheck() {
           {loading ? (
             <><Loader2 className="h-4 w-4 animate-spin" /> Verifica in corso…</>
           ) : (
-            <><Search className="h-4 w-4" /> Dammi il verdetto</>
+            <><Search className="h-4 w-4" /> Ottieni il verdetto</>
           )}
         </button>
       </form>

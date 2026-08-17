@@ -3,18 +3,17 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, HelpCircle, Info } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, getAllMakes, slugify } from '@/lib/catalogo';
+import { getModelYears, isValidModelYear } from '@/lib/model-years';
 import ModelReportCard from '@/components/ModelReportCard';
 import AdBanner from '@/components/ads/AdBanner';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 import { getSsrReport } from '@/lib/ssrReports';
 import { POPULAR_MODELS } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string; year: string }>;
 }
-
-const CURRENT_YEAR = new Date().getFullYear();
-const YEAR_RANGE: number[] = [];
-for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -30,11 +29,10 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolved = await params;
   const yearNum = parseInt(resolved.year, 10);
-  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) return {};
   const make = findMakeBySlug(resolved.make);
   if (!make) return {};
   const model = findModelBySlug(make, resolved.model);
-  if (!model) return {};
+  if (!model || !isValidModelYear(make.name, model, yearNum)) return {};
 
   const title = `${make.name} ${model} ${yearNum} usata: prezzo e valutazione`;
   const description = `Quanto costa una ${make.name} ${model} ${yearNum} usata? Prezzo medio di mercato, affidabilità e punti critici da controllare prima di comprare una ${make.name} ${model} del ${yearNum}.`;
@@ -72,7 +70,7 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
   const yearNum = parseInt(resolved.year, 10);
-  if (isNaN(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
+  if (isNaN(yearNum) || !isValidModelYear(make.name, model, yearNum)) notFound();
 
   const isPopular = POPULAR_MODELS.some((p) => slugify(p.make) === resolved.make && slugify(p.model) === resolved.model);
   const initialReport = await getSsrReport(make.name, model, yearNum, isPopular);
@@ -139,22 +137,11 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
       : {}),
   };
 
-  const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
+  const nearbyYears = getModelYears(make.name, model).filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-border/60">
-        <div className="max-w-3xl mx-auto flex items-center justify-between px-5 h-16">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <Car className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-text-primary">
-              Auto<span className="text-accent">Esperto</span>
-            </span>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
@@ -250,24 +237,7 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
         />
       </main>
 
-      <footer className="border-t border-border/60 mt-10">
-        <div className="max-w-3xl mx-auto px-5 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center">
-                <Car className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
-            </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
-              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-              <Link href="/cookie-policy" className="hover:text-text-primary transition-colors">Cookie</Link>
-              <Link href="/terms" className="hover:text-text-primary transition-colors">Termini</Link>
-              <Link href="/contatti" className="hover:text-text-primary transition-colors">Contatti</Link>
-            </nav>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter variant="compact" />
     </div>
   );
 }

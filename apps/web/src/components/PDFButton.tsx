@@ -124,6 +124,11 @@ function kpiBox(
   doc.setTextColor(textColor[0], textColor[1], textColor[2]);
   doc.setFontSize(13);
   doc.setFont('helvetica', 'bold');
+  let valueFont = 13;
+  while (valueFont > 9 && doc.getTextWidth(value) > w - 12) {
+    valueFont -= 1;
+    doc.setFontSize(valueFont);
+  }
   doc.text(value, x + 6, y + 18);
   if (sub) {
     doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
@@ -358,12 +363,13 @@ function drawPriceBand(
   requested?: number
 ): void {
   const px = (v: number) => x + ((v - min) / (max - min)) * w;
+  const clampMid = (v: number) => Math.max(x + 22, Math.min(x + w - 22, v));
   doc.setFillColor(C.primaryLight[0], C.primaryLight[1], C.primaryLight[2]);
   doc.roundedRect(x, y, w, 8, 4, 4, 'F');
   doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
-  doc.roundedRect(x + (est - min) / (max - min) * w - 2.2, y - 1.5, 4.4, 11, 2.2, 2.2, 'F');
+  doc.roundedRect(clampMid(x + (est - min) / (max - min) * w) - 2.2, y - 1.5, 4.4, 11, 2.2, 2.2, 'F');
   if (requested !== undefined) {
-    const rx = px(Math.min(Math.max(requested, min), max));
+    const rx = clampMid(px(Math.min(Math.max(requested, min), max)));
     doc.setDrawColor(C.warning[0], C.warning[1], C.warning[2]);
     doc.setLineWidth(1);
     doc.line(rx, y - 3.5, rx, y + 12.5);
@@ -375,10 +381,10 @@ function drawPriceBand(
   doc.text(max.toLocaleString('it-IT') + ' €', x + w, y + 19, { align: 'right' });
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(C.primary[0], C.primary[1], C.primary[2]);
-  doc.text(`Stima centrale ${est.toLocaleString('it-IT')} €`, px(est), y + 19, { align: 'center' });
+  doc.text(`Stima centrale ${est.toLocaleString('it-IT')} €`, clampMid(px(est)), y + 19, { align: 'center' });
   if (requested !== undefined) {
     doc.setTextColor(C.warning[0], C.warning[1], C.warning[2]);
-    doc.text('Prezzo richiesto', px(Math.min(Math.max(requested, min), max)), y + 25, { align: 'center' });
+    doc.text('Prezzo richiesto', clampMid(px(Math.min(Math.max(requested, min), max))), y + 25, { align: 'center' });
   }
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
@@ -544,10 +550,11 @@ function drawCover(doc: import('jspdf').jsPDF, report: AutoReport, dateLabel: st
   doc.setTextColor(203, 213, 225);
   doc.text(dateLabel, 190, 23, { align: 'right' });
 
-  doc.setFontSize(27);
+  const title = `${vehicle.make} ${vehicle.model}`;
+  doc.setFontSize(title.length > 22 ? 20 : 27);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(255, 255, 255);
-  doc.text(`${vehicle.make} ${vehicle.model}`, MARGIN, 44);
+  doc.text(title, MARGIN, 44);
 
   const detailParts = [
     vehicle.version,
@@ -559,7 +566,9 @@ function drawCover(doc: import('jspdf').jsPDF, report: AutoReport, dateLabel: st
   doc.setFontSize(10);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(191, 219, 254);
-  doc.text(detailParts.length ? detailParts.join('  ·  ') : 'Scheda informativa veicolo', MARGIN, 52);
+  const detailText = detailParts.length ? detailParts.join('  ·  ') : 'Scheda informativa veicolo';
+  const detailLines = doc.splitTextToSize(detailText, 170);
+  doc.text(detailLines.slice(0, 2), MARGIN, 52);
 
   box({ doc, y: 0 } as PdfWriter, MARGIN, 74, CONTENT_W, 68, C.surface);
   drawCar(doc, 105, 118, 88);
@@ -592,18 +601,19 @@ function drawCover(doc: import('jspdf').jsPDF, report: AutoReport, dateLabel: st
   const factsBottom = fy + fBoxH + 10;
 
   const verdict = verdictColors(reliability.verdict);
-  box({ doc, y: 0 } as PdfWriter, MARGIN, factsBottom, CONTENT_W, 22, verdict.bg);
-  doc.setFontSize(11);
+  box({ doc, y: 0 } as PdfWriter, MARGIN, factsBottom, CONTENT_W, 24, verdict.bg);
+  doc.setFillColor(verdict.text[0], verdict.text[1], verdict.text[2]);
+  doc.roundedRect(MARGIN, factsBottom, 3, 24, 1.5, 1.5, 'F');
+  doc.setFontSize(8);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(verdict.text[0], verdict.text[1], verdict.text[2]);
-  doc.text('VERDETTO', MARGIN + 8, factsBottom + 9);
-  doc.text(reliability.verdictLabel.toUpperCase(), MARGIN + 8, factsBottom + 17);
-
-  const summary = doc.splitTextToSize(reliability.summary, 108);
+  doc.text('VERDETTO', MARGIN + 12, factsBottom + 8);
+  doc.setFontSize(13);
+  doc.text(reliability.verdictLabel.toUpperCase(), MARGIN + 12, factsBottom + 18);
   doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
-  doc.text(summary.slice(0, 3), 102, factsBottom + 9, { lineHeightFactor: 1.3 });
+  doc.text(`Punteggio affidabilità ${reliability.score.toFixed(1)}/10`, 188, factsBottom + 13, { align: 'right' });
 
   doc.setFontSize(8);
   doc.setTextColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
@@ -637,17 +647,17 @@ function drawSintesi(doc: import('jspdf').jsPDF, report: AutoReport): void {
   writeLine(w, sumLines.join(' '), MARGIN, 6, CONTENT_W);
 
   const boxH = 26;
-  const boxGap = 4;
-  const boxW = (CONTENT_W - boxGap * 3) / 4;
+  const boxGap = 6;
+  const boxW = (CONTENT_W - boxGap) / 2;
   const kpiY = w.y + 6;
   const relColor = verdictColors(reliability.verdict);
 
   kpiBox(w, 'Valore', euro(price.estimatedValue), `${euro(price.min)} – ${euro(price.max)}`, MARGIN, kpiY, boxW, boxH, [239, 246, 255], C.primary);
   kpiBox(w, 'Affidabilità', `${reliability.score.toFixed(1)}/10`, 'punteggio 0-10', MARGIN + boxW + boxGap, kpiY, boxW, boxH, relColor.bg, relColor.text);
-  kpiBox(w, 'Costi', costLabel(reliability.futureCosts.annualMaintenance), 'mantenimento annuo', MARGIN + (boxW + boxGap) * 2, kpiY, boxW, boxH, [241, 245, 249], C.dark);
-  kpiBox(w, 'Verdetto', reliability.verdictLabel, 'dalla combinazione dei dati', MARGIN + (boxW + boxGap) * 3, kpiY, boxW, boxH, relColor.bg, relColor.text);
+  kpiBox(w, 'Costi', costLabel(reliability.futureCosts.annualMaintenance), 'mantenimento annuo', MARGIN, kpiY + boxH + boxGap, boxW, boxH, [241, 245, 249], C.dark);
+  kpiBox(w, 'Verdetto', reliability.verdictLabel, 'dalla combinazione dei dati', MARGIN + boxW + boxGap, kpiY + boxH + boxGap, boxW, boxH, relColor.bg, relColor.text);
 
-  w.y = kpiY + boxH + 8;
+  w.y = kpiY + boxH * 2 + boxGap + 8;
 
   sectionTitle(w, 'Valore di mercato');
 

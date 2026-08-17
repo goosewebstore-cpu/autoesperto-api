@@ -3,15 +3,16 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { ArrowLeft, Car, Fuel, Euro, HelpCircle, Info } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
+import { getModelYears, isValidModelYear } from '@/lib/model-years';
 import { estimateConsumption } from '@/lib/consumi';
+import SiteHeader from '@/components/SiteHeader';
+import SiteFooter from '@/components/SiteFooter';
 
 interface PageProps {
   params: Promise<{ make: string; model: string; year: string }>;
 }
 
 const CURRENT_YEAR = new Date().getFullYear();
-const YEAR_RANGE: number[] = [];
-for (let y = CURRENT_YEAR; y >= 2015; y--) YEAR_RANGE.push(y);
 
 function siteUrl() {
   return process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -27,11 +28,12 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolved = await params;
   const yearNum = parseInt(resolved.year, 10);
-  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) return {};
+  if (!Number.isFinite(yearNum)) return {};
   const make = findMakeBySlug(resolved.make);
   if (!make) return {};
   const model = findModelBySlug(make, resolved.model);
   if (!model) return {};
+  if (!isValidModelYear(make.name, model, yearNum)) return {};
 
   const est = estimateConsumption(make.name, model, yearNum);
   const unit = est.isElectric ? 'kWh' : 'l';
@@ -61,11 +63,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 export default async function ConsumiYearPage({ params }: PageProps) {
   const resolved = await params;
   const yearNum = parseInt(resolved.year, 10);
-  if (!Number.isFinite(yearNum) || yearNum < 2010 || yearNum > CURRENT_YEAR + 1) notFound();
+  if (!Number.isFinite(yearNum)) notFound();
   const make = findMakeBySlug(resolved.make);
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
+  if (!isValidModelYear(make.name, model, yearNum)) notFound();
 
   const est = estimateConsumption(make.name, model, yearNum);
   const unit = est.unit === 'kWh/100 km' ? 'kWh/100 km' : 'l/100 km';
@@ -123,22 +126,11 @@ export default async function ConsumiYearPage({ params }: PageProps) {
     vehicleModelDate: String(yearNum),
   };
 
-  const nearbyYears = YEAR_RANGE.filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
+  const nearbyYears = getModelYears(make.name, model).filter((y) => Math.abs(y - yearNum) <= 2 && y !== yearNum).slice(0, 5);
 
   return (
     <div className="min-h-screen bg-white">
-      <header className="sticky top-0 z-40 bg-white/80 backdrop-blur-lg border-b border-border/60">
-        <div className="max-w-3xl mx-auto flex items-center justify-between px-5 h-16">
-          <Link href="/" className="flex items-center gap-2.5">
-            <div className="w-8 h-8 rounded-lg bg-accent flex items-center justify-center">
-              <Car className="w-4 h-4 text-white" />
-            </div>
-            <span className="text-lg font-bold tracking-tight text-text-primary">
-              Auto<span className="text-accent">Esperto</span>
-            </span>
-          </Link>
-        </div>
-      </header>
+      <SiteHeader />
 
       <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
         <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4 flex flex-wrap items-center gap-1.5">
@@ -221,16 +213,16 @@ export default async function ConsumiYearPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mt-8 rounded-2xl bg-accent p-6 text-white">
-          <h2 className="text-lg font-bold">Valore e costi totali prima di comprare</h2>
-          <p className="text-sm text-white/85 leading-relaxed mt-2">
+        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50">
+          <h2 className="text-lg font-bold text-text-primary">Valore e costi totali prima di comprare</h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-2">
             I consumi sono solo una parte del costo di proprietà: confrontali con il valore reale di mercato e la
             manutenzione della {make.name} {model} {yearNum}.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
               href={`/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`}
-              className="inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-accent hover:bg-white/90 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
             >
               Scopri quanto vale oggi
             </Link>
@@ -288,24 +280,7 @@ export default async function ConsumiYearPage({ params }: PageProps) {
         />
       </main>
 
-      <footer className="border-t border-border/60 mt-10">
-        <div className="max-w-3xl mx-auto px-5 py-8">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded-lg bg-accent flex items-center justify-center">
-                <Car className="w-3.5 h-3.5 text-white" />
-              </div>
-              <span className="text-sm font-bold text-text-primary">AutoEsperto</span>
-            </div>
-            <nav className="flex flex-wrap items-center justify-center gap-x-5 gap-y-2 text-xs text-text-secondary">
-              <Link href="/valutazione" className="hover:text-text-primary transition-colors">Valutazione auto</Link>
-              <Link href="/riparazione" className="hover:text-text-primary transition-colors">Costi riparazione</Link>
-              <Link href="/guide" className="hover:text-text-primary transition-colors">Guide</Link>
-              <Link href="/privacy" className="hover:text-text-primary transition-colors">Privacy</Link>
-            </nav>
-          </div>
-        </div>
-      </footer>
+      <SiteFooter variant="compact" />
     </div>
   );
 }

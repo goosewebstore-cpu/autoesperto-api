@@ -232,15 +232,15 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
             <div className="scanner-photo-tab">
               <button type="button" className="scanner-dropzone" onClick={() => inputRef.current?.click()}>
                 <span className="scanner-drop-icon"><Camera className="h-6 w-6" /></span>
-                <span className="scanner-drop-main">Carica una o più foto dell'auto</span>
-                <span className="scanner-drop-sub">JPG, PNG o WebP · max 5 MB l'una · più foto, più precisione</span>
+                <span className="scanner-drop-main">Analizza un&apos;auto con una foto</span>
+                <span className="scanner-drop-sub">JPG, PNG o WebP · max 5 MB l&apos;una · più foto, più precisione</span>
               </button>
               <div className="scanner-box-promises" aria-label="Cosa ricevi">
                 {promises.map((item) => (
                   <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
                 ))}
               </div>
-              <p className="scanner-box-micro">Analisi completa sempre gratuita: nessun pagamento, nessun abbonamento. Registrati gratis se vuoi salvarla nel tuo account.</p>
+              <p className="scanner-box-micro">Analisi sempre gratuita e senza registrazione: nessun pagamento, nessun abbonamento. Un account gratuito permette di salvare il report.</p>
             </div>
           ) : (
             <form
@@ -335,15 +335,15 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
         <div className="scanner-hero-copy">
           <div className="scanner-kicker"><Camera className="h-4 w-4" /> Riconoscimento auto da foto</div>
           <h1>Analizza l’auto.<br className="hidden sm:block" /> Scopri modello e prezzo.</h1>
-          <p className="scanner-lead">Da una o più foto riconosciamo marca, modello e anno indicativo, stimiamo il prezzo e creiamo un’analisi dettagliata fatta apposta per quel modello e quell’anno.</p>
+          <p className="scanner-lead">Da una o più foto riconosciamo marca, modello e anno, stimiamo il prezzo e generiamo un report per quel modello.</p>
            <div className="scanner-promises" aria-label="Informazioni analizzate">
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
-           <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la scansione gratuita <ChevronRight className="h-5 w-5" /></button>
-           <p className="scanner-microcopy">Analisi completa sempre gratuita, senza account e senza limiti. Registrati gratis se vuoi salvarla e ritrovarla quando vuoi.</p>
+            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Analizza un&apos;auto gratis <ChevronRight className="h-5 w-5" /></button>
+            <p className="scanner-microcopy">Analisi sempre gratuita, senza account e senza limiti. Un account gratuito consente di salvare i report.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
-           <p className="mt-3 flex items-start gap-2 text-xs text-slate-600 max-w-xl">
-             <Check className="h-3.5 w-3.5 mt-0.5 shrink-0 text-emerald-600" />
+           <p className="mt-3 flex items-start gap-2 text-xs max-w-xl" style={{ color: 'var(--text-2)' }}>
+             <Check className="h-3.5 w-3.5 mt-0.5 shrink-0" style={{ color: 'var(--success)' }} />
              <span>Per un risultato migliore: carica più foto (frontale, laterale, posteriore, interni) con buona illuminazione. Il riconoscimento è indicativo e può contenere errori.</span>
            </p>
         </div>
@@ -398,17 +398,17 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
         <div className="scanner-result-banner">
           <ShieldCheck className="h-4 w-4" />
           {user ? (
-            <span>Questa analisi è stata salvata gratuitamente nel tuo <button type="button" onClick={() => router.push('/account')} className="scanner-result-banner-link">account</button>.</span>
+             <span>Analisi salvata gratuitamente. La trovi nell&apos;<button type="button" onClick={() => router.push('/account')} className="scanner-result-banner-link">account</button>.</span>
           ) : (
-            <span>Analisi completa gratuita. Per salvarla e ritrovarla quando vuoi, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">crea un account gratuito</button>.</span>
+             <span>Analisi gratuita. Per salvarla, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">crea un account gratuito</button>.</span>
           )}
         </div>
 
         {report ? (
           <ReportView report={report} embedded />
         ) : (
-          <div className="mt-5 rounded-2xl border border-border bg-surface-2 p-5">
-            <h2 className="text-sm font-bold text-text-primary">Veicolo riconosciuto</h2>
+          <div className="mt-5 rounded-2xl p-5" style={{ border: '1px solid var(--border)', background: 'rgba(15, 22, 41, 0.6)' }}>
+            <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Veicolo riconosciuto</h2>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {[
                 ['Marca', scan.vehicle.make],
@@ -420,13 +420,13 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
               ]
                 .filter((item) => item[1])
                 .map(([label, value]) => (
-                  <div key={String(label)} className="rounded-xl border border-border bg-white p-3">
-                    <span className="block text-[11px] font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
-                    <strong className="mt-1 block text-sm capitalize text-text-primary">{String(value)}</strong>
+                  <div key={String(label)} className="rounded-xl p-3" style={{ border: '1px solid var(--border)', background: 'var(--bg-soft)' }}>
+                    <span className="block text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--text-3)' }}>{label}</span>
+                    <strong className="mt-1 block text-sm capitalize" style={{ color: 'var(--text)' }}>{String(value)}</strong>
                   </div>
                 ))}
             </div>
-            {error && <p className="mt-3 text-center text-xs font-semibold text-red-600" role="alert">{error}</p>}
+            {error && <p className="mt-3 text-center text-xs font-semibold" style={{ color: 'var(--danger)' }} role="alert">{error}</p>}
           </div>
         )}
         {requestedPrice != null && (
@@ -487,9 +487,9 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
                 <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
                   <div className="flex items-center gap-2 mb-1.5">
                     <Loader2 className="h-4 w-4 text-amber-400 animate-spin" />
-                    <span className="text-xs font-bold">Analisi in corso…</span>
+                    <span className="text-xs font-bold">Sto riconoscendo l&apos;auto…</span>
                   </div>
-                  <p className="text-xs text-white/70 leading-snug">Identificazione marca, modello e dettagli visibili.</p>
+                  <p className="text-xs text-white/70 leading-snug">Identifico marca, modello e versione dalla foto.</p>
                 </div>
               ) : (
                 <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
@@ -520,14 +520,14 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
           <div className="scanner-manual-side animate-fade-in">
             <div className="scanner-stage-label">Inserimento manuale</div>
             <h2>Inserisci marca e modello</h2>
-            <p className="scanner-stage-copy">Compila i dati nel form sopra la foto per generare il report completo comunque.</p>
+            <p className="scanner-stage-copy">Compila i dati per generare il report completo.</p>
             <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
           </div>
         ) : (
           <>
             <div className="scanner-stage-label">{stage === 'recognition' ? 'Analisi gratuita in corso' : 'Veicolo riconosciuto'}</div>
-            <h2>{stage === 'recognition' ? 'Riconoscimento veicolo e preparazione report completo…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
-            <p className="scanner-stage-copy">{stage === 'recognition' ? "L'analisi è completa e include prezzo e affidabilità." : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
+            <h2>{stage === 'recognition' ? 'Sto riconoscendo l\u2019auto e preparando il report…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
+            <p className="scanner-stage-copy">{stage === 'recognition' ? 'Confronto i prezzi di mercato e raccolgo affidabilità, costi e controlli da fare.' : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
             <div className="scanner-phases" role="status" aria-live="polite">
               {SCAN_PHASES.map((phase, i) => (
                 <div key={phase} className={`scanner-phase${i < scanPhase ? ' done' : ''}`}>

@@ -1,22 +1,29 @@
 'use client';
 
-import { Suspense, useEffect, useRef, useState } from 'react';
+import { Suspense, useEffect, useRef, useState, useCallback } from 'react';
+import type { CSSProperties } from 'react';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import {
-  BarChart3,
+  ArrowRight,
+  Banknote,
   Camera,
   Check,
+  CheckCircle2,
   ChevronRight,
-  Fuel,
+  Euro,
   Gauge,
+  LineChart,
+  ListChecks,
   ScanSearch,
-  ShieldAlert,
-  Tag,
+  SearchCheck,
+  ShieldCheck,
+  TrendingUp,
+  Wrench,
 } from 'lucide-react';
 import VehicleScanner from '@/components/VehicleScanner';
+import BuyChecklist from '@/components/BuyChecklist';
 import SiteHeader from '@/components/SiteHeader';
-import BuyVerdictCard, { type VerdictData } from '@/components/BuyVerdictCard';
 import { trackEvent } from '@/lib/analytics';
 import { type AnalyzePayload } from '@/lib/api';
 
@@ -53,102 +60,143 @@ function PrefillHandler({ onPrefill }: { onPrefill: (payload: AnalyzePayload) =>
   return null;
 }
 
-const EXAMPLE_VERDICT: VerdictData = {
-  label: 'BUON AFFARE',
-  tone: 'good',
-  score: 82,
-  requestedPrice: 17900,
-  estimated: 17500,
-  min: 16800,
-  max: 18200,
-  percent: 2.3,
-  checks: ['Pneumatici', 'Frizione', 'Manutenzione', 'Carrozzeria'],
-  recommendedPrice: 17000,
-  negotiationMin: 16500,
-  negotiationMax: 17000,
-  finalVerdict: 'La comprerei, ma proverei a trattare il prezzo.',
-};
-
-const BENEFITS = [
-  {
-    icon: Gauge,
-    title: 'Valore',
-    desc: 'Scopri quanto vale davvero l\u2019auto che stai guardando, con una fascia di mercato stimata sugli annunci reali.',
-  },
-  {
-    icon: Tag,
-    title: 'Prezzo',
-    desc: 'Confronta il prezzo richiesto con il valore di mercato e scopri se è un buon affare, caro o nella norma.',
-  },
-  {
-    icon: ShieldAlert,
-    title: 'Rischi',
-    desc: 'Punti deboli del modello, problemi noti e i controlli da fare prima di firmare qualsiasi cosa.',
-  },
-  {
-    icon: Fuel,
-    title: 'Costi',
-    desc: 'Consumi reali, manutenzione e riparazioni medie: quanto ti costerà tenerla, non solo comprarla.',
-  },
+const QUESTIONS = [
+  { icon: SearchCheck, title: 'Conviene comprarla?', desc: 'Prezzo, verdetto e controlli prima di firmare.', href: '/compra' },
+  { icon: Banknote, title: 'Quanto vale?', desc: 'Valore di mercato e annuncio di vendita.', href: '/vendi' },
+  { icon: Wrench, title: 'Cosa potrebbe costarmi?', desc: 'Costi di riparazione e manutenzione.', href: '/riparazione' },
+  { icon: LineChart, title: 'Quale conviene?', desc: 'Confronta due modelli fianco a fianco.', href: '/confronta' },
 ];
 
-const HOW_IT_WORKS = [
+const SECONDARY_TOOLS = [
+  { label: 'Affidabilità e guasti', href: '/affidabilita' },
+  { label: 'Consumi reali', href: '/consumi' },
+  { label: 'Valuta la condizione', href: '/condizione' },
+  { label: 'Valutazione per modello', href: '/valutazione' },
+];
+
+const STEPS = [
   {
     num: '1',
     icon: Camera,
-    title: 'Inserisci i dati dell\u2019auto',
-    desc: 'Marca, modello, anno e chilometraggio. Oppure una foto: riconosciamo noi il veicolo.',
+    title: 'Inserisci l\u2019auto',
+    desc: 'Una foto oppure marca e modello. Niente moduli lunghi.',
   },
   {
     num: '2',
-    icon: BarChart3,
-    title: 'La confrontiamo con il mercato',
-    desc: 'Incrociamo gli annunci reali in vendita, le schede tecniche e i problemi noti del modello.',
+    icon: TrendingUp,
+    title: 'Analizziamo il mercato',
+    desc: 'Prezzi dagli annunci reali, affidabilità e problemi noti del modello.',
   },
   {
     num: '3',
-    icon: Check,
+    icon: Gauge,
     title: 'Ricevi il verdetto',
-    desc: 'BUON AFFARE, TRATTA o EVITALA: punteggio, differenza rispetto al mercato e cosa controllare.',
+    desc: 'Score su 100, prezzo vs mercato e cosa controllare prima di comprare.',
   },
+];
+
+const TRUST = [
+  { icon: Euro, title: 'Prezzi di mercato', desc: 'Dati reali dagli annunci in vendita, incrociati con stime per anno e chilometri.' },
+  { icon: ShieldCheck, title: 'Affidabilità', desc: 'Problemi noti, punti di forza e versioni da evitare per ogni modello.' },
+  { icon: Wrench, title: 'Costi stimati', desc: 'Manutenzione, carburante, bollo e assicurazione come prima indicazione.' },
+  { icon: ListChecks, title: 'Checklist pre-acquisto', desc: 'Controlli rapidi da fare sull\u2019esemplare prima di contattare il venditore.' },
 ];
 
 const FAQS = [
   {
-    q: '\u00C8 gratis analizzare un\u2019auto?',
-    a: 'S\u00EC: l\u2019analisi completa \u00E8 sempre gratuita, senza account e senza limiti. Nessun pagamento, nessun abbonamento. Un account gratuito serve solo se vuoi salvare le analisi e ritrovarle quando vuoi.',
+    q: 'È gratis analizzare un\u2019auto?',
+    a: 'Sì: l\u2019analisi è sempre gratuita e senza registrazione. Serve un account solo per salvare le analisi nella tua area personale.',
   },
   {
-    q: 'Da dove vengono i dati?',
-    a: 'Dagli annunci reali in vendita in Italia, incrociati con le schede tecniche, i richiami ufficiali e i costi di manutenzione medi del modello.',
+    q: 'Da dove arrivano i dati?',
+    a: 'Dagli annunci reali in vendita in Italia, incrociati con schede tecniche, problemi noti e costi di manutenzione del modello.',
   },
   {
-    q: 'Cosa mi dice il verdetto?',
-    a: 'Se l\u2019auto \u00E8 un buon affare, se conviene trattare il prezzo o evitarla. Ricevi un punteggio su 100, la differenza rispetto al valore di mercato, i controlli da fare e l\u2019obiettivo di trattativa.',
+    q: 'Cosa dice il verdetto?',
+    a: 'Un punteggio su 100 con un giudizio: BUON AFFARE, TRATTA IL PREZZO o EVITALA, insieme a prezzo vs mercato e controlli da fare.',
   },
   {
-    q: 'Il riconoscimento da foto \u00E8 affidabile?',
-    a: 'Per i modelli pi\u00F9 comuni s\u00EC. Caricare pi\u00F9 foto (frontale, laterale, posteriore) migliora la precisione. Se non \u00E8 sicuro, ti chiediamo di inserire marca e modello a mano. La foto non viene salvata.',
-  },
-  {
-    q: 'Devo registrarmi per analizzare un\u2019auto?',
-    a: 'No. Puoi analizzare subito, senza registrazione. Un account gratuito ti permette solo di salvare le analisi e ritrovarle in un secondo momento.',
-  },
-  {
-    q: 'Salvate le mie foto?',
-    a: 'No: salviamo solo il report con i dati e le valutazioni. La fotografia originale non viene conservata.',
+    q: 'Il riconoscimento da foto è affidabile?',
+    a: 'Per i modelli comuni sì. Più foto aumentano la precisione. Se il riconoscimento non è sicuro, ti chiediamo marca e modello. La foto non viene salvata.',
   },
 ];
 
+const POPULAR: { make: string; model: string; year: string; score: number; verdict: string }[] = [
+  { make: 'Fiat', model: 'Panda', year: '2023', score: 78, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Fiat', model: '500', year: '2024', score: 81, verdict: 'BUON AFFARE' },
+  { make: 'Volkswagen', model: 'Golf', year: '2023', score: 75, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Toyota', model: 'Yaris', year: '2023', score: 86, verdict: 'BUON AFFARE' },
+  { make: 'Renault', model: 'Clio', year: '2023', score: 79, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Peugeot', model: '208', year: '2023', score: 82, verdict: 'BUON AFFARE' },
+  { make: 'Mazda', model: 'CX-3', year: '2023', score: 80, verdict: 'BUON AFFARE' },
+  { make: 'Volkswagen', model: 'Polo', year: '2022', score: 77, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Hyundai', model: 'i20', year: '2023', score: 83, verdict: 'BUON AFFARE' },
+];
+
+function popularHref(make: string, model: string) {
+  const slug = (value: string) =>
+    value.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9\s-]/g, '').replace(/[-\s]+/g, '-').replace(/^-+|-+$/g, '');
+  return `/valutazione/${slug(make)}/${slug(model)}`;
+}
+
+function verdictColor(verdict: string) {
+  if (verdict === 'BUON AFFARE') return 'ae-popular-verdict-good';
+  if (verdict === 'TRATTA IL PREZZO') return 'ae-popular-verdict-warn';
+  return 'ae-popular-verdict-bad';
+}
+
+const formatEuro = (n: number) => n.toLocaleString('it-IT') + ' €';
+
+function useScrollReveal() {
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.1, rootMargin: '0px 0px -60px 0px' }
+    );
+
+    const children = el.querySelectorAll('.reveal');
+    children.forEach((child) => observer.observe(child));
+
+    return () => observer.disconnect();
+  }, []);
+
+  return ref;
+}
+
+function RevealSection({ children, className = '', ...props }: React.HTMLAttributes<HTMLDivElement>) {
+  return (
+    <div className={`reveal ${className}`} {...props}>
+      {children}
+    </div>
+  );
+}
+
 export default function HomeClient({ stats }: HomeClientProps) {
   const [initialPayload, setInitialPayload] = useState<AnalyzePayload | null>(null);
+  const revealRef = useScrollReveal();
 
   const handlePrefill = (payload: AnalyzePayload) => {
     setInitialPayload(payload);
   };
 
+  const scrollToScanner = () => {
+    document.getElementById('scanner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  };
+
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background" ref={revealRef}>
       <Suspense fallback={null}>
         <PrefillHandler onPrefill={handlePrefill} />
       </Suspense>
@@ -157,85 +205,261 @@ export default function HomeClient({ stats }: HomeClientProps) {
 
       <main>
         {/* ─── HERO ─── */}
-        <section className="hero-v2">
-          <div className="hero-v2-inner">
-            <div className="hero-v2-kicker"><ScanSearch className="h-3.5 w-3.5" /> Compreresti questa auto?</div>
-            <h1 className="hero-v2-title">
-              Hai trovato un&apos;auto usata?
-              <br />
-              <em>Scopri se vale davvero</em> quello che chiedono.
-            </h1>
-            <p className="hero-v2-sub">
-              Analizza prezzo, valore, problemi e costi prima di comprarla. Verdetto in pochi secondi: BUON AFFARE, TRATTA o EVITALA.
-            </p>
-            <div className="home-hero-actions">
-              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('search_car', { feature: 'hero_cta' })}>
-                Analizza un&apos;auto <ChevronRight className="h-4 w-4" />
-              </a>
-            </div>
-            <p className="home-micro-steps">
-              Analisi completa gratuita · Nessuna registrazione richiesta · Salvataggio con account gratuito
-            </p>
-          </div>
-        </section>
-
-        {/* ─── FORM / SCANNER ─── */}
-        <section className="search-v2" id="scanner-section" aria-label="Analizza un'auto">
-          <VehicleScanner embedded initialPayload={initialPayload ?? undefined} />
-          <ul className="search-v2-trust">
-            <li><Check /> Analisi completa sempre gratuita</li>
-            <li><Check /> Più foto per un riconoscimento più preciso</li>
-            <li><Check /> Dati da {stats.makes} marchi e {stats.models.toLocaleString('it-IT')} modelli</li>
-          </ul>
-        </section>
-
-        {/* ─── MINI ESEMPIO ─── */}
-        <section className="v2-section" id="esempio" aria-label="Esempio di verdetto">
-          <div className="home-v2-wrap">
-            <div className="home-section-head">
-              <h2>Compreresti questa auto?</h2>
-              <p>Esempio di verdetto: BMW Serie 1, 2018, 85.000 km.</p>
-            </div>
-            <div className="mx-auto max-w-3xl">
-              <BuyVerdictCard verdict={EXAMPLE_VERDICT} />
-              <p className="mt-3 text-center text-xs font-semibold text-slate-400">
-                Esempio illustrativo. Prova con la tua auto sopra <ChevronRight className="inline h-3.5 w-3.5" />
+        <section className="ae-hero" aria-label="AutoEsperto — analizza un'auto usata">
+          <div className="ae-wrap ae-hero-grid">
+            <div className="ae-hero-copy">
+              <span className="ae-hero-kicker">
+                <ScanSearch className="h-3.5 w-3.5" />
+                Valutazione auto usate
+              </span>
+              <h1 className="ae-hero-title">
+                Scopri se un&apos;auto usata vale davvero la pena.
+              </h1>
+              <p className="ae-hero-sub">
+                Carica una foto oppure inserisci marca e modello. AutoEsperto analizza prezzo,
+                affidabilità, problemi noti e cosa controllare prima di comprarla.
               </p>
+              <div className="ae-hero-actions">
+                <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('search_car', { feature: 'hero_cta' })}>
+                  Analizza un&apos;auto <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+              <div className="ae-hero-micro">
+                <span><Check className="h-3.5 w-3.5" /> Gratis</span>
+                <span><Check className="h-3.5 w-3.5" /> Senza registrazione</span>
+                <span><Check className="h-3.5 w-3.5" /> Risultato in pochi secondi</span>
+              </div>
+            </div>
+
+            {/* Mockup del prodotto */}
+            <div className="ae-hero-mock" aria-hidden="true">
+              <div className="ae-mock-card">
+                <div className="ae-mock-head">
+                  <span className="ae-mock-brand">AutoEsperto Score</span>
+                  <span className="ae-mock-live"><span /> Analisi in tempo reale</span>
+                </div>
+                <div className="ae-mock-car">
+                  <div>
+                    <h2>Mazda CX-3</h2>
+                    <p>2.0 Sport · 2023</p>
+                  </div>
+                  <div className="ae-mock-ring" style={{ '--ae-score': '80deg' } as CSSProperties}>
+                    <div className="ae-mock-ring-inner">
+                      <strong>80</strong>
+                      <span>/100</span>
+                    </div>
+                  </div>
+                </div>
+                <div className="ae-mock-verdict">
+                  <CheckCircleIcon />
+                  BUON AFFARE
+                </div>
+                <div className="ae-mock-rows">
+                  <div className="ae-mock-row">
+                    <span>Prezzo richiesto</span>
+                    <strong>{formatEuro(18900)}</strong>
+                  </div>
+                  <div className="ae-mock-row">
+                    <span>Valore di mercato</span>
+                    <strong>{formatEuro(17500)} – {formatEuro(19200)}</strong>
+                  </div>
+                </div>
+                <div className="ae-mock-bar">
+                  <span className="ae-mock-bar-track" />
+                  <span className="ae-mock-bar-range" />
+                  <span className="ae-mock-bar-marker" />
+                </div>
+                <div className="ae-mock-chips">
+                  <span>Affidabilità <strong>8.0/10</strong></span>
+                  <span>Costi <strong>medi</strong></span>
+                  <span>Rischio <strong className="text-success">basso</strong></span>
+                </div>
+                <div className="ae-mock-check">
+                  <span>Prima di comprarla:</span>
+                  <ul>
+                    <li>Avviamento a freddo</li>
+                    <li>Cambio automatico</li>
+                    <li>Sospensioni</li>
+                    <li>Tagliandi</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* ─── 4 BENEFICI ─── */}
-        <section className="v2-section" aria-label="Cosa ottieni">
-          <div className="home-v2-wrap">
-            <div className="home-section-head">
-              <h2>Prima di decidere, guarda tutto</h2>
-              <p>Non solo il prezzo: tutta la verit\u00E0 su quell\u2019esemplare.</p>
+        {/* ─── ANALIZZA AUTO ─── */}
+        <section className="ae-scan" id="scanner-section" aria-label="Analizza un'auto">
+          <div className="ae-scan-card reveal">
+            <div className="ae-scan-head">
+              <h2>Che auto vuoi controllare?</h2>
+              <p>Carica una foto oppure inserisci marca e modello. Nessun modulo lungo.</p>
             </div>
-            <div className="home-benefits-grid">
-              {BENEFITS.map((benefit) => (
-                <article key={benefit.title} className="home-benefit-card">
-                  <span className="home-benefit-icon"><benefit.icon className="h-5 w-5" /></span>
-                  <h3>{benefit.title}</h3>
-                  <p>{benefit.desc}</p>
-                </article>
+            <VehicleScanner embedded initialPayload={initialPayload ?? undefined} />
+            <ul className="ae-scan-trust">
+              <li><Check /> Gratis · senza registrazione</li>
+              <li><Check /> Più foto, più precisione</li>
+              <li><Check /> Report completo in pochi secondi</li>
+            </ul>
+          </div>
+        </section>
+
+        {/* ─── ESEMPIO REALE DEL RISULTATO ─── */}
+        <section className="ae-section alt" id="esempio" aria-label="Ecco cosa ottieni">
+          <div className="ae-wrap">
+            <div className="ae-section-head center reveal">
+              <h2>Ecco cosa ottieni</h2>
+              <p>Un esempio reale del report: verdetto, score, prezzo vs mercato e controlli.</p>
+            </div>
+
+            <div className="ae-example reveal">
+              <div className="ae-example-main">
+                <div className="ae-example-car">
+                  <div>
+                    <span className="ae-example-tag">Esempio</span>
+                    <h3>FIAT 500</h3>
+                    <p>1.2 Lounge · 2018 · 62.000 km</p>
+                  </div>
+                  <div className="ae-example-verdict">
+                    <span className="ae-example-badge-good">
+                      <CheckCircleIcon />
+                      BUON AFFARE
+                    </span>
+                    <div className="ae-example-score">
+                      <strong>81</strong>
+                      <span>/100</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="ae-example-price">
+                  <div>
+                    <span className="ae-price-cap">Prezzo richiesto</span>
+                    <strong className="ae-price-val">{formatEuro(12900)}</strong>
+                  </div>
+                  <div>
+                    <span className="ae-price-cap">Valore di mercato</span>
+                    <strong className="ae-price-val">{formatEuro(12300)} – {formatEuro(13400)}</strong>
+                  </div>
+                </div>
+                <div className="ae-bar">
+                  <span className="ae-bar-track" />
+                  <span className="ae-bar-range" />
+                  <span className="ae-bar-marker" style={{ left: '46%' }} />
+                </div>
+                <p className="ae-price-hint text-text-secondary">
+                  Prezzo in linea con la fascia di mercato · {formatEuro(12900)} entro {formatEuro(12300)} – {formatEuro(13400)}
+                </p>
+
+                <div className="ae-subb-grid">
+                  {[
+                    ['Prezzo', 84],
+                    ['Affidabilità', 80],
+                    ['Costi', 62],
+                    ['Consumi', 76],
+                    ['Rischio', 88],
+                  ].map(([label, value]) => {
+                    const v = value as number;
+                    const tone = v >= 70 ? 'bg-success' : v >= 45 ? 'bg-warning' : 'bg-danger';
+                    return (
+                      <div key={label} className="ae-subb">
+                        <div className="ae-subb-head">
+                          <span>{label}</span>
+                          <strong>{v}/100</strong>
+                        </div>
+                        <span className="ae-subb-bar">
+                          <span className={`ae-subb-fill ${tone}`} style={{ width: `${v}%` }} />
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+
+              <div className="ae-example-side">
+                <div className="ae-example-check-head">
+                  <span>Prima di comprarla</span>
+                  <ul>
+                    <li><Check /> Frizione</li>
+                    <li><Check /> Distribuzione</li>
+                    <li><Check /> Pneumatici</li>
+                    <li><Check /> Tagliandi</li>
+                  </ul>
+                </div>
+                <p className="ae-example-note">
+                  Ogni report include la checklist dei controlli da fare sull&apos;esemplare specifico.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── MODELLI POPOLARI ─── */}
+        <section className="ae-section" aria-label="Modelli più venduti in Italia">
+          <div className="ae-wrap">
+            <div className="ae-section-head center reveal">
+              <h2>I modelli più venduti in Italia</h2>
+              <p>Controlla il verdetto, il prezzo di mercato e cosa guardare prima di comprare.</p>
+            </div>
+            <div className="ae-popular-grid reveal">
+              {POPULAR.map((item) => (
+                <Link key={`${item.make}-${item.model}`} href={popularHref(item.make, item.model)} className="ae-popular-card" onClick={() => trackEvent('tool_click', { tool: `${item.make} ${item.model}` })}>
+                  <div className="ae-popular-info">
+                    <div>
+                      <h3>{item.make} {item.model}</h3>
+                      <p>{item.year}</p>
+                    </div>
+                    <div className="ae-popular-score">
+                      <strong>{item.score}</strong>
+                      <span>/100</span>
+                    </div>
+                  </div>
+                  <span className={`ae-popular-verdict ${verdictColor(item.verdict)}`}>{item.verdict}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* ─── COSA VUOI SAPERE? ─── */}
+        <section className="ae-section alt" aria-label="Strumenti secondari">
+          <div className="ae-wrap">
+            <div className="ae-section-head reveal">
+              <h2>Cosa vuoi sapere?</h2>
+              <p>Gli strumenti di approfondimento, quando ti servono.</p>
+            </div>
+            <div className="ae-questions reveal">
+              {QUESTIONS.map((q) => (
+                <Link key={q.href} href={q.href} className="ae-question-card" onClick={() => trackEvent('tool_click', { tool: q.title })}>
+                  <span className="ae-question-icon"><q.icon className="h-5 w-5" /></span>
+                  <span className="ae-question-copy">
+                    <strong>{q.title}</strong>
+                    <small>{q.desc}</small>
+                  </span>
+                  <ChevronRight className="ae-question-chev" />
+                </Link>
+              ))}
+            </div>
+            <div className="ae-secondary-links">
+              {SECONDARY_TOOLS.map((tool) => (
+                <Link key={tool.href} href={tool.href}>{tool.label}</Link>
               ))}
             </div>
           </div>
         </section>
 
         {/* ─── COME FUNZIONA ─── */}
-        <section className="v2-section" id="come-funziona" aria-label="Come funziona">
-          <div className="home-v2-wrap">
-            <div className="home-section-head">
+        <section className="ae-section" aria-label="Come funziona">
+          <div className="ae-wrap">
+            <div className="ae-section-head center reveal">
               <h2>Come funziona</h2>
-              <p>Tre passi, pochi secondi.</p>
+              <p>Tre passi, pochi secondi, zero costi.</p>
             </div>
-            <div className="home-how-grid">
-              {HOW_IT_WORKS.map((step) => (
-                <div key={step.num} className="home-how-card">
-                  <span className="home-how-num">{step.num}</span>
-                  <step.icon className="home-how-icon" />
+            <div className="ae-steps reveal">
+              {STEPS.map((step) => (
+                <div key={step.num} className="ae-step">
+                  <span className="ae-step-num">{step.num}</span>
+                  <span className="ae-step-icon"><step.icon className="h-5 w-5" /></span>
                   <h3>{step.title}</h3>
                   <p>{step.desc}</p>
                 </div>
@@ -244,26 +468,77 @@ export default function HomeClient({ stats }: HomeClientProps) {
           </div>
         </section>
 
-        {/* ─── CTA BAND ─── */}
-        <section className="cta-band-v2" aria-label="Inizia ora">
-          <div className="cta-band-v2-inner">
-            <h2>Hai trovato un&apos;auto?</h2>
-            <p>Verifica se \u00E8 un buon affare prima di comprarla.</p>
-            <div className="cta-band-v2-actions">
-              <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('search_car', { feature: 'cta_band' })}>
-                Analizza un&apos;auto <ChevronRight className="h-4 w-4" />
-              </a>
+        {/* ─── CHECKLIST ─── */}
+        <section className="ae-section alt" aria-label="Checklist prima dell'acquisto">
+          <div className="ae-wrap ae-wrap-narrow">
+            <div className="ae-section-head center">
+              <h2>Prima di comprare, controlla queste cose</h2>
+              <p>La stessa checklist che trovi in ogni report. Portala con te quando vai a vedere l&apos;auto.</p>
+            </div>
+            <BuyChecklist />
+          </div>
+        </section>
+
+        {/* ─── DATI E FIDUCIA ─── */}
+        <section className="ae-section" aria-label="Da dove arrivano i dati">
+          <div className="ae-wrap">
+            <div className="ae-section-head reveal">
+              <h2>Dati reali. Risultati semplici.</h2>
+              <p>AutoEsperto incrocia dati di mercato e informazioni tecniche per aiutarti a decidere con più consapevolezza.</p>
+            </div>
+            <div className="ae-trust-grid reveal">
+              {TRUST.map((t) => (
+                <div key={t.title} className="ae-trust-card">
+                  <span className="ae-trust-icon"><t.icon className="h-5 w-5" /></span>
+                  <h3>{t.title}</h3>
+                  <p>{t.desc}</p>
+                </div>
+              ))}
+            </div>
+            <p className="ae-trust-note">
+              Le stime sono indicative e non sostituiscono un controllo professionale dell&apos;esemplare:
+              danni nascosti o meccanici vanno sempre verificati da un meccanico o da un&apos;ispezione.
+            </p>
+          </div>
+        </section>
+
+        {/* ─── GUIDE / SEO ─── */}
+        <section className="ae-section alt" aria-label="Guide e modelli più cercati">
+          <div className="ae-wrap">
+            <div className="ae-section-head reveal">
+              <h2>Stai valutando un modello specifico?</h2>
+              <p>Prezzi di mercato e informazioni dei modelli più cercati. Su ogni pagina trovi il pulsante per controllare l&apos;esemplare che hai trovato.</p>
+            </div>
+            <div className="ae-guide-cta">
+              <span>Cerchi consigli su acquisto, vendita o manutenzione?</span>
+              <Link href="/guide">Sfoglia le guide <ArrowRight className="h-4 w-4" /></Link>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── CTA FINALE ─── */}
+        <section className="ae-section" aria-label="Chiamata finale">
+          <div className="ae-wrap">
+            <div className="ae-cta-final reveal">
+              <h2>Hai trovato un&apos;auto?</h2>
+              <p>Controllala prima di contattare il venditore. Prezzo, affidabilità e cosa guardare: gratis, in pochi secondi.</p>
+              <div className="ae-cta-final-actions">
+                <a href="#scanner-section" className="home-hero-cta" onClick={() => trackEvent('search_car', { feature: 'final_cta' })}>
+                  Analizza un&apos;auto <ArrowRight className="h-4 w-4" />
+                </a>
+              </div>
+              <p className="ae-cta-final-micro">Gratis · senza registrazione · {stats.makes} marchi e {stats.models.toLocaleString('it-IT')} modelli</p>
             </div>
           </div>
         </section>
 
         {/* ─── FAQ ─── */}
-        <section className="v2-section" aria-label="Domande frequenti">
-          <div className="home-v2-wrap">
-            <div className="home-section-head">
+        <section className="ae-section alt" aria-label="Domande frequenti">
+          <div className="ae-wrap ae-wrap-narrow">
+            <div className="ae-section-head center reveal">
               <h2>Domande frequenti</h2>
             </div>
-            <div className="home-faq">
+            <div className="home-faq reveal">
               {FAQS.map((faq) => (
                 <details key={faq.q} className="home-faq-item">
                   <summary>{faq.q}</summary>
@@ -276,4 +551,8 @@ export default function HomeClient({ stats }: HomeClientProps) {
       </main>
     </div>
   );
+}
+
+function CheckCircleIcon() {
+  return <CheckCircle2 className="h-4 w-4" />;
 }

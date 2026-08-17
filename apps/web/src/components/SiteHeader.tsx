@@ -3,12 +3,26 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X } from 'lucide-react';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote } from 'lucide-react';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
+
+const TOOLS = [
+  { group: 'Valutazione & acquisto', items: [
+    { label: 'Quanto vale la mia auto?', desc: 'Stima di mercato e annuncio pronto', href: '/vendi', icon: Banknote },
+    { label: 'Mi conviene comprarla?', desc: 'Prezzo e verdetto prima di firmare', href: '/compra', icon: SearchCheck },
+    { label: 'Valutazione per modello', desc: 'Prezzi reali per marca e modello', href: '/valutazione', icon: Gauge },
+    { label: 'Confronta modelli', desc: 'Due auto a confronto, fianco a fianco', href: '/confronta', icon: ArrowLeftRight },
+  ]},
+  { group: 'Manutenzione & costi', items: [
+    { label: 'Affidabilità e guasti', desc: 'Problemi noti modello per modello', href: '/affidabilita', icon: Hammer },
+    { label: 'Costi di riparazione', desc: 'Quanto costa sistemarla', href: '/riparazione', icon: Wrench },
+    { label: 'Consumi reali', desc: 'Consumi veri, non da listino', href: '/consumi', icon: Fuel },
+    { label: 'Valuta la condizione', desc: 'Riparare o vendere?', href: '/condizione', icon: Scale },
+  ]},
+];
 
 const NAV_LINKS = [
   { label: 'Analizza auto', href: '/#scanner-section' },
-  { label: 'Valuta auto', href: '/valutazione' },
   { label: 'Confronta', href: '/confronta' },
   { label: 'Guide', href: '/guide' },
 ];
@@ -17,6 +31,7 @@ export default function SiteHeader() {
   const pathname = usePathname();
   const router = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const [toolsOpen, setToolsOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
   const [signedIn, setSignedIn] = useState(() => typeof window !== 'undefined' && Boolean(getAuthToken()));
   const headerRef = useRef<HTMLElement>(null);
@@ -28,12 +43,14 @@ export default function SiteHeader() {
   useEffect(() => {
     setMenuOpen(false);
     setUserMenu(false);
+    setToolsOpen(false);
   }, [pathname]);
 
   useEffect(() => {
     const onPointerDown = (event: MouseEvent) => {
       if (headerRef.current && !headerRef.current.contains(event.target as Node)) {
         setUserMenu(false);
+        setToolsOpen(false);
       }
     };
     document.addEventListener('mousedown', onPointerDown);
@@ -69,6 +86,30 @@ export default function SiteHeader() {
               {item.label}
             </Link>
           ))}
+          <div className={`site-nav-item${toolsOpen ? ' open' : ''}`}>
+            <button
+              type="button"
+              className="site-nav-trigger"
+              aria-expanded={toolsOpen}
+              onClick={() => setToolsOpen((value) => !value)}
+            >
+              Strumenti
+              <ChevronDown className="site-nav-chev" />
+            </button>
+            <div className="site-drop" role="menu" aria-label="Strumenti AutoEsperto">
+              {TOOLS.map((toolGroup) => (
+                <div key={toolGroup.group} className="site-drop-group">
+                  <span className="site-drop-title">{toolGroup.group}</span>
+                  {toolGroup.items.map((tool) => (
+                    <Link key={tool.href} href={tool.href} className="site-drop-link" onClick={() => setToolsOpen(false)}>
+                      <span className="site-drop-label">{tool.label}</span>
+                      <span className="site-drop-desc">{tool.desc}</span>
+                    </Link>
+                  ))}
+                </div>
+              ))}
+            </div>
+          </div>
         </nav>
 
         <div className="site-actions">
@@ -99,7 +140,7 @@ export default function SiteHeader() {
           </div>
           <Link href="/#scanner-section" className="site-cta">
             <ScanSearch className="h-4 w-4" />
-            <span className="site-cta-label">Analizza</span>
+            <span className="site-cta-label">Analizza gratis</span>
           </Link>
           <button
             type="button"
@@ -120,6 +161,17 @@ export default function SiteHeader() {
               <span className="site-mobile-label">{item.label}</span>
             </Link>
           ))}
+          {TOOLS.map((toolGroup) => (
+            <div key={toolGroup.group}>
+              <span className="site-mobile-title">{toolGroup.group}</span>
+              {toolGroup.items.map((tool) => (
+                <Link key={tool.href} href={tool.href} className="site-mobile-link" onClick={() => setMenuOpen(false)}>
+                  <span className="site-mobile-label">{tool.label}</span>
+                  <span className="site-mobile-desc">{tool.desc}</span>
+                </Link>
+              ))}
+            </div>
+          ))}
           <div className="site-mobile-actions">
             {signedIn ? (
               <>
@@ -129,7 +181,7 @@ export default function SiteHeader() {
             ) : (
               <Link href="/accesso" className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>Accedi</Link>
             )}
-            <Link href="/#scanner-section" className="home-hero-cta" onClick={() => setMenuOpen(false)}>Analizza</Link>
+            <Link href="/#scanner-section" className="home-hero-cta" onClick={() => setMenuOpen(false)}>Analizza gratis</Link>
           </div>
         </div>
       )}

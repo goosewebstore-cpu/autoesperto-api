@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { Car, Fuel, Euro, Gauge, TrendingDown, Search } from 'lucide-react';
+import { Fuel, Euro, Gauge, TrendingDown, Search } from 'lucide-react';
 import { getAllMakes, POPULAR_MODELS, slugify } from '@/lib/catalogo';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import PageHero from '@/components/PageHero';
 import AdBanner from '@/components/ads/AdBanner';
 
 function siteUrl() {
@@ -13,7 +14,7 @@ function siteUrl() {
 export const metadata: Metadata = {
   title: 'Consumi auto per marca, modello e anno',
   description:
-    'Consumi stimati di ogni auto in urbano, extraurbano e combinato: litri per 100 km, costo per 100 km e costo annuo, per marca, modello e anno.',
+    'Consumi stimati in urbano, extraurbano e combinato: litri per 100 km, costo per 100 km e costo annuo per modello.',
   alternates: {
     canonical: '/consumi',
     languages: { 'it-IT': `${siteUrl()}/consumi` },
@@ -35,25 +36,25 @@ export default function ConsumiPage() {
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader />
-      <main className="max-w-3xl mx-auto px-5 pt-8 pb-20">
-        <section className="text-center">
-          <h1 className="text-3xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Quanto consuma la tua auto?
-          </h1>
-          <p className="text-text-secondary text-base leading-relaxed mt-4 max-w-xl mx-auto">
-            Consumi stimati in urbano, extraurbano e combinato per marca, modello e anno, con il costo per 100 km e
-            quanto spendi di carburante in un anno.
-          </p>
-        </section>
-
+      <PageHero
+        crumb="Consumi"
+        photo="https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1600&q=80"
+        title="Quanto consuma un'auto usata?"
+      >
+        <p>
+          Consumi in urbano, extraurbano e combinato, con costo per 100 km e
+          spesa annua di carburante.
+        </p>
+      </PageHero>
+      <main className="page-body narrow">
         <AdBanner />
 
-        <section className="mt-8 rounded-2xl bg-accent p-6 text-white">
+        <section className="mt-8 rounded-2xl bg-white border border-border p-6 shadow-card">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 shrink-0 rounded-xl bg-white/15 flex items-center justify-center">
-              <Search className="w-5 h-5 text-white" />
+            <div className="w-10 h-10 shrink-0 rounded-xl bg-blue-50 flex items-center justify-center">
+              <Search className="w-5 h-5 text-accent" />
             </div>
-            <p className="text-sm text-white/90">Scegli la marca e il modello per vedere i consumi stimati.</p>
+            <p className="text-sm font-medium text-text-secondary">Scegli la marca e il modello per vedere i consumi stimati.</p>
           </div>
         </section>
 
@@ -100,7 +101,7 @@ export default function ConsumiPage() {
             <Fuel className="w-6 h-6 text-accent" />
             <h3 className="text-sm font-bold text-text-primary mt-3">Costo per 100 km</h3>
             <p className="text-xs text-text-secondary leading-relaxed mt-1">
-              Quanto spendi di carburante per 100 km, calcolato sul consumo combinato.
+              Spesa di carburante per 100 km, calcolata sul consumo combinato.
             </p>
           </div>
           <div className="rounded-2xl border border-border bg-surface-2 p-5">
@@ -119,17 +120,16 @@ export default function ConsumiPage() {
           </div>
         </section>
 
-        <section className="mt-12 rounded-2xl bg-accent p-6 text-white">
-          <h2 className="text-lg font-bold">I consumi contano, ma anche valore e costi</h2>
-          <p className="text-sm text-white/85 leading-relaxed mt-2">
-            Consumi, manutenzione e valore di mercato definiscono il costo reale di un&apos;auto: controlla quanto vale il
-            modello che ti interessa e quanto costa mantenerlo.
+        <section className="mt-12 rounded-2xl border border-blue-100 bg-blue-50 p-6">
+          <h2 className="text-lg font-bold text-text-primary">Consumi, valore e costi di gestione</h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-2">
+            Consumi, manutenzione e valore definiscono il costo reale. Controlla valore e costi del modello.
           </p>
           <Link
             href="/valutazione"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-accent hover:bg-white/90 transition-colors"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
           >
-            Valuta la tua auto gratis
+            Valuta un&apos;auto gratis
           </Link>
         </section>
 

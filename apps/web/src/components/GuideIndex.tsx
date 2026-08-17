@@ -1,14 +1,23 @@
 'use client';
 
+import { useState } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
 import { guides, GUIDE_CATEGORIES, type GuideCategory } from '@/lib/guides';
 import GuideCard from '@/components/GuideCard';
+import PageHero from '@/components/PageHero';
 import AdBanner from '@/components/ads/AdBanner';
 
 const PAGE_SIZE = 6;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
+
+function normalize(value: string) {
+  return value
+    .toLowerCase()
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '');
+}
 
 export default function GuideIndex() {
   const searchParams = useSearchParams();
@@ -17,11 +26,20 @@ export default function GuideIndex() {
     rawCategory && rawCategory in GUIDE_CATEGORIES ? (rawCategory as GuideCategory) : undefined;
   const rawPage = Number.parseInt(searchParams.get('pagina') || '1', 10);
   const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+  const [query, setQuery] = useState(searchParams.get('q') || '');
 
-  const filtered = category ? guides.filter((g) => g.category === category) : guides;
+  const q = normalize(query.trim());
+  const filtered = guides.filter((g) => {
+    if (category && g.category !== category) return false;
+    if (q) {
+      const haystack = normalize(`${g.title} ${g.description} ${g.category}`);
+      if (!haystack.includes(q)) return false;
+    }
+    return true;
+  });
   const sorted = [...filtered].sort((a, b) => b.published.localeCompare(a.published));
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
-  const current = Math.min(page, totalPages);
+  const current = q ? 1 : Math.min(page, totalPages);
   const pageItems = sorted.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
   const buildPageHref = (categoria?: string, pagina?: number) => {
@@ -93,30 +111,30 @@ export default function GuideIndex() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
-      <main className="max-w-5xl mx-auto px-5 pt-8 pb-20">
-        <nav aria-label="Breadcrumb" className="text-xs text-text-tertiary mb-4">
-          <ol className="inline-flex items-center gap-1.5">
-            <li>
-              <Link href="/" className="hover:text-accent transition-colors">Home</Link>
-            </li>
-            <li>/</li>
-            <li>
-              <span className="text-text-secondary font-medium">Guide</span>
-            </li>
-          </ol>
-        </nav>
+      <PageHero
+        crumb="Guide"
+        photo="https://images.unsplash.com/photo-1502877338535-766e1452684a?auto=format&fit=crop&w=1600&q=80"
+        title="Guide sull'auto usata"
+      >
+        <p>
+          Consigli pratici per comprare, vendere e valutare un&apos;auto usata con dati reali di mercato.
+        </p>
+      </PageHero>
 
-        <section>
-          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15]">
-            Guide sull&apos;auto usata
-          </h1>
-          <p className="text-text-secondary text-base leading-relaxed mt-3 max-w-2xl">
-            Consigli pratici basati sui dati reali del mercato per comprare, vendere e valutare
-            un&apos;auto usata senza rischiare di sbagliare il prezzo.
-          </p>
-        </section>
+      <main className="page-body">
+        <div className="relative">
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" />
+          <input
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+            placeholder="Cerca una guida… (es. cambio auto, rottamazione, assicurazione)"
+            aria-label="Cerca una guida"
+            className="w-full rounded-xl border border-border bg-white py-3 pl-11 pr-4 text-sm text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+          />
+        </div>
 
-        <div className="mt-6 flex flex-wrap items-center gap-2">
+        <div className="mt-4 flex flex-wrap items-center gap-2">
           <Link
             href="/guide"
             className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
@@ -130,10 +148,30 @@ export default function GuideIndex() {
           {categoryChips}
         </div>
 
-        <div className="mt-8 grid gap-4 sm:grid-cols-2">
-          {pageItems.map((guide) => (
-            <GuideCard key={guide.slug} guide={guide} />
-          ))}
+        <p className="mt-5 text-xs font-semibold text-text-secondary">
+          {pageItems.length} {pageItems.length === 1 ? 'guida trovata' : 'guide trovate'}
+          {category ? ` in ${GUIDE_CATEGORIES[category].label}` : ''}
+          {q ? ` per "${query.trim()}"` : ''}
+        </p>
+
+        <div className="mt-4 grid gap-4 sm:grid-cols-2">
+          {pageItems.length > 0 ? (
+            pageItems.map((guide) => (
+              <GuideCard key={guide.slug} guide={guide} />
+            ))
+          ) : (
+            <div className="sm:col-span-2 rounded-2xl border border-border bg-surface-2 p-8 text-center">
+              <p className="text-sm font-semibold text-text-primary">Nessuna guida trovata</p>
+              <p className="mt-1 text-xs text-text-secondary">Prova con un altro termine o sfoglia tutte le categorie.</p>
+              <button
+                type="button"
+                onClick={() => { setQuery(''); }}
+                className="mt-3 rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-semibold text-text-primary hover:border-accent hover:text-accent"
+              >
+                Mostra tutte le guide
+              </button>
+            </div>
+          )}
         </div>
 
         <AdBanner />
@@ -170,16 +208,16 @@ export default function GuideIndex() {
           </nav>
         )}
 
-        <section className="mt-12 rounded-2xl bg-accent p-6 text-white">
-          <h2 className="text-lg font-bold">Scopri quanto vale la tua auto</h2>
-          <p className="text-sm text-white/85 leading-relaxed mt-2">
+        <section className="mt-12 rounded-2xl border border-blue-100 bg-blue-50 p-6">
+          <h2 className="text-lg font-bold text-text-primary">Quanto vale un&apos;auto usata?</h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-2">
             Prezzo medio reale dagli annunci in vendita per marca, modello e anno. Gratis, senza registrazione.
           </p>
           <Link
             href="/valutazione"
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-accent hover:bg-white/90 transition-colors"
+            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
           >
-            Valuta la tua auto
+            Valuta un&apos;auto
           </Link>
         </section>
       </main>

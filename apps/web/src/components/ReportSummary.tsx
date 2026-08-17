@@ -7,9 +7,9 @@ import { useState } from 'react';
 function euro(v: number) { return v.toLocaleString('it-IT') + ' €'; }
 
 function getVerdictDisplay(verdict: string) {
-  if (verdict === 'BUY') return { icon: CheckCircle2, label: 'Buona scelta', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500' };
-  if (verdict === 'NEGOTIATE') return { icon: AlertTriangle, label: 'Valuta con attenzione', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500' };
-  return { icon: XCircle, label: 'Rischi possibili', color: 'text-red-700', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500' };
+  if (verdict === 'BUY') return { icon: CheckCircle2, label: 'Buon affare', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500' };
+  if (verdict === 'NEGOTIATE') return { icon: AlertTriangle, label: 'Tratta il prezzo', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500' };
+  return { icon: XCircle, label: 'Evitala', color: 'text-red-700', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500' };
 }
 
 function getCostLabel(annualMaintenance: number) {

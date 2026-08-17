@@ -31,62 +31,62 @@ const LEGAL_LINKS = [
 export default function SiteFooter({ variant = 'compact' }: SiteFooterProps) {
   if (variant === 'full') {
     return (
-      <footer className="mt-16 border-t border-slate-800 bg-slate-950 text-slate-400">
+      <footer className="mt-16 border-t border-slate-200 bg-slate-50 text-slate-600">
         <div className="mx-auto max-w-6xl px-5 pt-14 pb-8">
-          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr] pb-10 border-b border-slate-800">
+          <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr] pb-10 border-b border-slate-200">
             <div>
               <div className="flex items-center gap-2.5">
-                <span className="grid h-9 w-9 place-items-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/30">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/20">
                   <Car className="h-4.5 w-4.5" />
                 </span>
-                <span className="text-lg font-bold tracking-tight text-white">
-                  Auto<span className="text-blue-400">Esperto</span>
+                <span className="text-lg font-bold tracking-tight text-slate-900">
+                  Auto<span className="text-blue-600">Esperto</span>
                 </span>
               </div>
-              <p className="mt-4 text-sm leading-relaxed text-slate-400">
+              <p className="mt-4 text-sm leading-relaxed text-slate-600">
                 Il tuo secondo parere prima di comprare o vendere un&apos;auto usata.
                 Dati reali dagli annunci in vendita, stime trasparenti e sempre gratis.
               </p>
               <Link
                 href="/#scanner-section"
-                className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-lg shadow-blue-600/30 transition hover:bg-blue-500"
+                className="mt-5 inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 transition hover:bg-blue-700"
               >
                 Analizza un&apos;auto gratis <ArrowRight className="h-4 w-4" />
               </Link>
-              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-slate-800 bg-slate-900 px-3.5 py-1.5 text-xs font-semibold text-slate-300">
-                <ShieldCheck className="h-4 w-4 text-emerald-400" />
+              <div className="mt-6 inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-700 shadow-sm">
+                <ShieldCheck className="h-4 w-4 text-emerald-600" />
                 100% gratuito · senza registrazione
               </div>
             </div>
 
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Strumenti</p>
+              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Strumenti</p>
               <ul className="mt-4 space-y-2.5 text-sm">
                 {TOOL_LINKS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-slate-400 transition-colors hover:text-white">{link.label}</Link>
+                    <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Risorse &amp; Info</p>
+              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Risorse &amp; Info</p>
               <ul className="mt-4 space-y-2.5 text-sm">
                 {INFO_LINKS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-slate-400 transition-colors hover:text-white">{link.label}</Link>
+                    <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
                   </li>
                 ))}
               </ul>
             </div>
 
             <div>
-              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-500">Note Legali</p>
+              <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Note Legali</p>
               <ul className="mt-4 space-y-2.5 text-sm">
                 {LEGAL_LINKS.map((link) => (
                   <li key={link.href}>
-                    <Link href={link.href} className="text-slate-400 transition-colors hover:text-white">{link.label}</Link>
+                    <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
                   </li>
                 ))}
               </ul>

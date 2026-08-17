@@ -509,6 +509,30 @@ export default function HomeClient({ stats }: HomeClientProps) {
               <h2>Stai valutando un modello specifico?</h2>
               <p>Prezzi di mercato e informazioni dei modelli più cercati. Su ogni pagina trovi il pulsante per controllare l&apos;esemplare che hai trovato.</p>
             </div>
+            <div className="ae-popular-grid reveal my-6">
+              {POPULAR.map((car) => (
+                <Link
+                  key={`${car.make}-${car.model}`}
+                  href={popularHref(car.make, car.model)}
+                  className="ae-popular-card"
+                >
+                  <div className="ae-popular-info">
+                    <div>
+                      <h3>{car.make} {car.model}</h3>
+                      <p>Anno {car.year}</p>
+                    </div>
+                    <div className="ae-popular-score">
+                      <strong>{car.score}</strong>
+                      <span>/100</span>
+                    </div>
+                  </div>
+                  <span className={`ae-popular-verdict ${verdictColor(car.verdict)}`}>
+                    {car.verdict}
+                  </span>
+                </Link>
+              ))}
+            </div>
+
             <div className="ae-guide-cta">
               <span>Cerchi consigli su acquisto, vendita o manutenzione?</span>
               <Link href="/guide">Sfoglia le guide <ArrowRight className="h-4 w-4" /></Link>

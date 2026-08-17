@@ -407,8 +407,8 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
         {report ? (
           <ReportView report={report} embedded />
         ) : (
-          <div className="mt-5 rounded-2xl p-5" style={{ border: '1px solid var(--border)', background: 'rgba(15, 22, 41, 0.6)' }}>
-            <h2 className="text-sm font-bold" style={{ color: 'var(--text)' }}>Veicolo riconosciuto</h2>
+          <div className="mt-5 rounded-2xl p-5 border border-border bg-surface shadow-card">
+            <h2 className="text-sm font-bold text-text-primary">Veicolo riconosciuto</h2>
             <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
               {[
                 ['Marca', scan.vehicle.make],
@@ -420,13 +420,13 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
               ]
                 .filter((item) => item[1])
                 .map(([label, value]) => (
-                  <div key={String(label)} className="rounded-xl p-3" style={{ border: '1px solid var(--border)', background: 'var(--bg-soft)' }}>
-                    <span className="block text-[11px] font-bold uppercase tracking-wide" style={{ color: 'var(--text-3)' }}>{label}</span>
-                    <strong className="mt-1 block text-sm capitalize" style={{ color: 'var(--text)' }}>{String(value)}</strong>
+                  <div key={String(label)} className="rounded-xl p-3 border border-border bg-surface-2">
+                    <span className="block text-[11px] font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
+                    <strong className="mt-1 block text-sm capitalize text-text-primary">{String(value)}</strong>
                   </div>
                 ))}
             </div>
-            {error && <p className="mt-3 text-center text-xs font-semibold" style={{ color: 'var(--danger)' }} role="alert">{error}</p>}
+            {error && <p className="mt-3 text-center text-xs font-semibold text-danger" role="alert">{error}</p>}
           </div>
         )}
         {requestedPrice != null && (

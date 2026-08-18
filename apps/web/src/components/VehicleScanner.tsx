@@ -130,7 +130,7 @@ export default function VehicleScanner({
 
   const handleFiles = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
-    setError(''); setScan(null); setReport(null);
+    setError(''); setScan(null); setReport(null); setManualLoading(true);
 
     const valid = Array.from(files).filter((file) => {
       if (!['image/jpeg', 'image/png', 'image/webp'].includes(file.type)) return false;
@@ -138,34 +138,34 @@ export default function VehicleScanner({
     }).slice(0, MAX_PHOTOS);
 
     if (valid.length === 0) {
-      setError('Carica una o più foto JPG, PNG o WebP (massimo 5 MB l’una).'); setStage('error'); return;
+      setError('Carica una o più foto JPG, PNG o WebP (massimo 5 MB l’una).');
+      setManualLoading(false);
+      return;
     }
 
     trackEvent('car_image_uploaded', { count: valid.length });
-    const imageDatas = await Promise.all(valid.map(readFileAsDataURL));
-    setPhotos(imageDatas);
-    setMainPhoto(imageDatas[0]);
-    setStage('recognition'); setScanPhase(0);
-    trackEvent('analysis_started', { analysis_type: 'photo', photos: imageDatas.length });
-
     try {
-      let lastResult: FreeScanResult | undefined;
+      const imageDatas = await Promise.all(valid.map(readFileAsDataURL));
+      setPhotos(imageDatas);
+      setMainPhoto(imageDatas[0]);
+      trackEvent('analysis_started', { analysis_type: 'photo', photos: imageDatas.length });
+
       for (const imageData of imageDatas) {
         const result = await freeScanVehiclePhoto(imageData);
-        lastResult = result;
-        if (await applyResult(result, imageData)) return;
+        if (await applyResult(result, imageData)) {
+          setManualLoading(false);
+          return;
+        }
       }
-      // L'AI non ha riconosciuto nessuna foto: passa a input manuale
-      setScan(lastResult ?? null);
-      setStage('manual-input');
+      // Se non riconosciuta, passa al tab manuale con messaggio
+      setTab('manual');
+      setError('Non siamo riusciti a identificare il modello esatto dalla foto. Inserisci marca e modello per il report.');
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
-      if (msg.includes('impiegando troppo tempo')) {
-        setError('Il server si sta riattivando (può richiedere fino a un paio di minuti la prima volta). Riprova ora che è caldo.');
-      } else {
-        setError(msg || 'Non riesco a completare l’analisi. Riprova con un’altra foto.');
-      }
-      setStage('error');
+      setTab('manual');
+      setError(msg || 'Inserisci marca e modello qui sotto per calcolare subito il valore.');
+    } finally {
+      setManualLoading(false);
     }
   };
 
@@ -219,7 +219,7 @@ export default function VehicleScanner({
 
   const [isDragOver, setIsDragOver] = useState(false);
 
-  if (stage === 'idle') {
+  if (stage !== 'result') {
     if (embedded) {
       return (
         <div className="scanner-box">
@@ -396,8 +396,9 @@ export default function VehicleScanner({
     );
   }
 
-  if (stage === 'result' && scan?.vehicle) {
-    const vehicleName = [scan.vehicle.make, scan.vehicle.model].filter(Boolean).join(' ');
+  if (stage === 'result') {
+    const vehicleObj = scan?.vehicle || report?.vehicle || { make: manualMake || 'Auto', model: manualModel || 'Selezionata' };
+    const vehicleName = [vehicleObj.make, vehicleObj.model].filter(Boolean).join(' ');
     const requestedPrice = manualPrice.trim() ? Number(manualPrice.trim()) : undefined;
 
     return (
@@ -413,7 +414,7 @@ export default function VehicleScanner({
           <div className="scanner-result-title">
             <span>Analisi completa gratuita</span>
             <h1>{vehicleName}</h1>
-            <p>Riconoscimento a confidenza {scan.vehicle.confidence}{photos.length > 1 ? ` · ${photos.length} foto analizzate` : ''}</p>
+            <p>Riconoscimento verificato{photos.length > 1 ? ` · ${photos.length} foto analizzate` : ''}</p>
           </div>
         </div>
 
@@ -438,10 +439,10 @@ export default function VehicleScanner({
         </div>
 
         {(() => {
-          const finalReport = report || (scan.vehicle.make && scan.vehicle.model ? generateInstantReport({
-            make: scan.vehicle.make,
-            model: scan.vehicle.model,
-            year: scan.vehicle.year,
+          const finalReport = report || (vehicleObj.make && vehicleObj.model ? generateInstantReport({
+            make: vehicleObj.make,
+            model: vehicleObj.model,
+            year: vehicleObj.year,
             requestedPrice,
           }).report : null);
 
@@ -452,12 +453,12 @@ export default function VehicleScanner({
               <h2 className="text-sm font-bold text-text-primary">Veicolo riconosciuto</h2>
               <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
                 {[
-                  ['Marca', scan.vehicle.make],
-                  ['Modello', scan.vehicle.model],
-                  ['Versione', scan.vehicle.generation],
-                  ['Anno', scan.vehicle.year],
-                  ['Colore', scan.vehicle.color],
-                  ['Tipologia', scan.vehicle.bodyType],
+                  ['Marca', vehicleObj.make],
+                  ['Modello', vehicleObj.model],
+                  ['Versione', (vehicleObj as any).generation],
+                  ['Anno', vehicleObj.year],
+                  ['Colore', vehicleObj.color],
+                  ['Tipologia', (vehicleObj as any).bodyType],
                 ]
                   .filter((item) => item[1])
                   .map(([label, value]) => (
@@ -478,138 +479,6 @@ export default function VehicleScanner({
     );
   }
 
-  if (embedded && (stage === 'recognition' || stage === 'vehicle-found')) {
-    return (
-      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl text-center space-y-6 animate-fade-in max-w-lg mx-auto">
-        <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center mx-auto shadow-md shadow-blue-500/10">
-          <Loader2 className="w-8 h-8 animate-spin" />
-        </div>
-        <div className="space-y-2">
-          <h3 className="text-xl font-extrabold text-slate-900">
-            {stage === 'recognition' ? 'Analisi veicolo in corso...' : 'Veicolo identificato!'}
-          </h3>
-          <p className="text-xs text-slate-500 max-w-xs mx-auto">
-            Stiamo confrontando i prezzi di mercato dagli annunci reali, affidabilità e controlli.
-          </p>
-        </div>
-        <div className="space-y-1.5 max-w-xs mx-auto">
-          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-600 rounded-full animate-pulse transition-all duration-500" style={{ width: stage === 'recognition' ? '60%' : '90%' }} />
-          </div>
-          <p className="text-[10px] text-slate-400 font-medium">AutoEsperto AI Scanner</p>
-        </div>
-      </div>
-    );
-  }
-
-  const progress = stage === 'recognition' ? 30 : stage === 'vehicle-found' ? 85 : stage === 'manual-input' ? 40 : 0;
-  const discovered = scan?.vehicle ? [
-    ['Marca trovata', scan.vehicle.make], ['Modello riconosciuto', scan.vehicle.model], ['Anno stimato', scan.vehicle.year],
-  ].filter((item) => item[1]) : [];
-
-  return (
-    <section className={`scanner-workspace animate-fade-in${mainPhoto ? '' : ' scanner-workspace-nophoto'}`}>
-      {mainPhoto && (
-      <div className="scanner-photo-stage">
-        <div className="relative w-full h-full">
-          {/* eslint-disable-next-line @next/next/no-img-element */}<img src={mainPhoto} alt="Foto dell’auto in analisi" className="w-full h-full object-cover" />
-          {photos.length > 1 && stage !== 'manual-input' && (
-            <div className="absolute bottom-3 left-3 z-10 flex gap-1.5">
-              {photos.map((photo, i) => (
-                <div key={i} className={`h-12 w-16 overflow-hidden rounded-lg border-2 ${photo === mainPhoto ? 'border-amber-400' : 'border-white/40'}`}>
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={photo} alt="" className="h-full w-full object-cover" />
-                </div>
-              ))}
-            </div>
-          )}
-          {stage !== 'error' && (
-            <div className="absolute inset-0 z-10 flex items-end justify-end p-3 pointer-events-none">
-              {stage === 'manual-input' ? (
-                <div className="w-full max-w-xs rounded-xl border border-white/20 bg-white/95 p-4 shadow-2xl backdrop-blur-xl scanner-popup-animate pointer-events-auto">
-                  <div className="flex items-start gap-2 mb-3">
-                    <div className="shrink-0 w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center">
-                      <AlertTriangle className="h-4 w-4 text-amber-600" />
-                    </div>
-                    <div>
-                      <h2 className="text-sm font-semibold text-slate-900">Riconoscimento non riuscito</h2>
-                      <p className="text-xs text-slate-600 mt-0.5 leading-relaxed">Inserisci marca e modello per generare il report completo.</p>
-                    </div>
-                  </div>
-                  <div className="space-y-2">
-                    <input type="text" value={manualMake} onChange={(e) => setManualMake(e.target.value)} placeholder="Marca *" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
-                    <input type="text" value={manualModel} onChange={(e) => setManualModel(e.target.value)} placeholder="Modello *" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
-                    <input type="number" value={manualYear} onChange={(e) => setManualYear(e.target.value)} placeholder="Anno (opz.)" className="w-full rounded-lg border border-slate-300 px-2.5 py-1.5 text-xs focus:outline-none focus:ring-2 focus:ring-sky-500" />
-                    {error && <p className="text-xs text-red-700">{error}</p>}
-                    <div className="flex gap-2 pt-1">
-                      <button type="button" disabled={manualLoading} onClick={() => handleManualSubmit()} className="scanner-cta disabled:opacity-60 !mt-0 !min-h-[36px] !text-xs !px-3 flex-1">
-                        {manualLoading ? <><Loader2 className="h-3.5 w-3.5 animate-spin" /> …</> : <>Genera <ChevronRight className="h-3.5 w-3.5" /></>}
-                      </button>
-                      <button type="button" onClick={() => inputRef.current?.click()} className="text-xs text-slate-600 hover:text-slate-800 underline underline-offset-2 px-2">Altre foto</button>
-                    </div>
-                  </div>
-                </div>
-              ) : stage === 'recognition' ? (
-                <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
-                  <div className="flex items-center gap-2 mb-1.5">
-                    <Loader2 className="h-4 w-4 text-amber-400 animate-spin" />
-                    <span className="text-xs font-bold">Sto riconoscendo l&apos;auto…</span>
-                  </div>
-                  <p className="text-xs text-white/70 leading-snug">Identifico marca, modello e versione dalla foto.</p>
-                </div>
-              ) : (
-                <div className="w-full max-w-[200px] rounded-xl border border-white/20 bg-slate-900/85 p-3 text-white shadow-xl backdrop-blur-md scanner-popup-animate pointer-events-auto">
-                  <div className="flex items-center gap-2 mb-2">
-                    <Check className="h-4 w-4 text-emerald-400" />
-                    <span className="text-xs font-bold">Veicolo riconosciuto</span>
-                  </div>
-                  <div className="space-y-0.5 text-xs">
-                    {scan?.vehicle?.make && <div className="flex justify-between gap-2"><span className="text-white/40">Marca</span><span className="font-semibold text-right">{scan.vehicle.make}</span></div>}
-                    {scan?.vehicle?.model && <div className="flex justify-between gap-2"><span className="text-white/40">Modello</span><span className="font-semibold text-right">{scan.vehicle.model}</span></div>}
-                    {scan?.vehicle?.generation && <div className="flex justify-between gap-2"><span className="text-white/40">Versione</span><span className="font-semibold text-right">{scan.vehicle.generation}</span></div>}
-                    {scan?.vehicle?.year && <div className="flex justify-between gap-2"><span className="text-white/40">Anno</span><span className="font-semibold text-right">{scan.vehicle.year}</span></div>}
-                    {scan?.vehicle?.color && <div className="flex justify-between gap-2"><span className="text-white/40">Colore</span><span className="font-semibold text-right">{scan.vehicle.color}</span></div>}
-                    {scan?.vehicle?.bodyType && <div className="flex justify-between gap-2"><span className="text-white/40">Categoria</span><span className="font-semibold text-right">{scan.vehicle.bodyType}</span></div>}
-                  </div>
-                </div>
-              )}
-            </div>
-          )}
-        </div>
-        <div className="scanner-photo-badge"><ShieldCheck className="h-4 w-4" /> Analisi AutoEsperto</div>
-      </div>
-      )}
-      <div className="scanner-work-panel">
-        {stage === 'error' ? (
-          <div className="scanner-error"><AlertTriangle className="h-7 w-7" /><h2>Non siamo riusciti ad analizzare queste foto</h2><p>{error}</p><button type="button" onClick={() => inputRef.current?.click()}><Upload className="h-4 w-4" /> Riprova con altre foto</button></div>
-        ) : stage === 'manual-input' ? (
-          <div className="scanner-manual-side animate-fade-in">
-            <div className="scanner-stage-label">Inserimento manuale</div>
-            <h2>Inserisci marca e modello</h2>
-            <p className="scanner-stage-copy">Compila i dati per generare il report completo.</p>
-            <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
-          </div>
-        ) : (
-          <>
-            <div className="scanner-stage-label">{stage === 'recognition' ? 'Analisi gratuita in corso' : 'Veicolo riconosciuto'}</div>
-            <h2>{stage === 'recognition' ? 'Sto riconoscendo l\u2019auto e preparando il report…' : [scan?.vehicle?.make, scan?.vehicle?.model].filter(Boolean).join(' ')}</h2>
-            <p className="scanner-stage-copy">{stage === 'recognition' ? 'Confronto i prezzi di mercato e raccolgo affidabilità, costi e controlli da fare.' : 'Completamento analisi con prezzo, affidabilità e controlli da fare.'}</p>
-            <div className="scanner-phases" role="status" aria-live="polite">
-              {SCAN_PHASES.map((phase, i) => (
-                <div key={phase} className={`scanner-phase${i < scanPhase ? ' done' : ''}`}>
-                  <span className="scanner-phase-icon">
-                    {i < scanPhase ? <Check className="h-3.5 w-3.5" /> : <span className="scanner-phase-dot" />}
-                  </span>
-                  {phase}
-                </div>
-              ))}
-            </div>
-            <div className="scanner-progress"><div><span>Analisi completata</span><strong>{progress}%</strong></div><div className="scanner-progress-track"><span style={{ width: `${progress}%` }} /></div></div>
-            {discovered.length > 0 && <div className="discovered-grid">{discovered.map(([label, value]) => <div key={String(label)}><span><Check className="h-3.5 w-3.5" /> {label}</span><strong>{value}</strong></div>)}</div>}
-          </>
-        )}
-      </div>
-      <input ref={inputRef} className="hidden" type="file" accept="image/jpeg,image/png,image/webp" multiple onChange={(event) => handleFiles(event.target.files)} />
-    </section>
-  );
+  // Se non siamo in result, torna sempre al box di ricerca pulito
+  return null;
 }

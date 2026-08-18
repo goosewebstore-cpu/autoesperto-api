@@ -506,40 +506,81 @@ export default function HomeClient({ stats }: HomeClientProps) {
           </div>
         </section>
 
-        {/* ─── GUIDE / SEO ─── */}
-        <section className="ae-section alt" aria-label="Guide e modelli più cercati">
+        {/* ─── GUIDE / RISORSE UTILI ─── */}
+        <section className="ae-section alt" aria-label="Guide pratiche per l'usato">
           <div className="ae-wrap">
             <div className="ae-section-head reveal">
-              <h2>Stai valutando un modello specifico?</h2>
-              <p>Prezzi di mercato e informazioni dei modelli più cercati. Su ogni pagina trovi il pulsante per controllare l&apos;esemplare che hai trovato.</p>
+              <h2>Guide pratiche per comprare e vendere</h2>
+              <p>Consigli approfonditi, verifiche da fare e dati di mercato per non sbagliare acquisto.</p>
             </div>
-            <div className="ae-popular-grid reveal my-6">
-              {POPULAR.map((car) => (
-                <Link
-                  key={`${car.make}-${car.model}`}
-                  href={popularHref(car.make, car.model)}
-                  className="ae-popular-card"
-                >
-                  <div className="ae-popular-info">
-                    <div>
-                      <h3>{car.make} {car.model}</h3>
-                      <p>Anno {car.year}</p>
-                    </div>
-                    <div className="ae-popular-score">
-                      <strong>{car.score}</strong>
-                      <span>/100</span>
-                    </div>
-                  </div>
-                  <span className={`ae-popular-verdict ${verdictColor(car.verdict)}`}>
-                    {car.verdict}
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 my-6 reveal">
+              <Link
+                href="/guide/come-capire-se-auto-usata-e-affare"
+                className="rounded-2xl border border-border bg-white p-5 hover:border-accent hover:shadow-card-hover transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <span className="inline-flex items-center rounded-full bg-blue-50 text-blue-700 px-2.5 py-1 text-xs font-bold mb-3">
+                    Acquisto
                   </span>
-                </Link>
-              ))}
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+                    Come capire se un&apos;auto usata è un affare
+                  </h3>
+                  <p className="text-xs text-slate-500 line-clamp-2 mt-2 leading-relaxed">
+                    I 5 dati da verificare per capire se il prezzo richiesto è in linea con il mercato reale.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                  <span>Leggi la guida</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+
+              <Link
+                href="/guide/auto-che-si-svalutano-meno"
+                className="rounded-2xl border border-border bg-white p-5 hover:border-accent hover:shadow-card-hover transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <span className="inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 px-2.5 py-1 text-xs font-bold mb-3">
+                    Valutazione
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+                    Le auto che si svalutano meno nel 2026
+                  </h3>
+                  <p className="text-xs text-slate-500 line-clamp-2 mt-2 leading-relaxed">
+                    Quali modelli mantengono meglio il prezzo nel tempo e perché conviene sceglierli.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                  <span>Leggi la guida</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
+
+              <Link
+                href="/guide/come-vendere-auto-usata-prezzo-giusto"
+                className="rounded-2xl border border-border bg-white p-5 hover:border-accent hover:shadow-card-hover transition-all flex flex-col justify-between group"
+              >
+                <div>
+                  <span className="inline-flex items-center rounded-full bg-purple-50 text-purple-700 px-2.5 py-1 text-xs font-bold mb-3">
+                    Vendita
+                  </span>
+                  <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug">
+                    Come vendere un&apos;auto al giusto prezzo
+                  </h3>
+                  <p className="text-xs text-slate-500 line-clamp-2 mt-2 leading-relaxed">
+                    Come fissare il valore di vendita, scrivere l&apos;annuncio e gestire le trattative senza svendere.
+                  </p>
+                </div>
+                <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600">
+                  <span>Leggi la guida</span>
+                  <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+                </div>
+              </Link>
             </div>
 
             <div className="ae-guide-cta">
-              <span>Cerchi consigli su acquisto, vendita o manutenzione?</span>
-              <Link href="/guide">Sfoglia le guide <ArrowRight className="h-4 w-4" /></Link>
+              <span>Vuoi approfondire normative, manutenzione o checklist?</span>
+              <Link href="/guide">Sfoglia tutte le oltre 80 guide <ArrowRight className="h-4 w-4" /></Link>
             </div>
           </div>
         </section>

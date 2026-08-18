@@ -296,8 +296,8 @@ export default function HomeClient({ stats }: HomeClientProps) {
         </section>
 
         {/* ─── ANALIZZA AUTO ─── */}
-        <section className={`ae-scan ${isShowingResult ? 'pt-4' : ''}`} id="scanner-section" aria-label="Analizza un'auto">
-          <div className={`ae-scan-card reveal ${isShowingResult ? 'p-3 sm:p-5 max-w-5xl' : ''}`}>
+        <section className={`ae-scan ${isShowingResult ? 'pt-2' : ''}`} id="scanner-section" aria-label="Analizza un'auto">
+          <div className={`ae-scan-card ${isShowingResult ? 'p-0 sm:p-0 max-w-5xl bg-transparent border-0 shadow-none' : ''}`}>
             {!isShowingResult && (
               <div className="ae-scan-head">
                 <h2>Che auto vuoi controllare?</h2>

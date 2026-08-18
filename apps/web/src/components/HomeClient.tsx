@@ -185,6 +185,7 @@ function RevealSection({ children, className = '', ...props }: React.HTMLAttribu
 
 export default function HomeClient({ stats }: HomeClientProps) {
   const [initialPayload, setInitialPayload] = useState<AnalyzePayload | null>(null);
+  const [scannerStage, setScannerStage] = useState<string>('idle');
   const revealRef = useScrollReveal();
 
   const handlePrefill = (payload: AnalyzePayload) => {
@@ -194,6 +195,8 @@ export default function HomeClient({ stats }: HomeClientProps) {
   const scrollToScanner = () => {
     document.getElementById('scanner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+
+  const isShowingResult = scannerStage === 'result';
 
   return (
     <div className="min-h-screen bg-background" ref={revealRef}>
@@ -293,18 +296,26 @@ export default function HomeClient({ stats }: HomeClientProps) {
         </section>
 
         {/* ─── ANALIZZA AUTO ─── */}
-        <section className="ae-scan" id="scanner-section" aria-label="Analizza un'auto">
-          <div className="ae-scan-card reveal">
-            <div className="ae-scan-head">
-              <h2>Che auto vuoi controllare?</h2>
-              <p>Carica una foto oppure inserisci marca e modello. Nessun modulo lungo.</p>
-            </div>
-            <VehicleScanner embedded initialPayload={initialPayload ?? undefined} />
-            <ul className="ae-scan-trust">
-              <li><Check /> Gratis · senza registrazione</li>
-              <li><Check /> Più foto, più precisione</li>
-              <li><Check /> Report completo in pochi secondi</li>
-            </ul>
+        <section className={`ae-scan ${isShowingResult ? 'pt-4' : ''}`} id="scanner-section" aria-label="Analizza un'auto">
+          <div className={`ae-scan-card reveal ${isShowingResult ? 'p-3 sm:p-5 max-w-5xl' : ''}`}>
+            {!isShowingResult && (
+              <div className="ae-scan-head">
+                <h2>Che auto vuoi controllare?</h2>
+                <p>Carica una foto oppure inserisci marca e modello. Nessun modulo lungo.</p>
+              </div>
+            )}
+            <VehicleScanner
+              embedded
+              initialPayload={initialPayload ?? undefined}
+              onStageChange={(st) => setScannerStage(st)}
+            />
+            {!isShowingResult && (
+              <ul className="ae-scan-trust">
+                <li><Check /> Gratis · senza registrazione</li>
+                <li><Check /> Più foto, più precisione</li>
+                <li><Check /> Report completo in pochi secondi</li>
+              </ul>
+            )}
           </div>
         </section>
 

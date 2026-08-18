@@ -35,10 +35,22 @@ function readFileAsDataURL(file: File): Promise<string> {
   });
 }
 
-export default function VehicleScanner({ embedded = false, initialPayload }: { embedded?: boolean; initialPayload?: AnalyzePayload }) {
+export default function VehicleScanner({
+  embedded = false,
+  initialPayload,
+  onStageChange,
+}: {
+  embedded?: boolean;
+  initialPayload?: AnalyzePayload;
+  onStageChange?: (stage: ScannerStage) => void;
+}) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [stage, setStage] = useState<ScannerStage>('idle');
+
+  useEffect(() => {
+    onStageChange?.(stage);
+  }, [stage, onStageChange]);
   const [tab, setTab] = useState<'foto' | 'manual'>('foto');
   const [photos, setPhotos] = useState<string[]>([]);
   const [mainPhoto, setMainPhoto] = useState('');
@@ -111,7 +123,12 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
     setStage('result');
     trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
     trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      const el = document.getElementById('scanner-section');
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
     return true;
   };
 
@@ -190,7 +207,12 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
       setStage('result');
       trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
       trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        const el = document.getElementById('scanner-section');
+        if (el) {
+          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 100);
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
       if (msg.includes('impiegando troppo tempo')) {

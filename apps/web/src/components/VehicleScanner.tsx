@@ -192,24 +192,24 @@ export default function VehicleScanner({
       });
       if (!result.recognized || !result.vehicle) {
         setError(result.message || 'Non riesco a riconoscere il veicolo. Riprova.');
+        setStage('idle');
         return;
       }
       setScan(result);
       setReport(result.report ?? null);
       trackEvent('car_selected', { make: result.vehicle.make, model: result.vehicle.model });
-      setStage('vehicle-found');
-      await wait(2500);
       setStage('result');
       trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
       trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
-      if (msg.includes('impiegando troppo tempo')) {
-        setError('Il server sta avviandosi (può richiedere fino a 60 secondi la prima volta). Riprova ora che è caldo.');
+      if (msg.includes('impiegando troppo tempo') || msg.includes('500') || msg.includes('servizio')) {
+        setError('Il server sta elaborando la richiesta. Riprova tra pochi istanti.');
       } else {
         setError(msg || 'Errore durante la generazione del report. Riprova.');
       }
+      setStage('idle');
     } finally {
       setManualLoading(false);
     }

@@ -118,8 +118,6 @@ export default function VehicleScanner({
     setReport(result.report ?? null);
     setMainPhoto(photoUrl);
     trackEvent('car_selected', { make: result.vehicle.make, model: result.vehicle.model });
-    setStage('vehicle-found');
-    await wait(3500);
     setStage('result');
     trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
     trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
@@ -154,8 +152,7 @@ export default function VehicleScanner({
         lastResult = result;
         if (await applyResult(result, imageData)) return;
       }
-      // L'AI non ha riconosciuto nessuna foto: mostra il popup un attimo, poi passa a input manuale
-      await wait(2500);
+      // L'AI non ha riconosciuto nessuna foto: passa a input manuale
       setScan(lastResult ?? null);
       setStage('manual-input');
     } catch (err) {
@@ -464,6 +461,30 @@ export default function VehicleScanner({
           <p className="text-xs text-text-tertiary mt-4">Prezzo richiesto inserito: {requestedPrice.toLocaleString('it-IT')} €</p>
         )}
       </section>
+    );
+  }
+
+  if (embedded && (stage === 'recognition' || stage === 'vehicle-found')) {
+    return (
+      <div className="rounded-3xl border border-slate-200 bg-white p-8 shadow-xl text-center space-y-6 animate-fade-in max-w-lg mx-auto">
+        <div className="w-16 h-16 rounded-2xl bg-blue-50 text-blue-600 border border-blue-100 flex items-center justify-center mx-auto shadow-md shadow-blue-500/10">
+          <Loader2 className="w-8 h-8 animate-spin" />
+        </div>
+        <div className="space-y-2">
+          <h3 className="text-xl font-extrabold text-slate-900">
+            {stage === 'recognition' ? 'Analisi veicolo in corso...' : 'Veicolo identificato!'}
+          </h3>
+          <p className="text-xs text-slate-500 max-w-xs mx-auto">
+            Stiamo confrontando i prezzi di mercato dagli annunci reali, affidabilità e controlli.
+          </p>
+        </div>
+        <div className="space-y-1.5 max-w-xs mx-auto">
+          <div className="h-2 w-full bg-slate-100 rounded-full overflow-hidden">
+            <div className="h-full bg-blue-600 rounded-full animate-pulse transition-all duration-500" style={{ width: stage === 'recognition' ? '60%' : '90%' }} />
+          </div>
+          <p className="text-[10px] text-slate-400 font-medium">AutoEsperto AI Scanner</p>
+        </div>
+      </div>
     );
   }
 

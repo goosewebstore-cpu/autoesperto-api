@@ -53,7 +53,7 @@ export default async function ComparePage() {
 
         <CompareModels initialLeftReport={initialLeftReport} initialRightReport={initialRightReport} />
       </main>
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

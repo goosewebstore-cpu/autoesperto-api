@@ -185,6 +185,80 @@ export default async function ModelValutazionePage({ params }: PageProps) {
           </Link>
         </section>
 
+        {/* Blocco Affiliate Ricerca Usato */}
+        <section className="mt-6 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <h2 className="text-base font-bold text-slate-900 mb-1">
+            Cerca {make.name} {model} usata sui portali partner
+          </h2>
+          <p className="text-xs text-slate-500 mb-4">
+            Trova annunci reali in vendita in tutta Italia con filtri per anno, km e allestimento:
+          </p>
+          <div className="grid sm:grid-cols-2 gap-3">
+            <a
+              href={`https://www.autoscout24.it/lst/${encodeURIComponent(resolved.make)}/${encodeURIComponent(resolved.model)}`}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-white border border-slate-200 hover:border-blue-600 hover:shadow-sm transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-500/10 text-amber-600 font-extrabold text-xs">
+                  AS
+                </span>
+                <div>
+                  <span className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    AutoScout24
+                  </span>
+                  <p className="text-[11px] text-slate-500">Vedi annunci di {model}</p>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+            </a>
+
+            <a
+              href={`https://www.subito.it/annunci-italia/vendita/auto/${encodeURIComponent(resolved.make)}/${encodeURIComponent(resolved.model)}/`}
+              target="_blank"
+              rel="noopener noreferrer sponsored"
+              className="flex items-center justify-between p-3.5 rounded-xl bg-white border border-slate-200 hover:border-blue-600 hover:shadow-sm transition-all group"
+            >
+              <div className="flex items-center gap-3">
+                <span className="grid h-8 w-8 place-items-center rounded-lg bg-red-500/10 text-red-600 font-extrabold text-xs">
+                  S!
+                </span>
+                <div>
+                  <span className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors">
+                    Subito.it
+                  </span>
+                  <p className="text-[11px] text-slate-500">Annunci da privati e concessionari</p>
+                </div>
+              </div>
+              <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all" />
+            </a>
+          </div>
+        </section>
+
+        {/* Blocco Comparatore Assicurazione */}
+        <section className="mt-6 rounded-2xl bg-gradient-to-br from-blue-50 to-indigo-50/60 border border-blue-200/80 p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="space-y-1 text-center sm:text-left">
+            <span className="inline-flex items-center gap-1 text-[11px] font-bold uppercase tracking-wider text-blue-700 bg-blue-100 px-2.5 py-0.5 rounded-full">
+              Assicurazione RCA
+            </span>
+            <h2 className="text-base font-bold text-slate-900">
+              Quanto costa assicurare {make.name} {model}?
+            </h2>
+            <p className="text-xs text-slate-600 max-w-md">
+              Confronta i preventivi delle principali compagnie online e risparmia fino al 50% sulla polizza auto.
+            </p>
+          </div>
+          <a
+            href="https://www.facile.it/assicurazioni-auto.html"
+            target="_blank"
+            rel="noopener noreferrer sponsored"
+            className="shrink-0 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-bold text-white shadow-md shadow-blue-600/20 hover:bg-blue-700 transition-colors"
+          >
+            Confronta gratis <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </section>
+
         <section className="mt-6">
           <p className="text-sm text-text-tertiary mb-3">Condividi questa valutazione:</p>
           <div className="flex flex-wrap gap-2">
@@ -288,7 +362,7 @@ export default async function ModelValutazionePage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

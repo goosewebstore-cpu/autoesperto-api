@@ -122,7 +122,7 @@ export default async function RepairMakePage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

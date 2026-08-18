@@ -79,7 +79,7 @@ export default function LegalPage({ title, updated, intro, sections }: LegalPage
         </main>
       </div>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

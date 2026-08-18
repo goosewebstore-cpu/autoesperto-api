@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, BookOpen, Calendar, CheckCircle2, Clock, List, Share2, ShieldCheck, Sparkles } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Calendar, CheckCircle2, Clock, List, ScanSearch, Share2, ShieldCheck, Sparkles } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import AdInArticle from '@/components/ads/AdInArticle';
@@ -576,15 +576,25 @@ export default async function GuidePage({ params }: PageProps) {
           </section>
         )}
 
-        <section className="mt-12 rounded-2xl border border-blue-100 bg-blue-50">
-          <h2 className="text-lg font-bold text-text-primary">{cta.label}</h2>
-          <p className="text-sm text-text-secondary leading-relaxed mt-2">{cta.description}</p>
+        <section className="mt-12 rounded-2xl bg-accent-light border border-accent/20 p-6 text-center">
+          <div className="flex justify-center mb-3">
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-accent text-white shadow-md shadow-accent/20">
+              <ScanSearch className="h-6 w-6" />
+            </span>
+          </div>
+          <h2 className="text-lg font-bold text-text-primary">Vuoi controllare un&apos;auto specifica?</h2>
+          <p className="text-sm text-text-secondary leading-relaxed mt-2 max-w-md mx-auto">
+            Usa lo scanner gratuito di AutoEsperto: prezzo di mercato, affidabilità e cosa controllare prima di comprarla.
+          </p>
           <Link
-            href={cta.href}
-            className="mt-4 inline-flex items-center gap-2 rounded-lg bg-accent px-4 py-2 text-sm font-semibold text-white hover:bg-accent/90 transition-colors"
+            href="/#scanner-section"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-accent/20 hover:bg-accent-hover transition-colors"
           >
-            {cta.label}
+            Analizza un&apos;auto gratis <ArrowRight className="h-4 w-4" />
           </Link>
+          <p className="mt-3 text-xs text-text-tertiary">
+            Gratis · senza registrazione · risultato in pochi secondi
+          </p>
         </section>
 
         {otherGuides.length > 0 && (
@@ -607,7 +617,7 @@ export default async function GuidePage({ params }: PageProps) {
         )}
       </main>
 
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

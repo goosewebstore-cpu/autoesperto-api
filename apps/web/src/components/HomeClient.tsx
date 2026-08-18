@@ -229,6 +229,10 @@ export default function HomeClient({ stats }: HomeClientProps) {
                 <span><Check className="h-3.5 w-3.5" /> Senza registrazione</span>
                 <span><Check className="h-3.5 w-3.5" /> Risultato in pochi secondi</span>
               </div>
+              <div className="mt-3 inline-flex items-center gap-2 rounded-full border border-blue-200 bg-blue-50 px-3.5 py-1.5 text-xs font-semibold text-blue-700 shadow-sm">
+                <ScanSearch className="h-3.5 w-3.5" />
+                Oltre 2.500 auto analizzate
+              </div>
             </div>
 
             {/* Mockup del prodotto */}

@@ -23,7 +23,7 @@ export default function Home() {
   return (
     <>
       <HomeClient stats={stats} />
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </>
   );
 }

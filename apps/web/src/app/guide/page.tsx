@@ -44,7 +44,7 @@ export default function GuideIndexPage() {
       <Suspense fallback={<div className="min-h-[40vh]" />}>
         <GuideIndex />
       </Suspense>
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

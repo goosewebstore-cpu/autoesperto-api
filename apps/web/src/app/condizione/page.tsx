@@ -115,7 +115,7 @@ export default function Page() {
         />
       </main>
 
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

@@ -43,7 +43,7 @@ export default function CompraPage() {
         <AdBanner />
         <BuyCheck />
       </main>
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

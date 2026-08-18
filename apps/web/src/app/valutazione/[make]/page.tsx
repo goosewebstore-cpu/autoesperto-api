@@ -113,7 +113,7 @@ export default async function MakeValutazionePage({ params }: PageProps) {
         </Link>
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbSchema, itemListSchema]) }}

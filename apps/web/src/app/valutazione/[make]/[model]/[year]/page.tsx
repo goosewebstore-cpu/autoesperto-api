@@ -237,7 +237,7 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

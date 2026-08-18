@@ -282,7 +282,7 @@ export default async function ReliabilityYearPage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

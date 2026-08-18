@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { getConsent } from '@/lib/consent';
+import { hasCategory } from '@/lib/consent';
 
 const RAW_CONVERSION_ID = process.env.NEXT_PUBLIC_GA_ADS_CONVERSION_ID || '';
 const RAW_LABEL = process.env.NEXT_PUBLIC_GA_ADS_PURCHASE_LABEL || '';
@@ -51,7 +51,7 @@ function trackPurchase(value: number, currency: string, transactionId?: string) 
 export function fireAdsPurchase(value = 1.99, currency = 'EUR', transactionId?: string) {
   if (typeof window === 'undefined') return;
   if (!CONVERSION_ID) return;
-  if (getConsent() !== 'accepted') return;
+  if (!hasCategory('marketing')) return;
   loadGtag();
   trackPurchase(value, currency, transactionId);
 }
@@ -59,11 +59,10 @@ export function fireAdsPurchase(value = 1.99, currency = 'EUR', transactionId?: 
 export default function AdsTracker() {
   useEffect(() => {
     if (!CONVERSION_ID) return;
-    if (getConsent() !== 'accepted') return;
+    if (!hasCategory('marketing')) return;
     loadGtag();
-    const onConsent = (event: Event) => {
-      if ((event as CustomEvent<string>).detail !== 'accepted') return;
-      loadGtag();
+    const onConsent = () => {
+      if (hasCategory('marketing')) loadGtag();
     };
     window.addEventListener('ae-consent-changed', onConsent);
     return () => window.removeEventListener('ae-consent-changed', onConsent);

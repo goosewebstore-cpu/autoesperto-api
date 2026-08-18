@@ -122,7 +122,7 @@ export default async function ConsumiMakePage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

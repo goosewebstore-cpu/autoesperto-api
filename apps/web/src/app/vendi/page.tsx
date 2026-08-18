@@ -44,7 +44,7 @@ export default function VendiPage() {
         <AdBanner />
         <SellCheck />
       </main>
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

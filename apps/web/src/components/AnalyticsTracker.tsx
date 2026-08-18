@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
-import { getConsent } from '@/lib/consent';
+import { hasCategory } from '@/lib/consent';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || '';
@@ -52,17 +52,17 @@ export default function AnalyticsTracker() {
   const lastGaPage = useRef('');
 
   useEffect(() => {
-    if (!GA4_ID || getConsent() !== 'accepted') return;
+    if (!GA4_ID || !hasCategory('analytics')) return;
     loadGtag();
-    const onConsent = (event: Event) => {
-      if ((event as CustomEvent<string>).detail === 'accepted') loadGtag();
+    const onConsent = () => {
+      if (hasCategory('analytics')) loadGtag();
     };
     window.addEventListener('ae-consent-changed', onConsent);
     return () => window.removeEventListener('ae-consent-changed', onConsent);
   }, []);
 
   useEffect(() => {
-    if (!GA4_ID || getConsent() !== 'accepted') return;
+    if (!GA4_ID || !hasCategory('analytics')) return;
     if (lastGaPage.current === pathname) return;
     lastGaPage.current = pathname;
     loadGtag();

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote } from 'lucide-react';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search } from 'lucide-react';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
 const TOOLS = [
@@ -19,12 +19,17 @@ const TOOLS = [
     { label: 'Consumi reali', desc: 'Consumi veri, non da listino', href: '/consumi', icon: Fuel },
     { label: 'Valuta la condizione', desc: 'Riparare o vendere?', href: '/condizione', icon: Scale },
   ]},
+  { group: 'Strumenti extra', items: [
+    { label: 'Verifica targa', desc: 'Trova modello e valore dalla targa', href: '/verifica-targa', icon: Search },
+    { label: 'Calcolo bollo auto', desc: 'Quanto paghi di bollo nel 2026', href: '/calcolo-bollo', icon: CreditCard },
+  ]},
 ];
 
 const NAV_LINKS = [
   { label: 'Analizza auto', href: '/#scanner-section' },
   { label: 'Confronta', href: '/confronta' },
   { label: 'Guide', href: '/guide' },
+  { label: 'Chi siamo', href: '/chi-siamo' },
 ];
 
 export default function SiteHeader() {

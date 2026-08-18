@@ -140,7 +140,7 @@ export default function ValutazioneIndexPage() {
         </p>
       </main>
 
-      <SiteFooter variant="full" />
+      <SiteFooter />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }}

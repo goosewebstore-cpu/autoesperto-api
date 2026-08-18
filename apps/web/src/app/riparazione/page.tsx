@@ -141,7 +141,7 @@ export default function RiparazionePage() {
         </p>
       </main>
 
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

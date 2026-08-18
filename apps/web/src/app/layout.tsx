@@ -145,18 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="it" className={`${outfit.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
-        {process.env.NEXT_PUBLIC_ADSENSE_ENABLED === 'true' && process.env.NEXT_PUBLIC_ADSENSE_CLIENT && (
-          <>
-            <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-            <link rel="dns-prefetch" href="https://pagead2.googlesyndication.com" />
-            <Script
-              async
-              src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${process.env.NEXT_PUBLIC_ADSENSE_CLIENT}`}
-              crossOrigin="anonymous"
-              strategy="afterInteractive"
-            />
-          </>
-        )}
+        {/* AdSense script removed from <head> — loaded dynamically after marketing consent via AdSlot */}
       </head>
       <body className="min-h-screen">
         <JsonLd />

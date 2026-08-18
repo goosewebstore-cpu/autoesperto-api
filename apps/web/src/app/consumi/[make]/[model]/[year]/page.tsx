@@ -280,7 +280,7 @@ export default async function ConsumiYearPage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

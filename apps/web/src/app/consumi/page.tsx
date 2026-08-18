@@ -139,7 +139,7 @@ export default function ConsumiPage() {
         </p>
       </main>
 
-      <SiteFooter variant="full" />
+      <SiteFooter />
     </div>
   );
 }

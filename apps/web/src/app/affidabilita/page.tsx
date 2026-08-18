@@ -140,7 +140,7 @@ export default function AffidabilitaPage() {
         </p>
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

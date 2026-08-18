@@ -269,7 +269,7 @@ export default async function RepairYearPage({ params }: PageProps) {
         />
       </main>
 
-      <SiteFooter variant="compact" />
+      <SiteFooter />
     </div>
   );
 }

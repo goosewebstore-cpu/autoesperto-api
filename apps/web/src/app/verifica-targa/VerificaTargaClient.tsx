@@ -7,6 +7,7 @@ import { Search, ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, Sparkles, C
 export default function VerificaTargaClient() {
   const [targa, setTarga] = useState('');
   const [error, setError] = useState('');
+  const [isScanning, setIsScanning] = useState(false);
   const [checked, setChecked] = useState(false);
 
   // Formato targa italiana standard: 2 lettere, 3 numeri, 2 lettere (es. AB123CD)
@@ -30,7 +31,13 @@ export default function VerificaTargaClient() {
       return;
     }
     setError('');
-    setChecked(true);
+    setIsScanning(true);
+    setChecked(false);
+
+    setTimeout(() => {
+      setIsScanning(false);
+      setChecked(true);
+    }, 900);
   };
 
   return (
@@ -42,9 +49,12 @@ export default function VerificaTargaClient() {
             Inserisci la targa del veicolo (autovettura italiana)
           </label>
           
-          <div className="relative flex items-center">
+          <div className="relative flex items-center overflow-hidden rounded-xl">
+            {/* Fascio laser animato durante scansione */}
+            {isScanning && <div className="laser-line z-20 pointer-events-none" />}
+
             {/* Banda blu sinistra europea */}
-            <div className="absolute left-2.5 flex flex-col items-center justify-center w-7 h-11 bg-blue-700 text-white rounded-l-md text-[9px] font-bold select-none">
+            <div className="absolute left-2.5 flex flex-col items-center justify-center w-7 h-11 bg-blue-700 text-white rounded-l-md text-[9px] font-bold select-none z-10">
               <span className="text-yellow-300 text-[10px] leading-none mb-0.5">★</span>
               <span>I</span>
             </div>
@@ -53,6 +63,7 @@ export default function VerificaTargaClient() {
               id="targa-input"
               type="text"
               value={targa}
+              disabled={isScanning}
               onChange={(e) => {
                 setTarga(e.target.value.toUpperCase());
                 if (error) setError('');
@@ -60,11 +71,13 @@ export default function VerificaTargaClient() {
               }}
               placeholder="AA 000 BB"
               maxLength={8}
-              className="w-full h-14 pl-12 pr-12 text-center text-2xl tracking-[0.25em] font-mono font-extrabold uppercase rounded-xl border-2 border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-base focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-600/10 transition-all shadow-inner"
+              className={`w-full h-14 pl-12 pr-12 text-center text-2xl tracking-[0.25em] font-mono font-extrabold uppercase rounded-xl border-2 bg-slate-50 text-slate-900 placeholder:text-slate-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-base focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-600/10 transition-all shadow-inner ${
+                isScanning ? 'border-blue-500 bg-blue-50/40 ring-4 ring-blue-500/20' : 'border-slate-300'
+              }`}
             />
 
             {/* Banda blu destra */}
-            <div className="absolute right-2.5 flex flex-col items-center justify-center w-7 h-11 bg-blue-700 text-white rounded-r-md text-[9px] font-bold select-none">
+            <div className="absolute right-2.5 flex flex-col items-center justify-center w-7 h-11 bg-blue-700 text-white rounded-r-md text-[9px] font-bold select-none z-10">
               <span className="w-2.5 h-2.5 rounded-full border border-yellow-300/80 mb-0.5" />
               <span className="text-[8px] opacity-80">26</span>
             </div>
@@ -79,10 +92,20 @@ export default function VerificaTargaClient() {
 
           <button
             type="submit"
-            className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-bold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:shadow-xl active:scale-[0.99] transition-all"
+            disabled={isScanning}
+            className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-bold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:shadow-xl active:scale-[0.99] disabled:opacity-80 transition-all"
           >
-            <Search className="w-4 h-4" />
-            Verifica Targa Gratis
+            {isScanning ? (
+              <>
+                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                Scansione registri in corso...
+              </>
+            ) : (
+              <>
+                <Search className="w-4 h-4" />
+                Verifica Targa Gratis
+              </>
+            )}
           </button>
 
           <p className="text-center text-[11px] text-slate-500">

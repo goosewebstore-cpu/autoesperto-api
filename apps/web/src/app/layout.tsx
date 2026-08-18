@@ -6,6 +6,7 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
+import MobileStickyBar from '@/components/MobileStickyBar';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import AdsTracker from '@/components/AdsTracker';
 
@@ -151,6 +152,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd />
         <ServiceWorker />
         <CookieConsent />
+        <MobileStickyBar />
         <AnalyticsTracker />
         <AdsTracker />
         {children}

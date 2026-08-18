@@ -203,6 +203,8 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
     }
   };
 
+  const [isDragOver, setIsDragOver] = useState(false);
+
   if (stage === 'idle') {
     if (embedded) {
       return (
@@ -230,17 +232,34 @@ export default function VehicleScanner({ embedded = false, initialPayload }: { e
 
           {tab === 'foto' ? (
             <div className="scanner-photo-tab">
-              <button type="button" className="scanner-dropzone" onClick={() => inputRef.current?.click()}>
-                <span className="scanner-drop-icon"><Camera className="h-6 w-6" /></span>
-                <span className="scanner-drop-main">Analizza un&apos;auto con una foto</span>
-                <span className="scanner-drop-sub">JPG, PNG o WebP · max 5 MB l&apos;una · più foto, più precisione</span>
+              <button
+                type="button"
+                className={`scanner-dropzone ${isDragOver ? 'ring-4 ring-blue-500/20 border-blue-600 bg-blue-50/50' : ''}`}
+                onClick={() => inputRef.current?.click()}
+                onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
+                onDragLeave={() => setIsDragOver(false)}
+                onDrop={(e) => {
+                  e.preventDefault();
+                  setIsDragOver(false);
+                  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                    void handleFiles(e.dataTransfer.files);
+                  }
+                }}
+              >
+                <span className="scanner-drop-icon">
+                  <Camera className="h-6 w-6" />
+                </span>
+                <span className="scanner-drop-main">
+                  {isDragOver ? 'Rilascia le foto qui' : 'Trascina o carica le foto dell\'auto'}
+                </span>
+                <span className="scanner-drop-sub">JPG, PNG o WebP · max 5 MB l&apos;una · fino a 6 foto</span>
               </button>
               <div className="scanner-box-promises" aria-label="Cosa ricevi">
                 {promises.map((item) => (
                   <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
                 ))}
               </div>
-              <p className="scanner-box-micro">Analisi sempre gratuita e senza registrazione: nessun pagamento, nessun abbonamento. Un account gratuito permette di salvare il report.</p>
+              <p className="scanner-box-micro">Analisi gratuita al 100% e senza registrazione.</p>
             </div>
           ) : (
             <form

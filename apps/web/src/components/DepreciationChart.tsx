@@ -9,10 +9,11 @@ interface Props {
 }
 
 export default function DepreciationChart({ price, reliability }: Props) {
-  const startValue = price.estimatedValue;
-  const v1 = Math.max(0, startValue - reliability.futureCosts.depreciation1Year);
-  const v3 = Math.max(0, startValue - reliability.futureCosts.depreciation3Years);
-  const v5 = Math.max(0, startValue - reliability.futureCosts.depreciation5Years);
+  const startValue = Number(price?.estimatedValue) || 15000;
+  const fc = reliability?.futureCosts;
+  const v1 = Math.max(0, startValue - (fc?.depreciation1Year ?? Math.round(startValue * 0.12)));
+  const v3 = Math.max(0, startValue - (fc?.depreciation3Years ?? Math.round(startValue * 0.28)));
+  const v5 = Math.max(0, startValue - (fc?.depreciation5Years ?? Math.round(startValue * 0.42)));
 
   const data = [
     { label: 'Oggi', value: startValue },

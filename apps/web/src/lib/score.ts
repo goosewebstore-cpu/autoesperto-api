@@ -10,9 +10,12 @@ export interface CarScores {
 }
 
 export function computeScores(report: AutoReport): CarScores {
-  const { reliability, price } = report;
+  const reliability = report?.reliability || ({} as any);
+  const price = report?.price || ({} as any);
 
-  const reliabilityScore = Math.round(reliability.score * 10);
+  // Normalizza score affidabilità (se 0-10 moltiplica per 10, se già 0-100 usa così com'è)
+  const rawScore = Number(reliability.score) || 7.5;
+  const reliabilityScore = Math.min(100, Math.max(10, Math.round(rawScore <= 10 ? rawScore * 10 : rawScore)));
 
   let priceScore = 60;
   if (price.requestedPrice && price.estimatedValue) {
@@ -25,7 +28,7 @@ export function computeScores(report: AutoReport): CarScores {
     priceScore = 45;
   }
 
-  const maint = reliability.futureCosts.annualMaintenance;
+  const maint = reliability.futureCosts?.annualMaintenance ?? 400;
   const costScore = maint < 400 ? 85 : maint < 700 ? 65 : 45;
 
   let consumptionScore = 60;

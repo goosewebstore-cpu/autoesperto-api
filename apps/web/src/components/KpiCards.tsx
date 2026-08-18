@@ -12,15 +12,20 @@ function euro(v: number): string {
 }
 
 export default function KpiCards({ report }: Props) {
+  const rel = report?.reliability || ({} as any);
+  const pr = report?.price || ({} as any);
+  const scoreNum = Number(rel.score) || 7.5;
+  const normalizedScore = (scoreNum > 10 ? scoreNum / 10 : scoreNum).toFixed(1);
+
   const kpis = [
-    { icon: Euro, label: 'Valore stimato', value: `${euro(report.price.estimatedValue)} €`, tone: 'indigo' },
-    { icon: Gauge, label: 'Affidabilità', value: `${report.reliability.score.toFixed(1)}/10`, tone: report.reliability.verdict === 'BUY' ? 'emerald' : report.reliability.verdict === 'NEGOTIATE' ? 'amber' : 'red' },
+    { icon: Euro, label: 'Valore stimato', value: `${euro(pr.estimatedValue || 0)} €`, tone: 'indigo' },
+    { icon: Gauge, label: 'Affidabilità', value: `${normalizedScore}/10`, tone: rel.verdict === 'BUY' ? 'emerald' : rel.verdict === 'NEGOTIATE' ? 'amber' : 'red' },
     { icon: Wallet, label: 'Costo annuo', value: `${euro(annualCost(report))} €`, tone: 'slate' },
-    { icon: Fuel, label: 'Consumo comb.', value: report.reliability.consumption?.combined ? `${report.reliability.consumption.combined} km/L` : '—', tone: 'sky' },
+    { icon: Fuel, label: 'Consumo comb.', value: rel.consumption?.combined ? `${rel.consumption.combined} km/L` : '—', tone: 'sky' },
   ];
 
-  if (report.reliability.taxAnnual) {
-    kpis.push({ icon: Calendar, label: 'Bollo annuo', value: `${euro(report.reliability.taxAnnual)} €`, tone: 'violet' });
+  if (rel.taxAnnual) {
+    kpis.push({ icon: Calendar, label: 'Bollo annuo', value: `${euro(rel.taxAnnual)} €`, tone: 'violet' });
   }
 
   const toneMap: Record<string, string> = {
@@ -52,14 +57,15 @@ export default function KpiCards({ report }: Props) {
 }
 
 function annualCost(report: AutoReport): number {
-  const c = report.reliability.futureCosts;
-  let total = c.annualMaintenance + c.insuranceEstimate;
-  if (report.reliability.taxAnnual) total += report.reliability.taxAnnual;
-  if (report.reliability.consumption?.combined) {
+  const c = report?.reliability?.futureCosts;
+  let total = (c?.annualMaintenance ?? 350) + (c?.insuranceEstimate ?? 450);
+  if (report?.reliability?.taxAnnual) total += report.reliability.taxAnnual;
+  if (report?.reliability?.consumption?.combined) {
     const kmAnno = 12000;
     const litriAnno = kmAnno / report.reliability.consumption.combined;
-    total += Math.round(litriAnno * 1.85);
-  } else {
+    const prezzoBenzina = 1.85;
+    total += Math.round(litriAnno * prezzoBenzina);
+  } else if (c?.fuelCostPer100Km) {
     total += c.fuelCostPer100Km * 120;
   }
   return total;

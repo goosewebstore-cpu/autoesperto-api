@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, RotateCcw, ScanSearch, ShieldCheck, Upload } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, type FreeScanResult, type AccountUser, type AnalyzePayload } from '@/lib/api';
+import { generateInstantReport } from '@/lib/reportFallback';
 import { trackEvent } from '@/lib/analytics';
 import ReportView from '@/components/ReportView';
 
@@ -436,31 +437,40 @@ export default function VehicleScanner({
           )}
         </div>
 
-        {report ? (
-          <ReportView report={report} embedded />
-        ) : (
-          <div className="mt-5 rounded-2xl p-5 border border-border bg-surface shadow-card">
-            <h2 className="text-sm font-bold text-text-primary">Veicolo riconosciuto</h2>
-            <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
-              {[
-                ['Marca', scan.vehicle.make],
-                ['Modello', scan.vehicle.model],
-                ['Versione', scan.vehicle.generation],
-                ['Anno', scan.vehicle.year],
-                ['Colore', scan.vehicle.color],
-                ['Tipologia', scan.vehicle.bodyType],
-              ]
-                .filter((item) => item[1])
-                .map(([label, value]) => (
-                  <div key={String(label)} className="rounded-xl p-3 border border-border bg-surface-2">
-                    <span className="block text-[11px] font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
-                    <strong className="mt-1 block text-sm capitalize text-text-primary">{String(value)}</strong>
-                  </div>
-                ))}
+        {(() => {
+          const finalReport = report || (scan.vehicle.make && scan.vehicle.model ? generateInstantReport({
+            make: scan.vehicle.make,
+            model: scan.vehicle.model,
+            year: scan.vehicle.year,
+            requestedPrice,
+          }).report : null);
+
+          return finalReport ? (
+            <ReportView report={finalReport} embedded />
+          ) : (
+            <div className="mt-5 rounded-2xl p-5 border border-border bg-surface shadow-card">
+              <h2 className="text-sm font-bold text-text-primary">Veicolo riconosciuto</h2>
+              <div className="mt-4 grid grid-cols-2 gap-3 sm:grid-cols-3">
+                {[
+                  ['Marca', scan.vehicle.make],
+                  ['Modello', scan.vehicle.model],
+                  ['Versione', scan.vehicle.generation],
+                  ['Anno', scan.vehicle.year],
+                  ['Colore', scan.vehicle.color],
+                  ['Tipologia', scan.vehicle.bodyType],
+                ]
+                  .filter((item) => item[1])
+                  .map(([label, value]) => (
+                    <div key={String(label)} className="rounded-xl p-3 border border-border bg-surface-2">
+                      <span className="block text-[11px] font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
+                      <strong className="mt-1 block text-sm capitalize text-text-primary">{String(value)}</strong>
+                    </div>
+                  ))}
+              </div>
+              {error && <p className="mt-3 text-center text-xs font-semibold text-danger" role="alert">{error}</p>}
             </div>
-            {error && <p className="mt-3 text-center text-xs font-semibold text-danger" role="alert">{error}</p>}
-          </div>
-        )}
+          );
+        })()}
         {requestedPrice != null && (
           <p className="text-xs text-text-tertiary mt-4">Prezzo richiesto inserito: {requestedPrice.toLocaleString('it-IT')} €</p>
         )}

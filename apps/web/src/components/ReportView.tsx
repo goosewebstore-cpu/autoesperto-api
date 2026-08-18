@@ -53,9 +53,26 @@ interface ReportViewProps {
 }
 
 export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true }: ReportViewProps) {
-  const { vehicle, reliability, price } = report;
+  const vehicle = report?.vehicle || ({} as any);
+  const reliability = report?.reliability || ({} as any);
+  const price = report?.price || ({} as any);
 
-  const verdict = getVerdictConfig(reliability.verdict);
+  const strengths = reliability.strengths || (reliability as any).pros || [
+    'Costi di gestione e manutenzione contenuti',
+    'Buona reperibilità di ricambi',
+    'Facile da rivendere sul mercato',
+  ];
+  const weaknesses = reliability.weaknesses || (reliability as any).cons || [
+    'Verificare lo stato della cinghia o catena',
+    'Controllare usura freni e sospensioni',
+  ];
+  const advice = reliability.advice || (reliability as any).checkBeforeBuying || [
+    'Controlla libretto tagliandi e cronologia',
+    'Fai una prova su strada a freddo',
+    'Verifica conformità chilometraggio',
+  ];
+
+  const verdict = getVerdictConfig(reliability.verdict || 'BUY');
   const VerdictIcon = verdict.icon;
   const priceLabelCfg = getPriceLabelConfig(price.priceLabel);
   const isModelData = vehicle.dataSource === 'model';
@@ -66,8 +83,9 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
   ].filter(Boolean);
   const comparisonLabel = comparisonParts.length ? comparisonParts.join(' · ') : 'modello e caratteristiche disponibili';
   const comparisonIsExact = marketComparison && marketComparison.yearMatched && marketComparison.kmMatched;
-  const communityQuery = encodeURIComponent(`${vehicle.make} ${vehicle.model}`);
-  const communityHighlights = (reliability.commonIssues?.length ? reliability.commonIssues : reliability.weaknesses).slice(0, 3);
+  const communityQuery = encodeURIComponent(`${vehicle.make || ''} ${vehicle.model || ''}`);
+  const rawIssues = reliability.commonIssues?.length ? reliability.commonIssues : weaknesses;
+  const communityHighlights = (rawIssues || []).slice(0, 3);
   const communityUrl = `https://www.reddit.com/search/?q=${communityQuery}&type=link&sort=relevance&t=all`;
   const communityLinks = [
     { label: 'Discussioni proprietari', detail: 'Reddit', href: communityUrl, icon: MessageCircle },
@@ -90,7 +108,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
   ].filter((s) => s.value);
 
   return (
-    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-5 pb-20 animate-fade-in`}>
+    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-5 pb-20 animate-fade-in text-slate-900`}>
       {onBack && (
         <button
           onClick={onBack}
@@ -278,7 +296,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               Punti di forza
             </h3>
             <ul className="space-y-2.5">
-              {reliability.strengths.map((s, i) => (
+              {strengths.map((s: string, i: number) => (
                 <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary leading-relaxed">
                   <span className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 flex-shrink-0" />
                   {s}
@@ -292,7 +310,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               Possibili criticità
             </h3>
             <ul className="space-y-2.5">
-              {reliability.weaknesses.map((w, i) => (
+              {weaknesses.map((w: string, i: number) => (
                 <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary leading-relaxed">
                   <span className="w-1.5 h-1.5 rounded-full bg-danger mt-1.5 flex-shrink-0" />
                   {w}
@@ -308,7 +326,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             Consigli prima dell&apos;acquisto
           </h3>
           <ul className="space-y-2">
-            {reliability.advice.map((a, i) => (
+            {advice.map((a: string, i: number) => (
               <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
                 <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
                 {a}

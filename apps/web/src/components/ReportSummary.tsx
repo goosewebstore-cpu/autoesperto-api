@@ -20,16 +20,22 @@ function getCostLabel(annualMaintenance: number) {
 
 export default function ReportSummary({ report }: { report: AutoReport }) {
   const [showWhy, setShowWhy] = useState(false);
-  const { vehicle, reliability, price } = report;
-  const v = getVerdictDisplay(reliability.verdict);
+  const vehicle = report?.vehicle || ({} as any);
+  const reliability = report?.reliability || ({} as any);
+  const price = report?.price || ({} as any);
+  const v = getVerdictDisplay(reliability.verdict || 'BUY');
   const VIcon = v.icon;
-  const costLabel = getCostLabel(reliability.futureCosts.annualMaintenance);
+  const costLabel = getCostLabel(reliability.futureCosts?.annualMaintenance ?? 350);
 
   // Build 3-4 key reasons
   const reasons: string[] = [];
-  if (reliability.strengths.length > 0) reasons.push(reliability.strengths[0]);
-  if (reliability.weaknesses.length > 0) reasons.push('Attenzione: ' + reliability.weaknesses[0]);
-  if (reliability.advice.length > 0) reasons.push(reliability.advice[0]);
+  const strengths = reliability.strengths || (reliability as any).pros || [];
+  const weaknesses = reliability.weaknesses || (reliability as any).cons || [];
+  const advice = reliability.advice || (reliability as any).checkBeforeBuying || [];
+
+  if (strengths.length > 0) reasons.push(strengths[0]);
+  if (weaknesses.length > 0) reasons.push('Attenzione: ' + weaknesses[0]);
+  if (advice.length > 0) reasons.push(advice[0]);
   if (price.priceLabel === 'GOOD') reasons.push('Il prezzo è nella fascia bassa del mercato.');
   if (price.priceLabel === 'HIGH') reasons.push('Il prezzo è sopra la media di mercato.');
 
@@ -59,7 +65,7 @@ export default function ReportSummary({ report }: { report: AutoReport }) {
         <div className="p-4 text-center">
           <span className="block text-[11px] font-bold uppercase tracking-wider text-text-tertiary">Affidabilità</span>
           <span className="block mt-1 text-lg font-extrabold text-text-primary number-mono">
-            {reliability.score.toFixed(1)}<span className="text-sm text-text-tertiary">/10</span>
+            {(Number(reliability.score) > 10 ? (Number(reliability.score) / 10) : (Number(reliability.score) || 7.5)).toFixed(1)}<span className="text-sm text-text-tertiary">/10</span>
           </span>
         </div>
         <div className="p-4 text-center">

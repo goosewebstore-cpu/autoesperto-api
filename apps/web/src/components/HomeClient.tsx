@@ -206,9 +206,10 @@ export default function HomeClient({ stats }: HomeClientProps) {
 
       <SiteHeader />
 
-      <main>
-        {/* ─── HERO ─── */}
-        <section className="ae-hero" aria-label="AutoEsperto — analizza un'auto usata">
+      <main className={isShowingResult ? 'py-6 px-4 max-w-5xl mx-auto' : ''}>
+        {/* ─── HERO (nascosta durante la visualizzazione del report) ─── */}
+        {!isShowingResult && (
+          <section className="ae-hero" aria-label="AutoEsperto — analizza un'auto usata">
           <div className="ae-wrap ae-hero-grid">
             <div className="ae-hero-copy">
               <span className="ae-hero-kicker">
@@ -294,9 +295,10 @@ export default function HomeClient({ stats }: HomeClientProps) {
             </div>
           </div>
         </section>
+        )}
 
         {/* ─── ANALIZZA AUTO ─── */}
-        <section className={`ae-scan ${isShowingResult ? 'pt-2' : ''}`} id="scanner-section" aria-label="Analizza un'auto">
+        <section className={`ae-scan ${isShowingResult ? 'p-0 my-0' : ''}`} id="scanner-section" aria-label="Analizza un'auto">
           <div className={`ae-scan-card ${isShowingResult ? 'p-0 sm:p-0 max-w-5xl bg-transparent border-0 shadow-none' : ''}`}>
             {!isShowingResult && (
               <div className="ae-scan-head">
@@ -319,8 +321,10 @@ export default function HomeClient({ stats }: HomeClientProps) {
           </div>
         </section>
 
-        {/* ─── ESEMPIO REALE DEL RISULTATO ─── */}
-        <section className="ae-section alt" id="esempio" aria-label="Ecco cosa ottieni">
+        {!isShowingResult && (
+          <>
+            {/* ─── ESEMPIO REALE DEL RISULTATO ─── */}
+            <section className="ae-section alt" id="esempio" aria-label="Ecco cosa ottieni">
           <div className="ae-wrap">
             <div className="ae-section-head center reveal">
               <h2>Ecco cosa ottieni</h2>
@@ -628,6 +632,8 @@ export default function HomeClient({ stats }: HomeClientProps) {
             </div>
           </div>
         </section>
+        </>
+        )}
       </main>
     </div>
   );

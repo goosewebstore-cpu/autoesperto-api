@@ -123,12 +123,7 @@ export default function VehicleScanner({
     setStage('result');
     trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
     trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-    setTimeout(() => {
-      const el = document.getElementById('scanner-section');
-      if (el) {
-        el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-    }, 100);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
     return true;
   };
 
@@ -207,12 +202,7 @@ export default function VehicleScanner({
       setStage('result');
       trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
       trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-      setTimeout(() => {
-        const el = document.getElementById('scanner-section');
-        if (el) {
-          el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-      }, 100);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
       if (msg.includes('impiegando troppo tempo')) {

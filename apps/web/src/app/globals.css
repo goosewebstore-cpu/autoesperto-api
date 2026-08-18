@@ -537,17 +537,6 @@ body {
 }
 
 .scanner-tabs {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0.3rem;
-  padding: 0.3rem;
-  background: #ffffff;
-  border-radius: var(--radius-sm);
-}
-.scanner-tab {
-  display: flex;
-  align-items: center;
-.scanner-tabs {
   display: flex;
   padding: 0.35rem;
   background: var(--bg-soft);

@@ -188,6 +188,10 @@ export default function HomeClient({ stats }: HomeClientProps) {
   const [scannerStage, setScannerStage] = useState<string>('idle');
   const revealRef = useScrollReveal();
 
+  const handleStageChange = useCallback((st: string) => {
+    setScannerStage(st);
+  }, []);
+
   const handlePrefill = (payload: AnalyzePayload) => {
     setInitialPayload(payload);
   };
@@ -309,7 +313,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
             <VehicleScanner
               embedded
               initialPayload={initialPayload ?? undefined}
-              onStageChange={(st) => setScannerStage(st)}
+              onStageChange={handleStageChange}
             />
             {!isShowingResult && (
               <ul className="ae-scan-trust">

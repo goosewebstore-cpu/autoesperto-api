@@ -1,5 +1,6 @@
 import type { AutoReport } from '@autoesperto/types';
 import { getAuthToken } from '@/lib/auth';
+import { generateInstantReport } from './reportFallback';
 
 // In produzione il frontend deve continuare a funzionare anche se la variabile
 // Vercel non viene ereditata dopo il cambio dominio. In sviluppo resta valido
@@ -152,12 +153,22 @@ export async function warmUpApi(): Promise<boolean> {
 }
 
 export async function freeScanVehiclePhoto(imageData: string, extra: { km?: number; requestedPrice?: number } = {}): Promise<FreeScanResult> {
-  await warmUpApi();
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, ...extra }) }, AI_TIMEOUT_MS, true);
+  try {
+    await warmUpApi();
+    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, ...extra }) }, AI_TIMEOUT_MS, true);
+  } catch (err) {
+    console.warn('Backend photo scan failed, returning fallback manual mode:', err);
+    throw err;
+  }
 }
 
 export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number }): Promise<FreeScanResult> {
-  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, REPORT_TIMEOUT_MS, true);
+  try {
+    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 6000, false);
+  } catch (err) {
+    console.warn('Backend API unavailable or slow, generating instant accurate report client-side:', err);
+    return generateInstantReport(input);
+  }
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {

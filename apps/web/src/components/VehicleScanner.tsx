@@ -121,7 +121,9 @@ export default function VehicleScanner({
     setStage('result');
     trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
     trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setTimeout(() => {
+      document.getElementById('scanner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 100);
     return true;
   };
 
@@ -198,7 +200,9 @@ export default function VehicleScanner({
       setStage('result');
       trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
       trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setTimeout(() => {
+        document.getElementById('scanner-section')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 100);
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
       if (msg.includes('impiegando troppo tempo') || msg.includes('500') || msg.includes('servizio')) {

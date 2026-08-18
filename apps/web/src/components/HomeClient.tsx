@@ -210,10 +210,9 @@ export default function HomeClient({ stats }: HomeClientProps) {
 
       <SiteHeader />
 
-      <main className={isShowingResult ? 'py-6 px-4 max-w-5xl mx-auto' : ''}>
-        {/* ─── HERO (nascosta durante la visualizzazione del report) ─── */}
-        {!isShowingResult && (
-          <section className="ae-hero" aria-label="AutoEsperto — analizza un'auto usata">
+      <main>
+        {/* ─── HERO ─── */}
+        <section className="ae-hero" aria-label="AutoEsperto — analizza un'auto usata">
           <div className="ae-wrap ae-hero-grid">
             <div className="ae-hero-copy">
               <span className="ae-hero-kicker">
@@ -299,12 +298,11 @@ export default function HomeClient({ stats }: HomeClientProps) {
             </div>
           </div>
         </section>
-        )}
 
         {/* ─── ANALIZZA AUTO ─── */}
-        <section className={`ae-scan ${isShowingResult ? 'p-0 my-0' : ''}`} id="scanner-section" aria-label="Analizza un'auto">
-          <div className={`ae-scan-card ${isShowingResult ? 'p-0 sm:p-0 max-w-5xl bg-transparent border-0 shadow-none' : ''}`}>
-            {!isShowingResult && (
+        <section className="ae-scan" id="scanner-section" aria-label="Analizza un'auto">
+          <div className="ae-scan-card max-w-5xl mx-auto">
+            {scannerStage === 'idle' && (
               <div className="ae-scan-head">
                 <h2>Che auto vuoi controllare?</h2>
                 <p>Carica una foto oppure inserisci marca e modello. Nessun modulo lungo.</p>
@@ -315,7 +313,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
               initialPayload={initialPayload ?? undefined}
               onStageChange={handleStageChange}
             />
-            {!isShowingResult && (
+            {scannerStage === 'idle' && (
               <ul className="ae-scan-trust">
                 <li><Check /> Gratis · senza registrazione</li>
                 <li><Check /> Più foto, più precisione</li>
@@ -325,10 +323,8 @@ export default function HomeClient({ stats }: HomeClientProps) {
           </div>
         </section>
 
-        {!isShowingResult && (
-          <>
-            {/* ─── ESEMPIO REALE DEL RISULTATO ─── */}
-            <section className="ae-section alt" id="esempio" aria-label="Ecco cosa ottieni">
+        {/* ─── ESEMPIO REALE DEL RISULTATO ─── */}
+        <section className="ae-section alt" id="esempio" aria-label="Ecco cosa ottieni">
           <div className="ae-wrap">
             <div className="ae-section-head center reveal">
               <h2>Ecco cosa ottieni</h2>
@@ -636,8 +632,6 @@ export default function HomeClient({ stats }: HomeClientProps) {
             </div>
           </div>
         </section>
-        </>
-        )}
       </main>
     </div>
   );

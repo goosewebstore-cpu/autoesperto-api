@@ -27,5 +27,11 @@
     "@prisma/client@5.22.0": true,
     "@prisma/engines@5.22.0": true,
     "sharp@0.34.5": true
+  },
+  "devDependencies": {
+    "@cloudflare/next-on-pages": "^1.13.16"
+  },
+  "dependencies": {
+    "react-is": "^19.2.8"
   }
 }

@@ -302,7 +302,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
 
         {/* ─── ANALIZZA AUTO ─── */}
         <section className="ae-scan" id="scanner-section" aria-label="Analizza un'auto">
-          <div className="ae-scan-card max-w-5xl mx-auto">
+          <div className={scannerStage === 'result' ? 'ae-scan-result-wrapper px-3 sm:px-4' : 'ae-scan-card max-w-5xl mx-auto'}>
             {scannerStage === 'idle' && (
               <div className="ae-scan-head">
                 <h2>Che auto vuoi controllare?</h2>

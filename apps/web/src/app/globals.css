@@ -665,44 +665,48 @@ body {
 }
 .scanner-result-hero {
   position: relative;
-  min-height: 140px;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  min-height: 160px;
+  background: linear-gradient(135deg, #0b1329 0%, #1e293b 100%);
   border-radius: 20px;
-  padding: 1.5rem 1.75rem;
+  padding: 1.75rem 2rem;
   color: #ffffff;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.2);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
   margin-bottom: 1.25rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 .scanner-result-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(15, 23, 42, 0.3) 0%, rgba(15, 23, 42, 0.9) 100%);
+  background: linear-gradient(180deg, rgba(11, 19, 41, 0.4) 0%, rgba(11, 19, 41, 0.92) 100%);
 }
 .scanner-reset {
   position: absolute;
-  top: 1rem;
-  right: 1rem;
+  top: 1.1rem;
+  right: 1.1rem;
   z-index: 10;
   display: inline-flex;
   align-items: center;
-  gap: 0.4rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-blur-md: 6px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  gap: 0.45rem;
+  background: rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
   color: #ffffff;
-  padding: 0.45rem 0.85rem;
-  border-radius: 12px;
-  font-size: 0.75rem;
+  padding: 0.5rem 0.95rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 .scanner-reset:hover {
-  background: rgba(255, 255, 255, 0.25);
+  background: rgba(255, 255, 255, 0.3);
+  transform: translateY(-1px);
+  color: #ffffff;
 }
 .scanner-result-title {
   position: relative;
@@ -710,33 +714,35 @@ body {
 }
 .scanner-result-title span {
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: #60a5fa;
 }
 .scanner-result-title h1 {
-  font-size: 1.6rem;
+  font-family: var(--font-outfit), 'Outfit', sans-serif;
+  font-size: clamp(1.6rem, 3.5vw, 2.4rem);
   font-weight: 800;
-  margin: 0.2rem 0;
+  margin: 0.25rem 0 0.15rem;
   color: #ffffff;
   letter-spacing: -0.02em;
+  line-height: 1.15;
 }
 .scanner-result-title p {
-  font-size: 0.8rem;
-  color: #94a3b8;
+  font-size: 0.85rem;
+  color: #cbd5e1;
   margin: 0;
 }
 .scanner-result-banner {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.75rem 1rem;
+  padding: 0.85rem 1.15rem;
   background: #f0fdf4;
   border: 1px solid #bbf7d0;
   border-radius: 14px;
   color: #166534;
-  font-size: 0.8rem;
+  font-size: 0.82rem;
   font-weight: 600;
   margin-bottom: 1.25rem;
 }
@@ -748,6 +754,7 @@ body {
   border: none;
   cursor: pointer;
   padding: 0;
+  font-family: inherit;
 }
 
 .scanner-manual-form { padding: 1.1rem 0.9rem 0.9rem; }
@@ -1385,65 +1392,8 @@ body {
 .scanner-manual-side { text-align: left; }
 .scanner-manual { display: grid; place-items: center; padding: 1.5rem 1rem; }
 
-/* -------------------------------- */
+/* ─── Scanner Locked Preview & Legacy Intro ─── */
 
-.scanner-result { max-width: 1140px; margin: 0 auto; padding: 1.25rem 1.25rem 2rem; }
-.scanner-result-hero {
-  position: relative;
-  min-height: 300px;
-  border-radius: var(--radius-xl);
-  overflow: hidden;
-  background: var(--bg);
-}
-.scanner-result-shade { position: absolute; inset: 0; background: #e2e8f0; }
-.scanner-reset {
-  position: absolute;
-  top: 1.1rem;
-  left: 1.1rem;
-  z-index: 3;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.55rem 0.9rem;
-  border: 1px solid #ffffff;
-  border-radius: 999px;
-  background: #ffffff;
-  color: #fff;
-  font-size: 0.78rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.2s, border-color 0.2s;
-}
-.scanner-reset:hover { background: #e2e8f0; border-color: #ffffff; }
-.scanner-result-title { position: absolute; left: 1.5rem; right: 1.5rem; bottom: 1.4rem; z-index: 2; color: #fff; }
-.scanner-result-title span { font-size: 0.7rem; font-weight: 800; letter-spacing: 0.12em; text-transform: uppercase; color: var(--brand); }
-.scanner-result-title h1 {
-  font-family: var(--font-outfit), 'Outfit', sans-serif;
-  margin-top: 0.3rem;
-  font-size: clamp(1.8rem, 4vw, 2.8rem);
-  font-weight: 800;
-  letter-spacing: -0.03em;
-  line-height: 1.05;
-}
-.scanner-result-title p { margin-top: 0.35rem; font-size: 0.85rem; color: var(--text-2); }
-.scanner-result-banner {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  max-width: 900px;
-  margin: 1.25rem auto 0;
-  padding: 0.85rem 1.1rem;
-  border: 1px solid #2563eb;
-  background: var(--brand-light);
-  border-radius: var(--radius);
-  color: var(--brand);
-  font-size: 0.85rem;
-  font-weight: 650;
-  text-align: center;
-}
-.scanner-result-banner svg { flex-shrink: 0; }
-.scanner-result-banner-link { background: none; border: 0; padding: 0; color: var(--brand); font-weight: 800; text-decoration: underline; cursor: pointer; font-family: inherit; }
 
 .scanner-locked-report { position: relative; overflow: hidden; padding-bottom: 1.5rem; }
 .scanner-locked-preview { position: relative; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 0.75rem; margin-top: 1.5rem; padding: 0.25rem; filter: blur(3px); user-select: none; opacity: 0.72; }
@@ -1696,11 +1646,22 @@ body {
 
 /* -------------------------------- */
 
-.ae-scan { padding: 0 0 3rem; }
+.ae-scan {
+  padding: 0 0 3rem;
+  scroll-margin-top: 5.5rem;
+}
 .ae-scan-card {
-  max-width: 800px; margin: 0 auto; padding: 1.8rem 1.5rem;
-  background: #ffffff; border: 1px solid var(--border); border-radius: var(--radius-xl);
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 1.8rem 1.5rem;
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
   box-shadow: var(--shadow-md);
+}
+.ae-scan-result-wrapper {
+  max-width: 1000px;
+  margin: 0 auto;
 }
 .ae-scan-head { text-align: center; margin-bottom: 1.4rem; }
 .ae-scan-head h2 { font-family: var(--font-outfit), 'Outfit', sans-serif; font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; margin: 0; color: var(--text); }

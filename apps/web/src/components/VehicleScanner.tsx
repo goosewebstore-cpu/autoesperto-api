@@ -14,15 +14,6 @@ type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error
 
 const promises = ['Marca e modello', 'Anno indicativo', 'Valore stimato', 'Prezzo di mercato', 'Affidabilità e controlli', 'Salvataggio account (opz.)'];
 
-const SCAN_PHASES = [
-  'Foto ricevute',
-  'Identificazione del veicolo',
-  'Analisi del modello',
-  'Valutazione del mercato',
-  'Controllo affidabilità',
-  'Preparazione del report',
-];
-
 const MAX_PHOTOS = 6;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
 
@@ -66,15 +57,6 @@ export default function VehicleScanner({
   const [manualPrice, setManualPrice] = useState('');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
-  const [scanPhase, setScanPhase] = useState(0);
-
-  const analyzing = stage === 'recognition' || stage === 'vehicle-found' || stage === 'manual-input';
-
-  useEffect(() => {
-    if (!analyzing) return;
-    const timers = SCAN_PHASES.map((_, i) => setTimeout(() => setScanPhase(i + 1), 700 * (i + 1)));
-    return () => timers.forEach(clearTimeout);
-  }, [analyzing]);
 
   useEffect(() => {
     fetch(`${API_URL}/health`).catch(() => {});
@@ -110,7 +92,6 @@ export default function VehicleScanner({
     setPhotos([]); setMainPhoto(''); setScan(null); setReport(null); setError(''); setStage('idle');
     setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
     setManualKm(''); setManualPrice('');
-    setScanPhase(0);
     if (inputRef.current) inputRef.current.value = '';
   };
 
@@ -245,7 +226,19 @@ export default function VehicleScanner({
             </button>
           </div>
 
-          {tab === 'foto' ? (
+          {manualLoading ? (
+            <div className="py-10 px-4 text-center">
+              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 mb-3 shadow-sm">
+                <Loader2 className="h-7 w-7 animate-spin" />
+              </div>
+              <h3 className="text-base font-bold text-text-primary mb-1">
+                Analisi in corso…
+              </h3>
+              <p className="text-xs text-text-secondary max-w-sm mx-auto">
+                Stiamo elaborando quotazioni di mercato e affidabilità del modello.
+              </p>
+            </div>
+          ) : tab === 'foto' ? (
             <div className="scanner-photo-tab">
               <button
                 type="button"
@@ -269,6 +262,7 @@ export default function VehicleScanner({
                 </span>
                 <span className="scanner-drop-sub">JPG, PNG o WebP · max 5 MB l&apos;una · fino a 6 foto</span>
               </button>
+              {error && <p className="scanner-box-error mt-3" role="alert">{error}</p>}
               <div className="scanner-box-promises" aria-label="Cosa ricevi">
                 {promises.map((item) => (
                   <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
@@ -406,16 +400,22 @@ export default function VehicleScanner({
       <section className="scanner-result">
         <div className="scanner-result-hero">
           {mainPhoto && (
-            <div className="relative w-full h-full">
-              {/* eslint-disable-next-line @next/next/no-img-element */}<img src={mainPhoto} alt={`Foto analizzata: ${vehicleName}`} className="w-full h-full object-cover" />
+            <div className="absolute inset-0 z-0">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={mainPhoto} alt={`Foto analizzata: ${vehicleName}`} className="w-full h-full object-cover" />
               <div className="scanner-result-shade" />
             </div>
           )}
-          <button type="button" onClick={reset} className="scanner-reset"><RotateCcw className="h-4 w-4" /> Nuova analisi</button>
+          <button type="button" onClick={reset} className="scanner-reset">
+            <RotateCcw className="h-3.5 w-3.5" /> Nuova analisi
+          </button>
           <div className="scanner-result-title">
-            <span>Analisi completa gratuita</span>
+            <span>Analisi completata con successo</span>
             <h1>{vehicleName}</h1>
-            <p>Riconoscimento verificato{photos.length > 1 ? ` · ${photos.length} foto analizzate` : ''}</p>
+            <p>
+              {vehicleObj.year ? `Modello ${vehicleObj.year}` : 'Rapporto di mercato e affidabilità generato'}
+              {photos.length > 1 ? ` · ${photos.length} foto analizzate` : ''}
+            </p>
           </div>
         </div>
 

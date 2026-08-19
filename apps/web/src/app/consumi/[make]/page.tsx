@@ -22,7 +22,7 @@ export const dynamicParams = true;
 export const revalidate = 86400;
 
 export function generateStaticParams() {
-  return [];
+  return getAllMakes().map((make) => ({ make: make.slug }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -666,7 +666,7 @@ body {
 .scanner-result-hero {
   position: relative;
   min-height: 160px;
-  background: linear-gradient(135deg, #0b1329 0%, #1e293b 100%);
+  background: linear-gradient(135deg, #064e3b 0%, #065f46 45%, #0f172a 100%);
   border-radius: 20px;
   padding: 1.75rem 2rem;
   color: #ffffff;
@@ -674,14 +674,14 @@ body {
   flex-direction: column;
   justify-content: flex-end;
   overflow: hidden;
-  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.25);
+  box-shadow: 0 12px 30px -6px rgba(6, 78, 59, 0.32), 0 4px 12px -2px rgba(15, 23, 42, 0.15);
   margin-bottom: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(52, 211, 153, 0.28);
 }
 .scanner-result-shade {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(11, 19, 41, 0.4) 0%, rgba(11, 19, 41, 0.92) 100%);
+  background: linear-gradient(180deg, rgba(6, 78, 59, 0.35) 0%, rgba(15, 23, 42, 0.94) 100%);
 }
 .scanner-reset {
   position: absolute;
@@ -691,10 +691,10 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 0.45rem;
-  background: rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.16);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   color: #ffffff;
   padding: 0.5rem 0.95rem;
   border-radius: 999px;
@@ -704,7 +704,8 @@ body {
   transition: all 0.2s ease;
 }
 .scanner-reset:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: rgba(52, 211, 153, 0.28);
+  border-color: rgba(52, 211, 153, 0.5);
   transform: translateY(-1px);
   color: #ffffff;
 }
@@ -713,11 +714,14 @@ body {
   z-index: 5;
 }
 .scanner-result-title span {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-size: 0.72rem;
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: #60a5fa;
+  color: #34d399;
 }
 .scanner-result-title h1 {
   font-family: var(--font-outfit), 'Outfit', sans-serif;
@@ -730,7 +734,7 @@ body {
 }
 .scanner-result-title p {
   font-size: 0.85rem;
-  color: #cbd5e1;
+  color: #e2e8f0;
   margin: 0;
 }
 .scanner-result-banner {

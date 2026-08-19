@@ -17,6 +17,7 @@ import {
   Search,
 } from 'lucide-react';
 import ReportView from '@/components/ReportView';
+import ReportErrorBoundary from '@/components/ReportErrorBoundary';
 import AnalyticsDashboard from '@/components/AnalyticsDashboard';
 import { type AccountUser, type StoredAnalysis, getMyAccount, getMyAnalysis, resendVerification } from '@/lib/api';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
@@ -193,7 +194,7 @@ export default function AccountDashboard() {
                     <article className="rounded-2xl border border-slate-200 bg-white p-5"><p className="text-xs font-extrabold uppercase tracking-wide text-slate-500">Riparazione indicativa</p><p className="mt-3 text-lg font-extrabold text-slate-950">{activeAnalysis.photoAnalysis.repairRange ? `${euro(activeAnalysis.photoAnalysis.repairRange.min)} – ${euro(activeAnalysis.photoAnalysis.repairRange.max)}` : 'Nessun costo stimato'}</p><p className="mt-1 text-sm text-slate-600">Solo elementi esterni chiaramente visibili.</p></article>
                   </section>
 
-                  <div className="mt-8"><ReportView report={activeAnalysis.report} embedded showAds={false} allowPhotoTools={false} /></div>
+                  <div className="mt-8"><ReportErrorBoundary><ReportView report={activeAnalysis.report} embedded showAds={false} allowPhotoTools={false} /></ReportErrorBoundary></div>
                 </div>
               )}
             </>

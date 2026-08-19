@@ -4,7 +4,7 @@ import { CheckCircle2, AlertTriangle, XCircle, Euro, Gauge, Wallet, ChevronDown 
 import type { AutoReport } from '@autoesperto/types';
 import { useState } from 'react';
 
-function euro(v: number) { return v.toLocaleString('it-IT') + ' €'; }
+function euro(v: number | undefined | null) { return (v ?? 0).toLocaleString('it-IT') + ' €'; }
 
 function getVerdictDisplay(verdict: string) {
   if (verdict === 'BUY') return { icon: CheckCircle2, label: 'Buon affare', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500' };

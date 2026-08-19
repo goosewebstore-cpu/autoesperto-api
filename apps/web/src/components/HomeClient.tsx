@@ -22,6 +22,7 @@ import {
   Wrench,
 } from 'lucide-react';
 import VehicleScanner from '@/components/VehicleScanner';
+import ReportErrorBoundary from '@/components/ReportErrorBoundary';
 import BuyChecklist from '@/components/BuyChecklist';
 import SiteHeader from '@/components/SiteHeader';
 import { trackEvent } from '@/lib/analytics';
@@ -308,11 +309,13 @@ export default function HomeClient({ stats }: HomeClientProps) {
                 <p>Carica una foto oppure inserisci marca e modello. Nessun modulo lungo.</p>
               </div>
             )}
-            <VehicleScanner
-              embedded
-              initialPayload={initialPayload ?? undefined}
-              onStageChange={handleStageChange}
-            />
+            <ReportErrorBoundary onRetry={() => window.location.reload()}>
+              <VehicleScanner
+                embedded
+                initialPayload={initialPayload ?? undefined}
+                onStageChange={handleStageChange}
+              />
+            </ReportErrorBoundary>
             {scannerStage === 'idle' && (
               <ul className="ae-scan-trust">
                 <li><Check /> Gratis · senza registrazione</li>

@@ -13,12 +13,12 @@ interface SubScore {
   tone: Tone;
 }
 
-function formatPrice(n: number) {
-  return Math.round(n).toLocaleString('it-IT') + ' €';
+function formatPrice(n: number | undefined | null) {
+  return Math.round(n ?? 0).toLocaleString('it-IT') + ' €';
 }
 
-function roundTo100(n: number) {
-  return Math.round(n / 100) * 100;
+function roundTo100(n: number | undefined | null) {
+  return Math.round((n ?? 0) / 100) * 100;
 }
 
 function toneOf(value: number): Tone {
@@ -28,7 +28,7 @@ function toneOf(value: number): Tone {
 }
 
 function verdictFor(report: AutoReport, priceScore: number): { label: string; tone: Tone; note: string } {
-  const { reliability } = report;
+  const reliability = report.reliability || ({} as any);
   if (reliability.verdict === 'AVOID') {
     return { label: 'EVITALA', tone: 'bad', note: 'Rischi o costi troppo elevati: valuta alternative prima di procedere.' };
   }
@@ -66,7 +66,9 @@ function Bar({ value, tone }: { value: number; tone: Tone }) {
 }
 
 export default function ReportScoreHero({ report, isModelData = false }: { report: AutoReport; isModelData?: boolean }) {
-  const { vehicle, reliability, price } = report;
+  const vehicle = report.vehicle || ({} as any);
+  const reliability = report.reliability || ({} as any);
+  const price = report.price || ({} as any);
   const scores = computeScores(report);
   const verdict = verdictFor(report, scores.priceScore);
   const VIcon = TONE_UI[verdict.tone].icon;
@@ -79,10 +81,10 @@ export default function ReportScoreHero({ report, isModelData = false }: { repor
     { label: 'Rischio', value: scores.riskScore, tone: toneOf(scores.riskScore) },
   ];
 
-  const marketRef = price.market?.priceAvg ?? price.estimatedValue;
+  const marketRef = (price.market?.priceAvg ?? price.estimatedValue) || 0;
   const requested = price.requestedPrice;
-  const min = price.min;
-  const max = price.max;
+  const min = price.min || 0;
+  const max = price.max || 0;
   const barPos = requested != null && max > min
     ? Math.max(2, Math.min(98, ((requested - min) / (max - min)) * 100))
     : 50;
@@ -94,7 +96,7 @@ export default function ReportScoreHero({ report, isModelData = false }: { repor
     ? Math.round(requested - marketRef)
     : null;
 
-  const checklist = (reliability.advice.length ? reliability.advice : reliability.commonIssues).slice(0, 4);
+  const checklist = ((reliability.advice?.length ? reliability.advice : reliability.commonIssues) || []).slice(0, 4);
 
   return (
     <section className="ae-score-hero" aria-label={`Verdetto AutoEsperto: ${verdict.label}`}>

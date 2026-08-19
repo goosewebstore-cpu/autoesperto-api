@@ -15,12 +15,12 @@ import KpiCards from '@/components/KpiCards';
 import { ShareButton } from '@/components/ShareButton';
 import { SellAdGenerator } from '@/components/SellAdGenerator';
 
-function formatPrice(n: number) {
-  return n.toLocaleString('it-IT') + ' €';
+function formatPrice(n: number | undefined | null) {
+  return (n ?? 0).toLocaleString('it-IT') + ' €';
 }
 
-function formatKm(n: number) {
-  return n.toLocaleString('it-IT') + ' km';
+function formatKm(n: number | undefined | null) {
+  return (n ?? 0).toLocaleString('it-IT') + ' km';
 }
 
 function getVerdictConfig(verdict: string) {
@@ -108,7 +108,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
   ].filter((s) => s.value);
 
   return (
-    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-5 pb-20 animate-fade-in text-slate-900`}>
+    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-5 pb-20 text-slate-900`}>
       {onBack && (
         <button
           onClick={onBack}
@@ -435,7 +435,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             <p className="text-sm text-text-secondary leading-relaxed">{reliability.transmission}</p>
           </div>
         </div>
-        {reliability.commonIssues.length > 0 && (
+        {(reliability.commonIssues?.length ?? 0) > 0 && (
           <div>
             <h3 className="font-semibold text-text-primary mb-2.5 text-sm flex items-center gap-2">
               <AlertTriangle className="w-4 h-4 text-warning" />
@@ -573,7 +573,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
                 <ExternalLink className="w-3 h-3" />
               </a>
               <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs">
-                {price.marketUrls.filter((link) => link.source !== 'Subito.it').map((link) => (
+                {(price.marketUrls || []).filter((link) => link.source !== 'Subito.it').map((link) => (
                   <a key={link.source} href={link.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
                     Cerca su {link.source}
                   </a>
@@ -606,31 +606,41 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
       </section>
 
       {/* Costs */}
+      {reliability.futureCosts && (
       <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
         <h2 className="text-base font-bold text-text-primary mb-4">Costi stimati</h2>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
+          {reliability.futureCosts.annualMaintenance != null && (
           <div className="bg-surface-2 rounded-xl p-4">
             <div className="text-[11px] font-medium text-text-secondary mb-0.5">Manutenzione / anno</div>
             <div className="text-lg font-bold text-text-primary number-mono">{formatPrice(reliability.futureCosts.annualMaintenance)}</div>
           </div>
+          )}
+          {reliability.futureCosts.fuelCostPer100Km != null && (
           <div className="bg-surface-2 rounded-xl p-4">
             <div className="text-[11px] font-medium text-text-secondary mb-0.5">Carburante / 100 km</div>
             <div className="text-lg font-bold text-text-primary number-mono">{reliability.futureCosts.fuelCostPer100Km.toFixed(0)} €</div>
           </div>
+          )}
+          {reliability.futureCosts.insuranceEstimate != null && (
           <div className="bg-surface-2 rounded-xl p-4">
             <div className="text-[11px] font-medium text-text-secondary mb-0.5">Assicurazione / anno</div>
             <div className="text-lg font-bold text-text-primary number-mono">{formatPrice(reliability.futureCosts.insuranceEstimate)}</div>
           </div>
+          )}
+          {reliability.futureCosts.depreciation3Years != null && (
           <div className="bg-surface-2 rounded-xl p-4">
             <div className="text-[11px] font-medium text-text-secondary mb-0.5">Svalutazione 3 anni</div>
             <div className="text-lg font-bold text-text-primary number-mono">-{formatPrice(reliability.futureCosts.depreciation3Years)}</div>
           </div>
+          )}
         </div>
         <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
           <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
           Stime indicative basate sul modello. I costi reali variano in base a utilizzo e stato del veicolo.
         </p>
       </section>
+      )}
 
       {/* Alternatives comparison */}
       {price.market?.listings && price.market.listings.length > 0 && (
@@ -818,7 +828,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             Vedi gli annunci reali in vendita su questi portali.
           </p>
           <div className="space-y-2">
-            {price.marketUrls.map((l) => (
+            {(price.marketUrls || []).map((l) => (
               <a
                 key={l.source}
                 href={l.url}

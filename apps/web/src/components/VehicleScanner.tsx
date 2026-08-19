@@ -8,6 +8,7 @@ import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, type FreeS
 import { generateInstantReport } from '@/lib/reportFallback';
 import { trackEvent } from '@/lib/analytics';
 import ReportView from '@/components/ReportView';
+import ReportErrorBoundary from '@/components/ReportErrorBoundary';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
@@ -402,7 +403,7 @@ export default function VehicleScanner({
     const requestedPrice = manualPrice.trim() ? Number(manualPrice.trim()) : undefined;
 
     return (
-      <section className="scanner-result animate-fade-in">
+      <section className="scanner-result">
         <div className="scanner-result-hero">
           {mainPhoto && (
             <div className="relative w-full h-full">
@@ -447,7 +448,9 @@ export default function VehicleScanner({
           }).report : null);
 
           return finalReport ? (
-            <ReportView report={finalReport} embedded />
+            <ReportErrorBoundary onRetry={reset}>
+              <ReportView report={finalReport} embedded />
+            </ReportErrorBoundary>
           ) : (
             <div className="mt-5 rounded-2xl p-5 border border-border bg-surface shadow-card">
               <h2 className="text-sm font-bold text-text-primary">Veicolo riconosciuto</h2>

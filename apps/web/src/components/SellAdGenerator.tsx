@@ -16,12 +16,13 @@ export function SellAdGenerator({ report }: SellAdGeneratorProps) {
   const [extras, setExtras] = useState('');
   const [copiedField, setCopiedField] = useState<string | null>(null);
 
-  const { vehicle, price, reliability } = report;
+  const { vehicle, price } = report;
+  const reliability = report.reliability || ({} as any);
   const vehicleName = [vehicle.make, vehicle.model].filter(Boolean).join(' ');
   const year = vehicle.year || new Date().getFullYear();
 
-  const suggestedPrice = price.estimatedValue;
-  const minPrice = price.min;
+  const suggestedPrice = price.estimatedValue || 0;
+  const minPrice = price.min || 0;
   const startPrice = Math.round(suggestedPrice * 1.05);
 
   const generateTitle = () => {
@@ -40,14 +41,14 @@ export function SellAdGenerator({ report }: SellAdGeneratorProps) {
     if (vehicle.fuel) lines.push(`Alimentazione: ${vehicle.fuel}.`);
     if (vehicle.transmission) lines.push(`Cambio: ${vehicle.transmission}.`);
     lines.push('');
-    if (reliability.strengths.length > 0) {
+    if ((reliability.strengths || []).length > 0) {
       lines.push('Punti di forza:');
-      reliability.strengths.slice(0, 4).forEach(s => lines.push(`\u2022 ${s}`));
+      (reliability.strengths || []).slice(0, 4).forEach(s => lines.push(`\u2022 ${s}`));
       lines.push('');
     }
-    if (reliability.weaknesses.length > 0) {
+    if ((reliability.weaknesses || []).length > 0) {
       lines.push('In trasparenza:');
-      reliability.weaknesses.slice(0, 3).forEach(w => lines.push(`\u2022 ${w}`));
+      (reliability.weaknesses || []).slice(0, 3).forEach(w => lines.push(`\u2022 ${w}`));
       lines.push('');
     }
     if (extras.trim()) {

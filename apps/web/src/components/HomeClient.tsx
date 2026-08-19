@@ -303,7 +303,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
         {/* ─── ANALIZZA AUTO ─── */}
         <section className="ae-scan" id="scanner-section" aria-label="Analizza un'auto">
           <div className={scannerStage === 'result' ? 'ae-scan-result-wrapper px-3 sm:px-4' : 'ae-scan-card max-w-5xl mx-auto'}>
-            {scannerStage === 'idle' && (
+            {scannerStage !== 'result' && (
               <div className="ae-scan-head">
                 <h2>Che auto vuoi controllare?</h2>
                 <p>Carica una foto oppure inserisci marca e modello. Nessun modulo lungo.</p>
@@ -316,7 +316,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
                 onStageChange={handleStageChange}
               />
             </ReportErrorBoundary>
-            {scannerStage === 'idle' && (
+            {scannerStage !== 'result' && (
               <ul className="ae-scan-trust">
                 <li><Check /> Gratis · senza registrazione</li>
                 <li><Check /> Più foto, più precisione</li>

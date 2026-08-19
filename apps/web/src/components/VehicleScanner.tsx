@@ -226,41 +226,32 @@ export default function VehicleScanner({
             </button>
           </div>
 
-          {manualLoading ? (
-            <div className="py-10 px-4 text-center">
-              <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-blue-50 text-blue-600 mb-3 shadow-sm">
-                <Loader2 className="h-7 w-7 animate-spin" />
-              </div>
-              <h3 className="text-base font-bold text-text-primary mb-1">
-                Analisi in corso…
-              </h3>
-              <p className="text-xs text-text-secondary max-w-sm mx-auto">
-                Stiamo elaborando quotazioni di mercato e affidabilità del modello.
-              </p>
-            </div>
-          ) : tab === 'foto' ? (
+          {tab === 'foto' ? (
             <div className="scanner-photo-tab">
               <button
                 type="button"
-                className={`scanner-dropzone ${isDragOver ? 'ring-4 ring-blue-500/20 border-blue-600 bg-blue-50/50' : ''}`}
-                onClick={() => inputRef.current?.click()}
+                disabled={manualLoading}
+                className={`scanner-dropzone ${isDragOver ? 'ring-4 ring-blue-500/20 border-blue-600 bg-blue-50/50' : ''} ${manualLoading ? 'opacity-75 cursor-wait' : ''}`}
+                onClick={() => !manualLoading && inputRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
                 onDragLeave={() => setIsDragOver(false)}
                 onDrop={(e) => {
                   e.preventDefault();
                   setIsDragOver(false);
-                  if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+                  if (!manualLoading && e.dataTransfer.files && e.dataTransfer.files.length > 0) {
                     void handleFiles(e.dataTransfer.files);
                   }
                 }}
               >
                 <span className="scanner-drop-icon">
-                  <Camera className="h-6 w-6" />
+                  {manualLoading ? <Loader2 className="h-6 w-6 animate-spin text-blue-600" /> : <Camera className="h-6 w-6" />}
                 </span>
                 <span className="scanner-drop-main">
-                  {isDragOver ? 'Rilascia le foto qui' : 'Trascina o carica le foto dell\'auto'}
+                  {manualLoading ? 'Analisi foto in corso…' : isDragOver ? 'Rilascia le foto qui' : 'Trascina o carica le foto dell\'auto'}
                 </span>
-                <span className="scanner-drop-sub">JPG, PNG o WebP · max 5 MB l&apos;una · fino a 6 foto</span>
+                <span className="scanner-drop-sub">
+                  {manualLoading ? 'Identificazione veicolo e preparazione dati…' : 'JPG, PNG o WebP · max 5 MB l\'una · fino a 6 foto'}
+                </span>
               </button>
               {error && <p className="scanner-box-error mt-3" role="alert">{error}</p>}
               <div className="scanner-box-promises" aria-label="Cosa ricevi">

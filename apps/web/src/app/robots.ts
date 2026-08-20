@@ -17,6 +17,19 @@ export default function robots(): MetadataRoute.Robots {
         userAgent: 'Google-Extended',
         allow: '/',
       },
+      {
+        userAgent: 'GPTBot',
+        allow: '/',
+        disallow: ['/api/', '/account', '/accesso'],
+      },
+      {
+        userAgent: 'Applebot',
+        allow: '/',
+      },
+      {
+        userAgent: 'Applebot-Extended',
+        allow: '/',
+      },
     ],
     sitemap: [
       `${base}/sitemap.xml`,

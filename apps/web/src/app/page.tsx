@@ -4,9 +4,9 @@ import SiteFooter from '@/components/SiteFooter';
 import { getAllMakes } from '@/lib/catalogo';
 
 export const metadata: Metadata = {
-  title: 'Analizza un\'auto usata: conviene comprarla? Verdetto gratis',
+  title: 'Valutazione Auto Usata Gratis: Prezzo di Mercato, Affidabilità e Verdetto | AutoEsperto',
   description:
-    'Analizza un\'auto usata con una foto o marca e modello. Prezzo di mercato, affidabilità e controlli prima dell\'acquisto. Verdetto in pochi secondi: BUON AFFARE, TRATTA o EVITALA. Gratis, senza registrazione.',
+    'Valutazione auto usate gratuita e senza registrazione. Scopri il prezzo di mercato reale, l\'affidabilità, i problemi noti e i costi di manutenzione. Verdetto in pochi secondi: BUON AFFARE, TRATTA IL PREZZO o EVITALA.',
   alternates: {
     canonical: '/',
     languages: { 'it-IT': 'https://autoesperto.it/' },

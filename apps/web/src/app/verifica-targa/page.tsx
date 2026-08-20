@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Search, ShieldCheck, HelpCircle, ArrowRight, FileCheck, AlertTriangle } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 import VerificaTargaClient from './VerificaTargaClient';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -214,6 +215,8 @@ export default function VerificaTargaPage() {
               ))}
             </div>
           </div>
+
+          <RelatedTools currentHref="/verifica-targa" />
         </section>
       </main>
 

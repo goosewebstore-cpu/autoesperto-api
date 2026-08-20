@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import NeopatentatiClient from './NeopatentatiClient';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
@@ -120,6 +121,9 @@ export default function NeopatentatiPage() {
       <SiteHeader />
       <JsonLd />
       <NeopatentatiClient />
+      <div className="max-w-3xl mx-auto px-5 pb-12">
+        <RelatedTools currentHref="/neopatentati" />
+      </div>
       <SiteFooter />
     </div>
   );

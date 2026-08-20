@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import MotoriProblemiClient from './MotoriProblemiClient';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
@@ -128,6 +129,9 @@ export default function MotoriProblemiPage() {
       <SiteHeader />
       <JsonLd />
       <MotoriProblemiClient />
+      <div className="max-w-3xl mx-auto px-5 pb-12">
+        <RelatedTools currentHref="/motori-problemi" />
+      </div>
       <SiteFooter />
     </div>
   );

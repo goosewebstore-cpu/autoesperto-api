@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import IncentiviAutoClient from './IncentiviAutoClient';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
@@ -119,6 +120,9 @@ export default function IncentiviAutoPage() {
       <SiteHeader />
       <JsonLd />
       <IncentiviAutoClient />
+      <div className="max-w-3xl mx-auto px-5 pb-12">
+        <RelatedTools currentHref="/incentivi-auto" />
+      </div>
       <SiteFooter />
     </div>
   );

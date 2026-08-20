@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import BlocchiTrafficoClient from './BlocchiTrafficoClient';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
@@ -119,6 +120,9 @@ export default function BlocchiTrafficoPage() {
       <SiteHeader />
       <JsonLd />
       <BlocchiTrafficoClient />
+      <div className="max-w-3xl mx-auto px-5 pb-12">
+        <RelatedTools currentHref="/blocchi-traffico" />
+      </div>
       <SiteFooter />
     </div>
   );

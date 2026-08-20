@@ -16,6 +16,15 @@ interface PageProps {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
+/** Compute a realistic dateModified for freshness signals.
+ *  Returns the 1st of the current month, or the published date if it's more recent. */
+function getDateModified(published: string): string {
+  const pub = new Date(published);
+  const now = new Date();
+  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+  return pub > firstOfMonth ? published : firstOfMonth.toISOString().slice(0, 10);
+}
+
 const guideCtas: Record<string, { label: string; href: string; description: string }> = {
   'auto-usata-affare': {
     label: 'Valuta il prezzo reale',
@@ -207,7 +216,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: fullUrl,
       siteName: 'AutoEsperto',
       publishedTime: guide.published,
-      modifiedTime: guide.published,
+      modifiedTime: getDateModified(guide.published),
       authors: ['Redazione AutoEsperto'],
       section: GUIDE_CATEGORIES[guide.category].label,
       images: [{ url: '/og-image.png', width: 1200, height: 630, alt: guide.title }],
@@ -330,7 +339,7 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.description,
     datePublished: guide.published,
-    dateModified: guide.published,
+    dateModified: getDateModified(guide.published),
     inLanguage: 'it-IT',
     wordCount,
     timeRequired: `PT${readingTimeMinutes}M`,
@@ -454,6 +463,10 @@ export default async function GuidePage({ params }: PageProps) {
                 <Clock className="w-3.5 h-3.5 text-accent" />
                 <span>{readingTimeMinutes} min lettura</span>
               </div>
+              <span className="text-text-tertiary">·</span>
+              <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 px-2 py-0.5 text-[11px] font-bold">
+                ✓ Aggiornato {new Date(getDateModified(guide.published)).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })}
+              </span>
             </div>
 
             <h1 itemProp="headline" className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-4">

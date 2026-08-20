@@ -47,7 +47,11 @@ export const metadata: Metadata = {
   publisher: 'AutoEsperto',
   manifest: '/manifest.json',
   alternates: {
-    languages: { 'it-IT': siteUrl },
+    languages: {
+      'it-IT': siteUrl,
+      'it-CH': siteUrl,
+      'x-default': siteUrl,
+    },
   },
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',

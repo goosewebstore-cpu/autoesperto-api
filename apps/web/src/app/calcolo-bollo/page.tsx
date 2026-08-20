@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { Calculator, HelpCircle, ArrowRight, ShieldCheck, Zap, Info } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 import CalcoloBolloClient from './CalcoloBolloClient';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
@@ -204,6 +205,8 @@ export default function CalcoloBolloPage() {
               ))}
             </div>
           </div>
+
+          <RelatedTools currentHref="/calcolo-bollo" />
         </section>
       </main>
 

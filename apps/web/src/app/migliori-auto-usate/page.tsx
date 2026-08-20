@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import MiglioriAutoUsateClient from './MiglioriAutoUsateClient';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import RelatedTools from '@/components/RelatedTools';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
@@ -118,6 +119,9 @@ export default function MiglioriAutoUsatePage() {
       <SiteHeader />
       <JsonLd />
       <MiglioriAutoUsateClient />
+      <div className="max-w-3xl mx-auto px-5 pb-12">
+        <RelatedTools currentHref="/migliori-auto-usate" />
+      </div>
       <SiteFooter />
     </div>
   );

@@ -5,7 +5,6 @@ import {
   ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
   Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
 } from 'lucide-react';
-import ReportSummary from '@/components/ReportSummary';
 import ReportScoreHero from '@/components/ReportScoreHero';
 import AdSlot from '@/components/AdSlot';
 import ConditionAssessment from '@/components/ConditionAssessment';
@@ -21,21 +20,6 @@ function formatPrice(n: number | undefined | null) {
 
 function formatKm(n: number | undefined | null) {
   return (n ?? 0).toLocaleString('it-IT') + ' km';
-}
-
-function getVerdictConfig(verdict: string) {
-  if (verdict === 'BUY') return {
-    bg: 'bg-success-light', text: 'text-success', border: 'border-success/20',
-    badge: 'verdict-buy', icon: CheckCircle2, label: 'Affidabile',
-  };
-  if (verdict === 'NEGOTIATE') return {
-    bg: 'bg-warning-light', text: 'text-warning', border: 'border-warning/20',
-    badge: 'verdict-negotiate', icon: AlertTriangle, label: 'Valuta con attenzione',
-  };
-  return {
-    bg: 'bg-danger-light', text: 'text-danger', border: 'border-danger/20',
-    badge: 'verdict-avoid', icon: AlertTriangle, label: 'Rischi possibili',
-  };
 }
 
 function getPriceLabelConfig(label: PriceLabel | undefined) {
@@ -72,8 +56,6 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
     'Verifica conformità chilometraggio',
   ];
 
-  const verdict = getVerdictConfig(reliability.verdict || 'BUY');
-  const VerdictIcon = verdict.icon;
   const priceLabelCfg = getPriceLabelConfig(price.priceLabel);
   const isModelData = vehicle.dataSource === 'model';
   const marketComparison = price.market?.comparison;
@@ -119,81 +101,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </button>
       )}
 
-      {/* Summary Card - always visible */}
-      <ReportSummary report={report} />
-
-      {/* Header */}
-      {!embedded && <header className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
-        {vehicle.imageUrl && (
-          <div className="relative h-56 md:h-72 bg-surface-2">
-            <img
-              src={vehicle.imageUrl}
-              alt={`${vehicle.make} ${vehicle.model}`}
-              loading="lazy"
-              referrerPolicy="no-referrer"
-              className="w-full h-full object-cover"
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
-          </div>
-        )}
-        <div className="p-6 md:p-7">
-          <div className="flex flex-wrap items-center gap-2 mb-3">
-            {vehicle.plate && (
-              <span className="inline-flex items-center gap-1.5 bg-text-primary text-white px-3 py-1 rounded-lg text-sm font-bold tracking-[0.15em]">
-                <Hash className="w-3.5 h-3.5 opacity-70" />
-                {vehicle.plate}
-              </span>
-            )}
-            {vehicle.plate && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-surface-2 text-text-secondary">
-                <Car className="w-3 h-3" />
-                Modello riconosciuto dalla targa
-              </span>
-            )}
-            <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-sm font-semibold text-white ${verdict.badge}`}>
-              <VerdictIcon className="w-3.5 h-3.5" />
-              {verdict.label}
-            </span>
-            {reliability.aiEnhanced && (
-              <span
-                className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-semibold bg-violet-600 text-white"
-                title="Punti di forza, criticità e consigli specifici per questo modello"
-              >
-                Analisi completa
-              </span>
-            )}
-            {isModelData && (
-              <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-xs font-medium bg-surface-2 text-text-secondary">
-                <Info className="w-3 h-3" />
-                Dati indicativi del modello
-              </span>
-            )}
-          </div>
-          <h1 className="text-2xl md:text-3xl font-bold text-text-primary tracking-tight">
-            {vehicle.make} {vehicle.model}
-          </h1>
-          <p className="text-text-secondary text-sm md:text-base mt-1">
-            {[vehicle.version, vehicle.year, vehicle.fuel, vehicle.body].filter(Boolean).join(' · ')}
-          </p>
-        </div>
-      </header>}
-
-      {/* Disclaimer AI */}
-      <section className="rounded-2xl border border-amber-200 bg-amber-50 p-5 md:p-6">
-        <div className="flex items-start gap-3">
-          <AlertTriangle className="h-5 w-5 text-amber-600 mt-0.5 shrink-0" />
-          <div>
-            <h3 className="text-sm font-bold text-amber-900">Nota importante — Risultato indicativo</h3>
-            <p className="mt-1 text-sm text-amber-800 leading-relaxed">
-              Questa analisi è <strong>indicativa</strong> e basata sui dati di mercato disponibili. Può contenere errori su marca, modello, anno, stato visivo o stima di prezzo.
-              Per decisioni d'acquisto, rivolgiti sempre a un professionista per un controllo reale dell'auto.
-              <strong> Carica più foto</strong> (frontale, laterale, posteriore, interni, targa) per migliorare la precisione dell'analisi.
-            </p>
-          </div>
-        </div>
-      </section>
-
-      {/* Score + verdetto */}
+      {/* Score + verdetto unified hero */}
       <ReportScoreHero report={report} isModelData={isModelData} />
 
       {/* Metodologia */}

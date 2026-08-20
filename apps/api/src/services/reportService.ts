@@ -91,7 +91,15 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
 
   const alternatives = getAlternatives(vehicle.make, vehicle.model).slice(0, 4);
 
-  const marketStats = await fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km).catch(() => undefined);
+  // Run market scraping and vehicle reliability analysis in parallel
+  const [marketStats, reliability] = await Promise.all([
+    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km).catch(() => undefined),
+    analyzeVehicle({
+      vehicle,
+      km: input.km,
+      requestedPrice: input.requestedPrice,
+    }, { requireDetailedModelAnalysis: options.requireDetailedModelAnalysis }),
+  ]);
 
   // Se gli annunci reali restituiscono un prezzo medio attendibile, il valore
   // stimato usa il mercato reale (già filtrato per anno e km confrontabili).
@@ -109,12 +117,6 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     // Il campione è già filtrato per km: niente ulteriore aggiustamento.
     comparisonValue = finalValue;
   }
-
-  const reliability = await analyzeVehicle({
-    vehicle,
-    km: input.km,
-    requestedPrice: input.requestedPrice,
-  }, { requireDetailedModelAnalysis: options.requireDetailedModelAnalysis });
 
   const report: AutoReport = {
     vehicle,

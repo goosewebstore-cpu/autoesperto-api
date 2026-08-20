@@ -179,7 +179,7 @@ export async function freeScanVehiclePhoto(imageData: string, extra: { km?: numb
 
 export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number }): Promise<FreeScanResult> {
   try {
-    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 6000, false);
+    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 8500, false);
   } catch (err) {
     console.warn('Backend API unavailable or slow, generating instant accurate report client-side:', err);
     return generateInstantReport(input);

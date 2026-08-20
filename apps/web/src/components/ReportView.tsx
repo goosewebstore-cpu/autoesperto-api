@@ -91,59 +91,88 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
   ].filter((s) => s.value);
 
   return (
-    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-5 pb-20 text-slate-900`}>
+    <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-4 sm:space-y-5 pb-16 text-text-primary`}>
       {onBack && (
         <button
           onClick={onBack}
-          className="flex items-center gap-2 text-sm text-text-secondary hover:text-text-primary transition-colors"
+          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors py-1 px-2 -ml-2 rounded-lg"
         >
           <ArrowLeft className="w-4 h-4" />
           Nuova ricerca
         </button>
       )}
 
-      {/* Score + verdetto unified hero */}
+      {/* 1. Score + verdetto unified hero */}
       <ReportScoreHero report={report} isModelData={isModelData} />
 
-      {/* Metodologia */}
-      <section className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
-        <details className="group">
-          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-5 md:p-6 text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
-            <span>Come viene calcolato?</span>
-            <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
-          </summary>
-          <div className="space-y-3 border-t border-border/60 px-5 py-4 text-sm text-text-secondary leading-relaxed md:px-6">
-            <p>
-              <strong className="font-semibold text-text-primary">Valore:</strong> la stima parte dai prezzi
-              pubblicati negli annunci reali per lo stesso modello. Dove possibile confrontiamo anno e
-              chilometraggio simili e mostriamo il campione usato e la data di aggiornamento. Non è una
-              perizia.
-            </p>
-            <p>
-              <strong className="font-semibold text-text-primary">Affidabilità:</strong> il punteggio 0-10 è
-              costruito dai dati tecnici del modello: motore, cambio, componenti più a rischio e costi di
-              manutenzione attesi.
-            </p>
-            <p>
-              <strong className="font-semibold text-text-primary">Costi:</strong> manutenzione annuale,
-              carburante, bollo e assicurazione sono stime basate sul modello e sul chilometraggio indicato.
-            </p>
-            <p>
-              I dati sono indicativi: un esemplare specifico può valere più o meno della stima. Per decisioni
-              d&apos;acquisto chiedi sempre un controllo fisico.
-            </p>
-          </div>
-        </details>
-      </section>
-
-      {/* KPI Cards: prezzo, affidabilità, costo annuo, consumo, bollo */}
+      {/* 2. KPI Cards: prezzo, affidabilità, costo annuo, consumo, bollo */}
       <KpiCards report={report} />
 
-      {/* Grafici: radar affidabilità per categoria + andamento prezzo */}
+      {/* 3. Action Buttons (PDF & Condividi) - High visibility for mobile */}
+      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+        <button
+          onClick={() => {
+            import('@/components/PDFButton').then((m) => m.downloadPDF(report));
+          }}
+          className="h-11 sm:h-12 rounded-xl bg-brand text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-brand-dark active:scale-[0.99] transition-all shadow-sm"
+        >
+          <Download className="w-4 h-4 shrink-0" />
+          Scarica PDF
+        </button>
+        <ShareButton title={`Valutazione ${vehicle.make} ${vehicle.model}`} text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`} />
+      </div>
+
+      {/* 4. Strengths & Weaknesses (Essential visual summary) */}
+      <section className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-6">
+        <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4">
+          <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary flex items-center gap-1.5">
+            <Users className="w-4 h-4 text-brand" />
+            Punti di forza e Criticità
+          </h2>
+        </div>
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div className="bg-emerald-50/50 dark:bg-emerald-950/20 border border-emerald-200/60 rounded-xl p-3.5">
+            <h3 className="font-bold text-emerald-800 dark:text-emerald-300 flex items-center gap-1.5 mb-2.5 text-xs sm:text-sm">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
+              Punti di forza
+            </h3>
+            <ul className="space-y-2">
+              {strengths.slice(0, 3).map((s: string, i: number) => (
+                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-text-primary leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
+                  {s}
+                </li>
+              ))}
+            </ul>
+          </div>
+          <div className="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 rounded-xl p-3.5">
+            <h3 className="font-bold text-rose-800 dark:text-rose-300 flex items-center gap-1.5 mb-2.5 text-xs sm:text-sm">
+              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
+              Possibili criticità
+            </h3>
+            <ul className="space-y-2">
+              {weaknesses.slice(0, 3).map((w: string, i: number) => (
+                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-text-primary leading-relaxed">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
+                  {w}
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. Grafici: radar affidabilità per categoria + andamento prezzo */}
       {reliability.categoryScores && (
-        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-          <h2 className="text-base font-bold text-text-primary mb-1">Affidabilità per categoria</h2>
-          <p className="text-sm text-text-secondary mb-4">Punteggio 0-10 per ogni componente: motore, cambio, elettronica, sospensioni e carrozzeria.</p>
+        <section className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-6">
+          <div className="flex items-center justify-between gap-2 mb-3">
+            <div>
+              <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary flex items-center gap-1.5">
+                <Gauge className="w-4 h-4 text-brand" />
+                Affidabilità per Categoria
+              </h2>
+            </div>
+          </div>
           <ReliabilityRadar categoryScores={reliability.categoryScores} />
         </section>
       )}
@@ -157,637 +186,168 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         />
       )}
 
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <h2 className="text-base font-bold text-text-primary mb-1">Andamento valore stimato</h2>
-        <p className="text-sm text-text-secondary mb-3">Svalutazione prevista a 1, 3 e 5 anni basata sul valore stimato di mercato.</p>
+      <section className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-6">
+        <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary mb-1 flex items-center gap-1.5">
+          <TrendingDown className="w-4 h-4 text-brand" />
+          Previsione Svalutazione
+        </h2>
+        <p className="text-xs text-text-secondary mb-3">Stima del valore residuo a 1, 3 e 5 anni.</p>
         <DepreciationChart price={price} reliability={reliability} />
       </section>
 
-      {/* Ad slot (attivo solo se NEXT_PUBLIC_ADSENSE_CLIENT è configurato) */}
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div>
-            <h2 className="text-base font-bold text-text-primary">Controlla la community</h2>
-            <p className="text-sm text-text-secondary mt-1">I temi pi&ugrave; ricorrenti su {vehicle.make} {vehicle.model}, utili da approfondire prima di decidere.</p>
-          </div>
-          <MessageCircle className="w-4 h-4 text-accent mt-0.5 flex-shrink-0" />
-        </div>
-        <div className="grid sm:grid-cols-3 gap-2">
-          {communityHighlights.map((highlight, index) => (
-            <div key={`${highlight}-${index}`} className="rounded-xl bg-surface-2 p-3">
-              <p className="text-[11px] font-semibold uppercase tracking-wide text-text-tertiary mb-1">Da verificare</p>
-              <p className="text-sm font-semibold text-text-primary leading-snug">{highlight}</p>
-            </div>
-          ))}
-        </div>
-        <a href={communityUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-4 text-sm font-semibold text-accent hover:underline">
-          Cerca discussioni su {vehicle.make} {vehicle.model}
-          <ExternalLink className="w-3.5 h-3.5" />
-        </a>
-        <p className="text-xs text-text-tertiary mt-3">Le discussioni sono opinioni personali: usale per fare domande pi&ugrave; precise a venditore e meccanico.</p>
-      </section>
-
-      {showAds && <AdSlot placement="result" />}
-
-      {/* Strengths / weaknesses / advice */}
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <div className="flex items-start justify-between gap-4 mb-4">
-          <div>
-            <h2 className="text-base font-bold text-text-primary">Valutazione del modello</h2>
-            <p className="text-xs text-text-tertiary mt-1">Punti ricorrenti da approfondire con community, storico manutenzione e ispezione.</p>
-          </div>
-          <Users className="w-4 h-4 text-accent flex-shrink-0 mt-0.5" />
-        </div>
-        <div className="grid md:grid-cols-2 gap-5">
-          <div>
-            <h3 className="font-semibold text-emerald-700 flex items-center gap-2 mb-3 text-sm">
-              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-              Punti di forza
-            </h3>
-            <ul className="space-y-2.5">
-              {strengths.map((s: string, i: number) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
-                  {s}
-                </li>
+      {/* 6. Accordion: Dettagli Tecnici & Specifiche */}
+      <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
+        <details className="group">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
+            <span className="flex items-center gap-2">
+              <Car className="w-4 h-4 text-brand" />
+              Scheda Tecnica & Informazioni Veicolo
+            </span>
+            <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="space-y-4 border-t border-border px-4 py-4 sm:px-6">
+            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+              {specs.map((s) => (
+                <div key={s.label} className="bg-surface-2 rounded-xl p-2.5 sm:p-3">
+                  <div className="text-[10px] font-medium text-text-secondary">{s.label}</div>
+                  <div className="text-xs sm:text-sm font-semibold text-text-primary truncate">{s.value}</div>
+                </div>
               ))}
-            </ul>
-          </div>
-          <div>
-            <h3 className="font-semibold text-rose-700 flex items-center gap-2 mb-3 text-sm">
-              <AlertTriangle className="w-4 h-4 text-rose-600" />
-              Possibili criticità
-            </h3>
-            <ul className="space-y-2.5">
-              {weaknesses.map((w: string, i: number) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" />
-                  {w}
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
+            </div>
 
-        <div className="mt-6 bg-surface-2 rounded-xl p-4">
-          <h3 className="font-semibold text-text-primary mb-2.5 text-sm flex items-center gap-2">
-            <Gauge className="w-4 h-4 text-blue-600" />
-            Consigli prima dell&apos;acquisto
-          </h3>
-          <ul className="space-y-2">
-            {advice.map((a: string, i: number) => (
-              <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
-                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
-                {a}
-              </li>
-            ))}
-          </ul>
-        </div>
+            <div className="grid sm:grid-cols-2 gap-3 pt-2">
+              <div className="bg-surface-2 rounded-xl p-3">
+                <div className="text-xs font-bold text-text-primary mb-1 flex items-center gap-1.5">
+                  <Fuel className="w-3.5 h-3.5 text-brand" />
+                  Motore
+                </div>
+                <p className="text-xs text-text-secondary leading-relaxed">{reliability.engine}</p>
+              </div>
+              <div className="bg-surface-2 rounded-xl p-3">
+                <div className="text-xs font-bold text-text-primary mb-1 flex items-center gap-1.5">
+                  <Wrench className="w-3.5 h-3.5 text-brand" />
+                  Cambio
+                </div>
+                <p className="text-xs text-text-secondary leading-relaxed">{reliability.transmission}</p>
+              </div>
+            </div>
+          </div>
+        </details>
       </section>
 
-      {/* Usage suitability + versions */}
-      {(reliability.usage || reliability.recommendedVersions?.length || reliability.versionsToAvoid?.length) && (
-        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-          {reliability.usage && (
-            <>
-              <h2 className="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
-                <Gauge className="w-4 h-4 text-accent" />
-                A chi si addice
-              </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5 mb-5">
-                {[
-                  { label: 'Città', value: reliability.usage.city },
-                  { label: 'Famiglia', value: reliability.usage.family },
-                  { label: 'Autostrada', value: reliability.usage.highway },
-                  { label: 'Neopatentati', value: reliability.usage.newDriver },
-                ].map((u) => (
-                  <div key={u.label} className="bg-surface-2 rounded-xl p-3 text-center">
-                    <div className="text-[11px] font-medium text-text-secondary mb-0.5">{u.label}</div>
-                    <div className="text-sm font-semibold text-text-primary">{u.value}</div>
-                  </div>
-                ))}
-              </div>
-            </>
-          )}
-
-          {(reliability.recommendedVersions?.length || reliability.versionsToAvoid?.length) && (
-            <div className="grid md:grid-cols-2 gap-5">
-              {reliability.recommendedVersions?.length ? (
-                <div>
-                  <h3 className="font-semibold text-emerald-700 flex items-center gap-2 mb-3 text-sm">
-                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                    Versioni consigliate
-                  </h3>
-                  <ul className="space-y-2">
-                    {reliability.recommendedVersions.map((v, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary">
-                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
-                        {v}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-              {reliability.versionsToAvoid?.length ? (
-                <div>
-                  <h3 className="font-semibold text-rose-700 flex items-center gap-2 mb-3 text-sm">
-                    <AlertTriangle className="w-4 h-4 text-rose-600" />
-                    Versioni da evitare
-                  </h3>
-                  <ul className="space-y-2">
-                    {reliability.versionsToAvoid.map((v, i) => (
-                      <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary">
-                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" />
-                        {v}
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ) : null}
-            </div>
-          )}
-        </section>
-      )}
-
-      {/* Vehicle info */}
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <h2 className="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
-          <Car className="w-4 h-4 text-accent" />
-          Informazioni veicolo
-        </h2>
-        <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
-          {specs.map((s) => (
-            <div key={s.label} className="bg-surface-2 rounded-xl p-3">
-              <div className="text-[11px] font-medium text-text-secondary mb-0.5">{s.label}</div>
-              <div className="text-sm font-semibold text-text-primary">{s.value}</div>
-            </div>
-          ))}
-        </div>
-      </section>
-
-      {/* Engine / transmission / common issues */}
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <h2 className="text-base font-bold text-text-primary mb-4">Dettagli tecnici</h2>
-        <div className="grid md:grid-cols-2 gap-4 mb-5">
-          <div className="bg-surface-2 rounded-xl p-4">
-            <h3 className="font-semibold text-text-primary mb-1.5 text-sm flex items-center gap-2">
-              <Fuel className="w-4 h-4 text-accent" />
-              Motore
-            </h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{reliability.engine}</p>
-          </div>
-          <div className="bg-surface-2 rounded-xl p-4">
-            <h3 className="font-semibold text-text-primary mb-1.5 text-sm flex items-center gap-2">
-              <Wrench className="w-4 h-4 text-accent" />
-              Cambio
-            </h3>
-            <p className="text-sm text-text-secondary leading-relaxed">{reliability.transmission}</p>
-          </div>
-        </div>
-        {(reliability.commonIssues?.length ?? 0) > 0 && (
-          <div>
-            <h3 className="font-semibold text-amber-800 mb-2.5 text-sm flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-amber-600" />
-              Problemi più comuni
-            </h3>
-            <ul className="space-y-2">
-              {reliability.commonIssues.slice(0, 5).map((issue, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
-                  {issue}
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-        {(reliability.consumption || reliability.taxAnnual || reliability.serviceIntervalKm) && (
-          <div>
-            <h3 className="font-semibold text-text-primary mb-2.5 text-sm flex items-center gap-2">
-              <Fuel className="w-4 h-4 text-accent" />
-              Consumi, bollo e manutenzione
-            </h3>
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 text-sm">
-              {reliability.consumption && (
-                <>
-                  <div className="rounded-lg bg-surface-2 px-3 py-2">
-                    <div className="text-xs text-text-tertiary">Consumo città</div>
-                    <div className="font-bold text-text-primary">{reliability.consumption.city} {reliability.consumption.fuelType || 'km/L'}</div>
-                  </div>
-                  <div className="rounded-lg bg-surface-2 px-3 py-2">
-                    <div className="text-xs text-text-tertiary">Consumo autostrada</div>
-                    <div className="font-bold text-text-primary">{reliability.consumption.highway} {reliability.consumption.fuelType || 'km/L'}</div>
-                  </div>
-                  <div className="rounded-lg bg-surface-2 px-3 py-2">
-                    <div className="text-xs text-text-tertiary">Consumo combinato</div>
-                    <div className="font-bold text-text-primary">{reliability.consumption.combined} {reliability.consumption.fuelType || 'km/L'}</div>
-                  </div>
-                </>
-              )}
-              {reliability.taxAnnual !== undefined && (
-                <div className="rounded-lg bg-surface-2 px-3 py-2">
-                  <div className="text-xs text-text-tertiary">Bollo annuo</div>
-                  <div className="font-bold text-text-primary">{formatPrice(reliability.taxAnnual)}</div>
-                </div>
-              )}
-              {reliability.serviceIntervalKm !== undefined && (
-                <div className="rounded-lg bg-surface-2 px-3 py-2">
-                  <div className="text-xs text-text-tertiary">Tagliando ogni</div>
-                  <div className="font-bold text-text-primary">{formatKm(reliability.serviceIntervalKm)}</div>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
-      </section>
-
-      {/* Price */}
-      <section className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
-        <div className="p-6 md:p-7">
-          <h2 className="text-base font-bold text-text-primary mb-4 flex items-center gap-2">
-            <Euro className="w-4 h-4 text-accent" />
-            Prezzo
-          </h2>
-
-          {price.requestedPrice ? (
-            <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-              <div>
-                <div className="text-xs text-text-secondary mb-0.5">Prezzo inserito</div>
-                <div className="text-3xl font-extrabold text-text-primary number-mono">
-                  {formatPrice(price.requestedPrice)}
-                </div>
-              </div>
-              <span className={`px-3 py-1.5 rounded-lg text-sm font-semibold ${priceLabelCfg.text} ${priceLabelCfg.bg} border ${priceLabelCfg.border}`}>
-                {priceLabelCfg.label}
-              </span>
-            </div>
-          ) : (
-            <p className="text-sm text-text-secondary mb-5">
-              Inserisci il prezzo richiesto per il confronto con la stima di mercato.
-            </p>
-          )}
-
-          <div className="bg-surface-2 rounded-xl p-4 mb-3">
-            <div className="flex items-center justify-between mb-1">
-              <span className="text-xs font-medium text-text-secondary">Stima indicativa di mercato</span>
-              {price.requestedPrice && price.priceVsMarketPercent !== undefined && !price.adjustedForKm && (
-                <span className="text-xs font-semibold text-text-secondary">
-                  {price.priceVsMarketPercent > 0 ? '+' : ''}{price.priceVsMarketPercent}% vs stima
-                </span>
-              )}
-            </div>
-            <div className="text-2xl font-extrabold text-text-primary number-mono">
-              {formatPrice(price.estimatedValue)}
-            </div>
-            <div className="text-xs text-text-secondary mt-0.5">
-              Range: {formatPrice(price.min)} – {formatPrice(price.max)}
-            </div>
-          </div>
-
-          {price.market && price.market.priceAvg && (
-            <div className="bg-surface-2 rounded-xl p-4 mb-3 border border-[#e6007e]/20">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium text-text-secondary">
-                  Prezzo medio reale dagli annunci per {comparisonLabel}
-                </span>
-                <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#e6007e]/10 text-[#c4006b] text-[11px] font-semibold">
-                  subito.it
-                </span>
-              </div>
-              <div className="text-2xl font-extrabold text-text-primary number-mono">
-                {formatPrice(price.market.priceAvg)}
-              </div>
-              <div className="text-xs text-text-secondary mt-0.5">
-                Media di {price.market.total} annunci · Range: {formatPrice(price.market.priceMin || 0)} – {formatPrice(price.market.priceMax || 0)}
-                {price.market.yearMin && price.market.yearMax ? ` · anni ${price.market.yearMin}–${price.market.yearMax}` : ''}
-              </div>
-              {price.market.comparison?.disclosure && (
-                <p className="text-[11px] text-text-tertiary mt-1.5 leading-relaxed">
-                  {price.market.comparison.disclosure}
-                </p>
-              )}
-              {!price.market.comparison?.disclosure && (
-                <div className="text-[11px] text-text-tertiary mt-1">
-                  {comparisonIsExact
-                    ? 'Confronto ristretto agli annunci più simili per anno e chilometraggio.'
-                    : 'Confronto ampliato perché non erano disponibili almeno 3 annunci con anno e km equivalenti.'}
-                </div>
-              )}
-              <a
-                href={price.market.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-accent hover:underline"
-              >
-                Vedi gli annunci reali
-                <ExternalLink className="w-3 h-3" />
-              </a>
-              <div className="flex flex-wrap gap-x-3 gap-y-1 mt-2 text-xs">
-                {(price.marketUrls || []).filter((link) => link.source !== 'Subito.it').map((link) => (
-                  <a key={link.source} href={link.url} target="_blank" rel="noopener noreferrer" className="font-semibold text-accent hover:underline">
-                    Cerca su {link.source}
-                  </a>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {price.adjustedForKm && price.adjustedForKm > 0 && (
-            <div className="bg-surface-2 rounded-xl p-4 mb-3">
-              <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium text-text-secondary">
-                  Valore con {formatKm(price.inputKm || 0)}
-                </span>
-                {price.requestedPrice && price.priceVsMarketPercent !== undefined && (
-                  <span className="text-xs font-semibold text-text-secondary">
-                    {price.priceVsMarketPercent > 0 ? '+' : ''}{price.priceVsMarketPercent}% vs stima
-                  </span>
-                )}
-              </div>
-              <div className="text-lg font-bold text-text-primary number-mono">{formatPrice(price.adjustedForKm)}</div>
-            </div>
-          )}
-
-          <p className="text-xs text-text-tertiary flex items-start gap-1.5">
-            <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-            {price.comment} La stima è orientativa e calcolata su modello, anno e caratteristiche.
-          </p>
-        </div>
-      </section>
-
-      {/* Costs */}
-      {reliability.futureCosts && (
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <h2 className="text-base font-bold text-text-primary mb-4">Costi stimati</h2>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2.5">
-          {reliability.futureCosts.annualMaintenance != null && (
-          <div className="bg-surface-2 rounded-xl p-4">
-            <div className="text-[11px] font-medium text-text-secondary mb-0.5">Manutenzione / anno</div>
-            <div className="text-lg font-bold text-text-primary number-mono">{formatPrice(reliability.futureCosts.annualMaintenance)}</div>
-          </div>
-          )}
-          {reliability.futureCosts.fuelCostPer100Km != null && (
-          <div className="bg-surface-2 rounded-xl p-4">
-            <div className="text-[11px] font-medium text-text-secondary mb-0.5">Carburante / 100 km</div>
-            <div className="text-lg font-bold text-text-primary number-mono">{reliability.futureCosts.fuelCostPer100Km.toFixed(0)} €</div>
-          </div>
-          )}
-          {reliability.futureCosts.insuranceEstimate != null && (
-          <div className="bg-surface-2 rounded-xl p-4">
-            <div className="text-[11px] font-medium text-text-secondary mb-0.5">Assicurazione / anno</div>
-            <div className="text-lg font-bold text-text-primary number-mono">{formatPrice(reliability.futureCosts.insuranceEstimate)}</div>
-          </div>
-          )}
-          {reliability.futureCosts.depreciation3Years != null && (
-          <div className="bg-surface-2 rounded-xl p-4">
-            <div className="text-[11px] font-medium text-text-secondary mb-0.5">Svalutazione 3 anni</div>
-            <div className="text-lg font-bold text-text-primary number-mono">-{formatPrice(reliability.futureCosts.depreciation3Years)}</div>
-          </div>
-          )}
-        </div>
-        <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
-          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-          Stime indicative basate sul modello. I costi reali variano in base a utilizzo e stato del veicolo.
-        </p>
-      </section>
-      )}
-
-      {/* Alternatives comparison */}
+      {/* 7. Accordion: Annunci di Mercato & Portali */}
       {price.market?.listings && price.market.listings.length > 0 && (
-        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-          <div className="flex items-start justify-between gap-4 mb-5">
-            <div>
-              <h2 className="text-base font-bold text-text-primary">Annunci usati per il calcolo</h2>
-              <p className="text-sm text-text-secondary mt-1">
-                Ho confrontato {price.market.total} annunci di {vehicle.make} {vehicle.model} filtrati per {comparisonLabel}: la media è {formatPrice(price.market.priceAvg || 0)}. Sotto vedi quelli più vicini alla media.
-              </p>
+        <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
+          <details className="group">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
+              <span className="flex items-center gap-2">
+                <Euro className="w-4 h-4 text-brand" />
+                Annunci reali usati per il calcolo ({price.market.total})
+              </span>
+              <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="space-y-2 border-t border-border px-4 py-4 sm:px-6">
+              {price.market.listings.slice(0, 6).map((listing) => {
+                return (
+                  <a key={listing.id} href={listing.sourceUrl} target="_blank" rel="noopener noreferrer" className="group flex items-center justify-between gap-3 rounded-xl border border-border bg-surface p-3 transition-colors hover:border-brand hover:bg-surface-2">
+                    <div className="min-w-0 flex-1">
+                      <p className="truncate text-xs sm:text-sm font-semibold text-text-primary">{listing.title}</p>
+                      <p className="text-[11px] text-text-secondary">{[listing.year || undefined, listing.km ? formatKm(listing.km) : undefined, listing.city || undefined].filter(Boolean).join(' · ')}</p>
+                    </div>
+                    <div className="shrink-0 text-right">
+                      <p className="text-sm sm:text-base font-extrabold text-text-primary number-mono">{formatPrice(listing.price)}</p>
+                    </div>
+                    <ExternalLink className="h-3.5 w-3.5 shrink-0 text-text-tertiary group-hover:text-brand" />
+                  </a>
+                );
+              })}
             </div>
-            <span className="shrink-0 rounded-full bg-[#e6007e]/10 px-2.5 py-1 text-[11px] font-semibold text-[#c4006b]">subito.it</span>
-          </div>
-          <div className="space-y-2">
-            {price.market.listings.map((listing) => {
-              const distance = Math.round(((listing.price - (price.market?.priceAvg || listing.price)) / (price.market?.priceAvg || listing.price)) * 100);
-              return (
-                <a key={listing.id} href={listing.sourceUrl} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-4 rounded-xl border border-border bg-white p-4 transition-colors hover:border-accent/40 hover:bg-surface-2">
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate text-sm font-semibold text-text-primary">{listing.title}</p>
-                    <p className="mt-1 text-xs text-text-secondary">{[listing.year || undefined, listing.km ? formatKm(listing.km) : undefined, listing.city || undefined].filter(Boolean).join(' · ')}</p>
-                  </div>
-                  <div className="shrink-0 text-right">
-                    <p className="text-lg font-extrabold text-text-primary number-mono">{formatPrice(listing.price)}</p>
-                    <p className={`text-[11px] font-semibold ${Math.abs(distance) <= 3 ? 'text-success' : 'text-text-secondary'}`}>{distance >= 0 ? '+' : ''}{distance}% dalla media</p>
-                  </div>
-                  <ExternalLink className="h-4 w-4 shrink-0 text-text-tertiary transition-colors group-hover:text-accent" />
-                </a>
-              );
-            })}
-          </div>
-          <p className="mt-3 text-[11px] text-text-tertiary flex items-start gap-1.5">
-            <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-            Il prezzo medio è la somma dei prezzi richiesti divisa per il numero di annunci comparabili. È un indicatore di mercato, non una perizia: controlla sempre l&apos;esemplare specifico.
-          </p>
+          </details>
         </section>
       )}
 
-      {/* Sell Ad Generator Component */}
-      <section className="bg-white rounded-2xl shadow-card border border-border overflow-hidden">
+      {/* 8. Accordion: Alternative & Confronti */}
+      {report.alternatives && report.alternatives.length > 0 && (
+        <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
+          <details className="group">
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
+              <span className="flex items-center gap-2">
+                <GitCompareArrows className="w-4 h-4 text-brand" />
+                Alternative nella stessa categoria ({report.alternatives.length})
+              </span>
+              <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="grid sm:grid-cols-2 gap-2.5 border-t border-border px-4 py-4 sm:px-6">
+              {report.alternatives.map((alt) => (
+                <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-3 flex items-center justify-between gap-2">
+                  <div>
+                    <div className="text-xs sm:text-sm font-bold text-text-primary truncate">{alt.make} {alt.model}</div>
+                    <div className="text-[11px] text-text-secondary">Stima: {formatPrice(alt.estimatedValue)}</div>
+                  </div>
+                  <a
+                    href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}`}
+                    className="inline-flex items-center gap-1 text-xs font-bold text-brand hover:underline shrink-0"
+                  >
+                    Vedi <ArrowRight className="w-3 h-3" />
+                  </a>
+                </div>
+              ))}
+            </div>
+          </details>
+        </section>
+      )}
+
+      {/* 9. Accordion: Verifiche Ufficiali (VIN, Revisioni, PRA) */}
+      <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
+        <details className="group">
+          <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
+            <span className="flex items-center gap-2">
+              <ShieldCheck className="w-4 h-4 text-brand" />
+              Link alle Verifiche Ufficiali (Revisioni, VIN, PRA)
+            </span>
+            <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="space-y-2 border-t border-border px-4 py-4 sm:px-6">
+            <a
+              href="https://www.ilportaledellautomobilista.it/interrogazionistoricorevisioni/spa/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/60 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-text-primary transition-colors"
+            >
+              Portale dell&apos;Automobilista (Revisioni e Km reali)
+              <ExternalLink className="w-3.5 h-3.5 text-text-tertiary" />
+            </a>
+            <a
+              href="https://richiami.unraeservizi.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/60 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-text-primary transition-colors"
+            >
+              Verifica Campagne di Richiamo UNRAE
+              <ExternalLink className="w-3.5 h-3.5 text-text-tertiary" />
+            </a>
+            <a
+              href="https://www.aci.it/servizi/lestratto-cronologico-pra/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/60 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold text-text-primary transition-colors"
+            >
+              Estratto Cronologico PRA (Vincoli e Ipotetiche)
+              <ExternalLink className="w-3.5 h-3.5 text-text-tertiary" />
+            </a>
+          </div>
+        </details>
+      </section>
+
+      {/* 10. Sell Ad Generator (optional tool) */}
+      <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
         <SellAdGenerator report={report} />
       </section>
 
-      {report.alternatives && report.alternatives.length > 0 && (
-        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-          <h2 className="text-base font-bold text-text-primary mb-1 flex items-center gap-2">
-            <GitCompareArrows className="w-4 h-4 text-accent" />
-            Alternative nella stessa fascia
-          </h2>
-          <p className="text-xs text-text-tertiary mb-4 flex items-start gap-1.5">
-            <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-            Modelli comparabili per prezzo, categoria e utilizzo. Le medie sotto usano {comparisonLabel} per rendere il confronto più equo.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-3">
-            {report.alternatives.map((alt) => {
-              const market = alt.market;
-              const hasMarket = Boolean(market && market.priceAvg);
-              return (
-                <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-4">
-                  <div className="flex items-center justify-between gap-2 mb-1">
-                    <div className="text-sm font-semibold text-text-primary truncate">
-                      {alt.make} {alt.model}
-                    </div>
-                    <Scale className="w-4 h-4 text-text-tertiary flex-shrink-0" />
-                  </div>
-                  <div className="text-lg font-extrabold text-text-primary number-mono">
-                    {formatPrice(alt.estimatedValue)}
-                  </div>
-                  <div className="text-xs text-text-secondary mt-0.5">
-                    {hasMarket ? (
-                      <>
-                        Prezzo medio da {market!.total} annunci · Range: {formatPrice(alt.estimatedMin)} – {formatPrice(alt.estimatedMax)}
-                      </>
-                    ) : (
-                      <>
-                        Stima · Range: {formatPrice(alt.estimatedMin)} – {formatPrice(alt.estimatedMax)}
-                      </>
-                    )}
-                  </div>
-                  {hasMarket && (
-                    <div className="flex items-center gap-1.5 mt-2">
-                      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-[#e6007e]/10 text-[#c4006b] text-[11px] font-semibold">
-                        subito.it
-                      </span>
-                      {market!.yearMin && market!.yearMax && (
-                        <span className="text-[11px] text-text-tertiary">
-                          {market!.yearMin}–{market!.yearMax}{market!.kmAvg ? ` · ${formatKm(market!.kmAvg)} in media` : ''}
-                        </span>
-                      )}
-                    </div>
-                  )}
-                  <div className="flex flex-wrap items-center gap-3 mt-3 pt-2 border-t border-border/50">
-                    <a
-                      href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}`}
-                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
-                    >
-                      Analizza scheda
-                      <ArrowRight className="w-3 h-3" />
-                    </a>
-                    <a
-                      href={market?.url || `https://www.subito.it/annunci-italia/vendita/auto/?q=${encodeURIComponent(`${alt.make} ${alt.model}`)}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-1 text-xs font-medium text-text-secondary hover:text-text-primary hover:underline"
-                    >
-                      Cerca annunci
-                      <ExternalLink className="w-3 h-3" />
-                    </a>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-        <h2 className="text-base font-bold text-text-primary mb-2 flex items-center gap-2">
-          <ShieldCheck className="w-4 h-4 text-accent" />
-          Controlli importanti per anno e chilometri
-        </h2>
-        <p className="text-sm text-text-secondary leading-relaxed mb-4">
-          Per una {vehicle.year ? `vettura del ${vehicle.year}` : 'vettura usata'}{price.inputKm ? ` con circa ${formatKm(price.inputKm)}` : ''}, verifica anche le campagne di richiamo e lo storico delle revisioni. Un richiamo dipende dal VIN: anno e modello da soli non bastano per dire se questa specifica auto è coinvolta.
-        </p>
-        <div className="grid sm:grid-cols-3 gap-2">
-          <a
-            href="https://richiami.unraeservizi.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-          >
-            Verifica richiami con VIN
-            <ExternalLink className="w-4 h-4 text-text-tertiary" />
-          </a>
-          <a
-            href="https://www.ilportaledellautomobilista.it/interrogazionistoricorevisioni/spa/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-          >
-            Verifica storico revisioni e km
-            <ExternalLink className="w-4 h-4 text-text-tertiary" />
-          </a>
-          <a
-            href="https://www.aci.it/servizi/lestratto-cronologico-pra/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-          >
-            Controlla storico PRA e vincoli
-            <ExternalLink className="w-4 h-4 text-text-tertiary" />
-          </a>
-        </div>
-        <p className="text-xs text-text-tertiary mt-3 flex items-start gap-1.5">
-          <Info className="w-3.5 h-3.5 mt-0.5 flex-shrink-0" />
-          Se un chilometraggio di revisione risulta inferiore a una registrazione precedente, chiedi documenti e una verifica professionale: è un&apos;anomalia da approfondire, non una prova automatica di manomissione.
-        </p>
-      </section>
-
-      {vehicle.plate && (
-        <section className="bg-white rounded-2xl shadow-card border border-border p-6 md:p-7">
-          <h2 className="text-base font-bold text-text-primary mb-2">Verifiche ufficiali aggiuntive</h2>
-          <p className="text-sm text-text-secondary mb-4">
-            Per privacy e sicurezza la targa non viene inoltrata automaticamente: inseriscila tu sul Portale dell&apos;Automobilista per controllare copertura RCA, revisioni e chilometri rilevati.
-          </p>
-          <div className="grid sm:grid-cols-2 gap-2">
-            <a
-              href="https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/verifica-copertura-rc?p_p_id=CoperturaRC_WAR_ServiziAlCittadinowar100SNAPSHOTesercizio&p_p_lifecycle=0&p_p_state=normal&p_p_mode=view&p_p_col_id=_118_INSTANCE_hoIzOCy6I6vu__column-2&p_p_col_count=1&_CoperturaRC_WAR_ServiziAlCittadinowar100SNAPSHOTesercizio_action=coperturaRCCiclomotore"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-            >
-              Verifica copertura RCA
-              <ExternalLink className="w-4 h-4 text-text-tertiary" />
-            </a>
-            <a
-              href="https://www.ilportaledellautomobilista.it/web/portale-automobilista/verifica-revisioni-effettuate-ms"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-            >
-              Verifica revisioni e km
-              <ExternalLink className="w-4 h-4 text-text-tertiary" />
-            </a>
-          </div>
-        </section>
-      )}
-
-      {/* Market links + PDF */}
-      <section className="grid md:grid-cols-2 gap-4">
-        <div className="bg-white rounded-2xl shadow-card border border-border p-6">
-          <h2 className="text-base font-bold text-text-primary mb-3">Confronta sul mercato</h2>
-          <p className="text-sm text-text-secondary mb-4">
-            Vedi gli annunci reali in vendita su questi portali.
-          </p>
-          <div className="space-y-2">
-            {(price.marketUrls || []).map((l) => (
-              <a
-                key={l.source}
-                href={l.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-between gap-3 bg-surface-2 hover:bg-border/50 rounded-xl px-4 py-3 text-sm font-semibold text-text-primary transition-colors"
-              >
-                {l.source}
-                <ExternalLink className="w-4 h-4 text-text-tertiary" />
-              </a>
-            ))}
-          </div>
-        </div>
-
-        <div className="bg-white rounded-2xl shadow-card border border-border p-6 flex flex-col">
-          <h2 className="text-base font-bold text-text-primary mb-3 flex items-center gap-2">
-            <Download className="w-4 h-4 text-accent" />
-            Scarica il report
-          </h2>
-          <p className="text-sm text-text-secondary mb-4 flex-1">
-            Report completo in PDF con dati, valutazione e stima di mercato. Perfetto da portare in concessionaria.
-          </p>
-          <div className="grid grid-cols-2 gap-3">
-            <button
-              onClick={() => {
-                import('@/components/PDFButton').then((m) => m.downloadPDF(report));
-              }}
-              className="w-full h-11 rounded-xl bg-accent text-white font-semibold text-sm flex items-center justify-center gap-2 hover:bg-accent-hover active:scale-[0.99] transition-all"
-            >
-              <Download className="w-4 h-4 shrink-0" />
-              Scarica PDF
-            </button>
-            <ShareButton title={`Valutazione ${vehicle.make} ${vehicle.model}`} text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`} />
-          </div>
-        </div>
-      </section>
-
-      {/* Footer note */}
-      <p className="text-xs text-text-tertiary flex items-center justify-center gap-1.5 text-center">
-        <ShieldCheck className="w-3.5 h-3.5" />
-        AutoEsperto fornisce valutazioni indicative. Rivolgiti sempre a un professionista per l&apos;ispezione.
+      {/* Footer disclaimer */}
+      <p className="text-[11px] text-text-tertiary flex items-center justify-center gap-1.5 text-center pt-2">
+        <ShieldCheck className="w-3.5 h-3.5 shrink-0" />
+        Stima indicativa basata su dati di mercato. Verifica sempre l&apos;auto di persona prima dell&apos;acquisto.
       </p>
     </div>
   );

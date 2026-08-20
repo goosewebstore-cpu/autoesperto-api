@@ -122,16 +122,26 @@ const FAQS = [
   },
 ];
 
-const POPULAR: { make: string; model: string; year: string; score: number; verdict: string }[] = [
-  { make: 'Fiat', model: 'Panda', year: '2023', score: 78, verdict: 'TRATTA IL PREZZO' },
-  { make: 'Fiat', model: '500', year: '2024', score: 81, verdict: 'BUON AFFARE' },
-  { make: 'Volkswagen', model: 'Golf', year: '2023', score: 75, verdict: 'TRATTA IL PREZZO' },
-  { make: 'Toyota', model: 'Yaris', year: '2023', score: 86, verdict: 'BUON AFFARE' },
-  { make: 'Renault', model: 'Clio', year: '2023', score: 79, verdict: 'TRATTA IL PREZZO' },
-  { make: 'Peugeot', model: '208', year: '2023', score: 82, verdict: 'BUON AFFARE' },
-  { make: 'Mazda', model: 'CX-3', year: '2023', score: 80, verdict: 'BUON AFFARE' },
-  { make: 'Volkswagen', model: 'Polo', year: '2022', score: 77, verdict: 'TRATTA IL PREZZO' },
-  { make: 'Hyundai', model: 'i20', year: '2023', score: 83, verdict: 'BUON AFFARE' },
+const POPULAR: {
+  make: string;
+  model: string;
+  year: string;
+  fuel: string;
+  priceRange: string;
+  reliabilityScore: string;
+  maint: string;
+  score: number;
+  verdict: string;
+}[] = [
+  { make: 'Fiat', model: 'Panda', year: '2023', fuel: 'Benzina / Ibrida', priceRange: '8.400 – 11.200 €', reliabilityScore: '7.8/10', maint: 'Costi bassi', score: 78, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Fiat', model: '500', year: '2024', fuel: 'Ibrida / Elettrica', priceRange: '11.500 – 15.200 €', reliabilityScore: '8.1/10', maint: 'Costi bassi', score: 81, verdict: 'BUON AFFARE' },
+  { make: 'Volkswagen', model: 'Golf', year: '2023', fuel: 'Benzina / Diesel', priceRange: '19.800 – 25.500 €', reliabilityScore: '7.5/10', maint: 'Costi medi', score: 75, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Toyota', model: 'Yaris', year: '2023', fuel: 'Full Hybrid', priceRange: '16.200 – 19.800 €', reliabilityScore: '8.8/10', maint: 'Costi bassi', score: 86, verdict: 'BUON AFFARE' },
+  { make: 'Renault', model: 'Clio', year: '2023', fuel: 'GPL / Ibrida', priceRange: '13.500 – 17.000 €', reliabilityScore: '7.9/10', maint: 'Costi medi', score: 79, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Peugeot', model: '208', year: '2023', fuel: 'Benzina / Elettrica', priceRange: '14.000 – 18.500 €', reliabilityScore: '8.0/10', maint: 'Costi medi', score: 82, verdict: 'BUON AFFARE' },
+  { make: 'Mazda', model: 'CX-3', year: '2023', fuel: 'Benzina', priceRange: '17.500 – 21.000 €', reliabilityScore: '8.3/10', maint: 'Costi medi', score: 80, verdict: 'BUON AFFARE' },
+  { make: 'Volkswagen', model: 'Polo', year: '2022', fuel: 'Benzina / Metano', priceRange: '15.000 – 18.200 €', reliabilityScore: '7.7/10', maint: 'Costi medi', score: 77, verdict: 'TRATTA IL PREZZO' },
+  { make: 'Hyundai', model: 'i20', year: '2023', fuel: 'Benzina / Ibrida', priceRange: '13.800 – 17.500 €', reliabilityScore: '8.4/10', maint: 'Costi bassi', score: 83, verdict: 'BUON AFFARE' },
 ];
 
 function popularHref(make: string, model: string) {
@@ -429,18 +439,40 @@ export default function HomeClient({ stats }: HomeClientProps) {
                 </div>
                 <div className="ae-popular-grid reveal">
                   {POPULAR.map((item) => (
-                    <Link key={`${item.make}-${item.model}`} href={popularHref(item.make, item.model)} className="ae-popular-card" onClick={() => trackEvent('tool_click', { tool: `${item.make} ${item.model}` })}>
+                    <Link
+                      key={`${item.make}-${item.model}`}
+                      href={popularHref(item.make, item.model)}
+                      className="ae-popular-card group"
+                      onClick={() => trackEvent('tool_click', { tool: `${item.make} ${item.model}` })}
+                    >
                       <div className="ae-popular-info">
-                        <div>
-                          <h3>{item.make} {item.model}</h3>
-                          <p>{item.year}</p>
+                        <div className="min-w-0 flex-1">
+                          <h3 className="truncate">{item.make} {item.model}</h3>
+                          <p>{item.year} · {item.fuel}</p>
                         </div>
-                        <div className="ae-popular-score">
+                        <div className="ae-popular-score shrink-0">
                           <strong>{item.score}</strong>
                           <span>/100</span>
                         </div>
                       </div>
-                      <span className={`ae-popular-verdict ${verdictColor(item.verdict)}`}>{item.verdict}</span>
+
+                      <div className="ae-popular-details">
+                        <div className="ae-popular-row">
+                          <span className="ae-popular-label">Stima mercato</span>
+                          <strong className="ae-popular-val number-mono">{item.priceRange}</strong>
+                        </div>
+                        <div className="ae-popular-chips">
+                          <span>{item.reliabilityScore}</span>
+                          <span>{item.maint}</span>
+                        </div>
+                      </div>
+
+                      <div className="ae-popular-foot">
+                        <span className={`ae-popular-verdict ${verdictColor(item.verdict)}`}>{item.verdict}</span>
+                        <span className="ae-popular-action">
+                          Analizza <ArrowRight className="h-3 w-3" />
+                        </span>
+                      </div>
                     </Link>
                   ))}
                 </div>

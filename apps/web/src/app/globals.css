@@ -1889,25 +1889,97 @@ body {
 /* -------------------------------- */
 
 .ae-popular-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
-.ae-popular-card { display: flex; flex-direction: column; border-radius: var(--radius-xl); overflow: hidden; background: #ffffff; border: 1px solid var(--border); box-shadow: var(--shadow-sm); transition: box-shadow 0.3s, transform 0.3s; text-decoration: none; color: inherit; }
-.ae-popular-card:hover { box-shadow: var(--shadow-md); transform: translateY(-2px); }
+.ae-popular-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+  background: var(--bg-alt);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+  text-decoration: none;
+  color: inherit;
+}
+.ae-popular-card:hover {
+  box-shadow: var(--shadow-md);
+  transform: translateY(-2px);
+  border-color: var(--brand);
+}
 .ae-popular-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 1.1rem 1.15rem 0.6rem;
+  gap: 0.5rem;
+  padding: 1rem 1.15rem 0.6rem;
+  border-bottom: 1px solid var(--border);
 }
-.ae-popular-info h3 { font-family: var(--font-outfit), sans-serif; font-size: 1rem; font-weight: 800; margin: 0; color: #0f172a; }
-.ae-popular-info p { font-size: 0.78rem; color: #64748b; margin: 0.15rem 0 0; }
+.ae-popular-info h3 { font-family: var(--font-outfit), sans-serif; font-size: 0.95rem; font-weight: 800; margin: 0; color: var(--text); }
+.ae-popular-info p { font-size: 0.72rem; color: var(--text-2); margin: 0.15rem 0 0; }
 .ae-popular-score { display: flex; align-items: baseline; gap: 0.15rem; }
-.ae-popular-score strong { font-family: var(--font-outfit), sans-serif; font-size: 1.5rem; font-weight: 800; line-height: 1; color: #0f172a; }
-.ae-popular-score span { font-size: 0.7rem; font-weight: 700; color: #94a3b8; }
-.ae-popular-verdict {
-  display: block; text-align: center;
-  padding: 0.45rem 1rem; margin: 0 1rem 1rem;
-  border-radius: var(--radius-md); font-size: 0.72rem; font-weight: 800;
-  letter-spacing: 0.04em; text-transform: uppercase;
+.ae-popular-score strong { font-family: var(--font-outfit), sans-serif; font-size: 1.35rem; font-weight: 800; line-height: 1; color: var(--text); }
+.ae-popular-score span { font-size: 0.68rem; font-weight: 700; color: var(--text-3); }
+
+.ae-popular-details {
+  padding: 0.65rem 1.15rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  flex: 1;
 }
+.ae-popular-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.76rem;
+}
+.ae-popular-label { color: var(--text-3); font-weight: 600; }
+.ae-popular-val { color: var(--brand); font-weight: 800; font-size: 0.82rem; }
+.ae-popular-chips {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: var(--text-2);
+}
+.ae-popular-chips span {
+  background: var(--bg-soft);
+  border: 1px solid var(--border);
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-sm);
+}
+
+.ae-popular-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.55rem 1.15rem 0.85rem;
+  gap: 0.5rem;
+}
+.ae-popular-verdict {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.3rem 0.65rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+.ae-popular-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--brand);
+  transition: transform 0.2s ease;
+}
+.ae-popular-card:hover .ae-popular-action {
+  transform: translateX(2px);
+}
+
 .ae-popular-verdict-good { background: #dcfce7; color: #166534; border: 1px solid #bbf7d0; }
 .ae-popular-verdict-warn { background: #fef3c7; color: #92400e; border: 1px solid #fde68a; }
 .ae-popular-verdict-bad { background: #fee2e2; color: #991b1b; border: 1px solid #fecaca; }

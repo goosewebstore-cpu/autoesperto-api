@@ -39,16 +39,16 @@ export default function KpiCards({ report }: Props) {
   };
 
   return (
-    <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5" aria-label="KPI principali">
+    <section className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-2.5 sm:gap-3" aria-label="KPI principali">
       {kpis.map((kpi) => {
         const Icon = kpi.icon;
         return (
-          <div key={kpi.label} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
-            <div className="flex items-center justify-between">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-500">{kpi.label}</span>
-              <span className={`grid h-8 w-8 place-items-center rounded-lg ${toneMap[kpi.tone]}`}><Icon className="h-4 w-4" /></span>
+          <div key={kpi.label} className="rounded-xl sm:rounded-2xl border border-border bg-surface p-3 sm:p-4 shadow-2xs">
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-[10px] sm:text-xs font-bold uppercase tracking-wider text-text-secondary truncate">{kpi.label}</span>
+              <span className={`grid h-7 w-7 sm:h-8 sm:w-8 shrink-0 place-items-center rounded-lg ${toneMap[kpi.tone]}`}><Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" /></span>
             </div>
-            <div className="mt-3 text-2xl font-extrabold tracking-tight text-slate-950">{kpi.value}</div>
+            <div className="mt-2 text-lg sm:text-2xl font-extrabold tracking-tight text-text-primary number-mono">{kpi.value}</div>
           </div>
         );
       })}

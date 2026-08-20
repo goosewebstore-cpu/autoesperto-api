@@ -220,9 +220,9 @@ function drawRadar(
   const n = labels.length;
   const angle = (i: number) => -Math.PI / 2 + (i * 2 * Math.PI) / n;
   
-  // Concentric regular pentagon grid rings (standard lines)
+  // Concentric regular pentagon grid rings
   doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
-  doc.setLineWidth(0.3);
+  doc.setLineWidth(0.2);
   for (const frac of [0.25, 0.5, 0.75, 1]) {
     for (let i = 0; i < n; i++) {
       const nextIdx = (i + 1) % n;
@@ -234,9 +234,9 @@ function drawRadar(
     }
   }
 
-  // Grid axis lines
-  doc.setDrawColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
-  doc.setLineWidth(0.3);
+  // Grid radial axis lines
+  doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
+  doc.setLineWidth(0.25);
   for (let i = 0; i < n; i++) {
     doc.line(cx, cy, cx + R * Math.cos(angle(i)), cy + R * Math.sin(angle(i)));
   }
@@ -244,14 +244,14 @@ function drawRadar(
   // Calculate data points
   const dataPts: Array<{ x: number; y: number }> = [];
   for (let i = 0; i < n; i++) {
-    const f = Math.max(0, Math.min(1, scores[i] / 10));
+    const f = Math.max(0.1, Math.min(1, scores[i] / 10));
     dataPts.push({
       x: cx + R * f * Math.cos(angle(i)),
       y: cy + R * f * Math.sin(angle(i)),
     });
   }
 
-  // Draw filled radar data area using standard triangles
+  // Draw filled radar polygon data area
   doc.setFillColor(C.primaryLight[0], C.primaryLight[1], C.primaryLight[2]);
   for (let i = 0; i < n; i++) {
     const nextIdx = (i + 1) % n;
@@ -265,22 +265,29 @@ function drawRadar(
 
   // Draw border outline lines around data area
   doc.setDrawColor(C.primary[0], C.primary[1], C.primary[2]);
-  doc.setLineWidth(0.7);
+  doc.setLineWidth(1.0);
   for (let i = 0; i < n; i++) {
     const nextIdx = (i + 1) % n;
     doc.line(dataPts[i].x, dataPts[i].y, dataPts[nextIdx].x, dataPts[nextIdx].y);
   }
 
-  // Labels
+  // Draw circular vertex markers
+  doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
+  for (let i = 0; i < n; i++) {
+    doc.circle(dataPts[i].x, dataPts[i].y, 1.8, 'F');
+  }
+
+  // Labels with scores
   for (let i = 0; i < n; i++) {
     const a = angle(i);
-    const lx = cx + R * 1.22 * Math.cos(a);
-    const ly = cy + R * 1.22 * Math.sin(a);
-    doc.setFontSize(8.5);
+    const lx = cx + (R + 10) * Math.cos(a);
+    const ly = cy + (R + 10) * Math.sin(a);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
+    doc.setTextColor(C.dark[0], C.dark[1], C.dark[2]);
     const align = Math.abs(Math.cos(a)) < 0.2 ? 'center' : Math.cos(a) > 0 ? 'left' : 'right';
-    doc.text(labels[i], lx, ly, { align: align as 'left' | 'center' | 'right' });
+    const text = `${labels[i]} ${scores[i].toFixed(1)}`;
+    doc.text(text, lx, ly, { align: align as 'left' | 'center' | 'right' });
   }
   doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
   doc.setFont('helvetica', 'normal');
@@ -296,18 +303,17 @@ function drawDepreciation(
   values: number[]
 ): void {
   const xs = [0, 1, 3, 5];
-  const min = Math.min(...values) * 0.94;
-  const max = Math.max(...values) * 1.02;
+  const min = Math.min(...values) * 0.92;
+  const max = Math.max(...values) * 1.05;
   const px = (v: number) => x + (v / 5) * plotW;
   const py = (v: number) => y + plotH - ((v - min) / (max - min)) * plotH;
 
+  // Background light grid
   doc.setDrawColor(C.border[0], C.border[1], C.border[2]);
-  doc.setLineWidth(0.3);
-  for (const v of values) {
-    doc.setFontSize(7.5);
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
-    doc.text(v.toLocaleString('it-IT'), x - 3, py(v) + 2, { align: 'right' });
+  doc.setLineWidth(0.2);
+  for (let i = 0; i <= 4; i++) {
+    const gy = y + (plotH / 4) * i;
+    doc.line(x, gy, x + plotW, gy);
   }
 
   // Draw filled area segments (rect + triangle for each segment)
@@ -328,25 +334,31 @@ function drawDepreciation(
 
   // Draw outline border stroke for the depreciation trend line
   doc.setDrawColor(C.primary[0], C.primary[1], C.primary[2]);
-  doc.setLineWidth(0.8);
+  doc.setLineWidth(1.0);
   for (let i = 0; i < 3; i++) {
     doc.line(px(xs[i]), py(values[i]), px(xs[i+1]), py(values[i+1]));
   }
 
-  doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
+  // Draw point markers
   values.forEach((v, i) => {
-    doc.circle(px(xs[i]), py(v), 1.6, 'F');
+    doc.setFillColor(255, 255, 255);
+    doc.circle(px(xs[i]), py(v), 2.8, 'F');
+    doc.setDrawColor(C.primary[0], C.primary[1], C.primary[2]);
+    doc.setLineWidth(0.8);
+    doc.circle(px(xs[i]), py(v), 2.8, 'S');
+    doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
+    doc.circle(px(xs[i]), py(v), 1.4, 'F');
   });
 
   const labels = ['Oggi', '+1 anno', '+3 anni', '+5 anni'];
   labels.forEach((label, i) => {
-    doc.setFontSize(8.5);
+    doc.setFontSize(8);
     doc.setFont('helvetica', 'bold');
-    doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
+    doc.setTextColor(C.dark[0], C.dark[1], C.dark[2]);
     doc.text(label, px(xs[i]), y + plotH + 6, { align: 'center' });
-    doc.setFont('helvetica', 'normal');
-    doc.setTextColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
-    doc.text(values[i].toLocaleString('it-IT') + ' €', px(xs[i]), y + plotH + 11.5, { align: 'center' });
+    doc.setFont('helvetica', 'bold');
+    doc.setTextColor(C.primary[0], C.primary[1], C.primary[2]);
+    doc.text(values[i].toLocaleString('it-IT') + ' €', px(xs[i]), py(values[i]) - 5, { align: 'center' });
   });
   doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
   doc.setFontSize(10);
@@ -524,55 +536,127 @@ function drawLogo(doc: import('jspdf').jsPDF, logoData: string | null, x: number
 }
 
 function drawCover(doc: import('jspdf').jsPDF, report: AutoReport, dateLabel: string, logoData: string | null): void {
-  const { vehicle, reliability } = report;
+  const { vehicle, reliability, price } = report;
 
+  // Header Banner
   doc.setFillColor(C.dark[0], C.dark[1], C.dark[2]);
-  doc.rect(0, 0, 210, 62, 'F');
+  doc.rect(0, 0, 210, 56, 'F');
   doc.setFillColor(C.primary[0], C.primary[1], C.primary[2]);
-  doc.rect(0, 62, 210, 3, 'F');
+  doc.rect(0, 56, 210, 2.5, 'F');
 
-  drawLogo(doc, logoData, MARGIN, 7, 11);
+  drawLogo(doc, logoData, MARGIN, 8, 10);
 
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(17);
+  doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
-  doc.text('AUTOESPERTO', MARGIN + 15, 17);
-  doc.setFontSize(8);
+  doc.text('AUTOESPERTO', MARGIN + 14, 16);
+  doc.setFontSize(7.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(191, 219, 254);
-  doc.text('Il tuo secondo parere prima di comprare o vendere un\u2019auto usata', MARGIN + 15, 23);
+  doc.text('Valutazione di mercato e affidabilità pre-acquisto', MARGIN + 14, 22);
+
   doc.setTextColor(255, 255, 255);
-  doc.setFontSize(10);
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'bold');
-  doc.text('REPORT AUTO', 190, 17, { align: 'right' });
+  doc.text('REPORT ANALISI', 190, 16, { align: 'right' });
   doc.setFontSize(7);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(203, 213, 225);
-  doc.text(dateLabel, 190, 23, { align: 'right' });
+  doc.text(dateLabel, 190, 22, { align: 'right' });
 
   const title = `${vehicle.make} ${vehicle.model}`;
-  doc.setFontSize(title.length > 22 ? 20 : 27);
+  doc.setFontSize(title.length > 22 ? 18 : 24);
   doc.setFont('helvetica', 'bold');
   doc.setTextColor(255, 255, 255);
-  doc.text(title, MARGIN, 44);
+  doc.text(title, MARGIN, 39);
 
   const detailParts = [
     vehicle.version,
     vehicle.year ? String(vehicle.year) : '',
-    report.price.inputKm ? `circa ${report.price.inputKm.toLocaleString('it-IT')} km` : '',
+    price.inputKm ? `${price.inputKm.toLocaleString('it-IT')} km` : '',
     vehicle.fuel || '',
     vehicle.body || '',
   ].filter(Boolean);
-  doc.setFontSize(10);
+  doc.setFontSize(8.5);
   doc.setFont('helvetica', 'normal');
   doc.setTextColor(191, 219, 254);
-  const detailText = detailParts.length ? detailParts.join('  ·  ') : 'Scheda informativa veicolo';
-  const detailLines = doc.splitTextToSize(detailText, 170);
-  doc.text(detailLines.slice(0, 2), MARGIN, 52);
+  const detailText = detailParts.length ? detailParts.join('  ·  ') : 'Scheda veicolo';
+  doc.text(detailText, MARGIN, 48);
 
-  box({ doc, y: 0 } as PdfWriter, MARGIN, 74, CONTENT_W, 68, C.surface);
-  drawCar(doc, 105, 118, 88);
+  // 1. Verdict Prominent Card
+  const verdict = verdictColors(reliability.verdict);
+  const vY = 67;
+  const vH = 34;
+  box({ doc, y: 0 } as PdfWriter, MARGIN, vY, CONTENT_W, vH, verdict.bg);
+  doc.setFillColor(verdict.text[0], verdict.text[1], verdict.text[2]);
+  doc.roundedRect(MARGIN, vY, 3.5, vH, 1.5, 1.5, 'F');
 
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(verdict.text[0], verdict.text[1], verdict.text[2]);
+  doc.text('VERDETTO AUTOESPERTO', MARGIN + 8, vY + 9);
+
+  doc.setFontSize(14);
+  doc.text(reliability.verdictLabel.toUpperCase(), MARGIN + 8, vY + 20);
+
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
+  doc.text(`Affidabilità ${reliability.score.toFixed(1)}/10`, 188, vY + 9, { align: 'right' });
+
+  const summaryLine = doc.splitTextToSize(reliability.summary || '', CONTENT_W - 16);
+  doc.text(summaryLine.slice(0, 1), MARGIN + 8, vY + 28);
+
+  // 2. 3 Large KPI Summary Cards
+  const kpiY = 107;
+  const kpiW = (CONTENT_W - 8) / 3;
+  const kpiH = 30;
+
+  // KPI 1: Valore
+  box({ doc, y: 0 } as PdfWriter, MARGIN, kpiY, kpiW, kpiH, C.surface);
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+  doc.text('VALORE STIMATO', MARGIN + 6, kpiY + 8);
+  doc.setFontSize(12);
+  doc.setTextColor(C.primary[0], C.primary[1], C.primary[2]);
+  doc.text(euro(price.estimatedValue), MARGIN + 6, kpiY + 18);
+  doc.setFontSize(6.8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+  doc.text(`${euro(price.min)} – ${euro(price.max)}`, MARGIN + 6, kpiY + 25);
+
+  // KPI 2: Affidabilità
+  const kpiX2 = MARGIN + kpiW + 4;
+  box({ doc, y: 0 } as PdfWriter, kpiX2, kpiY, kpiW, kpiH, C.surface);
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+  doc.text('AFFIDABILITÀ', kpiX2 + 6, kpiY + 8);
+  doc.setFontSize(12);
+  doc.setTextColor(verdict.text[0], verdict.text[1], verdict.text[2]);
+  doc.text(`${reliability.score.toFixed(1)} / 10`, kpiX2 + 6, kpiY + 18);
+  doc.setFontSize(6.8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+  doc.text('score meccanica', kpiX2 + 6, kpiY + 25);
+
+  // KPI 3: Costi
+  const kpiX3 = MARGIN + (kpiW + 4) * 2;
+  box({ doc, y: 0 } as PdfWriter, kpiX3, kpiY, kpiW, kpiH, C.surface);
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'bold');
+  doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+  doc.text('MANUTENZIONE', kpiX3 + 6, kpiY + 8);
+  doc.setFontSize(12);
+  doc.setTextColor(C.dark[0], C.dark[1], C.dark[2]);
+  doc.text(costLabel(reliability.futureCosts?.annualMaintenance ?? 450), kpiX3 + 6, kpiY + 18);
+  doc.setFontSize(6.8);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
+  doc.text(`~${euro(reliability.futureCosts?.annualMaintenance ?? 450)}/anno`, kpiX3 + 6, kpiY + 25);
+
+  // 3. Technical Specs Box
   const facts: Array<[string, string]> = [
     ['Alimentazione', vehicle.fuel],
     ['Cambio', vehicle.transmission],
@@ -583,41 +667,27 @@ function drawCover(doc: import('jspdf').jsPDF, report: AutoReport, dateLabel: st
   ].filter(([, v]) => Boolean(v)) as Array<[string, string]>;
 
   const fBoxW = (CONTENT_W - 8) / 2;
-  const fBoxH = 21;
-  let fy = 152;
+  const fBoxH = 18;
+  let fy = 145;
   facts.slice(0, 6).forEach(([label, value], i) => {
     const fx = MARGIN + (i % 2) * (fBoxW + 8);
-    if (i > 0 && i % 2 === 0) fy += fBoxH + 6;
+    if (i > 0 && i % 2 === 0) fy += fBoxH + 4;
     box({ doc, y: 0 } as PdfWriter, fx, fy, fBoxW, fBoxH, C.surface);
-    doc.setFontSize(7);
+    doc.setFontSize(6.8);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(C.slateMuted[0], C.slateMuted[1], C.slateMuted[2]);
-    doc.text(label.toUpperCase(), fx + 7, fy + 8);
-    doc.setFontSize(10);
+    doc.text(label.toUpperCase(), fx + 6, fy + 7);
+    doc.setFontSize(9);
     doc.setFont('helvetica', 'bold');
     doc.setTextColor(C.dark[0], C.dark[1], C.dark[2]);
-    doc.text(value, fx + 7, fy + 16);
+    doc.text(value, fx + 6, fy + 14);
   });
-  const factsBottom = fy + fBoxH + 10;
 
-  const verdict = verdictColors(reliability.verdict);
-  box({ doc, y: 0 } as PdfWriter, MARGIN, factsBottom, CONTENT_W, 24, verdict.bg);
-  doc.setFillColor(verdict.text[0], verdict.text[1], verdict.text[2]);
-  doc.roundedRect(MARGIN, factsBottom, 3, 24, 1.5, 1.5, 'F');
-  doc.setFontSize(8);
-  doc.setFont('helvetica', 'bold');
-  doc.setTextColor(verdict.text[0], verdict.text[1], verdict.text[2]);
-  doc.text('VERDETTO', MARGIN + 12, factsBottom + 8);
-  doc.setFontSize(13);
-  doc.text(reliability.verdictLabel.toUpperCase(), MARGIN + 12, factsBottom + 18);
-  doc.setFontSize(8.5);
+  // Footer
+  doc.setFontSize(7.5);
   doc.setFont('helvetica', 'normal');
-  doc.setTextColor(C.slateText[0], C.slateText[1], C.slateText[2]);
-  doc.text(`Punteggio affidabilità ${reliability.score.toFixed(1)}/10`, 188, factsBottom + 13, { align: 'right' });
-
-  doc.setFontSize(8);
   doc.setTextColor(C.slateLight[0], C.slateLight[1], C.slateLight[2]);
-  doc.text('AutoEsperto — autoesperto.it · Report generato automaticamente', MARGIN, 268);
+  doc.text('AutoEsperto — autoesperto.it · Report generato per orientamento all\'acquisto', MARGIN, 270);
 }
 
 function drawSintesi(doc: import('jspdf').jsPDF, report: AutoReport): void {

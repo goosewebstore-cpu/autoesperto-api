@@ -3,8 +3,9 @@ import { siteUrl, sitemapNames } from '@/lib/sitemaps';
 export const dynamic = 'force-static';
 
 export function GET() {
+  const buildDate = new Date().toISOString().split('T')[0];
   const body = `<?xml version="1.0" encoding="UTF-8"?>\n<sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${sitemapNames()
-    .map((name) => `  <sitemap>\n    <loc>${siteUrl}/sitemaps/${name}.xml</loc>\n  </sitemap>`)
+    .map((name) => `  <sitemap>\n    <loc>${siteUrl}/sitemaps/${name}.xml</loc>\n    <lastmod>${buildDate}</lastmod>\n  </sitemap>`)
     .join('\n')}\n</sitemapindex>`;
   return new Response(body, {
     headers: { 'Content-Type': 'application/xml; charset=utf-8', 'Cache-Control': 'public, max-age=300, s-maxage=86400' },

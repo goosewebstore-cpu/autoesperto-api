@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { BadgeEuro, Gauge, ShieldCheck, ShoppingCart, Wrench } from 'lucide-react';
+import { BadgeEuro, Gauge, ShieldCheck, ShoppingCart, Wrench, ArrowRight } from 'lucide-react';
 import { GUIDE_CATEGORIES, type Guide, type GuideCategory } from '@/lib/guides';
 
 const CATEGORY_ICONS: Record<GuideCategory, typeof ShoppingCart> = {
@@ -33,7 +33,7 @@ export default function GuideCard({ guide }: GuideCardProps) {
   return (
     <Link
       href={`/guide/${guide.slug}`}
-      className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-300 hover:border-blue-500/50 hover:shadow-card-hover hover:-translate-y-0.5"
+      className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-300 hover:border-blue-500/50 hover:shadow-card-hover hover:-translate-y-0.5 cursor-pointer block text-left"
     >
       <div className="flex items-center justify-between gap-3">
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ${style.badge}`}>
@@ -48,9 +48,10 @@ export default function GuideCard({ guide }: GuideCardProps) {
         {guide.title}
       </h3>
       <p className="mt-2 text-xs leading-relaxed text-text-secondary line-clamp-3">{guide.description}</p>
-      <span className="mt-auto pt-4 text-xs font-bold text-blue-600 flex items-center gap-1 transition-all group-hover:translate-x-1">
-        Leggi la guida <span aria-hidden="true">→</span>
-      </span>
+      <div className="mt-auto pt-4 text-xs font-bold text-blue-600 flex items-center justify-between transition-all">
+        <span>Leggi la guida</span>
+        <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />
+      </div>
     </Link>
   );
 }

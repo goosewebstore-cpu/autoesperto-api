@@ -52,7 +52,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
   return (
     <>
       {/* Scroll Progress Bar at very top of screen */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-100">
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-100 pointer-events-none">
         <div
           className="h-full bg-accent transition-all duration-150 ease-out"
           style={{ width: `${scrollProgress}%` }}

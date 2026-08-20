@@ -5,11 +5,17 @@ import NewsletterSignup from '@/components/NewsletterSignup';
 const TOOL_LINKS = [
   { label: 'Mi conviene comprarla?', href: '/compra' },
   { label: 'Quanto vale la mia auto?', href: '/vendi' },
-  { label: 'Valutazione auto usata', href: '/valutazione' },
+  { label: 'Migliori auto usate', href: '/migliori-auto-usate' },
+  { label: 'Incentivi ed Ecobonus 2026', href: '/incentivi-auto' },
+  { label: 'Blocchi del traffico Euro', href: '/blocchi-traffico' },
+  { label: 'Valutazione per modello', href: '/valutazione' },
+  { label: 'Auto per neopatentati', href: '/neopatentati' },
+  { label: 'Passaggio di proprietà', href: '/passaggio-proprieta' },
+  { label: 'Guida problemi motori', href: '/motori-problemi' },
   { label: 'Confronta modelli', href: '/confronta' },
   { label: 'Affidabilità e guasti', href: '/affidabilita' },
-  { label: 'Verifica targa', href: '/verifica-targa' },
   { label: 'Calcolo bollo auto', href: '/calcolo-bollo' },
+  { label: 'Verifica targa', href: '/verifica-targa' },
 ];
 
 const INFO_LINKS = [

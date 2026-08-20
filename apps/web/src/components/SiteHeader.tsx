@@ -3,25 +3,31 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search } from 'lucide-react';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert } from 'lucide-react';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
 const TOOLS = [
   { group: 'Valutazione & acquisto', items: [
     { label: 'Quanto vale la mia auto?', desc: 'Stima di mercato e annuncio pronto', href: '/vendi', icon: Banknote },
     { label: 'Mi conviene comprarla?', desc: 'Prezzo e verdetto prima di firmare', href: '/compra', icon: SearchCheck },
+    { label: 'Migliori auto usate', desc: 'Classifica per budget e categoria', href: '/migliori-auto-usate', icon: Trophy },
     { label: 'Valutazione per modello', desc: 'Prezzi reali per marca e modello', href: '/valutazione', icon: Gauge },
+    { label: 'Auto per neopatentati', desc: 'Limiti kW e migliori usate 2026', href: '/neopatentati', icon: Car },
     { label: 'Confronta modelli', desc: 'Due auto a confronto, fianco a fianco', href: '/confronta', icon: ArrowLeftRight },
   ]},
   { group: 'Manutenzione & costi', items: [
     { label: 'Affidabilità e guasti', desc: 'Problemi noti modello per modello', href: '/affidabilita', icon: Hammer },
+    { label: 'Guida problemi motori', desc: 'Difetti noti e costi di ripristino', href: '/motori-problemi', icon: Wrench },
     { label: 'Costi di riparazione', desc: 'Quanto costa sistemarla', href: '/riparazione', icon: Wrench },
     { label: 'Consumi reali', desc: 'Consumi veri, non da listino', href: '/consumi', icon: Fuel },
     { label: 'Valuta la condizione', desc: 'Riparare o vendere?', href: '/condizione', icon: Scale },
   ]},
-  { group: 'Strumenti extra', items: [
-    { label: 'Verifica targa', desc: 'Trova modello e valore dalla targa', href: '/verifica-targa', icon: Search },
+  { group: 'Strumenti & Normative 2026', items: [
+    { label: 'Incentivi & Ecobonus', desc: 'Calcolo bonus rottamazione 2026', href: '/incentivi-auto', icon: Zap },
+    { label: 'Blocchi del traffico', desc: 'Verifica classi Euro e Area B/Roma', href: '/blocchi-traffico', icon: ShieldAlert },
+    { label: 'Passaggio di proprietà', desc: 'Costo per kW e provincia 2026', href: '/passaggio-proprieta', icon: CreditCard },
     { label: 'Calcolo bollo auto', desc: 'Quanto paghi di bollo nel 2026', href: '/calcolo-bollo', icon: CreditCard },
+    { label: 'Verifica targa', desc: 'Trova modello e valore dalla targa', href: '/verifica-targa', icon: Search },
   ]},
 ];
 

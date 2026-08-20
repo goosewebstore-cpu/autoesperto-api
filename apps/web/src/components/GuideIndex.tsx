@@ -1,9 +1,9 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useSearchParams } from 'next/navigation';
 import Link from 'next/link';
-import { ChevronLeft, ChevronRight, Search } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Search, BookOpen } from 'lucide-react';
 import { guides, GUIDE_CATEGORIES, type GuideCategory } from '@/lib/guides';
 import GuideCard from '@/components/GuideCard';
 import PageHero from '@/components/PageHero';
@@ -22,11 +22,23 @@ function normalize(value: string) {
 export default function GuideIndex() {
   const searchParams = useSearchParams();
   const rawCategory = searchParams.get('categoria') || undefined;
-  const category: GuideCategory | undefined =
+  const initialCategory: GuideCategory | undefined =
     rawCategory && rawCategory in GUIDE_CATEGORIES ? (rawCategory as GuideCategory) : undefined;
   const rawPage = Number.parseInt(searchParams.get('pagina') || '1', 10);
-  const page = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+  const initialPage = Number.isFinite(rawPage) && rawPage > 0 ? rawPage : 1;
+
+  const [category, setCategory] = useState<GuideCategory | undefined>(initialCategory);
+  const [page, setPage] = useState<number>(initialPage);
   const [query, setQuery] = useState(searchParams.get('q') || '');
+
+  useEffect(() => {
+    const urlCat = searchParams.get('categoria');
+    if (urlCat && urlCat in GUIDE_CATEGORIES) {
+      setCategory(urlCat as GuideCategory);
+    } else if (!urlCat) {
+      setCategory(undefined);
+    }
+  }, [searchParams]);
 
   const q = normalize(query.trim());
   const filtered = guides.filter((g) => {
@@ -42,12 +54,25 @@ export default function GuideIndex() {
   const current = q ? 1 : Math.min(page, totalPages);
   const pageItems = sorted.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
-  const buildPageHref = (categoria?: string, pagina?: number) => {
+  const handleCategorySelect = (newCat?: GuideCategory) => {
+    setCategory(newCat);
+    setPage(1);
     const params = new URLSearchParams();
-    if (categoria) params.set('categoria', categoria);
-    if (pagina && pagina > 1) params.set('pagina', String(pagina));
+    if (newCat) params.set('categoria', newCat);
+    if (query) params.set('q', query);
     const qs = params.toString();
-    return qs ? `/guide?${qs}` : '/guide';
+    window.history.replaceState(null, '', qs ? `/guide?${qs}` : '/guide');
+  };
+
+  const handlePageChange = (newPage: number) => {
+    setPage(newPage);
+    const params = new URLSearchParams();
+    if (category) params.set('categoria', category);
+    if (newPage > 1) params.set('pagina', String(newPage));
+    if (query) params.set('q', query);
+    const qs = params.toString();
+    window.history.replaceState(null, '', qs ? `/guide?${qs}` : '/guide');
+    window.scrollTo({ top: 300, behavior: 'smooth' });
   };
 
   const collectionSchema = {
@@ -85,27 +110,6 @@ export default function GuideIndex() {
     ],
   };
 
-  const categoryChips = (
-    <>
-      {Object.entries(GUIDE_CATEGORIES).map(([key, { label }]) => {
-        const active = category === key;
-        return (
-          <Link
-            key={key}
-            href={buildPageHref(key, 1)}
-            className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
-              active
-                ? 'border-accent bg-accent text-white'
-                : 'border-border bg-white text-text-secondary hover:border-accent hover:text-accent'
-            }`}
-          >
-            {label}
-          </Link>
-        );
-      })}
-    </>
-  );
-
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(collectionSchema) }} />
@@ -127,33 +131,56 @@ export default function GuideIndex() {
           <input
             type="search"
             value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder="Cerca una guida… (es. cambio auto, rottamazione, assicurazione)"
+            onChange={(event) => {
+              setQuery(event.target.value);
+              setPage(1);
+            }}
+            placeholder="Cerca una guida… (es. cambio auto, rottamazione, assicurazione, neopatentati)"
             aria-label="Cerca una guida"
             className="w-full rounded-xl border border-border bg-white py-3 pl-11 pr-4 text-sm text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
           />
         </div>
 
+        {/* Interactive Category Chips */}
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <Link
-            href="/guide"
-            className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-colors ${
+          <button
+            type="button"
+            onClick={() => handleCategorySelect(undefined)}
+            className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
               category === undefined
-                ? 'border-accent bg-accent text-white'
+                ? 'border-accent bg-accent text-white shadow-sm'
                 : 'border-border bg-white text-text-secondary hover:border-accent hover:text-accent'
             }`}
           >
-            Tutte
-          </Link>
-          {categoryChips}
+            Tutte ({guides.length})
+          </button>
+          {Object.entries(GUIDE_CATEGORIES).map(([key, { label }]) => {
+            const count = guides.filter((g) => g.category === key).length;
+            const active = category === key;
+            return (
+              <button
+                key={key}
+                type="button"
+                onClick={() => handleCategorySelect(key as GuideCategory)}
+                className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
+                  active
+                    ? 'border-accent bg-accent text-white shadow-sm'
+                    : 'border-border bg-white text-text-secondary hover:border-accent hover:text-accent'
+                }`}
+              >
+                {label} ({count})
+              </button>
+            );
+          })}
         </div>
 
         <p className="mt-5 text-xs font-semibold text-text-secondary">
-          {pageItems.length} {pageItems.length === 1 ? 'guida trovata' : 'guide trovate'}
+          {sorted.length} {sorted.length === 1 ? 'guida disponibile' : 'guide disponibili'}
           {category ? ` in ${GUIDE_CATEGORIES[category].label}` : ''}
           {q ? ` per "${query.trim()}"` : ''}
         </p>
 
+        {/* Guides Grid */}
         <div className="mt-4 grid gap-4 sm:grid-cols-2">
           {pageItems.length > 0 ? (
             pageItems.map((guide) => (
@@ -161,12 +188,16 @@ export default function GuideIndex() {
             ))
           ) : (
             <div className="sm:col-span-2 rounded-2xl border border-border bg-surface-2 p-8 text-center">
+              <BookOpen className="h-8 w-8 mx-auto text-slate-400 mb-2" />
               <p className="text-sm font-semibold text-text-primary">Nessuna guida trovata</p>
               <p className="mt-1 text-xs text-text-secondary">Prova con un altro termine o sfoglia tutte le categorie.</p>
               <button
                 type="button"
-                onClick={() => { setQuery(''); }}
-                className="mt-3 rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-semibold text-text-primary hover:border-accent hover:text-accent"
+                onClick={() => {
+                  setQuery('');
+                  setCategory(undefined);
+                }}
+                className="mt-3 rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-semibold text-text-primary hover:border-accent hover:text-accent cursor-pointer"
               >
                 Mostra tutte le guide
               </button>
@@ -178,33 +209,35 @@ export default function GuideIndex() {
 
         {totalPages > 1 && (
           <nav aria-label="Paginazione guide" className="mt-10 flex items-center justify-center gap-4">
-            <Link
-              href={buildPageHref(category, current - 1)}
-              aria-disabled={current <= 1}
-              className={`inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-xs font-semibold transition-colors ${
+            <button
+              type="button"
+              onClick={() => handlePageChange(Math.max(1, current - 1))}
+              disabled={current <= 1}
+              className={`inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-xs font-semibold transition-colors cursor-pointer ${
                 current <= 1
-                  ? 'pointer-events-none text-text-tertiary'
-                  : 'text-text-primary hover:border-accent hover:text-accent'
+                  ? 'pointer-events-none opacity-40 text-text-tertiary'
+                  : 'text-text-primary hover:border-accent hover:text-accent bg-white'
               }`}
             >
               <ChevronLeft className="h-3.5 w-3.5" />
               Precedente
-            </Link>
+            </button>
             <span className="text-xs font-semibold text-text-secondary">
               Pagina {current} di {totalPages}
             </span>
-            <Link
-              href={buildPageHref(category, current + 1)}
-              aria-disabled={current >= totalPages}
-              className={`inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-xs font-semibold transition-colors ${
+            <button
+              type="button"
+              onClick={() => handlePageChange(Math.min(totalPages, current + 1))}
+              disabled={current >= totalPages}
+              className={`inline-flex items-center gap-1 rounded-lg border border-border px-3 py-2 text-xs font-semibold transition-colors cursor-pointer ${
                 current >= totalPages
-                  ? 'pointer-events-none text-text-tertiary'
-                  : 'text-text-primary hover:border-accent hover:text-accent'
+                  ? 'pointer-events-none opacity-40 text-text-tertiary'
+                  : 'text-text-primary hover:border-accent hover:text-accent bg-white'
               }`}
             >
               Successiva
               <ChevronRight className="h-3.5 w-3.5" />
-            </Link>
+            </button>
           </nav>
         )}
 

@@ -47,7 +47,6 @@ export const metadata: Metadata = {
   publisher: 'AutoEsperto',
   manifest: '/manifest.json',
   alternates: {
-    canonical: '/',
     languages: { 'it-IT': siteUrl },
   },
   verification: {

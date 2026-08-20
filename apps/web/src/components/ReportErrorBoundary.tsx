@@ -33,7 +33,7 @@ export default class ReportErrorBoundary extends Component<Props, State> {
       return (
         <div className="mt-5 rounded-2xl p-6 border border-amber-200 bg-amber-50 text-center">
           <AlertTriangle className="h-6 w-6 text-amber-600 mx-auto mb-3" />
-          <h2 className="text-sm font-bold text-amber-900">Qualcosa è andato stinto nel report</h2>
+          <h2 className="text-sm font-bold text-amber-900">Qualcosa è andato storto nel report</h2>
           <p className="mt-1 text-xs text-amber-800">Riprova l&apos;analisi o inserisci marca e modello manualmente.</p>
           {this.props.onRetry && (
             <button

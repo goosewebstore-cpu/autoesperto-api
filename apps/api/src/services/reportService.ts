@@ -91,12 +91,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
 
   const alternatives = getAlternatives(vehicle.make, vehicle.model).slice(0, 4);
 
-  const [marketStats, alternativeStats] = await Promise.all([
-    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km).catch(() => undefined),
-    Promise.all(alternatives.map((alt) =>
-      fetchSubitoMarketStats(alt.make, alt.model, vehicle.year, input.km).catch(() => undefined)
-    )),
-  ]);
+  const marketStats = await fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km).catch(() => undefined);
 
   // Se gli annunci reali restituiscono un prezzo medio attendibile, il valore
   // stimato usa il mercato reale (già filtrato per anno e km confrontabili).
@@ -145,36 +140,23 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       marketUrls: getMarketSearchUrls(vehicle),
       market: marketStats,
     },
-    alternatives: alternatives.map((alt, i) => {
+    alternatives: alternatives.map((alt) => {
       const altVehicle = {
         ...alt,
         year: vehicle.year,
-        fuel: vehicle.fuel,
-        body: vehicle.body,
+        fuel: vehicle.fuel || alt.fuel,
+        body: vehicle.body || alt.body,
       };
       const est = input.km
         ? estimateMarketValueWithKm(altVehicle, input.km)
         : estimateMarketValue(altVehicle);
 
-      const market = alternativeStats[i];
-      // Only use crawled market price if it successfully matched the specific target year (±1 year)
-      if (market && market.priceAvg && market.comparison?.yearMatched) {
-        return {
-          make: alt.make,
-          model: alt.model,
-          estimatedValue: market.priceAvg,
-          estimatedMin: market.priceMin || est.min,
-          estimatedMax: market.priceMax || est.max,
-          market,
-        };
-      }
       return {
         make: alt.make,
         model: alt.model,
         estimatedValue: est.value,
         estimatedMin: est.min,
         estimatedMax: est.max,
-        market: market || undefined,
       };
     }),
     createdAt: new Date().toISOString(),

@@ -442,54 +442,199 @@ export function getVehicleKnowledge(make: string): VehicleKnowledge {
     versionsToAvoid: ['Versioni senza documentazione tagliandi continua'],
     versionsRecommended: ['Versioni con tagliandi documentati e basso chilometraggio'],
   };
+const SEGMENT_CANDIDATES: Record<string, Array<{ make: string; model: string; power: number; fuel: string; body: string }>> = {
+  citycar: [
+    { make: 'Fiat', model: 'Panda', power: 70, fuel: 'Ibrida', body: 'Utilitaria' },
+    { make: 'Fiat', model: '500', power: 70, fuel: 'Ibrida', body: 'Utilitaria' },
+    { make: 'Toyota', model: 'Aygo', power: 72, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Hyundai', model: 'i10', power: 67, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Kia', model: 'Picanto', power: 67, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Renault', model: 'Twingo', power: 65, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Smart', model: 'Fortwo', power: 71, fuel: 'Benzina', body: 'Citycar' },
+    { make: 'Volkswagen', model: 'up!', power: 65, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Lancia', model: 'Ypsilon', power: 70, fuel: 'Ibrida', body: 'Utilitaria' },
+    { make: 'Suzuki', model: 'Ignis', power: 83, fuel: 'Ibrida', body: 'Crossover' },
+  ],
+  utilitaria: [
+    { make: 'Toyota', model: 'Yaris', power: 116, fuel: 'Ibrida', body: 'Utilitaria' },
+    { make: 'Renault', model: 'Clio', power: 90, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Peugeot', model: '208', power: 100, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Volkswagen', model: 'Polo', power: 95, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Ford', model: 'Fiesta', power: 100, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Opel', model: 'Corsa', power: 100, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Dacia', model: 'Sandero', power: 90, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Citroen', model: 'C3', power: 83, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Hyundai', model: 'i20', power: 84, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Seat', model: 'Ibiza', power: 95, fuel: 'Benzina', body: 'Utilitaria' },
+    { make: 'Mini', model: 'Cooper', power: 136, fuel: 'Benzina', body: 'Utilitaria' },
+  ],
+  bsuv: [
+    { make: 'Jeep', model: 'Renegade', power: 120, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Fiat', model: '500X', power: 120, fuel: 'Benzina', body: 'Crossover' },
+    { make: 'Volkswagen', model: 'T-Roc', power: 110, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Volkswagen', model: 'T-Cross', power: 95, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Toyota', model: 'Yaris Cross', power: 116, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Peugeot', model: '2008', power: 100, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Renault', model: 'Captur', power: 90, fuel: 'Benzina', body: 'Crossover' },
+    { make: 'Ford', model: 'Puma', power: 125, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Nissan', model: 'Juke', power: 114, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Hyundai', model: 'Kona', power: 120, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Dacia', model: 'Duster', power: 100, fuel: 'GPL/Metano', body: 'SUV' },
+    { make: 'Suzuki', model: 'Vitara', power: 129, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Mazda', model: 'CX-3', power: 121, fuel: 'Benzina', body: 'SUV' },
+  ],
+  compatta: [
+    { make: 'Volkswagen', model: 'Golf', power: 115, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'Audi', model: 'A3', power: 116, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'BMW', model: 'Serie 1', power: 136, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'Mercedes', model: 'Classe A', power: 136, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'Ford', model: 'Focus', power: 125, fuel: 'Ibrida', body: 'Berlina' },
+    { make: 'Toyota', model: 'Corolla', power: 140, fuel: 'Ibrida', body: 'Berlina' },
+    { make: 'Peugeot', model: '308', power: 130, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'Seat', model: 'Leon', power: 115, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'Skoda', model: 'Octavia', power: 115, fuel: 'Diesel', body: 'Berlina' },
+    { make: 'Fiat', model: 'Tipo', power: 100, fuel: 'Benzina', body: 'Berlina' },
+    { make: 'Alfa Romeo', model: 'Giulietta', power: 120, fuel: 'Benzina', body: 'Berlina' },
+  ],
+  csuv: [
+    { make: 'Volkswagen', model: 'Tiguan', power: 150, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Toyota', model: 'RAV4', power: 218, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Nissan', model: 'Qashqai', power: 140, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Peugeot', model: '3008', power: 130, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Hyundai', model: 'Tucson', power: 150, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Kia', model: 'Sportage', power: 150, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Ford', model: 'Kuga', power: 150, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Jeep', model: 'Compass', power: 130, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Cupra', model: 'Formentor', power: 150, fuel: 'Benzina', body: 'SUV' },
+    { make: 'BMW', model: 'X1', power: 150, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Audi', model: 'Q3', power: 150, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Mercedes', model: 'GLA', power: 150, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Volvo', model: 'XC40', power: 163, fuel: 'Ibrida', body: 'SUV' },
+    { make: 'Alfa Romeo', model: 'Tonale', power: 130, fuel: 'Ibrida', body: 'SUV' },
+  ],
+  berlina_d: [
+    { make: 'BMW', model: 'Serie 3', power: 190, fuel: 'Diesel', body: 'Berlina' },
+    { make: 'Audi', model: 'A4', power: 190, fuel: 'Diesel', body: 'Berlina' },
+    { make: 'Mercedes', model: 'Classe C', power: 200, fuel: 'Diesel', body: 'Berlina' },
+    { make: 'Alfa Romeo', model: 'Giulia', power: 190, fuel: 'Diesel', body: 'Berlina' },
+    { make: 'Volvo', model: 'S60', power: 197, fuel: 'Ibrida', body: 'Berlina' },
+    { make: 'Volkswagen', model: 'Passat', power: 150, fuel: 'Diesel', body: 'Station wagon' },
+    { make: 'Tesla', model: 'Model 3', power: 283, fuel: 'Elettrica', body: 'Berlina' },
+  ],
+  dsuv: [
+    { make: 'BMW', model: 'X3', power: 190, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Audi', model: 'Q5', power: 204, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Mercedes', model: 'GLC', power: 197, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Porsche', model: 'Macan', power: 265, fuel: 'Benzina', body: 'SUV' },
+    { make: 'Alfa Romeo', model: 'Stelvio', power: 210, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Volvo', model: 'XC60', power: 197, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Land Rover', model: 'Range Rover Velar', power: 204, fuel: 'Diesel', body: 'SUV' },
+    { make: 'Tesla', model: 'Model Y', power: 299, fuel: 'Elettrica', body: 'SUV' },
+    { make: 'Maserati', model: 'Grecale', power: 300, fuel: 'Ibrida', body: 'SUV' },
+  ],
+  sportiva: [
+    { make: 'Mazda', model: 'MX-5', power: 132, fuel: 'Benzina', body: 'Spider' },
+    { make: 'Toyota', model: 'GR86', power: 234, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'BMW', model: 'Serie 2', power: 184, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'BMW', model: 'Z4', power: 197, fuel: 'Benzina', body: 'Spider' },
+    { make: 'Audi', model: 'TT', power: 197, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Porsche', model: '718 Cayman', power: 300, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Ford', model: 'Mustang', power: 450, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Alpine', model: 'A110', power: 252, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Abarth', model: '595', power: 165, fuel: 'Benzina', body: 'Utilitaria' },
+  ],
+  supercar: [
+    { make: 'Porsche', model: '911', power: 385, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Ferrari', model: 'Roma', power: 620, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Ferrari', model: '296 GTB', power: 830, fuel: 'Ibrida', body: 'Coupé' },
+    { make: 'Lamborghini', model: 'Huracan', power: 610, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'McLaren', model: 'Artura', power: 680, fuel: 'Ibrida', body: 'Coupé' },
+    { make: 'Aston Martin', model: 'Vantage', power: 510, fuel: 'Benzina', body: 'Coupé' },
+    { make: 'Maserati', model: 'MC20', power: 630, fuel: 'Benzina', body: 'Coupé' },
+  ],
+  monovolume: [
+    { make: 'Fiat', model: '500L', power: 95, fuel: 'Diesel', body: 'Monovolume' },
+    { make: 'Citroen', model: 'Berlingo', power: 100, fuel: 'Diesel', body: 'Multispazio' },
+    { make: 'Peugeot', model: 'Rifter', power: 100, fuel: 'Diesel', body: 'Multispazio' },
+    { make: 'Volkswagen', model: 'Touran', power: 115, fuel: 'Diesel', body: 'Monovolume' },
+    { make: 'Mercedes', model: 'Classe B', power: 116, fuel: 'Diesel', body: 'Monovolume' },
+  ],
+};
+
+function classifySegment(make: string, model: string): string {
+  const norm = `${make} ${model}`.toLowerCase();
+  const m = model.toLowerCase();
+
+  // Supercars
+  if (/911|ferrari|lamborghini|mclaren|aston martin|mc20|r8\b|huracan|aventador|roma|296|f8|sf90|gtb/.test(norm)) return 'supercar';
+  // Sports cars
+  if (/mx-5|gr86|gt86|z4|tt\b|718|boxster|cayman|mustang|alpine|a110|abarth|spider|supra|brz/.test(norm)) return 'sportiva';
+  // Citycar
+  if (/panda|500\b|aygo|i10|picanto|twingo|fortwo|up!|up\b|ypsilon|ignis|celerio|spring|citigo|mii\b|c1\b|108\b/.test(norm)) return 'citycar';
+  // Utilitarie
+  if (/yaris|clio|208|polo|fiesta|corsa|sandero|c3\b|i20|rio\b|ibiza|fabia|swift|micra|jazz|mito\b|cooper\b|mini\b/.test(norm)) return 'utilitaria';
+  // B-SUV
+  if (/renegade|500x|t-roc|t-cross|yaris cross|2008|captur|puma|juke|kona|stonic|duster|vitara|cx-3\b|cx-30|mokka|crossland|arona|kamiq|avenger|c3 aircross|zs\b/.test(norm)) return 'bsuv';
+  // C-SUV
+  if (/tiguan|rav4|qashqai|3008|tucson|sportage|kuga|compass|formentor|x1\b|x2\b|q3\b|gla\b|glb\b|xc40|tonale|austral|kadjar|cx-5|c5 aircross|ateca|karoq|evoque|ux\b/.test(norm)) return 'csuv';
+  // D-SUV
+  if (/x3\b|x5\b|x6\b|q5\b|q7\b|q8\b|glc|gle|macan|cayenne|stelvio|xc60|xc90|velar|range rover|grand cherokee|model y|grecale|levante|f-pace|touareg|rx\b|nx\b/.test(norm)) return 'dsuv';
+  // Berlina D
+  if (/serie 3|320|330|a4\b|classe c|c200|c220|giulia|s60|v60|passat|model 3|superb|508/.test(norm)) return 'berlina_d';
+  // Monovolume
+  if (/500l|berlingo|rifter|touran|caddy|classe b|b180|b200|scenic|c-max|s-max|kangoo|doblo|qubo/.test(norm)) return 'monovolume';
+  // Compatte
+  if (/golf|a3\b|serie 1|116|118|120|classe a|a180|a200|focus|corolla|308|megane|leon|octavia|tipo|giulietta|astra|i30|ceed|mazda 3|civic/.test(norm)) return 'compatta';
+
+  return 'compatta';
 }
 
 export function getAlternatives(make: string, model: string): VehicleData[] {
-  const alt = (make: string, model: string, year: number, power: number, fuel: string, body: string): VehicleData => ({
-    make,
-    model,
-    year,
-    power: `${power} CV`,
-    fuel,
-    body,
-  });
+  const currentYear = new Date().getFullYear();
+  const segment = classifySegment(make, model);
+  const pool = SEGMENT_CANDIDATES[segment] || SEGMENT_CANDIDATES.compatta;
+  const normMake = make.toLowerCase();
+  const normModel = model.toLowerCase();
 
-  const map: Record<string, VehicleData[]> = {
-    'volkswagen t-roc': [
-      alt('Peugeot', '2008', 2019, 110, 'Benzina', 'SUV'),
-      alt('Renault', 'Captur', 2018, 110, 'Diesel', 'Crossover'),
-      alt('Toyota', 'C-HR', 2019, 122, 'Ibrida', 'SUV'),
-      alt('Nissan', 'Juke', 2019, 117, 'Benzina', 'SUV'),
-    ],
-    'mazda cx-3': [
-      alt('Peugeot', '2008', 2019, 110, 'Benzina', 'SUV'),
-      alt('Renault', 'Captur', 2018, 110, 'Diesel', 'Crossover'),
-      alt('Toyota', 'C-HR', 2019, 122, 'Ibrida', 'SUV'),
-      alt('Nissan', 'Juke', 2019, 117, 'Benzina', 'SUV'),
-    ],
-    'fiat 500': [
-      alt('Toyota', 'Aygo', 2019, 72, 'Benzina', 'Utilitaria'),
-      alt('Volkswagen', 'up!', 2018, 75, 'Benzina', 'Utilitaria'),
-      alt('Renault', 'Twingo', 2018, 90, 'Benzina', 'Utilitaria'),
-      alt('Hyundai', 'i10', 2019, 67, 'Benzina', 'Utilitaria'),
-    ],
-    'ford focus': [
-      alt('Volkswagen', 'Golf', 2018, 115, 'Diesel', 'Berlina'),
-      alt('Peugeot', '308', 2019, 130, 'Diesel', 'Berlina'),
-      alt('Opel', 'Astra', 2018, 110, 'Benzina', 'Berlina'),
-      alt('Toyota', 'Corolla', 2020, 122, 'Ibrida', 'Berlina'),
-    ],
-    'bmw serie 3': [
-      alt('Mercedes', 'Classe C', 2018, 194, 'Diesel', 'Berlina'),
-      alt('Audi', 'A4', 2018, 190, 'Diesel', 'Berlina'),
-      alt('Volvo', 'S60', 2019, 190, 'Diesel', 'Berlina'),
-      alt('Lexus', 'IS', 2018, 200, 'Benzina', 'Berlina'),
-    ],
-  };
-  return map[`${make.toLowerCase()} ${model.toLowerCase()}`] || [
-    alt('Volkswagen', 'Golf', 2018, 115, 'Diesel', 'Berlina'),
-    alt('Toyota', 'Corolla', 2020, 122, 'Ibrida', 'Berlina'),
-    alt('Peugeot', '308', 2019, 130, 'Diesel', 'Berlina'),
-    alt('Ford', 'Focus', 2018, 120, 'Diesel', 'Berlina'),
-  ];
+  // Filter out the same model and prioritize other makes for genuine market competition
+  const candidates = pool.filter(
+    (c) => !(c.make.toLowerCase() === normMake && c.model.toLowerCase() === normModel)
+  );
+
+  const seenMakes = new Set<string>();
+  const selected: VehicleData[] = [];
+
+  // Pass 1: pick 1 car per distinct make
+  for (const c of candidates) {
+    const cMake = c.make.toLowerCase();
+    if (cMake === normMake || seenMakes.has(cMake)) continue;
+    seenMakes.add(cMake);
+    selected.push({
+      make: c.make,
+      model: c.model,
+      year: currentYear - 3,
+      power: `${c.power} CV`,
+      fuel: c.fuel,
+      body: c.body,
+    });
+    if (selected.length >= 4) break;
+  }
+
+  // Pass 2: if still under 4, fill remaining slots
+  if (selected.length < 4) {
+    for (const c of candidates) {
+      if (selected.some((s) => s.make === c.make && s.model === c.model)) continue;
+      selected.push({
+        make: c.make,
+        model: c.model,
+        year: currentYear - 3,
+        power: `${c.power} CV`,
+        fuel: c.fuel,
+        body: c.body,
+      });
+      if (selected.length >= 4) break;
+    }
+  }
+
+  return selected;
 }

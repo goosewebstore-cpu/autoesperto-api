@@ -1,5 +1,6 @@
 import type { AutoReport, PriceLabel, VehicleData, ReliabilityAnalysis, PriceAnalysis } from '@autoesperto/types';
 import type { FreeScanResult } from './api';
+import { buildAlternatives } from './stima';
 
 const MODEL_BASE_PRICES: Record<string, number> = {
   'fiat panda': 16500, 'fiat 500': 19500, 'fiat 500x': 25500, 'fiat 500l': 24500, 'fiat tipo': 21000, 'fiat punto': 17500,
@@ -73,7 +74,7 @@ export function generateInstantReport(input: {
     else if (input.requestedPrice > estValue * 1.05) priceLabel = 'HIGH';
   }
 
-  const score = Math.min(95, Math.max(65, Math.round(82 - age * 1.5 + (priceLabel === 'GOOD' ? 5 : priceLabel === 'HIGH' ? -6 : 0))));
+  const scoreNum = Math.min(9.5, Math.max(6.0, Math.round((8.2 - age * 0.15 + (priceLabel === 'GOOD' ? 0.5 : priceLabel === 'HIGH' ? -0.6 : 0)) * 10) / 10));
 
   const vehicle: VehicleData = {
     make: input.make,
@@ -83,10 +84,10 @@ export function generateInstantReport(input: {
   };
 
   const reliability: ReliabilityAnalysis = {
-    score,
-    verdict: score >= 80 ? 'BUY' : score >= 70 ? 'NEGOTIATE' : 'AVOID',
-    verdictLabel: score >= 80 ? 'Consigliata' : score >= 70 ? 'Da valutare' : 'Attenzione',
-    summary: `${input.make} ${input.model} (${year}) presenta un buon equilibrio complessivo tra affidabilità, costi di gestione e tenuta del valore.`,
+    score: scoreNum,
+    verdict: scoreNum >= 7.8 ? 'BUY' : scoreNum >= 6.8 ? 'NEGOTIATE' : 'AVOID',
+    verdictLabel: scoreNum >= 7.8 ? 'Consigliata' : scoreNum >= 6.8 ? 'Da valutare' : 'Attenzione',
+    summary: `${input.make} ${input.model} (${year}) presenta un solido equilibrio complessivo tra affidabilità meccanica, costi di gestione e tenuta del valore sul mercato.`,
     strengths: [
       'Costi di gestione e manutenzione contenuti',
       'Buona reperibilità di ricambi sul mercato italiano',
@@ -106,9 +107,24 @@ export function generateInstantReport(input: {
     transmission: 'Cambio fluido, verificare innesti a freddo.',
     maintenance: 'medio',
     commonIssues: [
-      'Usura precoce frizione nel ciclo prevalentemente urbano',
+      'Usura frizione nel ciclo prevalentemente urbano',
       'Sensori pressione pneumatici (TPMS) e batteria 12V dopo 4-5 anni',
     ],
+    categoryScores: {
+      engine: Math.min(9.5, Math.max(6.5, scoreNum + 0.3)),
+      transmission: Math.min(9.5, Math.max(6.0, scoreNum)),
+      electronics: Math.min(9.5, Math.max(5.5, scoreNum - 0.4)),
+      suspension: Math.min(9.5, Math.max(6.0, scoreNum - 0.2)),
+      body: Math.min(9.5, Math.max(6.5, scoreNum + 0.1)),
+    },
+    consumption: {
+      city: 14.5,
+      highway: 19.0,
+      combined: 16.8,
+      fuelType: 'km/L',
+    },
+    taxAnnual: Math.round(150 + Math.max(0, basePrice - 15000) * 0.006),
+    serviceIntervalKm: 15000,
     usage: {
       city: 'Ottima agilità e facilità di parcheggio.',
       family: 'Buona abitabilità per l\'uso quotidiano.',
@@ -147,10 +163,13 @@ export function generateInstantReport(input: {
     ],
   };
 
+  const alternatives = buildAlternatives(input.make, input.model, year);
+
   const report: AutoReport = {
     vehicle,
     reliability,
     price,
+    alternatives,
     createdAt: new Date().toISOString(),
   };
 

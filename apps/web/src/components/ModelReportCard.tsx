@@ -116,7 +116,7 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
             <div className="bg-surface-2 rounded-xl p-4">
               <div className="flex items-center gap-3">
                 <div className="text-4xl font-extrabold text-text-primary number-mono">
-                  {reliability.score.toFixed(1)}
+                  {(Number(reliability.score) > 10 ? Number(reliability.score) / 10 : (Number(reliability.score) || 7.5)).toFixed(1)}
                   <span className="text-base font-medium text-text-secondary">/10</span>
                 </div>
                 <div className="flex-1 min-w-0">
@@ -140,17 +140,17 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
                 <ul className="mt-3 space-y-1.5">
                   {reliability.strengths.slice(0, 3).map((s, i) => (
                     <li key={i} className="flex items-start gap-2 text-xs text-text-secondary">
-                      <CheckCircle2 className="w-3.5 h-3.5 text-success flex-shrink-0 mt-0.5" />
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0 mt-0.5" />
                       {s}
                     </li>
                   ))}
                 </ul>
               )}
-              <div className={`mt-3 rounded-xl border p-3 ${reliability.verdict === 'BUY' ? 'border-emerald-200 bg-emerald-50' : reliability.verdict === 'NEGOTIATE' ? 'border-amber-200 bg-amber-50' : 'border-red-200 bg-red-50'}`}>
+              <div className={`mt-3 rounded-xl border p-3 ${reliability.verdict === 'BUY' ? 'border-emerald-200 bg-emerald-50' : reliability.verdict === 'NEGOTIATE' ? 'border-amber-200 bg-amber-50' : 'border-rose-200 bg-rose-50'}`}>
                 <div className="text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
                   Conviene comprarla?
                 </div>
-                <div className={`mt-0.5 text-sm font-extrabold ${reliability.verdict === 'BUY' ? 'text-emerald-700' : reliability.verdict === 'NEGOTIATE' ? 'text-amber-700' : 'text-red-700'}`}>
+                <div className={`mt-0.5 text-sm font-extrabold ${reliability.verdict === 'BUY' ? 'text-emerald-700' : reliability.verdict === 'NEGOTIATE' ? 'text-amber-800' : 'text-rose-700'}`}>
                   {reliability.verdict === 'BUY'
                     ? 'Sì, con i controlli del caso'
                     : reliability.verdict === 'NEGOTIATE'
@@ -161,7 +161,7 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
               {(reliability.advice.length > 0 || reliability.commonIssues.length > 0) && (
                 <div className="mt-3 rounded-xl border border-border bg-white p-3">
                   <h4 className="mb-2 flex items-center gap-1.5 text-xs font-bold text-text-primary">
-                    <AlertTriangle className="w-3.5 h-3.5 text-warning" />
+                    <AlertTriangle className="w-3.5 h-3.5 text-amber-600" />
                     Cosa controllare prima di comprare
                   </h4>
                   <ul className="space-y-1.5">
@@ -169,7 +169,7 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
                       .slice(0, 4)
                       .map((item, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-text-secondary leading-relaxed">
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
                           {item}
                         </li>
                       ))}

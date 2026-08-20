@@ -17,7 +17,7 @@ export function computeScores(report: AutoReport): CarScores {
   const rawScore = Number(reliability.score) || 7.5;
   const reliabilityScore = Math.min(100, Math.max(10, Math.round(rawScore <= 10 ? rawScore * 10 : rawScore)));
 
-  let priceScore = 60;
+  let priceScore = 75;
   if (price.requestedPrice && price.estimatedValue) {
     const pct = ((price.requestedPrice - price.estimatedValue) / price.estimatedValue) * 100;
     priceScore = Math.round(100 - pct * 4);

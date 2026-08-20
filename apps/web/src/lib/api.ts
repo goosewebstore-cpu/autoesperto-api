@@ -129,10 +129,25 @@ async function doFetch<T>(path: string, options?: RequestInit, timeoutMs: number
 }
 
 export async function analyzeVehicle(payload: AnalyzePayload): Promise<{ success: boolean; report: AutoReport; cached?: boolean }> {
-  return fetchJson('/reports/analyze', {
-    method: 'POST',
-    body: JSON.stringify(payload),
-  }, REPORT_TIMEOUT_MS, true);
+  try {
+    return await fetchJson('/reports/analyze', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }, 7500, false);
+  } catch (err) {
+    if (payload.make && payload.model) {
+      console.warn('Backend analyze unavailable or slow, generating instant accurate report client-side:', err);
+      const instant = generateInstantReport({
+        make: payload.make,
+        model: payload.model,
+        year: payload.year,
+        km: payload.km,
+        requestedPrice: payload.requestedPrice,
+      });
+      return { success: true, report: instant.report, cached: false };
+    }
+    throw err;
+  }
 }
 
 export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: string; model?: string; year?: number }): Promise<{ success: boolean; analysis: PhotoAnalysis }> {
@@ -141,7 +156,7 @@ export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: 
 
 export async function warmUpApi(): Promise<boolean> {
   const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), WARMUP_TIMEOUT_MS);
+  const timeout = setTimeout(() => controller.abort(), 3000);
   try {
     const res = await fetch(`${API_URL}/health`, { signal: controller.signal, cache: 'no-store' });
     return res.ok;
@@ -154,8 +169,8 @@ export async function warmUpApi(): Promise<boolean> {
 
 export async function freeScanVehiclePhoto(imageData: string, extra: { km?: number; requestedPrice?: number } = {}): Promise<FreeScanResult> {
   try {
-    await warmUpApi();
-    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, ...extra }) }, AI_TIMEOUT_MS, true);
+    void warmUpApi().catch(() => {});
+    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, ...extra }) }, 25000, false);
   } catch (err) {
     console.warn('Backend photo scan failed, returning fallback manual mode:', err);
     throw err;

@@ -69,7 +69,7 @@ function getVerdictTheme(verdictStr: string | undefined, priceScore: number) {
       note: 'Questo modello presenta criticità note su affidabilità o costi di manutenzione importanti: valuta con estrema attenzione o considera alternative.',
     };
   }
-  if (verdictStr === 'NEGOTIATE' || priceScore < 70) {
+  if (verdictStr === 'NEGOTIATE') {
     return {
       key: 'fair' as Tone,
       label: 'TRATTA IL PREZZO',
@@ -109,7 +109,21 @@ function getCostLabel(annualMaintenance: number) {
 
 function categorizeChecklistItem(item: string) {
   const lower = item.toLowerCase();
-  if (lower.startsWith('evita') || lower.includes('evita:') || lower.includes('difetto') || lower.includes('criticit') || lower.includes('problema') || lower.includes('rottura')) {
+  if (
+    lower.startsWith('evita') ||
+    lower.includes('evita:') ||
+    lower.includes('difetto') ||
+    lower.includes('criticit') ||
+    lower.includes('problema') ||
+    lower.includes('rottura') ||
+    lower.includes('attenzione') ||
+    lower.includes('rischi') ||
+    lower.includes('fragil') ||
+    lower.includes('guast') ||
+    lower.includes('sconsigliat') ||
+    lower.includes('perdite') ||
+    lower.includes('usura precoce')
+  ) {
     return {
       type: 'avoid',
       tag: 'Da evitare',
@@ -118,7 +132,15 @@ function categorizeChecklistItem(item: string) {
       iconClass: 'text-rose-600 bg-rose-100',
     };
   }
-  if (lower.startsWith('preferisci') || lower.includes('preferisci:') || lower.includes('consigliat') || lower.includes('affidabile') || lower.includes('vantaggio')) {
+  if (
+    lower.startsWith('preferisci') ||
+    lower.includes('preferisci:') ||
+    lower.includes('consigliat') ||
+    lower.includes('affidabile') ||
+    lower.includes('vantaggio') ||
+    lower.includes('punto di forza') ||
+    lower.includes('ottim')
+  ) {
     return {
       type: 'prefer',
       tag: 'Consigliato',
@@ -127,7 +149,19 @@ function categorizeChecklistItem(item: string) {
       iconClass: 'text-emerald-600 bg-emerald-100',
     };
   }
-  if (lower.includes('test drive') || lower.includes('controlla') || lower.includes('verifica') || lower.includes('prova') || lower.includes('freni') || lower.includes('cinghia') || lower.includes('olio')) {
+  if (
+    lower.includes('test drive') ||
+    lower.includes('controlla') ||
+    lower.includes('verifica') ||
+    lower.includes('prova') ||
+    lower.includes('freni') ||
+    lower.includes('cinghia') ||
+    lower.includes('distribuzione') ||
+    lower.includes('olio') ||
+    lower.includes('tagliandi') ||
+    lower.includes('revisione') ||
+    lower.includes('ispezione')
+  ) {
     return {
       type: 'check',
       tag: 'Controllo',

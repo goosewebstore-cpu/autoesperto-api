@@ -238,9 +238,9 @@ const DASHBOARD_LIGHTS_OPTIONS: DashboardLightOption[] = [
 ];
 
 const URGENCY_CONFIG: Record<Urgency, { label: string; dot: string; bg: string; text: string }> = {
-  high:   { label: 'Urgente',      dot: 'bg-red-500',    bg: 'bg-red-50',    text: 'text-red-700' },
-  medium: { label: 'Da verificare', dot: 'bg-amber-500',  bg: 'bg-amber-50',  text: 'text-amber-700' },
-  low:    { label: 'Non urgente',  dot: 'bg-green-500',  bg: 'bg-green-50',  text: 'text-green-700' },
+  high:   { label: 'Urgente',      dot: 'bg-rose-500',    bg: 'bg-rose-50',    text: 'text-rose-700' },
+  medium: { label: 'Da verificare', dot: 'bg-amber-500',  bg: 'bg-amber-50',  text: 'text-amber-800' },
+  low:    { label: 'Di routine',   dot: 'bg-slate-400',  bg: 'bg-slate-50',  text: 'text-slate-700' },
 };
 
 /* ── KM usage level calculator ── */

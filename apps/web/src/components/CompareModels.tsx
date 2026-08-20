@@ -149,11 +149,13 @@ export default function CompareModels({
 
     const lRel = leftReport.reliability;
     const rRel = rightReport.reliability;
+    const lRelScore = Number(lRel.score) > 10 ? Number(lRel.score) / 10 : (Number(lRel.score) || 7.5);
+    const rRelScore = Number(rRel.score) > 10 ? Number(rRel.score) / 10 : (Number(rRel.score) || 7.5);
     rows.push({
       label: 'Affidabilità',
-      left: `${lRel.score.toFixed(1)} / 10`,
-      right: `${rRel.score.toFixed(1)} / 10`,
-      better: sideWinner(lRel, rRel, (v) => -v.score),
+      left: `${lRelScore.toFixed(1)} / 10`,
+      right: `${rRelScore.toFixed(1)} / 10`,
+      better: sideWinner(lRelScore, rRelScore, (v) => -v),
     });
     rows.push({
       label: 'Manutenzione',
@@ -235,20 +237,20 @@ export default function CompareModels({
 
       {canCompare && (
         <div className="mt-6 space-y-4">
-          <div className={winner === 'tie' ? 'rounded-2xl border border-border bg-surface-2 p-5' : 'rounded-2xl border border-accent/30 bg-accent-light p-5'}>
+          <div className={winner === 'tie' ? 'rounded-2xl border border-border bg-surface-2 p-5' : 'rounded-2xl border border-emerald-200 bg-emerald-50 p-5'}>
             <div className="flex items-start gap-3">
-              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${winner === 'tie' ? 'bg-white text-text-secondary' : 'bg-accent text-white'}`}>
+              <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${winner === 'tie' ? 'bg-white text-text-secondary' : 'bg-emerald-600 text-white shadow-sm'}`}>
                 <Trophy className="w-5 h-5" />
               </div>
               <div className="min-w-0">
                 <div className="text-xs font-bold uppercase tracking-wider text-text-tertiary">Quale scegliere?</div>
                 {winner !== 'tie' ? (
                   <>
-                    <div className="mt-0.5 text-lg font-extrabold text-text-primary">{winnerText}</div>
+                    <div className="mt-0.5 text-lg font-extrabold text-emerald-950">{winnerText}</div>
                     <ul className="mt-2 space-y-1.5">
                       {reasons.map((reason) => (
-                        <li key={reason} className="flex items-start gap-2 text-sm text-text-secondary">
-                          <CheckCircle2 className="w-4 h-4 text-success flex-shrink-0 mt-0.5" />
+                        <li key={reason} className="flex items-start gap-2 text-sm text-emerald-900">
+                          <CheckCircle2 className="w-4 h-4 text-emerald-600 flex-shrink-0 mt-0.5" />
                           {reason}
                         </li>
                       ))}
@@ -280,9 +282,9 @@ export default function CompareModels({
                     {[row.left, row.right].map((value, i) => {
                       const sideBetter = i === 0 ? row.better === 'left' : row.better === 'right';
                       return (
-                        <td key={i} className={`px-4 py-3 ${sideBetter ? 'bg-success-light' : ''}`}>
-                          <span className={`inline-flex items-center gap-1.5 ${sideBetter ? 'font-bold text-text-primary' : 'text-text-secondary'}`}>
-                            {sideBetter && <CheckCircle2 className="w-3.5 h-3.5 text-success flex-shrink-0" />}
+                        <td key={i} className={`px-4 py-3 ${sideBetter ? 'bg-emerald-50/70' : ''}`}>
+                          <span className={`inline-flex items-center gap-1.5 ${sideBetter ? 'font-bold text-emerald-950' : 'text-text-secondary'}`}>
+                            {sideBetter && <CheckCircle2 className="w-3.5 h-3.5 text-emerald-600 flex-shrink-0" />}
                             {value}
                           </span>
                         </td>

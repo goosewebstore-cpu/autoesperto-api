@@ -421,63 +421,130 @@ function buildAdvice(weaknesses: string[], maintenanceMin: number): string[] {
   return list.slice(0, 4);
 }
 
-const SEGMENT_ALTERNATIVES: Record<SegmentKey, Array<[string, string]>> = {
+export const REAL_SEGMENT_CANDIDATES: Record<string, Array<[string, string]>> = {
   citycar: [
-    ['Fiat', '500'], ['Fiat', 'Panda'], ['Toyota', 'Aygo'], ['Toyota', 'Yaris'],
-    ['Renault', 'Twingo'], ['Hyundai', 'i10'], ['Kia', 'Picanto'], ['Smart', 'Fortwo'],
+    ['Fiat', 'Panda'], ['Fiat', '500'], ['Toyota', 'Aygo'], ['Hyundai', 'i10'],
+    ['Kia', 'Picanto'], ['Renault', 'Twingo'], ['Smart', 'Fortwo'], ['Volkswagen', 'up!'],
+    ['Lancia', 'Ypsilon'], ['Suzuki', 'Ignis'],
   ],
-  utility: [
-    ['Volkswagen', 'Polo'], ['Volkswagen', 'Golf'], ['Ford', 'Fiesta'], ['Ford', 'Focus'],
-    ['Renault', 'Clio'], ['Peugeot', '208'], ['Opel', 'Corsa'], ['Toyota', 'Corolla'],
-    ['Dacia', 'Sandero'], ['Skoda', 'Octavia'],
+  utilitaria: [
+    ['Toyota', 'Yaris'], ['Renault', 'Clio'], ['Peugeot', '208'], ['Volkswagen', 'Polo'],
+    ['Ford', 'Fiesta'], ['Opel', 'Corsa'], ['Dacia', 'Sandero'], ['Citroen', 'C3'],
+    ['Hyundai', 'i20'], ['Seat', 'Ibiza'], ['Mini', 'Cooper'],
   ],
-  berlina: [
-    ['BMW', 'Serie 3'], ['Audi', 'A4'], ['Mercedes-Benz', 'Classe C'], ['Volvo', 'S60'],
-    ['Alfa Romeo', 'Giulia'], ['Volkswagen', 'Passat'],
+  bsuv: [
+    ['Jeep', 'Renegade'], ['Fiat', '500X'], ['Volkswagen', 'T-Roc'], ['Volkswagen', 'T-Cross'],
+    ['Toyota', 'Yaris Cross'], ['Peugeot', '2008'], ['Renault', 'Captur'], ['Ford', 'Puma'],
+    ['Nissan', 'Juke'], ['Hyundai', 'Kona'], ['Dacia', 'Duster'], ['Suzuki', 'Vitara'],
+    ['Mazda', 'CX-3'],
   ],
-  suv: [
-    ['Volkswagen', 'Tiguan'], ['Toyota', 'RAV4'], ['Nissan', 'Qashqai'], ['Ford', 'Kuga'],
-    ['Peugeot', '3008'], ['Hyundai', 'Tucson'], ['Kia', 'Sportage'], ['Renault', 'Captur'],
-    ['Jeep', 'Renegade'], ['Dacia', 'Duster'],
+  compatta: [
+    ['Volkswagen', 'Golf'], ['Audi', 'A3'], ['BMW', 'Serie 1'], ['Mercedes', 'Classe A'],
+    ['Ford', 'Focus'], ['Toyota', 'Corolla'], ['Peugeot', '308'], ['Seat', 'Leon'],
+    ['Skoda', 'Octavia'], ['Fiat', 'Tipo'], ['Alfa Romeo', 'Giulietta'],
+  ],
+  csuv: [
+    ['Volkswagen', 'Tiguan'], ['Toyota', 'RAV4'], ['Nissan', 'Qashqai'], ['Peugeot', '3008'],
+    ['Hyundai', 'Tucson'], ['Kia', 'Sportage'], ['Ford', 'Kuga'], ['Jeep', 'Compass'],
+    ['Cupra', 'Formentor'], ['BMW', 'X1'], ['Audi', 'Q3'], ['Mercedes', 'GLA'],
+    ['Volvo', 'XC40'], ['Alfa Romeo', 'Tonale'],
+  ],
+  berlina_d: [
+    ['BMW', 'Serie 3'], ['Audi', 'A4'], ['Mercedes', 'Classe C'], ['Alfa Romeo', 'Giulia'],
+    ['Volvo', 'S60'], ['Volkswagen', 'Passat'], ['Tesla', 'Model 3'],
+  ],
+  dsuv: [
+    ['BMW', 'X3'], ['Audi', 'Q5'], ['Mercedes', 'GLC'], ['Porsche', 'Macan'],
+    ['Alfa Romeo', 'Stelvio'], ['Volvo', 'XC60'], ['Land Rover', 'Range Rover Velar'],
+    ['Tesla', 'Model Y'], ['Maserati', 'Grecale'],
   ],
   sportiva: [
-    ['Mazda', 'MX-5'], ['BMW', 'Serie 2'], ['Audi', 'TT'], ['Porsche', 'Boxster'], ['Ford', 'Mustang'],
+    ['Mazda', 'MX-5'], ['Toyota', 'GR86'], ['BMW', 'Serie 2'], ['BMW', 'Z4'],
+    ['Audi', 'TT'], ['Porsche', '718 Cayman'], ['Ford', 'Mustang'], ['Alpine', 'A110'],
+    ['Abarth', '595'],
+  ],
+  supercar: [
+    ['Porsche', '911'], ['Ferrari', 'Roma'], ['Ferrari', '296 GTB'], ['Lamborghini', 'Huracan'],
+    ['McLaren', 'Artura'], ['Aston Martin', 'Vantage'], ['Maserati', 'MC20'],
+  ],
+  monovolume: [
+    ['Fiat', '500L'], ['Citroen', 'Berlingo'], ['Peugeot', 'Rifter'], ['Volkswagen', 'Touran'],
+    ['Mercedes', 'Classe B'],
   ],
 };
 
-function buildAlternatives(make: string, model: string, year: number): AlternativeVehicle[] {
-  const makes = getAllMakes();
-  const current = makes.find((m) => m.name.toLowerCase() === make.toLowerCase());
+export function classifySegment(make: string, model: string): string {
+  const norm = `${make} ${model}`.toLowerCase();
 
-  const candidates: Array<{ make: string; model: string }> = [];
-  if (current) {
-    for (const m of current.models) {
-      if (m.toLowerCase() !== model.toLowerCase()) candidates.push({ make: current.name, model: m });
-    }
-  }
-  for (const [am, amodel] of SEGMENT_ALTERNATIVES[detectSegment(make, model)]) {
-    candidates.push({ make: am, model: amodel });
-  }
+  // Supercars
+  if (/911|ferrari|lamborghini|mclaren|aston martin|mc20|r8\b|huracan|aventador|roma|296|f8|sf90|gtb/.test(norm)) return 'supercar';
+  // Sports cars
+  if (/mx-5|gr86|gt86|z4|tt\b|718|boxster|cayman|mustang|alpine|a110|abarth|spider|supra|brz/.test(norm)) return 'sportiva';
+  // Citycar
+  if (/panda|500\b|aygo|i10|picanto|twingo|fortwo|up!|up\b|ypsilon|ignis|celerio|spring|citigo|mii\b|c1\b|108\b/.test(norm)) return 'citycar';
+  // Utilitarie
+  if (/yaris|clio|208|polo|fiesta|corsa|sandero|c3\b|i20|rio\b|ibiza|fabia|swift|micra|jazz|mito\b|cooper\b|mini\b/.test(norm)) return 'utilitaria';
+  // B-SUV
+  if (/renegade|500x|t-roc|t-cross|yaris cross|2008|captur|puma|juke|kona|stonic|duster|vitara|cx-3\b|cx-30|mokka|crossland|arona|kamiq|avenger|c3 aircross|zs\b/.test(norm)) return 'bsuv';
+  // C-SUV
+  if (/tiguan|rav4|qashqai|3008|tucson|sportage|kuga|compass|formentor|x1\b|x2\b|q3\b|gla\b|glb\b|xc40|tonale|austral|kadjar|cx-5|c5 aircross|ateca|karoq|evoque|ux\b/.test(norm)) return 'csuv';
+  // D-SUV
+  if (/x3\b|x5\b|x6\b|q5\b|q7\b|q8\b|glc|gle|macan|cayenne|stelvio|xc60|xc90|velar|range rover|grand cherokee|model y|grecale|levante|f-pace|touareg|rx\b|nx\b/.test(norm)) return 'dsuv';
+  // Berlina D
+  if (/serie 3|320|330|a4\b|classe c|c200|c220|giulia|s60|v60|passat|model 3|superb|508/.test(norm)) return 'berlina_d';
+  // Monovolume
+  if (/500l|berlingo|rifter|touran|caddy|classe b|b180|b200|scenic|c-max|s-max|kangoo|doblo|qubo/.test(norm)) return 'monovolume';
+  // Compatte
+  if (/golf|a3\b|serie 1|116|118|120|classe a|a180|a200|focus|corolla|308|megane|leon|octavia|tipo|giulietta|astra|i30|ceed|mazda 3|civic/.test(norm)) return 'compatta';
 
-  const seen = new Set<string>();
+  return 'compatta';
+}
+
+export function buildAlternatives(make: string, model: string, year: number): AlternativeVehicle[] {
+  const segment = classifySegment(make, model);
+  const pool = REAL_SEGMENT_CANDIDATES[segment] || REAL_SEGMENT_CANDIDATES.compatta;
+  const normMake = make.toLowerCase();
+  const normModel = model.toLowerCase();
+
+  const candidates = pool.filter(
+    ([mMake, mModel]) => !(mMake.toLowerCase() === normMake && mModel.toLowerCase() === normModel)
+  );
+
+  const seenMakes = new Set<string>();
   const result: AlternativeVehicle[] = [];
-  for (const c of candidates) {
-    const key = `${c.make.toLowerCase()}|${c.model.toLowerCase()}`;
-    if (seen.has(key)) continue;
-    seen.add(key);
-    const makeEntry = makes.find((m) => m.name.toLowerCase() === c.make.toLowerCase());
-    if (!makeEntry || !makeEntry.models.some((m) => m.toLowerCase() === c.model.toLowerCase())) continue;
-    const est = estimateMarketValue(c.make, c.model, { year });
-    if (result.some((r) => r.estimatedValue === est.value)) continue;
+
+  // Pass 1: 1 car per make
+  for (const [am, amodel] of candidates) {
+    const cMake = am.toLowerCase();
+    if (cMake === normMake || seenMakes.has(cMake)) continue;
+    seenMakes.add(cMake);
+    const est = estimateMarketValue(am, amodel, { year });
     result.push({
-      make: c.make,
-      model: c.model,
+      make: am,
+      model: amodel,
       estimatedValue: est.value,
       estimatedMin: est.min,
       estimatedMax: est.max,
     });
     if (result.length >= 4) break;
   }
+
+  // Pass 2: Fill remaining if needed
+  if (result.length < 4) {
+    for (const [am, amodel] of candidates) {
+      if (result.some((r) => r.make === am && r.model === amodel)) continue;
+      const est = estimateMarketValue(am, amodel, { year });
+      result.push({
+        make: am,
+        model: amodel,
+        estimatedValue: est.value,
+        estimatedMin: est.min,
+        estimatedMax: est.max,
+      });
+      if (result.length >= 4) break;
+    }
+  }
+
   return result;
 }
 

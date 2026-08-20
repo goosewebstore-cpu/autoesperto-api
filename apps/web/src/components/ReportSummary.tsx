@@ -8,8 +8,8 @@ function euro(v: number | undefined | null) { return (v ?? 0).toLocaleString('it
 
 function getVerdictDisplay(verdict: string) {
   if (verdict === 'BUY') return { icon: CheckCircle2, label: 'Buon affare', color: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', dot: 'bg-emerald-500' };
-  if (verdict === 'NEGOTIATE') return { icon: AlertTriangle, label: 'Tratta il prezzo', color: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500' };
-  return { icon: XCircle, label: 'Evitala', color: 'text-red-700', bg: 'bg-red-50', border: 'border-red-200', dot: 'bg-red-500' };
+  if (verdict === 'NEGOTIATE') return { icon: AlertTriangle, label: 'Tratta il prezzo', color: 'text-amber-800', bg: 'bg-amber-50', border: 'border-amber-200', dot: 'bg-amber-500' };
+  return { icon: XCircle, label: 'Evitala', color: 'text-rose-700', bg: 'bg-rose-50', border: 'border-rose-200', dot: 'bg-rose-500' };
 }
 
 function getCostLabel(annualMaintenance: number) {
@@ -93,12 +93,15 @@ export default function ReportSummary({ report }: { report: AutoReport }) {
           </button>
           {showWhy && (
             <ul className="px-5 pb-4 space-y-2">
-              {reasons.slice(0, 4).map((r, i) => (
-                <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
-                  {r}
-                </li>
-              ))}
+              {reasons.slice(0, 4).map((r, i) => {
+                const isWarn = r.toLowerCase().startsWith('attenzione:') || r.includes('sopra la media');
+                return (
+                  <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
+                    <span className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${isWarn ? 'bg-rose-500' : 'bg-emerald-500'}`} />
+                    {r}
+                  </li>
+                );
+              })}
             </ul>
           )}
         </div>

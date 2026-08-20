@@ -22,9 +22,9 @@ const reportSchema = z
       .optional(),
     make: z.string().trim().min(2).optional(),
     model: z.string().trim().min(1).optional(),
-    year: z.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
-    km: z.number().int().min(0).max(1000000).optional(),
-    requestedPrice: z.number().int().min(0).max(10000000).optional(),
+    year: z.coerce.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
+    km: z.coerce.number().int().min(0).max(1000000).optional(),
+    requestedPrice: z.coerce.number().int().min(0).max(10000000).optional(),
   })
   .refine((data) => Boolean(data.plate) !== Boolean(data.make && data.model), {
     message: 'Indica la targa oppure marca e modello',
@@ -38,7 +38,7 @@ const askSchema = z.object({
 
 const photoSchema = z.object({
   imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
-  vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.number().int().optional() }).optional(),
+  vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.coerce.number().int().optional() }).optional(),
 });
 
 const freeScanSchema = z
@@ -50,9 +50,9 @@ const freeScanSchema = z
       .optional(),
     make: z.string().trim().min(2).optional(),
     model: z.string().trim().min(1).optional(),
-    year: z.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
-    km: z.number().int().min(0).max(1000000).optional(),
-    requestedPrice: z.number().int().min(0).max(10000000).optional(),
+    year: z.coerce.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
+    km: z.coerce.number().int().min(0).max(1000000).optional(),
+    requestedPrice: z.coerce.number().int().min(0).max(10000000).optional(),
     freeUsed: z.boolean().optional(),
   })
   .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {

@@ -3,7 +3,7 @@ import { cacheGet, cacheSet } from './cache';
 
 const SUBITO_BASE = 'https://www.subito.it';
 const SUBITO_TTL = 6 * 60 * 60 * 1000;
-const FETCH_TIMEOUT_MS = 8000;
+const FETCH_TIMEOUT_MS = 4500;
 const TARGET_SAMPLE = 10;
 const MIN_SAMPLE = 3;
 const USER_AGENT =

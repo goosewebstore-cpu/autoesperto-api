@@ -2,9 +2,10 @@
 
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
-  ArrowLeft, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
+  ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
   Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
 } from 'lucide-react';
+import { slugify } from '@/lib/catalogo';
 import ReportScoreHero from '@/components/ReportScoreHero';
 import AdSlot from '@/components/AdSlot';
 import ConditionAssessment from '@/components/ConditionAssessment';
@@ -199,28 +200,28 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </div>
         <div className="grid md:grid-cols-2 gap-5">
           <div>
-            <h3 className="font-semibold text-success flex items-center gap-2 mb-3 text-sm">
-              <CheckCircle2 className="w-4 h-4" />
+            <h3 className="font-semibold text-emerald-700 flex items-center gap-2 mb-3 text-sm">
+              <CheckCircle2 className="w-4 h-4 text-emerald-600" />
               Punti di forza
             </h3>
             <ul className="space-y-2.5">
               {strengths.map((s: string, i: number) => (
                 <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
                   {s}
                 </li>
               ))}
             </ul>
           </div>
           <div>
-            <h3 className="font-semibold text-danger flex items-center gap-2 mb-3 text-sm">
-              <AlertTriangle className="w-4 h-4" />
+            <h3 className="font-semibold text-rose-700 flex items-center gap-2 mb-3 text-sm">
+              <AlertTriangle className="w-4 h-4 text-rose-600" />
               Possibili criticità
             </h3>
             <ul className="space-y-2.5">
               {weaknesses.map((w: string, i: number) => (
                 <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-danger mt-1.5 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" />
                   {w}
                 </li>
               ))}
@@ -230,13 +231,13 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
 
         <div className="mt-6 bg-surface-2 rounded-xl p-4">
           <h3 className="font-semibold text-text-primary mb-2.5 text-sm flex items-center gap-2">
-            <Gauge className="w-4 h-4 text-accent" />
+            <Gauge className="w-4 h-4 text-blue-600" />
             Consigli prima dell&apos;acquisto
           </h3>
           <ul className="space-y-2">
             {advice.map((a: string, i: number) => (
               <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
-                <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                <span className="w-1.5 h-1.5 rounded-full bg-blue-500 mt-1.5 flex-shrink-0" />
                 {a}
               </li>
             ))}
@@ -273,14 +274,14 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             <div className="grid md:grid-cols-2 gap-5">
               {reliability.recommendedVersions?.length ? (
                 <div>
-                  <h3 className="font-semibold text-success flex items-center gap-2 mb-3 text-sm">
-                    <CheckCircle2 className="w-4 h-4" />
+                  <h3 className="font-semibold text-emerald-700 flex items-center gap-2 mb-3 text-sm">
+                    <CheckCircle2 className="w-4 h-4 text-emerald-600" />
                     Versioni consigliate
                   </h3>
                   <ul className="space-y-2">
                     {reliability.recommendedVersions.map((v, i) => (
                       <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary">
-                        <span className="w-1.5 h-1.5 rounded-full bg-success mt-1.5 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 flex-shrink-0" />
                         {v}
                       </li>
                     ))}
@@ -289,14 +290,14 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               ) : null}
               {reliability.versionsToAvoid?.length ? (
                 <div>
-                  <h3 className="font-semibold text-danger flex items-center gap-2 mb-3 text-sm">
-                    <AlertTriangle className="w-4 h-4" />
+                  <h3 className="font-semibold text-rose-700 flex items-center gap-2 mb-3 text-sm">
+                    <AlertTriangle className="w-4 h-4 text-rose-600" />
                     Versioni da evitare
                   </h3>
                   <ul className="space-y-2">
                     {reliability.versionsToAvoid.map((v, i) => (
                       <li key={i} className="flex items-start gap-2.5 text-sm text-text-primary">
-                        <span className="w-1.5 h-1.5 rounded-full bg-danger mt-1.5 flex-shrink-0" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" />
                         {v}
                       </li>
                     ))}
@@ -345,14 +346,14 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </div>
         {(reliability.commonIssues?.length ?? 0) > 0 && (
           <div>
-            <h3 className="font-semibold text-text-primary mb-2.5 text-sm flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-warning" />
+            <h3 className="font-semibold text-amber-800 mb-2.5 text-sm flex items-center gap-2">
+              <AlertTriangle className="w-4 h-4 text-amber-600" />
               Problemi più comuni
             </h3>
             <ul className="space-y-2">
               {reliability.commonIssues.slice(0, 5).map((issue, i) => (
                 <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-accent mt-1.5 flex-shrink-0" />
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
                   {issue}
                 </li>
               ))}
@@ -640,15 +641,24 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
                       )}
                     </div>
                   )}
-                  <a
-                    href={market?.url || `https://www.subito.it/annunci-italia/vendita/auto/${alt.make.toLowerCase()}/${alt.model.toLowerCase()}/`}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1.5 mt-2 text-xs font-semibold text-accent hover:underline"
-                  >
-                    Cerca annunci
-                    <ExternalLink className="w-3 h-3" />
-                  </a>
+                  <div className="flex flex-wrap items-center gap-3 mt-3 pt-2 border-t border-border/50">
+                    <a
+                      href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}`}
+                      className="inline-flex items-center gap-1 text-xs font-semibold text-blue-600 hover:text-blue-700 hover:underline"
+                    >
+                      Analizza scheda
+                      <ArrowRight className="w-3 h-3" />
+                    </a>
+                    <a
+                      href={market?.url || `https://www.subito.it/annunci-italia/vendita/auto/?q=${encodeURIComponent(`${alt.make} ${alt.model}`)}`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1 text-xs font-medium text-text-secondary hover:text-text-primary hover:underline"
+                    >
+                      Cerca annunci
+                      <ExternalLink className="w-3 h-3" />
+                    </a>
+                  </div>
                 </div>
               );
             })}

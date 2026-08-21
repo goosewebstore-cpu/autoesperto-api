@@ -1084,8 +1084,18 @@ function drawConditionPage(doc: import('jspdf').jsPDF, data: PDFConditionData): 
   }
 }
 
-export async function downloadPDF(report: AutoReport, conditionData?: PDFConditionData) {
+export async function downloadPDF(rawReport: AutoReport, conditionData?: PDFConditionData) {
   try {
+    const rawScore = Number(rawReport.reliability?.score) || 7.5;
+    const normScore = rawScore > 10 ? rawScore / 10 : rawScore;
+    const report: AutoReport = {
+      ...rawReport,
+      reliability: {
+        ...rawReport.reliability,
+        score: normScore,
+      },
+    };
+
     const { jsPDF } = await import('jspdf');
     const doc = new jsPDF();
     const { vehicle } = report;

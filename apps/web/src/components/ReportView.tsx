@@ -3,7 +3,8 @@
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
-  Euro, Download, ExternalLink, ShieldCheck, Hash, Info, Scale, GitCompareArrows, Users, MessageCircle, ChevronDown,
+  Euro, Download, ExternalLink, ShieldCheck, GitCompareArrows, Users, MessageCircle, ChevronDown,
+  TrendingDown,
 } from 'lucide-react';
 import { slugify } from '@/lib/catalogo';
 import ReportScoreHero from '@/components/ReportScoreHero';

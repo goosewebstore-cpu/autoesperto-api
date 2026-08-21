@@ -14,7 +14,6 @@ export { API_URL };
 const TIMEOUT_MS = 30000;
 const AI_TIMEOUT_MS = 180000;
 const REPORT_TIMEOUT_MS = 90000;
-const WARMUP_TIMEOUT_MS = 90000;
 
 export interface AnalyzePayload {
   plate?: string;
@@ -179,7 +178,7 @@ export async function freeScanVehiclePhoto(imageData: string, extra: { km?: numb
 
 export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number }): Promise<FreeScanResult> {
   try {
-    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 8500, false);
+    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 7500, false);
   } catch (err) {
     console.warn('Backend API unavailable or slow, generating instant accurate report client-side:', err);
     return generateInstantReport(input);

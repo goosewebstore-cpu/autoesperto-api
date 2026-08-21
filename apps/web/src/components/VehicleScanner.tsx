@@ -428,10 +428,12 @@ export default function VehicleScanner({
         </div>
 
         {(() => {
+          const km = manualKm.trim() ? Number(manualKm.trim()) : undefined;
           const finalReport = report || (vehicleObj.make && vehicleObj.model ? generateInstantReport({
             make: vehicleObj.make,
             model: vehicleObj.model,
             year: vehicleObj.year,
+            km,
             requestedPrice,
           }).report : null);
 

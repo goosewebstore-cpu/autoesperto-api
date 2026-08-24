@@ -1,5 +1,5 @@
 import Link from 'next/link';
-import { ArrowRight, Banknote, Calculator, Car, Fuel, Gauge, Hammer, Scale, SearchCheck, ShieldAlert, Trophy, Wrench, Zap } from 'lucide-react';
+import { ArrowRight, Banknote, Calculator, Car, Fuel, Gauge, Hammer, Scale, SearchCheck, ShieldAlert, ShieldCheck, Trophy, Wrench, Zap } from 'lucide-react';
 
 interface ToolLink {
   label: string;
@@ -9,8 +9,9 @@ interface ToolLink {
 }
 
 const ALL_TOOLS: ToolLink[] = [
+  { label: 'Profilo Digitale Auto', href: '/passport', desc: 'Libretto digitale, scadenze e storico manutenzioni', icon: ShieldCheck },
   { label: 'Conviene comprarla?', href: '/compra', desc: 'Prezzo e verdetto pre-acquisto', icon: SearchCheck },
-  { label: 'Quanto vale?', href: '/vendi', desc: 'Valore di mercato e annuncio', icon: Banknote },
+  { label: 'Quanto vale la mia auto?', href: '/vendi', desc: 'Valore di mercato e annuncio pronto', icon: Banknote },
   { label: 'Migliori auto usate', href: '/migliori-auto-usate', desc: 'Classifica per budget 2026', icon: Trophy },
   { label: 'Incentivi ed Ecobonus', href: '/incentivi-auto', desc: 'Calcolo bonus rottamazione', icon: Zap },
   { label: 'Blocchi del traffico', href: '/blocchi-traffico', desc: 'Verifica classi Euro e ZTL', icon: ShieldAlert },

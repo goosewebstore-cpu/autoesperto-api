@@ -2,13 +2,47 @@
 
 import { useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, ArrowRight, Camera, Car, Check, ChevronRight, Loader2, RotateCcw, ScanSearch, ShieldCheck, Upload } from 'lucide-react';
+import {
+  AlertTriangle,
+  ArrowRight,
+  Camera,
+  Car,
+  Check,
+  ChevronRight,
+  Link2,
+  Loader2,
+  RotateCcw,
+  ScanSearch,
+  ShieldCheck,
+  Sparkles,
+  Upload,
+} from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
-import { API_URL, freeScanVehiclePhoto, freeScanManual, getMyAccount, type FreeScanResult, type AccountUser, type AnalyzePayload } from '@/lib/api';
+import {
+  API_URL,
+  freeScanVehiclePhoto,
+  freeScanManual,
+  getMyAccount,
+  type FreeScanResult,
+  type AccountUser,
+  type AnalyzePayload,
+} from '@/lib/api';
 import { generateInstantReport } from '@/lib/reportFallback';
 import { trackEvent } from '@/lib/analytics';
 import ReportView from '@/components/ReportView';
 import ReportErrorBoundary from '@/components/ReportErrorBoundary';
+import { parseListingTextOrUrl, type ParsedAdData } from '@/lib/adParser';
+
+const POPULAR_CHIPS = [
+  { make: 'Fiat', model: 'Panda' },
+  { make: 'Fiat', model: '500' },
+  { make: 'Volkswagen', model: 'Golf' },
+  { make: 'Toyota', model: 'Yaris' },
+  { make: 'Renault', model: 'Clio' },
+  { make: 'Peugeot', model: '208' },
+  { make: 'Ford', model: 'Puma' },
+  { make: 'Jeep', model: 'Renegade' },
+];
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
@@ -44,7 +78,9 @@ export default function VehicleScanner({
   useEffect(() => {
     onStageChange?.(stage);
   }, [stage, onStageChange]);
-  const [tab, setTab] = useState<'foto' | 'manual'>('foto');
+  const [tab, setTab] = useState<'annuncio' | 'foto' | 'manual'>('annuncio');
+  const [adInput, setAdInput] = useState('');
+  const [parsedAd, setParsedAd] = useState<ParsedAdData | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
   const [mainPhoto, setMainPhoto] = useState('');
   const [scan, setScan] = useState<FreeScanResult | null>(null);
@@ -88,10 +124,38 @@ export default function VehicleScanner({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
+  const handleAdInputChange = (value: string) => {
+    setAdInput(value);
+    setError('');
+    const parsed = parseListingTextOrUrl(value);
+    setParsedAd(parsed);
+    if (parsed.make) setManualMake(parsed.make);
+    if (parsed.model) setManualModel(parsed.model);
+    if (parsed.year) setManualYear(String(parsed.year));
+    if (parsed.km) setManualKm(String(parsed.km));
+    if (parsed.price) setManualPrice(String(parsed.price));
+  };
+
+  const handleAnalyzeAd = () => {
+    const make = parsedAd?.make || manualMake;
+    const model = parsedAd?.model || manualModel;
+    if (!make || !model) {
+      setError('Incolla il link o il testo dell\'annuncio contenente marca e modello (es. Fiat Panda 2021).');
+      return;
+    }
+    void handleManualSubmit({
+      make,
+      model,
+      year: parsedAd?.year ?? (manualYear ? Number(manualYear) : undefined),
+      km: parsedAd?.km ?? (manualKm ? Number(manualKm) : undefined),
+      requestedPrice: parsedAd?.price ?? (manualPrice ? Number(manualPrice) : undefined),
+    });
+  };
+
   const reset = () => {
     setPhotos([]); setMainPhoto(''); setScan(null); setReport(null); setError(''); setStage('idle');
     setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
-    setManualKm(''); setManualPrice('');
+    setManualKm(''); setManualPrice(''); setAdInput(''); setParsedAd(null);
     if (inputRef.current) inputRef.current.value = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -206,11 +270,20 @@ export default function VehicleScanner({
             <button
               type="button"
               role="tab"
+              aria-selected={tab === 'annuncio'}
+              className={`scanner-tab${tab === 'annuncio' ? ' active' : ''}`}
+              onClick={() => { setTab('annuncio'); setError(''); }}
+            >
+              <Link2 className="h-4 w-4" /> Controlla annuncio
+            </button>
+            <button
+              type="button"
+              role="tab"
               aria-selected={tab === 'foto'}
               className={`scanner-tab${tab === 'foto' ? ' active' : ''}`}
               onClick={() => { setTab('foto'); setError(''); }}
             >
-              <Camera /> Da foto
+              <Camera className="h-4 w-4" /> Da foto / screenshot
             </button>
             <button
               type="button"
@@ -219,11 +292,99 @@ export default function VehicleScanner({
               className={`scanner-tab${tab === 'manual' ? ' active' : ''}`}
               onClick={() => { setTab('manual'); setError(''); }}
             >
-              <Car /> Marca e modello
+              <Car className="h-4 w-4" /> Marca e modello
             </button>
           </div>
 
-          {tab === 'foto' ? (
+          {tab === 'annuncio' ? (
+            <div className="space-y-4 pt-1">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Incolla il link dell&apos;annuncio o il testo dell&apos;offerta:
+                </label>
+                <div className="relative">
+                  <textarea
+                    rows={3}
+                    value={adInput}
+                    onChange={(e) => handleAdInputChange(e.target.value)}
+                    placeholder="Incolla qui il link di AutoScout24, Subito.it, Facebook Marketplace oppure copia il testo dell'annuncio (es. 'Fiat Panda 1.2 Lounge 2021 45.000 km 9.500 €')..."
+                    className="w-full p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-600 outline-none transition-all resize-none shadow-xs"
+                  />
+                  {adInput && (
+                    <button
+                      type="button"
+                      onClick={() => handleAdInputChange('')}
+                      className="absolute top-3 right-3 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md"
+                    >
+                      Pulisci
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Live Extracted Fields Preview Pill Tags */}
+              {parsedAd && (parsedAd.make || parsedAd.model || parsedAd.year || parsedAd.price) && (
+                <div className="p-3 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-2">
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
+                    <Sparkles className="w-3.5 h-3.5" /> Dati estratti automaticamente:
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
+                    {parsedAd.make && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Marca: <strong>{parsedAd.make}</strong>
+                      </span>
+                    )}
+                    {parsedAd.model && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Modello: <strong>{parsedAd.model}</strong>
+                      </span>
+                    )}
+                    {parsedAd.year && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Anno: <strong>{parsedAd.year}</strong>
+                      </span>
+                    )}
+                    {parsedAd.km && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Km: <strong>{parsedAd.km.toLocaleString('it-IT')}</strong>
+                      </span>
+                    )}
+                    {parsedAd.price && (
+                      <span className="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">
+                        Prezzo: <strong>{parsedAd.price.toLocaleString('it-IT')} €</strong>
+                      </span>
+                    )}
+                    {parsedAd.fuel && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Alim.: <strong>{parsedAd.fuel}</strong>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {error && <p className="scanner-box-error" role="alert">{error}</p>}
+
+              <button
+                type="button"
+                onClick={handleAnalyzeAd}
+                disabled={manualLoading}
+                className="scanner-submit w-full"
+              >
+                {manualLoading ? (
+                  <><Loader2 className="animate-spin" /> Analisi annuncio in corso…</>
+                ) : (
+                  <><ScanSearch /> Ottieni il Verdetto sull&apos;Annuncio <ArrowRight /></>
+                )}
+              </button>
+
+              <div className="scanner-box-promises" aria-label="Cosa ricevi">
+                {promises.map((item) => (
+                  <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
+                ))}
+              </div>
+            </div>
+          ) : tab === 'foto' ? (
             <div className="scanner-photo-tab">
               <button
                 type="button"
@@ -244,10 +405,10 @@ export default function VehicleScanner({
                   {manualLoading ? <Loader2 className="h-6 w-6 animate-spin text-blue-600" /> : <Camera className="h-6 w-6" />}
                 </span>
                 <span className="scanner-drop-main">
-                  {manualLoading ? 'Analisi foto in corso…' : isDragOver ? 'Rilascia le foto qui' : 'Trascina o carica le foto dell\'auto'}
+                  {manualLoading ? 'Analisi foto / screenshot in corso…' : isDragOver ? 'Rilascia qui le immagini' : 'Trascina o carica foto o screenshot dell\'annuncio'}
                 </span>
                 <span className="scanner-drop-sub">
-                  {manualLoading ? 'Identificazione veicolo e preparazione dati…' : 'JPG, PNG o WebP · max 5 MB l\'una · fino a 6 foto'}
+                  {manualLoading ? 'Riconoscimento IA e generazione verdetto…' : 'JPG, PNG o WebP · max 5 MB l\'una · fino a 6 foto'}
                 </span>
               </button>
               {error && <p className="scanner-box-error mt-3" role="alert">{error}</p>}
@@ -263,6 +424,30 @@ export default function VehicleScanner({
               className="scanner-manual-form"
               onSubmit={(event) => { event.preventDefault(); void handleManualSubmit(); }}
             >
+              {/* Quick Select Popular Chips */}
+              <div className="mb-3 space-y-1.5">
+                <span className="text-[11px] font-bold text-slate-500">Scelta rapida modelli diffusi:</span>
+                <div className="flex flex-wrap gap-1.5">
+                  {POPULAR_CHIPS.map((chip) => (
+                    <button
+                      key={`${chip.make}-${chip.model}`}
+                      type="button"
+                      onClick={() => {
+                        setManualMake(chip.make);
+                        setManualModel(chip.model);
+                      }}
+                      className={`px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all ${
+                        manualMake.toLowerCase() === chip.make.toLowerCase() && manualModel.toLowerCase() === chip.model.toLowerCase()
+                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                          : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400'
+                      }`}
+                    >
+                      {chip.make} {chip.model}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
               <div className="scanner-manual-row">
                 <label className="scanner-field">
                   <span>Marca *</span>

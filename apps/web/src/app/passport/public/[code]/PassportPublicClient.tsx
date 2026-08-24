@@ -102,9 +102,30 @@ export default function PassportPublicClient({ code }: { code: string }) {
                 Profilo Digitale Auto Certificato · Codice: {passport.shareCode}
               </div>
 
-              <div className="inline-flex items-center gap-1.5 text-xs text-slate-400">
-                <Lock className="w-3.5 h-3.5 text-emerald-400" />
-                <span>Zero dati personali esposti</span>
+              <div className="flex items-center gap-2">
+                <a
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Guarda il Profilo Digitale certificato di questa ${v.make} ${v.model} su AutoEsperto: ${typeof window !== 'undefined' ? window.location.href : `https://autoesperto.it/passport/public/${passport.shareCode}`}`)}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white font-bold text-xs shadow-xs transition-all"
+                  title="Condividi su WhatsApp"
+                >
+                  <MessageCircle className="w-3.5 h-3.5" /> Condividi
+                </a>
+
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+                      void navigator.clipboard.writeText(window.location.href);
+                      alert('Link del Profilo Digitale copiato negli appunti!');
+                    }
+                  }}
+                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition-all"
+                  title="Copia link"
+                >
+                  <Share2 className="w-3.5 h-3.5" /> Copia link
+                </button>
               </div>
             </div>
 

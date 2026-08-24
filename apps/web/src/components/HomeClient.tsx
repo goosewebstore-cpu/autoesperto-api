@@ -140,19 +140,19 @@ export default function HomeClient({ stats }: HomeClientProps) {
           <section className="pt-8 sm:pt-12 pb-6 px-4 text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200/80 px-4 py-1.5 text-xs font-bold text-blue-700 mb-5 shadow-xs">
               <ScanSearch className="h-4 w-4 text-blue-600" />
-              Valutazione auto usate gratuita e senza registrazione
+              Il tuo consulente digitale per l&apos;auto usata
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-[1.15]">
-              Scopri se un&apos;auto usata vale il prezzo richiesto
+              Prima di comprare un&apos;auto usata, chiedi ad AutoEsperto.
             </h1>
 
             <p className="mt-4 text-base sm:text-xl text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
-              Analizza il prezzo reale di mercato, l&apos;affidabilità, i difetti meccanici e cosa controllare prima di comprare.
+              Controlla prezzo, problemi meccanici e valore reale in pochi secondi. Incolla il link dell&apos;annuncio, carica uno screenshot o scegli marca e modello.
             </p>
 
             <div className="mt-4 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-600">
-              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Analisi accurata e approfondita</span>
+              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Verdetto chiaro pre-acquisto</span>
               <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Prezzi reali e bollo esatto</span>
               <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> 100% Gratis e senza registrazione</span>
             </div>

@@ -67,23 +67,39 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
   const currentYear = new Date().getFullYear();
   const age = currentYear - (vehicle.year || currentYear - 5);
   const brand = (vehicle.make || '').toLowerCase();
-  const isPremium = /bmw|mercedes|audi|porsche|maserati|land rover|jaguar/.test(brand);
+  const model = (vehicle.model || '').toLowerCase();
+  const isSupercar = /porsche|ferrari|maserati|lamborghini|aston martin|bentley/.test(brand);
+  const isPremium = /bmw|mercedes|audi|land rover|jaguar|volvo|alfa romeo|lexus/.test(brand);
+  const isCityCar = /panda|500|ypsilon|aygo|c1|c3|clio|208|i10|i20|picanto|polo|fiesta|micra|twingo|up|smart|yaris/.test(model);
 
-  const baseMaint = age <= 5 ? 240 : age <= 10 ? 320 : 380;
-  const maintenance = isPremium ? Math.round(baseMaint * 1.3) : baseMaint;
+  let maintenance = 180;
+  if (isSupercar) {
+    maintenance = 650;
+  } else if (isPremium) {
+    maintenance = age > 8 ? 340 : 280;
+  } else if (isCityCar) {
+    maintenance = 160;
+  } else {
+    maintenance = 210;
+  }
 
   const f = fuel.toLowerCase();
   const fuelCost = f.includes('diesel')
-    ? 8.5
+    ? 7.8
     : f.includes('elettr') || f.includes('ev')
-    ? 4.2
+    ? 3.6
     : f.includes('ibrid') || f.includes('hybrid')
     ? 7.2
     : f.includes('gpl') || f.includes('metano')
-    ? 5.5
-    : 9.8;
+    ? 5.0
+    : 9.6;
 
-  const insurance = power < 90 ? 340 : power < 130 ? 420 : power < 180 ? 490 : 650;
+  let insurance = 290;
+  if (power < 75) insurance = 240;
+  else if (power < 115) insurance = 290;
+  else if (power < 170) insurance = 350;
+  else insurance = isSupercar ? 680 : 460;
+
   return { maintenance, fuelCost, insurance };
 }
 

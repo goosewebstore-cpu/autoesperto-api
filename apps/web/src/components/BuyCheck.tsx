@@ -3,11 +3,12 @@
 import { useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { AlertTriangle, Car, CheckCircle2, Loader2, RotateCcw, Search } from 'lucide-react';
+import { AlertTriangle, Car, CheckCircle2, Link2, Loader2, RotateCcw, Search, Sparkles } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import { freeScanManual } from '@/lib/api';
 import { trackEvent } from '@/lib/analytics';
 import { getAllMakes, slugify } from '@/lib/catalogo';
+import { parseListingTextOrUrl, type ParsedAdData } from '@/lib/adParser';
 
 interface BuyVerdict {
   tone: 'green' | 'amber' | 'red';
@@ -73,6 +74,8 @@ const inputClass =
   'w-full h-12 px-4 rounded-xl border border-border bg-white text-text-primary font-medium outline-none focus:border-accent input-premium transition-all placeholder:text-text-tertiary';
 
 export default function BuyCheck() {
+  const [adInput, setAdInput] = useState('');
+  const [parsedAd, setParsedAd] = useState<ParsedAdData | null>(null);
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
@@ -84,6 +87,18 @@ export default function BuyCheck() {
   const [error, setError] = useState('');
   const [report, setReport] = useState<AutoReport | null>(null);
   const router = useRouter();
+
+  const handleAdInputChange = (value: string) => {
+    setAdInput(value);
+    setError('');
+    const parsed = parseListingTextOrUrl(value);
+    setParsedAd(parsed);
+    if (parsed.make) setMake(parsed.make);
+    if (parsed.model) setModel(parsed.model);
+    if (parsed.year) setYear(String(parsed.year));
+    if (parsed.km) setKm(String(parsed.km));
+    if (parsed.price) setPrice(String(parsed.price));
+  };
 
   const brands = useMemo(() => getAllMakes(), []);
 
@@ -367,8 +382,34 @@ export default function BuyCheck() {
 
       <form
         onSubmit={handleSubmit}
-        className="mt-6 rounded-2xl border border-border bg-white p-5 md:p-6 shadow-card"
+        className="mt-6 rounded-2xl border border-border bg-white p-5 md:p-6 shadow-card space-y-4"
       >
+        {/* Quick Paste Ad Box */}
+        <div className="p-4 rounded-2xl bg-blue-50/70 border border-blue-200/80 space-y-2">
+          <label htmlFor="buy-ad-input" className="block text-xs font-bold text-blue-900 flex items-center gap-1.5">
+            <Link2 className="w-3.5 h-3.5 text-blue-600" />
+            Hai il link dell&apos;annuncio o il testo dell&apos;offerta?
+          </label>
+          <input
+            id="buy-ad-input"
+            type="text"
+            value={adInput}
+            onChange={(e) => handleAdInputChange(e.target.value)}
+            placeholder="Incolla link AutoScout24, Subito.it o testo annuncio (es. 'Fiat Panda 2021 45000 km 9500 €')..."
+            className="w-full h-11 px-3.5 rounded-xl border border-blue-300 bg-white text-xs text-slate-900 placeholder:text-slate-400 outline-none focus:border-blue-600 transition-all"
+          />
+          {parsedAd && (parsedAd.make || parsedAd.model || parsedAd.year || parsedAd.price) && (
+            <div className="flex flex-wrap items-center gap-1.5 pt-1 text-[11px] font-bold text-blue-700">
+              <Sparkles className="w-3 h-3" />
+              <span>Dati rilevati:</span>
+              {parsedAd.make && <span className="bg-white px-2 py-0.5 rounded-md border">{parsedAd.make}</span>}
+              {parsedAd.model && <span className="bg-white px-2 py-0.5 rounded-md border">{parsedAd.model}</span>}
+              {parsedAd.year && <span className="bg-white px-2 py-0.5 rounded-md border">{parsedAd.year}</span>}
+              {parsedAd.price && <span className="bg-emerald-100 text-emerald-800 px-2 py-0.5 rounded-md border border-emerald-300">{parsedAd.price.toLocaleString('it-IT')} €</span>}
+            </div>
+          )}
+        </div>
+
         <div className="grid sm:grid-cols-2 gap-4">
           <div>
             <label htmlFor="buy-make" className="block text-xs font-semibold text-text-secondary mb-1.5">

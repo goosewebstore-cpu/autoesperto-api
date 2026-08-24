@@ -307,15 +307,20 @@ export default function ReportScoreHero({
               {verdict.label}
             </span>
 
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80">
-              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
-              Analisi accurata verificata
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-800 border border-emerald-200/80">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
+              Affidabilità Stima: <strong>ALTA</strong>
             </span>
 
-            {isModelData && (
+            {isModelData ? (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-2 text-text-secondary border border-border">
                 <Info className="w-3.5 h-3.5 shrink-0" />
                 Dati indicativi modello
+              </span>
+            ) : (
+              <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80">
+                <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                Dati reali di mercato
               </span>
             )}
           </div>

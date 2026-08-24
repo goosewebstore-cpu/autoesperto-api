@@ -25,9 +25,9 @@ const dmSans = DM_Sans({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
-const siteTitle = 'AutoEsperto: valutazione auto usate gratis';
+const siteTitle = 'AutoEsperto: Valutazione Auto Usate, Controllo Annunci e Profilo Digitale';
 const siteDescription =
-  'Valutazione auto usate gratuita: prezzo di mercato, affidabilità, consumi e costi di riparazione. Verdetto in pochi secondi, senza registrazione.';
+  'Valutazione auto usate gratuita: controlla annunci da link o foto, calcola il prezzo reale di mercato, affidabilità, bollo, consumi e crea il tuo Profilo Digitale Auto.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -38,8 +38,17 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   keywords: [
-    'valutazione auto usata', 'quanto vale la mia auto', 'comprare auto usata', 'valutazione auto',
-    'preventivo riparazione auto', 'valore auto usata', 'affidabilità auto', 'consumi auto',
+    'valutazione auto usata',
+    'controlla annuncio auto',
+    'profilo auto digitale',
+    'passaporto digitale veicolo',
+    'quanto vale la mia auto',
+    'comprare auto usata',
+    'calcolo bollo auto',
+    'storico tagliandi auto',
+    'libretto digitale manutenzione',
+    'prezzo auto usata',
+    'affidabilità auto',
     'AutoEsperto',
   ],
   category: 'automotive',
@@ -128,11 +137,18 @@ function JsonLd() {
       operatingSystem: 'Web',
       inLanguage: 'it-IT',
       image: `${siteUrl}/og-image.png`,
+      featureList: [
+        'Valutazione auto usate basata su annunci reali',
+        'Controlla Annuncio pre-acquisto con verdetto immediato',
+        'Profilo Digitale Auto e Passaporto Veicolo permanente',
+        'Calcolo bollo auto con esenzioni regionali',
+        'Stima costi di riparazione e affidabilità motori',
+      ],
       offers: {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'EUR',
-        description: 'Analisi completa gratuita delle auto usate',
+        description: 'Analisi completa gratuita delle auto usate e Profilo Digitale Auto',
       },
     },
   ];

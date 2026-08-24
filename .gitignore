@@ -23,3 +23,4 @@ web.log
 packages/database/src/generated/
 .open-next/
 .wrangler/
+scratch/

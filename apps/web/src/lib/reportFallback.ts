@@ -134,9 +134,21 @@ export function generateInstantReport(input: {
       newDriver: 'Verificare rapporto potenza/tara per neopatentati.',
     },
     futureCosts: {
-      annualMaintenance: 350,
-      fuelCostPer100Km: 11.5,
-      insuranceEstimate: 480,
+      annualMaintenance: /panda|500|ypsilon|aygo|c1|c3|clio|208|i10|polo|fiesta|yaris/.test(input.model.toLowerCase())
+        ? 160
+        : /bmw|mercedes|audi|porsche|maserati|land rover|jaguar/.test(input.make.toLowerCase())
+        ? 320
+        : 210,
+      fuelCostPer100Km: vehicle.fuel?.toLowerCase().includes('diesel')
+        ? 8.3
+        : vehicle.fuel?.toLowerCase().includes('ibrid')
+        ? 7.4
+        : vehicle.fuel?.toLowerCase().includes('gpl')
+        ? 5.0
+        : vehicle.fuel?.toLowerCase().includes('elettr')
+        ? 3.6
+        : 10.3,
+      insuranceEstimate: 290,
       depreciation1Year: Math.round(estValue * 0.12),
       depreciation3Years: Math.round(estValue * 0.28),
       depreciation5Years: Math.round(estValue * 0.42),

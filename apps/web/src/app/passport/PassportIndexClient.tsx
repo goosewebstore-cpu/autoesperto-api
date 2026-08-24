@@ -334,6 +334,150 @@ export default function PassportIndexClient() {
           </div>
         </section>
 
+        {/* ─── FEATURE PILLARS SECTION ─── */}
+        <section className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              Tutto sotto controllo in un unico posto
+            </span>
+            <h2 className="text-xl sm:text-3xl font-black text-slate-900 dark:text-white tracking-tight">
+              Tutte le funzionalità del Profilo Digitale Auto
+            </h2>
+            <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
+              Uno strumento potente per chi possiede, cura o desidera vendere la propria auto al miglior prezzo.
+            </p>
+          </div>
+
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 grid place-items-center">
+                <FileText className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Documento Unico &amp; Libretto</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Targa, telaio VIN, classe ambientale Euro, potenza kW/CV e omologazione sempre a portata di mano sul tuo smartphone.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 grid place-items-center">
+                <Wrench className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Storico Tagliandi &amp; Fatture</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Registra ogni intervento di manutenzione ordinaria e straordinaria, allegando foto e fatture per certificare la cura del veicolo.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-violet-50 dark:bg-violet-950/60 text-violet-600 dark:text-violet-400 grid place-items-center">
+                <Calendar className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Promemoria Scadenze Intelligente</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Avvisi automatici per la revisione ministeriale MCTC, scadenza bollo auto, rinnovo polizza RC e cambio gomme stagionale.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 grid place-items-center">
+                <Activity className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Vehicle Health Score Dinamico</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Indice oggettivo dello stato di salute meccanica (0-100) aggiornato in base ai km percorsi, età e regolarità dei tagliandi.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 grid place-items-center">
+                <Gauge className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Valore di Mercato in Tempo Reale</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Monitora la svalutazione e la quotazione reale aggiornata del tuo modello sul mercato italiano dell&apos;usato.
+              </p>
+            </div>
+
+            <div className="p-5 rounded-3xl bg-white dark:bg-slate-900 border border-slate-200/90 dark:border-slate-800 shadow-xs space-y-2.5">
+              <div className="w-10 h-10 rounded-2xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 grid place-items-center">
+                <Share2 className="w-5 h-5" />
+              </div>
+              <h3 className="text-sm font-bold text-slate-900 dark:text-white">Scheda QR Code per la Vendita</h3>
+              <p className="text-xs text-slate-600 dark:text-slate-400 leading-relaxed">
+                Genera un link pubblico o un QR code da stampare o allegare al tuo annuncio. Gli acquirenti vedranno la cura del veicolo senza accedere ai tuoi dati personali.
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* ─── SEO FAQ SECTION ─── */}
+        <section className="mt-12 pt-8 border-t border-slate-200 dark:border-slate-800 space-y-6">
+          <div className="text-center max-w-2xl mx-auto space-y-2">
+            <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
+              Domande Frequenti
+            </span>
+            <h2 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white tracking-tight">
+              Tutto quello che c&apos;è da sapere sul Profilo Digitale Auto
+            </h2>
+          </div>
+
+          <div className="max-w-3xl mx-auto space-y-3">
+            {[
+              {
+                q: "Cos'è il Profilo Digitale Auto (o Passaporto Digitale)?",
+                a: "È il fascicolo permanente e gratuito della tua auto su AutoEsperto. Raccoglie in un unico luogo digitale tutti i dati del libretto, la cronologia dei tagliandi, lo stato di salute meccanica (Vehicle Health Score), le scadenze di bollo e revisione, le foto e l'andamento del valore di mercato.",
+              },
+              {
+                q: "Quanto costa creare e mantenere il Profilo Digitale?",
+                a: "Il servizio è 100% gratuito e non richiede abbonamenti. Puoi aggiungere tutte le auto del tuo nucleo familiare o del tuo parco veicoli.",
+              },
+              {
+                q: "I miei dati personali e la targa sono protetti?",
+                a: "Sì. Tutti i dati del tuo veicolo vengono memorizzati localmente e in sicurezza sul tuo dispositivo. Quando condividi la scheda pubblica per la vendita, i tuoi dati personali sensibili (indirizzo, nome completo, ecc.) restano protetti.",
+              },
+              {
+                q: "Come aiuta il Profilo Digitale a vendere l'auto più velocemente?",
+                a: "Mostrare agli acquirenti una cronologia trasparente di tagliandi, scadenze in regola e verdetto AutoEsperto elimina la diffidenza tipica del mercato dell'usato, velocizzando le trattative fino al 40% e difendendo il prezzo richiesto.",
+              },
+            ].map((faq, idx) => (
+              <details
+                key={idx}
+                className="group rounded-2xl border border-slate-200/80 dark:border-slate-800 bg-white dark:bg-slate-900 p-4 sm:p-5 transition-all open:ring-1 open:ring-blue-500/20"
+              >
+                <summary className="flex cursor-pointer items-center justify-between font-bold text-xs sm:text-sm text-slate-900 dark:text-white">
+                  <span>{faq.q}</span>
+                  <ChevronRight className="w-4 h-4 text-slate-400 transition-transform group-open:rotate-90 shrink-0 ml-2" />
+                </summary>
+                <p className="mt-3 text-xs text-slate-600 dark:text-slate-400 leading-relaxed border-t border-slate-100 dark:border-slate-800 pt-3">
+                  {faq.a}
+                </p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        {/* ─── BOTTOM CTA ─── */}
+        <section className="my-10 rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 sm:p-8 text-center space-y-4 shadow-xl shadow-blue-600/15">
+          <h2 className="text-xl sm:text-3xl font-black tracking-tight">
+            Pronto a creare il Profilo Digitale della tua auto?
+          </h2>
+          <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto">
+            Bastano meno di 60 secondi: inserisci la targa o scegli il modello per generare subito il passaporto permanente.
+          </p>
+          <div className="pt-2 flex justify-center">
+            <button
+              onClick={() => {
+                setWizardStep(1);
+                setShowWizard(true);
+              }}
+              className="px-6 py-3.5 rounded-2xl bg-white text-blue-600 font-extrabold text-xs sm:text-sm shadow-md hover:bg-blue-50 active:scale-[0.98] transition-all flex items-center gap-2"
+            >
+              <Plus className="w-4 h-4" /> Crea Profilo Auto Gratis
+            </button>
+          </div>
+        </section>
+
         {/* Wizard Modal: Add New Car Profile */}
         {showWizard && (
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/75 backdrop-blur-xs overflow-y-auto">

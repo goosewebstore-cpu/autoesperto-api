@@ -26,6 +26,127 @@ export interface Guide {
 
 export const guides: Guide[] = [
   {
+    slug: 'profilo-auto-digitale-passaporto-veicolo',
+    title: 'Profilo Auto Digitale: come funziona il passaporto permanente della tua auto',
+    description:
+      'Cos\'è il Profilo Digitale Auto, come organizzare libretto, storico tagliandi, promemoria scadenze bollo e revisione, e come condividere una scheda certificata con QR code per vendere prima e meglio.',
+    published: '2026-08-24',
+    category: 'manutenzione',
+    cta: 'Crea subito gratis il Profilo Digitale della tua auto',
+    sections: [
+      {
+        heading: 'Perché il libretto cartaceo e i fogli volanti non bastano più',
+        paragraphs: [
+          'Chiunque abbia posseduto o venduto un\'auto usata conosce la frustrazione: fatture dei tagliandi sparse nel cassetto del cruscotto, scadenze di revisione ministeriale o bollo dimenticate, e acquirenti diffidenti che chiedono prove concrete sulla cura del veicolo.',
+          'Il Profilo Digitale Auto (o Passaporto Digitale) di AutoEsperto nasce per risolvere definitivamente questo problema: un fascicolo digitale permanente, gratuito e privato sul tuo smartphone che racchiude tutta la vita della tua auto.',
+        ],
+      },
+      {
+        heading: '1. Documento Unico e dati tecnici sempre accessibili',
+        paragraphs: [
+          'Grazie alla tecnologia AI OCR, puoi caricare una foto del Documento Unico di Circolazione (libretto): il sistema estrae istantaneamente telaio VIN, omologazione, classe ambientale Euro, potenza fiscale e kW effettivi.',
+          'Niente più dubbi su blocchi del traffico o limiti neopatentati: tutti i dati ufficiali sono a portata di tap in qualsiasi momento.',
+        ],
+      },
+      {
+        heading: '2. Cronologia tagliandi e interventi certificati',
+        paragraphs: [
+          'Ogni volta che fai un cambio olio, sostituisci le pastiglie freno o fai la cinghia di distribuzione, puoi registrare l\'intervento nel tuo passaporto, allegando foto della ricevuta e chilometraggio esatto.',
+          'Questo storico documentato trasforma la tua auto da una semplice "usata" a un veicolo con manutenzione verificabile, aumentandone il valore commerciale del 10–15% rispetto alla media.',
+        ],
+      },
+      {
+        heading: '3. Promemoria scadenze: mai più multe o ritardi',
+        paragraphs: [
+          'Il Profilo Digitale calcola e notifica automaticamente le scadenze cruciali:',
+          '• Revisione ministeriale MCTC (dopo 4 anni dalla prima immatricolazione, poi ogni 2 anni).',
+          '• Scadenza del bollo auto con calcolo esatto delle aliquote regionali ed esenzioni per ibride ed elettriche.',
+          '• Rinnovo polizza assicurativa RC e cambio pneumatici stagionale (estivi/invernali).',
+        ],
+      },
+      {
+        heading: '4. Vendere fino al 40% più velocemente con il QR Code Trasparente',
+        paragraphs: [
+          'Quando decidi di vendere l\'auto, puoi generare con un click un link pubblico o un QR code protetto: i potenziali acquirenti potranno consultare lo storico manutenzioni, le foto ad alta risoluzione e il verdetto AutoEsperto senza vedere i tuoi dati personali sensibili.',
+          'La trasparenza totale azzera la diffidenza dell\'acquirente e ti permette di difendere il prezzo senza subire sconti ingiustificati.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'come-controllare-annuncio-auto-usata',
+    title: 'Come analizzare un annuncio di auto usata: cosa controllare e come evitare truffe',
+    description:
+      'La guida completa per analizzare annunci su AutoScout24, Subito.it e marketplace: verificare coerenza tra km e anno, individuare prezzi fuori mercato e ottenere il verdetto AutoEsperto.',
+    published: '2026-08-24',
+    category: 'acquisto',
+    cta: 'Incolla il link dell\'annuncio su AutoEsperto per il verdetto immediato',
+    sections: [
+      {
+        heading: 'Come leggere un annuncio tra le righe',
+        paragraphs: [
+          'Navigando tra i portali di annunci auto in Italia, la maggior parte delle offerte sembra perfetta: "come nuova", "tenuta maniacalmente", "chilometri certificati". Tuttavia, oltre il 30% degli annunci presenta omissioni strategiche o prezzi non realistici.',
+          'Prima di contattare il venditore o versare qualsiasi caparra, è fondamentale verificare 4 parametri oggettivi.',
+        ],
+      },
+      {
+        heading: '1. Rapporto tra Anno e Chilometraggio',
+        paragraphs: [
+          'In Italia un\'auto diesel percorre mediamente tra i 15.000 e i 20.000 km all\'anno, mentre un\'auto a benzina circa 8.000–12.000 km. Un\'auto diesel di 8 anni con "soli 45.000 km" richiede controlli scrupolosi sul portale dell\'Automobilista (storico revisioni).',
+          'Se i chilometri dichiarati sono insolitamente bassi, chiedi sempre le fatture dei tagliandi con data e km registrati.',
+        ],
+      },
+      {
+        heading: '2. Prezzo richiesto vs Prezzo medio reale di mercato',
+        paragraphs: [
+          'Un prezzo troppo basso (più del 20% sotto la media) è quasi sempre indice di problemi nascosti, incidenti strutturali pregressi o tentativi di truffa su acconti.',
+          'Usa lo strumento "Controlla Annuncio" di AutoEsperto: incolla il link dell\'annuncio per confrontare la cifra richiesta con le quotazioni reali e scoprire subito se è un BUON AFFARE o un prezzo da trattare con decisione.',
+        ],
+      },
+      {
+        heading: '3. Foto: i dettagli che i venditori cercano di nascondere',
+        paragraphs: [
+          'Esamina le foto ingrandite: allineamento delle fessure tra cofano, parafanghi e fari (segno di riparazioni post-incidente), usura del volante e della pedaliera rispetto ai km dichiarati, e differenze di tonalità di vernice tra pannelli adiacenti.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'come-trattare-prezzo-auto-usata',
+    title: 'Come trattare il prezzo di un\'auto usata: tecniche e margine di trattativa',
+    description:
+      'Quanto margine di sconto chiedere su un\'auto usata da privati e concessionari. Strategie pratiche, argomenti tecnici oggettivi e come chiudere al miglior prezzo.',
+    published: '2026-08-24',
+    category: 'acquisto',
+    cta: 'Calcola il valore di mercato e il margine di trattativa su AutoEsperto',
+    sections: [
+      {
+        heading: 'Quanto si può trattare su un\'auto usata?',
+        paragraphs: [
+          'La trattativa sul prezzo non è una questione di fortuna o di aggressività verbale: è una questione di dati oggettivi. In media, gli annunci di auto usate in Italia hanno un margine di trattativa implicito compreso tra il 5% e il 10% del prezzo esposto.',
+          'Presentarsi preparati con la quotazione reale di mercato e la lista dei lavori imminenti ti dà un vantaggio contrattuale imbattibile.',
+        ],
+      },
+      {
+        heading: '1. Trasforma i controlli in euro di sconto',
+        paragraphs: [
+          'Invece di chiedere genericamente "mi fai uno sconto?", quantifica i costi che dovrai sostenere subito dopo l\'acquisto:',
+          '• Pneumatici con battistrada sotto i 3 mm: sconto di circa 300–500 € per il treno nuovo.',
+          '• Tagliando ordinario imminente o non documentato: sconto di 200–350 €.',
+          '• Cinghia di distribuzione in scadenza (oltre 5 anni o 100.000 km): sconto di 400–700 €.',
+          '• Piccoli graffi o ammaccature su paraurti e cerchi: sconto di 150–300 €.',
+        ],
+      },
+      {
+        heading: '2. Differenza tra trattativa con privato e con concessionario',
+        paragraphs: [
+          'Con un privato conta la certezza e la rapidità del pagamento: mostrare che hai il budget pronto e che sei deciso a concludere rapidamente se il prezzo scende alla cifra equa è la leva più forte.',
+          'Con un concessionario, se non scende sul prezzo finale, chiedi di includere nel prezzo il passaggio di proprietà (circa 300–600 €), il tagliando preconsegna completo o l\'estensione della garanzia di conformità a 24 mesi.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'come-capire-se-auto-usata-e-affare',
     title: 'Come capire se un\'auto usata è un affare: 5 dati da verificare',
     description:

@@ -6,11 +6,6 @@ export default function robots(): MetadataRoute.Robots {
     '/api/',
     '/account',
     '/accesso',
-    '/passport/',
-    '/valutazione/*/*/*',
-    '/riparazione/*/*/*',
-    '/affidabilita/*/*/*',
-    '/consumi/*/*/*',
   ];
 
   return {

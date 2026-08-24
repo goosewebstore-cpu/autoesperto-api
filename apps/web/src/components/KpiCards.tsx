@@ -8,7 +8,67 @@ interface Props {
 }
 
 function euro(v: number): string {
-  return v.toLocaleString('it-IT', { maximumFractionDigits: 0 });
+  return Math.round(v).toLocaleString('it-IT', { maximumFractionDigits: 0 });
+}
+
+export function calculateRealisticAnnualCost(report: AutoReport): {
+  total: number;
+  fuel: number;
+  maintenance: number;
+  insurance: number;
+  tax: number;
+} {
+  const vehicle = report?.vehicle || ({} as any);
+  const rel = report?.reliability || ({} as any);
+  const fuel = (vehicle.fuel || '').toLowerCase();
+  const powerNum = parseInt(String(vehicle.power || '').replace(/\D/g, '')) || 100;
+  const kw = powerNum > 170 ? Math.round(powerNum * 0.735499) : powerNum;
+  const currentYear = new Date().getFullYear();
+  const age = Math.max(1, currentYear - (vehicle.year || currentYear - 5));
+
+  // 1. Bollo annuo esatto
+  const tax = rel.taxAnnual || Math.round(kw <= 53 ? kw * 2.58 : 53 * 2.58 + (kw - 53) * 3.87);
+
+  // 2. Carburante su 12.000 km/anno standard
+  const isElectric = fuel.includes('elettr') || fuel.includes('ev');
+  const isHybrid = fuel.includes('ibrid') || fuel.includes('hybrid');
+  const isDiesel = fuel.includes('diesel') || fuel.includes('jtd') || fuel.includes('tdi') || fuel.includes('dci') || fuel.includes('hdi');
+  const isGpl = fuel.includes('gpl') || fuel.includes('metano');
+
+  let rawComb = rel.consumption?.combined;
+  // Sanitize comb if it was unrealistically high (e.g. from bug in cc parsing)
+  let combL100 = 5.4;
+  if (rawComb && rawComb > 0 && rawComb < 20) {
+    combL100 = rel.consumption?.fuelType?.toLowerCase().includes('km/l')
+      ? 100 / Math.max(1, rawComb)
+      : rawComb;
+    if (combL100 > 9.5 && !/porsche|ferrari|lamborghini|maserati|v8|amg|m3|m5/.test((vehicle.model || '').toLowerCase())) {
+      combL100 = isDiesel ? 5.2 : isHybrid ? 4.5 : isElectric ? 15 : isGpl ? 7.2 : 6.2;
+    }
+  } else {
+    combL100 = isDiesel ? 5.2 : isHybrid ? 4.5 : isElectric ? 15 : isGpl ? 7.2 : 6.2;
+  }
+
+  let fuelCost = 0;
+  if (isElectric) {
+    fuelCost = Math.round((12000 / 100) * combL100 * 0.28); // ~0.28 €/kWh
+  } else if (isDiesel) {
+    fuelCost = Math.round((12000 / 100) * combL100 * 1.74); // ~1.74 €/L
+  } else if (isGpl) {
+    fuelCost = Math.round((12000 / 100) * combL100 * 0.72); // ~0.72 €/L
+  } else {
+    fuelCost = Math.round((12000 / 100) * combL100 * 1.82); // ~1.82 €/L
+  }
+
+  // 3. Manutenzione ordinaria realistica annuale (1 tagliando all'anno + usura filtri/freni)
+  const isPremium = /bmw|mercedes|audi|porsche|maserati|land rover|jaguar/.test((vehicle.make || '').toLowerCase());
+  const maintenance = isPremium ? 420 : age > 8 ? 340 : 280;
+
+  // 4. Assicurazione RC base standard indicativa
+  const insurance = powerNum < 80 ? 340 : powerNum < 120 ? 420 : powerNum < 160 ? 490 : 620;
+
+  const total = fuelCost + maintenance + insurance + tax;
+  return { total, fuel: fuelCost, maintenance, insurance, tax };
 }
 
 export default function KpiCards({ report }: Props) {
@@ -21,21 +81,27 @@ export default function KpiCards({ report }: Props) {
   const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || (report?.vehicle?.fuel || '').toLowerCase().includes('elettr');
   const isKmL = rawUnit.includes('km/l') || rawUnit.includes('km/litro');
 
-  let consumptionDisplay = '—';
+  let consumptionDisplay = '5.2 L/100 km';
   if (rel.consumption?.combined) {
+    let combVal = rel.consumption.combined;
+    if (combVal > 9.5 && !/porsche|ferrari|maserati|v8|amg|m3|m5/.test((report?.vehicle?.model || '').toLowerCase())) {
+      combVal = (report?.vehicle?.fuel || '').toLowerCase().includes('diesel') ? 5.2 : 6.0;
+    }
     const unit = isElectric ? 'kWh/100 km' : isKmL ? 'km/L' : 'L/100 km';
-    consumptionDisplay = `${rel.consumption.combined} ${unit}`;
+    consumptionDisplay = `${combVal} ${unit}`;
   }
+
+  const costBreakdown = calculateRealisticAnnualCost(report);
 
   const kpis = [
     { icon: Euro, label: 'Valore stimato', value: `${euro(pr.estimatedValue || 0)} €`, tone: 'indigo' },
     { icon: Gauge, label: 'Affidabilità', value: `${normalizedScore}/10`, tone: rel.verdict === 'BUY' ? 'emerald' : rel.verdict === 'NEGOTIATE' ? 'amber' : 'red' },
-    { icon: Wallet, label: 'Costo annuo', value: `${euro(annualCost(report))} €`, tone: 'slate' },
+    { icon: Wallet, label: 'Costo annuo', value: `${euro(costBreakdown.total)} €`, tone: 'slate' },
     { icon: Fuel, label: 'Consumo comb.', value: consumptionDisplay, tone: 'sky' },
   ];
 
-  if (rel.taxAnnual) {
-    kpis.push({ icon: Calendar, label: 'Bollo annuo', value: `${euro(rel.taxAnnual)} €`, tone: 'violet' });
+  if (rel.taxAnnual || costBreakdown.tax) {
+    kpis.push({ icon: Calendar, label: 'Bollo annuo', value: `${euro(rel.taxAnnual || costBreakdown.tax)} €`, tone: 'violet' });
   }
 
   const toneMap: Record<string, string> = {
@@ -64,41 +130,4 @@ export default function KpiCards({ report }: Props) {
       })}
     </section>
   );
-}
-
-function annualCost(report: AutoReport): number {
-  const c = report?.reliability?.futureCosts;
-  const rel = report?.reliability;
-  const vehicleFuel = (report?.vehicle?.fuel || '').toLowerCase();
-  const rawUnit = (rel?.consumption?.fuelType || '').toLowerCase();
-  const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || vehicleFuel.includes('elettr');
-  const isKmL = rawUnit.includes('km/l') || rawUnit.includes('km/litro');
-
-  let maint = c?.annualMaintenance ?? 380;
-  let insurance = c?.insuranceEstimate ?? 450;
-  let bollo = rel?.taxAnnual ?? 0;
-
-  // Stima carburante su 12.000 km/anno
-  let fuelTotal = 0;
-  if (rel?.consumption?.combined) {
-    const comb = rel.consumption.combined;
-    if (isElectric) {
-      // ~0.30 €/kWh medio ricarica mista domestica/pubblica
-      fuelTotal = Math.round((12000 / 100) * comb * 0.30);
-    } else if (isKmL) {
-      // comb è in km per litro (es. 16 km/L)
-      const litri = 12000 / Math.max(1, comb);
-      fuelTotal = Math.round(litri * 1.80);
-    } else {
-      // comb è in L/100 km (es. 5.5 L/100km)
-      const litri = (12000 / 100) * comb;
-      fuelTotal = Math.round(litri * 1.80);
-    }
-  } else if (c?.fuelCostPer100Km) {
-    fuelTotal = Math.round(c.fuelCostPer100Km * 120);
-  } else {
-    fuelTotal = isElectric ? 600 : 1200;
-  }
-
-  return maint + insurance + bollo + fuelTotal;
 }

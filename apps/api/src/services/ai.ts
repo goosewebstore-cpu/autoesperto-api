@@ -69,21 +69,21 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
   const brand = (vehicle.make || '').toLowerCase();
   const isPremium = /bmw|mercedes|audi|porsche|maserati|land rover|jaguar/.test(brand);
 
-  const baseMaint = age <= 5 ? 320 : age <= 10 ? 450 : 620;
-  const maintenance = isPremium ? Math.round(baseMaint * 1.4) : baseMaint;
+  const baseMaint = age <= 5 ? 240 : age <= 10 ? 320 : 380;
+  const maintenance = isPremium ? Math.round(baseMaint * 1.3) : baseMaint;
 
   const f = fuel.toLowerCase();
   const fuelCost = f.includes('diesel')
-    ? 9.5
+    ? 8.5
     : f.includes('elettr') || f.includes('ev')
-    ? 4.8
+    ? 4.2
     : f.includes('ibrid') || f.includes('hybrid')
-    ? 8.2
+    ? 7.2
     : f.includes('gpl') || f.includes('metano')
-    ? 6.5
-    : 11.0;
+    ? 5.5
+    : 9.8;
 
-  const insurance = power < 90 ? 380 : power < 130 ? 480 : power < 180 ? 620 : 850;
+  const insurance = power < 90 ? 340 : power < 130 ? 420 : power < 180 ? 490 : 650;
   return { maintenance, fuelCost, insurance };
 }
 
@@ -137,7 +137,8 @@ function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; 
   let hash = 0;
   for (let i = 0; i < makeNorm.length; i++) hash += makeNorm.charCodeAt(i);
 
-  const displacement = parseFloat((vehicle.displacement || '').replace(/[^0-9.]/g, '')) || (1.2 + (hash % 8) * 0.2);
+  const rawDisp = parseFloat((vehicle.displacement || '').replace(/[^0-9.]/g, '')) || (1.2 + (hash % 8) * 0.2);
+  const displacement = rawDisp > 20 ? rawDisp / 1000 : rawDisp; // convert cc to Liters
   const isDiesel = f.includes('diesel');
   const isHybrid = f.includes('ibrid');
   const isElectric = f.includes('elettr') || f.includes('ev');
@@ -146,13 +147,13 @@ function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; 
   if (isElectric) return { city: 16, highway: 13, combined: 14.5, fuelType: 'kWh/100km' };
 
   // Consumption in L/100 km
-  const baseL100 = isDiesel ? 5.2 : isHybrid ? 4.5 : isGpl ? 7.0 : 6.2;
-  const displacementFactor = Math.max(0.85, Math.min(1.6, displacement / 1.4));
+  const baseL100 = isDiesel ? 4.9 : isHybrid ? 4.3 : isGpl ? 6.8 : 5.8;
+  const displacementFactor = Math.max(0.88, Math.min(1.35, 0.75 + (displacement / 2.0) * 0.35));
   const combined = Math.round(baseL100 * displacementFactor * 10) / 10;
-  const city = Math.round(combined * 1.25 * 10) / 10;
-  const highway = Math.round(combined * 0.82 * 10) / 10;
+  const city = Math.round(combined * 1.2 * 10) / 10;
+  const highway = Math.round(combined * 0.85 * 10) / 10;
 
-  return { city, highway, combined, fuelType: 'l/100 km' };
+  return { city, highway, combined, fuelType: 'L/100 km' };
 }
 
 function extractKw(powerInput?: string | number): number {

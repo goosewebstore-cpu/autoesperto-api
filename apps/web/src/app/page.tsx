@@ -1,6 +1,5 @@
 import type { Metadata } from 'next';
 import HomeClient from '@/components/HomeClient';
-import SiteFooter from '@/components/SiteFooter';
 import { getAllMakes } from '@/lib/catalogo';
 
 export const metadata: Metadata = {
@@ -20,10 +19,5 @@ export default function Home() {
     models: makes.reduce((total, make) => total + make.models.length, 0),
   };
 
-  return (
-    <>
-      <HomeClient stats={stats} />
-      <SiteFooter />
-    </>
-  );
+  return <HomeClient stats={stats} />;
 }

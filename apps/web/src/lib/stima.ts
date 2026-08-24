@@ -421,81 +421,249 @@ function buildAdvice(weaknesses: string[], maintenanceMin: number): string[] {
   return list.slice(0, 4);
 }
 
-export const REAL_SEGMENT_CANDIDATES: Record<string, Array<[string, string]>> = {
+export interface SegmentCandidate {
+  make: string;
+  model: string;
+  body: string;
+}
+
+export const REAL_SEGMENT_CANDIDATES: Record<string, SegmentCandidate[]> = {
   citycar: [
-    ['Fiat', 'Panda'], ['Fiat', '500'], ['Toyota', 'Aygo'], ['Hyundai', 'i10'],
-    ['Kia', 'Picanto'], ['Renault', 'Twingo'], ['Smart', 'Fortwo'], ['Volkswagen', 'up!'],
-    ['Lancia', 'Ypsilon'], ['Suzuki', 'Ignis'],
+    { make: 'Fiat', model: 'Panda', body: 'Citycar' },
+    { make: 'Fiat', model: '500', body: 'Citycar' },
+    { make: 'Toyota', model: 'Aygo', body: 'Citycar' },
+    { make: 'Toyota', model: 'Aygo X', body: 'Citycar Crossover' },
+    { make: 'Hyundai', model: 'i10', body: 'Citycar' },
+    { make: 'Kia', model: 'Picanto', body: 'Citycar' },
+    { make: 'Renault', model: 'Twingo', body: 'Citycar' },
+    { make: 'Smart', model: 'Fortwo', body: 'Citycar' },
+    { make: 'Volkswagen', model: 'up!', body: 'Citycar' },
+    { make: 'Lancia', model: 'Ypsilon', body: 'Citycar' },
+    { make: 'Suzuki', model: 'Ignis', body: 'Citycar Crossover' },
+    { make: 'Citroen', model: 'C1', body: 'Citycar' },
+    { make: 'Peugeot', model: '108', body: 'Citycar' },
+    { make: 'Dacia', model: 'Spring', body: 'Citycar EV' },
   ],
   utilitaria: [
-    ['Toyota', 'Yaris'], ['Renault', 'Clio'], ['Peugeot', '208'], ['Volkswagen', 'Polo'],
-    ['Ford', 'Fiesta'], ['Opel', 'Corsa'], ['Dacia', 'Sandero'], ['Citroen', 'C3'],
-    ['Hyundai', 'i20'], ['Seat', 'Ibiza'], ['Mini', 'Cooper'],
+    { make: 'Toyota', model: 'Yaris', body: 'Utilitaria' },
+    { make: 'Renault', model: 'Clio', body: 'Utilitaria' },
+    { make: 'Peugeot', model: '208', body: 'Utilitaria' },
+    { make: 'Volkswagen', model: 'Polo', body: 'Utilitaria' },
+    { make: 'Ford', model: 'Fiesta', body: 'Utilitaria' },
+    { make: 'Opel', model: 'Corsa', body: 'Utilitaria' },
+    { make: 'Dacia', model: 'Sandero', body: 'Utilitaria' },
+    { make: 'Citroen', model: 'C3', body: 'Utilitaria' },
+    { make: 'Hyundai', model: 'i20', body: 'Utilitaria' },
+    { make: 'Seat', model: 'Ibiza', body: 'Utilitaria' },
+    { make: 'Skoda', model: 'Fabia', body: 'Utilitaria' },
+    { make: 'Suzuki', model: 'Swift', body: 'Utilitaria' },
+    { make: 'Nissan', model: 'Micra', body: 'Utilitaria' },
+    { make: 'Mini', model: 'Cooper', body: 'Utilitaria' },
+    { make: 'Fiat', model: 'Punto', body: 'Utilitaria' },
   ],
   bsuv: [
-    ['Jeep', 'Renegade'], ['Fiat', '500X'], ['Volkswagen', 'T-Roc'], ['Volkswagen', 'T-Cross'],
-    ['Toyota', 'Yaris Cross'], ['Peugeot', '2008'], ['Renault', 'Captur'], ['Ford', 'Puma'],
-    ['Nissan', 'Juke'], ['Hyundai', 'Kona'], ['Dacia', 'Duster'], ['Suzuki', 'Vitara'],
-    ['Mazda', 'CX-3'],
+    { make: 'Jeep', model: 'Renegade', body: 'SUV compatto' },
+    { make: 'Fiat', model: '500X', body: 'Crossover' },
+    { make: 'Volkswagen', model: 'T-Roc', body: 'SUV compatto' },
+    { make: 'Volkswagen', model: 'T-Cross', body: 'SUV compatto' },
+    { make: 'Volkswagen', model: 'Taigo', body: 'Crossover Coupé' },
+    { make: 'Toyota', model: 'Yaris Cross', body: 'SUV compatto' },
+    { make: 'Peugeot', model: '2008', body: 'SUV compatto' },
+    { make: 'Renault', model: 'Captur', body: 'Crossover' },
+    { make: 'Ford', model: 'Puma', body: 'Crossover' },
+    { make: 'Nissan', model: 'Juke', body: 'Crossover' },
+    { make: 'Hyundai', model: 'Kona', body: 'SUV compatto' },
+    { make: 'Hyundai', model: 'Bayon', body: 'Crossover' },
+    { make: 'Kia', model: 'Stonic', body: 'Crossover' },
+    { make: 'Dacia', model: 'Duster', body: 'SUV compatto' },
+    { make: 'Suzuki', model: 'Vitara', body: 'SUV compatto' },
+    { make: 'Mazda', model: 'CX-3', body: 'SUV compatto' },
+    { make: 'Mazda', model: 'CX-30', body: 'Crossover' },
+    { make: 'Opel', model: 'Mokka', body: 'Crossover' },
+    { make: 'Opel', model: 'Crossland', body: 'Crossover' },
+    { make: 'Seat', model: 'Arona', body: 'SUV compatto' },
+    { make: 'Skoda', model: 'Kamiq', body: 'SUV compatto' },
+    { make: 'Jeep', model: 'Avenger', body: 'SUV compatto' },
+    { make: 'Citroen', model: 'C3 Aircross', body: 'SUV compatto' },
+    { make: 'MG', model: 'ZS', body: 'SUV compatto' },
   ],
   compatta: [
-    ['Volkswagen', 'Golf'], ['Audi', 'A3'], ['BMW', 'Serie 1'], ['Mercedes', 'Classe A'],
-    ['Ford', 'Focus'], ['Toyota', 'Corolla'], ['Peugeot', '308'], ['Seat', 'Leon'],
-    ['Skoda', 'Octavia'], ['Fiat', 'Tipo'], ['Alfa Romeo', 'Giulietta'],
+    { make: 'Volkswagen', model: 'Golf', body: 'Berlina 2 volumi' },
+    { make: 'Audi', model: 'A3', body: 'Berlina 2 volumi' },
+    { make: 'BMW', model: 'Serie 1', body: 'Berlina 2 volumi' },
+    { make: 'Mercedes', model: 'Classe A', body: 'Berlina 2 volumi' },
+    { make: 'Ford', model: 'Focus', body: 'Berlina 2 volumi' },
+    { make: 'Toyota', model: 'Corolla', body: 'Berlina 2 volumi' },
+    { make: 'Peugeot', model: '308', body: 'Berlina 2 volumi' },
+    { make: 'Seat', model: 'Leon', body: 'Berlina 2 volumi' },
+    { make: 'Skoda', model: 'Octavia', body: 'Berlina' },
+    { make: 'Fiat', model: 'Tipo', body: 'Berlina 2 volumi' },
+    { make: 'Alfa Romeo', model: 'Giulietta', body: 'Berlina 2 volumi' },
+    { make: 'Opel', model: 'Astra', body: 'Berlina 2 volumi' },
+    { make: 'Hyundai', model: 'i30', body: 'Berlina 2 volumi' },
+    { make: 'Kia', model: 'Ceed', body: 'Berlina 2 volumi' },
+    { make: 'Mazda', model: 'Mazda 3', body: 'Berlina 2 volumi' },
+    { make: 'Honda', model: 'Civic', body: 'Berlina 2 volumi' },
+    { make: 'Renault', model: 'Megane', body: 'Berlina 2 volumi' },
   ],
   csuv: [
-    ['Volkswagen', 'Tiguan'], ['Toyota', 'RAV4'], ['Nissan', 'Qashqai'], ['Peugeot', '3008'],
-    ['Hyundai', 'Tucson'], ['Kia', 'Sportage'], ['Ford', 'Kuga'], ['Jeep', 'Compass'],
-    ['Cupra', 'Formentor'], ['BMW', 'X1'], ['Audi', 'Q3'], ['Mercedes', 'GLA'],
-    ['Volvo', 'XC40'], ['Alfa Romeo', 'Tonale'],
+    { make: 'Volkswagen', model: 'Tiguan', body: 'SUV medio' },
+    { make: 'Toyota', model: 'RAV4', body: 'SUV medio' },
+    { make: 'Toyota', model: 'C-HR', body: 'Crossover' },
+    { make: 'Nissan', model: 'Qashqai', body: 'Crossover' },
+    { make: 'Peugeot', model: '3008', body: 'SUV medio' },
+    { make: 'Hyundai', model: 'Tucson', body: 'SUV medio' },
+    { make: 'Kia', model: 'Sportage', body: 'SUV medio' },
+    { make: 'Ford', model: 'Kuga', body: 'SUV medio' },
+    { make: 'Jeep', model: 'Compass', body: 'SUV medio' },
+    { make: 'Cupra', model: 'Formentor', body: 'Crossover Coupé' },
+    { make: 'BMW', model: 'X1', body: 'SUV medio' },
+    { make: 'Audi', model: 'Q3', body: 'SUV medio' },
+    { make: 'Mercedes', model: 'GLA', body: 'SUV medio' },
+    { make: 'Volvo', model: 'XC40', body: 'SUV medio' },
+    { make: 'Alfa Romeo', model: 'Tonale', body: 'SUV medio' },
+    { make: 'Renault', model: 'Austral', body: 'SUV medio' },
+    { make: 'Citroen', model: 'C5 Aircross', body: 'SUV medio' },
+    { make: 'Seat', model: 'Ateca', body: 'SUV medio' },
+    { make: 'Skoda', model: 'Karoq', body: 'SUV medio' },
+    { make: 'Mazda', model: 'CX-5', body: 'SUV medio' },
+    { make: 'Land Rover', model: 'Range Rover Evoque', body: 'SUV medio' },
   ],
   berlina_d: [
-    ['BMW', 'Serie 3'], ['Audi', 'A4'], ['Mercedes', 'Classe C'], ['Alfa Romeo', 'Giulia'],
-    ['Volvo', 'S60'], ['Volkswagen', 'Passat'], ['Tesla', 'Model 3'],
+    { make: 'BMW', model: 'Serie 3', body: 'Berlina' },
+    { make: 'Audi', model: 'A4', body: 'Berlina / Station Wagon' },
+    { make: 'Mercedes', model: 'Classe C', body: 'Berlina' },
+    { make: 'Alfa Romeo', model: 'Giulia', body: 'Berlina' },
+    { make: 'Volvo', model: 'S60', body: 'Berlina' },
+    { make: 'Volkswagen', model: 'Passat', body: 'Station Wagon' },
+    { make: 'Tesla', model: 'Model 3', body: 'Berlina EV' },
+    { make: 'Skoda', model: 'Superb', body: 'Berlina / Station Wagon' },
+    { make: 'Peugeot', model: '508', body: 'Berlina' },
+    { make: 'Ford', model: 'Mondeo', body: 'Berlina' },
+    { make: 'Audi', model: 'A6', body: 'Berlina' },
+    { make: 'BMW', model: 'Serie 5', body: 'Berlina' },
+    { make: 'Mercedes', model: 'Classe E', body: 'Berlina' },
   ],
   dsuv: [
-    ['BMW', 'X3'], ['Audi', 'Q5'], ['Mercedes', 'GLC'], ['Porsche', 'Macan'],
-    ['Alfa Romeo', 'Stelvio'], ['Volvo', 'XC60'], ['Land Rover', 'Range Rover Velar'],
-    ['Tesla', 'Model Y'], ['Maserati', 'Grecale'],
+    { make: 'BMW', model: 'X3', body: 'SUV grande' },
+    { make: 'Audi', model: 'Q5', body: 'SUV grande' },
+    { make: 'Mercedes', model: 'GLC', body: 'SUV grande' },
+    { make: 'Porsche', model: 'Macan', body: 'SUV grande' },
+    { make: 'Alfa Romeo', model: 'Stelvio', body: 'SUV grande' },
+    { make: 'Volvo', model: 'XC60', body: 'SUV grande' },
+    { make: 'Land Rover', model: 'Range Rover Velar', body: 'SUV grande' },
+    { make: 'Tesla', model: 'Model Y', body: 'SUV EV' },
+    { make: 'Maserati', model: 'Grecale', body: 'SUV grande' },
+    { make: 'Volkswagen', model: 'Touareg', body: 'SUV grande' },
+    { make: 'Jeep', model: 'Grand Cherokee', body: 'SUV grande' },
+    { make: 'Porsche', model: 'Cayenne', body: 'SUV grande' },
+    { make: 'BMW', model: 'X5', body: 'SUV grande' },
+    { make: 'Audi', model: 'Q7', body: 'SUV grande' },
+    { make: 'Mercedes', model: 'GLE', body: 'SUV grande' },
+    { make: 'Volvo', model: 'XC90', body: 'SUV grande' },
   ],
   sportiva: [
-    ['Mazda', 'MX-5'], ['Toyota', 'GR86'], ['BMW', 'Serie 2'], ['BMW', 'Z4'],
-    ['Audi', 'TT'], ['Porsche', '718 Cayman'], ['Ford', 'Mustang'], ['Alpine', 'A110'],
-    ['Abarth', '595'],
+    { make: 'Mazda', model: 'MX-5', body: 'Spider' },
+    { make: 'Toyota', model: 'GR86', body: 'Coupé' },
+    { make: 'BMW', model: 'Serie 2', body: 'Coupé' },
+    { make: 'BMW', model: 'Z4', body: 'Spider' },
+    { make: 'Audi', model: 'TT', body: 'Coupé' },
+    { make: 'Porsche', model: '718 Cayman', body: 'Coupé' },
+    { make: 'Ford', model: 'Mustang', body: 'Coupé' },
+    { make: 'Alpine', model: 'A110', body: 'Coupé' },
+    { make: 'Abarth', model: '595', body: 'Sportiva compatta' },
+    { make: 'Toyota', model: 'Supra', body: 'Coupé' },
   ],
   supercar: [
-    ['Porsche', '911'], ['Ferrari', 'Roma'], ['Ferrari', '296 GTB'], ['Lamborghini', 'Huracan'],
-    ['McLaren', 'Artura'], ['Aston Martin', 'Vantage'], ['Maserati', 'MC20'],
+    { make: 'Porsche', model: '911', body: 'Coupé' },
+    { make: 'Ferrari', model: 'Roma', body: 'Coupé GT' },
+    { make: 'Ferrari', model: '296 GTB', body: 'Supercar' },
+    { make: 'Lamborghini', model: 'Huracan', body: 'Supercar' },
+    { make: 'McLaren', model: 'Artura', body: 'Supercar' },
+    { make: 'Aston Martin', model: 'Vantage', body: 'Coupé GT' },
+    { make: 'Maserati', model: 'MC20', body: 'Supercar' },
+    { make: 'Audi', model: 'R8', body: 'Supercar' },
+    { make: 'Nissan', model: 'GT-R', body: 'Supercar' },
   ],
   monovolume: [
-    ['Fiat', '500L'], ['Citroen', 'Berlingo'], ['Peugeot', 'Rifter'], ['Volkswagen', 'Touran'],
-    ['Mercedes', 'Classe B'],
+    { make: 'Fiat', model: '500L', body: 'Monovolume' },
+    { make: 'Citroen', model: 'Berlingo', body: 'Multispazio' },
+    { make: 'Peugeot', model: 'Rifter', body: 'Multispazio' },
+    { make: 'Volkswagen', model: 'Touran', body: 'Monovolume' },
+    { make: 'Volkswagen', model: 'Caddy', body: 'Multispazio' },
+    { make: 'Mercedes', model: 'Classe B', body: 'Monovolume' },
+    { make: 'Renault', model: 'Scenic', body: 'Monovolume' },
+    { make: 'Ford', model: 'C-Max', body: 'Monovolume' },
+    { make: 'Ford', model: 'S-Max', body: 'Monovolume' },
+    { make: 'Dacia', model: 'Jogger', body: 'Multispazio' },
+  ],
+  fuoristrada: [
+    { make: 'Jeep', model: 'Wrangler', body: 'Fuoristrada' },
+    { make: 'Suzuki', model: 'Jimny', body: 'Fuoristrada' },
+    { make: 'Toyota', model: 'Land Cruiser', body: 'Fuoristrada' },
+    { make: 'Toyota', model: 'Hilux', body: 'Pick-up' },
+    { make: 'Ford', model: 'Ranger', body: 'Pick-up' },
+    { make: 'Land Rover', model: 'Defender', body: 'Fuoristrada' },
+    { make: 'Mercedes', model: 'Classe G', body: 'Fuoristrada' },
+  ],
+  elettrica: [
+    { make: 'Tesla', model: 'Model 3', body: 'Berlina EV' },
+    { make: 'Tesla', model: 'Model Y', body: 'SUV EV' },
+    { make: 'Volkswagen', model: 'ID.3', body: 'Compatta EV' },
+    { make: 'Volkswagen', model: 'ID.4', body: 'SUV EV' },
+    { make: 'Cupra', model: 'Born', body: 'Compatta EV' },
+    { make: 'Renault', model: 'Megane E-Tech', body: 'Crossover EV' },
+    { make: 'Kia', model: 'EV6', body: 'Crossover EV' },
+    { make: 'Hyundai', model: 'Ioniq 5', body: 'Crossover EV' },
+    { make: 'MG', model: 'MG4', body: 'Compatta EV' },
+    { make: 'BYD', model: 'Atto 3', body: 'SUV EV' },
+    { make: 'Smart', model: '#1', body: 'Crossover EV' },
   ],
 };
 
 export function classifySegment(make: string, model: string): string {
-  const norm = `${make} ${model}`.toLowerCase();
+  const norm = `${make} ${model}`.toLowerCase().replace(/[-_.]/g, ' ');
 
-  // Supercars
-  if (/911|ferrari|lamborghini|mclaren|aston martin|mc20|r8\b|huracan|aventador|roma|296|f8|sf90|gtb/.test(norm)) return 'supercar';
-  // Sports cars
-  if (/mx-5|gr86|gt86|z4|tt\b|718|boxster|cayman|mustang|alpine|a110|abarth|spider|supra|brz/.test(norm)) return 'sportiva';
-  // Citycar
-  if (/panda|500\b|aygo|i10|picanto|twingo|fortwo|up!|up\b|ypsilon|ignis|celerio|spring|citigo|mii\b|c1\b|108\b/.test(norm)) return 'citycar';
-  // Utilitarie
-  if (/yaris|clio|208|polo|fiesta|corsa|sandero|c3\b|i20|rio\b|ibiza|fabia|swift|micra|jazz|mito\b|cooper\b|mini\b/.test(norm)) return 'utilitaria';
-  // B-SUV
-  if (/renegade|500x|t-roc|t-cross|yaris cross|2008|captur|puma|juke|kona|stonic|duster|vitara|cx-3\b|cx-30|mokka|crossland|arona|kamiq|avenger|c3 aircross|zs\b/.test(norm)) return 'bsuv';
-  // C-SUV
-  if (/tiguan|rav4|qashqai|3008|tucson|sportage|kuga|compass|formentor|x1\b|x2\b|q3\b|gla\b|glb\b|xc40|tonale|austral|kadjar|cx-5|c5 aircross|ateca|karoq|evoque|ux\b/.test(norm)) return 'csuv';
-  // D-SUV
-  if (/x3\b|x5\b|x6\b|q5\b|q7\b|q8\b|glc|gle|macan|cayenne|stelvio|xc60|xc90|velar|range rover|grand cherokee|model y|grecale|levante|f-pace|touareg|rx\b|nx\b/.test(norm)) return 'dsuv';
-  // Berlina D
-  if (/serie 3|320|330|a4\b|classe c|c200|c220|giulia|s60|v60|passat|model 3|superb|508/.test(norm)) return 'berlina_d';
-  // Monovolume
-  if (/500l|berlingo|rifter|touran|caddy|classe b|b180|b200|scenic|c-max|s-max|kangoo|doblo|qubo/.test(norm)) return 'monovolume';
-  // Compatte
-  if (/golf|a3\b|serie 1|116|118|120|classe a|a180|a200|focus|corolla|308|megane|leon|octavia|tipo|giulietta|astra|i30|ceed|mazda 3|civic/.test(norm)) return 'compatta';
+  // 1. Supercars
+  if (/911|ferrari|lamborghini|mclaren|aston martin|mc20|r8\b|huracan|aventador|roma|296|f8|sf90|gtb|granturismo|grancabrio|gt-r\b|gtr\b|corvette|artura|720s|765lt|vantage|db11|db12|revuelto|urus|purosangue/.test(norm)) return 'supercar';
+
+  // 2. Pure offroaders & pickups
+  if (/wrangler|jimny|land cruiser|hilux|ranger|navara|l200|amarok|classe g\b|g wagen|gladiator/.test(norm)) return 'fuoristrada';
+
+  // 3. Sports cars / Coupé / Spider / Hot Hatch
+  if (/mx 5|miata|gr86|gt86|brz|z4|tt\b|718|boxster|cayman|mustang|alpine|a110|abarth|spider|supra|370z|350z|golf gti|golf r|focus st|focus rs|civic type r|megane rs|i30 n|i20 n|yaris gr|gr yaris/.test(norm)) return 'sportiva';
+
+  // 4. Large / Luxury SUVs (D-SUV, E-SUV)
+  if (/x3\b|x4\b|x5\b|x6\b|x7\b|q5\b|q7\b|q8\b|glc|gle|gls|macan|cayenne|stelvio|grecale|levante|xc60|xc90|velar|range rover|grand cherokee|model y|f pace|e pace|touareg|rx\b|nx\b|santa fe|sorento|tarraco|edge|explorer|highlander|cx 60|cx 80|defender|discovery\b/.test(norm)) return 'dsuv';
+
+  // 5. C-SUV / Medium Crossovers
+  if (/tiguan|rav4|c hr|chr\b|corolla cross|qashqai|3008|5008|tucson|sportage|xceed|kuga|compass|formentor|ateca|karoq|kodiaq|x1\b|x2\b|q3\b|gla\b|glb\b|xc40|tonale|austral|kadjar|arkana|c5 aircross|grandland|cx 5|eclipse cross|cr v|crv\b|hr v|hrv\b|forester|xv\b|crosstrek|ux\b|evoque|discovery sport|hs\b|across|symbioz|rafale|elroq|enyaq|id 4|id 5|ioniq 5|ev6|atto 3/.test(norm)) return 'csuv';
+
+  // 6. B-SUV / Compact Crossovers
+  if (/renegade|500x|600\b|t roc|t cross|taigo|yaris cross|2008|captur|puma|juke|kona|bayon|stonic|duster|vitara|s cross|cx 3\b|cx 30|mokka|crossland|frontera|arona|kamiq|avenger|c3 aircross|zs\b|ecosport|tivoli|aceman|countryman|smart #1|smart #3|ex30|ds 3|mokka e|2008 e|e 2008/.test(norm)) return 'bsuv';
+
+  // 7. Monovolume & MPVs
+  if (/500l|berlingo|rifter|touran|sharan|caddy|multivan|classe b|b180|b200|classe v|vito|scenic|espace|c max|s max|galaxy|kangoo|doblo|qubo|combo|zafira|lodgy|dokker|jogger|carens|alhambra|altea|roomster|b max|meriva|c4 picasso|spacetourer/.test(norm)) return 'monovolume';
+
+  // 8. Dedicated Electrics (Compact)
+  if (/id 3|born|megane e tech|leaf|mg4|byd dolphin|zoe|i3\b/.test(norm)) return 'elettrica';
+
+  // 9. Berlina & Station Wagon Segment D/E
+  if (/serie 3|318|320|330|340|serie 5|520|530|540|a4\b|a5\b|a6\b|classe c|c180|c200|c220|classe e|e200|e220|giulia|159|s60|v60|s90|v90|passat|arteon|model 3|superb|508|mondeo|insignia|talisman|camry|mazda 6|avensis|accord|optima|i40|levorg|outback|i4\b|byd seal|polestar/.test(norm)) return 'berlina_d';
+
+  // 10. Citycar (A-Segment)
+  if (/panda|500\b|aygo|i10|picanto|twingo|fortwo|forfour|up!|up\b|ypsilon|ignis|celerio|spring|citigo|mii\b|c1\b|108\b|adam\b|ka\b|karl|matiz|seicento|space star|twizy/.test(norm)) return 'citycar';
+
+  // 11. Utilitaria (B-Segment Hatchbacks)
+  if (/yaris|clio|208|polo|fiesta|corsa|sandero|c3\b|i20|rio\b|ibiza|fabia|swift|micra|jazz|mito\b|cooper\b|mini\b|punto|grande punto|207|206|mazda 2|colt/.test(norm)) return 'utilitaria';
+
+  // 12. Compatta (C-Segment Hatchbacks)
+  if (/golf|a3\b|serie 1|116|118|120|128|135|classe a|a160|a180|a200|a220|focus|corolla|auris|308|megane|leon|octavia|tipo|giulietta|147|astra|i30|ceed|pro ceed|mazda 3|civic|scala|bravo|ds 4|ct200h|ct 200h|pulsar/.test(norm)) return 'compatta';
+
+  // Fallback heuristic based on make/model keywords
+  if (/\b(suv|cross|crossover|aircross)\b/.test(norm)) return 'csuv';
+  if (/\b(sw|station|touring|avant|wagon|combi|variant|sportstourer)\b/.test(norm)) return 'berlina_d';
+  if (/\b(sport|coupe|spider|cabrio|cabriolet|roadster)\b/.test(norm)) return 'sportiva';
 
   return 'compatta';
 }
@@ -507,21 +675,23 @@ export function buildAlternatives(make: string, model: string, year: number): Al
   const normModel = model.toLowerCase();
 
   const candidates = pool.filter(
-    ([mMake, mModel]) => !(mMake.toLowerCase() === normMake && mModel.toLowerCase() === normModel)
+    (c) => !(c.make.toLowerCase() === normMake && c.model.toLowerCase() === normModel)
   );
 
   const seenMakes = new Set<string>();
   const result: AlternativeVehicle[] = [];
 
   // Pass 1: 1 car per make
-  for (const [am, amodel] of candidates) {
-    const cMake = am.toLowerCase();
+  for (const c of candidates) {
+    const cMake = c.make.toLowerCase();
     if (cMake === normMake || seenMakes.has(cMake)) continue;
     seenMakes.add(cMake);
-    const est = estimateMarketValue(am, amodel, { year });
+    const est = estimateMarketValue(c.make, c.model, { year });
     result.push({
-      make: am,
-      model: amodel,
+      make: c.make,
+      model: c.model,
+      body: c.body,
+      segment,
       estimatedValue: est.value,
       estimatedMin: est.min,
       estimatedMax: est.max,
@@ -531,12 +701,14 @@ export function buildAlternatives(make: string, model: string, year: number): Al
 
   // Pass 2: Fill remaining if needed
   if (result.length < 4) {
-    for (const [am, amodel] of candidates) {
-      if (result.some((r) => r.make === am && r.model === amodel)) continue;
-      const est = estimateMarketValue(am, amodel, { year });
+    for (const c of candidates) {
+      if (result.some((r) => r.make === c.make && r.model === c.model)) continue;
+      const est = estimateMarketValue(c.make, c.model, { year });
       result.push({
-        make: am,
-        model: amodel,
+        make: c.make,
+        model: c.model,
+        body: c.body,
+        segment,
         estimatedValue: est.value,
         estimatedMin: est.min,
         estimatedMax: est.max,
@@ -561,6 +733,14 @@ export function buildLocalReport(make: string, model: string, year?: number): Au
     if (residualNow <= 0) return 0;
     return Math.round((price.value * (1 - getResidual(age + years) / residualNow)) / 100) * 100;
   };
+
+  const segmentKey = reliability.segmentKey || detectSegment(make, model);
+  const maintMin = segmentKey === 'citycar' ? 250 : segmentKey === 'utility' ? 300 : segmentKey === 'berlina' ? 420 : segmentKey === 'suv' ? 480 : 650;
+  const maintMax = segmentKey === 'citycar' ? 380 : segmentKey === 'utility' ? 480 : segmentKey === 'berlina' ? 650 : segmentKey === 'suv' ? 750 : 1100;
+  const annualMaint = Math.round((maintMin + maintMax) / 2);
+
+  const insuranceBase = segmentKey === 'citycar' ? 360 : segmentKey === 'utility' ? 400 : segmentKey === 'berlina' ? 480 : segmentKey === 'suv' ? 520 : 680;
+  const insuranceEstimate = insuranceBase;
 
   const reliabilityAnalysis: ReliabilityAnalysis = {
     score: reliability.score,
@@ -588,9 +768,9 @@ export function buildLocalReport(make: string, model: string, year?: number): Au
       fuelType: consumption.isElectric ? 'elettrica' : 'benzina',
     },
     futureCosts: {
-      annualMaintenance: Math.round((reliability.maintenanceMin + reliability.maintenanceMax) / 2),
+      annualMaintenance: annualMaint,
       fuelCostPer100Km: consumption.costPer100km,
-      insuranceEstimate: Math.round((price.value * 0.035) / 10) * 10,
+      insuranceEstimate: insuranceEstimate,
       depreciation1Year: dep(1),
       depreciation3Years: dep(3),
       depreciation5Years: dep(5),

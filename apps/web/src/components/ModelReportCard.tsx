@@ -169,7 +169,7 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
                       .slice(0, 4)
                       .map((item, i) => (
                         <li key={i} className="flex items-start gap-2 text-xs text-text-secondary leading-relaxed">
-                          <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 flex-shrink-0" />
+                          <span className="w-2 h-2 rounded-full bg-rose-500 mt-1.5 flex-shrink-0" />
                           {item}
                         </li>
                       ))}
@@ -192,8 +192,15 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
                     href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}`}
                     className="bg-white border border-border rounded-xl px-3.5 py-3 text-sm hover:border-accent transition-colors"
                   >
-                    <div className="font-semibold text-text-primary truncate">
-                      {alt.make} {alt.model}
+                    <div className="flex items-center justify-between gap-1.5">
+                      <div className="font-semibold text-text-primary truncate">
+                        {alt.make} {alt.model}
+                      </div>
+                      {alt.body && (
+                        <span className="shrink-0 text-[10px] font-medium px-1.5 py-0.5 rounded-md bg-surface-2 text-text-secondary">
+                          {alt.body}
+                        </span>
+                      )}
                     </div>
                     <div className="text-xs text-text-secondary mt-0.5">
                       {alt.market?.priceAvg ? (

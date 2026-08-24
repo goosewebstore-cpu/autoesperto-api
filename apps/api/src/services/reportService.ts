@@ -156,6 +156,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       return {
         make: alt.make,
         model: alt.model,
+        body: alt.body,
         estimatedValue: est.value,
         estimatedMin: est.min,
         estimatedMax: est.max,

@@ -45,8 +45,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     robots: { index: false, follow: true },
     alternates: {
-      canonical: `/consumi/${resolved.make}/${resolved.model}/${resolved.year}`,
-      languages: { 'it-IT': `${siteUrl()}/consumi/${resolved.make}/${resolved.model}/${resolved.year}` },
+      canonical: `/consumi/${resolved.make}/${resolved.model}`,
+      languages: { 'it-IT': `${siteUrl()}/consumi/${resolved.make}/${resolved.model}` },
     },
     openGraph: {
       type: 'website',
@@ -242,6 +242,7 @@ export default async function ConsumiYearPage({ params }: PageProps) {
               <Link
                 key={y}
                 href={`/consumi/${resolved.make}/${resolved.model}/${y}`}
+                rel="nofollow"
                 className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm font-semibold text-text-primary hover:border-accent hover:text-accent transition-colors"
               >
                 {y}

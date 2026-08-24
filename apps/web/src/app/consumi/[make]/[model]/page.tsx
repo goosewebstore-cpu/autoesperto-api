@@ -65,6 +65,46 @@ export default async function ConsumiModelPage({ params }: PageProps) {
 
   const latest = estimateConsumption(make.name, model, CURRENT_YEAR);
 
+  const unitLabel = latest.unit === 'kWh/100 km' ? 'kWh/100km' : 'L/100 km';
+  const faq = [
+    {
+      q: `Quanto consuma la ${make.name} ${model}?`,
+      a: `In ciclo combinato medio, la ${make.name} ${model} consuma circa ${latest.combined} ${unitLabel} (${latest.label.toLowerCase()}). In città il consumo è di circa ${latest.urban} ${unitLabel}, mentre in extraurbano è di circa ${latest.extraurban} ${unitLabel}.`,
+    },
+    {
+      q: `Quanto costa il carburante all'anno per una ${make.name} ${model}?`,
+      a: `Su una percorrenza tipica di 12.000 km/anno, la spesa stimata per ${latest.isElectric ? 'la ricarica elettrica' : 'il carburante'} è di circa ${latest.annualCost} € all'anno (circa ${latest.costPer100km} € ogni 100 km).`,
+    },
+    {
+      q: `Come ridurre i consumi su ${make.name} ${model}?`,
+      a: `Mantenere la corretta pressione degli pneumatici, effettuare tagliandi regolari (cambio filtri ed olio) e adottare uno stile di guida fluido riduce i consumi reali fino al 15-20%.`,
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  };
+
+  const carSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${make.name} ${model}`,
+    brand: {
+      '@type': 'Brand',
+      name: make.name,
+    },
+    fuelConsumption: `${latest.combined} ${unitLabel}`,
+  };
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -115,7 +155,7 @@ export default async function ConsumiModelPage({ params }: PageProps) {
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <h2 className="text-sm font-bold text-text-primary">
-                Consumo combinato: {latest.combined} {latest.unit === 'kWh/100 km' ? 'kWh/100 km' : 'l/100 km'}
+                Consumo combinato: {latest.combined} {unitLabel}
               </h2>
               <p className="text-xs text-text-secondary leading-relaxed mt-1">
                 {latest.label.toLowerCase()} rispetto al segmento ({latest.segment}). {latest.note}
@@ -128,17 +168,17 @@ export default async function ConsumiModelPage({ params }: PageProps) {
           <div className="rounded-2xl border border-border bg-white p-5">
             <Fuel className="w-6 h-6 text-accent" />
             <h2 className="text-sm font-bold text-text-primary mt-3">Urbano</h2>
-            <p className="text-2xl font-extrabold text-text-primary mt-1">{latest.urban} {latest.unit === 'kWh/100 km' ? 'kWh/100km' : 'l/100km'}</p>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">{latest.urban} {unitLabel}</p>
           </div>
           <div className="rounded-2xl border border-border bg-white p-5">
             <Fuel className="w-6 h-6 text-accent" />
             <h2 className="text-sm font-bold text-text-primary mt-3">Extraurbano</h2>
-            <p className="text-2xl font-extrabold text-text-primary mt-1">{latest.extraurban} {latest.unit === 'kWh/100 km' ? 'kWh/100km' : 'l/100km'}</p>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">{latest.extraurban} {unitLabel}</p>
           </div>
           <div className="rounded-2xl border border-border bg-white p-5">
             <Fuel className="w-6 h-6 text-accent" />
             <h2 className="text-sm font-bold text-text-primary mt-3">Combinato</h2>
-            <p className="text-2xl font-extrabold text-text-primary mt-1">{latest.combined} {latest.unit === 'kWh/100 km' ? 'kWh/100km' : 'l/100km'}</p>
+            <p className="text-2xl font-extrabold text-text-primary mt-1">{latest.combined} {unitLabel}</p>
           </div>
         </section>
 
@@ -148,7 +188,7 @@ export default async function ConsumiModelPage({ params }: PageProps) {
             <h2 className="text-sm font-bold text-text-primary mt-3">Costo per 100 km</h2>
             <p className="text-2xl font-extrabold text-text-primary mt-1">≈ {latest.costPer100km} €</p>
             <p className="text-xs text-text-secondary leading-relaxed mt-1">
-              {latest.isElectric ? 'Costo medio di ricarica domestica.' : 'Calcolato sul prezzo medio della benzina.'}
+              {latest.isElectric ? 'Costo medio di ricarica domestica.' : 'Calcolato sul prezzo medio della benzina/gasolio.'}
             </p>
           </div>
           <div className="rounded-2xl border border-border bg-white p-5">
@@ -170,11 +210,12 @@ export default async function ConsumiModelPage({ params }: PageProps) {
                 <Link
                   key={yearNum}
                   href={`/consumi/${resolved.make}/${resolved.model}/${yearNum}`}
+                  rel="nofollow"
                   className="block rounded-xl border border-border bg-white p-4 hover:border-accent transition-colors"
                 >
                   <div className="flex items-center justify-between gap-3">
                     <span className="text-sm font-bold text-text-primary">{make.name} {model} {yearNum}</span>
-                    <span className="text-sm font-extrabold text-accent whitespace-nowrap">{est.combined} {est.unit === 'kWh/100 km' ? 'kWh/100km' : 'l/100km'}</span>
+                    <span className="text-sm font-extrabold text-accent whitespace-nowrap">{est.combined} {unitLabel}</span>
                   </div>
                   <p className="text-xs text-text-secondary leading-relaxed mt-1">
                     {est.label} · circa {est.annualCost} €/anno di {est.isElectric ? 'ricarica' : 'carburante'}
@@ -185,10 +226,28 @@ export default async function ConsumiModelPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50">
+        <section className="mt-8">
+          <h2 className="text-lg font-bold text-text-primary mb-1">Domande frequenti sui consumi</h2>
+          <p className="text-sm text-text-tertiary mb-4">
+            Consumi reali, autonomia e costi chilometrici di {make.name} {model}.
+          </p>
+          <div className="space-y-3">
+            {faq.map((f) => (
+              <details key={f.q} className="group bg-surface-2 rounded-xl p-4">
+                <summary className="flex items-start justify-between gap-3 text-sm font-semibold text-text-primary cursor-pointer list-none">
+                  {f.q}
+                  <span className="text-accent text-lg leading-none group-open:rotate-45 transition-transform flex-shrink-0">+</span>
+                </summary>
+                <p className="text-sm text-text-secondary leading-relaxed mt-3">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
           <h2 className="text-lg font-bold text-text-primary">Valore e costi totali prima di comprare</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            I consumi sono una parte del costo di proprietà: confrontali con il valore reale di mercato e la manutenzione
+            I consumi sono una parte del costo di proprietà: confrontali con il valore reale di mercato, l&apos;affidabilità e i costi di manutenzione
             della {make.name} {model}.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
@@ -199,15 +258,24 @@ export default async function ConsumiModelPage({ params }: PageProps) {
               Scopri quanto vale oggi
             </Link>
             <Link
+              href={`/affidabilita/${resolved.make}/${resolved.model}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-text-primary hover:border-accent transition-colors"
+            >
+              Vedi l&apos;affidabilità
+            </Link>
+            <Link
               href={`/riparazione/${resolved.make}/${resolved.model}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-text-primary hover:border-accent transition-colors"
             >
               Stima i costi di riparazione
             </Link>
           </div>
         </section>
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbSchema, faqSchema, carSchema]) }}
+        />
       </main>
 
       <SiteFooter />

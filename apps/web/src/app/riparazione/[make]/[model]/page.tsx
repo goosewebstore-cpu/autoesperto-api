@@ -63,6 +63,50 @@ export default async function RepairModelPage({ params }: PageProps) {
   if (!model) notFound();
 
   const latest = estimateRepair(make.name, model, CURRENT_YEAR);
+  const faq = [
+    {
+      q: `Quanto costa mantenere una ${make.name} ${model}?`,
+      a: `Il costo stimato di manutenzione ordinaria annuale per ${make.name} ${model} varia tra ${latest.maintenanceMin} € e ${latest.maintenanceMax} €. I costi totali di ripristino per un esemplare usato sono stimati tra ${latest.totalMin} € e ${latest.totalMax} €.`,
+    },
+    {
+      q: `Quali sono gli interventi più frequenti su ${make.name} ${model}?`,
+      a: `Gli interventi più comuni includono tagliando completo (olio e filtri), dischi e pastiglie freni, cinghia/catena di distribuzione e verifica sospensioni/ammortizzatori in base al chilometraggio.`,
+    },
+    {
+      q: `Conviene riparare una ${make.name} ${model} o cambiarla?`,
+      a: `Se il preventivo di riparazione supera il 50-60% del valore commerciale residuo dell'auto, è consigliabile valutare la sostituzione. Confronta sempre il costo con la valutazione di mercato aggiornata.`,
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  };
+
+  const carSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${make.name} ${model}`,
+    brand: {
+      '@type': 'Brand',
+      name: make.name,
+    },
+    offers: {
+      '@type': 'AggregateOffer',
+      priceCurrency: 'EUR',
+      lowPrice: String(latest.totalMin),
+      highPrice: String(latest.totalMax),
+    },
+  };
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -102,21 +146,21 @@ export default async function RepairModelPage({ params }: PageProps) {
             Costi di riparazione {make.name} {model}
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Quanto costa riparare una {make.name} {model}? Stima di manodopera e ricambi per ogni anno, con i guasti più frequenti
-            e i costi di manutenzione ordinaria.
+            Guida ai costi di manutenzione e riparazione per {make.name} {model}. Scopri quanto costa mantenere
+            quest&apos;auto e le stime per ogni anno di produzione.
           </p>
         </section>
 
         <AdBanner />
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 shrink-0 rounded-xl bg-accent flex items-center justify-center">
-              <Wrench className="w-5 h-5 text-white" />
+          <div className="flex items-center gap-4">
+            <div className="w-14 h-14 shrink-0 rounded-2xl bg-accent flex items-center justify-center text-white">
+              <Wrench className="w-7 h-7" />
             </div>
             <div>
               <h2 className="text-sm font-bold text-text-primary">
-                Manutenzione ordinaria: circa {latest.maintenanceMin}–{latest.maintenanceMax} € all&apos;anno
+                Costo stimato rimessa a nuovo: {latest.totalMin}–{latest.totalMax} €
               </h2>
               <p className="text-xs text-text-secondary leading-relaxed mt-1">
                 {latest.reliabilityNote} I costi crescono con l&apos;età del veicolo: scegli l&apos;anno per la stima dettagliata.
@@ -134,6 +178,7 @@ export default async function RepairModelPage({ params }: PageProps) {
                 <Link
                   key={yearNum}
                   href={`/riparazione/${resolved.make}/${resolved.model}/${yearNum}`}
+                  rel="nofollow"
                   className="block rounded-xl border border-border bg-white p-4 hover:border-accent transition-colors"
                 >
                   <div className="flex items-center justify-between gap-3">
@@ -149,11 +194,29 @@ export default async function RepairModelPage({ params }: PageProps) {
           </div>
         </section>
 
-        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50">
+        <section className="mt-8">
+          <h2 className="text-lg font-bold text-text-primary mb-1">Domande frequenti sui costi di riparazione</h2>
+          <p className="text-sm text-text-tertiary mb-4">
+            Prezzi medi in officina e consigli per risparmiare su {make.name} {model}.
+          </p>
+          <div className="space-y-3">
+            {faq.map((f) => (
+              <details key={f.q} className="group bg-surface-2 rounded-xl p-4">
+                <summary className="flex items-start justify-between gap-3 text-sm font-semibold text-text-primary cursor-pointer list-none">
+                  {f.q}
+                  <span className="text-accent text-lg leading-none group-open:rotate-45 transition-transform flex-shrink-0">+</span>
+                </summary>
+                <p className="text-sm text-text-secondary leading-relaxed mt-3">{f.a}</p>
+              </details>
+            ))}
+          </div>
+        </section>
+
+        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
           <h2 className="text-lg font-bold text-text-primary">Valuta prima di riparare</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
             Se il costo della riparazione si avvicina al valore dell&apos;auto, spesso conviene cambiarla. Controlla il prezzo
-            reale di mercato e il punteggio di affidabilità della {make.name} {model} prima di spendere in officina.
+            reale di mercato, i consumi e il punteggio di affidabilità della {make.name} {model} prima di spendere in officina.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
@@ -164,14 +227,23 @@ export default async function RepairModelPage({ params }: PageProps) {
             </Link>
             <Link
               href={`/affidabilita/${resolved.make}/${resolved.model}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-text-primary hover:border-accent transition-colors"
             >
               Vedi l&apos;affidabilità
+            </Link>
+            <Link
+              href={`/consumi/${resolved.make}/${resolved.model}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-text-primary hover:border-accent transition-colors"
+            >
+              Controlla i consumi
             </Link>
           </div>
         </section>
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbSchema, faqSchema, carSchema]) }}
+        />
       </main>
 
       <SiteFooter />

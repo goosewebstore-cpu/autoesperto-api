@@ -3,17 +3,17 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert } from 'lucide-react';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck } from 'lucide-react';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
 const TOOLS = [
-  { group: 'Valutazione & acquisto', items: [
+  { group: 'Profilo Digitale & Garage', items: [
+    { label: 'Profilo Digitale Auto', desc: 'Profilo della tua macchina, foto, tagliandi e scadenze', href: '/passport', icon: ShieldCheck },
     { label: 'Quanto vale la mia auto?', desc: 'Stima di mercato e annuncio pronto', href: '/vendi', icon: Banknote },
     { label: 'Mi conviene comprarla?', desc: 'Prezzo e verdetto prima di firmare', href: '/compra', icon: SearchCheck },
     { label: 'Migliori auto usate', desc: 'Classifica per budget e categoria', href: '/migliori-auto-usate', icon: Trophy },
     { label: 'Valutazione per modello', desc: 'Prezzi reali per marca e modello', href: '/valutazione', icon: Gauge },
     { label: 'Auto per neopatentati', desc: 'Limiti kW e migliori usate 2026', href: '/neopatentati', icon: Car },
-    { label: 'Confronta modelli', desc: 'Due auto a confronto, fianco a fianco', href: '/confronta', icon: ArrowLeftRight },
   ]},
   { group: 'Manutenzione & costi', items: [
     { label: 'Affidabilità e guasti', desc: 'Problemi noti modello per modello', href: '/affidabilita', icon: Hammer },
@@ -33,6 +33,7 @@ const TOOLS = [
 
 const NAV_LINKS = [
   { label: 'Analizza auto', href: '/#scanner-section' },
+  { label: 'Profilo Digitale Auto', href: '/passport' },
   { label: 'Confronta', href: '/confronta' },
   { label: 'Guide', href: '/guide' },
   { label: 'Chi siamo', href: '/chi-siamo' },
@@ -112,9 +113,14 @@ export default function SiteHeader() {
                 <div key={toolGroup.group} className="site-drop-group">
                   <span className="site-drop-title">{toolGroup.group}</span>
                   {toolGroup.items.map((tool) => (
-                    <Link key={tool.href} href={tool.href} className="site-drop-link" onClick={() => setToolsOpen(false)}>
-                      <span className="site-drop-label">{tool.label}</span>
-                      <span className="site-drop-desc">{tool.desc}</span>
+                    <Link key={tool.href} href={tool.href} className="site-drop-link flex items-center gap-3" onClick={() => setToolsOpen(false)}>
+                      <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 grid place-items-center shrink-0">
+                        <tool.icon className="h-4 w-4" />
+                      </span>
+                      <div className="min-w-0 flex-1">
+                        <span className="site-drop-label">{tool.label}</span>
+                        <span className="site-drop-desc">{tool.desc}</span>
+                      </div>
                     </Link>
                   ))}
                 </div>
@@ -173,12 +179,17 @@ export default function SiteHeader() {
             </Link>
           ))}
           {TOOLS.map((toolGroup) => (
-            <div key={toolGroup.group}>
+            <div key={toolGroup.group} className="pt-2">
               <span className="site-mobile-title">{toolGroup.group}</span>
               {toolGroup.items.map((tool) => (
-                <Link key={tool.href} href={tool.href} className="site-mobile-link" onClick={() => setMenuOpen(false)}>
-                  <span className="site-mobile-label">{tool.label}</span>
-                  <span className="site-mobile-desc">{tool.desc}</span>
+                <Link key={tool.href} href={tool.href} className="site-mobile-link flex items-center gap-3" onClick={() => setMenuOpen(false)}>
+                  <span className="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 grid place-items-center shrink-0">
+                    <tool.icon className="h-4 w-4" />
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <span className="site-mobile-label">{tool.label}</span>
+                    <span className="site-mobile-desc">{tool.desc}</span>
+                  </div>
                 </Link>
               ))}
             </div>

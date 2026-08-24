@@ -23,6 +23,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ComparePage() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
   let initialLeftReport = undefined;
   let initialRightReport = undefined;
   try {
@@ -35,6 +36,30 @@ export default async function ComparePage() {
   } catch (err) {
     console.warn(`Failed to fetch SSR reports for confronta page`, err);
   }
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Confronta auto usate', item: `${siteUrl}/confronta` },
+    ],
+  };
+
+  const appSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
+    name: 'Confronto Auto Usate — AutoEsperto',
+    url: `${siteUrl}/confronta`,
+    applicationCategory: 'UtilityApplication',
+    operatingSystem: 'All',
+    offers: {
+      '@type': 'Offer',
+      price: '0',
+      priceCurrency: 'EUR',
+    },
+    description: 'Confronta prezzo medio di mercato, affidabilità, guasti noti e costi di gestione tra due auto usate.',
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -52,6 +77,11 @@ export default async function ComparePage() {
         <AdBanner />
 
         <CompareModels initialLeftReport={initialLeftReport} initialRightReport={initialRightReport} />
+
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbSchema, appSchema]) }}
+        />
       </main>
       <SiteFooter />
     </div>

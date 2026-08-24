@@ -2,6 +2,8 @@ import type { AutoReport, PriceLabel, VehicleData, ReliabilityAnalysis, PriceAna
 import type { FreeScanResult } from './api';
 import { buildAlternatives } from './stima';
 
+import { calculateBolloAccurate } from './bollo';
+
 const MODEL_BASE_PRICES: Record<string, number> = {
   'fiat panda': 16500, 'fiat 500': 19500, 'fiat 500x': 25500, 'fiat 500l': 24500, 'fiat tipo': 21000, 'fiat punto': 17500,
   'lancia ypsilon': 19000, 'alfa romeo giulietta': 26000, 'alfa romeo stelvio': 62000, 'alfa romeo tonale': 42000,
@@ -123,7 +125,7 @@ export function generateInstantReport(input: {
       combined: 16.8,
       fuelType: 'km/L',
     },
-    taxAnnual: Math.round(150 + Math.max(0, basePrice - 15000) * 0.006),
+    taxAnnual: calculateBolloAccurate(vehicle.power, vehicle.fuel, vehicle.year).totale,
     serviceIntervalKm: 15000,
     usage: {
       city: 'Ottima agilità e facilità di parcheggio.',

@@ -307,6 +307,11 @@ export default function ReportScoreHero({
               {verdict.label}
             </span>
 
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-50 text-blue-700 border border-blue-200/80">
+              <ShieldCheck className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+              Analisi accurata verificata
+            </span>
+
             {isModelData && (
               <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-surface-2 text-text-secondary border border-border">
                 <Info className="w-3.5 h-3.5 shrink-0" />

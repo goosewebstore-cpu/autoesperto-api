@@ -13,9 +13,11 @@ const HOST = 'autoesperto.it';
 const KEY = 'e8f4a1c2b5d6478990a1b2c3d4e5f678';
 const KEY_LOCATION = `https://${HOST}/${KEY}.txt`;
 
-// Read static URLs from static sitemap
+// Read URLs from sitemaps
 const staticXmlPath = path.resolve(__dirname, '../public/sitemaps/static.xml');
 const guidesXmlPath = path.resolve(__dirname, '../public/sitemaps/guides.xml');
+const makesXmlPath = path.resolve(__dirname, '../public/sitemaps/makes.xml');
+const modelsXmlPath = path.resolve(__dirname, '../public/sitemaps/models.xml');
 
 const urls = [];
 
@@ -30,19 +32,21 @@ function extractUrls(xmlPath) {
 
 extractUrls(staticXmlPath);
 extractUrls(guidesXmlPath);
+extractUrls(makesXmlPath);
+extractUrls(modelsXmlPath);
 
 if (urls.length === 0) {
   console.log('[IndexNow] No URLs found to ping.');
   process.exit(0);
 }
 
-console.log(`[IndexNow] Submitting ${urls.length} URLs to IndexNow API...`);
+console.log(`[IndexNow] Submitting ${Math.min(urls.length, 10000)} URLs to IndexNow API...`);
 
 const payload = {
   host: HOST,
   key: KEY,
   keyLocation: KEY_LOCATION,
-  urlList: urls.slice(0, 1000), // Max batch size
+  urlList: urls.slice(0, 10000), // Max batch size
 };
 
 try {

@@ -94,10 +94,13 @@ export default function ReportSummary({ report }: { report: AutoReport }) {
           {showWhy && (
             <ul className="px-5 pb-4 space-y-2">
               {reasons.slice(0, 4).map((r, i) => {
-                const isWarn = r.toLowerCase().startsWith('attenzione:') || r.includes('sopra la media');
+                const rLower = r.toLowerCase();
+                const isNegativeVerdict = (reliability.verdict || 'BUY') !== 'BUY';
+                const hasRiskKeyword = /attenzione|sopra la media|rischio|difett|cost|usur|evit|sconsigliat|elevat|guast|problem/i.test(rLower);
+                const isWarn = isNegativeVerdict || hasRiskKeyword;
                 return (
                   <li key={i} className="flex items-start gap-2.5 text-sm text-text-secondary leading-relaxed">
-                    <span className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${isWarn ? 'bg-rose-500' : 'bg-emerald-500'}`} />
+                    <span className={`w-2 h-2 rounded-full mt-1.5 flex-shrink-0 ${isWarn ? 'bg-rose-500' : 'bg-emerald-500'}`} />
                     {r}
                   </li>
                 );

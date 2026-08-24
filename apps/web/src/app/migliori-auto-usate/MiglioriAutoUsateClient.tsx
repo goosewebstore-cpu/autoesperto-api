@@ -396,9 +396,9 @@ export default function MiglioriAutoUsateClient() {
                     <span className="text-slate-600">{car.whyBuy}</span>
                   </div>
 
-                  <div className="bg-amber-50/60 rounded-xl p-3 border border-amber-100">
-                    <strong className="text-amber-950 block mb-0.5 flex items-center gap-1 font-bold">
-                      <AlertTriangle className="h-3.5 w-3.5 text-amber-600" /> Cosa controllare:
+                  <div className="bg-rose-50/60 rounded-xl p-3 border border-rose-100">
+                    <strong className="text-rose-950 block mb-0.5 flex items-center gap-1 font-bold">
+                      <AlertTriangle className="h-3.5 w-3.5 text-rose-600" /> Cosa controllare:
                     </strong>
                     <span className="text-slate-600">{car.whatToCheck}</span>
                   </div>

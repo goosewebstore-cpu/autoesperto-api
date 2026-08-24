@@ -34,6 +34,7 @@ const staticPages: UrlEntry[] = [
   { url: `${siteUrl}/blocchi-traffico`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
   { url: `${siteUrl}/migliori-auto-usate`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
   { url: `${siteUrl}/motori-problemi`, changeFrequency: 'weekly', priority: 0.85, lastmod: BUILD_DATE },
+  { url: `${siteUrl}/passport`, changeFrequency: 'weekly', priority: 0.8, lastmod: BUILD_DATE },
   { url: `${siteUrl}/condizione`, changeFrequency: 'monthly', priority: 0.7, lastmod: BUILD_DATE },
   { url: `${siteUrl}/contatti`, changeFrequency: 'yearly', priority: 0.5, lastmod: BUILD_DATE },
   { url: `${siteUrl}/lavora-con-noi`, changeFrequency: 'monthly', priority: 0.6, lastmod: BUILD_DATE },

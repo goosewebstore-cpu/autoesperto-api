@@ -3,6 +3,7 @@ import { Car, ShieldCheck, ArrowRight } from 'lucide-react';
 import NewsletterSignup from '@/components/NewsletterSignup';
 
 const TOOL_LINKS = [
+  { label: 'Profilo Digitale Auto', href: '/passport' },
   { label: 'Mi conviene comprarla?', href: '/compra' },
   { label: 'Quanto vale la mia auto?', href: '/vendi' },
   { label: 'Migliori auto usate', href: '/migliori-auto-usate' },
@@ -32,6 +33,29 @@ const LEGAL_LINKS = [
   { label: 'Termini di Servizio', href: '/terms' },
   { label: 'Licenza (EULA)', href: '/eula' },
   { label: 'Copyright (DMCA)', href: '/dmca' },
+];
+
+const POPULAR_MODELS = [
+  { label: 'Fiat Panda', href: '/valutazione/fiat/panda' },
+  { label: 'Volkswagen Golf', href: '/valutazione/volkswagen/golf' },
+  { label: 'Toyota Yaris', href: '/valutazione/toyota/yaris' },
+  { label: 'Fiat 500', href: '/valutazione/fiat/500' },
+  { label: 'Jeep Renegade', href: '/valutazione/jeep/renegade' },
+  { label: 'Volkswagen T-Roc', href: '/valutazione/volkswagen/t-roc' },
+  { label: 'Renault Clio', href: '/valutazione/renault/clio' },
+  { label: 'Peugeot 208', href: '/valutazione/peugeot/208' },
+  { label: 'Ford Puma', href: '/valutazione/ford/puma' },
+  { label: 'Dacia Duster', href: '/valutazione/dacia/duster' },
+  { label: 'Citroën C3', href: '/valutazione/citroen/c3' },
+  { label: 'Audi A3', href: '/valutazione/audi/a3' },
+  { label: 'BMW Serie 1', href: '/valutazione/bmw/serie-1' },
+  { label: 'Mercedes Classe A', href: '/valutazione/mercedes-benz/classe-a' },
+  { label: 'Volkswagen Polo', href: '/valutazione/volkswagen/polo' },
+  { label: 'Nissan Qashqai', href: '/valutazione/nissan/qashqai' },
+  { label: 'Toyota C-HR', href: '/valutazione/toyota/c-hr' },
+  { label: 'Hyundai Tucson', href: '/valutazione/hyundai/tucson' },
+  { label: 'Kia Sportage', href: '/valutazione/kia/sportage' },
+  { label: 'Alfa Romeo Stelvio', href: '/valutazione/alfa-romeo/stelvio' },
 ];
 
 export default function SiteFooter() {
@@ -102,6 +126,24 @@ export default function SiteFooter() {
                 </li>
               ))}
             </ul>
+          </div>
+        </div>
+
+        {/* Modelli più cercati SEO Hub Links */}
+        <div className="py-8 border-b border-slate-200">
+          <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900 mb-3.5">
+            Valutazioni auto più cercate in Italia
+          </p>
+          <div className="flex flex-wrap gap-x-4 gap-y-2 text-xs text-slate-500">
+            {POPULAR_MODELS.map((model) => (
+              <Link
+                key={model.href}
+                href={model.href}
+                className="hover:text-blue-600 transition-colors"
+              >
+                {model.label}
+              </Link>
+            ))}
           </div>
         </div>
 

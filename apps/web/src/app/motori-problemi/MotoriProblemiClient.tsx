@@ -395,7 +395,7 @@ export default function MotoriProblemiClient() {
                   <ul className="space-y-1.5 text-xs text-slate-600">
                     {engine.symptoms.map((sym, sIdx) => (
                       <li key={sIdx} className="flex items-start gap-2">
-                        <span className="h-1.5 w-1.5 rounded-full bg-amber-500 shrink-0 mt-1.5" />
+                        <span className="h-1.5 w-1.5 rounded-full bg-rose-500 shrink-0 mt-1.5" />
                         <span>{sym}</span>
                       </li>
                     ))}

@@ -17,11 +17,21 @@ export default function KpiCards({ report }: Props) {
   const scoreNum = Number(rel.score) || 7.5;
   const normalizedScore = (scoreNum > 10 ? scoreNum / 10 : scoreNum).toFixed(1);
 
+  const rawUnit = (rel.consumption?.fuelType || '').toLowerCase();
+  const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || (report?.vehicle?.fuel || '').toLowerCase().includes('elettr');
+  const isKmL = rawUnit.includes('km/l') || rawUnit.includes('km/litro');
+
+  let consumptionDisplay = '—';
+  if (rel.consumption?.combined) {
+    const unit = isElectric ? 'kWh/100 km' : isKmL ? 'km/L' : 'L/100 km';
+    consumptionDisplay = `${rel.consumption.combined} ${unit}`;
+  }
+
   const kpis = [
     { icon: Euro, label: 'Valore stimato', value: `${euro(pr.estimatedValue || 0)} €`, tone: 'indigo' },
     { icon: Gauge, label: 'Affidabilità', value: `${normalizedScore}/10`, tone: rel.verdict === 'BUY' ? 'emerald' : rel.verdict === 'NEGOTIATE' ? 'amber' : 'red' },
     { icon: Wallet, label: 'Costo annuo', value: `${euro(annualCost(report))} €`, tone: 'slate' },
-    { icon: Fuel, label: 'Consumo comb.', value: rel.consumption?.combined ? `${rel.consumption.combined} km/L` : '—', tone: 'sky' },
+    { icon: Fuel, label: 'Consumo comb.', value: consumptionDisplay, tone: 'sky' },
   ];
 
   if (rel.taxAnnual) {
@@ -58,15 +68,37 @@ export default function KpiCards({ report }: Props) {
 
 function annualCost(report: AutoReport): number {
   const c = report?.reliability?.futureCosts;
-  let total = (c?.annualMaintenance ?? 350) + (c?.insuranceEstimate ?? 450);
-  if (report?.reliability?.taxAnnual) total += report.reliability.taxAnnual;
-  if (report?.reliability?.consumption?.combined) {
-    const kmAnno = 12000;
-    const litriAnno = kmAnno / report.reliability.consumption.combined;
-    const prezzoBenzina = 1.85;
-    total += Math.round(litriAnno * prezzoBenzina);
+  const rel = report?.reliability;
+  const vehicleFuel = (report?.vehicle?.fuel || '').toLowerCase();
+  const rawUnit = (rel?.consumption?.fuelType || '').toLowerCase();
+  const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || vehicleFuel.includes('elettr');
+  const isKmL = rawUnit.includes('km/l') || rawUnit.includes('km/litro');
+
+  let maint = c?.annualMaintenance ?? 380;
+  let insurance = c?.insuranceEstimate ?? 450;
+  let bollo = rel?.taxAnnual ?? 0;
+
+  // Stima carburante su 12.000 km/anno
+  let fuelTotal = 0;
+  if (rel?.consumption?.combined) {
+    const comb = rel.consumption.combined;
+    if (isElectric) {
+      // ~0.30 €/kWh medio ricarica mista domestica/pubblica
+      fuelTotal = Math.round((12000 / 100) * comb * 0.30);
+    } else if (isKmL) {
+      // comb è in km per litro (es. 16 km/L)
+      const litri = 12000 / Math.max(1, comb);
+      fuelTotal = Math.round(litri * 1.80);
+    } else {
+      // comb è in L/100 km (es. 5.5 L/100km)
+      const litri = (12000 / 100) * comb;
+      fuelTotal = Math.round(litri * 1.80);
+    }
   } else if (c?.fuelCostPer100Km) {
-    total += c.fuelCostPer100Km * 120;
+    fuelTotal = Math.round(c.fuelCostPer100Km * 120);
+  } else {
+    fuelTotal = isElectric ? 600 : 1200;
   }
-  return total;
+
+  return maint + insurance + bollo + fuelTotal;
 }

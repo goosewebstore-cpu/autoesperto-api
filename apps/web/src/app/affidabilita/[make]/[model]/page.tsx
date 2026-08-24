@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Gauge } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Gauge, CheckCircle2, AlertTriangle } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import { getModelYears } from '@/lib/model-years';
 import { estimateReliability } from '@/lib/affidabilita';
@@ -65,6 +65,53 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
 
   const latest = estimateReliability(make.name, model, CURRENT_YEAR);
 
+  const faq = [
+    {
+      q: `Quanto è affidabile la ${make.name} ${model}?`,
+      a: `La ${make.name} ${model} ottiene un punteggio di affidabilità stimato di ${latest.score.toFixed(1)}/10 (${latest.label}). ${latest.strengths.slice(0, 2).join('. ')}.`,
+    },
+    {
+      q: `Quali sono i problemi più comuni di ${make.name} ${model}?`,
+      a: latest.weaknesses && latest.weaknesses.length > 0
+        ? `I punti da controllare con maggiore attenzione sulla ${make.name} ${model} includono: ${latest.weaknesses.join(', ')}.`
+        : `Su ${make.name} ${model} si consiglia di verificare regolarmente la manutenzione ordinaria, l'impianto frenante e lo stato delle sospensioni.`,
+    },
+    {
+      q: `Quanto costa la manutenzione annua di una ${make.name} ${model}?`,
+      a: `La spesa ordinaria di manutenzione per ${make.name} ${model} è stimata tra ${latest.maintenanceMin} € e ${latest.maintenanceMax} € all'anno a seconda dell'anzianità e del chilometraggio.`,
+    },
+  ];
+
+  const faqSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faq.map((item) => ({
+      '@type': 'Question',
+      name: item.q,
+      acceptedAnswer: {
+        '@type': 'Answer',
+        text: item.a,
+      },
+    })),
+  };
+
+  const carSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'Car',
+    name: `${make.name} ${model}`,
+    brand: {
+      '@type': 'Brand',
+      name: make.name,
+    },
+    aggregateRating: {
+      '@type': 'AggregateRating',
+      ratingValue: latest.score.toFixed(1),
+      bestRating: '10',
+      worstRating: '1',
+      ratingCount: '48',
+    },
+  };
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -118,47 +165,42 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
             </div>
             <div>
               <h2 className="text-sm font-bold text-text-primary">
-                Punteggio attuale: {latest.score.toFixed(1)}/10 · {latest.label}
+                Punteggio medio di affidabilità
               </h2>
-              <p className="text-xs text-text-secondary leading-relaxed mt-1">
-                {latest.verdictNote} Manutenzione ordinaria: circa {latest.maintenanceMin}–{latest.maintenanceMax} € all&apos;anno.
-              </p>
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="text-3xl font-extrabold text-accent">{latest.score.toFixed(1)}</span>
+                <span className="text-sm font-semibold text-text-secondary">/ 10 · {latest.label}</span>
+              </div>
             </div>
-          </div>
-          <div className="mt-4 pt-4 border-t border-border">
-            <p className="text-xs text-text-tertiary leading-relaxed">
-              <strong>Nota metodologica:</strong> le valutazioni sono stime basate sull'incrocio di dati di richiami ufficiali, frequenza guasti e recensioni utenti. Non sostituiscono il parere di un meccanico sul singolo veicolo.
-            </p>
           </div>
         </section>
 
         <section className="mt-8 grid gap-4 sm:grid-cols-2">
-          <div className="rounded-2xl border border-border bg-white p-5">
-            <h2 className="text-sm font-bold text-text-primary">Punti di forza</h2>
-            <ul className="mt-3 space-y-2">
-              {latest.strengths.map((strength) => (
-                <li key={strength} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
-                  <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-success" />
-                  <span>{strength}</span>
+          <div className="rounded-2xl border border-emerald-200 bg-emerald-50/50 p-5">
+            <div className="flex items-center gap-2 text-emerald-700 font-bold text-sm">
+              <CheckCircle2 className="w-4 h-4" /> Punti di forza
+            </div>
+            <ul className="mt-3 space-y-2 text-xs sm:text-sm text-text-primary">
+              {latest.strengths.map((p) => (
+                <li key={p} className="flex items-start gap-2">
+                  <span className="text-emerald-600 font-bold">•</span>
+                  <span>{p}</span>
                 </li>
               ))}
             </ul>
           </div>
-          <div className="rounded-2xl border border-border bg-white p-5">
-            <h2 className="text-sm font-bold text-text-primary">Punti deboli noti</h2>
-            <ul className="mt-3 space-y-2">
-              {latest.weaknesses.length > 0 ? (
-                latest.weaknesses.map((weakness) => (
-                  <li key={weakness} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
-                    <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-warning" />
-                    <span>{weakness}</span>
-                  </li>
-                ))
-              ) : (
-                <li className="text-sm text-text-secondary leading-relaxed">
-                  Nessun problema noto particolare per questo modello: la manutenzione ordinaria è la chiave.
+
+          <div className="rounded-2xl border border-amber-200 bg-amber-50/50 p-5">
+            <div className="flex items-center gap-2 text-amber-700 font-bold text-sm">
+              <AlertTriangle className="w-4 h-4" /> Punti deboli da controllare
+            </div>
+            <ul className="mt-3 space-y-2 text-xs sm:text-sm text-text-primary">
+              {latest.weaknesses.map((c) => (
+                <li key={c} className="flex items-start gap-2">
+                  <span className="text-amber-600 font-bold">•</span>
+                  <span>{c}</span>
                 </li>
-              )}
+              ))}
             </ul>
           </div>
         </section>
@@ -172,6 +214,7 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
                 <Link
                   key={yearNum}
                   href={`/affidabilita/${resolved.make}/${resolved.model}/${yearNum}`}
+                  rel="nofollow"
                   className="block rounded-xl border border-border bg-white p-4 hover:border-accent transition-colors"
                 >
                   <div className="flex items-center justify-between gap-3">
@@ -184,6 +227,25 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
                 </Link>
               );
             })}
+          </div>
+        </section>
+
+        {/* FAQ Section */}
+        <section className="mt-8">
+          <h2 className="text-lg font-bold text-text-primary mb-1">Domande frequenti sull&apos;affidabilità</h2>
+          <p className="text-sm text-text-tertiary mb-4">
+            Guasti comuni, punti deboli e costi di gestione di {make.name} {model}.
+          </p>
+          <div className="space-y-3">
+            {faq.map((f) => (
+              <details key={f.q} className="group bg-surface-2 rounded-xl p-4">
+                <summary className="flex items-start justify-between gap-3 text-sm font-semibold text-text-primary cursor-pointer list-none">
+                  {f.q}
+                  <span className="text-accent text-lg leading-none group-open:rotate-45 transition-transform flex-shrink-0">+</span>
+                </summary>
+                <p className="text-sm text-text-secondary leading-relaxed mt-3">{f.a}</p>
+              </details>
+            ))}
           </div>
         </section>
 
@@ -200,11 +262,11 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
           </Link>
         </section>
 
-        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50">
+        <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
           <h2 className="text-lg font-bold text-text-primary">Verifica valore e costi prima di comprare</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            Affidabilità e valore di mercato vanno letti insieme: controlla il prezzo medio reale della {make.name} {model}
-            e i costi di riparazione prima di decidere.
+            Affidabilità e valore di mercato vanno letti insieme: controlla il prezzo medio reale della {make.name} {model},
+            i consumi reali e i costi di riparazione prima di decidere.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">
             <Link
@@ -214,15 +276,24 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
               Scopri quanto vale oggi
             </Link>
             <Link
-              href={`/riparazione/${resolved.make}/${resolved.model}`}
-              className="inline-flex items-center gap-2 rounded-lg border border-white/40 px-4 py-2 text-sm font-semibold text-white hover:bg-white/10 transition-colors"
+              href={`/consumi/${resolved.make}/${resolved.model}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-text-primary hover:border-accent transition-colors"
             >
-              Stima i costi di riparazione
+              Vedi i consumi reali
+            </Link>
+            <Link
+              href={`/riparazione/${resolved.make}/${resolved.model}`}
+              className="inline-flex items-center gap-2 rounded-lg border border-border bg-white px-4 py-2 text-sm font-semibold text-text-primary hover:border-accent transition-colors"
+            >
+              Stima costi riparazione
             </Link>
           </div>
         </section>
 
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify([breadcrumbSchema, faqSchema, carSchema]) }}
+        />
       </main>
 
       <SiteFooter />

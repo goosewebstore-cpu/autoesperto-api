@@ -1,10 +1,11 @@
 'use client';
 
+import { useRouter } from 'next/navigation';
 import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
   Euro, Download, ExternalLink, ShieldCheck, GitCompareArrows, Users, MessageCircle, ChevronDown,
-  TrendingDown,
+  TrendingDown, Sparkles,
 } from 'lucide-react';
 import { slugify } from '@/lib/catalogo';
 import ReportScoreHero from '@/components/ReportScoreHero';
@@ -13,8 +14,10 @@ import ConditionAssessment from '@/components/ConditionAssessment';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
 import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
+import VehicleHealthScore from '@/components/VehicleHealthScore';
 import { ShareButton } from '@/components/ShareButton';
 import { SellAdGenerator } from '@/components/SellAdGenerator';
+import { createPassportFromReport } from '@/lib/passportStorage';
 
 function formatPrice(n: number | undefined | null) {
   return (n ?? 0).toLocaleString('it-IT') + ' €';
@@ -39,6 +42,7 @@ interface ReportViewProps {
 }
 
 export default function ReportView({ report, onBack, embedded = false, showAds = true, allowPhotoTools = true }: ReportViewProps) {
+  const router = useRouter();
   const vehicle = report?.vehicle || ({} as any);
   const reliability = report?.reliability || ({} as any);
   const price = report?.price || ({} as any);
@@ -109,21 +113,75 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
       {/* 2. KPI Cards: prezzo, affidabilità, costo annuo, consumo, bollo */}
       <KpiCards report={report} />
 
-      {/* 3. Action Buttons (PDF & Condividi) - High visibility for mobile */}
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-        <button
-          onClick={() => {
-            import('@/components/PDFButton').then((m) => m.downloadPDF(report));
-          }}
-          className="h-11 sm:h-12 rounded-xl bg-brand text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-brand-dark active:scale-[0.99] transition-all shadow-sm"
-        >
-          <Download className="w-4 h-4 shrink-0" />
-          Scarica PDF
-        </button>
-        <ShareButton title={`Valutazione ${vehicle.make} ${vehicle.model}`} text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`} />
+      {/* 3. Action Buttons (PDF & Condividi & Profilo Digitale Auto) */}
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
+          <button
+            onClick={() => {
+              import('@/components/PDFButton').then((m) => m.downloadPDF(report));
+            }}
+            className="h-11 sm:h-12 rounded-xl bg-brand text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-brand-dark active:scale-[0.99] transition-all shadow-sm"
+          >
+            <Download className="w-4 h-4 shrink-0" />
+            Scarica PDF
+          </button>
+          <ShareButton title={`Valutazione ${vehicle.make} ${vehicle.model}`} text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`} />
+        </div>
+
+        {/* PROFILO DIGITALE AUTO — PROMINENT INTEGRATION HERO CARD */}
+        <div className="rounded-2xl border border-blue-200/90 dark:border-blue-800/60 bg-gradient-to-br from-blue-50/90 via-white to-blue-50/60 dark:from-blue-950/40 dark:via-slate-900 dark:to-blue-950/20 p-4 sm:p-5 shadow-sm space-y-3">
+          <div className="flex items-start gap-3">
+            <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
+              <Sparkles className="w-5 h-5" />
+            </div>
+            <div className="flex-1">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 text-[10px] font-extrabold uppercase tracking-wide mb-1">
+                <ShieldCheck className="w-3 h-3 text-blue-600" /> Profilo Digitale Auto
+              </span>
+              <h3 className="text-sm sm:text-base font-black text-slate-900 dark:text-white leading-tight">
+                Salva questa auto nel tuo Profilo Digitale Auto
+              </h3>
+              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed">
+                Conserva analisi, foto, documenti, valore e storico della tua auto in un unico posto. Sempre aggiornabile e condivisibile con QR code.
+              </p>
+            </div>
+          </div>
+
+          <div className="pt-1 flex flex-col sm:flex-row items-center gap-2.5">
+            <button
+              onClick={() => {
+                const pass = createPassportFromReport(report);
+                router.push(`/passport/${pass.id}`);
+              }}
+              className="w-full sm:w-auto flex-1 h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/20"
+            >
+              <ShieldCheck className="w-4 h-4 shrink-0" />
+              Crea Profilo Digitale
+            </button>
+            <button
+              onClick={() => {
+                const el = document.getElementById('report-detailed-breakdown');
+                el?.scrollIntoView({ behavior: 'smooth' });
+              }}
+              className="w-full sm:w-auto h-11 px-4 rounded-xl bg-slate-100 hover:bg-slate-200 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs transition-colors"
+            >
+              Continua senza salvare
+            </button>
+          </div>
+
+          <div className="pt-1 flex items-center gap-2 text-[11px] text-slate-500">
+            <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+            <span>100% Privato: i dati rimangono memorizzati nel tuo profilo personale sul tuo dispositivo.</span>
+          </div>
+        </div>
       </div>
 
-      {/* 4. Strengths & Weaknesses (Essential visual summary) */}
+      <div id="report-detailed-breakdown">
+        {/* 4. Health Score Veicolo & Diagnostica Componenti */}
+        <VehicleHealthScore report={report} />
+      </div>
+
+      {/* 5. Strengths & Weaknesses (Essential visual summary) */}
       <section className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-6">
         <div className="flex items-center justify-between gap-3 mb-3 sm:mb-4">
           <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary flex items-center gap-1.5">
@@ -281,9 +339,16 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             <div className="grid sm:grid-cols-2 gap-2.5 border-t border-border px-4 py-4 sm:px-6">
               {report.alternatives.map((alt) => (
                 <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-3 flex items-center justify-between gap-2">
-                  <div>
-                    <div className="text-xs sm:text-sm font-bold text-text-primary truncate">{alt.make} {alt.model}</div>
-                    <div className="text-[11px] text-text-secondary">Stima: {formatPrice(alt.estimatedValue)}</div>
+                  <div className="min-w-0">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-xs sm:text-sm font-bold text-text-primary truncate">{alt.make} {alt.model}</span>
+                      {alt.body && (
+                        <span className="shrink-0 text-[10px] font-semibold px-1.5 py-0.5 rounded-md bg-surface border border-border text-text-secondary">
+                          {alt.body}
+                        </span>
+                      )}
+                    </div>
+                    <div className="text-[11px] text-text-secondary mt-0.5">Stima: {formatPrice(alt.estimatedValue)}</div>
                   </div>
                   <a
                     href={`/valutazione/${slugify(alt.make)}/${slugify(alt.model)}`}

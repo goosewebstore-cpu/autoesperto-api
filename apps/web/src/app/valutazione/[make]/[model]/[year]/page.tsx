@@ -42,8 +42,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     description,
     robots: { index: false, follow: true },
     alternates: {
-      canonical: `/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`,
-      languages: { 'it-IT': `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}/${resolved.year}` },
+      canonical: `/valutazione/${resolved.make}/${resolved.model}`,
+      languages: { 'it-IT': `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}` },
     },
     openGraph: {
       type: 'website',
@@ -197,6 +197,7 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
               <Link
                 key={y}
                 href={`/valutazione/${resolved.make}/${resolved.model}/${y}`}
+                rel="nofollow"
                 className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm font-semibold text-text-primary hover:border-accent hover:text-accent transition-colors"
               >
                 {y}

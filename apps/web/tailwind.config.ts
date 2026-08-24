@@ -32,7 +32,8 @@ const config: Config = {
         'brand-dark': '#1d4ed8',
       },
       fontFamily: {
-        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        sans: ['var(--font-dm-sans)', 'DM Sans', 'Inter', 'system-ui', 'sans-serif'],
+        display: ['var(--font-outfit)', 'Outfit', 'sans-serif'],
       },
       boxShadow: {
         card: '0 1px 3px 0 rgba(15, 23, 42, 0.05), 0 1px 2px -1px rgba(15, 23, 42, 0.05)',

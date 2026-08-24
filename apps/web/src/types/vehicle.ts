@@ -64,6 +64,8 @@ export interface AlternativeVehicle {
   estimatedValue: number;
   estimatedMin: number;
   estimatedMax: number;
+  body?: string;
+  segment?: string;
   market?: MarketStats;
 }
 

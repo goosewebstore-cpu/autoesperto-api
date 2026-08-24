@@ -66,9 +66,24 @@ function getVerdict(score: number): { verdict: ReliabilityAnalysis['verdict']; l
 function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
   const currentYear = new Date().getFullYear();
   const age = currentYear - (vehicle.year || currentYear - 5);
-  const maintenance = age <= 5 ? 400 : age <= 10 ? 700 : 1100;
-  const fuelCost = fuel.includes('diesel') ? 12 : fuel.includes('elettr') ? 6 : fuel.includes('ibrid') ? 8 : 15;
-  const insurance = power < 90 ? 450 : power < 130 ? 650 : power < 180 ? 900 : 1300;
+  const brand = (vehicle.make || '').toLowerCase();
+  const isPremium = /bmw|mercedes|audi|porsche|maserati|land rover|jaguar/.test(brand);
+
+  const baseMaint = age <= 5 ? 320 : age <= 10 ? 450 : 620;
+  const maintenance = isPremium ? Math.round(baseMaint * 1.4) : baseMaint;
+
+  const f = fuel.toLowerCase();
+  const fuelCost = f.includes('diesel')
+    ? 9.5
+    : f.includes('elettr') || f.includes('ev')
+    ? 4.8
+    : f.includes('ibrid') || f.includes('hybrid')
+    ? 8.2
+    : f.includes('gpl') || f.includes('metano')
+    ? 6.5
+    : 11.0;
+
+  const insurance = power < 90 ? 380 : power < 130 ? 480 : power < 180 ? 620 : 850;
   return { maintenance, fuelCost, insurance };
 }
 
@@ -140,25 +155,63 @@ function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; 
   return { city, highway, combined, fuelType: 'l/100 km' };
 }
 
-function deriveTaxAnnual(power: number, fuel: string, year?: number): number {
-  const f = fuel.toLowerCase();
-  if (f.includes('elettr') || f.includes('ev')) return Math.max(40, Math.round(power / 5) * 5);
+function extractKw(powerInput?: string | number): number {
+  if (!powerInput) return 75;
+  if (typeof powerInput === 'number') {
+    return powerInput > 170 ? Math.round(powerInput * 0.735499) : powerInput;
+  }
+  const str = String(powerInput).trim().toLowerCase();
+  const kwMatch = str.match(/(\d+(?:[.,]\d+)?)\s*kw/i);
+  if (kwMatch) return Math.round(parseFloat(kwMatch[1].replace(',', '.')));
+  const cvMatch = str.match(/(\d+(?:[.,]\d+)?)\s*(?:cv|hp|cavall)/i);
+  if (cvMatch) return Math.round(parseFloat(cvMatch[1].replace(',', '.')) * 0.735499);
+  const digits = parseInt(str.replace(/\D/g, ''), 10);
+  if (!isNaN(digits) && digits > 0) {
+    return digits > 170 ? Math.round(digits * 0.735499) : digits;
+  }
+  return 75;
+}
+
+function deriveTaxAnnual(powerInput?: string | number, fuelInput?: string, yearInput?: number): number {
+  const kw = extractKw(powerInput);
+  const fuel = (fuelInput || '').toLowerCase();
   const currentYear = new Date().getFullYear();
-  const age = currentYear - (year || currentYear - 5);
-  const euroClassOk = age <= 15;
+  const age = Math.max(0, currentYear - (yearInput || currentYear - 5));
 
-  let amount: number;
-  if (power < 60) amount = 120;
-  else if (power < 100) amount = 180;
-  else if (power < 150) amount = 280;
-  else if (power < 200) amount = 420;
-  else if (power < 280) amount = 620;
-  else amount = 850;
+  if (kw <= 0) return 0;
 
-  if (f.includes('diesel') && !euroClassOk) amount += 80;
-  if (f.includes('gpl') || f.includes('metano')) amount = Math.round(amount * 0.65);
+  if (fuel.includes('elettr') || fuel.includes('bev') || fuel === 'ev') {
+    if (age <= 5) return 0;
+    const baseRate = kw <= 100 ? kw * 2.58 : 100 * 2.58 + (kw - 100) * 3.87;
+    return Math.round(baseRate * 0.25);
+  }
 
-  return amount;
+  let baseRate = kw <= 100 ? kw * 2.58 : 100 * 2.58 + (kw - 100) * 3.87;
+
+  if ((fuel.includes('ibrid') || fuel.includes('hybrid') || fuel.includes('phev') || fuel.includes('hev')) && age <= 3) {
+    baseRate *= 0.5;
+  }
+
+  if (fuel.includes('gpl') || fuel.includes('metano') || fuel.includes('cng') || fuel.includes('lpg')) {
+    baseRate *= 0.75;
+  }
+
+  if (age >= 30) return 30;
+  if (age >= 20) baseRate *= 0.5;
+
+  let bolloBase = Math.round(baseRate);
+  let superbollo = 0;
+  if (kw > 185) {
+    const extraKw = kw - 185;
+    let ratePerKw = 20;
+    if (age >= 20) ratePerKw = 0;
+    else if (age >= 15) ratePerKw = 3;
+    else if (age >= 10) ratePerKw = 6;
+    else if (age >= 5) ratePerKw = 12;
+    superbollo = Math.round(extraKw * ratePerKw);
+  }
+
+  return bolloBase + superbollo;
 }
 
 function getAIBaseUrl() { return process.env.AI_BASE_URL || 'https://api.openai.com/v1'; }
@@ -392,7 +445,7 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
 
   const costs = estimateCosts(vehicle, fuel, power);
   const consumption = deriveConsumption(vehicle, fuel);
-  const taxAnnual = deriveTaxAnnual(power, fuel, vehicle.year);
+  const taxAnnual = deriveTaxAnnual(vehicle.power || power, fuel, vehicle.year);
   const serviceIntervalKm = fuel.includes('diesel') ? 20000 : 15000;
   const categoryScores = deriveCategoryScores(vehicle, score, knowledge);
 

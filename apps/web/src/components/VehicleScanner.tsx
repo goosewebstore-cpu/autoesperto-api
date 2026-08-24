@@ -12,7 +12,7 @@ import ReportErrorBoundary from '@/components/ReportErrorBoundary';
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
-const promises = ['Marca e modello', 'Anno indicativo', 'Valore stimato', 'Prezzo di mercato', 'Affidabilità e controlli', 'Salvataggio account (opz.)'];
+const promises = ['Valutazione accurata', 'Prezzo reale di mercato', 'Affidabilità e difetti noti', 'Calcolo bollo esatto', 'Controlli pre-acquisto'];
 
 const MAX_PHOTOS = 6;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;

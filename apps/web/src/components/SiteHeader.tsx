@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck, Compass, Bot } from 'lucide-react';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck, Compass, Bot, Bookmark } from 'lucide-react';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
 const TOOLS = [
@@ -11,7 +11,8 @@ const TOOLS = [
     { label: 'Auto Finder (Trova Auto)', desc: 'Matching Engine su budget ed esigenze', href: '/auto-finder', icon: Compass },
     { label: 'AI Car Advisor', desc: 'Consulente digitale: la compreresti?', href: '/ai-car-advisor', icon: Bot },
     { label: 'Controlla un Annuncio', desc: 'Trust Score 0-100 e quanto offrire', href: '/analizza-annuncio', icon: ShieldCheck },
-    { label: 'Mi conviene comprarla?', desc: 'Prezzo e verdetto prima di firmare', href: '/compra', icon: SearchCheck },
+    { label: 'Confronta Modelli', desc: 'Confronto fino a 4 auto con TCO e verdetto', href: '/confronta', icon: ArrowLeftRight },
+    { label: 'Buying Room (Auto Salvate)', desc: 'Il tuo spazio personale d\'acquisto', href: '/buying-room', icon: Bookmark },
     { label: 'Migliori auto usate', desc: 'Classifica per budget e categoria', href: '/migliori-auto-usate', icon: Trophy },
   ]},
   { group: 'Profilo Digitale & Valutazione', items: [
@@ -31,10 +32,10 @@ const TOOLS = [
 
 const NAV_LINKS = [
   { label: 'Auto Finder', href: '/auto-finder' },
-  { label: 'AI Advisor', href: '/ai-car-advisor' },
+  { label: 'Confronta', href: '/confronta' },
   { label: 'Controlla annuncio', href: '/analizza-annuncio' },
+  { label: 'Buying Room', href: '/buying-room' },
   { label: 'Profilo Digitale', href: '/passport' },
-  { label: 'Guide', href: '/guide' },
 ];
 
 export default function SiteHeader() {

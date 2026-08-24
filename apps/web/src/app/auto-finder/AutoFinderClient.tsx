@@ -20,7 +20,6 @@ import {
   Fuel,
   Compass,
   MessageCircle,
-  HelpCircle,
   TrendingDown,
   Info,
   MapPin,
@@ -30,11 +29,15 @@ import {
   ChevronRight,
   Bell,
   Heart,
+  Send,
+  HelpCircle,
 } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import type { FinderCriteria, FinderMatchResult, BodyType, FuelType, TransmissionType, UsageType, PriorityType } from '@/lib/finderEngine';
 import { runAutoFinder, quickTweakCriteria } from '@/lib/finderEngine';
+import { parseNaturalLanguageQuery } from '@/lib/nlpSearch';
+import { generateWhyAndWhyNot } from '@/lib/decisionEngine';
 import { saveAdvisorContext } from '@/lib/aiAdvisor';
 import { saveSearch, toggleSaveFavorite, getSavedFavorites } from '@/lib/savedSearches';
 import { trackEvent } from '@/lib/analytics';
@@ -94,7 +97,11 @@ const PRIORITY_OPTIONS: { id: PriorityType; label: string; icon: string }[] = [
 
 export default function AutoFinderClient() {
   const [step, setStep] = useState<number>(1);
-  const totalSteps = 6; // Compacted progressive flow
+  const totalSteps = 6;
+
+  // Natural language query bar state
+  const [nlpInput, setNlpInput] = useState<string>('');
+  const [nlpFeedback, setNlpFeedback] = useState<string[]>([]);
 
   // Criteria State
   const [budgetMax, setBudgetMax] = useState<number>(12000);
@@ -131,12 +138,33 @@ export default function AutoFinderClient() {
 
   const result = useMemo(() => runAutoFinder(criteria), [criteria]);
 
+  const handleNlpSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!nlpInput.trim()) return;
+
+    const parsedIntent = parseNaturalLanguageQuery(nlpInput);
+    setBudgetMax(parsedIntent.criteria.budgetMax);
+    setSelectedUsages(parsedIntent.criteria.usages);
+    setAnnualKm(parsedIntent.criteria.annualKm);
+    setFuel(parsedIntent.criteria.fuel);
+    setTransmission(parsedIntent.criteria.transmission);
+    setBodyTypes(parsedIntent.criteria.bodyTypes);
+    setPriorities(parsedIntent.criteria.priorities);
+    if (parsedIntent.criteria.location?.city) setLocationCity(parsedIntent.criteria.location.city);
+    setFreeText(nlpInput);
+    setNlpFeedback(parsedIntent.extractedSummary);
+
+    // Jump directly to results
+    setStep(totalSteps + 1);
+    trackEvent('natural_language_search_executed', { query: nlpInput });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const handleNext = () => {
     if (step < totalSteps) {
       setStep((s) => s + 1);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } else {
-      // Finished
       setStep(totalSteps + 1);
       saveAdvisorContext({ criteria, lastFinderResults: result.matches.slice(0, 5) });
       trackEvent('finder_completed', { budgetMax: criteria.budgetMax, topMatch: result.matches[0]?.vehicle.model });
@@ -209,22 +237,84 @@ export default function AutoFinderClient() {
       <main className="flex-1 pb-20">
         {!isShowingResults ? (
           /* ─── WIZARD CONTAINER ─── */
-          <div className="max-w-2xl mx-auto px-4 pt-6 sm:pt-10">
+          <div className="max-w-2xl mx-auto px-4 pt-6 sm:pt-10 space-y-6">
             {/* Header / Intro */}
-            <div className="text-center space-y-2 mb-6 sm:mb-8">
+            <div className="text-center space-y-2">
               <div className="inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-black border border-blue-200/80 dark:border-blue-800 shadow-2xs">
-                <Sparkles className="w-3.5 h-3.5" /> Auto Finder Intelligente
+                <Sparkles className="w-3.5 h-3.5" /> AI Car Buying Copilot
               </div>
               <h1 className="text-2xl sm:text-4xl font-black tracking-tight text-slate-900 dark:text-white">
                 Trova l&apos;auto perfetta per te
               </h1>
               <p className="text-xs sm:text-sm text-slate-600 dark:text-slate-400">
-                Non serve conoscere modelli o cilindrate: rispondi a poche domande e il Matching Engine seleziona le migliori auto usate sul mercato.
+                Scrivi a parole tue cosa cerchi oppure rispondi alle domande guidate.
               </p>
             </div>
 
+            {/* Natural Language Free Text Search Box */}
+            <form
+              onSubmit={handleNlpSearch}
+              className="bg-white dark:bg-slate-900 rounded-3xl p-4 sm:p-5 border border-blue-200 dark:border-blue-900/60 shadow-lg shadow-blue-600/5 space-y-3"
+            >
+              <label className="block text-xs font-black text-slate-900 dark:text-white flex items-center gap-1.5">
+                <MessageCircle className="w-4 h-4 text-blue-600" />
+                Descrivi l&apos;auto che stai cercando (Natural Language Search):
+              </label>
+
+              <div className="relative">
+                <input
+                  type="text"
+                  value={nlpInput}
+                  onChange={(e) => setNlpInput(e.target.value)}
+                  placeholder="es. 'Cerco una macchina sotto i 12.000 euro, affidabile, per città, faccio 15.000 km/anno e preferisco benzina o ibrida'..."
+                  className="w-full h-12 pl-4 pr-12 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs sm:text-sm outline-none focus:border-blue-600 transition-all"
+                />
+                <button
+                  type="submit"
+                  disabled={!nlpInput.trim()}
+                  className="absolute right-1.5 top-1.5 h-9 w-9 rounded-xl bg-blue-600 text-white grid place-items-center hover:bg-blue-500 disabled:opacity-40 transition-all"
+                  title="Avvia ricerca naturale"
+                >
+                  <Send className="w-4 h-4" />
+                </button>
+              </div>
+
+              <div className="flex flex-wrap gap-1.5 text-[11px] text-slate-500">
+                <span className="font-semibold">Oppure prova:</span>
+                {[
+                  'SUV familiare sotto i 18.000€',
+                  'Utilitaria affidabile fino a 9.000€ per neopatentati',
+                  'Ibrida da città economica sui 13.000€',
+                ].map((eg, idx) => (
+                  <button
+                    key={idx}
+                    type="button"
+                    onClick={() => {
+                      setNlpInput(eg);
+                      const parsed = parseNaturalLanguageQuery(eg);
+                      setBudgetMax(parsed.criteria.budgetMax);
+                      setSelectedUsages(parsed.criteria.usages);
+                      setAnnualKm(parsed.criteria.annualKm);
+                      setFuel(parsed.criteria.fuel);
+                      setBodyTypes(parsed.criteria.bodyTypes);
+                      setPriorities(parsed.criteria.priorities);
+                      setStep(totalSteps + 1);
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
+                    className="underline hover:text-blue-600 text-left"
+                  >
+                    &quot;{eg}&quot;
+                  </button>
+                ))}
+              </div>
+            </form>
+
+            <div className="text-center">
+              <span className="text-xs font-bold text-slate-400 uppercase tracking-widest">— OPPURE SEGUI IL WIZARD GUIDATO —</span>
+            </div>
+
             {/* Progress Bar */}
-            <div className="mb-6 space-y-1.5">
+            <div className="space-y-1.5">
               <div className="flex items-center justify-between text-xs font-bold text-slate-500">
                 <span>Passo {step} di {totalSteps}</span>
                 <span>{Math.round((step / totalSteps) * 100)}% completato</span>
@@ -237,7 +327,7 @@ export default function AutoFinderClient() {
               </div>
             </div>
 
-            {/* Wizard Card Box */}
+            {/* Wizard Box */}
             <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-900/5 space-y-6">
               {/* ── STEP 1: BUDGET ── */}
               {step === 1 && (
@@ -395,7 +485,6 @@ export default function AutoFinderClient() {
                     ))}
                   </div>
 
-                  {/* Transmission preference */}
                   <div className="pt-2 space-y-2 border-t border-slate-100 dark:border-slate-800">
                     <label className="block text-xs font-bold text-slate-800 dark:text-slate-200">
                       Tipo di cambio:
@@ -424,7 +513,7 @@ export default function AutoFinderClient() {
                 </div>
               )}
 
-              {/* ── STEP 4: CARROZZERIA & DIMENSIONE ── */}
+              {/* ── STEP 4: CARROZZERIA ── */}
               {step === 4 && (
                 <div className="space-y-5 animate-fade-in">
                   <div className="space-y-1">
@@ -479,7 +568,7 @@ export default function AutoFinderClient() {
                 </div>
               )}
 
-              {/* ── STEP 5: PRIORITÀ CHIAVE ── */}
+              {/* ── STEP 5: PRIORITÀ ── */}
               {step === 5 && (
                 <div className="space-y-5 animate-fade-in">
                   <div className="space-y-1">
@@ -520,19 +609,16 @@ export default function AutoFinderClient() {
                 </div>
               )}
 
-              {/* ── STEP 6: ZONA & DESCRIZIONE LIBERA ── */}
+              {/* ── STEP 6: ZONA ── */}
               {step === 6 && (
                 <div className="space-y-5 animate-fade-in">
                   <div className="space-y-1">
                     <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider">
-                      Passaggio 6 · Zona e Dettagli Aggiuntivi
+                      Passaggio 6 · Zona e Dettagli
                     </span>
                     <h2 className="text-lg sm:text-2xl font-black text-slate-900 dark:text-white">
                       Ultimi dettagli per perfezionare il Match
                     </h2>
-                    <p className="text-xs text-slate-500">
-                      Indica la tua zona o descrivi a parole tue eventuali altre esigenze particolari.
-                    </p>
                   </div>
 
                   <div className="space-y-2">
@@ -547,23 +633,6 @@ export default function AutoFinderClient() {
                       placeholder="es. Milano, Roma, Siracusa, Torino..."
                       className="w-full h-11 px-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-blue-600"
                     />
-                  </div>
-
-                  <div className="space-y-2">
-                    <label className="block text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1">
-                      <MessageCircle className="w-3.5 h-3.5 text-blue-600" />
-                      Hai altre esigenze particolari? (Descrizione libera AI):
-                    </label>
-                    <textarea
-                      rows={3}
-                      value={freeText}
-                      onChange={(e) => setFreeText(e.target.value)}
-                      placeholder="es. 'Siamo in 4 con due bambini, faccio tanta città ma d'estate andiamo in montagna e vorrei spendere poco di bollo e tagliandi...'"
-                      className="w-full p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-950 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-blue-600 resize-none"
-                    />
-                    <p className="text-[11px] text-slate-400">
-                      L&apos;AI analizzerà il tuo testo per adattare il punteggio delle auto consigliate.
-                    </p>
                   </div>
                 </div>
               )}
@@ -597,9 +666,9 @@ export default function AutoFinderClient() {
             </div>
           </div>
         ) : (
-          /* ─── RESULTS VIEW CONTAINER ─── */
+          /* ─── RESULTS VIEW ─── */
           <div className="max-w-5xl mx-auto px-4 pt-6 space-y-6 animate-fade-in">
-            {/* Top Bar with Actions & Restart */}
+            {/* Top Bar */}
             <div className="flex flex-wrap items-center justify-between gap-3 bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs">
               <div>
                 <span className="text-[11px] font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-1">
@@ -642,23 +711,7 @@ export default function AutoFinderClient() {
               </div>
             )}
 
-            {/* Infeasible Criteria Warning Notice if Any */}
-            {result.infeasibleNotice && (
-              <div className="p-4 sm:p-5 rounded-3xl bg-amber-50 dark:bg-amber-950/50 border border-amber-300 dark:border-amber-800/80 space-y-2">
-                <div className="flex items-center gap-2 text-amber-900 dark:text-amber-200 font-extrabold text-xs sm:text-sm">
-                  <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-                  <span>Avviso compatibilità filtri</span>
-                </div>
-                <p className="text-xs text-amber-800 dark:text-amber-300 leading-relaxed">
-                  {result.infeasibleNotice.reason}
-                </p>
-                <p className="text-xs font-semibold text-amber-950 dark:text-amber-100">
-                  💡 {result.infeasibleNotice.suggestion}
-                </p>
-              </div>
-            )}
-
-            {/* ─── DYNAMIC TWEAK MODIFIER PILLS ─── */}
+            {/* Tweak Pills */}
             <div className="space-y-2">
               <span className="text-[11px] font-extrabold uppercase tracking-wider text-slate-500 flex items-center gap-1">
                 <SlidersHorizontal className="w-3.5 h-3.5 text-blue-600" /> Modifica al volo le tue preferenze:
@@ -687,11 +740,12 @@ export default function AutoFinderClient() {
               </div>
             </div>
 
-            {/* ─── RESULTS CARDS LIST ─── */}
+            {/* Car Cards */}
             <div className="space-y-5">
               {result.matches.slice(0, 6).map((match, idx) => {
                 const v = match.vehicle;
                 const isFav = savedFavorites.includes(`${v.make}-${v.model}`);
+                const whyData = generateWhyAndWhyNot(v.make, v.model);
 
                 return (
                   <div
@@ -702,7 +756,7 @@ export default function AutoFinderClient() {
                         : 'border-slate-200 dark:border-slate-800'
                     }`}
                   >
-                    {/* Top Badge & Match Score Donut */}
+                    {/* Top Badges */}
                     <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
                       <div className="flex flex-wrap items-center gap-2">
                         {match.badgeCategory === 'best_overall' && (
@@ -764,36 +818,39 @@ export default function AutoFinderClient() {
                           </div>
                         </div>
 
-                        {/* Why Suits You Section */}
-                        <div className="space-y-2">
-                          <span className="text-[11px] font-bold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 flex items-center gap-1">
-                            <CheckCircle2 className="w-3.5 h-3.5" /> Perché è adatta alle tue esigenze:
-                          </span>
-                          <ul className="space-y-1.5 text-xs text-slate-700 dark:text-slate-300">
-                            {match.whySuitsYou.map((reason, rIdx) => (
-                              <li key={rIdx} className="flex items-start gap-2">
-                                <span className="text-emerald-600 font-bold shrink-0">✓</span>
-                                <span>{reason}</span>
-                              </li>
-                            ))}
-                          </ul>
+                        {/* Dual Why / Why Not Box */}
+                        <div className="grid sm:grid-cols-2 gap-3">
+                          <div className="p-3.5 rounded-2xl bg-emerald-50/50 dark:bg-emerald-950/30 border border-emerald-200/80 dark:border-emerald-900/40 space-y-1.5">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-emerald-700 dark:text-emerald-300 block">
+                              ✓ Perché te la consigliamo:
+                            </span>
+                            <ul className="space-y-1 text-xs text-slate-700 dark:text-slate-300">
+                              {whyData.whyBuy.slice(0, 2).map((b, idx) => (
+                                <li key={idx} className="flex items-start gap-1.5">
+                                  <span className="text-emerald-600 font-bold">•</span>
+                                  <span>{b}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
+
+                          <div className="p-3.5 rounded-2xl bg-amber-50/50 dark:bg-amber-950/30 border border-amber-200/80 dark:border-amber-900/40 space-y-1.5">
+                            <span className="text-[11px] font-black uppercase tracking-wider text-amber-700 dark:text-amber-300 block">
+                              ⚠️ Perché potresti non volerla:
+                            </span>
+                            <ul className="space-y-1 text-xs text-amber-950 dark:text-amber-200">
+                              {whyData.whyNot.slice(0, 2).map((w, idx) => (
+                                <li key={idx} className="flex items-start gap-1.5">
+                                  <span className="text-amber-600 font-bold">•</span>
+                                  <span>{w}</span>
+                                </li>
+                              ))}
+                            </ul>
+                          </div>
                         </div>
 
-                        {/* Warning Box if any */}
-                        {match.warning && (
-                          <div className="p-3 rounded-2xl bg-amber-50 dark:bg-amber-950/40 border border-amber-200 dark:border-amber-900/60 flex items-start gap-2 text-xs text-amber-900 dark:text-amber-200">
-                            <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
-                            <div>
-                              <strong>Cosa considerare:</strong> {match.warning}
-                            </div>
-                          </div>
-                        )}
-
                         {/* Subscores Grid */}
-                        <div className="pt-2">
-                          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2">
-                            Punteggi Dettagliati per Categoria:
-                          </span>
+                        <div className="pt-1">
                           <div className="grid grid-cols-3 sm:grid-cols-6 gap-2 text-center text-xs">
                             <div className="p-2 rounded-xl bg-slate-50 dark:bg-slate-800/60 border border-slate-100 dark:border-slate-800">
                               <span className="text-[10px] text-slate-500 block">Budget</span>
@@ -823,7 +880,7 @@ export default function AutoFinderClient() {
                         </div>
                       </div>
 
-                      {/* Right Column: Photo & Action CTAs */}
+                      {/* Right: Photo & Action CTAs */}
                       <div className="space-y-4">
                         <div className="relative rounded-2xl overflow-hidden aspect-16/10 bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
                           <img
@@ -876,24 +933,6 @@ export default function AutoFinderClient() {
                 );
               })}
             </div>
-
-            {/* Bottom Next Step Callout */}
-            <section className="mt-8 rounded-3xl bg-gradient-to-r from-blue-600 to-indigo-700 text-white p-6 sm:p-8 text-center space-y-4 shadow-xl shadow-blue-600/15">
-              <h2 className="text-xl sm:text-3xl font-black tracking-tight">
-                Hai già individuato un annuncio online?
-              </h2>
-              <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto">
-                Incolla il link di AutoScout24 o Subito.it per scoprire il Trust Score, il valore reale e quanto offrire al venditore.
-              </p>
-              <div className="pt-2 flex justify-center gap-3">
-                <Link
-                  href="/analizza-annuncio"
-                  className="px-6 py-3.5 rounded-2xl bg-white text-blue-600 font-extrabold text-xs sm:text-sm shadow-md hover:bg-blue-50 active:scale-98 transition-all flex items-center gap-2"
-                >
-                  <ShieldCheck className="w-4 h-4" /> Analizza Annuncio con Trust Score
-                </Link>
-              </div>
-            </section>
           </div>
         )}
       </main>

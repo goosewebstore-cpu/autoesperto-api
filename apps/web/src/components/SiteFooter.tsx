@@ -3,6 +3,9 @@ import { Car, ShieldCheck, ArrowRight } from 'lucide-react';
 import NewsletterSignup from '@/components/NewsletterSignup';
 
 const TOOL_LINKS = [
+  { label: 'Auto Finder (Trova Auto)', href: '/auto-finder' },
+  { label: 'AI Car Advisor', href: '/ai-car-advisor' },
+  { label: 'Controlla Annuncio & Trust Score', href: '/analizza-annuncio' },
   { label: 'Profilo Digitale Auto', href: '/passport' },
   { label: 'Mi conviene comprarla?', href: '/compra' },
   { label: 'Quanto vale la mia auto?', href: '/vendi' },
@@ -16,7 +19,6 @@ const TOOL_LINKS = [
   { label: 'Confronta modelli', href: '/confronta' },
   { label: 'Affidabilità e guasti', href: '/affidabilita' },
   { label: 'Calcolo bollo auto', href: '/calcolo-bollo' },
-  { label: 'Verifica targa', href: '/verifica-targa' },
 ];
 
 const INFO_LINKS = [

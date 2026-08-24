@@ -17,6 +17,9 @@ export interface UrlEntry {
 
 const staticPages: UrlEntry[] = [
   { url: siteUrl, changeFrequency: 'weekly', priority: 1, lastmod: BUILD_DATE },
+  { url: `${siteUrl}/auto-finder`, changeFrequency: 'daily', priority: 0.95, lastmod: BUILD_DATE },
+  { url: `${siteUrl}/ai-car-advisor`, changeFrequency: 'daily', priority: 0.9, lastmod: BUILD_DATE },
+  { url: `${siteUrl}/analizza-annuncio`, changeFrequency: 'daily', priority: 0.9, lastmod: BUILD_DATE },
   { url: `${siteUrl}/compra`, changeFrequency: 'weekly', priority: 0.85, lastmod: BUILD_DATE },
   { url: `${siteUrl}/vendi`, changeFrequency: 'weekly', priority: 0.85, lastmod: BUILD_DATE },
   { url: `${siteUrl}/valutazione`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },

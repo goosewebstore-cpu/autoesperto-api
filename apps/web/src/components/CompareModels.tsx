@@ -195,6 +195,20 @@ export default function CompareModels({
               </div>
             </div>
           </div>
+
+          {/* Scegli X se... decision pills */}
+          <div className="pt-3 border-t border-white/15 grid sm:grid-cols-2 gap-3">
+            {comparisonResults.map(({ vehicle, why }) => (
+              <div key={vehicle.id} className="p-3.5 rounded-2xl bg-white/10 backdrop-blur-sm border border-white/15 space-y-1">
+                <span className="text-xs font-black text-amber-300 block">
+                  👉 Scegli {vehicle.make} {vehicle.model} se:
+                </span>
+                <p className="text-[11px] text-blue-50 leading-relaxed">
+                  Cerchi {why.whyBuy[0]?.toLowerCase() || 'un ottimo equilibrio'} e la tua priorità è {vehicle.segment.toLowerCase() === 'city car' ? 'la massima maneggevolezza urbana ed economia di gestione' : 'il comfort di viaggio e l’affidabilità sulle lunghe percorrenze'}.
+                </p>
+              </div>
+            ))}
+          </div>
         </div>
       )}
 

@@ -85,7 +85,9 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
                 {market.yearMin && market.yearMax ? ` · anni ${market.yearMin}–${market.yearMax}` : ''}
               </div>
               {market.comparison?.disclosure && (
-                <p className="text-[11px] text-text-tertiary mt-1.5 leading-relaxed">{market.comparison.disclosure}</p>
+                <p className="text-[11px] text-text-tertiary mt-1.5 leading-relaxed">
+                  {market.comparison.disclosure.replace(/con\s+anno\s+undefined\s*(\(±1\))?/gi, 'su tutti gli anni')}
+                </p>
               )}
               <a
                 href={market.url}

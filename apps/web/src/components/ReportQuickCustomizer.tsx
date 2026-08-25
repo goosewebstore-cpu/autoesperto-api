@@ -108,19 +108,20 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
           </div>
           <div>
             <h3 className="text-xs sm:text-sm font-extrabold text-text-primary flex items-center gap-1.5 uppercase tracking-wide">
-              Personalizza Dati Auto
+              Parametri Veicolo Analizzato
             </h3>
             <p className="text-[11px] text-text-secondary">
-              Modifica anno, km o cambio per aggiornare la stima e salvarla nel tuo Profilo Digitale.
+              Valori considerati per il calcolo della quotazione e dei costi di gestione.
             </p>
           </div>
         </div>
 
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-xs font-bold text-brand hover:underline shrink-0"
+          className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-blue-50 dark:bg-blue-950/50 hover:bg-blue-100 text-xs font-bold text-brand transition-colors shrink-0"
         >
-          {isExpanded ? 'Comprimi' : 'Modifica parametri'}
+          <SlidersHorizontal className="w-3.5 h-3.5" />
+          {isExpanded ? 'Chiudi' : 'Modifica parametri'}
         </button>
       </div>
 
@@ -149,9 +150,9 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
 
         <div className="p-2.5 rounded-xl bg-surface-2 border border-border">
           <span className="text-[10px] font-bold text-text-tertiary uppercase flex items-center gap-1">
-            <Euro className="w-3 h-3 text-brand" /> Valutazione Attuale
+            <Fuel className="w-3 h-3 text-brand" /> Alimentazione
           </span>
-          <span className="text-xs sm:text-sm font-extrabold text-brand number-mono block mt-0.5">{baseValuation.toLocaleString('it-IT')} €</span>
+          <span className="text-xs sm:text-sm font-extrabold text-text-primary truncate block mt-0.5">{fuel}</span>
         </div>
       </div>
 

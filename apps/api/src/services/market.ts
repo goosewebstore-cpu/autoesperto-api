@@ -168,11 +168,23 @@ export async function fetchSubitoMarketStats(
       : ads;
     let disclosure: string;
     if (filtered === kmPool && kmPool.length >= TARGET_SAMPLE) {
-      disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} con anno ${year} (±1) e chilometri simili (${km ? `${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km` : 'qualsiasi'}).`;
+      if (year) {
+        disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} con anno ${year} (±1) e chilometri simili (${km ? `${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km` : 'qualsiasi'}).`;
+      } else {
+        disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} su tutti gli anni di produzione${km ? ` e chilometri simili (${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km)` : ''}.`;
+      }
     } else if (filtered === kmPool) {
-      disclosure = `Campione ridotto (${kmPool.length} annunci): ho usato quelli con anno ${year} (±1) e km simili, ma non ho trovato almeno ${TARGET_SAMPLE} annunci. Prezzo medio indicativo.`;
+      if (year) {
+        disclosure = `Campione ridotto (${kmPool.length} annunci): ho usato quelli con anno ${year} (±1) e km simili, ma non ho trovato almeno ${TARGET_SAMPLE} annunci. Prezzo medio indicativo.`;
+      } else {
+        disclosure = `Campione di ${kmPool.length} annunci di ${make} ${model}. Prezzo medio indicativo.`;
+      }
     } else if (filtered === yearPool) {
-      disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model} con anno ${year} (±1). I chilometri non erano abbastanza confrontabili, quindi il confronto resta indicativo.`;
+      if (year) {
+        disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model} con anno ${year} (±1). I chilometri non erano abbastanza confrontabili, quindi il confronto resta indicativo.`;
+      } else {
+        disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model}. Prezzo medio indicativo.`;
+      }
     } else {
       disclosure = `Campione ridotto (${ads.length} annunci totali): non ho trovato ${TARGET_SAMPLE} annunci con anno e chilometri confrontabili. Prezzo medio indicativo su tutto il modello.`;
     }

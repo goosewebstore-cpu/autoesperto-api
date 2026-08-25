@@ -142,45 +142,46 @@ export default function HomeClient({ stats }: HomeClientProps) {
           <section className="pt-8 sm:pt-12 pb-6 px-4 text-center max-w-4xl mx-auto">
             <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200/80 px-4 py-1.5 text-xs font-bold text-blue-700 mb-5 shadow-xs">
               <Sparkles className="h-4 w-4 text-blue-600" />
-              L&apos;assistente digitale per comprare un&apos;auto usata senza fregature
+              AutoEsperto · Il Profilo Digitale Intelligente della tua Auto
             </div>
 
             <h1 className="text-3xl sm:text-5xl font-black tracking-tight text-slate-900 leading-[1.15]">
-              Trova l&apos;auto giusta per te.
+              Hai trovato un&apos;auto?
+              <span className="text-blue-600 block sm:inline"> Scopri se vale davvero il prezzo.</span>
             </h1>
 
-            <p className="mt-4 text-base sm:text-xl text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
-              Dimmi budget, esigenze e zona: AutoEsperto trova le auto più adatte, analizza gli annunci reali e ti dice quanto offrire al venditore.
+            <p className="mt-4 text-base sm:text-lg text-slate-600 font-medium leading-relaxed max-w-2xl mx-auto">
+              Compra al prezzo giusto con il <strong>Buy Score indipendente</strong>, gestisci scadenze e tagliandi nel tuo <strong>Vehicle Passport</strong>, vendi con <strong>QR Code verificato</strong>.
             </p>
 
             {/* Main Action CTAs Tier */}
             <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                href="/auto-finder"
+              <a
+                href="#scanner-section"
                 className="px-6 py-3.5 rounded-2xl bg-blue-600 hover:bg-blue-500 active:scale-98 text-white font-extrabold text-xs sm:text-sm shadow-md shadow-blue-600/25 transition-all flex items-center gap-2"
               >
-                <Compass className="w-4 h-4" /> Trova la mia auto (Auto Finder) <ArrowRight className="w-4 h-4" />
-              </Link>
+                <ShieldCheck className="w-4 h-4" /> Analizza la mia auto <ArrowRight className="w-4 h-4" />
+              </a>
 
               <Link
-                href="/analizza-annuncio"
+                href="/auto-finder"
                 className="px-6 py-3.5 rounded-2xl bg-white hover:bg-slate-50 active:scale-98 text-slate-900 font-extrabold text-xs sm:text-sm border border-slate-300 shadow-xs transition-all flex items-center gap-2"
               >
-                <ShieldCheck className="w-4 h-4 text-blue-600" /> Controlla un annuncio
+                <Compass className="w-4 h-4 text-blue-600" /> Trova la mia auto (Auto Finder)
               </Link>
 
               <Link
-                href="/vendi"
+                href="/passport"
                 className="px-5 py-3.5 rounded-2xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs sm:text-sm transition-all"
               >
-                Quanto vale la mia auto?
+                Vehicle Passport (Il mio Garage)
               </Link>
             </div>
 
             <div className="mt-6 flex flex-wrap items-center justify-center gap-4 text-xs font-semibold text-slate-600">
-              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Match personalizzato su esigenze</span>
-              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Trust Score annuncio 0-100</span>
-              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> 100% Gratis e senza registrazione</span>
+              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Compra meglio</span>
+              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Mantieni meglio</span>
+              <span className="inline-flex items-center gap-1.5"><Check className="h-4 w-4 text-emerald-600" /> Vendi meglio</span>
             </div>
           </section>
         )}
@@ -200,27 +201,113 @@ export default function HomeClient({ stats }: HomeClientProps) {
 
         {!isShowingResult && (
           <>
-            {/* ─── COME FUNZIONA ─── */}
+            {/* ─── COSA POSSO FARE? (4 CARD PILASTRI) ─── */}
             <section className="px-4 max-w-5xl mx-auto mb-16">
               <div className="text-center mb-8">
-                <h2 className="text-2xl sm:text-3xl font-black text-slate-900">Come funziona</h2>
-                <p className="text-sm text-slate-600 mt-1 font-medium">Tre passaggi semplici, senza complicazioni.</p>
+                <h2 className="text-2xl sm:text-3xl font-black text-slate-900">Cosa puoi fare con AutoEsperto</h2>
+                <p className="text-sm text-slate-600 mt-1 font-medium">Un&apos;unica piattaforma per tutto il ciclo di vita della tua auto.</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {STEPS.map((step) => (
-                  <div key={step.num} className="bg-white rounded-3xl p-6 border border-slate-200/80 shadow-xs relative flex flex-col items-start">
-                    <span className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-700 font-black text-sm grid place-items-center mb-4">
-                      {step.num}
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+                {/* 1. TROVA */}
+                <Link
+                  href="/auto-finder"
+                  className="bg-white rounded-3xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    <span className="w-10 h-10 rounded-2xl bg-blue-50 text-blue-600 font-black grid place-items-center mb-4 group-hover:scale-105 transition-transform">
+                      <Compass className="w-5 h-5" />
                     </span>
-                    <h3 className="text-lg font-bold text-slate-900 mb-1 flex items-center gap-2">
-                      <step.icon className="h-5 w-5 text-blue-600" /> {step.title}
+                    <span className="text-[10px] uppercase font-black tracking-wider text-blue-600 block mb-1">
+                      1. Trova
+                    </span>
+                    <h3 className="text-base font-black text-slate-900 mb-2">
+                      Trova l&apos;auto giusta
                     </h3>
-                    <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                      {step.desc}
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Matching su misura su budget, consumi reali, km annui e spazio per te.
                     </p>
                   </div>
-                ))}
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-blue-600 group-hover:translate-x-0.5 transition-transform">
+                    <span>Avvia Auto Finder</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </Link>
+
+                {/* 2. CONTROLLA */}
+                <Link
+                  href="/analizza-annuncio"
+                  className="bg-white rounded-3xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    <span className="w-10 h-10 rounded-2xl bg-emerald-50 text-emerald-600 font-black grid place-items-center mb-4 group-hover:scale-105 transition-transform">
+                      <ShieldCheck className="w-5 h-5" />
+                    </span>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-emerald-600 block mb-1">
+                      2. Controlla
+                    </span>
+                    <h3 className="text-base font-black text-slate-900 mb-2">
+                      Scopri se è un affare
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Buy Score 0-100, prezzo di mercato reale e messaggio pronto per trattare col venditore.
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-emerald-600 group-hover:translate-x-0.5 transition-transform">
+                    <span>Controlla annuncio</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </Link>
+
+                {/* 3. GESTISCI */}
+                <Link
+                  href="/passport"
+                  className="bg-white rounded-3xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    <span className="w-10 h-10 rounded-2xl bg-indigo-50 text-indigo-600 font-black grid place-items-center mb-4 group-hover:scale-105 transition-transform">
+                      <Gauge className="w-5 h-5" />
+                    </span>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-indigo-600 block mb-1">
+                      3. Gestisci
+                    </span>
+                    <h3 className="text-base font-black text-slate-900 mb-2">
+                      Crea il Vehicle Passport
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Storico tagliandi con AI OCR, promemoria scadenze bollo/revisione e salute meccanica.
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-indigo-600 group-hover:translate-x-0.5 transition-transform">
+                    <span>Apri il Garage</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </Link>
+
+                {/* 4. VENDI */}
+                <Link
+                  href="/vendi"
+                  className="bg-white rounded-3xl p-6 border border-slate-200 hover:border-blue-500 hover:shadow-lg transition-all flex flex-col justify-between group"
+                >
+                  <div>
+                    <span className="w-10 h-10 rounded-2xl bg-amber-50 text-amber-600 font-black grid place-items-center mb-4 group-hover:scale-105 transition-transform">
+                      <TrendingUp className="w-5 h-5" />
+                    </span>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-amber-600 block mb-1">
+                      4. Vendi
+                    </span>
+                    <h3 className="text-base font-black text-slate-900 mb-2">
+                      Vendi al valore reale
+                    </h3>
+                    <p className="text-xs text-slate-600 leading-relaxed">
+                      Quotazione in tempo reale, scheda verificata con QR Code e trasferimento profilo.
+                    </p>
+                  </div>
+                  <div className="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between text-xs font-bold text-amber-600 group-hover:translate-x-0.5 transition-transform">
+                    <span>Valuta la tua auto</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </div>
+                </Link>
               </div>
             </section>
 

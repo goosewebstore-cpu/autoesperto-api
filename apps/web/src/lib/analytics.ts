@@ -24,7 +24,23 @@ export type AnalyticsEvent =
   | 'guide_read'
   | 'account_created'
   | 'tool_click'
-  | 'sell_cta';
+  | 'sell_cta'
+  | 'advisor_message_sent'
+  | 'natural_language_search_executed'
+  | 'homepage_view'
+  | 'valuation_viewed'
+  | 'passport_created'
+  | 'passport_shared'
+  | 'passport_transferred'
+  | 'document_uploaded'
+  | 'document_verified'
+  | 'vehicle_saved'
+  | 'comparison_started'
+  | 'auto_finder_started'
+  | 'auto_finder_completed'
+  | 'buy_score_viewed'
+  | 'negotiator_message_copied'
+  | 'listing_analyzed';
 
 export function trackEvent(event: AnalyticsEvent, meta?: Record<string, unknown>): void {
   if (typeof window === 'undefined') return;

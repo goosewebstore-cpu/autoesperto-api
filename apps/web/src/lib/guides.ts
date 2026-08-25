@@ -26,6 +26,67 @@ export interface Guide {
 
 export const guides: Guide[] = [
   {
+    slug: 'passaporto-digitale-veicolo-regolamento-ue-2026-1738',
+    title: 'Passaporto Digitale del Veicolo (Regolamento UE 2026/1738): cos\'è, quando entra in vigore e cosa cambia per l\'usato',
+    description:
+      'Guida completa al nuovo Regolamento UE 2026/1738 sul Passaporto Digitale di Circolarità del Veicolo: dati obbligatori, storico chilometri, salute della batteria (SoH), date di entrata in vigore e impatto sulle compravendite di auto usate.',
+    published: '2026-08-25',
+    category: 'acquisto',
+    cta: 'passaggio-proprieta',
+    sections: [
+      {
+        heading: 'Il nuovo quadro normativo europeo (Regolamento UE 2026/1738)',
+        paragraphs: [
+          'Pubblicato nella Gazzetta Ufficiale dell\'Unione Europea il 24 luglio 2026, il Regolamento (UE) 2026/1738 introduce formalmente il Passaporto Digitale del Veicolo (Digital Vehicle Passport / DPP), una delle riforme più incisive della direttiva europea sull\'economia circolare e la tutela del consumatore nel settore automotive.',
+          'La normativa risponde a una criticità storica del mercato unico dell\'usato: secondo le stime della Commissione Europea, le frodi sul contachilometri e i danni strutturali non dichiarati costano agli automobilisti europei oltre 8,7 miliardi di euro all\'anno, con un picco particolarmente elevato nelle importazioni transfrontaliere (es. vetture importate da Germania, Belgio o Francia).',
+        ],
+      },
+      {
+        heading: '1. Quali dati contiene obbligatoriamente il Passaporto Digitale',
+        paragraphs: [
+          'Il passaporto digitale è un fascicolo telematico unico associato al numero di telaio (VIN) del veicolo, strutturato su registri digitali interoperabili a livello unionale. Le informazioni obbligatorie comprendono:',
+          '• Tracciabilità chilometrica certificata: registrazione a ogni revisione ministeriale periodica, passaggio di proprietà e intervento presso officine autorizzate, rendendo impossibile lo "schilometraggio" prima della rivendita.',
+          '• Certificato State of Health (SoH) per batterie di trazione: per veicoli 100% elettrici (BEV) e ibridi plug-in (PHEV), il passaporto traccia la capacità residua reale della batteria, il numero di cicli di ricarica rapida DC effettuati e lo storico termico.',
+          '• Registro interventi e riparazioni strutturali: indicazione obbligatoria di incidenti gravi che abbiano intaccato montanti, longheroni o telaio, con verifica della conformità di ripristino.',
+          '• Impronta di carbonio e passaporto di circolarità: composizione dei materiali riciclabili, presenza di terre rare e conformità alle classi di emissione Euro in condizioni reali di guida (RDE).',
+        ],
+      },
+      {
+        heading: '2. Date di applicazione ed entrata in vigore graduale',
+        paragraphs: [
+          'L\'applicazione del Regolamento UE 2026/1738 segue una roadmap progressiva definita per consentire l\'adeguamento tecnico a costruttori, motorizzazioni e operatori:',
+          '• Entrata in vigore della normativa generale: 20 giorni dalla pubblicazione in GUUE (agosto 2026).',
+          '• Obbligo per i costruttori su veicoli di nuova omologazione: implementazione standardizzata del chip/QR Code di bordo e dei protocolli API entro 24 mesi.',
+          '• Interconnessione registri nazionali dell\'usato (MCTC, PRA, CAR-PASS, RDW): piena operatività della banca dati europea unificata prevista per la fine della fase transitoria.',
+        ],
+      },
+      {
+        heading: '3. Cosa cambia concretamente per chi compra un\'auto usata',
+        paragraphs: [
+          'Per l\'acquirente privato, il passaporto digitale rappresenta una rivoluzione di trasparenza:',
+          '1. Azzeramento del rischio truffe chilometriche: consultando il passaporto tramite scansione QR o verifica targa/VIN, l\'acquirente ottiene la curva di progressione dei chilometri senza doversi fidare unicamente del libretto cartaceo o delle dichiarazioni del venditore.',
+          '2. Valutazione oggettiva delle auto elettriche usate: la trasparenza sullo stato di salute della batteria (SoH) elimina la paura di acquistare un EV con pacco batterie degradato, consentendo di calcolare il reale valore residuo di mercato.',
+          '3. Verdetto pre-acquisto immediato: incrociando i dati ufficiali del passaporto con i prezzi medi degli annunci reali (come fa l\'algoritmo di AutoEsperto), è possibile stabilire istantaneamente se l\'offerta è un affare, è a prezzo di mercato o nasconde anomalie.',
+        ],
+      },
+      {
+        heading: '4. I vantaggi per chi vende: valorizzazione e velocità',
+        paragraphs: [
+          'Chi vende un\'auto dotata di passaporto digitale con manutenzioni verificate e storico chiaro gode di un vantaggio competitivo netto:',
+          '• Difesa del prezzo di vendita: le auto usate con storico digitale certificato registrano un premio di valore compreso tra il +8% e il +15% rispetto a modelli comparabili privi di documentazione.',
+          '• Tempi di compravendita dimezzati: la totale trasparenza abbatte i dubbi e le negoziazioni al ribasso da parte di potenziali compratori diffidenti.',
+        ],
+      },
+      {
+        heading: '5. Come anticipare la normativa con il Profilo Digitale Auto di AutoEsperto',
+        paragraphs: [
+          'In attesa che l\'infrastruttura governativa centrale completi l\'interconnessione, gli automobilisti italiani possono già creare gratuitamente il proprio Profilo Digitale Auto permanente su AutoEsperto:',
+          'Caricando il libretto di circolazione (riconosciuto via AI OCR), è possibile archiviare fatture dei tagliandi, scadenze bollo/revisione, e generare un QR Code Trasparente da mostrare all\'acquirente in fase di vendita.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'profilo-auto-digitale-passaporto-veicolo',
     title: 'Profilo Auto Digitale: come funziona il passaporto permanente della tua auto',
     description:

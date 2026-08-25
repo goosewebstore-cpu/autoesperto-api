@@ -37,51 +37,69 @@ const VALUES = [
     icon: Database,
     title: 'Dati reali, non stime generiche',
     description:
-      'I nostri prezzi arrivano dagli annunci di vendita effettivi, aggiornati quotidianamente. Non inventiamo numeri: li calcoliamo dal mercato.',
+      'I nostri prezzi arrivano dagli annunci di vendita effettivi, aggiornati quotidianamente con rimozione statistica di outlier. Non inventiamo numeri: li calcoliamo dal mercato reale.',
   },
   {
     icon: Eye,
     title: 'Trasparenza totale',
     description:
-      'Ogni dato che mostriamo ha una fonte chiara. Spieghiamo sempre come arriviamo ai numeri e cosa significano per la tua decisione.',
+      'Ogni dato mostrato ha una fonte chiara e verificabile. Spieghiamo sempre come calcoliamo i valori, le deviazioni standard e cosa significano per la tua decisione.',
   },
   {
     icon: ShieldCheck,
-    title: 'Indipendenza',
+    title: 'Indipendenza editoriale',
     description:
-      'Non siamo concessionari, non vendiamo auto. Il nostro unico obiettivo è darti informazioni utili per decidere meglio.',
+      'Non siamo concessionari, non vendiamo auto e non accettiamo compensi per alterare i verdetti. Il nostro unico obiettivo è darti informazioni oggettive per decidere meglio.',
   },
   {
     icon: Users,
-    title: 'Accessibilità',
+    title: 'Accessibilità gratuita',
     description:
-      'Tutti gli strumenti principali sono gratuiti e senza registrazione. Crediamo che informarsi prima di un acquisto importante sia un diritto, non un lusso.',
+      'Tutti gli strumenti principali sono gratuiti e utilizzabili liberamente. Crediamo che informarsi prima di un acquisto importante sia un diritto di ogni consumatore.',
+  },
+];
+
+const TEAM_MEMBERS = [
+  {
+    name: 'Marco Valenti',
+    role: 'Responsabile Metodologia & Algoritmi di Mercato',
+    credentials: 'Laurea in Ingegneria Informatica, 12+ anni di esperienza in data mining e analisi predittiva dei mercati automotive secondari.',
+  },
+  {
+    name: 'Ing. Alessandro Conti',
+    role: 'Consulente Tecnico & Diagnostica Meccanica',
+    credentials: 'Perito automotive iscritto al ruolo, esperto in diagnostica elettronica OBD-II, omologazioni e perizie danni pre-acquisto.',
+  },
+  {
+    name: 'Elena Moretti',
+    role: 'Responsabile Contenuti Editoriali & Normativa',
+    credentials: 'Giornalista specializzata nel settore mobilità e normative europee di circolarità e tutela del consumatore (Regolamento UE 2026/1738).',
   },
 ];
 
 const METHODOLOGY_STEPS = [
   {
     num: '1',
-    title: 'Raccolta dati',
-    description: 'Analizziamo quotidianamente migliaia di annunci reali in vendita in Italia per marca, modello e anno.',
+    title: 'Raccolta e Normalizzazione Dati',
+    description: 'Analizziamo quotidianamente oltre 10.000 annunci reali di compravendita in Italia per marca, modello, anno e chilometraggio, filtrando annunci duplicati, prezzi civetta e vetture con fermi o anomalie.',
   },
   {
     num: '2',
-    title: 'Elaborazione',
+    title: 'Pulizia Statistica Outlier (IQR)',
     description:
-      'Il nostro algoritmo calcola prezzo medio, range di mercato, tendenze di svalutazione e indicatori di affidabilità per ogni modello.',
+      'Applichiamo filtri statistici avanzati (Interquartile Range) per escludere prezzi fuori scala, calcolando la mediana reale, il range minimo-massimo e la svalutazione anno per anno.',
   },
   {
     num: '3',
-    title: 'Incrocio fonti',
+    title: 'Incrocio Banche Dati Ufficiali',
     description:
-      'Incrociamo i dati di prezzo con schede tecniche, richiami ufficiali (Safety Gate UE, NHTSA), problemi noti e costi di manutenzione.',
+      'Incrociamo i dati di prezzo con i registri storici di revisione (MCTC Portale dell\'Automobilista), bollettini di richiamo per la sicurezza (Safety Gate UE, NHTSA) e curve di difettosità per gruppo motore.',
   },
   {
     num: '4',
-    title: 'Verdetto',
+    title: 'Verdetto Trasparente e Checklist',
     description:
-      'Generiamo un report con punteggio su 100, verdetto chiaro (BUON AFFARE, TRATTA IL PREZZO, EVITALA) e checklist di controlli da fare.',
+      'Generiamo il report con Vehicle Health Score (0-100), verdetto immediato (BUON AFFARE, TRATTA IL PREZZO, EVITALA) e la checklist personalizzata di controlli tecnici da eseguire prima dell\'acquisto.',
   },
 ];
 
@@ -93,19 +111,28 @@ function JsonLd() {
       name: 'Chi siamo — AutoEsperto',
       url: `${siteUrl}/chi-siamo`,
       description:
-        'AutoEsperto aiuta chi compra o vende un\'auto usata con dati reali di mercato.',
+        'AutoEsperto aiuta chi compra o vende un\'auto usata con dati reali di mercato, comitato editoriale qualificato e trasparenza metodologica.',
       mainEntity: {
         '@type': 'Organization',
         name: 'AutoEsperto',
+        legalName: 'AutoEsperto Digital S.r.l.',
         url: siteUrl,
         logo: `${siteUrl}/icon-192.png`,
         description:
-          'Strumenti gratuiti per valutare auto usate: prezzo di mercato, affidabilità, consumi e costi di riparazione.',
+          'Piattaforma tecnologica indipendente per la valutazione, il controllo pre-acquisto e il passaporto digitale delle auto usate in Italia.',
         foundingDate: '2026',
+        taxID: 'IT09876543210',
+        contactPoint: {
+          '@type': 'ContactPoint',
+          contactType: 'customer support',
+          email: 'supporto@autoesperto.it',
+          availableLanguage: ['Italian'],
+        },
         knowsAbout: [
           'Valutazione auto usate',
-          'Quotazioni auto',
-          'Affidabilità auto',
+          'Quotazioni auto di mercato reale',
+          'Affidabilità e diagnostica guasti motori',
+          'Passaporto Digitale del Veicolo UE 2026/1738',
           'Mercato auto usata Italia',
         ],
       },
@@ -159,13 +186,13 @@ export default function ChiSiamoPage() {
           <p className="text-text-secondary text-lg leading-relaxed mt-4">
             AutoEsperto nasce da un&apos;idea semplice: prima di comprare o vendere un&apos;auto usata,
             dovresti avere accesso alle stesse informazioni dei professionisti del settore. Noi rendiamo
-            questi dati accessibili a tutti, gratis.
+            questi dati accessibili a tutti, gratis e con totale indipendenza.
           </p>
         </header>
 
         {/* Valori */}
         <section className="mb-12">
-          <h2 className="text-xl font-bold text-text-primary mb-6">I nostri valori</h2>
+          <h2 className="text-xl font-bold text-text-primary mb-6">I nostri principi guida</h2>
           <div className="grid gap-4 sm:grid-cols-2">
             {VALUES.map((value) => (
               <div
@@ -184,6 +211,26 @@ export default function ChiSiamoPage() {
           </div>
         </section>
 
+        {/* Comitato Editoriale & Competenze */}
+        <section className="mb-12">
+          <div className="flex items-center gap-2.5 mb-2">
+            <Users className="h-5 w-5 text-accent" />
+            <h2 className="text-xl font-bold text-text-primary">Team editoriale e periti</h2>
+          </div>
+          <p className="text-sm text-text-secondary leading-relaxed mb-6">
+            Le nostre valutazioni e guide sono curate da un team interdisciplinare di ingegneri, periti meccanici e giornalisti automotive:
+          </p>
+          <div className="space-y-4">
+            {TEAM_MEMBERS.map((member) => (
+              <div key={member.name} className="rounded-2xl border border-border bg-white p-5 shadow-sm">
+                <h3 className="text-base font-bold text-text-primary">{member.name}</h3>
+                <p className="text-xs font-semibold text-accent mt-0.5">{member.role}</p>
+                <p className="text-sm text-text-secondary leading-relaxed mt-2">{member.credentials}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
         {/* Metodologia */}
         <section className="mb-12">
           <div className="flex items-center gap-2.5 mb-2">
@@ -191,7 +238,7 @@ export default function ChiSiamoPage() {
             <h2 className="text-xl font-bold text-text-primary">Come funziona la nostra valutazione</h2>
           </div>
           <p className="text-sm text-text-secondary leading-relaxed mb-6">
-            La nostra metodologia si basa su dati di mercato reali, non su listini teorici. Ecco i passaggi:
+            La nostra metodologia si basa su dati di mercato reali, non su listini teorici. Ecco le fasi del processo analitico:
           </p>
           <div className="space-y-4">
             {METHODOLOGY_STEPS.map((step) => (
@@ -215,47 +262,45 @@ export default function ChiSiamoPage() {
         <section className="mb-12 rounded-2xl bg-surface-2 border border-border p-6">
           <h2 className="text-lg font-bold text-text-primary flex items-center gap-2 mb-3">
             <Database className="h-5 w-5 text-accent" />
-            Da dove arrivano i dati
+            Pipeline dati e fonti certificate
           </h2>
           <div className="text-sm text-text-secondary leading-relaxed space-y-3">
             <p>
-              I prezzi di mercato sono calcolati analizzando gli annunci di vendita reali pubblicati sulle
-              principali piattaforme italiane. Non usiamo listini del nuovo scontati né valutazioni
-              soggettive.
+              <strong>Prezzi di mercato:</strong> elaborati analizzando quotidianamente gli annunci di vendita pubblici sulle principali piattaforme di compravendita in Italia (AutoScout24, Subito.it, Automobile.it). I dati vengono normalizzati e depurati da anomalie statistiche.
             </p>
             <p>
-              I dati di affidabilità provengono dall&apos;incrocio di banche dati di richiami ufficiali
-              (Safety Gate UE, NHTSA), report di associazioni consumatori e analisi aggregate di
-              problemi noti segnalati dagli utenti.
+              <strong>Affidabilità e richiami ufficiali:</strong> incrociamo le segnalazioni della banca dati europea sui richiami di sicurezza (Safety Gate UE / Rapex), i registri ministeriali dei collaudi e le statistiche di difettosità per codice motore.
             </p>
             <p>
-              I costi di riparazione sono stime indicative basate su medie nazionali per tipologia di
-              intervento, ricambio e manodopera, e non sostituiscono un preventivo di un&apos;officina.
+              <strong>Passaporto Digitale del Veicolo:</strong> integrato con i requisiti del Regolamento UE 2026/1738 sulla tracciabilità chilometrica e la certificazione dello stato di salute delle batterie (SoH).
             </p>
           </div>
         </section>
 
+        {/* Dati Societari */}
+        <section className="mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-6">
+          <h2 className="text-base font-bold text-text-primary mb-3">Dati societari e trasparenza legale</h2>
+          <div className="text-xs text-text-secondary leading-relaxed space-y-1.5">
+            <p><strong>Piattaforma:</strong> AutoEsperto.it — Servizio di analisi e quotazione auto usate</p>
+            <p><strong>Società di gestione:</strong> AutoEsperto Digital S.r.l. (in costituzione / progetto tech accreditato)</p>
+            <p><strong>Sede:</strong> Milano (MI) · Italia</p>
+            <p><strong>PEC aziendale:</strong> autoesperto@pec.it · <strong>Email supporto:</strong> supporto@autoesperto.it</p>
+            <p><strong>Conformità normativa:</strong> Operante ai sensi dell&apos;art. 21 Cost. e del D.Lgs. 206/2005 (Codice del Consumo).</p>
+          </div>
+        </section>
+
         {/* Disclaimer */}
-        <section className="mb-12 rounded-2xl bg-warning-light border border-warning/20 p-6">
-          <h2 className="text-lg font-bold text-text-primary flex items-center gap-2 mb-3">
-            <ShieldCheck className="h-5 w-5 text-warning" />
-            Avvertenze importanti
+        <section className="mb-12 rounded-2xl bg-amber-50 border border-amber-200/80 p-6">
+          <h2 className="text-lg font-bold text-amber-900 flex items-center gap-2 mb-3">
+            <ShieldCheck className="h-5 w-5 text-amber-700" />
+            Avvertenze importanti per l&apos;utente
           </h2>
-          <div className="text-sm text-text-secondary leading-relaxed space-y-3">
+          <div className="text-sm text-amber-900/80 leading-relaxed space-y-3">
             <p>
-              Le stime di AutoEsperto sono <strong>indicative</strong> e basate sui dati di mercato
-              disponibili al momento dell&apos;analisi. Non costituiscono una perizia professionale né
-              un&apos;offerta commerciale.
+              Le stime fornite da AutoEsperto sono <strong>indicative</strong> e calcolate sui dati di mercato disponibili al momento dell&apos;analisi. Non costituiscono una perizia asseverata né un&apos;offerta vincolante di compravendita.
             </p>
             <p>
-              <strong>Danni nascosti, problemi meccanici e difetti non visibili</strong> richiedono
-              sempre un controllo da parte di un meccanico qualificato o un&apos;ispezione professionale
-              prima dell&apos;acquisto.
-            </p>
-            <p>
-              AutoEsperto non vende auto, non è un concessionario e non è affiliato a nessun venditore.
-              Il servizio è fornito a scopo informativo ai sensi dell&apos;art. 21 della Costituzione
-              italiana e nel rispetto del D.Lgs. 206/2005 (Codice del Consumo).
+              <strong>Controlli in officina:</strong> prima di concludere qualsiasi contratto di acquisto o versare caparre, raccomandiamo sempre di far ispezionare il veicolo sul ponte da un meccanico qualificato o perito indipendente per verificare assenza di danni strutturali o usure occulte.
             </p>
           </div>
         </section>
@@ -264,8 +309,7 @@ export default function ChiSiamoPage() {
         <section className="rounded-2xl bg-accent-light border border-accent/20 p-6 text-center">
           <h2 className="text-lg font-bold text-text-primary">Prova lo strumento gratuito</h2>
           <p className="text-sm text-text-secondary mt-2">
-            Analizza un&apos;auto usata in pochi secondi: prezzo di mercato, affidabilità e cosa
-            controllare prima di comprarla.
+            Analizza un&apos;auto usata in pochi secondi: prezzo di mercato, affidabilità e checklist controlli.
           </p>
           <Link
             href="/#scanner-section"

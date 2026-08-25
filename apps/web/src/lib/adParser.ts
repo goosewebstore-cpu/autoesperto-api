@@ -8,7 +8,7 @@ export interface ParsedAdData {
   price?: number;
   fuel?: string;
   powerCv?: number;
-  rawText: string;
+  rawText?: string;
 }
 
 const COMMON_FUELS = [

@@ -251,6 +251,84 @@ export function deletePassport(id: string): void {
 }
 
 /**
+ * Calcola il livello di trust del veicolo (AutoEsperto Trust Layer)
+ */
+export function getTrustBadgeForPassport(passport: VehiclePassportData): {
+  badge: 'AI_ANALYZED' | 'VERIFIED' | 'INSPECTED';
+  label: string;
+  desc: string;
+  colorClass: string;
+} {
+  const hasInspections = (passport.inspections || []).some((i) => i.status === 'rilevato');
+  const hasConfirmedDocs = (passport.documents || []).some((d) => d.status === 'CONFIRMED');
+
+  if (passport.trustBadge === 'INSPECTED' || hasInspections) {
+    return {
+      badge: 'INSPECTED',
+      label: 'INSPECTED',
+      desc: 'Veicolo con controllo fisico documentato',
+      colorClass: 'bg-indigo-50 text-indigo-700 border-indigo-200 dark:bg-indigo-950/50 dark:text-indigo-300 dark:border-indigo-800',
+    };
+  }
+
+  if (passport.trustBadge === 'VERIFIED' || hasConfirmedDocs) {
+    return {
+      badge: 'VERIFIED',
+      label: 'VERIFIED',
+      desc: 'Dati e documenti ufficiali verificati',
+      colorClass: 'bg-emerald-50 text-emerald-700 border-emerald-200 dark:bg-emerald-950/50 dark:text-emerald-300 dark:border-emerald-800',
+    };
+  }
+
+  return {
+    badge: 'AI_ANALYZED',
+    label: 'AI ANALYZED',
+    desc: 'Analisi automatica basata su dati di mercato',
+    colorClass: 'bg-blue-50 text-blue-700 border-blue-200 dark:bg-blue-950/50 dark:text-blue-300 dark:border-blue-800',
+  };
+}
+
+/**
+ * Genera un codice di trasferimento per cedere il Passport al nuovo acquirente
+ */
+export function generatePassportTransfer(id: string): string {
+  const passport = getPassportById(id);
+  if (!passport) throw new Error('Passport non trovato');
+
+  const randomPart = Math.floor(1000 + Math.random() * 9000);
+  const transferCode = `TR-${passport.shareCode.replace('AE-', '')}-${randomPart}`;
+
+  passport.transferCode = transferCode;
+  passport.transferStatus = 'PENDING';
+  savePassport(passport);
+  return transferCode;
+}
+
+/**
+ * Riscatta un Passport trasferito con il codice
+ */
+export function claimPassportTransfer(transferCode: string): { success: boolean; passport?: VehiclePassportData; message: string } {
+  const clean = transferCode.trim().toUpperCase();
+  const all = getAllPassports();
+  const found = all.find((p) => p.transferCode && p.transferCode.toUpperCase() === clean);
+
+  if (!found) {
+    return { success: false, message: 'Codice di trasferimento non valido o inesistente.' };
+  }
+
+  found.transferStatus = 'TRANSFERRED';
+  found.transferDate = new Date().toISOString();
+  found.transferCode = undefined;
+  savePassport(found);
+
+  return {
+    success: true,
+    passport: found,
+    message: `Profilo di ${found.vehicle.make} ${found.vehicle.model} acquisito con successo!`,
+  };
+}
+
+/**
  * Creates a digital profile directly from an AutoReport without re-asking any info!
  */
 export function createPassportFromReport(report: AutoReport, customNickname?: string): VehiclePassportData {

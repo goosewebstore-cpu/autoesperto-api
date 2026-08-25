@@ -27,7 +27,7 @@ import {
 } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { getPassportByShareCode, ensureSamplePassport, computeDynamicHealthScore } from '@/lib/passportStorage';
+import { getPassportByShareCode, ensureSamplePassport, computeDynamicHealthScore, getTrustBadgeForPassport } from '@/lib/passportStorage';
 import type { VehiclePassportData } from '@autoesperto/types';
 
 export default function PassportPublicClient({ code }: { code: string }) {
@@ -67,6 +67,7 @@ export default function PassportPublicClient({ code }: { code: string }) {
   }
 
   const v = passport.vehicle;
+  const trust = getTrustBadgeForPassport(passport);
   const cfg = passport.shareConfig || {
     enabled: true,
     showVehicleInfo: true,
@@ -97,9 +98,14 @@ export default function PassportPublicClient({ code }: { code: string }) {
         <section className="bg-slate-900 text-white pt-8 pb-12 px-4 sm:px-6 relative overflow-hidden">
           <div className="max-w-5xl mx-auto relative z-10 space-y-6">
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/35 shadow-sm">
-                <ShieldCheck className="w-4 h-4 text-emerald-400" />
-                Profilo Digitale Auto Certificato · Codice: {passport.shareCode}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 text-emerald-300 text-xs font-bold border border-emerald-500/35 shadow-sm">
+                  <ShieldCheck className="w-4 h-4 text-emerald-400" />
+                  Profilo Digitale Auto · {passport.shareCode}
+                </div>
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-black uppercase tracking-wider border ${trust.colorClass}`}>
+                  {trust.label}
+                </div>
               </div>
 
               <div className="flex items-center gap-2">

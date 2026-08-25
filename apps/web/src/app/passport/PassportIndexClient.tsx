@@ -36,6 +36,8 @@ import {
   createNewPassport,
   deletePassport,
   computeDynamicHealthScore,
+  claimPassportTransfer,
+  getTrustBadgeForPassport,
 } from '@/lib/passportStorage';
 import { scanPassportDoc } from '@/lib/api';
 import type { VehiclePassportData } from '@autoesperto/types';
@@ -80,6 +82,27 @@ export default function PassportIndexClient() {
   const [scanning, setScanning] = useState(false);
   const [scanMessage, setScanMessage] = useState('');
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+
+  // Claim Transfer state
+  const [showClaimModal, setShowClaimModal] = useState(false);
+  const [claimInput, setClaimInput] = useState('');
+  const [claimError, setClaimError] = useState('');
+
+  const handleClaimPassport = () => {
+    setClaimError('');
+    if (!claimInput.trim()) {
+      setClaimError('Inserisci un codice di trasferimento valido (es. TR-48291-1234)');
+      return;
+    }
+    const res = claimPassportTransfer(claimInput);
+    if (res.success && res.passport) {
+      setShowClaimModal(false);
+      refreshPassports();
+      router.push(`/passport/${res.passport.id}`);
+    } else {
+      setClaimError(res.message);
+    }
+  };
 
   useEffect(() => {
     refreshPassports();
@@ -204,6 +227,16 @@ export default function PassportIndexClient() {
                 <Plus className="w-4 h-4" /> Aggiungi Nuova Auto al Garage
               </button>
 
+              <button
+                onClick={() => {
+                  setClaimError('');
+                  setShowClaimModal(true);
+                }}
+                className="px-4 py-3 rounded-2xl bg-white/10 hover:bg-white/20 text-white font-bold text-xs flex items-center gap-2 transition-all"
+              >
+                <ArrowRight className="w-4 h-4 text-indigo-300" /> Riscatta Profilo Trasferito
+              </button>
+
               <div className="inline-flex items-center gap-2 px-3.5 py-2.5 rounded-2xl bg-white/10 text-emerald-300 text-xs font-bold border border-white/10">
                 <Lock className="w-4 h-4 text-emerald-400" />
                 <span>100% Privato: I dati rimangono sul tuo dispositivo</span>
@@ -218,15 +251,26 @@ export default function PassportIndexClient() {
             <h2 className="text-lg font-black text-slate-900 dark:text-white flex items-center gap-2">
               <Car className="w-5 h-5 text-blue-600" /> Le mie Auto nel Garage ({passports.length})
             </h2>
-            <button
-              onClick={() => {
-                setWizardStep(1);
-                setShowWizard(true);
-              }}
-              className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
-            >
-              <Plus className="w-3.5 h-3.5" /> Aggiungi auto
-            </button>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => {
+                  setClaimError('');
+                  setShowClaimModal(true);
+                }}
+                className="text-xs font-bold text-indigo-600 hover:underline"
+              >
+                Hai un codice di trasferimento?
+              </button>
+              <button
+                onClick={() => {
+                  setWizardStep(1);
+                  setShowWizard(true);
+                }}
+                className="text-xs font-bold text-blue-600 hover:underline flex items-center gap-1"
+              >
+                <Plus className="w-3.5 h-3.5" /> Aggiungi auto
+              </button>
+            </div>
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
@@ -730,6 +774,68 @@ export default function PassportIndexClient() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        )}
+
+        {/* ─── CLAIM TRANSFERRED PASSPORT MODAL ─── */}
+        {showClaimModal && (
+          <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+            <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 animate-scale-in">
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 grid place-items-center">
+                    <Car className="w-5 h-5" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-slate-900 dark:text-white">Riscatta Passport Auto</h3>
+                    <span className="text-[10px] text-slate-500 block">Acquisisci un profilo trasferito</span>
+                  </div>
+                </div>
+                <button
+                  onClick={() => setShowClaimModal(false)}
+                  className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+                >
+                  ✕
+                </button>
+              </div>
+
+              <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+                Hai acquistato un&apos;auto e il venditore ti ha fornito un codice di trasferimento AutoEsperto? Inseriscilo qui per caricare l&apos;intero storico nel tuo garage.
+              </p>
+
+              <div className="space-y-2">
+                <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400">
+                  Codice di Trasferimento (es. TR-48291-1234)
+                </label>
+                <input
+                  type="text"
+                  placeholder="TR-XXXXX-XXXX"
+                  value={claimInput}
+                  onChange={(e) => setClaimInput(e.target.value.toUpperCase())}
+                  className="w-full h-11 px-3.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 font-mono font-bold text-sm tracking-wider uppercase text-slate-900 dark:text-white outline-none focus:border-indigo-600"
+                />
+                {claimError && (
+                  <p className="text-xs font-semibold text-rose-600">{claimError}</p>
+                )}
+              </div>
+
+              <div className="flex gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowClaimModal(false)}
+                  className="flex-1 py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 font-bold text-xs"
+                >
+                  Annulla
+                </button>
+                <button
+                  type="button"
+                  onClick={handleClaimPassport}
+                  className="flex-1 py-2.5 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-bold text-xs shadow-xs"
+                >
+                  Riscatta Profilo
+                </button>
+              </div>
             </div>
           </div>
         )}

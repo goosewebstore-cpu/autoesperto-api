@@ -77,6 +77,7 @@ export default function AdAnalysisLandingClient() {
         price: qPrice ? Number(qPrice) : undefined,
         year: qYear ? Number(qYear) : undefined,
         km: qKm ? Number(qKm) : undefined,
+        rawText: `${qMake} ${qModel}`,
       };
       runFullAnalysis(initialAd);
     }
@@ -327,59 +328,130 @@ export default function AdAnalysisLandingClient() {
               </div>
             </div>
 
-            {/* ─── 2. SCORES TRIO CARDS ─── */}
-            <div className="grid sm:grid-cols-3 gap-4">
-              {/* Match Score */}
-              <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 text-center space-y-1">
-                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">Match Score</span>
-                <div className="text-3xl font-black text-blue-600 font-mono">88/100</div>
-                <p className="text-[11px] text-slate-500 leading-tight">Quanto l&apos;auto è adatta al tuo profilo d&apos;uso</p>
+            {/* ─── 2. BUY SCORE & AI NEGOTIATOR (INVESTOR-GRADE HERO RESULT) ─── */}
+            <div className="bg-white dark:bg-slate-900 rounded-3xl p-6 sm:p-8 border border-slate-200 dark:border-slate-800 shadow-md space-y-6">
+              <div className="flex flex-wrap items-center justify-between gap-3 pb-4 border-b border-slate-100 dark:border-slate-800">
+                <div className="flex items-center gap-2">
+                  <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white font-black text-xl grid place-items-center font-mono">
+                    {dealResult.dealScore}
+                  </div>
+                  <div>
+                    <span className="text-[10px] uppercase font-black tracking-wider text-slate-400 block">AutoEsperto Buy Score</span>
+                    <h3 className="text-lg font-black text-slate-900 dark:text-white">
+                      {dealResult.labelText}
+                    </h3>
+                  </div>
+                </div>
+
+                <div className="flex flex-wrap items-center gap-2">
+                  {/* Trust Level Badge */}
+                  <span className="inline-flex items-center gap-1 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/60 text-blue-700 dark:text-blue-300 text-xs font-bold border border-blue-200 dark:border-blue-800">
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600" /> AI ANALYZED
+                  </span>
+                  {/* Market Confidence Badge */}
+                  <span className={`inline-flex items-center gap-1 px-3 py-1 rounded-xl text-xs font-bold border ${
+                    dealResult.confidence === 'alta'
+                      ? 'bg-emerald-50 dark:bg-emerald-950/40 text-emerald-700 dark:text-emerald-300 border-emerald-200'
+                      : dealResult.confidence === 'media'
+                      ? 'bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border-blue-200'
+                      : 'bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border-amber-200'
+                  }`}>
+                    Confidenza: {dealResult.confidence.toUpperCase()} ({dealResult.comparablesCount} comparabili)
+                  </span>
+                </div>
               </div>
 
-              {/* Trust Score */}
-              <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 text-center space-y-1">
-                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">Trust Score</span>
-                <div className="text-3xl font-black text-indigo-600 font-mono">{trustResult.overallScore}/100</div>
-                <p className="text-[11px] text-slate-500 leading-tight">Coerenza e completezza dei dati dichiarati</p>
-              </div>
-
-              {/* Deal Score */}
-              <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 border border-slate-200 dark:border-slate-800 text-center space-y-1">
-                <span className="text-[10px] uppercase font-extrabold tracking-wider text-slate-400 block">Deal Score</span>
-                <div className="text-3xl font-black text-emerald-600 font-mono">{dealResult.dealScore}/100</div>
-                <p className="text-[11px] text-slate-500 leading-tight">Convenienza economica dell&apos;offerta sul mercato</p>
-              </div>
-            </div>
-
-            {/* ─── 3. MARKET PERCENTILE & POSITIONING ─── */}
-            <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-3">
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-xs font-black uppercase tracking-wider text-slate-500 flex items-center gap-1.5">
-                  <Gauge className="w-4 h-4 text-blue-600" /> Posizionamento di Mercato
-                </span>
-                <span className="text-xs font-semibold text-slate-500">
-                  Basato su {dealResult.comparablesCount} annunci comparabili · Confidenza: <strong>{dealResult.confidence}</strong>
-                </span>
-              </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/80 border border-slate-200/80 dark:border-slate-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-                <div>
-                  <span className="text-xs text-slate-500 block">Prezzo Richiesto:</span>
-                  <span className="text-2xl font-black text-slate-900 dark:text-white font-mono">
+              {/* Price & Target Values 4-Card Grid */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-center">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Prezzo Richiesto</span>
+                  <span className="text-lg sm:text-xl font-black text-slate-900 dark:text-white font-mono">
                     €{trustResult.priceAnalysis.askingPrice.toLocaleString('it-IT')}
                   </span>
+                  <span className={`text-[10px] font-bold block mt-0.5 ${
+                    dealResult.priceDiffPercent > 0 ? 'text-amber-600' : 'text-emerald-600'
+                  }`}>
+                    {dealResult.priceDiffPercent > 0 ? `+${dealResult.priceDiffPercent}% vs media` : `${dealResult.priceDiffPercent}% vs media`}
+                  </span>
                 </div>
 
-                <div className="text-center sm:text-right">
-                  <span className="text-xs text-slate-500 block">Posizionamento:</span>
-                  <span className="text-sm font-black text-emerald-600">
-                    Più economica del {dealResult.cheaperThanPercent}% degli annunci simili
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-center">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Valore Reale Medio</span>
+                  <span className="text-lg sm:text-xl font-black text-slate-900 dark:text-white font-mono">
+                    €{Math.round((trustResult.priceAnalysis.estimatedValueMin + trustResult.priceAnalysis.estimatedValueMax) / 2).toLocaleString('it-IT')}
                   </span>
-                  <span className="text-[11px] text-slate-400 block">
-                    Valore stimato: €{trustResult.priceAnalysis.estimatedValueMin.toLocaleString('it-IT')} – €{trustResult.priceAnalysis.estimatedValueMax.toLocaleString('it-IT')}
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    Forbice: €{trustResult.priceAnalysis.estimatedValueMin.toLocaleString('it-IT')} – {trustResult.priceAnalysis.estimatedValueMax.toLocaleString('it-IT')}
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 text-center">
+                  <span className="text-[10px] uppercase font-bold text-blue-600 dark:text-blue-300 block">Prezzo Consigliato</span>
+                  <span className="text-lg sm:text-xl font-black text-blue-700 dark:text-blue-200 font-mono">
+                    €{dealResult.recommendedOfferPrice.toLocaleString('it-IT')}
+                  </span>
+                  <span className="text-[10px] text-blue-600/80 dark:text-blue-300/80 block mt-0.5">
+                    Offerta consigliata
+                  </span>
+                </div>
+
+                <div className="p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/60 border border-slate-200/80 dark:border-slate-700 text-center">
+                  <span className="text-[10px] uppercase font-bold text-slate-400 block">Prezzo Max che Pagherei</span>
+                  <span className="text-lg sm:text-xl font-black text-slate-900 dark:text-white font-mono">
+                    €{dealResult.maxAcceptablePrice.toLocaleString('it-IT')}
+                  </span>
+                  <span className="text-[10px] text-slate-400 block mt-0.5">
+                    Limite massimo
                   </span>
                 </div>
               </div>
+
+              {/* AI Negotiator Message Box */}
+              <div className="p-5 rounded-2xl bg-gradient-to-br from-indigo-50/80 to-blue-50/80 dark:from-indigo-950/40 dark:to-blue-950/40 border border-indigo-200/80 dark:border-indigo-900/60 space-y-3">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs font-black uppercase tracking-wider text-indigo-700 dark:text-indigo-300 flex items-center gap-1.5">
+                    <MessageCircle className="w-4 h-4 text-indigo-600" /> AI Negotiator — Messaggio pronto per il venditore
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (typeof window !== 'undefined') {
+                        navigator.clipboard.writeText(dealResult.negotiatorMessage);
+                        trackEvent('negotiator_message_copied', { make: parsed?.make, model: parsed?.model });
+                        alert('Messaggio per il venditore copiato negli appunti!');
+                      }
+                    }}
+                    className="px-3 py-1.5 rounded-xl bg-white dark:bg-slate-800 hover:bg-slate-100 text-indigo-700 dark:text-indigo-300 text-xs font-bold border border-indigo-200 dark:border-indigo-800 flex items-center gap-1 shadow-xs transition-all"
+                  >
+                    <Copy className="w-3.5 h-3.5" /> Copia messaggio
+                  </button>
+                </div>
+
+                <div className="p-3.5 rounded-xl bg-white dark:bg-slate-950/80 border border-indigo-100 dark:border-indigo-900/60 text-xs text-slate-700 dark:text-slate-300 font-sans leading-relaxed whitespace-pre-line">
+                  {dealResult.negotiatorMessage}
+                </div>
+              </div>
+
+              {/* Data Transparency Accordion */}
+              <details className="rounded-2xl border border-slate-200 dark:border-slate-800 overflow-hidden group">
+                <summary className="p-3.5 bg-slate-50 dark:bg-slate-800/60 text-xs font-bold text-slate-700 dark:text-slate-300 cursor-pointer flex items-center justify-between">
+                  <span className="flex items-center gap-1.5">
+                    <Info className="w-3.5 h-3.5 text-blue-600" /> Come abbiamo calcolato questo valore? (Data Transparency)
+                  </span>
+                  <span className="text-slate-400 group-open:rotate-180 transition-transform font-bold text-xs">↓</span>
+                </summary>
+                <div className="p-4 bg-white dark:bg-slate-900 text-xs text-slate-600 dark:text-slate-400 space-y-2 leading-relaxed border-t border-slate-100 dark:border-slate-800">
+                  <p>
+                    • <strong>Campione di comparabili:</strong> {dealResult.comparablesCount} annunci reali di {parsed?.make} {parsed?.model} rilevati sui principali marketplace italiani.
+                  </p>
+                  <p>
+                    • <strong>Filtri di omogeneità:</strong> Anno {parsed?.year || 'di riferimento'} (±1 anno), chilometraggio simile e alimentazione corrispondente.
+                  </p>
+                  <p>
+                    • <strong>Valutazione oggettiva:</strong> Non vendiamo auto né prendiamo commissioni sul prezzo finale. Le stime sono calcolate per tutelare l&apos;acquirente da richieste fuori mercato.
+                  </p>
+                </div>
+              </details>
             </div>
 
             {/* ─── 4. WHY THIS CAR? vs WHY NOT? ─── */}

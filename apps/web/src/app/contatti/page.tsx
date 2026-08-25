@@ -2,40 +2,44 @@ import type { Metadata } from 'next';
 import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
-  title: 'Contatti',
-  description: 'Contatta AutoEsperto per assistenza, segnalazioni e collaborazioni.',
+  title: 'Contatti e Assistenza | AutoEsperto',
+  description: 'Contatta il team di AutoEsperto per assistenza tecnica, rettifiche dati, relazioni con la stampa e partnership con officine e periti.',
   alternates: { canonical: '/contatti' },
 };
 
 export default function ContactPage() {
   return (
     <LegalPage
-      title="Contatti"
-      updated="2 agosto 2026"
-      intro="Per assistenza su account, pagamento o report, o per proposte commerciali, contatta il team AutoEsperto."
+      title="Contatti & Assistenza"
+      updated="25 agosto 2026"
+      intro="Siamo a disposizione per assistenza su valutazioni e Passaporto Digitale, segnalazioni tecniche, relazioni con i media e collaborazioni professionali."
       sections={[
         {
-          heading: 'Chi Siamo',
+          heading: 'Supporto Utenti & Segnalazioni Dati',
           paragraphs: [
-            'AutoEsperto valuta auto usate in modo gratuito: prezzo di mercato, affidabilità e costi di riparazione calcolati su annunci reali.',
+            'Per domande sul funzionamento del servizio, segnalazioni di annunci non conformi o suggerimenti metodologici: scrivi a supporto@autoesperto.it.',
+            'Il nostro team di supporto risponde dal lunedì al venerdì (09:00 - 18:00) entro 24-48 ore lavorative.',
           ],
         },
         {
-          heading: 'Assistenza e segnalazioni',
+          heading: 'Ufficio Stampa & Relazioni con i Media',
           paragraphs: [
-            'Per problemi con il servizio, suggerimenti o segnalazioni di inesattezze nei dati: scrivi a supporto@autoesperto.it. Rispondiamo di norma entro 2-3 giorni lavorativi.',
+            'Per richieste di interviste, dati statistici sull\'andamento delle quotazioni dell\'usato in Italia, report sulla svalutazione delle auto elettriche o approfondimenti sul Regolamento UE 2026/1738 (Passaporto Digitale del Veicolo): stampa@autoesperto.it.',
           ],
         },
         {
-          heading: 'Privacy',
+          heading: 'Partnership con Officine, Gommisti e Periti Indipendenti',
           paragraphs: [
-            'Per questioni relative al trattamento dei dati personali: supporto@autoesperto.it.',
+            'Sei un\'officina meccatronica, un centro revisioni MCTC o un perito assicurativo e desideri integrare i controlli certificati di AutoEsperto o figurare nella rete di ispezione indipendente pre-acquisto? Scrivi a partner@autoesperto.it.',
           ],
         },
         {
-          heading: 'Pubblicità e collaborazioni',
+          heading: 'Dati Societari & Comunicazioni Legali / PEC',
           paragraphs: [
-            'Per sponsorizzazioni, partnership con officine, periti, concessionari e altri servizi automotive: supporto@autoesperto.it. Le proposte sono descritte anche nella pagina Lavora con noi.',
+            'Ragione sociale: AutoEsperto Digital S.r.l.',
+            'Sede legale: Milano (MI), Italia',
+            'Posta Elettronica Certificata (PEC): autoesperto@pec.it',
+            'Responsabile della protezione dei dati (DPO / Privacy): privacy@autoesperto.it',
           ],
         },
       ]}

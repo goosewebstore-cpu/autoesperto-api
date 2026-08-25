@@ -68,7 +68,8 @@ export async function getSsrReport(make: string, model: string, year?: number, p
   if (preferApi) {
     try {
       const controller = new AbortController();
-      const timer = setTimeout(() => controller.abort(), 15000);
+      // Timeout rapido (1.2s) per non bloccare l'SSR se il backend è in cold-start o non disponibile
+      const timer = setTimeout(() => controller.abort(), 1200);
       const res = await fetch(`${API_URL}/reports/analyze`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -85,7 +86,7 @@ export async function getSsrReport(make: string, model: string, year?: number, p
         }
       }
     } catch {
-      /* l'API non è raggiungibile: si usa la stima locale */
+      /* Fallback istantaneo: calcolo deterministico locale in <1ms */
     }
   }
 

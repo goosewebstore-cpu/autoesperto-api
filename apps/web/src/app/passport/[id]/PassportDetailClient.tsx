@@ -57,6 +57,8 @@ import {
   addTimelineEvent,
   ensureSamplePassport,
   computeDynamicHealthScore,
+  getTrustBadgeForPassport,
+  generatePassportTransfer,
 } from '@/lib/passportStorage';
 import { askPassportAI } from '@/lib/api';
 import type {
@@ -91,6 +93,16 @@ export default function PassportDetailClient({ id }: { id: string }) {
   const [showSellingModal, setShowSellingModal] = useState(false);
   const [showShareModal, setShowShareModal] = useState(false);
   const [showHealthModal, setShowHealthModal] = useState(false);
+  const [showTransferModal, setShowTransferModal] = useState(false);
+  const [transferCode, setTransferCode] = useState('');
+  const [transferCopied, setTransferCopied] = useState(false);
+
+  const handleOpenTransfer = () => {
+    if (!passport) return;
+    const code = generatePassportTransfer(passport.id);
+    setTransferCode(code);
+    setShowTransferModal(true);
+  };
 
   // Add Manual Timeline Event Modal
   const [showAddEventModal, setShowAddEventModal] = useState(false);
@@ -301,9 +313,18 @@ export default function PassportDetailClient({ id }: { id: string }) {
           <div className="grid lg:grid-cols-[1.25fr_1fr] gap-6 items-center">
             {/* Left: Car Title, Specs & Market Value */}
             <div className="space-y-4">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-extrabold uppercase tracking-wide">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600" />
-                Profilo Digitale Auto · {passport.shareCode}
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-xl bg-blue-50 dark:bg-blue-950/50 text-blue-700 dark:text-blue-300 text-xs font-extrabold uppercase tracking-wide">
+                  <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                  Profilo Digitale Auto · {passport.shareCode}
+                </div>
+                {/* AutoEsperto Trust Layer Badge */}
+                <div className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-xl text-xs font-black uppercase tracking-wider border ${
+                  getTrustBadgeForPassport(passport).colorClass
+                }`}>
+                  <ShieldCheck className="w-3.5 h-3.5" />
+                  {getTrustBadgeForPassport(passport).label}
+                </div>
               </div>
 
               <div>
@@ -440,7 +461,14 @@ export default function PassportDetailClient({ id }: { id: string }) {
               onClick={() => setShowDocModal(true)}
               className="py-2.5 px-4 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs flex items-center gap-2 transition-colors"
             >
-              <FileText className="w-4 h-4" /> Carica Documento / Tagliando
+              <FileText className="w-4 h-4" /> Carica Tagliando / Doc
+            </button>
+
+            <button
+              onClick={handleOpenTransfer}
+              className="py-2.5 px-4 rounded-xl bg-indigo-50 dark:bg-indigo-950/40 text-indigo-800 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 font-bold text-xs flex items-center gap-2 transition-colors"
+            >
+              <ArrowLeftRight className="w-4 h-4 text-indigo-600" /> Trasferisci a Nuovo Acquirente
             </button>
 
             <button
@@ -1101,6 +1129,71 @@ export default function PassportDetailClient({ id }: { id: string }) {
                 Salva evento
               </button>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* ─── TRANSFER MODAL ─── */}
+      {showTransferModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4 animate-scale-in">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2">
+                <div className="w-9 h-9 rounded-xl bg-indigo-100 dark:bg-indigo-950 text-indigo-700 dark:text-indigo-300 grid place-items-center">
+                  <ArrowLeftRight className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">Trasferisci Passport</h3>
+                  <span className="text-[10px] text-slate-500 block">Passaggio di proprietà digitale</span>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowTransferModal(false)}
+                className="p-1 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
+              Stai vendendo la tua <strong>{v.make} {v.model}</strong>? Comunica questo codice al nuovo proprietario per trasferirgli lo storico dei tagliandi, la documentazione e l&apos;identità digitale dell&apos;auto.
+            </p>
+
+            <div className="p-4 rounded-2xl bg-indigo-50 dark:bg-indigo-950/50 border border-indigo-200 dark:border-indigo-800 text-center space-y-2">
+              <span className="text-[10px] uppercase font-black tracking-wider text-indigo-600 dark:text-indigo-400 block">
+                Codice Univoco di Trasferimento
+              </span>
+              <div className="text-2xl font-black font-mono tracking-widest text-indigo-950 dark:text-white select-all">
+                {transferCode}
+              </div>
+              <button
+                type="button"
+                onClick={() => {
+                  if (typeof window !== 'undefined') {
+                    navigator.clipboard.writeText(transferCode);
+                    setTransferCopied(true);
+                    setTimeout(() => setTransferCopied(false), 2500);
+                  }
+                }}
+                className="px-4 py-2 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-bold inline-flex items-center gap-1.5 shadow-xs transition-all"
+              >
+                {transferCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                {transferCopied ? 'Codice Copiato!' : 'Copia Codice'}
+              </button>
+            </div>
+
+            <div className="text-[11px] text-slate-500 dark:text-slate-400 space-y-1 bg-slate-50 dark:bg-slate-800/60 p-3 rounded-xl border border-slate-100 dark:border-slate-700">
+              <p>• Il nuovo acquirente potrà riscattare il profilo inserendo questo codice su <strong>autoesperto.it/passport</strong>.</p>
+              <p>• Nessun dato personale (tuo nome, indirizzo o telefono) viene condiviso.</p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setShowTransferModal(false)}
+              className="w-full py-2.5 rounded-xl bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 text-slate-800 dark:text-slate-200 font-bold text-xs"
+            >
+              Chiudi
+            </button>
           </div>
         </div>
       )}

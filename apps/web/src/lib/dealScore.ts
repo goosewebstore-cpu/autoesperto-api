@@ -17,6 +17,10 @@ export interface DealScoreResult {
   cheaperThanPercent: number;
   comparablesCount: number;
   confidence: 'alta' | 'media' | 'bassa';
+  recommendedOfferPrice: number;
+  maxAcceptablePrice: number;
+  negotiationMargin: number;
+  negotiatorMessage: string;
   explanation: string;
 }
 
@@ -42,6 +46,10 @@ export function computeDealScore(
       cheaperThanPercent: 50,
       comparablesCount: comparables,
       confidence: 'bassa',
+      recommendedOfferPrice: askingPrice || estimatedMarketAvg || 0,
+      maxAcceptablePrice: askingPrice || estimatedMarketAvg || 0,
+      negotiationMargin: 0,
+      negotiatorMessage: `Buongiorno, ho visionato l'annuncio e vorrei avere maggiori informazioni su manutenzione e disponibilità per visionarla. Grazie.`,
       explanation: 'Campione di annunci comparabili non sufficiente per una valutazione statistica certificata.',
     };
   }
@@ -64,6 +72,15 @@ export function computeDealScore(
   let labelText = 'PREZZO CORRETTO';
   let badgeTone: DealScoreResult['badgeTone'] = 'slate';
   let explanation = `Il prezzo richiesto è perfettamente in linea con la media degli annunci comparabili (€${estimatedMarketAvg.toLocaleString('it-IT')}).`;
+
+  // Recommended offer price and negotiation calculation
+  const recommendedOfferPrice = Math.round((Math.min(askingPrice, estimatedMarketAvg * 0.95)) / 100) * 100;
+  const maxAcceptablePrice = Math.round((Math.min(askingPrice * 1.02, estimatedMarketAvg * 1.03)) / 100) * 100;
+  const negotiationMargin = Math.max(0, askingPrice - recommendedOfferPrice);
+
+  const negotiatorMessage = `Buongiorno, sono molto interessato alla vettura e ho verificato le quotazioni del valore reale di mercato su AutoEsperto (media di riferimento €${estimatedMarketAvg.toLocaleString('it-IT')}).
+Considerando lo stato del mercato e gli eventuali controlli pre-acquisto, vorrei proporle un'offerta di acquisto a €${recommendedOfferPrice.toLocaleString('it-IT')}, con passaggio di proprietà e pagamento immediato se il veicolo rispecchia la descrizione.
+Resto a disposizione per concordare una visione. Cordiali saluti.`;
 
   if (diffPct <= -10) {
     label = 'OTTIMO_AFFARE';
@@ -106,6 +123,10 @@ export function computeDealScore(
     cheaperThanPercent: cheaperThan,
     comparablesCount: comparables,
     confidence,
+    recommendedOfferPrice,
+    maxAcceptablePrice,
+    negotiationMargin,
+    negotiatorMessage,
     explanation,
   };
 }

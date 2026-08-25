@@ -112,25 +112,14 @@ export default async function ModelValutazionePage({ params }: PageProps) {
     ],
   };
   const price = initialReport?.price;
-  const displayedPrice = price ? (price.market?.priceAvg ?? price.estimatedValue) : undefined;
   const carSchema = {
     '@context': 'https://schema.org',
     '@type': 'Car',
     name: `${make.name} ${model} usata`,
     brand: { '@type': 'Brand', name: make.name },
     model: model,
-    description: `Valutazione e prezzo di mercato della ${make.name} ${model} usata: affidabilità, punti critici e range di prezzo.`,
-    ...(displayedPrice
-      ? {
-          offers: {
-            '@type': 'Offer',
-            priceCurrency: 'EUR',
-            price: displayedPrice,
-            availability: 'https://schema.org/InStock',
-            url: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}`,
-          },
-        }
-      : {}),
+    description: `Valutazione e prezzo medio di mercato della ${make.name} ${model} usata: affidabilità, difetti noti e quotazioni aggiornate dagli annunci reali.`,
+    mainEntityOfPage: `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}`,
   };
 
   return (

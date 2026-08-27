@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "node scripts/generate-sitemaps.mjs && next build && node scripts/ping-indexnow.mjs",
+    "build": "node scripts/generate-sitemaps.mjs && next build",
+    "indexnow": "node scripts/ping-indexnow.mjs",
     "start": "next start",
     "lint": "tsc --noEmit"
   },

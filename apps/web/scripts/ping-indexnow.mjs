@@ -56,6 +56,7 @@ try {
       'Content-Type': 'application/json; charset=utf-8',
     },
     body: JSON.stringify(payload),
+    signal: AbortSignal.timeout(3000),
   });
 
   if (response.ok || response.status === 200 || response.status === 202) {

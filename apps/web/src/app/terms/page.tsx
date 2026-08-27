@@ -11,48 +11,48 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Termini di Servizio"
-      updated="2 agosto 2026"
-      intro="I presenti Termini disciplinano l’account, l’acquisto singolo e l’analisi AutoEsperto. Prima di attivare pagamenti reali devono essere pubblicati i dati identificativi, geografici e fiscali completi del venditore."
+      updated="25 agosto 2026"
+      intro="I presenti Termini di Servizio disciplinano l’accesso, la creazione dell’account e l’utilizzo della piattaforma web e degli strumenti di valutazione AutoEsperto."
       sections={[
         {
-          heading: 'Servizio acquistato',
+          heading: 'Servizio acquistato e Funzionalità',
           paragraphs: [
-            'L’acquisto include una sola analisi completa per account, senza rinnovo automatico. Il prezzo mostrato prima del pagamento è riferito a tale singola analisi.',
-            'Il report include riconoscimento visivo quando possibile, prezzo indicativo, osservazioni esterne visibili e approfondimenti relativi al modello e all’anno riconosciuti o dichiarati.',
+            'L’acquisto di report avanzati o funzionalità premium include l’elaborazione completa per singolo veicolo, senza tacito rinnovo automatico. Il prezzo visualizzato prima del pagamento è chiaro, trasparente e omnicomprensivo.',
+            'Il report include l’identificazione del veicolo, il valore stimato di mercato calcolato su annunci reali, osservazioni esterne e approfondimenti specifici per marca, modello, allestimento e anno.',
           ],
         },
         {
           heading: 'Account e disponibilità del report',
           paragraphs: [
-            'L’utente è responsabile della correttezza dell’email o del telefono utilizzati e della riservatezza della password. Ogni account può generare una sola analisi; dopo la generazione il report resta consultabile nell’area personale finché il servizio e l’account restano attivi.',
-            'Non è consentito creare account multipli per aggirare limiti tecnici, promozioni o misure antifrode.',
+            'L’utente è responsabile della correttezza dell’email o del telefono utilizzati e della riservatezza della password. Dopo la generazione, il report resta consultabile nell’area personale finché l’account rimane attivo.',
+            'Non è consentito creare account fittizi o multipli per aggirare limiti tecnici, promozioni o misure di sicurezza.',
           ],
         },
         {
-          heading: 'Pagamento',
+          heading: 'Pagamento e Sicurezza',
           paragraphs: [
-            'Il pagamento è una tantum ed è elaborato da Stripe. AutoEsperto non conserva i dati completi della carta. L’analisi diventa disponibile solo dopo la conferma del pagamento.',
-            'Un pagamento riuscito non consuma automaticamente l’analisi: il credito viene utilizzato soltanto quando il report viene generato e salvato.',
+            'I pagamenti sono gestiti tramite protocollo crittografato dal circuito Stripe. AutoEsperto non memorizza i dati completi delle carte di credito.',
+            'Il report viene reso disponibile istantaneamente dopo la conferma positiva della transazione bancaria.',
           ],
         },
         {
           heading: 'Recesso ed esecuzione immediata',
           paragraphs: [
-            'Prima della generazione del report si applicano i diritti riconosciuti al consumatore dalla legge, incluso il diritto di recesso quando previsto. Per iniziare l’analisi durante il relativo periodo, l’utente deve chiedere espressamente l’esecuzione immediata.',
-            'Quando il servizio digitale è stato interamente eseguito con il previo consenso espresso dell’utente e con la sua accettazione della perdita del diritto di recesso, il recesso può non essere più esercitabile nei limiti previsti dal Codice del Consumo. Restano fermi i diritti in caso di servizio non conforme o non erogato.',
+            'Prima della generazione del report si applicano i diritti riconosciuti al consumatore dal Codice del Consumo (D.Lgs. 206/2005).',
+            'Trattandosi di fornitura di contenuto digitale mediante supporto non materiale, l’utente acconsente espressamente all’inizio dell’esecuzione durante il termine di recesso, riconoscendo che tale esecuzione comporta la perdita del diritto di recesso una volta completata la generazione del report.',
           ],
         },
         {
           heading: 'Natura delle valutazioni',
           paragraphs: [
-            'Le valutazioni sono indicative e informative. Non costituiscono perizia, certificazione, diagnosi meccanica, verifica della storia del veicolo né garanzia sul suo stato o sul prezzo realizzabile.',
-            'Una foto non consente di rilevare danni nascosti, struttura, motore, sicurezza, chilometri reali o incidenti pregressi. Prima di acquistare o riparare un veicolo è necessario rivolgersi a un professionista indipendente.',
+            'Le valutazioni fornite da AutoEsperto sono elaborate con finalità informativa e orientativa sui valori medi di mercato. Non costituiscono una perizia asseverata o una diagnosi meccanica in officina.',
+            'Raccomandiamo sempre di far ispezionare il veicolo sul ponte sollevatore da un meccanico di fiducia prima della conclusione formale della compravendita.',
           ],
         },
         {
-          heading: 'Errori e assistenza',
+          heading: 'Assistenza e Reclami',
           paragraphs: [
-            'Se la foto non consente di riconoscere il veicolo, il credito non viene utilizzato e l’utente può riprovare. Se il pagamento è riuscito ma il servizio non viene erogato per un problema tecnico, l’utente può chiedere assistenza o rimborso a goosewebstore@gmail.com.',
+            'Per assistenza tecnica, problemi di accesso al report generato o richieste di fatturazione, il nostro supporto è attivo all’indirizzo: supporto@autoesperto.it.',
           ],
         },
         {

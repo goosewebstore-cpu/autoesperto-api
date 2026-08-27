@@ -47,7 +47,7 @@ export default function AccountDashboard() {
   const [error, setError] = useState('');
   const [resend, setResend] = useState(false);
 
-  const isOwner = user?.email?.toLowerCase() === 'goosewebstore@gmail.com';
+  const isOwner = user?.email?.toLowerCase() === 'goosewebstore@gmail.com' || Boolean(user?.email?.toLowerCase().endsWith('@autoesperto.it'));
   const activeAnalysis = analyses.find((a) => a.id === activeId) || analyses[0] || null;
 
   useEffect(() => {

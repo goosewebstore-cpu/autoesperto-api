@@ -7,6 +7,7 @@ import {
   acceptAll,
   refuseAll,
   setConsentPreferences,
+  updateGtagConsent,
   type ConsentPreferences,
 } from '@/lib/consent';
 import Link from 'next/link';
@@ -53,6 +54,7 @@ export default function CookieConsent() {
     const stored = getConsentPreferences();
     if (stored) {
       setPrefs({ analytics: stored.analytics, marketing: stored.marketing });
+      updateGtagConsent({ analytics: stored.analytics, marketing: stored.marketing });
       setView('closed');
     } else {
       setView('banner');

@@ -11,44 +11,40 @@ export default function CookiePolicyPage() {
   return (
     <LegalPage
       title="Cookie Policy"
-      updated="2 agosto 2026"
-      intro="AutoEsperto separa gli strumenti necessari al servizio da quelli pubblicitari. Le funzioni essenziali restano disponibili anche rifiutando i cookie non necessari."
+      updated="25 agosto 2026"
+      intro="AutoEsperto rispetta la tua privacy e garantisce il controllo completo sui cookie e sulle tecnologie di tracciamento, in conformità alle Linee Guida del Garante Privacy del 10 giugno 2021 e al GDPR."
       sections={[
         {
-          heading: 'Strumenti necessari',
+          heading: 'Cookie Tecnici Necessari',
           paragraphs: [
-            'Il sito usa memoria locale o tecnologie equivalenti per mantenere la sessione dell’account e ricordare la scelta sui cookie. Sono strumenti necessari per autenticazione, sicurezza e preferenze e non vengono usati per pubblicità comportamentale.',
+            'Il sito utilizza cookie tecnici e memoria locale (localStorage) strettamente necessari per il funzionamento della piattaforma: gestione della sessione di autenticazione, sicurezza informatica e memorizzazione delle tue preferenze di consenso.',
+            'Questi strumenti sono sempre attivi e non richiedono il tuo consenso preventivo in quanto indispensabili per erogare i servizi richiesti.',
           ],
         },
         {
-          heading: 'Statistiche',
+          heading: 'Cookie Analitici e Prestazionali',
           paragraphs: [
-            'Vercel Web Analytics può raccogliere dati tecnici aggregati sulle pagine visitate e sul dispositivo. Non inviamo ad Analytics fotografie, credenziali, dati di pagamento o contenuto dei report.',
+            'Utilizziamo strumenti di misurazione statistica aggregata e anonimizzata per comprendere l’utilizzo del sito e migliorare costantemente l’esperienza utente. Nessun dato identificativo o contenuto riservato dei report viene trasferito a sistemi terzi non autorizzati.',
           ],
         },
         {
-          heading: 'Google AdSense',
+          heading: 'Google AdSense e Pubblicità Programmata',
           paragraphs: [
-            'Gli annunci AdSense sono predisposti ma restano tecnicamente disattivati finché non sono configurati un account approvato, identificativi reali delle unità pubblicitarie e una piattaforma di gestione del consenso certificata da Google per SEE, Regno Unito e Svizzera.',
-            'Quando attivo e autorizzato, Google e i suoi partner possono usare cookie o identificatori per erogare, misurare e, se consentito, personalizzare gli annunci. AdSense viene previsto soltanto sulle pagine pubbliche, non nell’area personale o nel report acquistato.',
+            'Sulle pagine informative e sulle guide pubbliche di AutoEsperto possono essere ospitati annunci pubblicitari erogati tramite la rete Google AdSense.',
+            'Google e i suoi partner pubblicitari utilizzano cookie e identificatori pubblicitari per mostrare annunci pertinenti, prevenire frodi pubblicitarie e misurare il rendimento delle campagne.',
+            'Grazie all’integrazione di Google Consent Mode v2, i cookie di profilazione pubblicitaria restano disabilitati di default e vengono attivati solo in seguito a un tuo esplicito consenso nella categoria “Marketing”.',
           ],
         },
         {
-          heading: 'Scelta e revoca',
+          heading: 'Gestione e Revoca del Consenso',
           paragraphs: [
-            'Al primo accesso è possibile accettare oppure rifiutare gli strumenti non necessari. Chiudere il banner mantiene l’impostazione “solo necessari”.',
-            'La scelta può essere modificata in ogni momento tramite il pulsante “Cookie” visibile nel sito. La revoca non pregiudica la liceità dei trattamenti già effettuati e non impedisce l’uso delle funzioni essenziali.',
+            'Al primo accesso al sito puoi accettare tutti i cookie, rifiutare quelli facoltativi oppure selezionare in dettaglio le tue preferenze.',
+            'Puoi modificare o revocare la tua scelta in qualsiasi momento cliccando sul pulsante circolare “Cookie” presente in basso a sinistra su ogni pagina del sito. La revoca non pregiudica la liceità dei trattamenti effettuati prima del ritiro del consenso.',
           ],
         },
         {
-          heading: 'Terze parti',
-          paragraphs: [
-            'Le informazioni aggiornate sulle tecnologie pubblicitarie di Google sono disponibili nelle Norme sulla privacy e nelle Impostazioni annunci di Google. La CMP attivata sul sito mostrerà l’elenco aggiornato dei fornitori e delle finalità selezionabili.',
-          ],
-        },
-        {
-          heading: 'Contatti',
-          paragraphs: ['Per richieste relative a cookie e privacy: goosewebstore@gmail.com.'],
+          heading: 'Contatti per la Privacy',
+          paragraphs: ['Per domande o chiarimenti relativi all’uso dei cookie su AutoEsperto: privacy@autoesperto.it.'],
         },
       ]}
     />

@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck, Compass, Bot, Bookmark } from 'lucide-react';
+import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck, Compass, Bot, Bookmark, BookOpen } from 'lucide-react';
 import { clearAuthToken, getAuthToken } from '@/lib/auth';
 
 const TOOLS = [
@@ -21,7 +21,8 @@ const TOOLS = [
     { label: 'Valutazione per modello', desc: 'Prezzi reali per marca e modello', href: '/valutazione', icon: Gauge },
     { label: 'Auto per neopatentati', desc: 'Limiti kW e migliori usate 2026', href: '/neopatentati', icon: Car },
   ]},
-  { group: 'Manutenzione & Normative 2026', items: [
+  { group: 'Guide, Manutenzione & Normative', items: [
+    { label: 'Tutte le 110+ Guide', desc: 'Consigli esperti, controlli pre-acquisto e mercato', href: '/guide', icon: BookOpen },
     { label: 'Affidabilità e guasti', desc: 'Problemi noti modello per modello', href: '/affidabilita', icon: Hammer },
     { label: 'Guida problemi motori', desc: 'Difetti noti e costi di ripristino', href: '/motori-problemi', icon: Wrench },
     { label: 'Incentivi & Ecobonus', desc: 'Calcolo bonus rottamazione 2026', href: '/incentivi-auto', icon: Zap },
@@ -34,6 +35,7 @@ const NAV_LINKS = [
   { label: 'Auto Finder', href: '/auto-finder' },
   { label: 'Confronta', href: '/confronta' },
   { label: 'Controlla annuncio', href: '/analizza-annuncio' },
+  { label: 'Guide & Consigli', href: '/guide' },
   { label: 'Buying Room', href: '/buying-room' },
   { label: 'Profilo Digitale', href: '/passport' },
 ];
@@ -83,7 +85,8 @@ export default function SiteHeader() {
     <header className="site-header" ref={headerRef}>
       <div className="site-header-inner">
         <Link href="/" className="site-logo" aria-label="AutoEsperto — torna alla home">
-          <span className="site-logo-icon"><Car className="h-4 w-4 text-white" /></span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src="/logo.png" alt="AutoEsperto Logo" className="h-8 w-8 rounded-full shadow-sm shrink-0 object-contain" width={32} height={32} />
           <span className="site-logo-text">Auto<span>Esperto</span></span>
         </Link>
 

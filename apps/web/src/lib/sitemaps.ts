@@ -82,8 +82,8 @@ export function buildSitemap(name: string): UrlEntry[] {
     case 'guides':
       return guides.map((guide) => ({
         url: `${siteUrl}/guide/${guide.slug}`,
-        changeFrequency: 'monthly',
-        priority: 0.7,
+        changeFrequency: 'weekly',
+        priority: 0.85,
         lastmod: guide.published,
       }));
     case 'makes':

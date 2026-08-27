@@ -26,6 +26,680 @@ export interface Guide {
 
 export const guides: Guide[] = [
   {
+    slug: 'straccia-bollo-sicilia-2026-chi-puo-farlo-norme',
+    title: 'Straccia Bollo Sicilia 2026: come cancellare sanzioni e interessi sulle vecchie pendenze',
+    description:
+      'Guida completa allo Straccia Bollo della Regione Siciliana: chi puÃ² regolarizzare i bolli auto non pagati fino al 31 dicembre 2025 senza sanzioni nÃ© interessi, le scadenze del 31 ottobre 2026 e come verificare la propria auto con AutoEsperto.',
+    published: '2026-08-27',
+    category: 'valutazione',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Cos\'Ã¨ lo Straccia Bollo Sicilia 2026 e cosa prevede la nuova legge regionale',
+        paragraphs: [
+          'La Regione Siciliana ha approvato e pubblicato il provvedimento straordinario denominato "Straccia Bollo", una misura di agevolazione fiscale pensata per permettere a migliaia di automobilisti e motociclisti residenti in Sicilia di regolarizzare i pagamenti arretrati della tassa automobilistica senza applicazione di sanzioni amministrative e interessi di mora.',
+          'La norma consente un risparmio compreso tra il 30% e il 45% rispetto all\'importo originariamente contestato dalle cartelle o dagli avvisi di accertamento della Regione.',
+        ],
+      },
+      {
+        heading: '1. Chi puÃ² beneficiarne e quali annualitÃ  sono coperte',
+        paragraphs: [
+          'L\'agevolazione riguarda tutti i proprietari di autoveicoli e motoveicoli iscritti nei registri tributari della Regione Siciliana per i periodi tributari scaduti fino al 31 dicembre 2025.',
+          'â€¢ Sono incluse le tasse automobilistiche regionali non pagate o pagate solo parzialmente.',
+          'â€¢ Il contribuente Ã¨ tenuto a versare unicamente la quota capitale della tassa originaria, vedendosi azzerare totalmente le sovrattasse per ritardato pagamento e gli interessi legali maturati negli anni.',
+          'â€¢ Il termine ultimo per presentare l\'adesione ed effettuare il versamento liberatorio Ã¨ fissato al 31 ottobre 2026, secondo le disposizioni dei decreti attuativi dell\'Assessorato all\'Economia.',
+        ],
+      },
+      {
+        heading: '2. Come effettuare il pagamento agevolato',
+        paragraphs: [
+          'Il pagamento potrÃ  essere eseguito attraverso i canali PagoPA dedicati della Regione Siciliana, gli uffici e delegazioni territoriali ACI (Automobile Club d\'Italia), le agenzie di pratiche auto telematiche (STA) e i punti Mooney/Lottomatica abilitati sul territorio.',
+          'Ãˆ consigliabile richiedere sempre la quietanza con l\'indicazione espressa della causale "Regolarizzazione Tassa Auto L.R. Sicilia - Straccia Bollo 2026" per evitare contestazioni successive.',
+        ],
+      },
+      {
+        heading: '3. Cartelle esattoriali e fermi amministrativi: cosa succede',
+        paragraphs: [
+          'Per i carichi giÃ  affidati all\'Agente della Riscossione (es. Agenzia delle Entrate - Riscossione), il pagamento della quota capitale consente la cancellazione delle procedure esecutive in corso e lo sblocco dei fermi amministrativi (le cosiddette "ganasce fiscali") iscritti sui veicoli, ripristinando la piena commerciabilitÃ  dell\'auto.',
+        ],
+      },
+      {
+        heading: '4. Prima di comprare un\'auto usata in Sicilia: il controllo dei bolli arretrati',
+        paragraphs: [
+          'Se stai valutando l\'acquisto di un\'auto usata immatricolata in Sicilia, Ã¨ fondamentale verificare che il precedente proprietario sia in regola con i bolli o abbia aderito alla sanatoria per evitare che l\'auto sia gravata da fermi amministrativi che impediscono la circolazione e il passaggio di proprietÃ .',
+          'Su AutoEsperto puoi analizzare qualsiasi vettura con il nostro sistema di verifica del valore, checklist documentale e profilo digitale pre-acquisto per acquistare in totale trasparenza e sicurezza.',
+        ],
+      },
+      {
+        heading: 'Domande frequenti sullo Straccia Bollo Sicilia',
+        paragraphs: [
+          'Ecco le risposte ai dubbi piÃ¹ comuni sulla misura agevolativa:',
+        ],
+        list: [
+          'Chi ha giÃ  pagato sanzioni in passato ha diritto a un rimborso? No, la legge non prevede rimborsi per somme giÃ  versate a titolo di sanzione o interesse prima dell\'entrata in vigore della sanatoria.',
+          'Qual Ã¨ la scadenza per aderire allo Straccia Bollo? La scadenza indicata dalla norma regionale Ã¨ il 31 ottobre 2026.',
+          'Posso vendere l\'auto se aderisco allo Straccia Bollo? SÃ¬, non appena effettuato il saldo della quota capitale e registrato lo sblocco del fermo amministrativo, l\'auto puÃ² essere venduta o radiata regolarmente.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'le-10-auto-piu-rubate-italia-2026',
+    title: 'Le 10 auto piÃ¹ rubate in Italia nel 2026: la classifica e come difendersi',
+    description:
+      'Classifica aggiornata 2026 delle 10 auto piÃ¹ rubate in Italia: dalla Fiat Panda alla Jeep Renegade, i dati ufficiali del Ministero dell\'Interno, le regioni a rischio e le tecniche di furto piÃ¹ diffuse.',
+    published: '2026-08-27',
+    category: 'affidabilita',
+    cta: 'controllare-auto-usata',
+    sections: [
+      {
+        heading: 'I numeri del fenomeno furti in Italia nel 2026',
+        paragraphs: [
+          'I dati diffusi dal Ministero dell\'Interno evidenziano oltre 120.000 furti d\'auto annui in Italia, con una media impressionante di piÃ¹ di 300 veicoli sottratti ogni giorno. Il mercato nero non risparmia nÃ© utilitarie nÃ© SUV moderni, guidato dalla fame insaziabile di componenti di ricambio a basso costo.',
+        ],
+      },
+      {
+        heading: '1. La Top 10 delle auto piÃ¹ rubate in Italia',
+        paragraphs: [
+          'Ecco la classifica dei modelli con il maggior numero di denunce registrate:',
+          '1. Fiat Panda: regina incontrastata delle vendite e purtroppo anche dei furti (oltre 21.000 denunce annue).',
+          '2. Fiat 500: bersaglio primario sia per furto intero che per la cannibalizzazione di fari e plancia.',
+          '3. Lancia Ypsilon: popolarissima tra i giovani e facilissima da smembrare per ricambi di carrozzeria.',
+          '4. Fiat Punto: ancora diffusissima nel parco circolante e ricercata per motori e cambi.',
+          '5. Jeep Renegade: il SUV compatto piÃ¹ sottratto in assoluto per mercato estero e centraline.',
+          '6. Fiat 500X: condivide telaio e componenti elettronici con la Renegade.',
+          '7. Renault Clio: tra le straniere piÃ¹ colpite, specialmente per i motori dCi e sistemi multimediali.',
+          '8. Smart Fortwo: ricercatissima nei centri metropolitani per furti lampo e pezzi carrozzeria.',
+          '9. Volkswagen Golf: da sempre nel mirino per gruppi ottici LED, cerchi in lega e volanti sportivi.',
+          '10. Nissan Qashqai: tra i crossover usati piÃ¹ richiesti per la componentistica meccanica.',
+        ],
+      },
+      {
+        heading: '2. Le regioni piÃ¹ colpite dai furti d\'auto',
+        paragraphs: [
+          'Oltre l\'80% dei furti nazionali si concentra in cinque regioni chiave: Campania, Lazio, Puglia, Sicilia e Lombardia. Nelle aree metropolitane di Napoli, Roma, Bari, Milano e Catania, il tasso di rischio per chi parcheggia su strada aperta Ã¨ quadruplo rispetto alla media nazionale.',
+        ],
+      },
+      {
+        heading: '3. Come proteggere la tua auto e cosa fare prima dell\'acquisto',
+        paragraphs: [
+          'Per difenderti: combina sempre un antifurto meccanico (bloccasterzo blindato sul piantone) con un sistema di protezione per la presa diagnostica OBD e un localizzatore GPS autoalimentato.',
+          'Se stai acquistando un\'auto usata appartenente alla Top 10, usa AutoEsperto per scansionare il veicolo, verificare la congruitÃ  del prezzo e controllare che non sia stato ricostruito con pezzi non tracciabili.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'bollo-auto-sicilia-2026-chi-paga-esenzioni',
+    title: 'Bollo auto Sicilia 2026: calcolo tariffe per kW, esenzioni ibride/elettriche e scadenze',
+    description:
+      'Guida completa al bollo auto in Sicilia nel 2026: calcolo importi in base ai kW e classe ambientale, esenzioni per auto elettriche, ibride, legge 104 e veicoli storici.',
+    published: '2026-08-27',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'Come si calcola il bollo auto in Sicilia nel 2026',
+        paragraphs: [
+          'Il bollo auto Ã¨ un tributo regionale di possesso gestito direttamente dalla Regione Siciliana. L\'importo dipende dalla potenza del veicolo espressa in kilowatt (kW, indicata alla voce P.2 della carta di circolazione o Documento Unico) e dalla classe di emissioni Euro.',
+        ],
+      },
+      {
+        heading: '1. Tabella delle tariffe per kW in Sicilia',
+        paragraphs: [
+          'â€¢ Euro 6, Euro 5 ed Euro 4: tariffa base di 2,58 â‚¬/kW fino a 53 kW; per ogni kW eccedente i 53 kW la tariffa sale a 3,87 â‚¬/kW.',
+          'â€¢ Euro 3: 2,70 â‚¬/kW fino a 53 kW, e 4,05 â‚¬/kW oltre i 53 kW.',
+          'â€¢ Euro 2: 2,80 â‚¬/kW fino a 53 kW, e 4,20 â‚¬/kW oltre i 53 kW.',
+          'â€¢ Superbollo: per le vetture con potenza superiore a 185 kW (250 CV) si applica l\'addizionale erariale di 20 â‚¬ per ogni kW eccedente, ridotta gradualmente dopo 5, 10 e 15 anni dalla costruzione.',
+        ],
+      },
+      {
+        heading: '2. Esenzioni totali e parziali previste in Sicilia',
+        paragraphs: [
+          'â€¢ Auto 100% Elettriche (BEV): esenzione totale dal pagamento del bollo per 5 anni dalla data di prima immatricolazione. Dal sesto anno in poi si beneficia di una riduzione del 75% della tariffa corrispondente.',
+          'â€¢ Auto Ibride (HEV / PHEV): esenzioni temporanee o riduzioni a seconda della data di immatricolazione e delle direttive regionali vigenti.',
+          'â€¢ Esenzione Disabili (Legge 104/92): esenzione permanente per veicoli fino a 2.000 cc benzina, 2.800 cc diesel o 150 kW elettrici destinati a persone con ridotte o impedite capacitÃ  motorie.',
+          'â€¢ Veicoli Storici ultra-trentennali (ASI): esenzione totale dal bollo di possesso; Ã¨ dovuta una tassa di circolazione forfettaria di circa 25,82 â‚¬ solo in caso di effettivo utilizzo su strada pubblica.',
+        ],
+      },
+      {
+        heading: '3. Come calcolare i costi di gestione della tua auto',
+        paragraphs: [
+          'Prima di scegliere la tua prossima auto, calcola il costo totale di possesso (TCO) su AutoEsperto: inserisci marca, modello e allestimento per conoscere subito bollo stimato, consumi reali, costi di manutenzione e svalutazione.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'diesel-benzina-ibrida-2026-quale-comprare-conviene',
+    title: 'Diesel, benzina o ibrida nel 2026? Quale conviene comprare per costi e svalutazione',
+    description:
+      'Guida alla scelta della motorizzazione nel 2026: diesel vs benzina vs full hybrid vs plug-in. Calcolo chilometrico di convenienza, costi di carburante, blocchi ambientali e valore di rivendita.',
+    published: '2026-08-27',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Il grande dilemma dell\'acquisto auto nel 2026',
+        paragraphs: [
+          'Scegliere tra diesel, benzina o ibrida oggi non Ã¨ solo una questione di gusti personali: con l\'evoluzione delle normative sulle emissioni, i blocchi del traffico nelle cittÃ  e le oscillazioni dei prezzi del carburante, la scelta sbagliata puÃ² costare migliaia di euro in svalutazione anticipata.',
+        ],
+      },
+      {
+        heading: '1. Quando conviene comprare un\'auto Diesel nel 2026',
+        paragraphs: [
+          'Il motore a gasolio resta insuperabile per chi percorre oltre 20.000 - 25.000 km all\'anno, soprattutto su tratte autostradali ed extraurbane. Un motore Diesel moderno Euro 6d consuma fino al 30% in meno rispetto a un benzina di pari potenza e garantisce un\'autonomia elevata.',
+          'Attenzione perÃ²: se usi l\'auto prevalentemente in cittÃ  o per tragitti brevi sotto i 10 km, il filtro antiparticolato (DPF/FAP) tenderÃ  a intasarsi rapidamente e il valore dell\'usato nei centri urbani sarÃ  soggetto a limitazioni.',
+        ],
+      },
+      {
+        heading: '2. Quando scegliere il Benzina o Mild Hybrid',
+        paragraphs: [
+          'Il motore benzina (o Mild Hybrid 12V/48V) Ã¨ la scelta perfetta per percorrenze annuali inferiori a 15.000 km, guida mista o prettamente urbana. I costi di acquisto iniziale e di manutenzione ordinaria sono piÃ¹ bassi rispetto al diesel, e non si hanno problemi di rigenerazione filtri o additivi AdBlue.',
+        ],
+      },
+      {
+        heading: '3. Full Hybrid (HEV): il miglior compromesso qualitÃ /prezzo',
+        paragraphs: [
+          'La tecnologia Full Hybrid (come il sistema Toyota o Renault E-Tech) si ricarica da sola durante le frenate e le decelerazioni. Nel traffico cittadino consente di viaggiare fino al 50% del tempo in modalitÃ  puramente elettrica, abbattendo drasticamente i consumi (fino a 22-25 km/l reali) e mantenendo una tenuta di valore eccezionale sul mercato dell\'usato.',
+        ],
+      },
+      {
+        heading: '4. Fai il confronto su AutoEsperto',
+        paragraphs: [
+          'Usa il tool di confronto modelli di AutoEsperto per mettere a confronto fianco a fianco due motorizzazioni: potrai confrontare consumi reali, costi di gestione a 5 anni e indice di tenuta del prezzo.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'migliori-auto-usate-10000-euro-2026',
+    title: 'Le 10 auto usate migliori da comprare con 10.000 â‚¬ nel 2026: affidabili e moderne',
+    description:
+      'Guida alle 10 migliori auto usate sotto i 10.000 euro nel 2026: modelli affidabili, economici da mantenere e con consumi contenuti, selezionati dall\'algoritmo di AutoEsperto.',
+    published: '2026-08-27',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Cosa si puÃ² comprare oggi con un budget di 10.000 euro',
+        paragraphs: [
+          'Con un budget di 10.000 euro nel mercato dell\'usato del 2026 Ã¨ possibile trovare ottime utilitarie e compatte di segmento B e C prodotte tra il 2015 e il 2021, con chilometraggi compresi tra 60.000 e 110.000 km, perfette per famiglie, neopatentati o pendolari.',
+        ],
+      },
+      {
+        heading: '1. Le 10 migliori scelte sotto i 10.000 â‚¬',
+        paragraphs: [
+          '1. Fiat Panda 1.2 Fire / 1.0 Hybrid (2017-2021): la regina dell\'usato italiano, ricambi ovunque a costi irrisori e meccanica indistruttibile.',
+          '2. Renault Clio 0.9 TCe / 1.5 dCi (2016-2019): design accattivante, interni confortevoli e motore diesel campione di consumi (23 km/l).',
+          '3. Toyota Yaris 1.5 Hybrid (2015-2018): affidabilitÃ  giapponese senza eguali, cambio automatico e consumi record in cittÃ .',
+          '4. Volkswagen Polo 1.0 TSI / 1.4 TDI (2015-2018): qualitÃ  costruttiva tedesca, insonorizzazione eccellente e grande tenuta del valore.',
+          '5. Ford Fiesta 1.1 / 1.0 EcoBoost (2017-2020): dinamica di guida eccellente, ottima dotazione tecnologica di sicurezza.',
+          '6. Dacia Sandero Stepway (2018-2021): assetto rialzato, spazio generoso per i bagagli e grande robustezza per strade sconnesse.',
+          '7. Peugeot 208 PureTech / BlueHDi (2016-2019): stile moderno, i-Cockpit futuristico e ottima guidabilitÃ .',
+          '8. Hyundai i20 (2016-2019): affidabilitÃ  comprovata, garanzia di fabbrica estesa e costi di manutenzione molto bassi.',
+          '9. Fiat 500 1.2 Lounge (2016-2019): icona di stile, costi di gestione minimi e facilissima da rivendere in qualunque momento.',
+          '10. Opel Corsa 1.2 / 1.4 GPL (2016-2019): ottima abitabilitÃ , economica da rifornire con l\'impianto a gas di serie.',
+        ],
+      },
+      {
+        heading: '2. Come trovare l\'occasione perfetta senza rischi',
+        paragraphs: [
+          'Prima di versare una caparra per un\'auto da 10.000 euro, analizzala gratuitamente con lo scanner di AutoEsperto: verifica se il prezzo richiesto Ã¨ in linea con gli annunci reali di tutta Italia ed esegui i controlli della nostra checklist anti-fregature.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'auto-usate-che-perdono-piu-valore-2026',
+    title: 'Le auto usate che stanno perdendo piÃ¹ valore nel 2026: la classifica del deprezzamento',
+    description:
+      'Analisi della svalutazione auto nel 2026: quali modelli e alimentazioni perdono piÃ¹ valore sul mercato dell\'usato, perchÃ© crollano i prezzi e come sfruttare la svalutazione a proprio vantaggio.',
+    published: '2026-08-27',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'La svalutazione non Ã¨ uguale per tutti',
+        paragraphs: [
+          'Se in media un\'auto nuova perde circa il 20-25% del valore nel primo anno e il 50% dopo quattro anni, ci sono modelli che mantengono quasi intatto il proprio prezzo e altri che subiscono veri e propri crolli verticali di quotazione.',
+        ],
+      },
+      {
+        heading: '1. I segmenti e modelli con la maggiore perdita di valore nel 2026',
+        paragraphs: [
+          'â€¢ Grandi berline di rappresentanza e ammiraglie (es. Audi A6, BMW Serie 5, Mercedes Classe E): a causa di bollo elevato, manutenzioni costose e preferenza del mercato per i SUV, perdono fino al 65% del prezzo di listino dopo soli 4 anni.',
+          'â€¢ Vetture Elettriche (BEV) di prima generazione: modelli con batterie piccole, ricarica lenta o degrado chimico precoce soffrono la concorrenza delle nuove generazioni con maggiore autonomia.',
+          'â€¢ Grandi SUV a benzina o diesel di grossa cilindrata (oltre 2.500 cc): penalizzati dai costi di gestione, assicurazione e consumi elevati.',
+          'â€¢ Diesel Euro 5 nei grandi centri urbani: soggetti a blocchi della circolazione nei mesi invernali in Lombardia, Piemonte, Veneto ed Emilia-Romagna.',
+        ],
+      },
+      {
+        heading: '2. Come trasformare la svalutazione in un grande affare',
+        paragraphs: [
+          'Chi acquista un\'auto usata che ha giÃ  subito il picco di svalutazione nei primi 3-5 anni puÃ² portarsi a casa vetture di segmento premium a una frazione del costo originario, a patto di verificarne accuratamente la salute meccanica.',
+          'Usa il tool di valutazione di AutoEsperto per visualizzare la curva di deprezzamento storica e futura di qualsiasi marca e modello.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'quanto-vale-fiat-panda-usata-2026',
+    title: 'Quanto vale una Fiat Panda usata nel 2026? Quotazioni reali, allestimenti e prezzi',
+    description:
+      'Quotazioni reali per Fiat Panda usata dal 2012 al 2025: fasce di prezzo per 1.2 Benzina, 1.0 Hybrid, 1.3 Multijet e 4x4, punti critici da controllare e stima su AutoEsperto.',
+    published: '2026-08-27',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'PerchÃ© la Fiat Panda Ã¨ l\'usato con la tenuta di valore piÃ¹ alta',
+        paragraphs: [
+          'La Fiat Panda Ã¨ la vettura piÃ¹ venduta in Italia da oltre dodici anni consecutivi. Questa enorme popolaritÃ  si riflette direttamente sul mercato dell\'usato: la domanda Ã¨ sempre superiore all\'offerta, e le svalutazioni annuali sono tra le piÃ¹ basse dell\'intero panorama automotive.',
+        ],
+      },
+      {
+        heading: '1. Tabella quotazioni medie Fiat Panda usata nel 2026',
+        paragraphs: [
+          'â€¢ Fiat Panda (2012-2015): 4.000 â‚¬ â€“ 6.500 â‚¬ (motori 1.2 Fire 69cv e 1.3 MJet 75cv con oltre 120.000 km).',
+          'â€¢ Fiat Panda (2016-2019): 6.800 â‚¬ â€“ 9.500 â‚¬ (allestimenti Pop, Easy, Lounge con 60.000-100.000 km).',
+          'â€¢ Fiat Panda 1.0 FireFly Hybrid (2020-2024): 9.800 â‚¬ â€“ 13.500 â‚¬ (versioni Mild Hybrid ideali per centri urbani).',
+          'â€¢ Fiat Panda 4x4 e Cross (2014-2023): 10.500 â‚¬ â€“ 17.500 â‚¬ (trazione integrale molto ricercata in montagna, quotazioni stabilissime).',
+        ],
+      },
+      {
+        heading: '2. Cosa controllare prima di comprare una Panda usata',
+        paragraphs: [
+          'â€¢ Frizione e cambio manuale: verifica che la retromarcia entri senza grattare e che il pedale non sia eccessivamente duro.',
+          'â€¢ Servosterzo elettrico Dualdrive (tasto City): controlla che non si accenda la spia rossa dello sterzo in manovra.',
+          'â€¢ Ammortizzatori posteriori e braccetti: nei percorsi cittadini con buche possono presentare giochi o rumori metallici.',
+        ],
+      },
+      {
+        heading: '3. Calcola il valore esatto della tua Panda',
+        paragraphs: [
+          'Inserisci targa, anno e chilometri su AutoEsperto per scoprire in pochi secondi il prezzo medio reale calcolato su migliaia di annunci attualmente in vendita in Italia.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'quanto-vale-fiat-500-usata-2026-prezzi-controlli',
+    title: 'Quanto vale una Fiat 500 usata nel 2026? Prezzi reali, motorizzazioni e cosa controllare',
+    description:
+      'Guida alle quotazioni reali della Fiat 500 usata nel 2026: prezzi medi per 1.2 Fire, 1.0 Hybrid, 1.3 Multijet e Cabrio 500C, difetti noti e come evitare truffe.',
+    published: '2026-08-27',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'Il valore di un\'icona senza tempo',
+        paragraphs: [
+          'La Fiat 500 non Ã¨ solo una citycar, ma un\'icona di design che attrae acquirenti di tutte le etÃ . Sul mercato dell\'usato conserva quotazioni superiori rispetto alla media del segmento A.',
+        ],
+      },
+      {
+        heading: '1. Fasce di prezzo per anno di immatricolazione',
+        paragraphs: [
+          'â€¢ 2012-2015 (Pre-Restyling): 5.500 â‚¬ â€“ 7.500 â‚¬ per versioni Pop e Lounge 1.2 benzina.',
+          'â€¢ 2016-2019 (Restyling con fari lenticolari e Uconnect): 7.800 â‚¬ â€“ 10.800 â‚¬.',
+          'â€¢ 2020-2024 (1.0 Hybrid e allestimenti Dolcevita / Cult): 10.500 â‚¬ â€“ 14.500 â‚¬.',
+          'â€¢ Versioni 500C (Cabrio) e Abarth 595: quotazioni maggiorate dal 15% al 40% a paritÃ  di anno e condizioni.',
+        ],
+      },
+      {
+        heading: '2. I punti deboli da verificare prima dell\'acquisto',
+        paragraphs: [
+          'â€¢ Fascio cavi portellone bagagliaio: l\'apertura frequente puÃ² logorare i cavi elettrici provocando malfunzionamenti allo sbrinatore o alle luci targa.',
+          'â€¢ Quadro strumenti digitale TFT (se presente): verifica che non ci siano pixel spenti o lampeggi.',
+          'â€¢ Stato capote in tela (su 500C): ispeziona le guide di scorrimento e l\'assenza di infiltrazioni d\'acqua nel baule.',
+        ],
+      },
+      {
+        heading: '3. Verifica la quotazione su AutoEsperto',
+        paragraphs: [
+          'Controlla subito la scheda di valutazione dedicata alla Fiat 500 su AutoEsperto: confronta allestimenti, consumi reali e stima di mercato gratuita.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: '5-cose-da-controllare-prima-comprare-auto-usata',
+    title: '5 cose fondamentali da controllare prima di comprare un\'auto usata (guida anti-fregature)',
+    description:
+      'La checklist indispensabile in 5 passaggi per verificare un\'auto usata da privato o concessionario: chilometri scalati, incidenti nascosti, documentazione e test drive.',
+    published: '2026-08-27',
+    category: 'acquisto',
+    cta: 'controllare-auto-usata',
+    sections: [
+      {
+        heading: 'Comprare un\'auto usata senza brutte sorprese',
+        paragraphs: [
+          'L\'acquisto di un\'auto usata puÃ² trasformarsi in un ottimo affare o in un incubo economico se non si effettuano i controlli preventivi giusti. Ecco i 5 controlli irrinunciabili da eseguire prima di firmare o versare una caparra.',
+        ],
+      },
+      {
+        heading: '1. Verifica storica chilometri e revisioni ministeriali',
+        paragraphs: [
+          'Consulta il Portale dell\'Automobilista per verificare i chilometri registrati all\'ultima revisione periodica obbligatoria. Se l\'auto ha meno chilometri rispetto alla revisione di due anni prima, sei davanti a un\'evidente manomissione del contachilometri.',
+        ],
+      },
+      {
+        heading: '2. Ispezione visiva: fessure, verniciatura e cristalli',
+        paragraphs: [
+          'Cammina attorno all\'auto alla luce del sole. Le fessure tra cofano, parafanghi e portiere devono essere uniformi e simmetriche su entrambi i lati. Controlla le scritte sui vetri (DOT): devono riportare tutte lo stesso anno di fabbricazione; un finestrino con anno diverso indica una sostituzione per furto o incidente.',
+        ],
+      },
+      {
+        heading: '3. Controllo fluidi nel vano motore a freddo',
+        paragraphs: [
+          'Apri il cofano con motore spento e freddo: svita il tappo di rabbocco dell\'olio motore per verificare che non ci sia una schiuma color nocciola ("effetto maionese"), tipico sintomo di guarnizione di testa bruciata o trafilaggio di liquido refrigerante.',
+        ],
+      },
+      {
+        heading: '4. Usura coerente dell\'abitacolo',
+        paragraphs: [
+          'Un\'auto con soli 60.000 km dichiarati non puÃ² avere la corona del volante consumata fino alla gomma grezza, i pedali di frizione/freno lisci e il fianchetto del sedile guidatore strappato. L\'usura degli interni deve essere sempre proporzionata ai chilometri indicati.',
+        ],
+      },
+      {
+        heading: '5. Prova su strada con radio spenta e finestrini chiusi',
+        paragraphs: [
+          'Guida su asfalto irregolare per ascoltare rumori di braccetti e ammortizzatori. In rettilineo, lascia dolcemente il volante per verificare che l\'auto non tiri da un lato (convergenza o telaio storto) e premi a fondo sul pedale del freno.',
+        ],
+      },
+      {
+        heading: 'Usa lo Scanner di AutoEsperto',
+        paragraphs: [
+          'Carica le foto dell\'annuncio su AutoEsperto per ricevere un report istantaneo con identificazione modello, stima di prezzo di mercato e checklist dei punti deboli specifici per quella vettura.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'auto-usata-100000-km-conviene-comprare',
+    title: 'Auto usata con 100.000 km: conviene comprarla nel 2026? La veritÃ  su durata e manutenzione',
+    description:
+      'Ha ancora senso acquistare un\'auto usata con 100.000 km? Quali motori durano oltre 300.000 km, quali componenti sostituire e come trattare sul prezzo.',
+    published: '2026-08-27',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Il mito psicologico dei 100.000 km',
+        paragraphs: [
+          'Per molti automobilisti la soglia dei 100.000 km rappresenta ancora un confine psicologico insuperabile. Ma con la tecnologia dei motori moderni, un\'auto con 100.000 km regolarmente tagliandata ha spesso superato appena un terzo della sua vita utile.',
+        ],
+      },
+      {
+        heading: '1. I motori che superano i 300.000 km senza difficoltÃ ',
+        paragraphs: [
+          'â€¢ 1.2 Fire Benzina (Fiat): semplicitÃ  costruttiva, manutenzione minima e longevitÃ  proverbiale.',
+          'â€¢ 1.5 dCi Diesel (Renault / Dacia / Nissan / Mercedes): uno dei migliori motori diesel a 8 valvole della storia, parco nei consumi e affidabilissimo.',
+          'â€¢ 1.4 D-4D e 1.5 Hybrid (Toyota): distribuzioni a catena indistruttibili con cambio e-CVT privo di frizione tradizionale.',
+          'â€¢ 1.6 / 2.0 TDI (Gruppo Volkswagen): se tagliandati con olio di qualitÃ  ad alto potere lubrificante.',
+        ],
+      },
+      {
+        heading: '2. I componenti che richiedono manutenzione straordinaria a 100.000 km',
+        paragraphs: [
+          'A questo chilometraggio metti in conto (o verifica nelle fatture che siano giÃ  stati sostituiti):',
+          'â€¢ Cinghia di distribuzione e pompa dell\'acqua (intervallo tipico 5-6 anni o 100.000-120.000 km).',
+          'â€¢ Ammortizzatori anteriori e posteriori.',
+          'â€¢ Dischi e pastiglie freno.',
+          'â€¢ Batteria dei servizi a 12V.',
+        ],
+      },
+      {
+        heading: '3. Come usare i 100.000 km nella trattativa',
+        paragraphs: [
+          'Se il venditore non Ã¨ in grado di dimostrare la sostituzione della cinghia di distribuzione o dei freni, puoi richiedere legittimamente uno sconto di 500 â‚¬ â€“ 1.000 â‚¬ sul prezzo esposto.',
+          'Valuta l\'auto su AutoEsperto per scoprire la quotazione corretta parametrata esattamente al chilometraggio dichiarato.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'come-capire-se-auto-usata-incidentata',
+    title: 'Come capire se un\'auto usata Ã¨ stata incidentata: i 7 indizi nascosti da cercare',
+    description:
+      'Come smascherare un\'auto usata incidentata prima di comprarla: fessure disallineate, punti di saldatura non originali, date dei vetri e fari asimmetrici.',
+    published: '2026-08-27',
+    category: 'acquisto',
+    cta: 'controllare-auto-usata',
+    sections: [
+      {
+        heading: 'PerchÃ© i venditori nascondono i danni strutturali',
+        paragraphs: [
+          'Un sinistro stradale grave puÃ² compromettere la rigiditÃ  torsionale del telaio, l\'efficacia degli airbag e la sicurezza complessiva dei passeggeri. Riconoscere un veicolo riparato male evita acquisti pericolosi ed esborsi ingenti.',
+        ],
+      },
+      {
+        heading: 'I 7 indizi per scoprire un incidente nascosto',
+        paragraphs: [
+          '1. Spessori e fessure asimmetriche: confronta sempre lo spazio tra cofano e faro sinistro con quello tra cofano e faro destro.',
+          '2. Bulloni di fissaggio dei parafanghi nel vano motore: se la vernice attorno ai dadi Ã¨ scheggiata o ci sono segni di cacciaviti, il pannello Ã¨ stato smontato o sostituito.',
+          '3. Codici e numeri di serie dei cristalli: tutti i finestrini e parabrezza devono riportare la medesima numerazione e marchio del costruttore.',
+          '4. Cordoni di sigillatura sui duomi e nel vano ruota di scorta: in fabbrica il silicone Ã¨ steso da robot industriali con precisione millimetrica; cordoni irregolari indicano riparazioni artigianali post-urto.',
+          '5. Fari anteriori di colore o brillantezza differente: un faro nuovo trasparente e uno ingiallito dal sole indicano che l\'auto Ã¨ stata urtata su un solo lato.',
+          '6. Verniciatura con effetto "buccia d\'arancia" o polvere sotto trasparente.',
+          '7. Spie airbag o ABS che si spengono contemporaneamente: trucchi usati da venditori scorretti per mascherare airbag scoppiati e mai rimpiazzati.',
+        ],
+      },
+      {
+        heading: 'Proteggiti con l\'analisi AI di AutoEsperto',
+        paragraphs: [
+          'Carica le foto dell\'auto su AutoEsperto: la nostra intelligenza artificiale esamina le immagini esterne segnalando difetti, incongruenze e anomalie prima di recarti sul posto.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'diesel-euro-5-2026-posso-ancora-comprarlo-blocchi',
+    title: 'Diesel Euro 5 nel 2026: posso ancora comprarlo? Blocchi del traffico, Move-In e prezzi',
+    description:
+      'Conviene comprare un\'auto diesel Euro 5 nel 2026? Normative sui blocchi invernali in Pianura Padana e grandi cittÃ , scatola nera Move-In, crollo dei prezzi e svalutazione.',
+    published: '2026-08-27',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'La situazione dei motori Diesel Euro 5 in Italia nel 2026',
+        paragraphs: [
+          'I motori Diesel Euro 5 (immatricolati tra il 2011 e il 2015) sono tra i piÃ¹ diffusi ed efficienti mai prodotti, ma subiscono restrizioni crescenti alla circolazione nelle aree ad alta densitÃ  abitativa.',
+        ],
+      },
+      {
+        heading: '1. Dove ci sono i blocchi e dove si puÃ² circolare liberamente',
+        paragraphs: [
+          'â€¢ Grandi cittÃ  e Pianura Padana: in Lombardia, Piemonte, Veneto ed Emilia-Romagna, cosÃ¬ come nelle Zone a Traffico Limitato (Area B di Milano, Fascia Verde di Roma), i diesel Euro 5 sono soggetti a limitazioni orarie nei mesi invernali (da ottobre a marzo).',
+          'â€¢ Nel resto d\'Italia, piccoli centri e autostrade: la circolazione Ã¨ assolutamente libera e non ci sono divieti generalizzati.',
+        ],
+      },
+      {
+        heading: '2. Il dispositivo Move-In per chi percorre pochi chilometri',
+        paragraphs: [
+          'Nelle regioni del bacino padano Ã¨ possibile installare la scatola nera telematica "Move-In" (Monitoraggio Veicoli Inquinanti), che concede un tetto di chilometri annuali (es. 8.000 - 10.000 km) utilizzabili senza vincoli di orario o giorno.',
+        ],
+      },
+      {
+        heading: '3. Il crollo dei prezzi: un\'opportunitÃ  per chi vive fuori dai grandi centri',
+        paragraphs: [
+          'A causa delle restrizioni cittadine, le quotazioni dei diesel Euro 5 sono scese notevolmente: per chi vive in provincia, al Sud, nelle isole o viaggia principalmente su strade extraurbane e autostrade, rappresentano oggi il miglior rapporto qualitÃ /prezzo del mercato dell\'usato.',
+        ],
+      },
+      {
+        heading: '4. Verifica le restrizioni su AutoEsperto',
+        paragraphs: [
+          'Consulta la sezione Blocchi del Traffico su AutoEsperto per conoscere in dettaglio la classe ambientale del modello che vuoi acquistare e le deroghe attive.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'quanto-costa-mantenere-auto-2026-spese-reali',
+    title: 'Quanto costa mantenere davvero un\'auto nel 2026? La spesa annuale reale che nessuno calcola',
+    description:
+      'Calcolo dettagliato dei costi fissi e variabili per mantenere un\'utilitaria o un SUV nel 2026: bollo, assicurazione RC, carburante, tagliandi ordinari, revisione e svalutazione.',
+    published: '2026-08-27',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'Il costo reale di possesso (TCO) di un\'automobile',
+        paragraphs: [
+          'Quando si acquista un\'auto ci si concentra quasi sempre solo sul prezzo di listino o sulle rate mensili. Tuttavia, la spesa effettiva per mantenere un\'auto comprende costi fissi, costi variabili legati all\'uso e la perdita di valore nel tempo.',
+        ],
+      },
+      {
+        heading: '1. I costi fissi annuali',
+        paragraphs: [
+          'â€¢ Bollo auto regionale: varia da 150 â‚¬ a oltre 400 â‚¬ a seconda dei kW e della classe Euro.',
+          'â€¢ Assicurazione RCA + tutela legale/assistenza stradale: da 350 â‚¬ (classi di merito virtuose) fino a 1.200 â‚¬ nelle province a maggior sinistrositÃ .',
+          'â€¢ Revisione ministeriale periodica: 79,02 â‚¬ ogni due anni (circa 40 â‚¬/anno).',
+        ],
+      },
+      {
+        heading: '2. I costi variabili (calcolati su 15.000 km/anno)',
+        paragraphs: [
+          'â€¢ Carburante: circa 1.300 â‚¬ â€“ 1.800 â‚¬ all\'anno a seconda dei consumi medi del modello (15-20 km/litro).',
+          'â€¢ Tagliando ordinario (olio, filtri, candele/candelette): 180 â‚¬ â€“ 350 â‚¬ annui.',
+          'â€¢ Cambio treno gomme: 350 â‚¬ â€“ 600 â‚¬ ogni 40.000 km (circa 150 â‚¬/anno).',
+        ],
+      },
+      {
+        heading: '3. Il costo nascosto piÃ¹ grande: la svalutazione',
+        paragraphs: [
+          'La svalutazione erode tra il 10% e il 20% del valore residuo del veicolo ogni anno. Nel complesso, mantenere un\'utilitaria usata costa tra 2.800 â‚¬ e 3.600 â‚¬ all\'anno; un SUV compatto moderno supera facilmente i 4.800 â‚¬ annui.',
+        ],
+      },
+      {
+        heading: '4. Tieni traccia dei costi con il Profilo Digitale AutoEsperto',
+        paragraphs: [
+          'Registra la tua auto sul Passaporto Digitale di AutoEsperto per memorizzare tagliandi, scadenze bollo/revisione e monitorare l\'andamento del valore di mercato nel tempo.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: '10-auto-piu-affidabili-usate-2026',
+    title: 'Le 10 auto piÃ¹ affidabili da comprare usate nel 2026: classifica e motori indistruttibili',
+    description:
+      'Classifica delle 10 auto usate piÃ¹ affidabili in Italia nel 2026: indici di guasto minimi, motori a catena indistruttibili e bassi costi di ricambi, basata su dati reali di officina.',
+    published: '2026-08-27',
+    category: 'affidabilita',
+    cta: 'auto-affidabili-2026',
+    sections: [
+      {
+        heading: 'Come si misura l\'affidabilitÃ  reale di un\'auto usata',
+        paragraphs: [
+          'Un\'auto affidabile non Ã¨ solo un\'auto che non si ferma mai per strada, ma un veicolo con impianto elettrico solido, assenza di difetti congeniti al motore o al cambio e componenti di usura a prezzi accessibili.',
+        ],
+      },
+      {
+        heading: '1. La classifica delle 10 auto usate piÃ¹ affidabili nel 2026',
+        paragraphs: [
+          '1. Toyota Yaris (Hybrid 1.5): al vertice di tutte le classifiche mondiali di affidabilitÃ ; zero cinghie di servizio, freni che durano il doppio grazie alla frenata rigenerativa.',
+          '2. Honda Jazz (1.3 / 1.5 i-VTEC): motori a benzina aspirati con catena di distribuzione indistruttibile e spazio record.',
+          '3. Fiat Panda (1.2 Fire 69cv): motore leggendario privo di interferenza valvole/pistoni, manutenzione eseguibile da qualsiasi meccanico con pezzi reperibili ovunque.',
+          '4. Suzuki Swift (1.2 Dualjet): proverbiale robustezza meccanica giapponese con impianto ibrido leggero ed efficiente.',
+          '5. Mazda 2 (1.5 Skyactiv-G): motori a 4 cilindri aspirati senza turbo, con compressione elevata e consumi contenuti.',
+          '6. Volkswagen Golf 7 (1.4 TSI / 1.6 TDI post-2015): qualitÃ  costruttiva impeccabile e problemi di gioventÃ¹ dei TSI completamente risolti con cinghia dentata.',
+          '7. Hyundai i10 / Kia Picanto (1.0 / 1.2 MPI): tecnologia collaudata, distribuzione solida e garanzie di fabbrica fino a 7 anni.',
+          '8. Dacia Duster (1.5 dCi): telaio robusto da fuoristrada leggero e motore Renault ultra-collaudato.',
+          '9. Renault Clio 4 (1.5 dCi 8V): assenza di AdBlue nei modelli precedenti, frizione longeva e consumi ridotti.',
+          '10. BMW Serie 3 F30 (2.0d motore B47 post-2015): la versione che ha risolto definitivamente i problemi di catena del vecchio N47.',
+        ],
+      },
+      {
+        heading: '2. Confronta l\'affidabilitÃ  su AutoEsperto',
+        paragraphs: [
+          'Prima di scegliere la tua prossima auto, consulta la sezione AffidabilitÃ  e Guasti su AutoEsperto: scopri i punti deboli noti, i richiami ufficiali e le opinioni degli esperti per oltre 4.000 modelli.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'fiat-panda-500-rubate-sicilia-come-proteggersi',
+    title: 'Fiat Panda e Fiat 500 rubate in Sicilia: perché sono nel mirino e come proteggere la tua auto',
+    description:
+      'Fiat Panda e Fiat 500 guidano la classifica dei furti d\'auto in Sicilia e in Italia: il business dei ricambi rubati, le tecniche usate dai ladri e le 6 difese pratiche per proteggere la tua auto.',
+    published: '2026-08-27',
+    category: 'manutenzione',
+    cta: 'controllare-auto-usata',
+    sections: [
+      {
+        heading: 'L\'allarme furti in Sicilia: perché Panda e 500 sono le più colpite',
+        paragraphs: [
+          'Secondo i dati del Ministero dell\'Interno e i report delle principali compagnie assicurative per il 2026, la Fiat Panda e la Fiat 500 si confermano stabilmente in cima alla classifica delle auto più rubate in Italia, con oltre 100.000 denunce complessive registrate sul territorio nazionale.',
+          'In Sicilia il fenomeno ha raggiunto livelli di allerta particolarmente critici: le province di Catania, Palermo e Siracusa registrano uno dei tassi di furto per veicolo circolante più alti d\'Europa. Tra i modelli sottratti, quasi una vettura su tre appartiene al marchio Fiat (Panda, 500, Punto e Lancia Ypsilon).',
+          'Ma cosa rende queste due utilitarie un bersaglio così costante per la criminalità organizzata e i ladri d\'auto specializzati?',
+        ],
+      },
+      {
+        heading: '1. Il business della "cannibalizzazione" e la richiesta di ricambi usati',
+        paragraphs: [
+          'A differenza delle supercar o dei SUV di lusso (spesso rubati su commissione per essere reimmatricolati e spediti nei mercati esteri), le utilitarie come la Fiat Panda e la Fiat 500 vengono sottratte principalmente per alimentare il fiorente mercato nero dei ricambi usati.',
+          'La popolarità immensa di questi modelli in Italia — con milioni di esemplari circolanti — genera una richiesta quotidiana elevatissima di componenti di carrozzeria e meccanica per riparazioni a basso costo:',
+          '• Gruppi ottici e fari LED: facili da asportare in pochi secondi e rivendibili a cifre comprese tra 200 e 500 euro a pezzo.',
+          '• Paraurti anteriori, calandre e cofani motore: i pezzi più danneggiati nei piccoli urti cittadini, cercati costantemente da carrozzieri compiacenti o privati su marketplace online.',
+          '• Volanti multifunzione e moduli airbag: componenti ad alto valore commerciale, asportabili senza nemmeno dover trainare via l\'automobile.',
+          '• Sistemi di infotainment (Uconnect e touchscreen): facilmente smontabili dalla plancia centrale.',
+          '• Catalizzatori e sonde lambda: ricercati per il recupero di metalli nobili e rari (platino, palladio e rodio).',
+        ],
+      },
+      {
+        heading: '2. Come agiscono i ladri: dalle squadre veloci alla riprogrammazione OBD',
+        paragraphs: [
+          'Le tecniche utilizzate per sottrarre o smontare una Fiat Panda o 500 sono diventate estremamente rapide e standardizzate:',
+          '1. Lo smontaggio sul posto (Stripping express): squadre di due o tre persone agiscono in orario notturno in strade secondarie o parcheggi poco illuminati. In meno di 3-5 minuti smontano l\'intero avantreno o gli interni, lasciando la scocca sui mattoni senza far scattare sirene.',
+          '2. Il furto elettronico via presa OBD-II: forzando la serratura o rompendo un deflettore, il malintenzionato si collega alla presa diagnostica di bordo (OBD-II) con un dispositivo di clonazione per programmare una chiave vergine in meno di 40 secondi, neutralizzando l\'immobilizer di serie.',
+          '3. Relay Attack su versioni Keyless: per i modelli più recenti dotati di apertura e avviamento senza chiave (Keyless Go), amplificatori di segnale a radiofrequenza captano il codice della chiave custodita all\'interno dell\'abitazione del proprietario, sbloccando l\'auto senza scasso.',
+        ],
+      },
+      {
+        heading: '3. Tassi di ritrovamento in calo: la corsa contro il tempo',
+        paragraphs: [
+          'La percentuale di ritrovamento dei veicoli rubati in Sicilia è scesa sotto il 32%. Il motivo è la rapidità con cui opera la filiera clandestina: un\'auto rubata a Palermo o Catania viene spesso trasferita entro 2-4 ore in capannoni isolati (i cosiddetti "mattatoi delle auto") dove viene completamente smembrata in singoli pezzi non tracciabili.',
+          'Una volta cancellati i numeri di serie o separati telaio e motore, il recupero da parte delle forze dell\'ordine diventa quasi impossibile.',
+        ],
+      },
+      {
+        heading: '4. Come proteggere efficacemente la tua Fiat Panda o 500: 6 difese pratiche',
+        paragraphs: [
+          'Nessun sistema rende un veicolo inespugnabile al 100%, ma l\'obiettivo di una buona difesa è moltiplicare il tempo e il rumore necessari per portare a termine il furto, spingendo il ladro a desistere e a cercare un bersaglio più facile:',
+          '1. Installa un antifurto meccanico blindato sul piantone dello sterzo (es. Block Shaft o Defender): è il deterrente visivo e fisico più temuto, poiché richiede flessibili o attrezzi rumorosi e oltre 15 minuti di lavoro per essere forzato.',
+          '2. Proteggi o sposta la presa OBD-II (OBD Blocker): installa un blocco corazzato con chiave o un connettore fittizio per impedire ai ladri di connettere computer di riprogrammazione centralina.',
+          '3. Usa custodie schermate Faraday per chiavi Keyless: bloccano la propagazione delle radiofrequenze quando la chiave è in casa, neutralizzando i tentativi di furto via ponte radio.',
+          '4. Installa un localizzatore GPS autonomo e autoalimentato: nascosto in punti non convenzionali del telaio (non collegato alla batteria principale), dotato di sensore di sollevamento e connettività anti-jammer.',
+          '5. Parcheggia in modo strategico: preferisci aree illuminate, vicino a telecamere di sorveglianza o passaggi pedonali. Quando parcheggi lungo la strada, sterza completamente le ruote verso il marciapiede per ostacolare il caricamento rapido su carro attrezzi.',
+          '6. Crea il fascicolo digitale della tua auto (Vehicle Passport su AutoEsperto): archivia foto ad alta risoluzione di dettagli unici, graffi identificativi, numero di telaio (VIN) e fatture dei ricambi. In caso di furto o ritrovamento parziale, avrai prove documentali immediate per denuncia e risarcimento assicurativo.',
+        ],
+      },
+      {
+        heading: '5. Cosa controllare se stai comprando una Fiat Panda o 500 usata',
+        paragraphs: [
+          'L\'alto tasso di furti e cannibalizzazioni rende fondamentale prestare la massima attenzione durante l\'acquisto di una Fiat usata da privati o commercianti non ufficiali:',
+          '• Verifica la corrispondenza del telaio (VIN): controlla che il numero inciso sotto il parabrezza, sul pianale lato passeggero e nella targhetta del vano motore coincida perfettamente con il Documento Unico di Circolazione.',
+          '• Controlla i componenti di carrozzeria: differenze marcate di verniciatura tra paraurti, cofano e fiancate possono indicare che l\'auto è stata ricostruita con ricambi di provenienza dubbia dopo un sinistro grave.',
+          '• Ispezione pre-acquisto con AutoEsperto: prima di versare caparre o firmare contratti, incolla il link dell\'annuncio o carica le foto su AutoEsperto per verificare se il prezzo è in linea con il mercato reale, controllare la storia del modello e consultare la checklist dei punti critici.',
+        ],
+      },
+      {
+        heading: 'Domande frequenti sui furti di Fiat Panda e 500',
+        paragraphs: [
+          'Ecco le risposte degli esperti di AutoEsperto ai dubbi più frequenti degli automobilisti:',
+        ],
+        list: [
+          'Qual è l\'auto più rubata in Sicilia? La Fiat Panda è stabilmente l\'auto più rubata in Sicilia e in Italia, seguita da Fiat 500, Lancia Ypsilon e Fiat Punto, principalmente a causa della forte richiesta di pezzi di ricambio nel mercato secondario.',
+          'Perché i ladri rubano solo i fari e il volante della Fiat 500? I fari anteriori LED/Xeno e i volanti con airbag sono componenti costosi, veloci da asportare senza muovere l\'auto e facilmente smerciabili su canali clandestini e marketplace.',
+          'Il bloccasterzo di serie della Fiat protegge dal furto? No, il bloccasterzo meccanico di fabbrica può essere forzato in pochi secondi facendo leva con una barra metallica. È sempre consigliabile installare un blocco corazzato aggiuntivo sul piantone o sui pedali.',
+          'Cosa fare immediatamente dopo aver scoperto il furto? Sporgi denuncia presso Carabinieri o Polizia specificando numero di telaio, targa e segni distintivi, avvisa la compagnia assicurativa entro 3 giorni e invia il blocco del veicolo tramite l\'app del localizzatore GPS.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'passaporto-digitale-veicolo-regolamento-ue-2026-1738',
     title: 'Passaporto Digitale del Veicolo (Regolamento UE 2026/1738): cos\'è, quando entra in vigore e cosa cambia per l\'usato',
     description:

@@ -219,13 +219,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       modifiedTime: getDateModified(guide.published),
       authors: ['Redazione AutoEsperto'],
       section: GUIDE_CATEGORIES[guide.category].label,
-      images: [{ url: '/og-image.png', width: 1200, height: 630, alt: guide.title }],
+      images: [{ url: `${siteUrl}/og-image.png`, width: 1200, height: 630, alt: guide.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title: guide.title,
       description: guide.description,
-      images: ['/og-image.png'],
+      images: [`${siteUrl}/og-image.png`],
     },
   };
 }

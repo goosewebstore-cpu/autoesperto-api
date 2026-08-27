@@ -74,9 +74,8 @@ export default function SiteFooter() {
         <div className="grid gap-10 sm:grid-cols-2 lg:grid-cols-[1.3fr_1fr_1fr_1fr] pb-10 border-b border-slate-200">
           <div>
             <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-blue-600 text-white shadow-md shadow-blue-600/20">
-                <Car className="h-4.5 w-4.5" />
-              </span>
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src="/logo.png" alt="AutoEsperto Logo" className="h-9 w-9 rounded-full shadow-sm shrink-0 object-contain" width={36} height={36} />
               <span className="text-lg font-bold tracking-tight text-slate-900">
                 Auto<span className="text-blue-600">Esperto</span>
               </span>

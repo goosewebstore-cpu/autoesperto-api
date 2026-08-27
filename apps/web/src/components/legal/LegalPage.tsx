@@ -16,12 +16,13 @@ interface LegalPageProps {
 }
 
 export default function LegalPage({ title, updated, intro, sections }: LegalPageProps) {
-  const renderText = (text: string) =>
-    text.split(/(goosewebstore@gmail\.com)/g).map((part, index) =>
-      part === 'goosewebstore@gmail.com' ? (
+  const renderText = (text: string) => {
+    const emailRegex = /([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g;
+    return text.split(emailRegex).map((part, index) =>
+      emailRegex.test(part) ? (
         <a
           key={`${part}-${index}`}
-          href="mailto:goosewebstore@gmail.com"
+          href={`mailto:${part}`}
           className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2"
         >
           {part}
@@ -30,6 +31,7 @@ export default function LegalPage({ title, updated, intro, sections }: LegalPage
         part
       )
     );
+  };
 
   return (
     <div className="min-h-screen bg-background flex flex-col justify-between">

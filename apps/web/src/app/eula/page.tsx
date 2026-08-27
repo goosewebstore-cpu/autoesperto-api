@@ -68,7 +68,7 @@ export default function EulaPage() {
         {
           heading: '8. Risoluzione',
           paragraphs: [
-            "L'utente può interrompere l'uso del servizio e richiedere la cancellazione dell'account in qualsiasi momento scrivendo a goosewebstore@gmail.com.",
+            "L'utente può interrompere l'uso del servizio e richiedere la cancellazione dell'account in qualsiasi momento scrivendo a supporto@autoesperto.it.",
             "AutoEsperto può sospendere o chiudere l'accesso dell'utente in caso di violazione del presente EULA, uso improprio del servizio o per ragioni di sicurezza, senza obbligo di rimborso per servizi già erogati.",
           ],
         },
@@ -82,7 +82,7 @@ export default function EulaPage() {
         {
           heading: '10. Contatti',
           paragraphs: [
-            "Per qualsiasi domanda relativa al presente Contratto di Licenza, è possibile contattare AutoEsperto all'indirizzo goosewebstore@gmail.com.",
+            "Per qualsiasi domanda relativa al presente Contratto di Licenza, è possibile contattare AutoEsperto all'indirizzo legal@autoesperto.it.",
           ],
         },
       ]}

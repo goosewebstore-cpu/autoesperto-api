@@ -92,7 +92,18 @@ export function getConsent(): ConsentChoice {
   return prefs.analytics || prefs.marketing ? 'accepted' : 'refused';
 }
 
-// ─── Write ───────────────────────────────────────────────────────────────
+export function updateGtagConsent(prefs: { analytics: boolean; marketing: boolean }): void {
+  if (typeof window === 'undefined') return;
+  const w = window as unknown as { gtag?: (...args: unknown[]) => void };
+  if (typeof w.gtag === 'function') {
+    w.gtag('consent', 'update', {
+      ad_storage: prefs.marketing ? 'granted' : 'denied',
+      ad_user_data: prefs.marketing ? 'granted' : 'denied',
+      ad_personalization: prefs.marketing ? 'granted' : 'denied',
+      analytics_storage: prefs.analytics ? 'granted' : 'denied',
+    });
+  }
+}
 
 /** Save user preferences. */
 export function setConsentPreferences(prefs: Omit<ConsentPreferences, 'timestamp'>): void {
@@ -101,6 +112,7 @@ export function setConsentPreferences(prefs: Omit<ConsentPreferences, 'timestamp
   window.localStorage.setItem(CONSENT_KEY, JSON.stringify(full));
   // Remove legacy key if present
   window.localStorage.removeItem(LEGACY_KEY);
+  updateGtagConsent(full);
   window.dispatchEvent(
     new CustomEvent('ae-consent-changed', { detail: full }),
   );

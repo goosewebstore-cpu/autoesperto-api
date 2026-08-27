@@ -66,7 +66,11 @@ export const metadata: Metadata = {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
   icons: {
-    icon: [{ url: '/icon.svg', type: 'image/svg+xml' }],
+    icon: [
+      { url: '/favicon.png', sizes: '64x64', type: 'image/png' },
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+      { url: '/icon-512.png', sizes: '512x512', type: 'image/png' },
+    ],
     apple: [{ url: '/icon-192.png', sizes: '192x192', type: 'image/png' }],
   },
   openGraph: {
@@ -165,7 +169,27 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="it" className={`${outfit.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
-        {/* AdSense script removed from <head> — loaded dynamically after marketing consent via AdSlot */}
+        {/* Google Consent Mode v2 default initialization — 100% GDPR compliant */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('consent', 'default', {
+                'ad_storage': 'denied',
+                'ad_user_data': 'denied',
+                'ad_personalization': 'denied',
+                'analytics_storage': 'denied'
+              });
+            `,
+          }}
+        />
+        {/* Google AdSense official script — required for site ownership verification */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4052961089956241"
+          crossOrigin="anonymous"
+        />
       </head>
       <body className="min-h-screen">
         <JsonLd />

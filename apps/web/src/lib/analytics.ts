@@ -38,6 +38,10 @@ export type AnalyticsEvent =
   | 'comparison_started'
   | 'auto_finder_started'
   | 'auto_finder_completed'
+  | 'finder_started'
+  | 'finder_completed'
+  | 'preference_changed'
+  | 'car_saved'
   | 'buy_score_viewed'
   | 'negotiator_message_copied'
   | 'listing_analyzed';

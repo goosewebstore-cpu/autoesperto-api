@@ -1,6 +1,8 @@
 import Link from 'next/link';
 import { ArrowLeft, Car, Home, Search } from 'lucide-react';
 
+export const dynamic = 'force-static';
+
 export default function NotFound() {
   return (
     <main className="min-h-screen flex flex-col items-center justify-center px-5 text-center bg-slate-50 relative overflow-hidden">

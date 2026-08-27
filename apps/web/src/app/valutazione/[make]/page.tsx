@@ -11,8 +11,12 @@ interface PageProps {
   params: Promise<{ make: string }>;
 }
 
+export const dynamic = 'force-static';
+export const dynamicParams = true;
+
 export function generateStaticParams() {
-  return getAllMakes().map((make) => ({ make: make.slug }));
+  const popular = ['fiat', 'volkswagen', 'ford', 'renault', 'peugeot', 'toyota', 'audi', 'bmw', 'mercedes-benz', 'jeep', 'citroen', 'dacia', 'alfa-romeo', 'lancia', 'nissan', 'hyundai', 'kia', 'opel', 'seat', 'skoda'];
+  return popular.map((make) => ({ make }));
 }
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {

@@ -221,6 +221,10 @@ export interface VehiclePassportData {
   reminders: PassportReminderItem[];
   shareConfig: PassportShareConfig;
   sellingConfig?: SellingProfileConfig;
+  trustBadge?: 'AI_ANALYZED' | 'VERIFIED' | 'INSPECTED';
+  transferCode?: string;
+  transferStatus?: 'AVAILABLE' | 'PENDING' | 'TRANSFERRED';
+  transferDate?: string;
   privacyAcknowledged?: boolean;
   createdAt: string;
   updatedAt: string;

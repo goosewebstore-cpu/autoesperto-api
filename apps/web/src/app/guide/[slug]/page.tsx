@@ -183,6 +183,9 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   },
 };
 
+export const dynamic = 'force-static';
+export const dynamicParams = true;
+
 export function generateStaticParams() {
   return guides.map((guide) => ({ slug: guide.slug }));
 }

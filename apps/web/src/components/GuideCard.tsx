@@ -27,27 +27,27 @@ interface GuideCardProps {
 }
 
 export default function GuideCard({ guide }: GuideCardProps) {
-  const Icon = CATEGORY_ICONS[guide.category];
-  const style = CATEGORY_STYLES[guide.category];
+  const Icon = CATEGORY_ICONS[guide.category] || ShoppingCart;
+  const style = CATEGORY_STYLES[guide.category] || { badge: 'bg-blue-50 text-blue-700', iconBg: 'bg-blue-100 text-blue-600' };
 
   return (
     <Link
       href={`/guide/${guide.slug}`}
-      className="group flex h-full flex-col rounded-2xl border border-slate-200/80 bg-white p-5 shadow-card transition-all duration-300 hover:border-blue-500/50 hover:shadow-card-hover hover:-translate-y-0.5 cursor-pointer block text-left"
+      className="group flex h-full flex-col rounded-2xl border border-slate-200 bg-white p-5 shadow-xs transition-all duration-300 hover:border-blue-500/60 hover:shadow-md hover:-translate-y-0.5 cursor-pointer block text-left"
     >
       <div className="flex items-center justify-between gap-3">
         <span className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-bold ${style.badge}`}>
-          <Icon className="h-3.5 w-3.5" />
-          {GUIDE_CATEGORIES[guide.category].label}
+          <Icon className="h-3.5 w-3.5 shrink-0" />
+          {GUIDE_CATEGORIES[guide.category]?.label || 'Guida'}
         </span>
-        <time dateTime={guide.published} className="text-xs text-text-tertiary">
+        <time dateTime={guide.published} className="text-xs font-medium text-slate-400">
           {formatGuideDate(guide.published)}
         </time>
       </div>
-      <h3 className="mt-3 text-base font-bold leading-snug text-text-primary transition-colors group-hover:text-blue-600">
+      <h3 className="mt-3 text-base font-bold leading-snug text-slate-900 transition-colors group-hover:text-blue-600">
         {guide.title}
       </h3>
-      <p className="mt-2 text-xs leading-relaxed text-text-secondary line-clamp-3">{guide.description}</p>
+      <p className="mt-2 text-xs leading-relaxed text-slate-600 line-clamp-3">{guide.description}</p>
       <div className="mt-auto pt-4 text-xs font-bold text-blue-600 flex items-center justify-between transition-all">
         <span>Leggi la guida</span>
         <ArrowRight className="w-3.5 h-3.5 group-hover:translate-x-1 transition-transform" />

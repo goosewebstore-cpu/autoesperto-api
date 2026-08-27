@@ -127,7 +127,7 @@ export default function GuideIndex() {
 
       <main className="page-body">
         <div className="relative">
-          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-text-tertiary" />
+          <Search className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="search"
             value={query}
@@ -137,7 +137,7 @@ export default function GuideIndex() {
             }}
             placeholder="Cerca una guida… (es. cambio auto, rottamazione, assicurazione, neopatentati)"
             aria-label="Cerca una guida"
-            className="w-full rounded-xl border border-border bg-white py-3 pl-11 pr-4 text-sm text-text-primary placeholder:text-text-tertiary focus:border-accent focus:outline-none focus:ring-2 focus:ring-accent/20"
+            className="w-full rounded-xl border border-slate-200 bg-white py-3 pl-11 pr-4 text-sm text-slate-900 placeholder:text-slate-400 focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
           />
         </div>
 
@@ -148,8 +148,8 @@ export default function GuideIndex() {
             onClick={() => handleCategorySelect(undefined)}
             className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
               category === undefined
-                ? 'border-accent bg-accent text-white shadow-sm'
-                : 'border-border bg-white text-text-secondary hover:border-accent hover:text-accent'
+                ? 'border-blue-600 bg-blue-600 text-white shadow-xs'
+                : 'border-slate-200 bg-white text-slate-600 hover:border-blue-600 hover:text-blue-600'
             }`}
           >
             Tutte ({guides.length})
@@ -164,8 +164,8 @@ export default function GuideIndex() {
                 onClick={() => handleCategorySelect(key as GuideCategory)}
                 className={`rounded-full border px-3.5 py-1.5 text-xs font-semibold transition-all cursor-pointer ${
                   active
-                    ? 'border-accent bg-accent text-white shadow-sm'
-                    : 'border-border bg-white text-text-secondary hover:border-accent hover:text-accent'
+                    ? 'border-blue-600 bg-blue-600 text-white shadow-xs'
+                    : 'border-slate-200 bg-white text-slate-600 hover:border-blue-600 hover:text-blue-600'
                 }`}
               >
                 {label} ({count})
@@ -174,9 +174,9 @@ export default function GuideIndex() {
           })}
         </div>
 
-        <p className="mt-5 text-xs font-semibold text-text-secondary">
+        <p className="mt-5 text-xs font-semibold text-slate-500">
           {sorted.length} {sorted.length === 1 ? 'guida disponibile' : 'guide disponibili'}
-          {category ? ` in ${GUIDE_CATEGORIES[category].label}` : ''}
+          {category ? ` in ${GUIDE_CATEGORIES[category]?.label}` : ''}
           {q ? ` per "${query.trim()}"` : ''}
         </p>
 
@@ -187,17 +187,17 @@ export default function GuideIndex() {
               <GuideCard key={guide.slug} guide={guide} />
             ))
           ) : (
-            <div className="sm:col-span-2 rounded-2xl border border-border bg-surface-2 p-8 text-center">
+            <div className="sm:col-span-2 rounded-2xl border border-slate-200 bg-slate-50 p-8 text-center">
               <BookOpen className="h-8 w-8 mx-auto text-slate-400 mb-2" />
-              <p className="text-sm font-semibold text-text-primary">Nessuna guida trovata</p>
-              <p className="mt-1 text-xs text-text-secondary">Prova con un altro termine o sfoglia tutte le categorie.</p>
+              <p className="text-sm font-semibold text-slate-900">Nessuna guida trovata</p>
+              <p className="mt-1 text-xs text-slate-500">Prova con un altro termine o sfoglia tutte le categorie.</p>
               <button
                 type="button"
                 onClick={() => {
                   setQuery('');
                   setCategory(undefined);
                 }}
-                className="mt-3 rounded-lg border border-border bg-white px-3 py-1.5 text-xs font-semibold text-text-primary hover:border-accent hover:text-accent cursor-pointer"
+                className="mt-3 rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-xs font-semibold text-slate-700 hover:border-blue-600 hover:text-blue-600 cursor-pointer"
               >
                 Mostra tutte le guide
               </button>

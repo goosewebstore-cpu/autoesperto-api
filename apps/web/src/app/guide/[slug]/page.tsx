@@ -495,21 +495,21 @@ export default async function GuidePage({ params }: PageProps) {
                   {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </time>
               </div>
-              <span className="text-text-tertiary">·</span>
-              <div className="flex items-center gap-1 text-xs text-text-tertiary font-medium">
-                <Clock className="w-3.5 h-3.5 text-accent" />
+              <span className="text-slate-300">·</span>
+              <div className="flex items-center gap-1 text-xs text-slate-500 font-medium">
+                <Clock className="w-3.5 h-3.5 text-blue-600" />
                 <span>{readingTimeMinutes} min lettura</span>
               </div>
-              <span className="text-text-tertiary">·</span>
+              <span className="text-slate-300">·</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 px-2 py-0.5 text-[11px] font-bold">
                 ✓ Aggiornato {new Date(getDateModified(guide.published)).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })}
               </span>
             </div>
 
-            <h1 itemProp="headline" className="text-2xl md:text-4xl font-extrabold tracking-tight text-text-primary leading-[1.15] mt-4">
+            <h1 itemProp="headline" className="text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 leading-[1.2] mt-4">
               {guide.title}
             </h1>
-            <p itemProp="description" className="article-summary text-text-secondary text-base leading-relaxed mt-4">
+            <p itemProp="description" className="article-summary text-slate-600 text-base leading-relaxed mt-4">
               {guide.description}
             </p>
           </header>
@@ -518,15 +518,15 @@ export default async function GuidePage({ params }: PageProps) {
 
           {/* Highlights / Key Takeaways Box for Featured Snippet & GEO AI Overviews */}
           {guide.sections.length > 0 && (
-            <div className="key-takeaways my-6 rounded-2xl bg-accent-light/40 border border-accent/20 p-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-accent uppercase tracking-wide mb-3">
+            <div className="key-takeaways my-6 rounded-2xl bg-blue-50/60 border border-blue-200/80 p-5">
+              <div className="flex items-center gap-2 text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
                 <Sparkles className="w-4 h-4" />
-                <span>In sintesi - Punti chiave per la ricerca</span>
+                <span>In sintesi - Punti chiave</span>
               </div>
-              <ul className="space-y-2.5 text-sm text-text-primary leading-relaxed">
+              <ul className="space-y-2.5 text-sm text-slate-800 leading-relaxed">
                 {guide.sections.slice(0, 4).map((sec) => (
                   <li key={sec.heading} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-accent shrink-0 mt-0.5" />
+                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
                     <span>
                       <strong className="font-semibold">{sec.heading.replace(/^\d+\.\s*/, '')}:</strong>{' '}
                       {sec.paragraphs[0] ? sec.paragraphs[0] : ''}
@@ -539,18 +539,18 @@ export default async function GuidePage({ params }: PageProps) {
 
           {/* Table of Contents / Indice dei contenuti for SERP Anchor Jump Links */}
           {tocItems.length > 1 && (
-            <nav aria-label="Indice dei contenuti" className="my-8 rounded-2xl bg-surface-2 border border-border p-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-text-primary uppercase tracking-wide border-b border-border/60 pb-3 mb-3">
-                <List className="w-4 h-4 text-accent" />
+            <nav aria-label="Indice dei contenuti" className="my-8 rounded-2xl bg-slate-50 border border-slate-200 p-5">
+              <div className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-3 mb-3">
+                <List className="w-4 h-4 text-blue-600" />
                 <span>Indice della guida</span>
               </div>
-              <ol className="space-y-2 text-sm text-text-secondary">
+              <ol className="space-y-2 text-sm text-slate-600">
                 {tocItems.map((item, idx) => (
                   <li key={item.id} className="flex items-start gap-2.5">
-                    <span className="font-semibold text-accent/90 text-xs shrink-0 mt-0.5">{idx + 1}.</span>
+                    <span className="font-semibold text-blue-600 text-xs shrink-0 mt-0.5">{idx + 1}.</span>
                     <a
                       href={`#${item.id}`}
-                      className="hover:text-accent hover:underline transition-colors leading-snug"
+                      className="hover:text-blue-600 hover:underline transition-colors leading-snug"
                     >
                       {item.heading}
                     </a>
@@ -565,21 +565,21 @@ export default async function GuidePage({ params }: PageProps) {
               const sectionId = slugifyHeading(section.heading);
               return (
                 <section key={section.heading} id={sectionId} className="scroll-mt-20">
-                  <h2 className="text-xl font-bold text-text-primary">
-                    <a href={`#${sectionId}`} className="hover:text-accent transition-colors">
+                  <h2 className="text-xl font-bold text-slate-900">
+                    <a href={`#${sectionId}`} className="hover:text-blue-600 transition-colors">
                       {section.heading}
                     </a>
                   </h2>
                   {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph.slice(0, 40)} className="text-text-secondary text-base leading-relaxed mt-3">
+                    <p key={paragraph.slice(0, 40)} className="text-slate-600 text-base leading-relaxed mt-3">
                       {renderParagraphWithLinks(paragraph)}
                     </p>
                   ))}
                   {section.list && (
                     <ul className="mt-4 space-y-2">
                       {section.list.map((item) => (
-                        <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
-                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
+                        <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-slate-600 leading-relaxed">
+                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
                           <span>{renderParagraphWithLinks(item)}</span>
                         </li>
                       ))}
@@ -593,12 +593,12 @@ export default async function GuidePage({ params }: PageProps) {
 
           <ArticleFeedbackBox />
 
-          <div className="mt-10 rounded-2xl bg-surface-2 border border-border p-5">
-            <div className="flex items-center gap-2 text-sm font-bold text-text-primary uppercase tracking-wide">
-              <ShieldCheck className="w-4 h-4 text-accent" />
+          <div className="mt-10 rounded-2xl bg-slate-50 border border-slate-200 p-5">
+            <div className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide">
+              <ShieldCheck className="w-4 h-4 text-blue-600" />
               <span>Metodologia & Fonti Ufficiali</span>
             </div>
-            <p className="text-xs text-text-secondary leading-relaxed mt-2.5">
+            <p className="text-xs text-slate-600 leading-relaxed mt-2.5">
               Questa guida è stata redatta dal team di esperti di <strong>AutoEsperto</strong> e verificata sul mercato automotive italiano 2026. I dati sulle quotazioni, sull&apos;affidabilità e sui costi di riparazione sono elaborati dal nostro algoritmo proprietario che analizza quotidianamente oltre 10.000+ annunci reali, incrociandoli con banche dati di richiami ufficiali (Safety Gate UE, NHTSA) e storici di manutenzione.
             </p>
           </div>
@@ -606,16 +606,16 @@ export default async function GuidePage({ params }: PageProps) {
 
         {mentionedModels.length > 0 && (
           <section className="mt-12" aria-label="Auto citate in questa guida">
-            <h2 className="text-lg font-bold text-text-primary">Auto citate in questa guida</h2>
-            <p className="text-sm text-text-secondary mt-1">Approfondisci valore di mercato, affidabilità e costi dei modelli citati.</p>
+            <h2 className="text-lg font-bold text-slate-900">Auto citate in questa guida</h2>
+            <p className="text-sm text-slate-600 mt-1">Approfondisci valore di mercato, affidabilità e costi dei modelli citati.</p>
             <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {mentionedModels.map(({ make, model }) => {
                 const makeSlug = slugify(make);
                 const modelSlug = slugify(model);
                 return (
-                  <div key={`${makeSlug}/${modelSlug}`} className="rounded-xl border border-border bg-surface-2 p-4">
-                    <h3 className="text-sm font-bold text-text-primary">{make} {model}</h3>
-                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-accent">
+                  <div key={`${makeSlug}/${modelSlug}`} className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                    <h3 className="text-sm font-bold text-slate-900">{make} {model}</h3>
+                    <div className="mt-2 flex flex-wrap gap-x-4 gap-y-1 text-xs font-semibold text-blue-600">
                       <Link href={`/valutazione/${makeSlug}/${modelSlug}`} className="hover:underline">Valutazione</Link>
                       <Link href={`/affidabilita/${makeSlug}/${modelSlug}`} className="hover:underline">Affidabilità</Link>
                       <Link href={`/riparazione/${makeSlug}/${modelSlug}`} className="hover:underline">Costi di riparazione</Link>
@@ -628,23 +628,23 @@ export default async function GuidePage({ params }: PageProps) {
           </section>
         )}
 
-        <section className="mt-12 rounded-2xl bg-accent-light border border-accent/20 p-6 text-center">
+        <section className="mt-12 rounded-2xl bg-blue-50/70 border border-blue-200/80 p-6 text-center">
           <div className="flex justify-center mb-3">
-            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-accent text-white shadow-md shadow-accent/20">
+            <span className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-600 text-white shadow-md shadow-blue-600/20">
               <ScanSearch className="h-6 w-6" />
             </span>
           </div>
-          <h2 className="text-lg font-bold text-text-primary">Vuoi controllare un&apos;auto specifica?</h2>
-          <p className="text-sm text-text-secondary leading-relaxed mt-2 max-w-md mx-auto">
+          <h2 className="text-lg font-bold text-slate-900">Vuoi controllare un&apos;auto specifica?</h2>
+          <p className="text-sm text-slate-600 leading-relaxed mt-2 max-w-md mx-auto">
             Usa lo scanner gratuito di AutoEsperto: prezzo di mercato, affidabilità e cosa controllare prima di comprarla.
           </p>
           <Link
             href="/#scanner-section"
-            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-accent px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-accent/20 hover:bg-accent-hover transition-colors"
+            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 hover:bg-blue-700 transition-colors"
           >
             Analizza un&apos;auto gratis <ArrowRight className="h-4 w-4" />
           </Link>
-          <p className="mt-3 text-xs text-text-tertiary">
+          <p className="mt-3 text-xs text-slate-400">
             Gratis · senza registrazione · risultato in pochi secondi
           </p>
         </section>
@@ -652,16 +652,16 @@ export default async function GuidePage({ params }: PageProps) {
         {otherGuides.length > 0 && (
           <section className="mt-12">
             <AdBanner />
-            <h2 className="text-lg font-bold text-text-primary mt-8">Altre guide correlate</h2>
+            <h2 className="text-lg font-bold text-slate-900 mt-8">Altre guide correlate</h2>
             <div className="mt-4 grid gap-3">
               {otherGuides.map((other) => (
                 <Link
                   key={other.slug}
                   href={`/guide/${other.slug}`}
-                  className="rounded-xl border border-border bg-surface-2 p-4 hover:border-accent transition-colors"
+                  className="rounded-xl border border-slate-200 bg-slate-50 p-4 hover:border-blue-600 transition-colors"
                 >
-                  <h3 className="text-sm font-bold text-text-primary">{other.title}</h3>
-                  <p className="text-xs text-text-secondary mt-1 line-clamp-2">{other.description}</p>
+                  <h3 className="text-sm font-bold text-slate-900">{other.title}</h3>
+                  <p className="text-xs text-slate-600 mt-1 line-clamp-2">{other.description}</p>
                 </Link>
               ))}
             </div>

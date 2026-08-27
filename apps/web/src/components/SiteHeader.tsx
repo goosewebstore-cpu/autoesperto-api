@@ -32,12 +32,10 @@ const TOOLS = [
 ];
 
 const NAV_LINKS = [
-  { label: 'Auto Finder', href: '/auto-finder' },
+  { label: 'Analizza auto', href: '/#scanner-section' },
   { label: 'Confronta', href: '/confronta' },
-  { label: 'Controlla annuncio', href: '/analizza-annuncio' },
   { label: 'Guide & Consigli', href: '/guide' },
-  { label: 'Buying Room', href: '/buying-room' },
-  { label: 'Profilo Digitale', href: '/passport' },
+  { label: 'Chi siamo', href: '/chi-siamo' },
 ];
 
 export default function SiteHeader() {

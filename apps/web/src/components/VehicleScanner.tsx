@@ -137,18 +137,19 @@ export default function VehicleScanner({
   };
 
   const handleAnalyzeAd = () => {
-    const make = parsedAd?.make || manualMake;
-    const model = parsedAd?.model || manualModel;
+    const parsed = parseListingTextOrUrl(adInput);
+    const make = parsed.make || parsedAd?.make || manualMake;
+    const model = parsed.model || parsedAd?.model || manualModel;
     if (!make || !model) {
-      setError('Incolla il link o il testo dell\'annuncio contenente marca e modello (es. Fiat Panda 2021).');
+      setError('Incolla il link (es. Autohero, AutoScout24, Subito) o testo con almeno marca e modello (es. "Mazda CX-3" o "Fiat Panda 2021").');
       return;
     }
     void handleManualSubmit({
       make,
       model,
-      year: parsedAd?.year ?? (manualYear ? Number(manualYear) : undefined),
-      km: parsedAd?.km ?? (manualKm ? Number(manualKm) : undefined),
-      requestedPrice: parsedAd?.price ?? (manualPrice ? Number(manualPrice) : undefined),
+      year: parsed.year ?? parsedAd?.year ?? (manualYear ? Number(manualYear) : undefined),
+      km: parsed.km ?? parsedAd?.km ?? (manualKm ? Number(manualKm) : undefined),
+      requestedPrice: parsed.price ?? parsedAd?.price ?? (manualPrice ? Number(manualPrice) : undefined),
     });
   };
 

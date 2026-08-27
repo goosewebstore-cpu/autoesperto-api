@@ -72,77 +72,64 @@ export async function POST(req: Request) {
     const repairTopic = findRepairTopic(qLower);
     if (repairTopic && REPAIR_COSTS[repairTopic]) {
       const cost = REPAIR_COSTS[repairTopic];
-      answer = `💰 Costi stimati per ${makeModel}${yearStr}:\n\n`;
-      answer += `🔧 Fai-da-te (solo ricambi): ${cost.diy}\n`;
-      answer += `🏭 Meccanico (ricambi + manodopera): ${cost.mech}\n`;
-      answer += `⏱️ Tempo stimato: ${cost.time}\n`;
-      answer += cost.canDiy
-        ? `\n✅ Intervento fattibile fai-da-te con attrezzatura base.`
-        : `\n⚠️ Intervento consigliato in officina specializzata.`;
-      answer += `\n\n🛒 Dove comprare: ${cost.stores}`;
+      answer = `Sulla tua **${makeModel}**${yearStr}, ecco la stima dei costi reali di mercato:\n\n` +
+        `• **Fai-da-te (solo ricambi)**: **${cost.diy}** (${cost.canDiy ? 'fattibile in autonomia con attrezzi standard' : 'richiede ponte sollevatore o attrezzatura specifica'})\n` +
+        `• **In officina (ricambi + manodopera)**: **${cost.mech}** (tempo medio: ${cost.time})\n` +
+        `• **Canali consigliati per i pezzi**: ${cost.stores}\n\n` +
+        `Hai già notato sintomi specifici durante la guida (come rumori o perdite di efficienza), o stai pianificando una manutenzione preventiva?`;
     }
     // Warning lights
     else if (qLower.includes('spia') || qLower.includes('cruscotto') || qLower.includes('motore accesa')) {
-      answer = `Per le spie del cruscotto su ${makeModel}${yearStr}:\n\n`;
-      answer += `🔴 Spie ROSSE (fermare subito): Freni, Temperatura, Olio\n`;
-      answer += `🟡 Spie GIALLE (controllare): Check Engine, ABS, Airbag, FAP\n\n`;
-      answer += `🔧 Fai-da-te: lettore OBD2 su Amazon (15-30€) per leggere i codici errore.\n`;
-      answer += `🏭 Meccanico: diagnosi completa 30-60€, poi preventivo specifico.`;
+      answer = `Sulla tua **${makeModel}**${yearStr}, l'accensione di una spia segnala un'anomalia registrata dalla centralina:\n\n` +
+        `• **Spia ROSSA**: arresta subito l'auto in sicurezza (pressione olio, freni, temperatura motore).\n` +
+        `• **Spia GIALLA / Check Engine**: anomalia a iniezione, scarico (EGR/DPF/lambda) o sensori. Puoi guidare a andatura moderata fino all'officina.\n\n` +
+        `La spia è **fissa o lampeggiante**? L'auto ha perso potenza o funziona normalmente?`;
     }
     // Where to buy
     else if (qLower.includes('ricamb') || qLower.includes('dove') || qLower.includes('compra') || qLower.includes('ebay')) {
-      answer = `🛒 Dove comprare ricambi per ${makeModel}${yearStr}:\n\n`;
-      answer += `1. **eBay.it** — Ricambi usati OEM a prezzi bassi\n`;
-      answer += `2. **Autodoc.it** — Catalogo enorme, ricambi nuovi\n`;
-      answer += `3. **Oscaro.it** — Specializzato auto, prezzi competitivi\n\n`;
-      answer += `💡 Cerca sempre con marca, modello, anno e codice OEM del pezzo.`;
+      answer = `Per ordinare i ricambi compatibili con la tua **${makeModel}**${yearStr}:\n\n` +
+        `1. **eBay.it**: ideale per ricambi usati originali OEM (specchietti, fanali, centraline, alternatori).\n` +
+        `2. **Autodoc.it**: catalogo completo per pastiglie, dischi, filtri e sospensioni nuove di qualità OE.\n` +
+        `3. **Oscaro.it**: ottimo per kit frizione e cinghie di distribuzione.\n\n` +
+        `Quale componente specifico devi sostituire? Posso indicarti le specifiche tecniche consigliate.`;
     }
     // DIY questions
     else if (qLower.includes('da solo') || qLower.includes('fai da te') || qLower.includes('posso')) {
-      answer = `🔧 Lavori fattibili fai-da-te su ${makeModel}:\n\n`;
-      answer += `✅ Facili: lampadine, tergicristalli, batteria, filtro aria, ritocco graffi\n`;
-      answer += `⚠️ Medi: pastiglie freni, olio + filtro, specchietto, sensore ABS\n`;
-      answer += `🚫 Meccanico: catena/cinghia, frizione, alternatore, FAP`;
+      answer = `Sulla tua **${makeModel}**${yearStr}, ecco cosa puoi fare tranquillamente in autonomia e cosa richiede l'officina:\n\n` +
+        `✅ **Fai-da-te facile**: batteria, filtro aria e abitacolo, lampadine, tergicristalli, ritocco graffi superficiali.\n` +
+        `⚠️ **Fai-da-te medio (con attrezzi)**: cambio olio e filtro, pastiglie freni anteriori, specchietto.\n` +
+        `🚫 **Consigliata officina**: frizione/volano, cinghia di distribuzione, ricarica clima, diagnosi elettronica avanzata.\n\n` +
+        `Quale lavoro vorresti fare da solo? Hai già gli attrezzi base nel box?`;
     }
     // Carrozzeria / color
     else if (qLower.includes('colore') || qLower.includes('vernic') || qLower.includes('carrozzeria') || qLower.includes('carrozziere')) {
-      answer = `Per lavori di carrozzeria su ${makeModel}${yearStr}:\n\n`;
-      answer += `🔧 Fai-da-te:\n`;
-      answer += `• Graffi leggeri: stilo ritocco OEM (12-25€)\n`;
-      answer += `• Graffi medi: kit verniciatura spray (30-60€)\n\n`;
-      answer += `🏭 Carrozziere:\n`;
-      answer += `• Ritocco singolo pannello: 150-350€\n`;
-      answer += `• Verniciatura paraurti: 250-500€\n`;
-      answer += `• Verniciatura completa: 2.000-4.000€\n`;
-      answer += `• Wrapping pellicola: 1.500-3.500€\n\n`;
-      answer += `💡 Per il codice colore esatto, controlla la targhetta nel vano motore o nel montante portiera.`;
+      answer = `Per ripristinare la carrozzeria della tua **${makeModel}**${yearStr}:\n\n` +
+        `• **Graffi leggeri / trasparente**: stilo o pasta abrasiva di ritocco OEM (circa 12 € – 25 €).\n` +
+        `• **Ammaccatura o paraurti dal carrozziere**: circa 150 € – 350 € a pannello verniciato a forno con garanzia.\n\n` +
+        `💡 Il codice colore esatto è stampato sulla targhetta nel montante della portiera o sotto il cofano motore.\n\n` +
+        `Il graffio è superficiale o si vede la lamiera/plastica scura sotto?`;
     }
     // Buy/sell
     else if (qLower.includes('comprare') || qLower.includes('controllare') || qLower.includes('acquist')) {
-      answer = `📋 Controlli prima di comprare una ${makeModel}${yearStr} usata:\n\n`;
-      answer += `1. Verifica tagliandi (libretto manutenzione)\n`;
-      answer += `2. Diagnosi OBD2 per errori nascosti (20-50€)\n`;
-      answer += `3. Controllare cinghia/catena distribuzione\n`;
-      answer += `4. Stato pneumatici e freni\n`;
-      answer += `5. Carrozzeria: ruggine, graffi, segni di incidenti\n`;
-      answer += `6. Verifica km reali su portale Motorizzazione\n`;
-      answer += `7. Visura PRA per vincoli o ipoteche`;
+      answer = `Stai valutando l'acquisto di una **${makeModel}**${yearStr}? Ecco i 5 controlli chiave:\n\n` +
+        `1. **Storico tagliandi**: verifica fatture reali per confermare la cura e i km effettivi.\n` +
+        `2. **Diagnosi OBD**: per verificare errori cancellati di recente prima della vendita.\n` +
+        `3. **Distribuzione e Frizione**: chiedi l'anno dell'ultima sostituzione.\n` +
+        `4. **Freni e Gomme**: controlla lo scalino sui dischi e l'anno di fabbricazione degli pneumatici (DOT).\n` +
+        `5. **Portate e visura**: controlla revisioni ministeriali e assenza di fermi amministrativi.\n\n` +
+        `Hai già il link dell'annuncio o la targa dell'auto per fare un controllo completo su AutoEsperto?`;
     }
     // Generic fallback
     else {
-      answer = `Per ${makeModel}${yearStr}:\n\n`;
-      answer += `Per qualsiasi intervento di riparazione, confronta i prezzi dei ricambi su:\n`;
-      answer += `• eBay.it (usato OEM economico)\n`;
-      answer += `• Autodoc.it (nuovo aftermarket)\n`;
-      answer += `• Oscaro.it (nuovo, specializzato)\n\n`;
-      answer += `Cerca sempre con codice OEM e richiedi un preventivo scritto al meccanico o carrozziere.`;
+      answer = `Ciao! Per la tua **${makeModel}**${yearStr}, posso aiutarti a stimare i costi di riparazione, verificare scadenze e consigliarti i pezzi compatibili.\n\n` +
+        `Vuoi un preventivo per un intervento specifico (es. freni, frizione, tagliando) o hai una spia accesa da verificare?`;
     }
 
     return NextResponse.json({ success: true, answer, vehicle: makeModel });
   } catch {
     return NextResponse.json({
       success: true,
-      answer: 'Consiglio dell\'Esperto AI: confronta i prezzi dei ricambi su eBay.it, Autodoc.it e Oscaro.it. Cerca sempre con il codice OEM del pezzo e richiedi preventivi scritti.',
+      answer: 'Ciao! Come posso aiutarti con la manutenzione, i ricambi o la valutazione della tua auto?',
     });
   }
 }

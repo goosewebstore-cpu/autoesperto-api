@@ -118,14 +118,63 @@ const STORE_BUTTONS = [
 ] as const;
 
 /* ── Depreciation curve matching backend (pricing.ts) ── */
+const KNOWN_MODEL_PRICES: Record<string, number> = {
+  // Fiat
+  'fiat panda': 16500, 'fiat 500': 19500, 'fiat 500x': 25500, 'fiat 500l': 24500,
+  'fiat tipo': 21000, 'fiat punto': 17500, 'fiat 600': 23000, 'fiat bravo': 22500,
+  'fiat doblo': 25000, 'fiat freemont': 32000, 'fiat ducato': 35000, 'fiat sedici': 24000,
+  'fiat multipla': 18000, 'fiat 124': 30000, 'fiat panda 4x4': 19000,
+  // Lancia
+  'lancia ypsilon': 19000, 'lancia delta': 24000,
+  // Alfa Romeo
+  'alfa romeo giulietta': 26000, 'alfa romeo giulia': 55000, 'alfa romeo stelvio': 62000,
+  'alfa romeo tonale': 42000, 'alfa romeo mito': 17500, 'alfa romeo 147': 22000,
+  'alfa romeo 159': 26000, 'alfa romeo 4c': 60000,
+  // Volkswagen
+  'volkswagen golf': 33000, 'volkswagen polo': 22500, 'volkswagen t-roc': 36000,
+  'volkswagen tiguan': 45000, 'volkswagen passat': 48000, 'volkswagen touran': 40000,
+  'volkswagen up': 16500, 'volkswagen t-cross': 27000, 'volkswagen taigo': 28000,
+  // Audi
+  'audi a1': 27000, 'audi a3': 38000, 'audi a4': 50000, 'audi a5': 56000, 'audi a6': 63000,
+  'audi q2': 32500, 'audi q3': 43000, 'audi q5': 58000, 'audi tt': 55000,
+  // BMW
+  'bmw serie 1': 38000, 'bmw serie 2': 45000, 'bmw serie 3': 53000, 'bmw serie 4': 58000,
+  'bmw serie 5': 68000, 'bmw x1': 45000, 'bmw x2': 46000, 'bmw x3': 59000,
+  // Mercedes
+  'mercedes-benz classe a': 39000, 'mercedes classe a': 39000, 'mercedes classe b': 40000, 'mercedes classe c': 57000,
+  'mercedes classe e': 68000, 'mercedes gla': 45000, 'mercedes glb': 48000, 'mercedes glc': 63000,
+  // Ford
+  'ford fiesta': 19000, 'ford focus': 29000, 'ford puma': 33500, 'ford kuga': 32000, 'ford ecosport': 23500,
+  // Opel
+  'opel corsa': 19000, 'opel astra': 29500, 'opel mokka': 29000, 'opel crossland': 27000,
+  // Peugeot
+  'peugeot 208': 22000, 'peugeot 308': 30000, 'peugeot 2008': 30000, 'peugeot 3008': 40500, 'peugeot 5008': 45000,
+  // Citroen
+  'citroen c3': 19500, 'citroen c4': 28000, 'citroen c3 aircross': 26000, 'citroen c5 aircross': 37000,
+  // Renault
+  'renault clio': 19000, 'renault captur': 28500, 'renault megane': 30000, 'renault scenic': 38000, 'renault arkana': 33000,
+  // Dacia
+  'dacia sandero': 14500, 'dacia duster': 21500, 'dacia jogger': 19000, 'dacia spring': 19000,
+  // Toyota
+  'toyota yaris': 23500, 'toyota corolla': 34500, 'toyota chr': 37000, 'toyota c-hr': 37000, 'toyota rav4': 49000, 'toyota aygo': 16000, 'toyota yaris cross': 31000,
+  // Nissan
+  'nissan qashqai': 37500, 'nissan juke': 28500, 'nissan micra': 18500, 'nissan x-trail': 43000,
+  // Jeep
+  'jeep renegade': 29000, 'jeep compass': 36000, 'jeep avenger': 26000,
+  // Hyundai & Kia
+  'hyundai i10': 16500, 'hyundai i20': 18500, 'hyundai i30': 28000, 'hyundai tucson': 41000, 'hyundai kona': 34500,
+  'kia picanto': 16500, 'kia rio': 19500, 'kia ceed': 27500, 'kia sportage': 39000, 'kia stonic': 23500,
+};
+
 const DEPRECIATION_CURVE: Array<[number, number]> = [
   [0, 1.0], [1, 0.82], [2, 0.74], [3, 0.67], [4, 0.63], [5, 0.58], [6, 0.56], [7, 0.51],
-  [8, 0.46], [9, 0.42], [10, 0.38], [11, 0.35], [12, 0.32], [13, 0.30], [14, 0.28], [15, 0.26],
+  [8, 0.46], [9, 0.42], [10, 0.38], [11, 0.35], [12, 0.32], [13, 0.30], [14, 0.28], [15, 0.25],
 ];
 
 function getResidual(age: number): number {
   const clamped = Math.max(0, age);
-  if (clamped >= 15) return Math.max(0.12, 0.26 - (clamped - 15) * 0.015);
+  if (clamped >= 20) return Math.max(0.08, 0.16 - (clamped - 20) * 0.006);
+  if (clamped >= 15) return 0.25 - (clamped - 15) * 0.018;
   let residual = DEPRECIATION_CURVE[0][1];
   for (const [ageAt, value] of DEPRECIATION_CURVE) {
     if (ageAt <= clamped) residual = value;
@@ -134,12 +183,20 @@ function getResidual(age: number): number {
   return residual;
 }
 
-function reverseBasePrice(estimatedValue: number, vehicleYear: number | undefined): number {
+function getCarBasePrice(make?: string, model?: string, estimatedValue?: number, vehicleYear?: number): number {
+  if (make && model) {
+    const key = `${make.toLowerCase()} ${model.toLowerCase()}`.replace(/-/g, ' ').trim();
+    for (const [mKey, mPrice] of Object.entries(KNOWN_MODEL_PRICES)) {
+      if (key.includes(mKey) || mKey.includes(key)) {
+        return mPrice;
+      }
+    }
+  }
   const currentYear = new Date().getFullYear();
   const originalAge = Math.max(0, currentYear - (vehicleYear || currentYear - 5));
   const originalResidual = getResidual(originalAge);
-  const base = originalResidual > 0.05 ? estimatedValue / originalResidual : estimatedValue;
-  return Math.max(8000, base);
+  const base = originalResidual > 0.05 && estimatedValue ? estimatedValue / originalResidual : (estimatedValue || 25000);
+  return Math.min(65000, Math.max(14000, Math.round(base / 500) * 500));
 }
 
 /* ── Repair cost database: DIY (parts only) vs Mechanic (parts + labor) ── */
@@ -349,14 +406,16 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
   };
 
   // ── Correct market valuation ──
-  const newCarBasePrice = reverseBasePrice(estimatedValue, vehicle?.year);
+  const newCarBasePrice = getCarBasePrice(vehicle?.make, vehicle?.model, estimatedValue, vehicle?.year);
   const userAge = Math.max(0, currentYear - (year || initialYear));
   const ageResidual = getResidual(userAge);
-  const standardKm = Math.max(10000, userAge * 12000);
+  const standardKm = Math.min(240000, Math.max(10000, userAge * 12000));
   const kmDelta = km - standardKm;
 
-  // Stiffer, more realistic KM factor (divisor 180,000, wider range [0.45, 1.45])
-  const kmFactor = Math.min(1.45, Math.max(0.45, 1 - (kmDelta / 180000)));
+  // Realistic KM factor tailored to vehicle age (bounds low km bump realistically)
+  const maxBonus = userAge > 12 ? 1.20 : 1.30;
+  const minMalus = userAge > 12 ? 0.70 : 0.60;
+  const kmFactor = Math.min(maxBonus, Math.max(minMalus, 1 - (kmDelta / 220000)));
 
   const lightsPenalty = selectedLights.length * 0.03;
   let accidentPenalty = 0;
@@ -390,7 +449,8 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
   if (selectedOptions.includes('alloy_wheels')) optionsBonus += 0.02;
 
   const conditionMultiplier = Math.max(0.40, (1 - lightsPenalty - accidentPenalty + serviceBonus + ownerBonus + interiorBonus + optionsBonus));
-  const ricalculatedValue = Math.max(1500, Math.round(newCarBasePrice * ageResidual * kmFactor * conditionMultiplier / 50) * 50);
+  const calculatedRaw = newCarBasePrice * ageResidual * kmFactor * conditionMultiplier;
+  const ricalculatedValue = Math.max(900, Math.round(calculatedRaw / 50) * 50);
 
   // KM usage analysis
   const kmUsage = getKmUsageLevel(km, userAge);
@@ -505,18 +565,18 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
   // ── Similar market cars ──
   const make = vehicle?.make || 'Auto';
   const model = vehicle?.model || 'usata';
-  const olderYear = Math.max(2000, year - 1);
+  const olderYear = Math.max(1995, year - 1);
   const newerYear = Math.min(currentYear, year + 1);
   const olderKm = km + 18000;
   const newerKm = Math.max(5000, km - 20000);
   const olderAge = Math.max(0, currentYear - olderYear);
   const newerAge = Math.max(0, currentYear - newerYear);
-  const olderStandardKm = Math.max(10000, olderAge * 12000);
-  const newerStandardKm = Math.max(10000, newerAge * 12000);
-  const olderKmFactor = Math.min(1.12, Math.max(0.70, 1 - ((olderKm - olderStandardKm) / 300000)));
-  const newerKmFactor = Math.min(1.12, Math.max(0.70, 1 - ((newerKm - newerStandardKm) / 300000)));
-  const olderPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(olderAge) * olderKmFactor * conditionMultiplier / 50) * 50);
-  const newerPrice = Math.max(1500, Math.round(newCarBasePrice * getResidual(newerAge) * newerKmFactor * conditionMultiplier / 50) * 50);
+  const olderStandardKm = Math.min(240000, Math.max(10000, olderAge * 12000));
+  const newerStandardKm = Math.min(240000, Math.max(10000, newerAge * 12000));
+  const olderKmFactor = Math.min(1.20, Math.max(0.70, 1 - ((olderKm - olderStandardKm) / 220000)));
+  const newerKmFactor = Math.min(1.20, Math.max(0.70, 1 - ((newerKm - newerStandardKm) / 220000)));
+  const olderPrice = Math.max(900, Math.round(newCarBasePrice * getResidual(olderAge) * olderKmFactor * conditionMultiplier / 50) * 50);
+  const newerPrice = Math.max(900, Math.round(newCarBasePrice * getResidual(newerAge) * newerKmFactor * conditionMultiplier / 50) * 50);
 
   const similarCars = [
     { model: `${make} ${model} (${year})`, km: `${km.toLocaleString('it-IT')} km`, price: ricalculatedValue },

@@ -236,21 +236,23 @@ export default function PassportDetailClient({ id }: { id: string }) {
     setEventKm('');
   };
 
-  const handleSendChatMessage = async () => {
-    if (!chatInput.trim() || isChatSending) return;
+  const handleSendChatMessage = async (customText?: string) => {
+    const textToSend = typeof customText === 'string' ? customText : chatInput;
+    if (!textToSend.trim() || isChatSending) return;
     const userMsg: PassportChatMessage = {
       id: `msg-${Date.now()}`,
       role: 'user',
-      content: chatInput.trim(),
+      content: textToSend.trim(),
       createdAt: new Date().toISOString(),
     };
 
-    setChatMessages((prev) => [...prev, userMsg]);
+    const updatedHistory = [...chatMessages, userMsg];
+    setChatMessages(updatedHistory);
     setChatInput('');
     setIsChatSending(true);
 
     try {
-      const res = await askPassportAI(passport, userMsg.content);
+      const res = await askPassportAI(passport, userMsg.content, chatMessages);
       if (res.success && res.data) {
         setChatMessages((prev) => [...prev, res.data]);
       } else {
@@ -259,7 +261,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
           {
             id: `msg-ai-${Date.now()}`,
             role: 'assistant',
-            content: `Per la tua **${v.make} ${v.model}** (${passport.currentKm.toLocaleString('it-IT')} km), ti confermo che è consigliabile verificare regolarmente lo stato dei filtri, l'olio motore omologato e l'usura dell'impianto frenante prima del prossimo tagliando.`,
+            content: `Ciao! Sulla tua ${v.make} ${v.model} (${passport.currentKm.toLocaleString('it-IT')} km), ti consiglio di verificare lo stato di usura dei componenti prima di procedere. Vuoi che ti aiuti a stimare il costo dei ricambi o preferisci un preventivo per il meccanico?`,
             createdAt: new Date().toISOString(),
           },
         ]);
@@ -270,7 +272,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
         {
           id: `msg-ai-${Date.now()}`,
           role: 'assistant',
-          content: `In base ai dati della tua ${v.make} ${v.model}, la manutenzione ordinaria è la chiave per mantenere alto l'Health Score (${health.totalScore}/100) e il valore di mercato residuo.`,
+          content: `In base ai dati della tua ${v.make} ${v.model}, la manutenzione ordinaria è la chiave per mantenere alto l'Health Score (${health.totalScore}/100) e il valore di mercato residuo. Hai notato comportamenti anomali o rumori insoliti durante la guida?`,
           createdAt: new Date().toISOString(),
         },
       ]);
@@ -918,8 +920,31 @@ export default function PassportDetailClient({ id }: { id: string }) {
               <div ref={chatBottomRef} />
             </div>
 
+            {/* Quick Suggestion Chips */}
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+              <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 shrink-0">Suggeriti:</span>
+              {[
+                'Cambiare pastiglie freni',
+                'Spia motore accesa',
+                'Quanto costa il tagliando?',
+                'Quando fare la distribuzione?',
+                'Fischiano in frenata',
+                'Fai-da-te o Meccanico?',
+              ].map((chip) => (
+                <button
+                  key={chip}
+                  type="button"
+                  onClick={() => handleSendChatMessage(chip)}
+                  disabled={isChatSending}
+                  className="px-2.5 py-1 rounded-full bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 hover:text-blue-600 dark:hover:bg-slate-700 text-slate-600 dark:text-slate-300 text-[11px] font-semibold border border-slate-200 dark:border-slate-700 shrink-0 transition-colors cursor-pointer"
+                >
+                  {chip}
+                </button>
+              ))}
+            </div>
+
             {/* Input Bar */}
-            <div className="flex gap-2 pt-2">
+            <div className="flex gap-2 pt-1">
               <input
                 type="text"
                 placeholder="Es. Quando devo cambiare la cinghia? Quanto costa il prossimo tagliando?"
@@ -932,7 +957,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
               />
               <button
                 disabled={!chatInput.trim() || isChatSending}
-                onClick={handleSendChatMessage}
+                onClick={() => handleSendChatMessage()}
                 className="px-5 h-11 rounded-xl bg-blue-600 hover:bg-blue-700 disabled:opacity-50 text-white font-bold text-xs shadow-xs"
               >
                 Invia

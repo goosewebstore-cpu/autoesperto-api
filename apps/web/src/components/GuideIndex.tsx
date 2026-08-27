@@ -9,7 +9,7 @@ import GuideCard from '@/components/GuideCard';
 import PageHero from '@/components/PageHero';
 import AdBanner from '@/components/ads/AdBanner';
 
-const PAGE_SIZE = 6;
+const PAGE_SIZE = 12;
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 function normalize(value: string) {
@@ -208,7 +208,7 @@ export default function GuideIndex() {
         <AdBanner />
 
         {totalPages > 1 && (
-          <nav aria-label="Paginazione guide" className="mt-10 flex items-center justify-center gap-4">
+          <nav aria-label="Paginazione guide" className="mt-10 flex flex-wrap items-center justify-center gap-2">
             <button
               type="button"
               onClick={() => handlePageChange(Math.max(1, current - 1))}
@@ -222,9 +222,30 @@ export default function GuideIndex() {
               <ChevronLeft className="h-3.5 w-3.5" />
               Precedente
             </button>
-            <span className="text-xs font-semibold text-text-secondary">
-              Pagina {current} di {totalPages}
-            </span>
+            <div className="flex items-center gap-1">
+              {Array.from({ length: totalPages }, (_, i) => i + 1)
+                .filter((p) => p === 1 || p === totalPages || Math.abs(p - current) <= 2)
+                .map((p, idx, arr) => {
+                  const prev = arr[idx - 1];
+                  const showEllipsis = prev && p - prev > 1;
+                  return (
+                    <div key={p} className="flex items-center gap-1">
+                      {showEllipsis && <span className="px-1 text-slate-400">…</span>}
+                      <button
+                        type="button"
+                        onClick={() => handlePageChange(p)}
+                        className={`h-8 w-8 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                          p === current
+                            ? 'bg-blue-600 text-white shadow-sm'
+                            : 'bg-white border border-slate-200 text-slate-700 hover:border-blue-600 hover:text-blue-600'
+                        }`}
+                      >
+                        {p}
+                      </button>
+                    </div>
+                  );
+                })}
+            </div>
             <button
               type="button"
               onClick={() => handlePageChange(Math.min(totalPages, current + 1))}

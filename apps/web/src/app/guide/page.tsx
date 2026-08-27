@@ -40,8 +40,10 @@ export const metadata: Metadata = {
   },
 };
 
+import Link from 'next/link';
+
 function GuideSsrFallback() {
-  const initialGuides = guides.slice(0, 6);
+  const initialGuides = guides.slice(0, 12);
   return (
     <div>
       <PageHero
@@ -53,13 +55,20 @@ function GuideSsrFallback() {
       </PageHero>
       <main className="page-body">
         <div className="mt-4 flex flex-wrap items-center gap-2">
-          <span className="rounded-full border border-blue-600 bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm">
+          <Link
+            href="/guide"
+            className="rounded-full border border-blue-600 bg-blue-600 px-3.5 py-1.5 text-xs font-semibold text-white shadow-sm"
+          >
             Tutte ({guides.length})
-          </span>
+          </Link>
           {Object.entries(GUIDE_CATEGORIES).map(([key, { label }]) => (
-            <span key={key} className="rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600">
+            <Link
+              key={key}
+              href={`/guide?categoria=${key}`}
+              className="rounded-full border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-slate-600 hover:border-blue-600 hover:text-blue-600 transition-colors"
+            >
               {label}
-            </span>
+            </Link>
           ))}
         </div>
         <div className="mt-6 grid gap-4 sm:grid-cols-2">

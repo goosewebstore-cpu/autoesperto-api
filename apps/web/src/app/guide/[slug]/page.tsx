@@ -244,6 +244,41 @@ function slugifyHeading(text: string): string {
     .replace(/\s+/g, '-');
 }
 
+function renderParagraphWithLinks(text: string) {
+  const markdownRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+
+  while ((match = markdownRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    const label = match[1];
+    const href = match[2];
+    if (href.startsWith('/')) {
+      parts.push(
+        <Link key={`${href}-${match.index}`} href={href} className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2">
+          {label}
+        </Link>
+      );
+    } else {
+      parts.push(
+        <a key={`${href}-${match.index}`} href={href} target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2">
+          {label}
+        </a>
+      );
+    }
+    lastIndex = match.index + match[0].length;
+  }
+
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+
+  return parts.length > 0 ? parts : text;
+}
+
 function countWords(guide: Guide): number {
   let count = guide.title.split(/\s+/).length + guide.description.split(/\s+/).length;
   for (const s of guide.sections) {
@@ -533,7 +568,7 @@ export default async function GuidePage({ params }: PageProps) {
                   </h2>
                   {section.paragraphs.map((paragraph) => (
                     <p key={paragraph.slice(0, 40)} className="text-text-secondary text-base leading-relaxed mt-3">
-                      {paragraph}
+                      {renderParagraphWithLinks(paragraph)}
                     </p>
                   ))}
                   {section.list && (
@@ -541,7 +576,7 @@ export default async function GuidePage({ params }: PageProps) {
                       {section.list.map((item) => (
                         <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-text-secondary leading-relaxed">
                           <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent" />
-                          <span>{item}</span>
+                          <span>{renderParagraphWithLinks(item)}</span>
                         </li>
                       ))}
                     </ul>

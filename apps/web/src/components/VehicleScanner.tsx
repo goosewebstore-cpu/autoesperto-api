@@ -78,7 +78,7 @@ export default function VehicleScanner({
   useEffect(() => {
     onStageChange?.(stage);
   }, [stage, onStageChange]);
-  const [tab, setTab] = useState<'annuncio' | 'foto' | 'manual'>('annuncio');
+  const [tab, setTab] = useState<'foto' | 'manual' | 'annuncio'>('foto');
   const [adInput, setAdInput] = useState('');
   const [parsedAd, setParsedAd] = useState<ParsedAdData | null>(null);
   const [photos, setPhotos] = useState<string[]>([]);
@@ -271,15 +271,6 @@ export default function VehicleScanner({
             <button
               type="button"
               role="tab"
-              aria-selected={tab === 'annuncio'}
-              className={`scanner-tab${tab === 'annuncio' ? ' active' : ''}`}
-              onClick={() => { setTab('annuncio'); setError(''); }}
-            >
-              <Link2 className="h-4 w-4" /> Controlla annuncio
-            </button>
-            <button
-              type="button"
-              role="tab"
               aria-selected={tab === 'foto'}
               className={`scanner-tab${tab === 'foto' ? ' active' : ''}`}
               onClick={() => { setTab('foto'); setError(''); }}
@@ -295,97 +286,18 @@ export default function VehicleScanner({
             >
               <Car className="h-4 w-4" /> Marca e modello
             </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'annuncio'}
+              className={`scanner-tab${tab === 'annuncio' ? ' active' : ''}`}
+              onClick={() => { setTab('annuncio'); setError(''); }}
+            >
+              <Link2 className="h-4 w-4" /> Controlla annuncio
+            </button>
           </div>
 
-          {tab === 'annuncio' ? (
-            <div className="space-y-4 pt-1">
-              <div className="space-y-2">
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Incolla il link dell&apos;annuncio o il testo dell&apos;offerta:
-                </label>
-                <div className="relative">
-                  <textarea
-                    rows={3}
-                    value={adInput}
-                    onChange={(e) => handleAdInputChange(e.target.value)}
-                    placeholder="Incolla qui il link di AutoScout24, Subito.it, Facebook Marketplace oppure copia il testo dell'annuncio (es. 'Fiat Panda 1.2 Lounge 2021 45.000 km 9.500 €')..."
-                    className="w-full p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-600 outline-none transition-all resize-none shadow-xs"
-                  />
-                  {adInput && (
-                    <button
-                      type="button"
-                      onClick={() => handleAdInputChange('')}
-                      className="absolute top-3 right-3 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md"
-                    >
-                      Pulisci
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Live Extracted Fields Preview Pill Tags */}
-              {parsedAd && (parsedAd.make || parsedAd.model || parsedAd.year || parsedAd.price) && (
-                <div className="p-3 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-2">
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
-                    <Sparkles className="w-3.5 h-3.5" /> Dati estratti automaticamente:
-                  </div>
-                  <div className="flex flex-wrap gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    {parsedAd.make && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Marca: <strong>{parsedAd.make}</strong>
-                      </span>
-                    )}
-                    {parsedAd.model && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Modello: <strong>{parsedAd.model}</strong>
-                      </span>
-                    )}
-                    {parsedAd.year && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Anno: <strong>{parsedAd.year}</strong>
-                      </span>
-                    )}
-                    {parsedAd.km && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Km: <strong>{parsedAd.km.toLocaleString('it-IT')}</strong>
-                      </span>
-                    )}
-                    {parsedAd.price && (
-                      <span className="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">
-                        Prezzo: <strong>{parsedAd.price.toLocaleString('it-IT')} €</strong>
-                      </span>
-                    )}
-                    {parsedAd.fuel && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Alim.: <strong>{parsedAd.fuel}</strong>
-                      </span>
-                    )}
-                  </div>
-                </div>
-              )}
-
-              {error && <p className="scanner-box-error" role="alert">{error}</p>}
-
-              <button
-                type="button"
-                onClick={handleAnalyzeAd}
-                disabled={manualLoading}
-                className="scanner-submit w-full"
-              >
-                {manualLoading ? (
-                  <><Loader2 className="animate-spin" /> Analisi annuncio in corso…</>
-                ) : (
-                  <><ScanSearch /> Ottieni il Verdetto sull&apos;Annuncio <ArrowRight /></>
-                )}
-              </button>
-
-              <div className="scanner-box-promises" aria-label="Cosa ricevi">
-                {promises.map((item) => (
-                  <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
-                ))}
-              </div>
-            </div>
-          ) : tab === 'foto' ? (
+          {tab === 'foto' ? (
             <div className="scanner-photo-tab">
               <button
                 type="button"
@@ -420,7 +332,7 @@ export default function VehicleScanner({
               </div>
               <p className="scanner-box-micro">Analisi gratuita al 100% e senza registrazione.</p>
             </div>
-          ) : (
+          ) : tab === 'manual' ? (
             <form
               className="scanner-manual-form"
               onSubmit={(event) => { event.preventDefault(); void handleManualSubmit(); }}
@@ -518,6 +430,94 @@ export default function VehicleScanner({
                 )}
               </button>
             </form>
+          ) : (
+            <div className="space-y-4 pt-1">
+              <div className="space-y-2">
+                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                  Incolla il link dell&apos;annuncio o il testo dell&apos;offerta:
+                </label>
+                <div className="relative">
+                  <textarea
+                    rows={3}
+                    value={adInput}
+                    onChange={(e) => handleAdInputChange(e.target.value)}
+                    placeholder="Incolla qui il link di AutoScout24, Subito.it, Facebook Marketplace oppure copia il testo dell'annuncio (es. 'Fiat Panda 1.2 Lounge 2021 45.000 km 9.500 €')..."
+                    className="w-full p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-600 outline-none transition-all resize-none shadow-xs"
+                  />
+                  {adInput && (
+                    <button
+                      type="button"
+                      onClick={() => handleAdInputChange('')}
+                      className="absolute top-3 right-3 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md"
+                    >
+                      Pulisci
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              {/* Live Extracted Fields Preview Pill Tags */}
+              {parsedAd && (parsedAd.make || parsedAd.model || parsedAd.year || parsedAd.price) && (
+                <div className="p-3 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-2">
+                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
+                    <Sparkles className="w-3.5 h-3.5" /> Dati estratti automaticamente:
+                  </div>
+                  <div className="flex flex-wrap gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
+                    {parsedAd.make && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Marca: <strong>{parsedAd.make}</strong>
+                      </span>
+                    )}
+                    {parsedAd.model && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Modello: <strong>{parsedAd.model}</strong>
+                      </span>
+                    )}
+                    {parsedAd.year && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Anno: <strong>{parsedAd.year}</strong>
+                      </span>
+                    )}
+                    {parsedAd.km && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Km: <strong>{parsedAd.km.toLocaleString('it-IT')}</strong>
+                      </span>
+                    )}
+                    {parsedAd.price && (
+                      <span className="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">
+                        Prezzo: <strong>{parsedAd.price.toLocaleString('it-IT')} €</strong>
+                      </span>
+                    )}
+                    {parsedAd.fuel && (
+                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                        Alim.: <strong>{parsedAd.fuel}</strong>
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {error && <p className="scanner-box-error" role="alert">{error}</p>}
+
+              <button
+                type="button"
+                onClick={handleAnalyzeAd}
+                disabled={manualLoading}
+                className="scanner-submit w-full"
+              >
+                {manualLoading ? (
+                  <><Loader2 className="animate-spin" /> Analisi annuncio in corso…</>
+                ) : (
+                  <><ScanSearch /> Ottieni il Verdetto sull&apos;Annuncio <ArrowRight /></>
+                )}
+              </button>
+
+              <div className="scanner-box-promises" aria-label="Cosa ricevi">
+                {promises.map((item) => (
+                  <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
+                ))}
+              </div>
+            </div>
           )}
           <input
             ref={inputRef}

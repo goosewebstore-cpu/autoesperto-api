@@ -447,7 +447,6 @@ export default async function GuidePage({ params }: PageProps) {
   return (
     <div className="min-h-screen bg-white">
       <SiteHeader />
-      <ArticleInteractiveBar title={guide.title} url={fullUrl} />
 
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(articleSchema) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
@@ -514,6 +513,8 @@ export default async function GuidePage({ params }: PageProps) {
               {guide.description}
             </p>
           </header>
+
+          <ArticleInteractiveBar title={guide.title} url={fullUrl} />
 
           {/* Highlights / Key Takeaways Box for Featured Snippet & GEO AI Overviews */}
           {guide.sections.length > 0 && (

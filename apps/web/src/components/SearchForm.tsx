@@ -37,6 +37,8 @@ export default function SearchForm({
   const [year, setYear] = useState(initialYear);
   const [km, setKm] = useState(initialKm);
   const [price, setPrice] = useState(initialPrice);
+  const [fuel, setFuel] = useState('Diesel');
+  const [transmission, setTransmission] = useState('Manuale');
 
   const brands = useMemo(
     () => Object.keys(catalogo.brands).sort((a, b) => a.localeCompare(b, 'it')),
@@ -110,36 +112,80 @@ export default function SearchForm({
           <>
             <div className="mb-4">
               <p className="text-sm font-semibold text-text-primary">Quale auto stai valutando?</p>
-              <p className="text-xs text-text-secondary mt-1">L&apos;anno &egrave; necessario: cambia prezzo, generazione e controlli da fare.</p>
+              <p className="text-xs text-text-secondary mt-1">Inserisci i dettagli per ottenere una stima immediata e accurata.</p>
             </div>
             <div className="grid sm:grid-cols-3 gap-3 mb-4">
               <div>
-                <label htmlFor="make" className="block text-xs font-semibold text-text-secondary mb-1.5">Marca</label>
-                <input id="make" type="text" list="auto-makes" autoComplete="off" value={make} onChange={(event) => setMake(event.target.value)} placeholder="Es. Mazda" className={inputClass} />
+                <label htmlFor="make" className="block text-xs font-semibold text-text-secondary mb-1.5">Marca *</label>
+                <input id="make" type="text" list="auto-makes" autoComplete="off" value={make} onChange={(event) => setMake(event.target.value)} placeholder="Es. Volkswagen" className={inputClass} />
                 <datalist id="auto-makes">{brands.map((brand) => <option key={brand} value={brand} />)}</datalist>
               </div>
               <div>
-                <label htmlFor="model" className="block text-xs font-semibold text-text-secondary mb-1.5">Modello</label>
-                <input id="model" type="text" list="auto-models" autoComplete="off" value={model} onChange={(event) => setModel(event.target.value)} placeholder="Es. CX-3" className={inputClass} />
+                <label htmlFor="model" className="block text-xs font-semibold text-text-secondary mb-1.5">Modello *</label>
+                <input id="model" type="text" list="auto-models" autoComplete="off" value={model} onChange={(event) => setModel(event.target.value)} placeholder="Es. Golf" className={inputClass} />
                 <datalist id="auto-models">{modelsForMake.map((item) => <option key={item} value={item} />)}</datalist>
               </div>
               <div>
-                <label htmlFor="year" className="block text-xs font-semibold text-text-secondary mb-1.5">Anno di immatricolazione</label>
-                <input id="year" type="number" inputMode="numeric" min="1950" max={new Date().getFullYear() + 1} autoComplete="off" value={year} onChange={(event) => setYear(event.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="Es. 2016" className={inputClass} />
+                <label htmlFor="year" className="block text-xs font-semibold text-text-secondary mb-1.5">Anno immatricolazione *</label>
+                <input id="year" type="number" inputMode="numeric" min="1950" max={new Date().getFullYear() + 1} autoComplete="off" value={year} onChange={(event) => setYear(event.target.value.replace(/\D/g, '').slice(0, 4))} placeholder="Es. 2019" className={inputClass} />
               </div>
             </div>
-            <div className="grid sm:grid-cols-2 gap-3 mb-5">
+
+            <div className="grid sm:grid-cols-2 gap-3 mb-4">
               <div>
                 <label htmlFor="km" className="block text-xs font-semibold text-text-secondary mb-1.5">Chilometri <span className="text-text-tertiary font-normal">(opzionale)</span></label>
                 <input id="km" type="number" inputMode="numeric" autoComplete="off" value={km} onChange={(event) => setKm(event.target.value.replace(/\D/g, ''))} placeholder="Es. 85000" className={inputClass} />
               </div>
               <div>
-                <label htmlFor="price" className="block text-xs font-semibold text-text-secondary mb-1.5">Prezzo dell&apos;annuncio <span className="text-text-tertiary font-normal">(facoltativo)</span></label>
-                <input id="price" type="number" inputMode="numeric" autoComplete="off" value={price} onChange={(event) => setPrice(event.target.value.replace(/\D/g, ''))} placeholder="Es. 12000" className={inputClass} />
+                <label htmlFor="price" className="block text-xs font-semibold text-text-secondary mb-1.5">Prezzo richiesto <span className="text-text-tertiary font-normal">(opzionale)</span></label>
+                <input id="price" type="number" inputMode="numeric" autoComplete="off" value={price} onChange={(event) => setPrice(event.target.value.replace(/\D/g, ''))} placeholder="Es. 15500" className={inputClass} />
               </div>
             </div>
+
+            <div className="grid sm:grid-cols-2 gap-3 mb-5 pt-3 border-t border-border">
+              <div>
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5">Alimentazione</label>
+                <div className="flex flex-wrap gap-1">
+                  {['Diesel', 'Benzina', 'Ibrida', 'GPL', 'Elettrica'].map((f) => (
+                    <button
+                      key={f}
+                      type="button"
+                      onClick={() => setFuel(f)}
+                      className={`px-2.5 py-1 rounded-lg text-xs font-semibold border transition-all ${
+                        fuel === f
+                          ? 'bg-accent text-white border-accent'
+                          : 'bg-surface-2 text-text-secondary border-border hover:bg-surface'
+                      }`}
+                    >
+                      {f}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-xs font-semibold text-text-secondary mb-1.5">Cambio</label>
+                <div className="flex flex-wrap gap-1">
+                  {['Manuale', 'Automatico'].map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTransmission(t)}
+                      className={`px-3 py-1 rounded-lg text-xs font-semibold border transition-all ${
+                        transmission === t
+                          ? 'bg-accent text-white border-accent'
+                          : 'bg-surface-2 text-text-secondary border-border hover:bg-surface'
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <button type="submit" disabled={isSubmitDisabled} className="w-full h-12 rounded-xl bg-accent text-white font-semibold text-base flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-accent-hover active:scale-[0.99] transition-all">
-              {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Analisi in corso...</> : <><Search className="w-5 h-5" /> Analizza il modello</>}
+              {loading ? <><Loader2 className="w-5 h-5 animate-spin" /> Analisi in corso...</> : <><Search className="w-5 h-5" /> Calcola Valutazione Completa</>}
             </button>
           </>
         )}

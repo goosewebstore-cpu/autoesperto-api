@@ -103,13 +103,8 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
       '@type': 'Brand',
       name: make.name,
     },
-    aggregateRating: {
-      '@type': 'AggregateRating',
-      ratingValue: latest.score.toFixed(1),
-      bestRating: '10',
-      worstRating: '1',
-      ratingCount: '48',
-    },
+    description: `Scheda di affidabilità e manutenzione per ${make.name} ${model} usata con problemi noti, richiami e punti di forza.`,
+    mainEntityOfPage: `${siteUrl()}/affidabilita/${resolved.make}/${resolved.model}`,
   };
 
   const breadcrumbSchema = {

@@ -720,12 +720,35 @@ export function buildAlternatives(make: string, model: string, year: number): Al
   return result;
 }
 
-export function buildLocalReport(make: string, model: string, year?: number): AutoReport {
+export function buildLocalReport(
+  make: string,
+  model: string,
+  year?: number,
+  requestedPrice?: number,
+  km?: number
+): AutoReport {
   const currentYear = new Date().getFullYear();
   const y = year || currentYear;
   const reliability = estimateReliability(make, model, y);
   const consumption = estimateConsumption(make, model, y);
-  const price = estimateMarketValue(make, model, { year: y });
+  const basePrice = estimateMarketValue(make, model, { year: y });
+
+  // Correzione km (media italiana ~15.000 km/anno)
+  let val = basePrice.value;
+  if (km && km > 0) {
+    const expectedKm = Math.max(10000, (currentYear - y) * 15000);
+    const diffKm = km - expectedKm;
+    const kmFactor = 1 - (diffKm / 100000) * 0.12;
+    val = Math.max(1500, Math.round((val * Math.max(0.65, Math.min(1.35, kmFactor))) / 100) * 100);
+  }
+
+  const range = Math.round((val * 0.1) / 100) * 100;
+  const price = {
+    value: val,
+    min: val - range,
+    max: val + range,
+  };
+
   const age = Math.max(0, currentYear - y);
   const residualNow = getResidual(age);
 
@@ -782,6 +805,14 @@ export function buildLocalReport(make: string, model: string, year?: number): Au
     min: price.min,
     max: price.max,
     inputYear: y,
+    requestedPrice: requestedPrice,
+    priceLabel: requestedPrice
+      ? requestedPrice <= price.min
+        ? 'GOOD'
+        : requestedPrice >= price.max
+        ? 'HIGH'
+        : 'FAIR'
+      : undefined,
     comment: `Stima indicativa per una ${make} ${model} ${y} in buone condizioni. Per una valutazione più precisa inserisci anno, chilometri e prezzo richiesto.`,
     marketUrls: [],
   };

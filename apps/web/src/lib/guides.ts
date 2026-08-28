@@ -6715,6 +6715,9 @@ export const guides: Guide[] = [
   },
 ];
 
+const guideMap = new Map(guides.map((g) => [g.slug, g]));
+
 export function getGuide(slug: string): Guide | undefined {
-  return guides.find((g) => g.slug === slug);
+  return guideMap.get(slug);
 }
+

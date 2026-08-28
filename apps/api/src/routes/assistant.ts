@@ -111,129 +111,103 @@ router.post('/ask', async (req: Request, res: Response, next: NextFunction) => {
       };
       const label = topicLabels[repairTopic] || repairTopic;
 
-      answer = `💰 Costi per ${label} su ${makeModel}${yearStr}:\n\n`;
-      answer += `🔧 Fai-da-te (solo ricambi): ${cost.diy}\n`;
-      answer += `🏭 Meccanico (ricambi + manodopera): ${cost.mech}\n`;
-      answer += `⏱️ Tempo stimato: ${cost.time}\n`;
-      answer += cost.canDiy
-        ? `\n✅ Intervento fattibile fai-da-te con attrezzatura base.`
-        : `\n⚠️ Intervento consigliato in officina specializzata.`;
-      answer += `\n\n🛒 Dove comprare: ${cost.stores}`;
+      answer = `Sulla tua **${makeModel}**${yearStr}, ecco la stima dei costi reali di mercato per ${label}:\n\n` +
+        `• **Fai-da-te (solo ricambi)**: **${cost.diy}** (${cost.canDiy ? 'fattibile in autonomia con attrezzi standard' : 'richiede ponte sollevatore o attrezzatura specifica'})\n` +
+        `• **In officina (ricambi + manodopera)**: **${cost.mech}** (tempo stimato: ${cost.time})\n` +
+        `• **Canali consigliati per i ricambi**: ${cost.stores}\n\n`;
 
       if (kb) {
         const relevantIssues = kb.common.filter(issue =>
           repairTopic.split('_').some(word => issue.toLowerCase().includes(word))
         );
         if (relevantIssues.length > 0) {
-          answer += `\n\n📋 Nota specifica per ${vehicle?.make}: ${relevantIssues[0]}`;
+          answer += `💡 **Nota specifica per ${vehicle?.make}**: ${relevantIssues[0]}\n\n`;
         }
       }
+
+      answer += `Hai già notato sintomi specifici durante la guida (come rumori anomali o perdite di efficienza), o stai pianificando una manutenzione preventiva?`;
     }
     // Dashboard lights / warning questions
-    else if (qLower.includes('spia') || qLower.includes('cruscotto') || qLower.includes('warning')) {
-      answer = `Per le spie del cruscotto su ${makeModel}${yearStr}${kmStr}:\n\n`;
-      answer += `🔴 Spie ROSSE (fermare subito): Freni, Temperatura motore, Olio\n`;
-      answer += `🟡 Spie GIALLE (far controllare): Check Engine, ABS, Airbag, FAP\n\n`;
+    else if (qLower.includes('spia') || qLower.includes('cruscotto') || qLower.includes('warning') || qLower.includes('motore accesa')) {
+      answer = `Sulla tua **${makeModel}**${yearStr}${kmStr}, l'accensione di una spia segnala un'anomalia registrata dalla centralina:\n\n` +
+        `🔴 **Spia ROSSA**: arresta subito l'auto in sicurezza (pressione olio, freni, temperatura motore).\n` +
+        `🟡 **Spia GIALLA / Check Engine**: anomalia a iniezione, scarico (EGR/DPF/lambda) o sensori. Puoi guidare a andatura moderata fino all'officina.\n\n`;
 
       if (condition?.dashboardLights?.length) {
-        answer += `Le spie che hai selezionato richiedono una diagnosi OBD2 in officina (costo: 20-50€). `;
-        answer += `Spesso il problema è un sensore economico (20-80€ su Autodoc o eBay).\n\n`;
+        answer += `Le anomalie indicate richiedono una diagnosi OBD2 in officina (costo: 20-50€) o un lettore diagnostico portatile (15-30€ su Amazon).\n\n`;
       }
-
-      answer += `🔧 Fai-da-te: puoi comprare un lettore OBD2 su Amazon (15-30€) per leggere i codici errore.\n`;
-      answer += `🏭 Meccanico: diagnosi completa 30-60€, poi preventivo specifico per la riparazione.`;
 
       if (kb) {
-        answer += `\n\n📋 Problemi noti per ${vehicle?.make}: ${kb.common[0]}`;
+        answer += `💡 **Criticità tipica per ${vehicle?.make}**: ${kb.common[0]}\n\n`;
       }
+
+      answer += `La spia è **fissa o lampeggiante**? L'auto ha vuoti di potenza o rumori insoliti?`;
+
     }
     // Buy/sell advice
     else if (qLower.includes('vender') || qLower.includes('conviene') || qLower.includes('comprare') || qLower.includes('acquist')) {
-      answer = `Consiglio per ${makeModel}${yearStr}${kmStr}:\n\n`;
+      answer = `Ecco un'analisi strategica per **${makeModel}**${yearStr}${kmStr}:\n\n`;
 
       if (kb) {
-        answer += `📊 Affidabilità: ${kb.reliabilityScore}/10\n`;
-        answer += `💸 Costi manutenzione: ${kb.maintenance}\n\n`;
+        answer += `📊 **Affidabilità complessiva**: ${kb.reliabilityScore}/10\n`;
+        answer += `💸 **Costi di gestione**: ${kb.maintenance}\n\n`;
 
         if (kb.versionsRecommended.length > 0) {
-          answer += `✅ Versioni consigliate: ${kb.versionsRecommended.join(', ')}\n`;
+          answer += `✅ **Versioni consigliate**: ${kb.versionsRecommended.join(', ')}\n`;
         }
         if (kb.versionsToAvoid.length > 0) {
-          answer += `❌ Da evitare: ${kb.versionsToAvoid.join(', ')}\n`;
+          answer += `❌ **Motorizzazioni/versioni da verificare o evitare**: ${kb.versionsToAvoid.join(', ')}\n`;
         }
 
-        answer += `\n📋 Controlli importanti prima dell'acquisto:\n`;
-        kb.common.forEach(issue => { answer += `• ${issue}\n`; });
+        answer += `\n📋 **Punti di controllo chiave**:\n`;
+        kb.common.slice(0, 3).forEach(issue => { answer += `• ${issue}\n`; });
       } else {
-        answer += `Regola generale: se la riparazione supera il 35-40% del valore dell'auto, conviene vendere.\n\n`;
-        answer += `📋 Controlli fondamentali:\n`;
-        answer += `• Verifica tagliandi (libretto manutenzione)\n`;
-        answer += `• Diagnosi OBD2 per errori nascosti\n`;
-        answer += `• Controllare cinghia/catena distribuzione\n`;
-        answer += `• Stato pneumatici e freni\n`;
-        answer += `• Carrozzeria: ruggine, graffi, incidenti`;
+        answer += `💡 **Regola d'oro**: se il preventivo di ripristino supera il 35-40% del valore attuale di mercato, conviene pianificare la vendita o la permuta.\n\n`;
+        answer += `📋 **Controlli essenziali prima di decidere**:\n`;
+        answer += `• Libretto tagliandi e cronologia interventi\n`;
+        answer += `• Diagnosi OBD2 per errori memorizzati\n`;
+        answer += `• Stato cinghia/catena di distribuzione e frizione\n`;
       }
+      answer += `\nQual è il prezzo richiesto o il preventivo di cui disponi? Posso confrontarlo con la quotazione di mercato.`;
     }
     // Where to buy parts
     else if (qLower.includes('ricamb') || qLower.includes('pezzo') || qLower.includes('dove') || qLower.includes('compra') || qLower.includes('ebay') || qLower.includes('autodoc') || qLower.includes('oscaro')) {
-      answer = `🛒 Dove comprare ricambi per ${makeModel}${yearStr}:\n\n`;
-      answer += `1. **eBay.it** — Ottimo per ricambi usati OEM a prezzi bassi. Cerca sempre con il codice OEM del pezzo.\n`;
-      answer += `2. **Autodoc.it** — Grande catalogo di ricambi nuovi aftermarket e OEM. Spedizione veloce.\n`;
-      answer += `3. **Oscaro.it** — Specializzato auto, prezzi competitivi su freni, filtri, sospensioni.\n`;
-      answer += `4. **Amazon.it** — Buono per accessori, olio, lampadine, attrezzi.\n\n`;
-      answer += `💡 Consiglio: cerca sempre inserendo marca, modello, anno e il codice OEM del pezzo (stampato sul ricambio vecchio o nel libretto). `;
-      answer += `Confronta i prezzi tra i 3 siti prima di ordinare.`;
+      answer = `Per ordinare i ricambi per la tua **${makeModel}**${yearStr}:\n\n` +
+        `1. **eBay.it** — Ideale per ricambi usati originali OEM (specchietti, fanali, centraline, alternatori).\n` +
+        `2. **Autodoc.it** — Catalogo completo per pastiglie, dischi, filtri e sospensioni nuove certificate.\n` +
+        `3. **Oscaro.it** — Ottimo per kit frizione e cinghie di distribuzione a prezzi competitivi.\n` +
+        `4. **Amazon.it** — Consigliato per fluidi, olio motore, lampadine e attrezzi fai-da-te.\n\n` +
+        `Quale componente specifico devi sostituire? Posso aiutarti a trovare il tipo esatto.`;
     }
     // General mechanic questions
     else if (qLower.includes('meccanic') || qLower.includes('motore') || qLower.includes('fumo') || qLower.includes('rumore') || qLower.includes('vibrazio')) {
-      answer = `Per problemi meccanici su ${makeModel}${yearStr}${kmStr}:\n\n`;
+      answer = `Per problemi meccanici su **${makeModel}**${yearStr}${kmStr}:\n\n`;
 
       if (kb) {
-        answer += `🔧 Motore: ${kb.engine}\n\n`;
-        answer += `⚙️ Cambio: ${kb.transmission}\n\n`;
+        answer += `🔧 **Motore**: ${kb.engine}\n\n`;
+        answer += `⚙️ **Trasmissione**: ${kb.transmission}\n\n`;
       }
 
-      answer += `📋 Passaggi consigliati:\n`;
-      answer += `1. Diagnosi OBD2 in officina (20-50€) per identificare il problema esatto\n`;
-      answer += `2. Chiedere preventivo scritto con dettaglio ricambi + manodopera\n`;
-      answer += `3. Confrontare il costo dei ricambi su Autodoc/eBay/Oscaro\n`;
-      answer += `4. Se il costo supera il 40% del valore auto, valutare la vendita\n\n`;
-      answer += `💡 Per rumori o vibrazioni anomale, è fondamentale la diagnosi di un meccanico esperto. Non rimandare se senti rumori dal motore o dal cambio.`;
-    }
-    // DIY questions
-    else if (qLower.includes('da solo') || qLower.includes('fai da te') || qLower.includes('posso') || qLower.includes('difficile')) {
-      answer = `🔧 Lavori fattibili fai-da-te su ${makeModel}:\n\n`;
-      answer += `✅ FACILI (nessuna esperienza richiesta):\n`;
-      answer += `• Cambio lampadine/fanali — 10-30€, 15 min\n`;
-      answer += `• Cambio tergicristalli — 10-25€, 5 min\n`;
-      answer += `• Sostituzione batteria — 60-150€, 15 min\n`;
-      answer += `• Cambio filtro aria — 10-25€, 10 min\n`;
-      answer += `• Ritocco graffi (stilo) — 12-25€, 20 min\n\n`;
-      answer += `⚠️ MEDI (serve un po' di esperienza):\n`;
-      answer += `• Cambio pastiglie freni — 25-60€, 1-2 ore\n`;
-      answer += `• Cambio olio + filtro — 25-60€, 30 min\n`;
-      answer += `• Cambio specchietto — 25-120€, 15 min\n`;
-      answer += `• Sostituzione sensore ABS — 20-70€, 30 min\n\n`;
-      answer += `🚫 RICHIEDE MECCANICO:\n`;
-      answer += `• Catena/cinghia distribuzione\n`;
-      answer += `• Frizione\n`;
-      answer += `• Alternatore\n`;
-      answer += `• Lavaggio FAP/DPF\n`;
-      answer += `• Problemi centralina/elettronica complessa`;
+      answer += `📋 **Procedura consigliata**:\n`;
+      answer += `1. Diagnosi OBD2 in officina (20-50€) per isolare l'origine del problema\n`;
+      answer += `2. Preventivo dettagliato che separi costo manodopera e ricambi\n`;
+      answer += `3. Verifica disponibilità ricambi OEM/aftermarket su Autodoc o eBay per risparmiare\n\n`;
+      answer += `Da quando hai notato il problema e in quali situazioni si manifesta (es. accelerazione, a freddo, in frenata)?`;
     }
     // Fallback: use KB if available
     else {
-      answer = `Riguardo "${question}" per ${makeModel}${yearStr}${kmStr}:\n\n`;
+      answer = `Riguardo a "${question}" per **${makeModel}**${yearStr}${kmStr}:\n\n`;
 
       if (kb) {
-        answer += `📊 Affidabilità: ${kb.reliabilityScore}/10 — Manutenzione: ${kb.maintenance}\n\n`;
-        answer += `🔧 Motore: ${kb.engine}\n\n`;
-        answer += `📋 Problemi comuni:\n`;
-        kb.common.forEach(issue => { answer += `• ${issue}\n`; });
-        answer += `\n🛒 Per qualsiasi ricambio: cerca su eBay.it, Autodoc.it o Oscaro.it inserendo marca, modello e anno.`;
+        answer += `📊 **Affidabilità**: ${kb.reliabilityScore}/10 — **Manutenzione**: ${kb.maintenance}\n\n`;
+        answer += `🔧 **Scheda tecnica**: ${kb.engine}\n\n`;
+        answer += `📋 **Note sul modello**:\n`;
+        kb.common.slice(0, 3).forEach(issue => { answer += `• ${issue}\n`; });
+        answer += `\nCosa vorresti approfondire in particolare su questo veicolo?`;
       } else {
-        answer += `Per piccoli difetti estetici (graffi, specchietti, plastiche) i ricambi su eBay e Autodoc sono molto convenienti.\n`;
-        answer += `Per problemi meccanici, fai sempre una diagnosi OBD2 prima di procedere (20-50€ in officina).`;
+        answer += `Per piccoli difetti estetici (graffi, specchietti, plastiche) i ricambi online consentono un forte risparmio.\n`;
+        answer += `Per problemi meccanici o spie, ti consiglio una lettura errori OBD2 in officina prima di sostituire componenti a caso.\n\n`;
+        answer += `Vuoi verificare una stima dei costi per un componente specifico?`;
       }
     }
 

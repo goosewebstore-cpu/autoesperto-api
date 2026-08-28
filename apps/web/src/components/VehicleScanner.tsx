@@ -88,9 +88,12 @@ export default function VehicleScanner({
   const [error, setError] = useState('');
   const [manualMake, setManualMake] = useState('');
   const [manualModel, setManualModel] = useState('');
+  const [manualVersion, setManualVersion] = useState('');
   const [manualYear, setManualYear] = useState('');
   const [manualKm, setManualKm] = useState('');
   const [manualPrice, setManualPrice] = useState('');
+  const [manualFuel, setManualFuel] = useState('Diesel');
+  const [manualTransmission, setManualTransmission] = useState('Manuale');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
 
@@ -241,6 +244,12 @@ export default function VehicleScanner({
         setStage('idle');
         return;
       }
+      if (result.report && result.report.vehicle) {
+        if (manualFuel) result.report.vehicle.fuel = manualFuel;
+        if (manualTransmission) result.report.vehicle.transmission = manualTransmission;
+        if (manualVersion) result.report.vehicle.version = manualVersion;
+      }
+
       setScan(result);
       setReport(result.report ?? null);
       trackEvent('car_selected', { make: result.vehicle.make, model: result.vehicle.model });
@@ -385,6 +394,16 @@ export default function VehicleScanner({
                   />
                 </label>
                 <label className="scanner-field">
+                  <span>Versione (opz.)</span>
+                  <input
+                    type="text"
+                    value={manualVersion}
+                    onChange={(e) => setManualVersion(e.target.value)}
+                    placeholder="es. Lounge, R-Line"
+                    autoComplete="off"
+                  />
+                </label>
+                <label className="scanner-field">
                   <span>Anno (opz.)</span>
                   <input
                     type="number"
@@ -409,20 +428,64 @@ export default function VehicleScanner({
                   />
                 </label>
                 <label className="scanner-field">
-                  <span>Prezzo richiesto (opz.)</span>
+                  <span>Prezzo (€ opz.)</span>
                   <input
                     type="number"
                     inputMode="numeric"
                     value={manualPrice}
                     onChange={(e) => setManualPrice(e.target.value)}
-                    placeholder="es. 17900"
+                    placeholder="es. 12500"
                     min={0}
                     max={10000000}
                   />
                 </label>
               </div>
-              {error && <p className="scanner-box-error" role="alert">{error}</p>}
-              <button type="submit" className="scanner-submit" disabled={manualLoading}>
+
+              {/* Selettori Carburante & Cambio */}
+              <div className="mt-3 grid sm:grid-cols-2 gap-3 pt-2 border-t border-slate-100 dark:border-slate-800 text-left">
+                <div>
+                  <span className="text-[11px] font-bold text-slate-500 block mb-1.5">Alimentazione / Carburante:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {['Diesel', 'Benzina', 'Ibrida', 'GPL', 'Metano', 'Elettrica'].map((f) => (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => setManualFuel(f)}
+                        className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all ${
+                          manualFuel.toLowerCase().includes(f.toLowerCase())
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-300'
+                        }`}
+                      >
+                        {f}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <span className="text-[11px] font-bold text-slate-500 block mb-1.5">Cambio:</span>
+                  <div className="flex flex-wrap gap-1">
+                    {['Manuale', 'Automatico'].map((t) => (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setManualTransmission(t)}
+                        className={`px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${
+                          manualTransmission.toLowerCase().includes(t.toLowerCase())
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-300'
+                        }`}
+                      >
+                        {t}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              {error && <p className="scanner-box-error mt-3" role="alert">{error}</p>}
+              <button type="submit" className="scanner-submit mt-4" disabled={manualLoading}>
                 {manualLoading ? (
                   <><Loader2 className="animate-spin" /> Calcolo in corso…</>
                 ) : (

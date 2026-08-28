@@ -7,7 +7,7 @@ COPY packages/database/package.json packages/database/
 COPY packages/database/prisma ./packages/database/prisma
 RUN npm install
 COPY . .
-RUN npm run build --workspace=packages/database && npm run build --workspace=packages/types && npm run build --workspace=apps/api
+RUN npm --workspace=packages/database run build && npm --workspace=packages/types run build && npm --workspace=apps/api run build
 
 FROM node:20-alpine AS runner
 WORKDIR /app

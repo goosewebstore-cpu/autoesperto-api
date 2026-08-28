@@ -1,18 +1,51 @@
 {
-  "name": "AutoEsperto — Analisi auto usate",
+  "name": "AutoEsperto — Analisi & Valutazione Auto",
   "short_name": "AutoEsperto",
-  "description": "Analizza un'auto usata, confronta le informazioni disponibili e scopri cosa controllare prima dell'acquisto.",
+  "description": "Valutazione auto usate, riconoscimento foto con IA, difetti noti e passaporto digitale del veicolo.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#FFFFFF",
-  "theme_color": "#0F172A",
-  "orientation": "portrait",
+  "background_color": "#0B1120",
+  "theme_color": "#2563EB",
+  "orientation": "portrait-primary",
   "scope": "/",
   "icons": [
-    { "src": "/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable" },
-    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable" }
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
   ],
-  "categories": ["utilities", "productivity"],
+  "shortcuts": [
+    {
+      "name": "Scansiona Auto da Foto",
+      "short_name": "Scansiona",
+      "description": "Scatta o carica una foto per analizzare subito un'auto usata",
+      "url": "/analizza-annuncio",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Valutazione & Prezzi di Mercato",
+      "short_name": "Valuta",
+      "description": "Calcola il valore reale di mercato di qualsiasi modello",
+      "url": "/valutazione",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "Passaporto Digitale",
+      "short_name": "Passaporto",
+      "description": "Accedi ai tuoi passaporti veicolo e storico manutenzioni",
+      "url": "/passport",
+      "icons": [{ "src": "/icon-192.png", "sizes": "192x192" }]
+    }
+  ],
+  "categories": ["utilities", "productivity", "automotive"],
   "lang": "it",
   "dir": "ltr"
 }

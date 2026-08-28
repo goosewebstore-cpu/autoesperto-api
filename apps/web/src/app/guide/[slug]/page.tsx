@@ -8,7 +8,11 @@ import AdInArticle from '@/components/ads/AdInArticle';
 import AdBanner from '@/components/ads/AdBanner';
 import ArticleInteractiveBar, { ArticleFeedbackBox } from '@/components/ArticleInteractiveBar';
 import { getGuide, guides, GUIDE_CATEGORIES, type Guide } from '@/lib/guides';
-import { getAllMakes, getModelSlug, POPULAR_MODELS, slugify } from '@/lib/catalogo';
+
+
+import GuideTableOfContents from '@/components/GuideTableOfContents';
+import ArticleValuatorWidget from '@/components/ArticleValuatorWidget';
+
 
 interface PageProps {
   params: Promise<{ slug: string }>;
@@ -181,14 +185,65 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     href: '/valutazione',
     description: 'Confronta la valutazione proposta con il valore reale di mercato.',
   },
+  'truffa-km': {
+    label: 'Verifica chilometri e usura',
+    href: '/',
+    description: 'Scansiona foto e documenti per individuare incongruenze sul chilometraggio.',
+  },
+  'auto-neopatentati': {
+    label: 'Guida auto per neopatentati',
+    href: '/neopatentati',
+    description: 'Consulta i modelli conformi ai limiti di potenza e neopatentati 2026.',
+  },
+  'calcolo-bollo': {
+    label: 'Calcola il bollo auto',
+    href: '/calcolo-bollo',
+    description: 'Calcola la tassa automobilistica per kW, regione ed esenzioni ibride/elettriche.',
+  },
+  'migliori-suv': {
+    label: 'Confronta i migliori SUV',
+    href: '/confronta',
+    description: 'Metti a confronto affidabilità, consumi e quotazioni dei SUV sul mercato.',
+  },
+  'incentivi-usato': {
+    label: 'Verifica incentivi ed esenzioni',
+    href: '/incentivi-auto',
+    description: 'Scopri le agevolazioni fiscali, sconti ed ecobonus attivi per l\'auto.',
+  },
+  'profilo-digitale': {
+    label: 'Crea il Profilo Digitale auto',
+    href: '/passport',
+    description: 'Digitalizza lo storico di tagliandi, manutenzioni e scadenze del tuo veicolo.',
+  },
 };
+
+const DEFAULT_CTA = {
+  label: 'Valuta il prezzo reale',
+  href: '/valutazione',
+  description: 'Confronta il prezzo richiesto con la media di mercato dagli annunci reali.',
+};
+
+function getGuideCta(ctaKey?: string): { label: string; href: string; description: string } {
+  if (!ctaKey) return DEFAULT_CTA;
+  if (guideCtas[ctaKey]) return guideCtas[ctaKey];
+  if (ctaKey.length > 25) {
+    return {
+      label: 'Analizza la tua auto gratis',
+      href: '/',
+      description: ctaKey,
+    };
+  }
+  return DEFAULT_CTA;
+}
 
 export const dynamic = 'force-static';
 export const dynamicParams = true;
 
+
 export function generateStaticParams() {
   return guides.map((guide) => ({ slug: guide.slug }));
 }
+
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -214,7 +269,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     openGraph: {
       type: 'article',
       locale: 'it_IT',
-      title: guide.title,
+      title: `${guide.title} | AutoEsperto`,
       description: guide.description,
       url: fullUrl,
       siteName: 'AutoEsperto',
@@ -222,7 +277,16 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       modifiedTime: getDateModified(guide.published),
       authors: ['Redazione AutoEsperto'],
       section: GUIDE_CATEGORIES[guide.category].label,
-      images: [{ url: `${siteUrl}/og-image.png`, width: 1200, height: 630, alt: guide.title }],
+      images: [
+        {
+          url: `${siteUrl}/og-image.png`,
+          secureUrl: `${siteUrl}/og-image.png`,
+          width: 1200,
+          height: 630,
+          type: 'image/png',
+          alt: guide.title,
+        },
+      ],
     },
     twitter: {
       card: 'summary_large_image',
@@ -318,44 +382,153 @@ function extractFaqs(guide: Guide): Array<{ question: string; answer: string }> 
   return faqs;
 }
 
-const MAKE_ALIASES: Record<string, string[]> = {
-  Volkswagen: ['vw'],
-  'Mercedes-Benz': ['mercedes'],
-  'Alfa Romeo': ['alfa'],
-};
-
-const SAFE_BARE_MODELS = new Set([
-  'Panda', 'Golf', 'Yaris', 'Corolla', 'RAV4', 'C-HR', 'Aygo', 'Fiesta', 'Puma', 'Kuga',
-  'Clio', 'Captur', 'Megane', 'Duster', 'Sandero', 'Jogger', 'Logan', 'Picanto', 'Rio',
-  'Ceed', 'Stonic', 'Qashqai', 'Juke', 'Micra', 'Swift', 'Vitara', 'Ignis', 'CX-3', 'CX-5',
-  'Tiguan', 'T-Cross', 'T-Roc', 'Ibiza', 'Leon', 'Arona', 'Ateca', 'Fabia', 'Octavia',
-  'Kamiq', 'Karoq', 'Kodiaq', 'Tucson', 'Kona', 'i10', 'i20', 'i30', 'Astra', 'Mokka',
-  'Crossland', 'Giulia', 'Giulietta', 'Stelvio', 'Renegade', 'Compass', 'Evoque', 'Ypsilon',
-  'XC40', 'XC60', 'V40', 'Model 3', 'Model Y', 'MG4', 'ZS', 'Civic', 'Jazz', 'CR-V',
-  'ASX', 'Outlander', 'NX', 'Cayenne', 'Macan', 'Fortwo', '500X',
-]);
-
-function isMentioned(text: string, name: string): boolean {
-  const escaped = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  return new RegExp(`(^|[^a-z0-9])${escaped}(?![a-z0-9-])`).test(text);
+function slugify(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[-\s]+/g, '-')
+    .replace(/^-+|-+$/g, '');
 }
+
+const POPULAR_MENTIONS = [
+  { make: 'Fiat', model: 'Panda' },
+  { make: 'Fiat', model: '500' },
+  { make: 'Fiat', model: 'Punto' },
+  { make: 'Fiat', model: 'Tipo' },
+  { make: 'Volkswagen', model: 'Golf' },
+  { make: 'Volkswagen', model: 'Polo' },
+  { make: 'Volkswagen', model: 'T-Roc' },
+  { make: 'Volkswagen', model: 'Tiguan' },
+  { make: 'Toyota', model: 'Yaris' },
+  { make: 'Toyota', model: 'Corolla' },
+  { make: 'Ford', model: 'Fiesta' },
+  { make: 'Ford', model: 'Focus' },
+  { make: 'Ford', model: 'Puma' },
+  { make: 'Renault', model: 'Clio' },
+  { make: 'Renault', model: 'Captur' },
+  { make: 'Peugeot', model: '208' },
+  { make: 'Peugeot', model: '2008' },
+  { make: 'Citroën', model: 'C3' },
+  { make: 'Opel', model: 'Corsa' },
+  { make: 'Dacia', model: 'Sandero' },
+  { make: 'Dacia', model: 'Duster' },
+  { make: 'Hyundai', model: 'i10' },
+  { make: 'Hyundai', model: 'Tucson' },
+  { make: 'Kia', model: 'Picanto' },
+  { make: 'Kia', model: 'Sportage' },
+  { make: 'Nissan', model: 'Qashqai' },
+  { make: 'BMW', model: 'Serie 1' },
+  { make: 'BMW', model: 'Serie 3' },
+  { make: 'Audi', model: 'A3' },
+  { make: 'Mercedes-Benz', model: 'Classe A' },
+  { make: 'Jeep', model: 'Renegade' },
+  { make: 'Alfa Romeo', model: 'Giulietta' },
+  { make: 'Lancia', model: 'Ypsilon' },
+];
 
 function getMentionedModels(guide: Guide): Array<{ make: string; model: string }> {
   const text = normalize(
     guide.sections
-      .flatMap((section) => [section.heading, ...section.paragraphs, ...(section.list ?? [])])
+      .map((s) => s.heading + ' ' + s.paragraphs.join(' '))
       .join(' ')
   );
-  const catalog = new Map(getAllMakes().map((make) => [make.slug, new Set(make.models.map(getModelSlug))]));
-  return POPULAR_MODELS.filter((item) => {
-    const makeSlug = slugify(item.make);
-    const modelSlug = slugify(item.model);
-    const inCatalog = catalog.get(makeSlug)?.has(modelSlug) ?? false;
-    if (!inCatalog) return false;
-    const names = [normalize(`${item.make} ${item.model}`), ...(MAKE_ALIASES[item.make] ?? []).map((alias) => normalize(`${alias} ${item.model}`))];
-    if (names.some((name) => isMentioned(text, name))) return true;
-    return SAFE_BARE_MODELS.has(item.model) && isMentioned(text, normalize(item.model));
+  return POPULAR_MENTIONS.filter((item) => {
+    const full = normalize(`${item.make} ${item.model}`);
+    const mod = normalize(item.model);
+    return text.includes(full) || text.includes(` ${mod} `);
   }).slice(0, 6);
+}
+
+
+
+function cleanHeadingTopic(heading: string): string {
+  let h = heading.replace(/^\d+[\.\)]\s*/, '').trim();
+  h = h.replace(/^Cos['’]è\s+(?:lo\s+|la\s+|il\s+|l['’])?/i, '');
+  h = h.replace(/^Cosa prevede\s+(?:lo\s+|la\s+|il\s+|l['’])?/i, '');
+  h = h.replace(/^Come\s+/i, '');
+  h = h.replace(/:\s*cosa succede$/i, '');
+  h = h.trim();
+  return h.charAt(0).toUpperCase() + h.slice(1);
+}
+
+function extractFirstSmartSentence(text?: string): string {
+  if (!text) return '';
+  let cleaned = text.replace(/^[•\-\*\d\.\)\s]+/, '').trim();
+  if (cleaned.length < 10) return '';
+
+  const regex = /(?<!\b(?:es|art|d\.lgs|d\.m|ecc|n|nr|dott|min|km|kw|tco))\.\s+/i;
+  const match = cleaned.search(regex);
+
+  let sentence = '';
+  if (match !== -1) {
+    sentence = cleaned.slice(0, match + 1).trim();
+  } else {
+    sentence = cleaned;
+  }
+
+  if (sentence.length < 30 && cleaned.length > sentence.length) {
+    sentence = cleaned;
+  }
+
+  if (sentence.length > 175) {
+    const truncated = sentence.slice(0, 170);
+    const lastSpace = truncated.lastIndexOf(' ');
+    sentence = (lastSpace > 90 ? truncated.slice(0, lastSpace) : truncated).trim() + '...';
+  }
+
+  return sentence;
+}
+
+function extractGuideTakeaways(guide: Guide): Array<{ topic: string; summary: string }> {
+  const takeaways: Array<{ topic: string; summary: string }> = [];
+  const validSections = guide.sections.filter((s) => {
+    const lower = s.heading.toLowerCase();
+    return !lower.includes('domande frequenti') &&
+           !lower.includes('faq') &&
+           !lower.includes('fonti') &&
+           !lower.includes('metodologia') &&
+           !lower.includes('chi siamo');
+  });
+
+  for (const sec of validSections) {
+    if (takeaways.length >= 4) break;
+
+    const topic = cleanHeadingTopic(sec.heading);
+    let summary = '';
+
+    for (const p of sec.paragraphs || []) {
+      const s = extractFirstSmartSentence(p);
+      if (s && !s.toLowerCase().startsWith('ecco ') && !s.toLowerCase().startsWith('di seguito')) {
+        summary = s;
+        break;
+      }
+    }
+
+    if (!summary && sec.list && sec.list.length > 0) {
+      for (const item of sec.list) {
+        const s = extractFirstSmartSentence(item);
+        if (s) {
+          summary = s;
+          break;
+        }
+      }
+    }
+
+    if (summary) {
+      takeaways.push({ topic, summary });
+    }
+  }
+
+  if (takeaways.length === 0) {
+    takeaways.push({
+      topic: 'Panoramica',
+      summary: guide.description,
+    });
+  }
+
+  return takeaways;
 }
 
 export default async function GuidePage({ params }: PageProps) {
@@ -364,7 +537,8 @@ export default async function GuidePage({ params }: PageProps) {
   if (!guide) notFound();
 
   const mentionedModels = getMentionedModels(guide);
-  const cta = guideCtas[guide.cta] ?? guideCtas['auto-usata-affare'];
+  const cta = getGuideCta(guide.cta);
+  const takeaways = extractGuideTakeaways(guide);
   const otherGuides = guides.filter((g) => g.slug !== guide.slug).slice(0, 3);
   const wordCount = countWords(guide);
   const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
@@ -516,59 +690,46 @@ export default async function GuidePage({ params }: PageProps) {
 
           <ArticleInteractiveBar title={guide.title} url={fullUrl} />
 
-          {/* Highlights / Key Takeaways Box for Featured Snippet & GEO AI Overviews */}
-          {guide.sections.length > 0 && (
-            <div className="key-takeaways my-6 rounded-2xl bg-blue-50/60 border border-blue-200/80 p-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-blue-700 uppercase tracking-wide mb-3">
-                <Sparkles className="w-4 h-4" />
-                <span>In sintesi - Punti chiave</span>
+          {/* Highlights / Key Takeaways Box — Sintesi chiara e leggibile dei punti salienti */}
+          {takeaways.length > 0 && (
+            <div className="key-takeaways my-8 rounded-2xl bg-gradient-to-br from-blue-50/90 via-sky-50/30 to-slate-50 border border-blue-200/90 p-5 md:p-6 shadow-xs">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/60 pb-3 mb-4">
+                <div className="flex items-center gap-2 text-xs font-extrabold text-blue-800 uppercase tracking-wider">
+                  <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span>In sintesi — Punti chiave</span>
+                </div>
+                <span className="text-[11px] font-semibold text-blue-700 bg-blue-100/70 rounded-full px-2.5 py-0.5">
+                  Riepilogo essenziale
+                </span>
               </div>
-              <ul className="space-y-2.5 text-sm text-slate-800 leading-relaxed">
-                {guide.sections.slice(0, 4).map((sec) => (
-                  <li key={sec.heading} className="flex items-start gap-2.5">
-                    <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0 mt-0.5" />
-                    <span>
-                      <strong className="font-semibold">{sec.heading.replace(/^\d+\.\s*/, '')}:</strong>{' '}
-                      {sec.paragraphs[0] ? sec.paragraphs[0] : ''}
+              <ul className="space-y-3.5">
+                {takeaways.map((item, idx) => (
+                  <li key={idx} className="flex items-start gap-3">
+                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-blue-600 text-white shadow-xs">
+                      <CheckCircle2 className="w-3.5 h-3.5" />
                     </span>
+                    <div className="text-sm leading-relaxed text-slate-800">
+                      <strong className="font-bold text-slate-900">{item.topic}:</strong>{' '}
+                      <span className="text-slate-700">{item.summary}</span>
+                    </div>
                   </li>
                 ))}
               </ul>
             </div>
           )}
 
-          {/* Table of Contents / Indice dei contenuti for SERP Anchor Jump Links */}
+          {/* Indice della guida — link funzionanti con scroll client-side */}
           {tocItems.length > 1 && (
-            <nav aria-label="Indice dei contenuti" className="my-8 rounded-2xl bg-slate-50 border border-slate-200 p-5">
-              <div className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide border-b border-slate-200 pb-3 mb-3">
-                <List className="w-4 h-4 text-blue-600" />
-                <span>Indice della guida</span>
-              </div>
-              <ol className="space-y-2 text-sm text-slate-600">
-                {tocItems.map((item, idx) => (
-                  <li key={item.id} className="flex items-start gap-2.5">
-                    <span className="font-semibold text-blue-600 text-xs shrink-0 mt-0.5">{idx + 1}.</span>
-                    <a
-                      href={`#${item.id}`}
-                      className="hover:text-blue-600 hover:underline transition-colors leading-snug"
-                    >
-                      {item.heading}
-                    </a>
-                  </li>
-                ))}
-              </ol>
-            </nav>
+            <GuideTableOfContents items={tocItems} />
           )}
 
           <div itemProp="articleBody" className="mt-8 space-y-10">
             {guide.sections.map((section, index) => {
               const sectionId = slugifyHeading(section.heading);
               return (
-                <section key={section.heading} id={sectionId} className="scroll-mt-20">
+                <section key={section.heading} id={sectionId} className="scroll-mt-28">
                   <h2 className="text-xl font-bold text-slate-900">
-                    <a href={`#${sectionId}`} className="hover:text-blue-600 transition-colors">
-                      {section.heading}
-                    </a>
+                    {section.heading}
                   </h2>
                   {section.paragraphs.map((paragraph) => (
                     <p key={paragraph.slice(0, 40)} className="text-slate-600 text-base leading-relaxed mt-3">
@@ -590,6 +751,8 @@ export default async function GuidePage({ params }: PageProps) {
               );
             })}
           </div>
+
+          <ArticleValuatorWidget suggestedModels={mentionedModels} articleTitle={guide.title} />
 
           <ArticleFeedbackBox />
 
@@ -634,15 +797,15 @@ export default async function GuidePage({ params }: PageProps) {
               <ScanSearch className="h-6 w-6" />
             </span>
           </div>
-          <h2 className="text-lg font-bold text-slate-900">Vuoi controllare un&apos;auto specifica?</h2>
+          <h2 className="text-lg font-bold text-slate-900">{cta.label}</h2>
           <p className="text-sm text-slate-600 leading-relaxed mt-2 max-w-md mx-auto">
-            Usa lo scanner gratuito di AutoEsperto: prezzo di mercato, affidabilità e cosa controllare prima di comprarla.
+            {cta.description}
           </p>
           <Link
-            href="/#scanner-section"
+            href={cta.href}
             className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 hover:bg-blue-700 transition-colors"
           >
-            Analizza un&apos;auto gratis <ArrowRight className="h-4 w-4" />
+            {cta.label} <ArrowRight className="h-4 w-4" />
           </Link>
           <p className="mt-3 text-xs text-slate-400">
             Gratis · senza registrazione · risultato in pochi secondi

@@ -6,7 +6,8 @@ import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
-import MobileStickyBar from '@/components/MobileStickyBar';
+import MobileBottomNav from '@/components/mobile/MobileBottomNav';
+import InstallAppPrompt from '@/components/mobile/InstallAppPrompt';
 import AnalyticsTracker from '@/components/AnalyticsTracker';
 import AdsTracker from '@/components/AdsTracker';
 
@@ -80,13 +81,22 @@ export const metadata: Metadata = {
     title: siteTitle,
     description: siteDescription,
     siteName: 'AutoEsperto',
-    images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'AutoEsperto — Valutazione auto gratis: prezzo, affidabilità e danni da foto' }],
+    images: [
+      {
+        url: `${siteUrl}/og-image.png`,
+        secureUrl: `${siteUrl}/og-image.png`,
+        width: 1200,
+        height: 630,
+        type: 'image/png',
+        alt: 'AutoEsperto — Valutazione auto gratis: prezzo, affidabilità e danni da foto',
+      },
+    ],
   },
   twitter: {
     card: 'summary_large_image',
     title: siteTitle,
     description: siteDescription,
-    images: ['/og-image.png'],
+    images: [`${siteUrl}/og-image.png`],
   },
   robots: {
     index: true,
@@ -191,11 +201,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           crossOrigin="anonymous"
         />
       </head>
-      <body className="min-h-screen">
+      <body className="min-h-screen pb-20 md:pb-0">
         <JsonLd />
         <ServiceWorker />
         <CookieConsent />
-        <MobileStickyBar />
+        <MobileBottomNav />
+        <InstallAppPrompt />
         <AnalyticsTracker />
         <AdsTracker />
         {children}

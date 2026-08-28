@@ -10,15 +10,18 @@ import {
   Fuel,
   Euro,
   RotateCcw,
-  Check,
   Sparkles,
   ShieldCheck,
-  Wrench,
-  Layers,
   ChevronDown,
   ChevronUp,
   Tag,
   CheckCircle2,
+  Car,
+  Zap,
+  Palette,
+  Hash,
+  Layers,
+  Settings2,
 } from 'lucide-react';
 import { calculateBolloAccurate } from '@/lib/bollo';
 import { estimateReliability } from '@/lib/affidabilita';
@@ -56,21 +59,42 @@ const CONDITION_OPTIONS = [
   { id: 'poor', label: 'Da Ripristinare / Difetti Evidenti', factor: 0.86, note: '-14% per carrozzeria/meccanica' },
 ];
 
+const FUEL_OPTIONS = ['Diesel', 'Benzina', 'Ibrida', 'GPL', 'Metano', 'Elettrica'];
+const TRANS_OPTIONS = ['Manuale', 'Automatico'];
+const BODY_OPTIONS = ['Berlina', 'SUV / Crossover', 'Station Wagon', 'Coupé', 'Cabrio', 'Monovolume', 'Utilitaria', 'Furgone'];
+
 export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
   const currentYear = new Date().getFullYear();
+
+  // Initial values from report
+  const initialMake = report.vehicle?.make || '';
+  const initialModel = report.vehicle?.model || '';
+  const initialVersion = report.vehicle?.version || '';
   const initialYear = report.price?.inputYear || report.vehicle?.year || currentYear - 5;
   const initialKm = report.price?.inputKm || (report.vehicle as any)?.mileage || 100000;
   const initialTrans = report.vehicle?.transmission || 'Manuale';
   const initialFuel = report.vehicle?.fuel || 'Diesel';
   const initialPrice = report.price?.requestedPrice || '';
-  const initialVersion = report.vehicle?.version || '';
+  const initialPower = report.vehicle?.power || '';
+  const initialDisplacement = report.vehicle?.displacement || '';
+  const initialBody = report.vehicle?.body || '';
+  const initialColor = report.vehicle?.color || '';
+  const initialEuroClass = report.vehicle?.euroClass || '';
 
+  // Editable state
+  const [make, setMake] = useState<string>(initialMake);
+  const [model, setModel] = useState<string>(initialModel);
   const [version, setVersion] = useState<string>(initialVersion);
   const [year, setYear] = useState<number>(initialYear);
   const [km, setKm] = useState<number>(initialKm);
   const [transmission, setTransmission] = useState<string>(initialTrans);
   const [fuel, setFuel] = useState<string>(initialFuel);
   const [requestedPrice, setRequestedPrice] = useState<string>(initialPrice ? String(initialPrice) : '');
+  const [power, setPower] = useState<string>(initialPower);
+  const [displacement, setDisplacement] = useState<string>(initialDisplacement);
+  const [body, setBody] = useState<string>(initialBody);
+  const [color, setColor] = useState<string>(initialColor);
+  const [euroClass, setEuroClass] = useState<string>(initialEuroClass);
   const [selectedOptionals, setSelectedOptionals] = useState<string[]>([]);
   const [condition, setCondition] = useState<string>('good');
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -151,19 +175,26 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
       else priceLabel = 'FAIR';
     }
 
-    const kw = report.vehicle?.power ? parseInt(String(report.vehicle.power).replace(/\D/g, '')) : 85;
+    const kw = power ? parseInt(String(power).replace(/\D/g, '')) : (report.vehicle?.power ? parseInt(String(report.vehicle.power).replace(/\D/g, '')) : 85);
     const bolloCalc = calculateBolloAccurate(kw, fuel, year);
-    const newReliability = estimateReliability(report.vehicle?.make || 'Auto', report.vehicle?.model || '', year);
-    const newConsumption = estimateConsumption(report.vehicle?.make || 'Auto', report.vehicle?.model || '', year);
+    const newReliability = estimateReliability(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year);
+    const newConsumption = estimateConsumption(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year);
 
     const updated: AutoReport = {
       ...report,
       vehicle: {
         ...report.vehicle,
+        make: make || report.vehicle?.make,
+        model: model || report.vehicle?.model,
         version: version || report.vehicle?.version,
         year: year,
         transmission: transmission,
         fuel: fuel,
+        power: power || report.vehicle?.power,
+        displacement: displacement || report.vehicle?.displacement,
+        body: body || report.vehicle?.body,
+        color: color || report.vehicle?.color,
+        euroClass: euroClass || report.vehicle?.euroClass,
       },
       price: {
         ...report.price,
@@ -196,15 +227,22 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
   useEffect(() => {
     handleApplyChanges();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, km, transmission, fuel, requestedPrice, selectedOptionals, condition, version]);
+  }, [year, km, transmission, fuel, requestedPrice, selectedOptionals, condition, version, make, model, power, displacement, body, color, euroClass]);
 
   const handleReset = () => {
+    setMake(initialMake);
+    setModel(initialModel);
     setVersion(initialVersion);
     setYear(initialYear);
     setKm(initialKm);
     setTransmission(initialTrans);
     setFuel(initialFuel);
     setRequestedPrice(initialPrice ? String(initialPrice) : '');
+    setPower(initialPower);
+    setDisplacement(initialDisplacement);
+    setBody(initialBody);
+    setColor(initialColor);
+    setEuroClass(initialEuroClass);
     setSelectedOptionals([]);
     setCondition('good');
     onUpdate(report);
@@ -228,7 +266,7 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
               </span>
             </div>
             <p className="text-xs text-slate-500 mt-0.5">
-              Modifica carburante, anno, km e optional per ottenere una stima precisa al 100%.
+              Modifica marca, modello, carburante, anno, km e optional per ottenere una stima precisa al 100%.
             </p>
           </div>
         </div>
@@ -248,25 +286,29 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-4">
         <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <Calendar className="w-3.5 h-3.5 text-blue-600" /> Anno
+            <Car className="w-3.5 h-3.5 text-blue-600" /> Auto
           </span>
-          <span className="text-sm font-extrabold text-slate-900 number-mono block mt-1">{year}</span>
+          <span className="text-sm font-extrabold text-slate-900 truncate block mt-1">
+            {make || '—'} {model || '—'}
+          </span>
         </div>
 
         <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <Gauge className="w-3.5 h-3.5 text-blue-600" /> Chilometri
+            <Calendar className="w-3.5 h-3.5 text-blue-600" /> Anno / KM
           </span>
           <span className="text-sm font-extrabold text-slate-900 number-mono block mt-1">
-            {km.toLocaleString('it-IT')} km
+            {year} · {km.toLocaleString('it-IT')} km
           </span>
         </div>
 
         <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
           <span className="text-[11px] font-bold text-slate-500 uppercase tracking-wider flex items-center gap-1">
-            <Fuel className="w-3.5 h-3.5 text-blue-600" /> Carburante
+            <Fuel className="w-3.5 h-3.5 text-blue-600" /> Motore
           </span>
-          <span className="text-sm font-extrabold text-slate-900 truncate block mt-1">{fuel}</span>
+          <span className="text-sm font-extrabold text-slate-900 truncate block mt-1">
+            {fuel} · {transmission}
+          </span>
         </div>
 
         <div className="p-3 rounded-xl bg-white border border-slate-200/90 shadow-2xs">
@@ -282,119 +324,240 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
       {/* Full Editing Controls */}
       {isExpanded && (
         <div className="mt-5 pt-5 border-t border-blue-100 space-y-5 animate-fade-in">
-          {/* Row 1: Versione, Anno, Km, Prezzo */}
-          <div className="grid sm:grid-cols-4 gap-3">
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">
-                Allestimento / Versione
-              </label>
-              <input
-                type="text"
-                value={version}
-                onChange={(e) => setVersion(e.target.value)}
-                placeholder="Es. R-Line, Lounge, Business"
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600"
-              />
-            </div>
 
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">
-                Anno di Immatricolazione
-              </label>
-              <select
-                value={year}
-                onChange={(e) => setYear(parseInt(e.target.value, 10))}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600"
-              >
-                {Array.from({ length: 28 }, (_, i) => currentYear - i).map((y) => (
-                  <option key={y} value={y}>
-                    {y}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">
-                Chilometri Effettivi (KM)
-              </label>
-              <input
-                type="number"
-                step="2500"
-                value={km}
-                onChange={(e) => setKm(Math.max(0, parseInt(e.target.value, 10) || 0))}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600"
-              />
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1">
-                Prezzo Richiesto (€ - Opzionale)
-              </label>
-              <input
-                type="number"
-                placeholder="Es. 14500"
-                value={requestedPrice}
-                onChange={(e) => setRequestedPrice(e.target.value)}
-                className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600"
-              />
-            </div>
-          </div>
-
-          {/* Row 2: Carburante & Cambio */}
-          <div className="grid sm:grid-cols-2 gap-4">
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
-                <Fuel className="w-3.5 h-3.5 text-blue-600" /> Tipo di Carburante / Alimentazione
-              </label>
-              <div className="grid grid-cols-3 gap-1.5">
-                {['Diesel', 'Benzina', 'Ibrida', 'GPL', 'Metano', 'Elettrica'].map((f) => {
-                  const isSel = fuel.toLowerCase().includes(f.toLowerCase());
-                  return (
-                    <button
-                      key={f}
-                      type="button"
-                      onClick={() => setFuel(f)}
-                      className={`h-9 px-2.5 rounded-xl text-xs font-bold border transition-all ${
-                        isSel
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                          : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
-                      }`}
-                    >
-                      {f}
-                    </button>
-                  );
-                })}
+          {/* ── Section 1: Identità Veicolo ── */}
+          <div>
+            <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Car className="w-4 h-4 text-blue-600" /> Identità Veicolo
+            </h4>
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Marca</label>
+                <input
+                  type="text"
+                  value={make}
+                  onChange={(e) => setMake(e.target.value)}
+                  placeholder="Es. Volkswagen, BMW, Fiat"
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                />
               </div>
-            </div>
-
-            <div>
-              <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
-                <Cog className="w-3.5 h-3.5 text-blue-600" /> Trasmissione / Cambio
-              </label>
-              <div className="grid grid-cols-2 gap-2">
-                {['Manuale', 'Automatico'].map((t) => {
-                  const isSel = transmission.toLowerCase().includes(t.toLowerCase());
-                  return (
-                    <button
-                      key={t}
-                      type="button"
-                      onClick={() => setTransmission(t)}
-                      className={`h-9 px-3 rounded-xl text-xs font-bold border transition-all ${
-                        isSel
-                          ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                          : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
-                      }`}
-                    >
-                      {t} {t === 'Automatico' ? '(+450 €)' : ''}
-                    </button>
-                  );
-                })}
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Modello</label>
+                <input
+                  type="text"
+                  value={model}
+                  onChange={(e) => setModel(e.target.value)}
+                  placeholder="Es. Golf, Serie 3, Panda"
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                />
+              </div>
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">Allestimento / Versione</label>
+                <input
+                  type="text"
+                  value={version}
+                  onChange={(e) => setVersion(e.target.value)}
+                  placeholder="Es. R-Line, Lounge, Business"
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                />
               </div>
             </div>
           </div>
 
-          {/* Row 3: Stato d'uso & Condizione */}
+          {/* ── Section 2: Dati Tecnici ── */}
+          <div>
+            <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Settings2 className="w-4 h-4 text-blue-600" /> Dati Tecnici
+            </h4>
+
+            <div className="space-y-4">
+              {/* Carburante */}
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
+                  <Fuel className="w-3.5 h-3.5 text-blue-600" /> Tipo di Carburante / Alimentazione
+                </label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {FUEL_OPTIONS.map((f) => {
+                    const isSel = fuel.toLowerCase().includes(f.toLowerCase());
+                    return (
+                      <button
+                        key={f}
+                        type="button"
+                        onClick={() => setFuel(f)}
+                        className={`h-9 px-2.5 rounded-xl text-xs font-bold border transition-all ${
+                          isSel
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
+                        }`}
+                      >
+                        {f}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Cambio */}
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
+                  <Cog className="w-3.5 h-3.5 text-blue-600" /> Trasmissione / Cambio
+                </label>
+                <div className="grid grid-cols-2 gap-2">
+                  {TRANS_OPTIONS.map((t) => {
+                    const isSel = transmission.toLowerCase().includes(t.toLowerCase());
+                    return (
+                      <button
+                        key={t}
+                        type="button"
+                        onClick={() => setTransmission(t)}
+                        className={`h-9 px-3 rounded-xl text-xs font-bold border transition-all ${
+                          isSel
+                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                            : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
+                        }`}
+                      >
+                        {t} {t === 'Automatico' ? '(+450 €)' : ''}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* Potenza, Cilindrata, Carrozzeria */}
+              <div className="grid sm:grid-cols-3 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                    <Zap className="w-3.5 h-3.5 text-blue-600" /> Potenza (CV o kW)
+                  </label>
+                  <input
+                    type="text"
+                    value={power}
+                    onChange={(e) => setPower(e.target.value)}
+                    placeholder="Es. 150 CV, 110 kW"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                    <Gauge className="w-3.5 h-3.5 text-blue-600" /> Cilindrata
+                  </label>
+                  <input
+                    type="text"
+                    value={displacement}
+                    onChange={(e) => setDisplacement(e.target.value)}
+                    placeholder="Es. 1598 cc, 2.0 TDI"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                    <Layers className="w-3.5 h-3.5 text-blue-600" /> Carrozzeria
+                  </label>
+                  <select
+                    value={body}
+                    onChange={(e) => setBody(e.target.value)}
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  >
+                    <option value="">Seleziona...</option>
+                    {BODY_OPTIONS.map((b) => (
+                      <option key={b} value={b}>{b}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+
+              {/* Colore, Classe Euro */}
+              <div className="grid sm:grid-cols-2 gap-3">
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                    <Palette className="w-3.5 h-3.5 text-blue-600" /> Colore
+                  </label>
+                  <input
+                    type="text"
+                    value={color}
+                    onChange={(e) => setColor(e.target.value)}
+                    placeholder="Es. Nero Perla, Grigio Nardo"
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs font-bold text-slate-700 block mb-1 flex items-center gap-1">
+                    <Hash className="w-3.5 h-3.5 text-blue-600" /> Classe Euro
+                  </label>
+                  <select
+                    value={euroClass}
+                    onChange={(e) => setEuroClass(e.target.value)}
+                    className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                  >
+                    <option value="">Seleziona...</option>
+                    <option value="Euro 6d">Euro 6d</option>
+                    <option value="Euro 6d-TEMP">Euro 6d-TEMP</option>
+                    <option value="Euro 6c">Euro 6c</option>
+                    <option value="Euro 6b">Euro 6b</option>
+                    <option value="Euro 6">Euro 6</option>
+                    <option value="Euro 5">Euro 5</option>
+                    <option value="Euro 4">Euro 4</option>
+                    <option value="Euro 3">Euro 3</option>
+                    <option value="Euro 2">Euro 2</option>
+                    <option value="Euro 1">Euro 1</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* ── Section 3: Anno, KM, Prezzo ── */}
+          <div>
+            <h4 className="text-xs font-extrabold text-slate-800 uppercase tracking-wider mb-3 flex items-center gap-1.5">
+              <Euro className="w-4 h-4 text-blue-600" /> Anno, Chilometri & Prezzo
+            </h4>
+            <div className="grid sm:grid-cols-3 gap-3">
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">
+                  Anno di Immatricolazione
+                </label>
+                <select
+                  value={year}
+                  onChange={(e) => setYear(parseInt(e.target.value, 10))}
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                >
+                  {Array.from({ length: 28 }, (_, i) => currentYear - i).map((y) => (
+                    <option key={y} value={y}>
+                      {y}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">
+                  Chilometri Effettivi (KM)
+                </label>
+                <input
+                  type="number"
+                  step="2500"
+                  value={km}
+                  onChange={(e) => setKm(Math.max(0, parseInt(e.target.value, 10) || 0))}
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                />
+              </div>
+
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1">
+                  Prezzo Richiesto (€ - Opzionale)
+                </label>
+                <input
+                  type="number"
+                  placeholder="Es. 14500"
+                  value={requestedPrice}
+                  onChange={(e) => setRequestedPrice(e.target.value)}
+                  className="w-full h-10 px-3 rounded-xl border border-slate-200 bg-white text-xs sm:text-sm font-bold text-slate-900 focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* ── Section 4: Stato d'uso & Condizione ── */}
           <div>
             <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
               <ShieldCheck className="w-3.5 h-3.5 text-blue-600" /> Stato Generale del Veicolo
@@ -421,7 +584,7 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
             </div>
           </div>
 
-          {/* Row 4: Optional & Dotazioni (Pacchetti ad alto valore) */}
+          {/* ── Section 5: Optional & Dotazioni ── */}
           <div>
             <div className="flex items-center justify-between mb-1.5">
               <label className="text-xs font-bold text-slate-700 flex items-center gap-1">

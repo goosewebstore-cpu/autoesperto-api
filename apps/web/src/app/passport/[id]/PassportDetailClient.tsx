@@ -39,6 +39,9 @@ import {
   Fuel,
   Lock,
   Download,
+  Pencil,
+  Save,
+  Palette,
   Info,
   ArrowLeftRight,
   X,
@@ -98,6 +101,66 @@ export default function PassportDetailClient({ id }: { id: string }) {
   const [showTransferModal, setShowTransferModal] = useState(false);
   const [transferCode, setTransferCode] = useState('');
   const [transferCopied, setTransferCopied] = useState(false);
+
+  // Vehicle Edit Modal
+  const [showVehicleEditModal, setShowVehicleEditModal] = useState(false);
+  const [editMake, setEditMake] = useState('');
+  const [editModel, setEditModel] = useState('');
+  const [editVersion, setEditVersion] = useState('');
+  const [editYear, setEditYear] = useState<number>(2020);
+  const [editFuel, setEditFuel] = useState('');
+  const [editTransmission, setEditTransmission] = useState('');
+  const [editPower, setEditPower] = useState('');
+  const [editDisplacement, setEditDisplacement] = useState('');
+  const [editBody, setEditBody] = useState('');
+  const [editColor, setEditColor] = useState('');
+  const [editEuroClass, setEditEuroClass] = useState('');
+  const [editPlate, setEditPlate] = useState('');
+
+  const openVehicleEditModal = () => {
+    if (!passport) return;
+    const v = passport.vehicle;
+    setEditMake(v.make || '');
+    setEditModel(v.model || '');
+    setEditVersion(v.version || '');
+    setEditYear(v.year || 2020);
+    setEditFuel(v.fuel || '');
+    setEditTransmission(v.transmission || '');
+    setEditPower(v.power || '');
+    setEditDisplacement(v.displacement || '');
+    setEditBody(v.body || '');
+    setEditColor(v.color || '');
+    setEditEuroClass(v.euroClass || '');
+    setEditPlate(v.plate || '');
+    setShowVehicleEditModal(true);
+  };
+
+  const handleSaveVehicleEdit = () => {
+    if (!passport) return;
+    const updated: VehiclePassportData = {
+      ...passport,
+      vehicle: {
+        ...passport.vehicle,
+        make: editMake || passport.vehicle.make,
+        model: editModel || passport.vehicle.model,
+        version: editVersion,
+        year: editYear,
+        fuel: editFuel,
+        transmission: editTransmission,
+        power: editPower,
+        displacement: editDisplacement,
+        body: editBody,
+        color: editColor,
+        euroClass: editEuroClass,
+        plate: editPlate,
+      },
+      nickname: `${editMake || passport.vehicle.make} ${editModel || passport.vehicle.model}`,
+      updatedAt: new Date().toISOString(),
+    };
+    savePassport(updated);
+    setPassport(updated);
+    setShowVehicleEditModal(false);
+  };
 
   const handleOpenTransfer = () => {
     if (!passport) return;
@@ -354,9 +417,29 @@ export default function PassportDetailClient({ id }: { id: string }) {
                     <Fuel className="w-3.5 h-3.5 text-slate-500" /> {v.fuel}
                   </span>
                 )}
+                {v.transmission && (
+                  <span className="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                    {v.transmission}
+                  </span>
+                )}
                 {v.power && (
                   <span className="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
                     {v.power}
+                  </span>
+                )}
+                {v.displacement && (
+                  <span className="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                    {v.displacement}
+                  </span>
+                )}
+                {v.body && (
+                  <span className="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700">
+                    {v.body}
+                  </span>
+                )}
+                {v.color && (
+                  <span className="bg-slate-100 dark:bg-slate-800 px-3 py-1.5 rounded-xl border border-slate-200 dark:border-slate-700 flex items-center gap-1">
+                    <Palette className="w-3.5 h-3.5 text-slate-500" /> {v.color}
                   </span>
                 )}
                 {v.euroClass && (
@@ -369,6 +452,14 @@ export default function PassportDetailClient({ id }: { id: string }) {
                     {v.plate}
                   </span>
                 )}
+
+                {/* Edit Vehicle Button */}
+                <button
+                  onClick={openVehicleEditModal}
+                  className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 px-3 py-1.5 rounded-xl border border-blue-200 dark:border-blue-800 hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors flex items-center gap-1.5 font-bold"
+                >
+                  <Pencil className="w-3.5 h-3.5" /> Modifica Dati Auto
+                </button>
               </div>
 
               {/* KM & Market Value Row */}
@@ -1221,6 +1312,136 @@ export default function PassportDetailClient({ id }: { id: string }) {
             >
               Chiudi
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ─── VEHICLE EDIT MODAL ─── */}
+      {showVehicleEditModal && (
+        <div className="fixed inset-0 z-50 bg-slate-950/80 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto">
+          <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 max-w-lg w-full shadow-2xl space-y-5 animate-scale-in my-8">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-2.5">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 text-white grid place-items-center shadow-md">
+                  <Pencil className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-black text-slate-900 dark:text-white">Modifica Dati Auto</h3>
+                  <p className="text-[10px] text-slate-500">Tutti i campi sono modificabili e salvati localmente</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setShowVehicleEditModal(false)}
+                className="p-1.5 rounded-lg text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+              >
+                <X className="w-5 h-5" />
+              </button>
+            </div>
+
+            <div className="space-y-4">
+              {/* Identità */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Marca</label>
+                  <input type="text" value={editMake} onChange={(e) => setEditMake(e.target.value)} placeholder="Es. BMW" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Modello</label>
+                  <input type="text" value={editModel} onChange={(e) => setEditModel(e.target.value)} placeholder="Es. Serie 3" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                </div>
+              </div>
+
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Versione / Allestimento</label>
+                <input type="text" value={editVersion} onChange={(e) => setEditVersion(e.target.value)} placeholder="Es. 320d M-Sport, 2.0 TDI R-Line" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+              </div>
+
+              {/* Anno & Targa */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Anno</label>
+                  <select value={editYear} onChange={(e) => setEditYear(parseInt(e.target.value, 10))} className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600">
+                    {Array.from({ length: 30 }, (_, i) => new Date().getFullYear() - i).map((y) => (<option key={y} value={y}>{y}</option>))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Targa</label>
+                  <input type="text" value={editPlate} onChange={(e) => setEditPlate(e.target.value.toUpperCase())} placeholder="Es. AB123CD" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold font-mono uppercase focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                </div>
+              </div>
+
+              {/* Carburante */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1.5">Carburante</label>
+                <div className="grid grid-cols-3 gap-1.5">
+                  {['Diesel', 'Benzina', 'Ibrida', 'GPL', 'Metano', 'Elettrica'].map((f) => (
+                    <button key={f} type="button" onClick={() => setEditFuel(f)} className={`h-9 px-2 rounded-xl text-xs font-bold border transition-all ${editFuel === f ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-300'}`}>{f}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Cambio */}
+              <div>
+                <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1.5">Trasmissione</label>
+                <div className="grid grid-cols-2 gap-2">
+                  {['Manuale', 'Automatico'].map((t) => (
+                    <button key={t} type="button" onClick={() => setEditTransmission(t)} className={`h-9 px-3 rounded-xl text-xs font-bold border transition-all ${editTransmission === t ? 'bg-blue-600 text-white border-blue-600' : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-300'}`}>{t}</button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Potenza, Cilindrata */}
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Potenza</label>
+                  <input type="text" value={editPower} onChange={(e) => setEditPower(e.target.value)} placeholder="Es. 150 CV" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Cilindrata</label>
+                  <input type="text" value={editDisplacement} onChange={(e) => setEditDisplacement(e.target.value)} placeholder="Es. 1998 cc" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-sm font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                </div>
+              </div>
+
+              {/* Carrozzeria, Colore, Euro */}
+              <div className="grid grid-cols-3 gap-3">
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Carrozzeria</label>
+                  <select value={editBody} onChange={(e) => setEditBody(e.target.value)} className="w-full h-10 px-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600">
+                    <option value="">—</option>
+                    {['Berlina', 'SUV', 'SW', 'Coupé', 'Cabrio', 'Monovolume', 'Utilitaria', 'Furgone'].map((b) => (<option key={b} value={b}>{b}</option>))}
+                  </select>
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Colore</label>
+                  <input type="text" value={editColor} onChange={(e) => setEditColor(e.target.value)} placeholder="Es. Nero" className="w-full h-10 px-3 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600" />
+                </div>
+                <div>
+                  <label className="block text-[11px] font-bold text-slate-600 dark:text-slate-400 mb-1">Classe Euro</label>
+                  <select value={editEuroClass} onChange={(e) => setEditEuroClass(e.target.value)} className="w-full h-10 px-2 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 text-xs font-bold focus:outline-none focus:border-blue-600 focus:ring-1 focus:ring-blue-600">
+                    <option value="">—</option>
+                    {['Euro 6d', 'Euro 6d-TEMP', 'Euro 6c', 'Euro 6b', 'Euro 6', 'Euro 5', 'Euro 4', 'Euro 3'].map((e) => (<option key={e} value={e}>{e}</option>))}
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            {/* Actions */}
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100 dark:border-slate-800">
+              <button
+                type="button"
+                onClick={() => setShowVehicleEditModal(false)}
+                className="px-4 py-2 rounded-xl text-xs font-bold text-slate-600 dark:text-slate-400 hover:text-slate-900"
+              >
+                Annulla
+              </button>
+              <button
+                type="button"
+                onClick={handleSaveVehicleEdit}
+                className="px-6 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs font-bold flex items-center gap-2 shadow-md shadow-blue-600/20 transition-all"
+              >
+                <Save className="w-4 h-4" /> Salva Modifiche
+              </button>
+            </div>
           </div>
         </div>
       )}

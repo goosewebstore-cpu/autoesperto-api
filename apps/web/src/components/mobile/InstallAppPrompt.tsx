@@ -84,7 +84,7 @@ export default function InstallAppPrompt() {
   if (!showPrompt) return null;
 
   return (
-    <div className="fixed bottom-20 left-3 right-3 z-40 md:hidden animate-fade-in">
+    <div className="fixed bottom-24 left-3 right-3 z-40 md:hidden animate-fade-in">
       <div className="bg-slate-900/95 backdrop-blur-md text-white rounded-2xl p-4 border border-blue-500/30 shadow-2xl shadow-blue-950/50">
         <div className="flex items-start justify-between gap-3">
           <div className="flex items-center gap-3">

@@ -6713,11 +6713,373 @@ export const guides: Guide[] = [
     ],
     cta: 'costi-riparazione',
   },
+  {
+    slug: 'blocco-diesel-euro-5-2026-citta-deroghe-multe',
+    title: 'Blocco Diesel Euro 5 nel 2026: città coinvolte, deroghe MoVe-In, calendari e multe',
+    description:
+      'Tutte le novità sui blocchi alla circolazione per i diesel Euro 5 nel 2026: Milano Area B, Roma fascia verde, Emilia-Romagna, Piemonte, Veneto, scatola nera MoVe-In e incentivi alla sostituzione.',
+    published: '2026-08-28',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Cosa prevede la normativa sui diesel Euro 5 nel 2026',
+        paragraphs: [
+          'Le restrizioni alla circolazione per i veicoli diesel omologati Euro 5 (immatricolati indicativamente tra il 2009 e il 2015) sono entrate in una fase cruciale nel 2026, con l\'applicazione dei Piani Regionali per la Qualità dell\'Aria nel bacino padano e nelle grandi aree metropolitane italiane.',
+          'Mentre alcune Regioni hanno rimodulato le scadenze originarie per tutelare i pendolari e i piccoli imprenditori, in città chiave come Milano, Roma, Torino e Bologna le limitazioni sono attive con telecamere ZTL e controlli elettronici ai varchi.',
+        ],
+      },
+      {
+        heading: '1. Milano Area B e le grandi città: dove non si può circolare',
+        paragraphs: [
+          'A Milano, l\'Area B vieta l\'ingresso e la circolazione ai veicoli diesel Euro 5 dal lunedì al venerdì dalle 7:30 alle 19:30 (esclusi i festivi). Sono previste giornate di deroga annuale e l\'adesione al servizio MoVe-In con chilometraggio prestabilito.',
+          'A Roma, all\'interno della Fascia Verde, le limitazioni per i diesel Euro 5 scattano nelle giornate di superamento dei limiti di PM10 e biossido di azoto (NO2) su ordinanza sindacale.',
+          'In Piemonte, Veneto ed Emilia-Romagna, le limitazioni invernali (da ottobre a marzo) vietano la circolazione dei diesel fino a Euro 4 nei comuni con oltre 30.000 abitanti, con misure emergenziali per gli Euro 5 in caso di allerta arancione o rossa.',
+        ],
+      },
+      {
+        heading: '2. Il sistema MoVe-In: come funziona e quanti km permette',
+        paragraphs: [
+          'Il progetto MoVe-In (Monitoraggio dei Veicoli Inquinanti) prevede l\'installazione di una scatola nera telematica sull\'auto che conteggia i chilometri percorsi all\'interno delle aree a traffico limitato.',
+          'Per un diesel Euro 5, la soglia chilometrica annuale concessa varia generalmente tra 2.000 e 8.000 km a seconda della Regione di residenza e della classe del veicolo, consentendo la circolazione anche nelle fasce orarie vietate fino a esaurimento del plafond.',
+        ],
+      },
+      {
+        heading: '3. Sanzioni previste per chi viola i divieti',
+        paragraphs: [
+          'L\'accesso non consentito alle zone a basse emissioni comporta una sanzione amministrativa ai sensi dell\'art. 7 comma 13-bis del Codice della Strada, con importi compresi tra 168 € e 679 €. In caso di recidiva nel biennio è prevista la sospensione della patente da 15 a 30 giorni.',
+        ],
+      },
+      {
+        heading: 'Domande frequenti sul blocco Diesel Euro 5',
+        paragraphs: [
+          'Ecco le risposte ai dubbi più frequenti degli automobilisti:',
+        ],
+        list: [
+          'I diesel Euro 5 con filtro antiparticolato (FAP) sono esenti? No, l\'omologazione Euro 5 include già il FAP di serie ma rientra comunque nelle limitazioni ambientali.',
+          'Posso montare un impianto GPL o Metano su un diesel Euro 5? La trasformazione Dual-Fuel (diesel-GPL) è omologabile su alcuni modelli e consente di ottenere la deroga per la circolazione in molte regioni.',
+          'Come verificare se la mia auto è Euro 5 o Euro 6? Controlla il riquadro 2 alla lettera V.9 del libretto di circolazione o usa lo strumento di verifica targa gratuito di AutoEsperto.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'migliori-auto-usate-sotto-5000-euro-2026',
+    title: 'Migliori auto usate sotto i 5.000 euro nel 2026: 10 modelli affidabili ed economici',
+    description:
+      'La classifica delle 10 migliori auto usate da comprare con un budget fino a 5.000 euro nel 2026: consumi ridotti, manutenzione economica e motori a prova di bomba.',
+    published: '2026-08-28',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Comprare un\'auto usata sotto i 5.000 euro nel mercato 2026',
+        paragraphs: [
+          'Con l\'aumento generale dei prezzi delle auto nuove e usate, trovare una vettura valida sotto i 5.000 € richiede attenzione e conoscenza tecnica. A questa cifra si trovano principalmente utilitarie del decennio 2006–2014 con chilometraggi compresi tra 100.000 e 180.000 km.',
+          'Il segreto per un acquisto azzeccato non è cercare l\'auto più recente, ma puntare sui motori più longevi, con componentistica economica e reperibilità illimitata di ricambi.',
+        ],
+      },
+      {
+        heading: '1. La Top 10 delle auto usate affidabili sotto i 5.000 €',
+        paragraphs: [
+          'Ecco i modelli consigliati dai nostri tecnici per affidabilità e facilità di riparazione:',
+          '1. Fiat Panda II serie (1.2 Fire 60/69 CV): il motore Fire è quasi indistruttibile, i ricambi costano pochissimo e consuma poco.',
+          '2. Toyota Yaris II serie (1.0 3 cilindri o 1.3 VVT-i): affidabilità giapponese leggendaria, catena di distribuzione robusta e ottima sicurezza passiva.',
+          '3. Ford Fiesta VI serie (1.2 o 1.4 benzina / 1.4 TDCi): tenuta di strada eccellente, interni spaziosi e manutenzione alla portata di qualsiasi officina.',
+          '4. Renault Clio III serie (1.2 16v 75 CV o 1.5 dCi): comodissima per viaggi medi, carrozzeria robusta e motore collaudato.',
+          '5. Volkswagen Polo IV / V serie (1.4 benzina 80 CV o 1.6 TDI): qualità costruttiva superiore, interni silenziosi e buona tenuta del valore nel tempo.',
+          '6. Fiat Punto Evo / Grande Punto (1.2 o 1.4 Fire / 1.3 Multijet 75/90 CV): spaziosa, ottima per neopatentati e costi di gestione minimi.',
+          '7. Opel Corsa D (1.2 benzina Twinport o 1.3 CDTI): meccanica condivisa con la Grande Punto, telaio solido e buona sicurezza.',
+          '8. Peugeot 207 (1.4 benzina 8v 73 CV o 1.4 HDi): confortevole ed economica, da preferire con motore 8 valvole per evitare problemi alla guarnizione di testa.',
+          '9. Hyundai i10 / i20 (1.1 o 1.2 benzina): meccanica semplice, catena di distribuzione e ottima maneggevolezza urbana.',
+          '10. Citroën C3 II serie (1.1 o 1.4 benzina TU): comoda con parabrezza Zenith, ammortizzatori morbidi e ricambi economici.',
+        ],
+      },
+      {
+        heading: '2. I controlli obbligatori prima di firmare',
+        paragraphs: [
+          'Su vetture in questa fascia di prezzo, controlla sempre: lo stato della cinghia di distribuzione e della pompa acqua, eventuali perdite d\'olio dal coperchio valvole, il gioco dei braccetti anteriori e la presenza di ruggine nei passaruota.',
+          'Usa AutoEsperto per scansionare le foto dell\'annuncio e verificare se il chilometraggio dichiarato è coerente con l\'usura dei pedali, del volante e della seduta guida.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'migliori-auto-usate-sotto-10000-euro-2026',
+    title: 'Migliori auto usate tra 5.000 e 10.000 euro nel 2026: le migliori occasioni per rapporto qualità/prezzo',
+    description:
+      'Guida all\'acquisto per il budget più cercato: utilitarie moderne, crossover compatti e berline affidabili con omologazione Euro 6 e costi di gestione contenuti.',
+    published: '2026-08-28',
+    category: 'acquisto',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Il budget ideale per l\'usato: cosa offre la fascia 5.000 – 10.000 €',
+        paragraphs: [
+          'La fascia tra 5.000 € e 10.000 € rappresenta il "punto di equilibrio" ideale nel mercato dell\'usato 2026: a questa cifra è possibile acquistare vetture con 6–10 anni di vita (2014–2019), spesso con omologazione Euro 6, sistemi di infotainment con Bluetooth/CarPlay e dispositivi di sicurezza attiva come ABS, ESP e airbag multipli.',
+        ],
+      },
+      {
+        heading: '1. I migliori modelli suddivisi per categoria',
+        paragraphs: [
+          '• Utilitarie da città: Fiat 500 (1.2 benzina o Hybrid), Renault Clio IV (0.9 TCe o 1.5 dCi), Ford Fiesta VII (1.1 benzina o 1.5 TDCi), Lancia Ypsilon Ecochic.',
+          '• Crossover e SUV compatti: Dacia Duster II serie (1.5 dCi o 1.0 TCe GPL), Renault Captur I serie, Peugeot 2008 I serie, Nissan Juke I serie.',
+          '• Compatte per famiglie: Volkswagen Golf 7 (1.6 TDI o 1.4 TSI), Ford Focus III (1.5 TDCi o 1.0 EcoBoost con cinghia verificata), Fiat Tipo (1.4 benzina o 1.6 Multijet).',
+          '• Ibride per la città: Toyota Yaris Hybrid (1.5 HSD 100 CV) o Toyota Auris Hybrid: zero pensieri per i blocchi del traffico e consumi reali superiori a 22 km/l.',
+        ],
+      },
+      {
+        heading: '2. Come proteggere il proprio investimento',
+        paragraphs: [
+          'Prima di versare una caparra, esigi sempre la fattura o le ricevute degli ultimi tagliandi eseguiti, verifica la scadenza della revisione ministeriale e controlla che non vi siano ipoteche o fermi amministrativi registrati al PRA.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'cambio-automatico-usato-problemi-costi-riparazione',
+    title: 'Cambio automatico su auto usata: quale scegliere, problemi tipici (DSG, CVT, convertitore) e costi',
+    description:
+      'Guida completa ai cambi automatici usati: differenze tra doppia frizione, convertitore di coppia e variazione continua, segnali di usura e costi di manutenzione o revisione.',
+    published: '2026-08-28',
+    category: 'manutenzione',
+    cta: 'costi-riparazione',
+    sections: [
+      {
+        heading: 'Le 4 tecnologie di cambio automatico a confronto',
+        paragraphs: [
+          'Comprare un\'auto usata con cambio automatico offre un comfort di guida imbattibile nel traffico moderno, ma richiede una valutazione attenta della tecnologia installata. I costi di riparazione di una trasmissione automatica guasta possono variare da 800 € fino a oltre 4.000 €.',
+          '1. Convertitore di coppia (ZF, Aisin, Mercedes G-Tronic): il più affidabile e duraturo nel tempo, fluido nei cambi marcia, richiede solo il cambio olio ogni 60.000–80.000 km.',
+          '2. Doppia frizione (DSG/S-Tronic VW, EDC Renault, Powershift Ford): cambi rapidissimi e bassi consumi, ma le frizioni a secco possono strappare in partenza dopo 100.000 km.',
+          '3. Variazione continua (CVT Toyota e-CVT, Nissan Xtronic): ideale per la città e i sistemi ibridi, estremamente affidabile nella versione a rotismi epicicloidali di Toyota.',
+          '4. Robotizzato mono-frizione (Dualogic Fiat, ASG VW, ETG PSA): economico all\'origine, ma lento nelle cambiate e soggetto a usura precoce dell\'attuatore elettroidraulico.',
+        ],
+      },
+      {
+        heading: '1. I sintomi di un cambio automatico usurato durante il test drive',
+        paragraphs: [
+          'Durante la prova su strada dell\'auto usata, presta attenzione a questi campanelli d\'allarme:',
+          '• Slittamento tra le marce: il contagiri sale ma l\'auto non accelera proporzionalmente.',
+          '• Colpi o strappi durante l\'inserimento di D (Drive) o R (Retro) da fermo.',
+          '• Esitazioni o vibrazioni a basse velocità nelle ripartenze da stop o semafori.',
+          '• Odore di bruciato proveniente dalla campana della trasmissione dopo una salita.',
+        ],
+      },
+      {
+        heading: '2. Quanto costa la manutenzione (lavaggio e olio)',
+        paragraphs: [
+          'La manutenzione ordinaria del cambio automatico prevede la sostituzione dell\'olio ATF, del filtro e il lavaggio dinamico del circuito con apposito macchinario. Il costo medio varia tra 350 € e 550 € ogni 60.000–80.000 km, una spesa fondamentale per evitare rotture da migliaia di euro.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'batteria-auto-ibrida-elettrica-degrado-soh-costi',
+    title: 'Batteria auto ibrida ed elettrica usata: come verificare lo stato di salute (SoH), durata e costi',
+    description:
+      'Come controllare il degrado della batteria (State of Health - SoH) prima di comprare un\'auto ibrida o elettrica usata, garanzie del costruttore e costi di sostituzione celle.',
+    published: '2026-08-28',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'La batteria di trazione: il componente più prezioso dell\'auto',
+        paragraphs: [
+          'Nell\'acquisto di un\'auto ibrida (Full Hybrid o Plug-in) o 100% elettrica usata, la batteria ad alto voltaggio rappresenta dal 30% al 50% del valore economico complessivo del veicolo. Sapere quanto ha degradato la batteria nel corso degli anni è essenziale per non rischiare brutte sorprese sull\'autonomia reale.',
+        ],
+      },
+      {
+        heading: '1. Cos\'è il SoH (State of Health) e come si misura',
+        paragraphs: [
+          'Il parametro SoH (State of Health) indica la capacità residua della batteria rispetto al valore nominale di fabbrica (espresso in percentuale dal 100% al 0%). Un\'auto con SoH pari al 90% ha perso solo il 10% della capacità originaria.',
+          'Per verificare il SoH prima dell\'acquisto è possibile richiedere una certificazione tramite presa diagnostica OBD2 utilizzando scanner professionali (es. Aviloo, Carly o software ufficiali della casa madre come il Toyota Hybrid Health Check).',
+        ],
+      },
+      {
+        heading: '2. Garanzie dei costruttori e costi di sostituzione',
+        paragraphs: [
+          'La maggior parte dei costruttori garantisce la batteria per 8 anni o 160.000 km, assicurando la sostituzione gratuita se la capacità scende sotto il 70%. Toyota estende la garanzia sulle batterie ibride fino a 15 anni effettuando il tagliando annuale in rete ufficiale.',
+          'In caso di guasto fuori garanzia, oggi è raramente necessario sostituire l\'intero pacco: officine specializzate effettuano la rigenerazione sostituendo solo i moduli o le celle degradate con costi compresi tra 600 € e 1.800 €.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'patente-a-punti-saldo-recupero-corsi-2026',
+    title: 'Patente a punti 2026: come verificare il saldo online, bonus biennale e come recuperare i punti',
+    description:
+      'Tutto sul saldo punti patente nel 2026: verifica tramite Portale dell\'Automobilista e App IO, corsi di recupero presso autoscuole e attribuzione dei 2 punti bonus ogni biennio.',
+    published: '2026-08-28',
+    category: 'valutazione',
+    cta: 'auto-svalutazione',
+    sections: [
+      {
+        heading: 'Come funziona il sistema della patente a punti in Italia',
+        paragraphs: [
+          'Ogni titolare di patente di guida italiana riceve una dote iniziale di 20 punti. A ogni violazione del Codice della Strada che prevede una decurtazione, i punti vengono scalati dopo la notifica del verbale e la comunicazione dei dati del conducente.',
+        ],
+      },
+      {
+        heading: '1. Come controllare il saldo punti in tempo reale',
+        paragraphs: [
+          'È possibile verificare gratuitamente il proprio saldo punti attraverso due canali ufficiali:',
+          '• App IO: effettuando l\'accesso con SPID o CIE, nella sezione "Portafoglio" o "Veicoli" è visibile il saldo aggiornato con lo storico dei movimenti.',
+          '• Il Portale dell\'Automobilista (www.ilportaledellautomobilista.it): previa autenticazione con SPID/CIE nella sezione "I miei dati patente".',
+          '• Servizio telefonico automatico: chiamando il numero 06 45775962 (costo di una telefonata urbana).',
+        ],
+      },
+      {
+        heading: '2. Come accumulare i punti bonus e come recuperarli',
+        paragraphs: [
+          'Se per due anni consecutivi non commetti infrazioni che comportano perdita di punti, ricevi automaticamente un accredito di 2 punti bonus ogni biennio, fino a raggiungere il tetto massimo di 30 punti.',
+          'Se hai perso punti, puoi recuperarli frequentando un corso specifico presso un\'autoscuola accreditata (6 punti per patenti A e B con 12 ore di lezione senza esame finale) oppure attendere due anni senza commettere violazioni per tornare automaticamente alla quota base di 20 punti (a patto che il saldo non sia sceso a zero).',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'pneumatici-4-stagioni-vs-invernali-confronto-2026',
+    title: 'Gomme 4 stagioni vs invernali ed estive: conviene montarle nel 2026? Guida alla scelta',
+    description:
+      'Confronto tecnico ed economico tra pneumatici All Season (4 stagioni) e il doppio treno estivo/invernale: chilometraggio annuo, sicurezza su neve e pioggia, e obblighi di legge.',
+    published: '2026-08-28',
+    category: 'manutenzione',
+    cta: 'costi-riparazione',
+    sections: [
+      {
+        heading: 'L\'evoluzione tecnologica delle gomme 4 stagioni',
+        paragraphs: [
+          'Fino a pochi anni fa gli pneumatici 4 stagioni rappresentavano un compromesso tiepido. Oggi, grazie a mescole arricchite con silice e battistrada a intagli tridimensionali, i modelli All Season di fascia premium (Michelin CrossClimate, Goodyear Vector 4Seasons, Continental AllSeasonContact, Pirelli Cinturato All Season) offrono prestazioni di frenata eccellenti su asfalto bagnato, asciutto e neve fresca.',
+        ],
+      },
+      {
+        heading: '1. Quando conviene scegliere le gomme 4 stagioni',
+        paragraphs: [
+          'Le 4 stagioni sono la scelta ottimale se:',
+          '• Percorri meno di 15.000–18.000 km all\'anno.',
+          '• Vivi in pianura, collina o zone costiere con inverni miti e nevicate rare o sporadiche.',
+          '• Vuoi risparmiare i costi del cambio gomme stagionale (50–90 € due volte all\'anno per montaggio, equilibratura e custodia pneumatici).',
+          '• Cerchi la piena conformità al codice della strada (devono riportare la marcatura M+S e il fiocco di neve 3PMSF).',
+        ],
+      },
+      {
+        heading: '2. Quando è indispensabile il doppio treno estivo/invernale',
+        paragraphs: [
+          'Il doppio treno tradizionale rimane insostituibile per chi percorre oltre 20.000 km/anno, vive in zone montane o viaggia frequentemente su tratti alpini/appenninici dove il ghiaccio e le basse temperature richiedono mescole termiche specialistiche.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'fermo-amministrativo-auto-visura-pra-come-cancellarlo',
+    title: 'Fermo amministrativo auto: come fare la visura al PRA, rischi nell\'usato e come cancellarlo',
+    description:
+      'Cosa succede se compri un\'auto con fermo amministrativo delle Entrate Riscossione, come effettuare la visura telematica al PRA e i passaggi per ottenere la cancellazione.',
+    published: '2026-08-28',
+    category: 'vendita',
+    cta: 'auto-usata-affare',
+    sections: [
+      {
+        heading: 'Cos\'è il fermo amministrativo e cosa comporta',
+        paragraphs: [
+          'Il fermo amministrativo (comunemente chiamato "ganasce fiscali") è un atto con cui l\'Agente della Riscossione (es. Agenzia delle Entrate - Riscossione o concessionari tributari locali) blocca un veicolo a garanzia di crediti non pagati (cartelle esattoriali per bolli auto, multe stradali, tributi locali, INPS).',
+          'Un veicolo con fermo amministrativo non può circolare su strada pubblica, non può essere esportato e non può essere rottamato.',
+        ],
+      },
+      {
+        heading: '1. Si può vendere un\'auto con fermo amministrativo?',
+        paragraphs: [
+          'La legge consente di vendere l\'auto anche con fermo iscritto, ma il vincolo rimane legato al veicolo e si trasferisce automaticamente al nuovo acquirente! Chi acquista un\'auto gravata da fermo senza saperlo non potrà utilizzarla fino all\'estinzione del debito originario da parte del vecchio proprietario.',
+          'Per questo motivo è fondamentale richiedere una visura della targa al PRA (Pubblico Registro Automobilistico) prima di effettuare qualsiasi pagamento.',
+        ],
+      },
+      {
+        heading: '2. Come cancellare il fermo amministrativo',
+        paragraphs: [
+          'Per cancellare il fermo occorre saldare integralmente il debito contestato presso l\'Ente Riscossore. Una volta registrato l\'incasso, l\'Ente invia telematicamente la revoca al PRA. Dal 2020 la cancellazione al PRA è automatica e gratuita, senza necessità di pagare i 32 € di bollo previsti in passato.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'truffa-caparra-auto-usata-come-difendersi-consigli',
+    title: 'Truffa della caparra e annunci fantasma: come riconoscere i raggiri e comprare in sicurezza',
+    description:
+      'I campanelli d\'allarme più frequenti negli annunci di auto usate online: richieste di acconti tramite bonifico istantaneo, venditori all\'estero e come tutelarsi con AutoEsperto.',
+    published: '2026-08-28',
+    category: 'acquisto',
+    cta: 'controllare-auto-usata',
+    sections: [
+      {
+        heading: 'L\'evoluzione delle truffe online sulle auto usate',
+        paragraphs: [
+          'Nel mercato delle auto usate online, oltre il 70% dei tentativi di truffa ruota attorno alla richiesta di caparre o anticipi per "bloccare l\'affare" su veicoli proposti a prezzi vistosamente inferiori alla media di mercato.',
+          'I truffatori clonano foto e descrizioni da annunci reali pubblicati in altri paesi europei o da concessionarie ignare, spacciandosi per venditori privati costretti a vendere urgentemente.',
+        ],
+      },
+      {
+        heading: '1. I 5 campanelli d\'allarme infallibili',
+        paragraphs: [
+          '1. Prezzo troppo basso: un\'auto quotata 15.000 € proposta a 8.500 € "per trasferimento all\'estero o motivi familiari".',
+          '2. Venditore irraggiungibile al telefono che comunica solo via WhatsApp, email o messaggi preimpostati.',
+          '3. Richiesta di caparra urgente tramite ricarica Postepay, bonifico istantaneo estero o servizi di money transfer (Western Union / MoneyGram).',
+          '4. Finti servizi di trasporto o escrow con link a siti web contraffatti che imitano corrieri noti.',
+          '5. Foto con sfondi incompatibili (es. vegetazione tropicale, targhe straniere coperte, volantini in lingua diversa).',
+        ],
+      },
+      {
+        heading: '2. La regola d\'oro di AutoEsperto',
+        paragraphs: [
+          'Non versare mai nemmeno un euro prima di aver visto l\'auto di persona, aver controllato il telaio corrispondente a libretto e aver verificato che chi vende sia l\'effettivo intestatario registrato al PRA.',
+        ],
+      },
+    ],
+  },
+  {
+    slug: 'cinghia-distribuzione-vs-catena-scadenze-costi-sostituzione',
+    title: 'Cinghia di distribuzione vs catena: scadenze in anni e km, rottura e costi di sostituzione',
+    description:
+      'Quando sostituire la cinghia o la catena di distribuzione dell\'auto usata, quali motori sono più a rischio, sintomi di allungamento catena e preventivo medio di riparazione.',
+    published: '2026-08-28',
+    category: 'manutenzione',
+    cta: 'costi-riparazione',
+    sections: [
+      {
+        heading: 'Il ruolo cruciale della distribuzione nel motore',
+        paragraphs: [
+          'La distribuzione è il sistema meccanico che sincronizza la rotazione dell\'albero motore con l\'albero a camme, garantendo che le valvole di aspirazione e scarico si aprano e chiudano nel momento esatto rispetto al movimento dei pistoni.',
+          'In caso di rottura improvvisa della cinghia o salto della catena in un motore a interferenza, le valvole impattano contro i pistoni provocando danni catastrofici (testata piegata, pistoni forati) con costi di ripristino che superano spesso i 2.000–4.000 €.',
+        ],
+      },
+      {
+        heading: '1. Cinghia di distribuzione: scadenze e costi',
+        paragraphs: [
+          'La cinghia in gomma dentata va sostituita seguendo due criteri (il primo che si raggiunge):',
+          '• Chilometraggio: generalmente tra 90.000 e 150.000 km secondo le specifiche del costruttore.',
+          '• Tempo: ogni 5 o 6 anni, anche se l\'auto ha percorso pochissimi chilometri, poiché la gomma perde elasticità e si microfessura con l\'invecchiamento e gli sbalzi termici.',
+          'Il costo per il kit distribuzione completo (cinghia, cuscinetti tenditori, pompa acqua e liquido refrigerante) varia tra 350 € e 700 € compresa la manodopera.',
+        ],
+      },
+      {
+        heading: '2. Catena di distribuzione: è davvero eterna?',
+        paragraphs: [
+          'La catena metallica è progettata per durare per l\'intera vita utile del motore (oltre 250.000 km), ma necessita di olio motore pulito con la corretta gradazione per mantenere efficiente il tendicatena idraulico.',
+          'Su alcuni motori noti (es. BMW N47, VW 1.2/1.4 TSI prime serie, Fiat 1.3 Multijet con cambi olio ritardati), la catena può allungarsi prematuramente. Il sintomo tipico è un forte sferragliamento metallico all\'avviamento a freddo per i primi 3–5 secondi.',
+        ],
+      },
+    ],
+  },
 ];
 
-const guideMap = new Map(guides.map((g) => [g.slug, g]));
+const guideMap = new Map(guides.map((g) => [g.slug.toLowerCase(), g]));
 
 export function getGuide(slug: string): Guide | undefined {
-  return guideMap.get(slug);
+  if (!slug) return undefined;
+  const clean = decodeURIComponent(slug).trim().toLowerCase();
+  return (
+    guideMap.get(clean) ||
+    guides.find((g) => g.slug.toLowerCase() === clean || g.slug === slug)
+  );
 }
+
 

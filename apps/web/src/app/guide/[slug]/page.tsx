@@ -8,10 +8,9 @@ import AdInArticle from '@/components/ads/AdInArticle';
 import AdBanner from '@/components/ads/AdBanner';
 import ArticleInteractiveBar, { ArticleFeedbackBox } from '@/components/ArticleInteractiveBar';
 import { getGuide, guides, GUIDE_CATEGORIES, type Guide } from '@/lib/guides';
-
-
 import GuideTableOfContents from '@/components/GuideTableOfContents';
 import ArticleValuatorWidget from '@/components/ArticleValuatorWidget';
+import GuideCard from '@/components/GuideCard';
 
 
 interface PageProps {
@@ -246,8 +245,9 @@ export function generateStaticParams() {
 
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
-  const { slug } = await params;
-  const guide = getGuide(slug);
+  const resolvedParams = await params;
+  const rawSlug = resolvedParams?.slug || '';
+  const guide = getGuide(rawSlug);
   if (!guide) return {};
 
   const fullUrl = `${siteUrl}/guide/${guide.slug}`;
@@ -532,8 +532,9 @@ function extractGuideTakeaways(guide: Guide): Array<{ topic: string; summary: st
 }
 
 export default async function GuidePage({ params }: PageProps) {
-  const { slug } = await params;
-  const guide = getGuide(slug);
+  const resolvedParams = await params;
+  const rawSlug = resolvedParams?.slug || '';
+  const guide = getGuide(rawSlug);
   if (!guide) notFound();
 
   const mentionedModels = getMentionedModels(guide);
@@ -813,19 +814,15 @@ export default async function GuidePage({ params }: PageProps) {
         </section>
 
         {otherGuides.length > 0 && (
-          <section className="mt-12">
+          <section className="mt-14">
             <AdBanner />
-            <h2 className="text-lg font-bold text-slate-900 mt-8">Altre guide correlate</h2>
-            <div className="mt-4 grid gap-3">
+            <h2 className="text-xl font-black text-slate-900 mt-8 mb-4 flex items-center gap-2">
+              <BookOpen className="w-5 h-5 text-blue-600" />
+              Altre guide correlate
+            </h2>
+            <div className="grid gap-4 sm:grid-cols-3">
               {otherGuides.map((other) => (
-                <Link
-                  key={other.slug}
-                  href={`/guide/${other.slug}`}
-                  className="rounded-xl border border-slate-200 bg-slate-50 p-4 hover:border-blue-600 transition-colors"
-                >
-                  <h3 className="text-sm font-bold text-slate-900">{other.title}</h3>
-                  <p className="text-xs text-slate-600 mt-1 line-clamp-2">{other.description}</p>
-                </Link>
+                <GuideCard key={other.slug} guide={other} />
               ))}
             </div>
           </section>

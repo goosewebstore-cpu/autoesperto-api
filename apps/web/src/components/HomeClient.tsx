@@ -458,7 +458,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
                   href="/guide"
                   className="text-xs font-bold text-blue-600 hover:text-blue-700 inline-flex items-center gap-1 shrink-0"
                 >
-                  Tutte le 110+ guide <ArrowRight className="h-3.5 w-3.5" />
+                  Tutte le 140+ guide <ArrowRight className="h-3.5 w-3.5" />
                 </Link>
               </div>
 
@@ -467,6 +467,7 @@ export default function HomeClient({ stats }: HomeClientProps) {
                   <Link
                     key={g.slug}
                     href={`/guide/${g.slug}`}
+                    prefetch={true}
                     className="bg-white rounded-2xl p-5 border border-slate-200/90 hover:border-blue-500 hover:shadow-md transition-all group flex flex-col justify-between"
                   >
                     <div>

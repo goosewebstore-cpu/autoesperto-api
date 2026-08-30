@@ -22,9 +22,170 @@ export interface Guide {
   category: GuideCategory;
   sections: GuideSection[];
   cta: string;
+  image?: string;
 }
 
 export const guides: Guide[] = [
+  {
+    slug: 'auto-usata-10-segnali-problema-annuncio',
+    title: 'Auto usata: 10 segnali che l’annuncio nasconde un problema',
+    description:
+      'Come capire se stai trovando un vero affare o se stai per comprare un’auto che potrebbe costarti migliaia di euro: i 10 segnali d\'allarme prima di lasciare una caparra e la verifica con il metodo AutoEsperto.',
+    published: '2026-08-30',
+    category: 'acquisto',
+    cta: 'analizza-annuncio',
+    image: '/images/guide/10-segnali-annuncio-auto-usata.jpg',
+    sections: [
+      {
+        heading: 'Perché costa così poco? Quando il vero affare nasconde un rischio',
+        paragraphs: [
+          'Quando un’auto usata sembra troppo conveniente, la prima domanda non dovrebbe essere "Quanto riesco a trattare?", ma piuttosto: "Perché costa così poco?".',
+          'Un prezzo inferiore alla media può essere una grande occasione, ma può anche nascondere problemi meccanici costosi, incidenti precedenti non dichiarati, chilometri poco credibili, manutenzione trascurata o semplicemente una serie di costi futuri che il testo dell’annuncio non racconta.',
+          'Prima di lasciare una caparra o affrontare centinaia di chilometri per andare a visionare una vettura, ci sono 10 segnali fondamentali che vale sempre la pena controllare con metodo e attenzione.',
+        ],
+      },
+      {
+        heading: '1. Il prezzo è molto più basso degli altri annunci simili',
+        paragraphs: [
+          'Questo è il primo campanello d’allarme.',
+          'Se trovi una Volkswagen Golf, una Fiat Panda, una Toyota Yaris o qualsiasi altro modello a un prezzo nettamente inferiore rispetto ad auto simili per anno, chilometraggio e motorizzazione, non significa automaticamente che sia una truffa, ma devi comprendere il motivo esatto di questa discrepanza.',
+          'Il prezzo da solo non dice mai se un\'auto è un affare. Il vero confronto è tra il prezzo richiesto e il [valore reale di mercato](/valutazione) di un veicolo con caratteristiche comparabili.',
+        ],
+        list: [
+          'Anno esatto di prima immatricolazione',
+          'Chilometraggio reale e percorrenza media annua',
+          'Motorizzazione, cilindrata e tipo di alimentazione (benzina, diesel, ibrida, GPL, elettrica)',
+          'Allestimento ed eventuali optional di valore inclusi',
+          'Numero di precedenti proprietari registrati',
+          'Condizioni complessive di carrozzeria e meccanica',
+          'Storico e regolarità della manutenzione eseguita',
+          'Eventuali sinistri o incidenti strutturali pregressi',
+          'Presenza di garanzia legale di conformità o convenzionale se venduta da un rivenditore professionale',
+        ],
+      },
+      {
+        heading: '2. Il venditore evita di fornire la targa',
+        paragraphs: [
+          'Prima di organizzare un appuntamento o percorrere chilometri per andare a vedere un\'auto, richiedere la targa è una delle verifiche più semplici, legittime e trasparenti.',
+          'Se il venditore rifiuta categoricamente di comunicarla, cancella le foto delle targhe senza motivazione o trova continue scuse per non fornirla al telefono, è un ottimo motivo per essere prudenti.',
+          'La targa è indispensabile per effettuare diversi controlli preliminari: verificare lo storico delle revisioni ministeriali, controllare eventuali gravami o fermi amministrativi, accertare la reale potenza in kW e confrontare le informazioni dichiarate nell\'annuncio con i registri ufficiali.',
+          'Non significa che chi non vuole fornire subito la targa sia necessariamente un truffatore, ma significa semplicemente che non hai ancora elementi a sufficienza per poterti fidare.',
+        ],
+      },
+      {
+        heading: '3. I chilometri sembrano troppo pochi rispetto all\'età dell\'auto',
+        paragraphs: [
+          'Un\'auto di 10 anni con un chilometraggio estremamente basso può essere realmente l\'auto del classico "nonno che la usava solo la domenica", ma richiede sempre una verifica meticolosa.',
+          'Non limitarti a guardare il numero visualizzato sul quadro strumenti. Cerca costantemente la coerenza logica tra: chilometri percorsi + anno di immatricolazione + storico revisioni + fatture tagliandi + usura fisica dei componenti interni.',
+          'Elementi come la corona del volante, i gommini copripedali di frizione e freno, il fianchetto esterno del sedile del guidatore, la cuffia e il pomello del cambio e l\'opacità dei pulsanti più usati (alzacristalli, climatizzatore) raccontano con precisione l\'uso reale del mezzo.',
+          'Anche le registrazioni storiche delle revisioni al Portale dell\'Automobilista sono preziose per verificare se ci sono stati salti sospetti o anomalie nella progressione del chilometraggio.',
+        ],
+      },
+      {
+        heading: '4. L\'auto è bellissima nelle foto, ma le informazioni tecniche sono scarse',
+        paragraphs: [
+          'Fotografie lucide, scattate con filtri o da angolazioni studiate non equivalgono automaticamente a una meccanica impeccabile.',
+          'Se un annuncio presenta 20 foto spettacolari della carrozzeria appena lucidata ma il testo contiene solo tre righe generiche senza dettagli tecnici essenziali, non fermarti alle apparenze. Una bella fotografia può distogliere l\'attenzione da difetti o mancanze importanti.',
+        ],
+        list: [
+          'Quale versione, motorizzazione e codice allestimento esatto si sta acquistando',
+          'Quanti chilometri effettivi sono stati percorsi',
+          'Quali sono gli optional principali effettivamente presenti e funzionanti',
+          'Quanti proprietari hanno posseduto il veicolo',
+          'Se l\'auto ha subito incidenti, urti o riparazioni strutturali',
+          'Quali tagliandi o manutenzioni straordinarie sono state eseguite di recente',
+          'La motivazione reale della vendita da parte del proprietario',
+        ],
+      },
+      {
+        heading: '5. Il venditore mette fretta e fa pressione psicologica',
+        paragraphs: [
+          'Frasi ricorrenti come "Ho già altri 3 clienti che stanno venendo a vederla", "Se vuoi bloccarla devi mandarmi subito un bonifico di caparra", "Domani il prezzo aumenterà" o "Devi decidere entro stasera" sono tecniche di pressione psicologica ben collaudate.',
+          'La fretta è il nemico numero uno dell\'acquisto consapevole: induce l\'acquirente ad abbassare la guardia e a saltare i controlli fondamentali per paura di perdere l\'affare.',
+          'L\'acquisto di un\'automobile è un investimento economico rilevante. Se un venditore non ti concede il tempo necessario per svolgere le dovute verifiche, richiedere la documentazione o far visionare l\'auto al tuo meccanico di fiducia, la decisione più prudente è fermarsi immediatamente.',
+          'Un vero affare trasparente non ha alcun bisogno di impedirti di controllarlo.',
+        ],
+      },
+      {
+        heading: '6. Il prezzo cambia quando inizi a parlare di persona',
+        paragraphs: [
+          'Un altro fenomeno a cui prestare massima attenzione è la differenza tra il "prezzo vetrina" pubblicato online e il costo totale effettivo su strada.',
+          'Spesso annunci con prezzi eccezionalmente bassi nascondono clausole vincolanti scritte in piccolo nelle note a piè di pagina:',
+        ],
+        list: [
+          'Obbligo di sottoscrivere un finanziamento a tasso elevato con maxi-rata finale o polizze accessorie per ottenere il prezzo promozionale',
+          'Pacchetti preconsegna, sanificazione o controlli preconsegna obbligatori a pagamento',
+          'Spese di gestione pratica e commissioni amministrative esorbitanti',
+          'Garanzie commerciali aggiuntive spacciate per obbligatorie per legge',
+          'Tariffe per il passaggio di proprietà gonfiate rispetto ai costi standard di agenzia',
+        ],
+      },
+      {
+        heading: '7. La manutenzione non è documentata con fatture e ricevute',
+        paragraphs: [
+          'Espressioni generiche come "Tagliandata regolarmente", "Tenuta da amatore" o "Sempre in garage e mai un problema" sono rassicuranti a parole, ma non hanno alcun valore contrattuale né legale se non sono supportate da documenti tracciabili.',
+          'Un\'auto con uno storico di manutenzione chiaro, cronologico e documentato da ricevute o libretto tagliandi, anche se proposta a una cifra leggermente superiore, è quasi sempre un investimento decisamente più sicuro rispetto a una vettura apparentemente economica ma senza passato verificabile.',
+        ],
+        list: [
+          'Fatture e ricevute fiscali dei tagliandi con dettaglio dei componenti sostituiti e chilometraggio riportato',
+          'Libretto dei tagliandi ufficiale timbrato e firmato dalle officine di riferimento',
+          'Data e chilometraggio dell\'eventuale sostituzione della cinghia di distribuzione e pompa dell\'acqua',
+          'Manutenzione del cambio (in particolare sostituzione olio e lavaggio per cambi automatici DSG, CVT, convertitore)',
+          'Sostituzione recente di componenti soggetti a usura come dischi e pastiglie freni, ammortizzatori, frizione o batteria',
+        ],
+      },
+      {
+        heading: '8. Ci sono segnali visivi di un possibile incidente o risagomatura',
+        paragraphs: [
+          'Non è detto che un\'auto che ha subito una riparazione di carrozzeria sia automaticamente da scartare: il problema nasce quando il venditore nasconde sinistri gravi o riparazioni strutturali che possono compromettere sicurezza e stabilità di marcia.',
+          'Osserva sempre con attenzione la vettura alla luce naturale del giorno, evitando visite serali, al buio o sotto la pioggia battente.',
+        ],
+        list: [
+          'Differenze di tonalità, riflesso o brillantezza tra i diversi pannelli della carrozzeria (parafanghi, portiere, cofano)',
+          'Disallineamento delle fughe e delle fessure tra portiere e montanti, o tra cofano e gruppi ottici',
+          'Tracce o polverizzazioni di vernice su guarnizioni in gomma, modanature in plastica o parabrezza',
+          'Proiettori anteriori o fanali posteriori con date di produzione differenti o trasparenza non simmetrica',
+          'Segni di saldatura non conforme, mastici irregolari o pieghe anomale nel vano ruota di scorta e nei duomi delle sospensioni',
+          'Usura anomala o asimmetrica del battistrada degli pneumatici, tipico sintomo di problemi di convergenza o campanatura post-urto',
+        ],
+      },
+      {
+        heading: '9. L\'auto sembra conveniente, ma non hai calcolato i costi di gestione post-acquisto',
+        paragraphs: [
+          'Questo è uno degli errori più frequenti commessi da chi compra un\'auto usata: calcolare unicamente la spesa iniziale d\'acquisto.',
+          'Un veicolo acquistato a 12.000 € non ti costerà semplicemente 12.000 €. Nei mesi successivi al passaggio di proprietà dovrai sostenere una serie di costi fissi e variabili indispensabili:',
+          '• Assicurazione RCA ed eventuali garanzie furto/incendio o assistenza stradale',
+          '• [Calcolo del bollo auto annuale](/calcolo-bollo) in base alla potenza in kW e alla regione',
+          '• Tagliando iniziale di controllo filtri e liquidi',
+          '• Treno gomme estive/invernali',
+          '• Costo del carburante in funzione dei consumi reali e dei tuoi chilometri annui',
+          '• Revisione periodica e fondo per eventuali imprevisti meccanici',
+          'Per questo è fondamentale farsi sempre la domanda giusta: "Quanto mi costerà realmente possedere e mantenere questa macchina?" e non limitarsi a "Quanto costa comprarla oggi?".',
+        ],
+      },
+      {
+        heading: '10. Il prezzo sembra giusto, ma nessuno ha verificato l\'annuncio nel suo complesso',
+        paragraphs: [
+          'Questo è forse l\'aspetto più decisivo di tutti: valutare un singolo dettaglio isolato non basta per fare una scelta serena.',
+          'Un\'auto usata può presentare un prezzo apparentemente congruo, un chilometraggio contenuto e un motore brillante, ma al contempo soffrire di [problemi cronici noti di affidabilità](/affidabilita), costi di ricambio molto elevati o essere penalizzata da future limitazioni alla circolazione urbana.',
+          'Una valutazione affidabile richiede di mettere insieme tutti i tasselli del puzzle: valore di mercato, affidabilità del modello, stato d\'uso dichiarato, congruenza dei chilometri e costi di gestione a lungo termine.',
+        ],
+      },
+      {
+        heading: 'Il metodo AutoEsperto: come verificare qualsiasi annuncio prima di decidere',
+        paragraphs: [
+          'Prima di procedere all\'acquisto di un\'auto usata o versare un anticipo, poniti sempre queste cinque domande strategiche:',
+          '1. Il prezzo richiesto dal venditore è realmente in linea con la media del mercato italiano?',
+          '2. I chilometri dichiarati sono credibili e coerenti con la storia e l\'usura visiva del veicolo?',
+          '3. Questo modello, motore o cambio presenta difetti noti o richiami di fabbrica ricorrenti?',
+          '4. Quali costi dovrò affrontare per manutenzione, bollo, carburante e riparazioni nei prossimi anni?',
+          '5. Alla luce di tutti questi fattori, si tratta davvero di un buon acquisto o è meglio cercare un\'altra alternativa?',
+          'È esattamente per rispondere a queste domande che è nato [AutoEsperto](/analizza-annuncio). Puoi incollare direttamente il link di un annuncio (AutoScout24, Subito.it, Facebook Marketplace) o caricare uno screenshot: il nostro motore analizza istantaneamente Trust Score, prezzo reale, affidabilità del motore e ti restituisce un verdetto chiaro, con le domande mirate da fare al venditore prima di firmare.',
+          'Non devi essere un meccanico professionista per acquistare in sicurezza: devi solo sapere cosa controllare e non ignorare i campanelli d\'allarme. Un\'auto che costa 1.500 € in meno potrebbe farti risparmiare, oppure costartene 4.000 € di riparazioni poco dopo.',
+        ],
+      },
+    ],
+  },
   {
     slug: 'straccia-bollo-sicilia-2026-chi-puo-farlo-norme',
     title: 'Straccia Bollo Sicilia 2026: come cancellare sanzioni e interessi sulle vecchie pendenze',

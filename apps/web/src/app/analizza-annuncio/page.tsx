@@ -19,7 +19,13 @@ export const metadata: Metadata = {
     title: 'Controlla Annuncio Auto Usata — Trust Score & Verdetto',
     description: 'Analizza annunci auto da link o testo: calcola Trust Score, affidabilità e strategia di trattativa.',
     siteName: 'AutoEsperto',
-    images: [{ url: `${siteUrl}/og-image.png`, width: 1200, height: 630, alt: 'Controlla Annuncio AutoEsperto' }],
+    images: [{ url: `${siteUrl}/images/guide/10-segnali-annuncio-auto-usata.jpg`, width: 1200, height: 630, alt: 'Controlla Annuncio Auto Usata - AutoEsperto' }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: 'Controlla Annuncio Auto Usata: Trust Score e Valore Reale | AutoEsperto',
+    description: 'Incolla il link dell\'annuncio: scopri Trust Score, verdetto, valore reale e quanto offrire al venditore.',
+    images: [`${siteUrl}/images/guide/10-segnali-annuncio-auto-usata.jpg`],
   },
 };
 

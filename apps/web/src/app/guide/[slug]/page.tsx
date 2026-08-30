@@ -29,6 +29,11 @@ function getDateModified(published: string): string {
 }
 
 const guideCtas: Record<string, { label: string; href: string; description: string }> = {
+  'analizza-annuncio': {
+    label: 'Analizza annuncio con AutoEsperto',
+    href: '/analizza-annuncio',
+    description: 'Incolla il link o carica una foto: calcola Trust Score, prezzo reale e controlli da fare prima di comprare.',
+  },
   'auto-usata-affare': {
     label: 'Valuta il prezzo reale',
     href: '/valutazione',
@@ -251,6 +256,9 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!guide) return {};
 
   const fullUrl = `${siteUrl}/guide/${guide.slug}`;
+  const guideImageUrl = guide.image
+    ? (guide.image.startsWith('http') ? guide.image : `${siteUrl}${guide.image.startsWith('/') ? '' : '/'}${guide.image}`)
+    : `${siteUrl}/og-image.png`;
 
   return {
     title: `${guide.title} | AutoEsperto`,
@@ -279,11 +287,11 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       section: GUIDE_CATEGORIES[guide.category].label,
       images: [
         {
-          url: `${siteUrl}/og-image.png`,
-          secureUrl: `${siteUrl}/og-image.png`,
+          url: guideImageUrl,
+          secureUrl: guideImageUrl,
           width: 1200,
           height: 630,
-          type: 'image/png',
+          type: guideImageUrl.endsWith('.png') ? 'image/png' : 'image/jpeg',
           alt: guide.title,
         },
       ],
@@ -292,7 +300,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       card: 'summary_large_image',
       title: guide.title,
       description: guide.description,
-      images: [`${siteUrl}/og-image.png`],
+      images: [guideImageUrl],
     },
   };
 }
@@ -588,7 +596,11 @@ export default async function GuidePage({ params }: PageProps) {
       '@type': 'WebPage',
       '@id': fullUrl,
     },
-    image: [`${siteUrl}/og-image.png`],
+    image: [
+      guide.image
+        ? (guide.image.startsWith('http') ? guide.image : `${siteUrl}${guide.image.startsWith('/') ? '' : '/'}${guide.image}`)
+        : `${siteUrl}/og-image.png`
+    ],
   };
 
   const breadcrumbSchema = {
@@ -687,6 +699,18 @@ export default async function GuidePage({ params }: PageProps) {
             <p itemProp="description" className="article-summary text-slate-600 text-base leading-relaxed mt-4">
               {guide.description}
             </p>
+
+            {guide.image && (
+              <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200/80 shadow-md bg-slate-950">
+                <img
+                  src={guide.image}
+                  alt={guide.title}
+                  className="w-full h-auto object-cover max-h-[500px]"
+                  loading="eager"
+                  itemProp="image"
+                />
+              </div>
+            )}
           </header>
 
           <ArticleInteractiveBar title={guide.title} url={fullUrl} />

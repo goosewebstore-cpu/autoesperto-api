@@ -121,6 +121,18 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
           </div>
         </div>
 
+        {/* Image thumbnail if present */}
+        {guide.image && (
+          <div className="relative mt-3.5 h-44 w-full overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+            <img
+              src={guide.image}
+              alt={guide.title}
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              loading="lazy"
+            />
+          </div>
+        )}
+
         {/* Title */}
         <h3 className="mt-3.5 text-base sm:text-lg font-black leading-snug text-slate-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
           {guide.title}

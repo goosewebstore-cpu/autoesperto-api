@@ -34,12 +34,12 @@ export default function ContactPage() {
           ],
         },
         {
-          heading: 'Dati Societari & Comunicazioni Legali / PEC',
+          heading: 'Gestione del Progetto, Informazioni Legali & PEC',
           paragraphs: [
-            'Ragione sociale: AutoEsperto Digital S.r.l.',
-            'Sede legale: Milano (MI), Italia',
+            'Piattaforma: AutoEsperto.it — Progetto tecnologico indipendente gestito da Ralfh (Sviluppatore Freelance)',
+            'Sede operativa: Siracusa (SR), Italia',
             'Posta Elettronica Certificata (PEC): autoesperto@pec.it',
-            'Responsabile della protezione dei dati (DPO / Privacy): privacy@autoesperto.it',
+            'Supporto & Privacy: supporto@autoesperto.it',
           ],
         },
       ]}

@@ -17,8 +17,8 @@ export default function PrivacyPage() {
         {
           heading: 'Titolare del Trattamento e Contatti',
           paragraphs: [
-            'Il Titolare del trattamento è AutoEsperto Digital S.r.l. (in costituzione), con sede in Milano (MI), Italia.',
-            'Per qualsiasi richiesta di chiarimento, esercizio dei diritti degli interessati o comunicazioni relative alla protezione dei dati personali, è possibile contattare il nostro Responsabile della Protezione dei Dati (DPO) all’indirizzo: privacy@autoesperto.it oppure supporto@autoesperto.it.',
+            'Il Titolare del trattamento è Ralfh (Sviluppatore Freelance e gestore della piattaforma AutoEsperto.it), con sede a Siracusa (SR), Italia.',
+            'Per qualsiasi richiesta di chiarimento, esercizio dei diritti degli interessati o comunicazioni relative alla protezione dei dati personali, è possibile contattare l’indirizzo: privacy@autoesperto.it oppure supporto@autoesperto.it.',
           ],
         },
         {

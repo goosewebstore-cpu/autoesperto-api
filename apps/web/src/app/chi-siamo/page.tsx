@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
-import { ArrowRight, BarChart3, Car, Database, Eye, ShieldCheck, Users } from 'lucide-react';
+import { ArrowRight, BarChart3, Car, Database, Eye, ShieldCheck, User } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 
@@ -52,28 +52,10 @@ const VALUES = [
       'Non siamo concessionari, non vendiamo auto e non accettiamo compensi per alterare i verdetti. Il nostro unico obiettivo è darti informazioni oggettive per decidere meglio.',
   },
   {
-    icon: Users,
+    icon: User,
     title: 'Accessibilità gratuita',
     description:
       'Tutti gli strumenti principali sono gratuiti e utilizzabili liberamente. Crediamo che informarsi prima di un acquisto importante sia un diritto di ogni consumatore.',
-  },
-];
-
-const TEAM_MEMBERS = [
-  {
-    name: 'Marco Valenti',
-    role: 'Responsabile Metodologia & Algoritmi di Mercato',
-    credentials: 'Laurea in Ingegneria Informatica, 12+ anni di esperienza in data mining e analisi predittiva dei mercati automotive secondari.',
-  },
-  {
-    name: 'Ing. Alessandro Conti',
-    role: 'Consulente Tecnico & Diagnostica Meccanica',
-    credentials: 'Perito automotive iscritto al ruolo, esperto in diagnostica elettronica OBD-II, omologazioni e perizie danni pre-acquisto.',
-  },
-  {
-    name: 'Elena Moretti',
-    role: 'Responsabile Contenuti Editoriali & Normativa',
-    credentials: 'Giornalista specializzata nel settore mobilità e normative europee di circolarità e tutela del consumatore (Regolamento UE 2026/1738).',
   },
 ];
 
@@ -111,22 +93,30 @@ function JsonLd() {
       name: 'Chi siamo — AutoEsperto',
       url: `${siteUrl}/chi-siamo`,
       description:
-        'AutoEsperto aiuta chi compra o vende un\'auto usata con dati reali di mercato, comitato editoriale qualificato e trasparenza metodologica.',
+        'AutoEsperto aiuta chi compra o vende un\'auto usata con dati reali di mercato, analisi di affidabilità e trasparenza metodologica.',
       mainEntity: {
-        '@type': 'Organization',
+        '@type': 'WebSite',
         name: 'AutoEsperto',
-        legalName: 'AutoEsperto Digital S.r.l.',
         url: siteUrl,
         logo: `${siteUrl}/icon-192.png`,
         description:
-          'Piattaforma tecnologica indipendente per la valutazione, il controllo pre-acquisto e il passaporto digitale delle auto usate in Italia.',
+          'Piattaforma tecnologica indipendente per la valutazione, il controllo pre-acquisto e il passaporto digitale delle auto usate in Italia, sviluppata da Ralfh.',
         foundingDate: '2026',
-        taxID: 'IT09876543210',
+        creator: {
+          '@type': 'Person',
+          name: 'Ralfh',
+          jobTitle: 'Sviluppatore Freelance & Fondatore',
+        },
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Siracusa',
+          addressRegion: 'SR',
+          addressCountry: 'IT',
+        },
         contactPoint: {
           '@type': 'ContactPoint',
           contactType: 'customer support',
           email: 'supporto@autoesperto.it',
-          availableLanguage: ['Italian'],
         },
         knowsAbout: [
           'Valutazione auto usate',
@@ -211,23 +201,28 @@ export default function ChiSiamoPage() {
           </div>
         </section>
 
-        {/* Comitato Editoriale & Competenze */}
+        {/* Fondatore */}
         <section className="mb-12">
           <div className="flex items-center gap-2.5 mb-2">
-            <Users className="h-5 w-5 text-accent" />
-            <h2 className="text-xl font-bold text-text-primary">Team editoriale e periti</h2>
+            <User className="h-5 w-5 text-accent" />
+            <h2 className="text-xl font-bold text-text-primary">Fondatore &amp; Sviluppatore</h2>
           </div>
           <p className="text-sm text-text-secondary leading-relaxed mb-6">
-            Le nostre valutazioni e guide sono curate da un team interdisciplinare di ingegneri, periti meccanici e giornalisti automotive:
+            AutoEsperto non è una grande azienda né una concessionaria, ma un progetto tecnologico indipendente sviluppato e curato da un professionista freelance:
           </p>
-          <div className="space-y-4">
-            {TEAM_MEMBERS.map((member) => (
-              <div key={member.name} className="rounded-2xl border border-border bg-white p-5 shadow-sm">
-                <h3 className="text-base font-bold text-text-primary">{member.name}</h3>
-                <p className="text-xs font-semibold text-accent mt-0.5">{member.role}</p>
-                <p className="text-sm text-text-secondary leading-relaxed mt-2">{member.credentials}</p>
+          <div className="rounded-2xl border border-border bg-white p-6 shadow-sm hover:border-accent/30 transition-colors">
+            <div className="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-accent text-white font-black text-xl shadow-md shadow-accent/20">
+                R
               </div>
-            ))}
+              <div>
+                <h3 className="text-lg font-bold text-text-primary">Ralfh</h3>
+                <p className="text-xs font-semibold text-accent mt-0.5">Fondatore &amp; Sviluppatore Freelance</p>
+                <p className="text-sm text-text-secondary leading-relaxed mt-2.5">
+                  Professionista freelance e ideatore di AutoEsperto. Ho sviluppato questa piattaforma in totale autonomia per offrire a chi compra o vende un&apos;auto usata in Italia uno strumento accessibile, neutrale e basato su dati reali di mercato, senza legami commerciali con concessionari o intermediari.
+                </p>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -277,14 +272,14 @@ export default function ChiSiamoPage() {
           </div>
         </section>
 
-        {/* Dati Societari */}
+        {/* Dati e Trasparenza Legale */}
         <section className="mb-12 rounded-2xl border border-slate-200 bg-slate-50 p-6">
-          <h2 className="text-base font-bold text-text-primary mb-3">Dati societari e trasparenza legale</h2>
+          <h2 className="text-base font-bold text-text-primary mb-3">Dati del progetto e trasparenza legale</h2>
           <div className="text-xs text-text-secondary leading-relaxed space-y-1.5">
             <p><strong>Piattaforma:</strong> AutoEsperto.it — Servizio di analisi e quotazione auto usate</p>
-            <p><strong>Società di gestione:</strong> AutoEsperto Digital S.r.l. (in costituzione / progetto tech accreditato)</p>
-            <p><strong>Sede:</strong> Milano (MI) · Italia</p>
-            <p><strong>PEC aziendale:</strong> autoesperto@pec.it · <strong>Email supporto:</strong> supporto@autoesperto.it</p>
+            <p><strong>Titolare &amp; Gestione:</strong> Ralfh (Sviluppatore Freelance — Progetto indipendente non societario)</p>
+            <p><strong>Sede:</strong> Siracusa (SR) · Italia</p>
+            <p><strong>PEC:</strong> autoesperto@pec.it · <strong>Email supporto:</strong> supporto@autoesperto.it</p>
             <p><strong>Conformità normativa:</strong> Operante ai sensi dell&apos;art. 21 Cost. e del D.Lgs. 206/2005 (Codice del Consumo).</p>
           </div>
         </section>

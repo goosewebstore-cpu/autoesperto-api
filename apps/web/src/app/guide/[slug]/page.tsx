@@ -579,8 +579,8 @@ export default async function GuidePage({ params }: PageProps) {
     ],
     author: {
       '@type': 'Organization',
-      name: 'Redazione AutoEsperto',
-      url: `${siteUrl}/lavora-con-noi`,
+      name: 'Redazione Tecnica & Giornalismo Automotive AutoEsperto',
+      url: `${siteUrl}/guide`,
     },
     publisher: {
       '@type': 'Organization',
@@ -673,8 +673,9 @@ export default async function GuidePage({ params }: PageProps) {
               <span className="inline-flex items-center rounded-full bg-accent-light px-2.5 py-1 text-xs font-bold text-accent">
                 {GUIDE_CATEGORIES[guide.category].label}
               </span>
-              <span className="text-xs font-semibold text-text-tertiary">
-                Di Redazione AutoEsperto
+              <span className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1.5 bg-slate-100/90 rounded-full px-2.5 py-1">
+                <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
+                A cura della Redazione Automotive
               </span>
               <span className="text-text-tertiary">·</span>
               <div className="flex items-center gap-1 text-xs text-text-tertiary font-medium">
@@ -716,34 +717,6 @@ export default async function GuidePage({ params }: PageProps) {
 
           <ArticleInteractiveBar title={guide.title} url={fullUrl} />
 
-          {/* Highlights / Key Takeaways Box — Sintesi chiara e leggibile dei punti salienti */}
-          {takeaways.length > 0 && (
-            <div className="key-takeaways my-8 rounded-2xl bg-gradient-to-br from-blue-50/90 via-sky-50/30 to-slate-50 border border-blue-200/90 p-5 md:p-6 shadow-xs">
-              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/60 pb-3 mb-4">
-                <div className="flex items-center gap-2 text-xs font-extrabold text-blue-800 uppercase tracking-wider">
-                  <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
-                  <span>In sintesi — Punti chiave</span>
-                </div>
-                <span className="text-[11px] font-semibold text-blue-700 bg-blue-100/70 rounded-full px-2.5 py-0.5">
-                  Riepilogo essenziale
-                </span>
-              </div>
-              <ul className="space-y-3.5">
-                {takeaways.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-3">
-                    <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-blue-600 text-white shadow-xs">
-                      <CheckCircle2 className="w-3.5 h-3.5" />
-                    </span>
-                    <div className="text-sm leading-relaxed text-slate-800">
-                      <strong className="font-bold text-slate-900">{item.topic}:</strong>{' '}
-                      <span className="text-slate-700">{item.summary}</span>
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-
           {/* Indice della guida — link funzionanti con scroll client-side */}
           {tocItems.length > 1 && (
             <GuideTableOfContents items={tocItems} />
@@ -776,6 +749,34 @@ export default async function GuidePage({ params }: PageProps) {
                 </section>
               );
             })}
+
+            {/* Highlights / Key Takeaways Box — Sintesi conclusiva dell'esperto a fine articolo */}
+            {takeaways.length > 0 && (
+              <div className="key-takeaways my-10 rounded-2xl bg-gradient-to-br from-blue-50/90 via-sky-50/30 to-slate-50 border border-blue-200/90 p-5 md:p-6 shadow-xs">
+                <div className="flex flex-wrap items-center justify-between gap-2 border-b border-blue-200/60 pb-3 mb-4">
+                  <div className="flex items-center gap-2 text-xs font-extrabold text-blue-800 uppercase tracking-wider">
+                    <Sparkles className="w-4 h-4 text-blue-600 shrink-0" />
+                    <span>In sintesi — Punti chiave & Conclusioni</span>
+                  </div>
+                  <span className="text-[11px] font-semibold text-blue-700 bg-blue-100/70 rounded-full px-2.5 py-0.5">
+                    Riepilogo finale dell&apos;esperto
+                  </span>
+                </div>
+                <ul className="space-y-3.5">
+                  {takeaways.map((item, idx) => (
+                    <li key={idx} className="flex items-start gap-3">
+                      <span className="mt-0.5 grid h-5 w-5 shrink-0 place-items-center rounded-full bg-blue-600 text-white shadow-xs">
+                        <CheckCircle2 className="w-3.5 h-3.5" />
+                      </span>
+                      <div className="text-sm leading-relaxed text-slate-800">
+                        <strong className="font-bold text-slate-900">{item.topic}:</strong>{' '}
+                        <span className="text-slate-700">{item.summary}</span>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
 
           <ArticleValuatorWidget suggestedModels={mentionedModels} articleTitle={guide.title} />
@@ -785,10 +786,10 @@ export default async function GuidePage({ params }: PageProps) {
           <div className="mt-10 rounded-2xl bg-slate-50 border border-slate-200 p-5">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide">
               <ShieldCheck className="w-4 h-4 text-blue-600" />
-              <span>Metodologia & Fonti Ufficiali</span>
+              <span>Metodologia Giornalistica & Fonti Tecniche</span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed mt-2.5">
-              Questa guida è stata redatta dal team di esperti di <strong>AutoEsperto</strong> e verificata sul mercato automotive italiano 2026. I dati sulle quotazioni, sull&apos;affidabilità e sui costi di riparazione sono elaborati dal nostro algoritmo proprietario che analizza quotidianamente oltre 10.000+ annunci reali, incrociandoli con banche dati di richiami ufficiali (Safety Gate UE, NHTSA) e storici di manutenzione.
+              Questa guida e analisi di mercato è redatta dalla <strong>Redazione Tecnica di AutoEsperto</strong> con approccio da giornalismo automotive indipendente ed esperienza sul campo. I dati su quotazioni, difettosità e costi di gestione sono elaborati incrociando l&apos;osservatorio annunci italiano con banche dati ufficiali (Safety Gate UE, NHTSA, bollettini tecnici ministeriali).
             </p>
           </div>
         </article>

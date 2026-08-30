@@ -12,7 +12,6 @@ import GuideTableOfContents from '@/components/GuideTableOfContents';
 import ArticleValuatorWidget from '@/components/ArticleValuatorWidget';
 import GuideCard from '@/components/GuideCard';
 
-
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
@@ -243,11 +242,9 @@ function getGuideCta(ctaKey?: string): { label: string; href: string; descriptio
 export const dynamic = 'force-static';
 export const dynamicParams = true;
 
-
 export function generateStaticParams() {
   return guides.map((guide) => ({ slug: guide.slug }));
 }
-
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const resolvedParams = await params;
@@ -540,6 +537,42 @@ function extractGuideTakeaways(guide: Guide): Array<{ topic: string; summary: st
   return takeaways;
 }
 
+function getRelatedGuides(currentGuide: Guide, count: number = 3): Guide[] {
+  // 1. Guides in the same category
+  const sameCategory = guides.filter(
+    (g) => g.slug !== currentGuide.slug && g.category === currentGuide.category
+  );
+  // 2. Guides in other categories
+  const otherCategory = guides.filter(
+    (g) => g.slug !== currentGuide.slug && g.category !== currentGuide.category
+  );
+
+  const related: Guide[] = [];
+
+  // Pick from same category first (up to count - 1)
+  for (const g of sameCategory) {
+    if (related.length >= count - 1) break;
+    related.push(g);
+  }
+
+  // Fill remainder from other categories
+  for (const g of otherCategory) {
+    if (related.length >= count) break;
+    related.push(g);
+  }
+
+  // Fallback to fill up to count if needed
+  if (related.length < count) {
+    for (const g of sameCategory) {
+      if (!related.some((r) => r.slug === g.slug) && related.length < count) {
+        related.push(g);
+      }
+    }
+  }
+
+  return related.slice(0, count);
+}
+
 export default async function GuidePage({ params }: PageProps) {
   const resolvedParams = await params;
   const rawSlug = resolvedParams?.slug || '';
@@ -549,11 +582,15 @@ export default async function GuidePage({ params }: PageProps) {
   const mentionedModels = getMentionedModels(guide);
   const cta = getGuideCta(guide.cta);
   const takeaways = extractGuideTakeaways(guide);
-  const otherGuides = guides.filter((g) => g.slug !== guide.slug).slice(0, 3);
+  const otherGuides = getRelatedGuides(guide, 3);
   const wordCount = countWords(guide);
   const readingTimeMinutes = Math.max(1, Math.ceil(wordCount / 200));
   const faqs = extractFaqs(guide);
   const fullUrl = `${siteUrl}/guide/${guide.slug}`;
+
+  const guideImageUrl = guide.image
+    ? (guide.image.startsWith('http') ? guide.image : `${siteUrl}${guide.image.startsWith('/') ? '' : '/'}${guide.image}`)
+    : `${siteUrl}/og-image.png`;
 
   const articleSchema = {
     '@context': 'https://schema.org',
@@ -597,11 +634,7 @@ export default async function GuidePage({ params }: PageProps) {
       '@type': 'WebPage',
       '@id': fullUrl,
     },
-    image: [
-      guide.image
-        ? (guide.image.startsWith('http') ? guide.image : `${siteUrl}${guide.image.startsWith('/') ? '' : '/'}${guide.image}`)
-        : `${siteUrl}/og-image.png`
-    ],
+    image: [guideImageUrl],
   };
 
   const breadcrumbSchema = {
@@ -859,5 +892,3 @@ export default async function GuidePage({ params }: PageProps) {
     </div>
   );
 }
-
-

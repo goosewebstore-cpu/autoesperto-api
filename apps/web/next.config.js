@@ -4,6 +4,10 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
   transpilePackages: ['@autoesperto/types'],
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'recharts', 'jspdf'],
+  },
+  productionBrowserSourceMaps: false,
   turbopack: {
     root: path.resolve(__dirname, '../..'),
   },

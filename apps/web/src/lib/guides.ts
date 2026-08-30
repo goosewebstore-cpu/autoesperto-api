@@ -26,7 +26,7 @@ export interface Guide {
 }
 
 export const guides: Guide[] = [
-  {
+{
     slug: 'auto-usata-10-segnali-problema-annuncio',
     title: 'Auto usata: 10 segnali che l’annuncio nasconde un problema',
     description:

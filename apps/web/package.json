@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "node scripts/generate-sitemaps.mjs && next build",
+    "deploy": "node scripts/deploy-cf.mjs",
     "indexnow": "node scripts/ping-indexnow.mjs",
     "start": "next start",
     "lint": "tsc --noEmit"
@@ -25,6 +26,7 @@
     "@types/react": "^19.2.18",
     "@types/react-dom": "^19.2.4",
     "autoprefixer": "^10.4.19",
+    "esbuild": "^0.25.0",
     "postcss": "^8.4.38",
     "tailwindcss": "^3.4.3",
     "typescript": "^5.4.0",

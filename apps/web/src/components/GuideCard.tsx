@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   BadgeEuro,
@@ -10,7 +12,7 @@ import {
   Sparkles,
   BookOpen,
 } from 'lucide-react';
-import { GUIDE_CATEGORIES, type Guide, type GuideCategory } from '@/lib/guides';
+import { GUIDE_CATEGORIES, type Guide, type GuideCategory } from '@/lib/guide-types';
 
 const CATEGORY_ICONS: Record<GuideCategory, typeof ShoppingCart> = {
   acquisto: ShoppingCart,
@@ -86,10 +88,18 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
   const style = CATEGORY_STYLES[guide.category] || CATEGORY_STYLES.acquisto;
   const readTime = estimateReadingTime(guide);
 
+  const handleClick = () => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  };
+
   return (
     <Link
       href={`/guide/${guide.slug}`}
       prefetch={true}
+      scroll={true}
+      onClick={handleClick}
       className={`
         group relative flex h-full flex-col justify-between rounded-3xl border bg-white p-5 sm:p-6
         transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl
@@ -127,7 +137,7 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
             <img
               src={guide.image}
               alt={guide.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
               loading="lazy"
             />
           </div>

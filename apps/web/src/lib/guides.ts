@@ -49,7 +49,7 @@ export const guides: Guide[] = [
         paragraphs: [
           'Questo è il primo campanello d’allarme.',
           'Se trovi una Volkswagen Golf, una Fiat Panda, una Toyota Yaris o qualsiasi altro modello a un prezzo nettamente inferiore rispetto ad auto simili per anno, chilometraggio e motorizzazione, non significa automaticamente che sia una truffa, ma devi comprendere il motivo esatto di questa discrepanza.',
-          'Il prezzo da solo non dice mai se un\'auto è un affare. Il vero confronto è tra il prezzo richiesto e il [valore reale di mercato](/valutazione) di un veicolo con caratteristiche comparabili.',
+          'Il prezzo da solo non dice mai se un\'auto è un affare. Il vero confronto è tra il prezzo richiesto e il [valore reale di mercato](/valutazione) di un veicolo con caratteristiche comparabili calcolato con la nostra [quotazione auto usate](/valutazione).',
         ],
         list: [
           'Anno esatto di prima immatricolazione',
@@ -68,7 +68,7 @@ export const guides: Guide[] = [
         paragraphs: [
           'Prima di organizzare un appuntamento o percorrere chilometri per andare a vedere un\'auto, richiedere la targa è una delle verifiche più semplici, legittime e trasparenti.',
           'Se il venditore rifiuta categoricamente di comunicarla, cancella le foto delle targhe senza motivazione o trova continue scuse per non fornirla al telefono, è un ottimo motivo per essere prudenti.',
-          'La targa è indispensabile per effettuare diversi controlli preliminari: verificare lo storico delle revisioni ministeriali, controllare eventuali gravami o fermi amministrativi, accertare la reale potenza in kW e confrontare le informazioni dichiarate nell\'annuncio con i registri ufficiali.',
+          'La targa è indispensabile per effettuare diversi controlli preliminari: con il nostro strumento di [verifica targa e dati auto](/verifica-targa) puoi accertare allestimento esatto, potenza e classe ambientale. Inoltre, puoi consultare lo storico dei chilometri registrati durante le ultime revisioni ufficiali su [Il Portale dell\'Automobilista](https://www.ilportaledellautomobilista.it/) o verificare eventuali gravami e fermi amministrativi con una visura PRA.',
           'Non significa che chi non vuole fornire subito la targa sia necessariamente un truffatore, ma significa semplicemente che non hai ancora elementi a sufficienza per poterti fidare.',
         ],
       },
@@ -78,7 +78,7 @@ export const guides: Guide[] = [
           'Un\'auto di 10 anni con un chilometraggio estremamente basso può essere realmente l\'auto del classico "nonno che la usava solo la domenica", ma richiede sempre una verifica meticolosa.',
           'Non limitarti a guardare il numero visualizzato sul quadro strumenti. Cerca costantemente la coerenza logica tra: chilometri percorsi + anno di immatricolazione + storico revisioni + fatture tagliandi + usura fisica dei componenti interni.',
           'Elementi come la corona del volante, i gommini copripedali di frizione e freno, il fianchetto esterno del sedile del guidatore, la cuffia e il pomello del cambio e l\'opacità dei pulsanti più usati (alzacristalli, climatizzatore) raccontano con precisione l\'uso reale del mezzo.',
-          'Anche le registrazioni storiche delle revisioni al Portale dell\'Automobilista sono preziose per verificare se ci sono stati salti sospetti o anomalie nella progressione del chilometraggio.',
+          'Anche le registrazioni storiche delle revisioni al [Portale dell\'Automobilista](https://www.ilportaledellautomobilista.it/) e la nostra [analisi da foto con AI](/analizza-annuncio) sono preziose per verificare se ci sono stati salti sospetti o anomalie nella progressione del chilometraggio.',
         ],
       },
       {
@@ -124,7 +124,7 @@ export const guides: Guide[] = [
         heading: '7. La manutenzione non è documentata con fatture e ricevute',
         paragraphs: [
           'Espressioni generiche come "Tagliandata regolarmente", "Tenuta da amatore" o "Sempre in garage e mai un problema" sono rassicuranti a parole, ma non hanno alcun valore contrattuale né legale se non sono supportate da documenti tracciabili.',
-          'Un\'auto con uno storico di manutenzione chiaro, cronologico e documentato da ricevute o libretto tagliandi, anche se proposta a una cifra leggermente superiore, è quasi sempre un investimento decisamente più sicuro rispetto a una vettura apparentemente economica ma senza passato verificabile.',
+          'Un\'auto con uno storico di manutenzione chiaro, cronologico e documentato da ricevute o digitalizzato tramite [Profilo Digitale Auto](/passport), anche se proposta a una cifra leggermente superiore, è quasi sempre un investimento decisamente più sicuro rispetto a una vettura apparentemente economica ma senza passato verificabile.',
         ],
         list: [
           'Fatture e ricevute fiscali dei tagliandi con dettaglio dei componenti sostituiti e chilometraggio riportato',
@@ -138,7 +138,7 @@ export const guides: Guide[] = [
         heading: '8. Ci sono segnali visivi di un possibile incidente o risagomatura',
         paragraphs: [
           'Non è detto che un\'auto che ha subito una riparazione di carrozzeria sia automaticamente da scartare: il problema nasce quando il venditore nasconde sinistri gravi o riparazioni strutturali che possono compromettere sicurezza e stabilità di marcia.',
-          'Osserva sempre con attenzione la vettura alla luce naturale del giorno, evitando visite serali, al buio o sotto la pioggia battente.',
+          'Osserva sempre con attenzione la vettura alla luce naturale del giorno, evitando visite serali, al buio o sotto la pioggia battente, oppure usa la nostra [stima costi di carrozzeria e riparazione](/riparazione) per quantificare eventuali ripristini.',
         ],
         list: [
           'Differenze di tonalità, riflesso o brillantezza tra i diversi pannelli della carrozzeria (parafanghi, portiere, cofano)',
@@ -156,9 +156,10 @@ export const guides: Guide[] = [
           'Un veicolo acquistato a 12.000 € non ti costerà semplicemente 12.000 €. Nei mesi successivi al passaggio di proprietà dovrai sostenere una serie di costi fissi e variabili indispensabili:',
           '• Assicurazione RCA ed eventuali garanzie furto/incendio o assistenza stradale',
           '• [Calcolo del bollo auto annuale](/calcolo-bollo) in base alla potenza in kW e alla regione',
-          '• Tagliando iniziale di controllo filtri e liquidi',
+          '• Tagliando iniziale di controllo filtri e liquidi stimabile con la [guida costi riparazione](/riparazione)',
           '• Treno gomme estive/invernali',
-          '• Costo del carburante in funzione dei consumi reali e dei tuoi chilometri annui',
+          '• Costo del carburante in funzione dei [consumi reali del veicolo](/consumi) e dei tuoi chilometri annui',
+          '• [Costo del passaggio di proprietà auto](/passaggio-proprieta) da considerare nel budget iniziale',
           '• Revisione periodica e fondo per eventuali imprevisti meccanici',
           'Per questo è fondamentale farsi sempre la domanda giusta: "Quanto mi costerà realmente possedere e mantenere questa macchina?" e non limitarsi a "Quanto costa comprarla oggi?".',
         ],
@@ -167,20 +168,20 @@ export const guides: Guide[] = [
         heading: '10. Il prezzo sembra giusto, ma nessuno ha verificato l\'annuncio nel suo complesso',
         paragraphs: [
           'Questo è forse l\'aspetto più decisivo di tutti: valutare un singolo dettaglio isolato non basta per fare una scelta serena.',
-          'Un\'auto usata può presentare un prezzo apparentemente congruo, un chilometraggio contenuto e un motore brillante, ma al contempo soffrire di [problemi cronici noti di affidabilità](/affidabilita), costi di ricambio molto elevati o essere penalizzata da future limitazioni alla circolazione urbana.',
-          'Una valutazione affidabile richiede di mettere insieme tutti i tasselli del puzzle: valore di mercato, affidabilità del modello, stato d\'uso dichiarato, congruenza dei chilometri e costi di gestione a lungo termine.',
+          'Un\'auto usata può presentare un prezzo apparentemente congruo, un chilometraggio contenuto e un motore brillante, ma al contempo soffrire di [problemi cronici noti di affidabilità](/affidabilita), [difetti noti del motore](/motori-problemi), costi di ricambio molto elevati o essere penalizzata da [blocchi del traffico ambientali](/blocchi-traffico).',
+          'Una valutazione affidabile richiede di mettere insieme tutti i tasselli del puzzle: valore di mercato, affidabilità del modello, stato d\'uso dichiarato, congruenza dei chilometri e costi di gestione a lungo termine, confrontandola con altre alternative tramite il nostro [comparatore auto](/confronta).',
         ],
       },
       {
         heading: 'Il metodo AutoEsperto: come verificare qualsiasi annuncio prima di decidere',
         paragraphs: [
           'Prima di procedere all\'acquisto di un\'auto usata o versare un anticipo, poniti sempre queste cinque domande strategiche:',
-          '1. Il prezzo richiesto dal venditore è realmente in linea con la media del mercato italiano?',
+          '1. Il prezzo richiesto dal venditore è realmente in linea con la media del mercato italiano calcolata su [AutoEsperto Valutazione](/valutazione)?',
           '2. I chilometri dichiarati sono credibili e coerenti con la storia e l\'usura visiva del veicolo?',
-          '3. Questo modello, motore o cambio presenta difetti noti o richiami di fabbrica ricorrenti?',
+          '3. Questo modello, motore o cambio presenta difetti noti o richiami di fabbrica ricorrenti verificabili su [AutoEsperto Affidabilità](/affidabilita)?',
           '4. Quali costi dovrò affrontare per manutenzione, bollo, carburante e riparazioni nei prossimi anni?',
-          '5. Alla luce di tutti questi fattori, si tratta davvero di un buon acquisto o è meglio cercare un\'altra alternativa?',
-          'È esattamente per rispondere a queste domande che è nato [AutoEsperto](/analizza-annuncio). Puoi incollare direttamente il link di un annuncio (AutoScout24, Subito.it, Facebook Marketplace) o caricare uno screenshot: il nostro motore analizza istantaneamente Trust Score, prezzo reale, affidabilità del motore e ti restituisce un verdetto chiaro, con le domande mirate da fare al venditore prima di firmare.',
+          '5. Alla luce di tutti questi fattori, si tratta davvero di un buon acquisto o è meglio cercare un\'altra alternativa con il nostro [Auto Finder](/auto-finder)?',
+          'È esattamente per rispondere a queste domande che è nato [l\'Analizzatore Annunci AutoEsperto](/analizza-annuncio). Puoi incollare direttamente il link di un annuncio (AutoScout24, Subito.it, Facebook Marketplace) o caricare uno screenshot: il nostro motore analizza istantaneamente Trust Score, prezzo reale, affidabilità del motore e ti restituisce un verdetto chiaro, con le domande mirate da fare al venditore prima di firmare.',
           'Non devi essere un meccanico professionista per acquistare in sicurezza: devi solo sapere cosa controllare e non ignorare i campanelli d\'allarme. Un\'auto che costa 1.500 € in meno potrebbe farti risparmiare, oppure costartene 4.000 € di riparazioni poco dopo.',
         ],
       },

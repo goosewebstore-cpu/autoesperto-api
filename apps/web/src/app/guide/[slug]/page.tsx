@@ -319,6 +319,16 @@ function slugifyHeading(text: string): string {
     .replace(/\s+/g, '-');
 }
 
+function slugify(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/[-\s]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+}
+
 function renderParagraphWithLinks(text: string) {
   const markdownRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   const parts: React.ReactNode[] = [];
@@ -358,8 +368,10 @@ function countWords(guide: Guide): number {
   let count = guide.title.split(/\s+/).length + guide.description.split(/\s+/).length;
   for (const s of guide.sections) {
     count += s.heading.split(/\s+/).length;
-    for (const p of s.paragraphs) {
-      count += p.split(/\s+/).length;
+    if (s.paragraphs) {
+      for (const p of s.paragraphs) {
+        count += p.split(/\s+/).length;
+      }
     }
     if (s.list) {
       for (const item of s.list) {
@@ -379,7 +391,7 @@ function extractFaqs(guide: Guide): Array<{ question: string; answer: string }> 
     const lower = heading.toLowerCase();
     const isQuestion = heading.endsWith('?') || questionStarters.some((starter) => lower.startsWith(starter));
 
-    if (isQuestion && section.paragraphs.length > 0) {
+    if (isQuestion && section.paragraphs && section.paragraphs.length > 0) {
       const answer = section.paragraphs.join(' ') + (section.list ? ' ' + section.list.join('. ') : '');
       faqs.push({
         question: heading.replace(/^\d+\.\s*/, ''),
@@ -388,16 +400,6 @@ function extractFaqs(guide: Guide): Array<{ question: string; answer: string }> 
     }
   }
   return faqs;
-}
-
-function slugify(value: string): string {
-  return value
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-    .toLowerCase()
-    .replace(/[^a-z0-9\s-]/g, '')
-    .replace(/[-\s]+/g, '-')
-    .replace(/^-+|-+$/g, '');
 }
 
 const POPULAR_MENTIONS = [
@@ -436,20 +438,28 @@ const POPULAR_MENTIONS = [
   { make: 'Lancia', model: 'Ypsilon' },
 ];
 
+const PRECOMPUTED_MENTIONS = POPULAR_MENTIONS.map((item) => ({
+  ...item,
+  normFull: normalize(`${item.make} ${item.model}`),
+  normModel: ` ${normalize(item.model)} `,
+}));
+
 function getMentionedModels(guide: Guide): Array<{ make: string; model: string }> {
-  const text = normalize(
-    guide.sections
-      .map((s) => s.heading + ' ' + s.paragraphs.join(' '))
-      .join(' ')
-  );
-  return POPULAR_MENTIONS.filter((item) => {
-    const full = normalize(`${item.make} ${item.model}`);
-    const mod = normalize(item.model);
-    return text.includes(full) || text.includes(` ${mod} `);
-  }).slice(0, 6);
+  let fullText = guide.title + ' ' + guide.description + ' ';
+  for (const s of guide.sections) {
+    fullText += s.heading + ' ';
+    if (s.paragraphs) fullText += s.paragraphs.join(' ') + ' ';
+  }
+  const normText = normalize(fullText);
+  const result: Array<{ make: string; model: string }> = [];
+  for (const item of PRECOMPUTED_MENTIONS) {
+    if (normText.includes(item.normFull) || normText.includes(item.normModel)) {
+      result.push({ make: item.make, model: item.model });
+      if (result.length >= 6) break;
+    }
+  }
+  return result;
 }
-
-
 
 function cleanHeadingTopic(heading: string): string {
   let h = heading.replace(/^\d+[\.\)]\s*/, '').trim();
@@ -466,20 +476,11 @@ function extractFirstSmartSentence(text?: string): string {
   let cleaned = text.replace(/^[•\-\*\d\.\)\s]+/, '').trim();
   if (cleaned.length < 10) return '';
 
-  const regex = /(?<!\b(?:es|art|d\.lgs|d\.m|ecc|n|nr|dott|min|km|kw|tco))\.\s+/i;
-  const match = cleaned.search(regex);
-
-  let sentence = '';
-  if (match !== -1) {
-    sentence = cleaned.slice(0, match + 1).trim();
-  } else {
-    sentence = cleaned;
-  }
-
+  const dotIdx = cleaned.indexOf('. ');
+  let sentence = dotIdx !== -1 ? cleaned.slice(0, dotIdx + 1).trim() : cleaned;
   if (sentence.length < 30 && cleaned.length > sentence.length) {
     sentence = cleaned;
   }
-
   if (sentence.length > 175) {
     const truncated = sentence.slice(0, 170);
     const lastSpace = truncated.lastIndexOf(' ');

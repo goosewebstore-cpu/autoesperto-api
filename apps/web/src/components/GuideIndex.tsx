@@ -33,9 +33,9 @@ function normalize(value: string) {
 
 // Slugs of top featured trending guides
 const FEATURED_SLUGS = [
+  'auto-usata-10-segnali-problema-annuncio',
   'straccia-bollo-sicilia-2026-chi-puo-farlo-norme',
   'blocco-diesel-euro-5-2026-citta-deroghe-multe',
-  'le-10-auto-piu-rubate-italia-2026',
 ];
 
 export default function GuideIndex() {

@@ -26,6 +26,13 @@ import { type AnalyzePayload } from '@/lib/api';
 
 const FEATURED_GUIDES = [
   {
+    slug: 'auto-usata-10-segnali-problema-annuncio',
+    title: 'Auto usata: 10 segnali che l’annuncio nasconde un problema',
+    tag: 'Controllo Annuncio',
+    desc: 'Come capire se stai trovando un vero affare o se stai per comprare un’auto con problemi nascosti.',
+    readTime: '6 min',
+  },
+  {
     slug: 'straccia-bollo-sicilia-2026-chi-puo-farlo-norme',
     title: 'Straccia Bollo Sicilia 2026: come cancellare sanzioni e interessi',
     tag: 'Novità Fiscale 2026',

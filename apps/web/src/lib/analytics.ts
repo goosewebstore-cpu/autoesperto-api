@@ -44,7 +44,9 @@ export type AnalyticsEvent =
   | 'car_saved'
   | 'buy_score_viewed'
   | 'negotiator_message_copied'
-  | 'listing_analyzed';
+  | 'listing_analyzed'
+  | 'health_scan_completed'
+  | 'health_score_applied';
 
 export function trackEvent(event: AnalyticsEvent, meta?: Record<string, unknown>): void {
   if (typeof window === 'undefined') return;

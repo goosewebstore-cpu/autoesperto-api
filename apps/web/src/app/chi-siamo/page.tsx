@@ -221,6 +221,15 @@ export default function ChiSiamoPage() {
                 <p className="text-sm text-text-secondary leading-relaxed mt-2.5">
                   Professionista freelance e ideatore di AutoEsperto. Ho sviluppato questa piattaforma in totale autonomia per offrire a chi compra o vende un&apos;auto usata in Italia uno strumento accessibile, neutrale e basato su dati reali di mercato, senza legami commerciali con concessionari o intermediari.
                 </p>
+                <div className="mt-4 pt-3 border-t border-slate-100">
+                  <Link
+                    href="/guide/autoesperto-freelance-siciliano-dati-reali-mercato-usato"
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-600 hover:text-blue-700 transition-colors"
+                  >
+                    <span>Leggi l&apos;articolo di presentazione: la storia di AutoEsperto</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

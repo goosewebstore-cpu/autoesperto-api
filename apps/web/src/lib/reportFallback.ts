@@ -59,10 +59,30 @@ export function generateInstantReport(input: {
   let estValue = Math.round((basePrice * depRate) / 100) * 100;
 
   if (input.km) {
-    const expectedKm = age * 15000;
+    const expectedKm = Math.max(15000, age * 14000);
     const diffKm = input.km - expectedKm;
-    const kmPenalty = (diffKm / 10000) * 0.015;
-    estValue = Math.round((estValue * (1 - Math.max(-0.2, Math.min(0.3, kmPenalty)))) / 100) * 100;
+    let kmFactor = 1.0;
+    if (diffKm < 0) {
+      const bonusRatio = Math.min(1.0, Math.abs(diffKm) / expectedKm);
+      kmFactor = 1.0 + bonusRatio * 0.14;
+    } else {
+      if (input.km <= 130000) {
+        kmFactor = 1.0 - (diffKm / 100000) * 0.18;
+      } else if (input.km <= 200000) {
+        const basePenalty = 0.12;
+        const extra = ((input.km - 130000) / 70000) * 0.20;
+        kmFactor = Math.max(0.60, 1.0 - basePenalty - extra);
+      } else if (input.km <= 280000) {
+        const basePenalty = 0.32;
+        const extra = ((input.km - 200000) / 80000) * 0.22;
+        kmFactor = Math.max(0.42, 1.0 - basePenalty - extra);
+      } else {
+        const basePenalty = 0.54;
+        const extra = Math.min(0.26, ((input.km - 280000) / 100000) * 0.15);
+        kmFactor = Math.max(0.20, 1.0 - basePenalty - extra);
+      }
+    }
+    estValue = Math.max(800, Math.round((estValue * kmFactor) / 100) * 100);
   }
 
   const min = Math.round((estValue * 0.92) / 100) * 100;

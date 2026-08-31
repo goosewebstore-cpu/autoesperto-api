@@ -148,17 +148,36 @@ export default function KpiCards({ report }: Props) {
   const costBreakdown = calculateRealisticAnnualCost(report);
 
   const kpis = [
-    { icon: Euro, label: 'Valore di Mercato', value: `${euro(pr.estimatedValue || 0)} €`, tone: 'indigo' },
-    { icon: Gauge, label: 'Affidabilità', value: `${normalizedScore}/10`, tone: rel.verdict === 'BUY' ? 'emerald' : rel.verdict === 'NEGOTIATE' ? 'amber' : 'red' },
+    {
+      icon: Euro,
+      label: 'Valore di Mercato',
+      value: `${euro(pr.estimatedValue || 0)} €`,
+      desc: 'Stima prezzo reale',
+      tone: 'indigo',
+    },
+    {
+      icon: Gauge,
+      label: 'Affidabilità',
+      value: `${normalizedScore}/10`,
+      desc: rel.verdict === 'BUY' ? 'Affidabilità elevata' : rel.verdict === 'NEGOTIATE' ? 'Nella media' : 'Rischio guasti',
+      tone: rel.verdict === 'BUY' ? 'emerald' : rel.verdict === 'NEGOTIATE' ? 'amber' : 'red',
+    },
     {
       icon: Wallet,
       label: 'Costo Annuo Totale',
       value: `${euro(costBreakdown.total)} €`,
       sub: '≈ ' + euro(costBreakdown.total / 12) + ' €/mese',
+      desc: 'Carburante + Bollo + Manutenz.',
       tone: 'slate',
       clickable: true,
     },
-    { icon: Fuel, label: 'Consumo Medio', value: consumptionDisplay, tone: 'sky' },
+    {
+      icon: Fuel,
+      label: 'Consumo Medio',
+      value: consumptionDisplay,
+      desc: 'Ciclo combinato',
+      tone: 'sky',
+    },
   ];
 
   if (rel.taxAnnual !== undefined || costBreakdown.tax !== undefined) {
@@ -166,48 +185,60 @@ export default function KpiCards({ report }: Props) {
       icon: Calendar,
       label: 'Bollo Annuo',
       value: costBreakdown.tax === 0 ? '0 € (Esente)' : `${euro(costBreakdown.tax)} €`,
+      desc: 'Tassa regionale',
       tone: 'violet',
     });
   }
 
-  const toneMap: Record<string, string> = {
-    indigo: 'bg-indigo-50 text-indigo-700 dark:bg-indigo-950/50 dark:text-indigo-300',
-    emerald: 'bg-emerald-50 text-emerald-700 dark:bg-emerald-950/50 dark:text-emerald-300',
-    amber: 'bg-amber-50 text-amber-800 dark:bg-amber-950/50 dark:text-amber-300',
-    red: 'bg-rose-50 text-rose-700 dark:bg-rose-950/50 dark:text-rose-300',
-    slate: 'bg-slate-100 text-slate-700 dark:bg-slate-800 dark:text-slate-300',
-    sky: 'bg-sky-50 text-sky-700 dark:bg-sky-950/50 dark:text-sky-300',
-    violet: 'bg-violet-50 text-violet-700 dark:bg-violet-950/50 dark:text-violet-300',
+  const toneMap: Record<string, { bg: string; text: string; badge: string }> = {
+    indigo: { bg: 'bg-blue-50 text-blue-700', text: 'text-blue-900', badge: 'bg-blue-100 text-blue-800' },
+    emerald: { bg: 'bg-emerald-50 text-emerald-700', text: 'text-emerald-900', badge: 'bg-emerald-100 text-emerald-800' },
+    amber: { bg: 'bg-amber-50 text-amber-800', text: 'text-amber-900', badge: 'bg-amber-100 text-amber-800' },
+    red: { bg: 'bg-rose-50 text-rose-700', text: 'text-rose-900', badge: 'bg-rose-100 text-rose-800' },
+    slate: { bg: 'bg-slate-100 text-slate-700', text: 'text-slate-900', badge: 'bg-slate-200 text-slate-800' },
+    sky: { bg: 'bg-sky-50 text-sky-700', text: 'text-sky-900', badge: 'bg-sky-100 text-sky-800' },
+    violet: { bg: 'bg-purple-50 text-purple-700', text: 'text-purple-900', badge: 'bg-purple-100 text-purple-800' },
   };
 
   return (
     <>
-      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5 sm:gap-3" aria-label="KPI principali">
+      <section className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3" aria-label="KPI principali">
         {kpis.map((kpi) => {
           const Icon = kpi.icon;
+          const tone = toneMap[kpi.tone] || toneMap.slate;
           return (
             <div
               key={kpi.label}
               onClick={() => kpi.clickable && setShowCostModal(true)}
-              className={`rounded-2xl border border-border bg-surface p-3.5 sm:p-4 shadow-2xs transition-all flex flex-col justify-between ${
-                kpi.clickable ? 'cursor-pointer hover:border-blue-400 hover:shadow-sm group' : ''
+              className={`rounded-2xl border border-slate-200/90 bg-white p-4 shadow-xs transition-all flex flex-col justify-between ${
+                kpi.clickable ? 'cursor-pointer hover:border-blue-400 hover:shadow-md group' : ''
               }`}
             >
-              <div className="flex items-center justify-between gap-1.5">
-                <span className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-wide text-text-secondary leading-tight flex items-center gap-1">
-                  {kpi.label}
-                  {kpi.clickable && <Info className="w-3 h-3 text-blue-500 opacity-70 group-hover:opacity-100 shrink-0" />}
-                </span>
-                <span className={`grid h-7 w-7 sm:h-8 sm:w-8 shrink-0 place-items-center rounded-xl ${toneMap[kpi.tone]}`}>
-                  <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" />
-                </span>
+              <div>
+                <div className="flex items-center justify-between gap-1.5 mb-2">
+                  <span className="text-[11px] font-extrabold uppercase tracking-wide text-slate-500 leading-tight flex items-center gap-1">
+                    {kpi.label}
+                    {kpi.clickable && <Info className="w-3 h-3 text-blue-500 opacity-70 group-hover:opacity-100 shrink-0" />}
+                  </span>
+                  <span className={`grid h-7 w-7 shrink-0 place-items-center rounded-xl ${tone.bg}`}>
+                    <Icon className="h-4 w-4" />
+                  </span>
+                </div>
+
+                <div className="text-xl sm:text-2xl font-black tracking-tight text-slate-900 number-mono">
+                  {kpi.value}
+                </div>
+
+                {kpi.sub && (
+                  <div className="text-xs font-bold text-blue-600 mt-0.5">
+                    {kpi.sub}
+                  </div>
+                )}
               </div>
-              <div className="mt-2 text-lg sm:text-xl md:text-2xl font-black tracking-tight text-text-primary number-mono">
-                {kpi.value}
-              </div>
-              {kpi.sub && (
-                <div className="text-[11px] font-medium text-text-secondary mt-0.5">
-                  {kpi.sub}
+
+              {kpi.desc && (
+                <div className="text-[11px] text-slate-400 font-medium pt-2 mt-2 border-t border-slate-100">
+                  {kpi.desc}
                 </div>
               )}
             </div>

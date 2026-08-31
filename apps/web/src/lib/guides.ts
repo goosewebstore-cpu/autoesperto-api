@@ -26,7 +26,84 @@ export interface Guide {
 }
 
 export const guides: Guide[] = [
-{
+  {
+    slug: 'autoesperto-freelance-siciliano-dati-reali-mercato-usato',
+    title: 'AutoEsperto.it: il giovane freelance siciliano che porta i dati reali del mercato dell\'usato a portata di clic',
+    description:
+      'Nato a Siracusa da un progetto personale, AutoEsperto è oggi una piattaforma gratuita che aiuta chi compra o vende un\'auto usata a farlo con dati di mercato veri, senza registrazione e senza intermediari commerciali.',
+    published: '2026-08-31',
+    category: 'valutazione',
+    cta: 'autoesperto-storia',
+    image: '/images/guide/autoesperto-freelance-siciliano-dati-mercato-usato.jpg',
+    sections: [
+      {
+        heading: 'Perché nasce AutoEsperto: trasparenza e risposte certe nel mercato dell\'usato',
+        paragraphs: [
+          'Chi ha mai provato a comprare un\'auto usata in Italia conosce bene la sensazione: un annuncio online, una foto sfocata, un prezzo che sembra buono ma non si sa rispetto a cosa, e la domanda che resta sempre senza risposta certa — "sto facendo un affare o mi stanno fregando?".',
+          'È da questa domanda, banale e allo stesso tempo irrisolta per milioni di automobilisti, che nasce [AutoEsperto.it](/).',
+        ],
+      },
+      {
+        heading: 'Un progetto, un solo sviluppatore: l\'idea nata a Siracusa',
+        paragraphs: [
+          'Dietro la piattaforma non c\'è una concessionaria, né una grande azienda del settore automotive, ma un solo professionista: Ralfh, sviluppatore freelance con base a Siracusa. Ha costruito AutoEsperto in totale autonomia, partendo da un\'esigenza molto concreta: rendere accessibili a chiunque le stesse informazioni che normalmente sono appannaggio degli addetti ai lavori — periti, concessionari, meccanici di fiducia.',
+          '«L\'idea di fondo è semplice», si legge nella presentazione del progetto: prima di comprare o vendere un\'auto usata, si dovrebbe poter contare sugli stessi dati di chi il mercato lo conosce da dentro. Nessun vincolo commerciale con concessionari o intermediari, nessun compenso che possa alterare i verdetti: solo dati di mercato, incrociati ed elaborati in modo trasparente.',
+        ],
+      },
+      {
+        heading: 'Come funziona: dalla foto al verdetto in pochi secondi',
+        paragraphs: [
+          'Il cuore del servizio è uno [scanner gratuito per auto usate](/) che permette di analizzare un\'auto usata in tre modi diversi: caricando una foto o uno screenshot dell\'annuncio, incollando il link dell\'inserzione, oppure semplicemente selezionando marca e modello.',
+          'In pochi secondi, il sistema restituisce un report completo con:',
+        ],
+        list: [
+          'Prezzo reale di mercato, confrontato con quello richiesto dal venditore tramite la [valutazione auto usate](/valutazione)',
+          'Un verdetto immediato — Buon Affare, Tratta il Prezzo o Evitala',
+          'Un Vehicle Health Score da 0 a 100, che valuta lo stato di salute meccanico del modello (motore, cambio, freni, elettronica, carrozzeria) sulla base di età, chilometraggio e difetti storici documentati nella nostra guida all\'[affidabilità auto](/affidabilita)',
+          'Il [calcolo del bollo auto](/calcolo-bollo), i [consumi reali](/consumi) e una checklist dei controlli da fare prima dell\'acquisto',
+        ],
+      },
+      {
+        heading: 'Non solo valutazioni: un ecosistema completo di strumenti per l\'usato',
+        paragraphs: [
+          'Attorno allo scanner, AutoEsperto ha costruito nel tempo una serie di strumenti pensati per accompagnare l\'intero ciclo di vita di un\'auto usata:',
+        ],
+        list: [
+          '[Controlla un Annuncio](/analizza-annuncio), con un Trust Score da 0 a 100 e un\'indicazione precisa di quanto offrire al venditore',
+          '[Auto Finder](/auto-finder), un motore di ricerca che incrocia budget, consumi reali, chilometri percorsi annualmente e spazio necessario per suggerire i modelli più adatti',
+          '[AI Car Advisor](/ai-car-advisor), un consulente digitale a cui porre domande dirette su qualsiasi modello prima dell\'acquisto',
+          '[Confronta Modelli](/confronta), per mettere a confronto fino a quattro auto con relativo costo totale di possesso (TCO)',
+          '[Profilo Digitale Auto](/passport), una sorta di libretto digitale che raccoglie storico tagliandi (letti anche tramite OCR con intelligenza artificiale), scadenze di bollo e revisione, e stato di salute del veicolo',
+          '[Oltre 140 guide pratiche](/guide) su normative, incentivi, [blocchi del traffico](/blocchi-traffico) per classe Euro, [passaggi di proprietà](/passaggio-proprieta) e strategie di trattativa',
+        ],
+      },
+      {
+        heading: 'Dati reali, non listini teorici: la metodologia statistica',
+        paragraphs: [
+          'La parte forse più interessante, dal punto di vista giornalistico, è la metodologia dichiarata. Secondo quanto spiegato dallo stesso Ralfh nella sezione [Chi siamo](/chi-siamo) del sito, AutoEsperto analizza quotidianamente oltre 10.000 annunci reali di compravendita in Italia, raccolti dalle principali piattaforme di settore, filtrando duplicati, prezzi civetta e anomalie.',
+          'I prezzi vengono poi ripuliti statisticamente con il metodo dell\'intervallo interquartile (IQR), per eliminare i valori fuori scala e calcolare mediana, range e svalutazione anno per anno.',
+          'A questi dati si incrociano informazioni provenienti da fonti ufficiali: i registri ministeriali delle revisioni consultabili tramite [Il Portale dell\'Automobilista](https://www.ilportaledellautomobilista.it/), i bollettini di richiamo per la sicurezza della banca dati europea [Safety Gate UE](https://ec.europa.eu/safety-gate) e le curve di difettosità note per ciascun gruppo motore.',
+          'Il progetto guarda anche al futuro normativo del settore: il [Profilo Digitale Auto](/passport) è già pensato in ottica del Regolamento UE 2026/1738 sul passaporto digitale del veicolo, che introdurrà la tracciabilità certificata dei chilometri e dello stato di salute delle batterie.',
+        ],
+      },
+      {
+        heading: 'Un servizio gratuito, con un avvertimento onesto e trasparente',
+        paragraphs: [
+          'Uno degli aspetti che colpisce, per un servizio del genere, è la cautela con cui vengono presentati i risultati.',
+          'AutoEsperto specifica chiaramente che le proprie stime sono indicative e non sostituiscono una perizia asseverata né un\'ispezione professionale: prima di firmare un contratto o versare una caparra, il consiglio che dà la piattaforma stessa è di far controllare l\'auto sul ponte da un meccanico qualificato o da un perito indipendente.',
+          'È un dettaglio che dice molto sull\'impostazione del progetto: non uno strumento che promette certezze assolute, ma un "secondo parere" — gratuito, basato su dati verificabili — da affiancare al buon senso e, quando serve, a un controllo tecnico vero.',
+        ],
+      },
+      {
+        heading: 'Un caso interessante nel panorama automotive italiano',
+        paragraphs: [
+          'In un mercato dell\'usato spesso opaco, dove il compratore parte quasi sempre in svantaggio informativo rispetto al venditore, l\'iniziativa di un singolo sviluppatore freelance che mette a disposizione gratuitamente strumenti di analisi di questo livello è un caso degno di nota.',
+          '[AutoEsperto.it](https://autoesperto.it/) è raggiungibile all\'indirizzo online ed è utilizzabile senza registrazione da chiunque voglia farsi un\'idea più chiara prima di comprare — o vendere — la propria auto usata.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'auto-usata-10-segnali-problema-annuncio',
     title: 'Auto usata: 10 segnali che l’annuncio nasconde un problema',
     description:

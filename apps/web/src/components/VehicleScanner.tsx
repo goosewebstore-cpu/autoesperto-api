@@ -169,11 +169,11 @@ export default function VehicleScanner({
     setScan(result);
     setReport(result.report ?? null);
     setMainPhoto(photoUrl);
-    trackEvent('car_selected', { make: result.vehicle.make, model: result.vehicle.model });
-    setStage('result');
-    trackEvent('analysis_completed', { make: result.vehicle.make, model: result.vehicle.model });
-    trackEvent('result_viewed', { make: result.vehicle.make, model: result.vehicle.model });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    setManualMake(result.vehicle.make || '');
+    setManualModel(result.vehicle.model || '');
+    if (result.vehicle.year) setManualYear(String(result.vehicle.year));
+    trackEvent('car_selected', { make: result.vehicle.make || '', model: result.vehicle.model || '' });
+    setStage('vehicle-found');
     return true;
   };
 
@@ -271,6 +271,110 @@ export default function VehicleScanner({
   };
 
   const [isDragOver, setIsDragOver] = useState(false);
+
+  if (stage === 'vehicle-found' && scan?.vehicle) {
+    return (
+      <div className="p-4 sm:p-6 text-center max-w-xl mx-auto space-y-5 animate-fadeIn">
+        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 text-xs font-bold shadow-xs">
+          <Check className="w-3.5 h-3.5" /> Veicolo Identificato
+        </div>
+
+        <div>
+          <h3 className="text-xl sm:text-2xl font-black text-slate-900 dark:text-white">
+            {scan.vehicle.make} {scan.vehicle.model}
+          </h3>
+          <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium max-w-md mx-auto leading-relaxed">
+            Per uno score più preciso e verificare i difetti specifici dell&apos;annata, inserisci anno e km (opzionale):
+          </p>
+        </div>
+
+        {mainPhoto && (
+          <div className="relative w-36 h-24 mx-auto rounded-2xl overflow-hidden border border-slate-200 shadow-sm">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={mainPhoto} alt={`${scan.vehicle.make} ${scan.vehicle.model}`} className="w-full h-full object-cover" />
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+          <label className="scanner-field">
+            <span>Anno (es. 2017)</span>
+            <input
+              type="number"
+              value={manualYear}
+              onChange={(e) => setManualYear(e.target.value)}
+              placeholder="es. 2017"
+              min={1990}
+              max={2027}
+            />
+          </label>
+          <label className="scanner-field">
+            <span>Km effettivi</span>
+            <input
+              type="number"
+              value={manualKm}
+              onChange={(e) => setManualKm(e.target.value)}
+              placeholder="es. 95000"
+              min={0}
+            />
+          </label>
+          <label className="scanner-field">
+            <span>Prezzo (€ opz.)</span>
+            <input
+              type="number"
+              value={manualPrice}
+              onChange={(e) => setManualPrice(e.target.value)}
+              placeholder="es. 11500"
+              min={0}
+            />
+          </label>
+        </div>
+
+        {error && <p className="scanner-box-error" role="alert">{error}</p>}
+
+        <div className="space-y-2 pt-2">
+          <button
+            type="button"
+            disabled={manualLoading}
+            onClick={() => {
+              const v = scan.vehicle;
+              if (!v?.make || !v?.model) return;
+              void handleManualSubmit({
+                make: v.make,
+                model: v.model,
+                year: manualYear.trim() ? Number(manualYear.trim()) : undefined,
+                km: manualKm.trim() ? Number(manualKm.trim()) : undefined,
+                requestedPrice: manualPrice.trim() ? Number(manualPrice.trim()) : undefined,
+              });
+            }}
+            className="scanner-submit w-full"
+          >
+            {manualLoading ? (
+              <><Loader2 className="animate-spin" /> Calcolo score accurato…</>
+            ) : (
+              <><Sparkles className="w-4 h-4" /> Calcola Score Accurato & Report <ArrowRight className="w-4 h-4" /></>
+            )}
+          </button>
+
+          <button
+            type="button"
+            onClick={() => {
+              const v = scan.vehicle;
+              setReport(scan.report ?? null);
+              setStage('result');
+              if (v?.make && v?.model) {
+                trackEvent('analysis_completed', { make: v.make, model: v.model });
+                trackEvent('result_viewed', { make: v.make, model: v.model });
+              }
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }}
+            className="text-xs font-bold text-slate-500 hover:text-slate-800 py-1.5 transition-colors block mx-auto underline decoration-slate-300"
+          >
+            Salta e vedi stima base indicativa →
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   if (stage !== 'result') {
     if (embedded) {

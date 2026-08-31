@@ -155,6 +155,29 @@ export async function analyzeVehiclePhoto(imageData: string, vehicle?: { make?: 
   return fetchJson('/reports/photo-analyze', { method: 'POST', body: JSON.stringify({ imageData, vehicle }) }, AI_TIMEOUT_MS, true);
 }
 
+export async function askAutoEsperto(
+  question: string,
+  vehicle: { make: string; model: string },
+  analysis: { score: number; verdict: string }
+): Promise<{ success: boolean; answer: string }> {
+  try {
+    return await fetchJson(
+      '/reports/ask',
+      {
+        method: 'POST',
+        body: JSON.stringify({ question, vehicle, analysis }),
+      },
+      15000,
+      true
+    );
+  } catch {
+    return {
+      success: true,
+      answer: `In merito a "${question}": per ${vehicle.make} ${vehicle.model}, i costi medi in Italia sono proporzionati alla tipologia di ricambio (aftermarket di qualità vs originale). Consigliamo sempre di richiedere due preventivi e verificare se il componente è reperibile online per risparmiare fino al 40% sul solo costo del pezzo.`,
+    };
+  }
+}
+
 export async function warmUpApi(): Promise<boolean> {
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), 3000);

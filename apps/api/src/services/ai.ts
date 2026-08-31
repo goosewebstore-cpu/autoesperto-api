@@ -678,15 +678,33 @@ export async function askAutoEsperto(question: string, vehicle: VehicleData, ana
 
 function mockAnswer(question: string, vehicle: VehicleData, analysis: AskInput): string {
   const q = question.toLowerCase();
-  if (q.includes('conviene') || q.includes('comprare')) {
+  const carName = `${vehicle.make} ${vehicle.model} ${vehicle.year || ''}`.trim();
+
+  if (q.includes('riverniciatur') || q.includes('verniciare paraurti') || q.includes('costo paraurti')) {
+    return `Per ${carName}, la riverniciatura completa del paraurti in carrozzeria costa mediamente tra 180 € e 350 € + IVA (compresa sfumatura e montaggio/smontaggio). Se il graffio è superficiale o limitato a un angolo, uno spot repair costa circa 80-130 € in giornata.`;
+  }
+  if (q.includes('freni') || q.includes('pastiglie') || q.includes('dischi')) {
+    return `Per ${carName}, la sostituzione delle pastiglie anteriori in officina costa circa 80–140 € (pastiglie di qualità + manodopera). In fai-da-te, il set pastiglie online (Brembo/Ferodo/Bosch) costa 30–60 €. Se i dischi hanno un gradino superiore a 1,5 mm vanno sostituiti in coppia.`;
+  }
+  if (q.includes('faro opacizzato') || q.includes('lucidatura fari') || q.includes('fari ingialliti')) {
+    return `I fari in policarbonato si rigenerano facilmente: con un kit fai-da-te di levigatura e sigillante UV (15–25 €) tornano trasparenti in 40 minuti. In carrozzeria costa 50–90 € per la coppia con verniciatura trasparente a forno.`;
+  }
+  if (q.includes('carrozziere orario') || q.includes('costo carrozziere') || q.includes('tariffa oraria')) {
+    return `In Italia la manodopera media in carrozzeria varia da 40 € a 65 €/ora + IVA (Nord 48–68 €/h, Centro 42–55 €/h, Sud 35–48 €/h). I materiali di consumo e la vernice vengono calcolati a parte (circa 35–50 € a pannello).`;
+  }
+  if (q.includes('conviene') || q.includes('comprare') || q.includes('prima di vendere')) {
     return analysis.verdict === 'BUY'
-      ? `Sì, ${vehicle.make} ${vehicle.model} è una scelta solida: ${analysis.summary} Verifica comunque lo storico tagliandi prima di chiudere.`
+      ? `Sì, ${carName} è una scelta solida: ${analysis.summary || 'buona affidabilità generale'}. Conviene ripristinare piccoli difetti estetici (150–250€) prima di vendere per evitare sconti maggiori in trattativa.`
       : analysis.verdict === 'NEGOTIATE'
-      ? `Può andare, ma con cautela: ${analysis.summary} Controlla i punti deboli segnalati prima di decidere.`
-      : `Sconsiglio l'acquisto senza controlli approfonditi: ${analysis.summary}`;
+      ? `Può andare, ma con cautela: ${analysis.summary || 'controlla i punti deboli'}. Scala i costi dei ripristini direttamente dal prezzo richiesto.`
+      : `Sconsiglio l'acquisto senza controlli approfonditi su ponte sollevatore: ${analysis.summary || 'presenza di criticità'}.`;
   }
   if (q.includes('problema') || q.includes('difetti')) {
-    return `I problemi più comuni su ${vehicle.make} ${vehicle.model}: ${(analysis.commonIssues || []).slice(0, 3).join('; ')}.`;
+    return `I problemi più comuni riscontrati su ${carName}: ${(analysis.commonIssues || []).slice(0, 3).join('; ') || 'usura standard componenti frenanti e sospensioni'}.`;
   }
-  return `Per ${vehicle.make} ${vehicle.model}: affidabilità ${analysis.score}/10, manutenzione ${analysis.maintenance}, assicurazione stimata ${analysis.futureCosts?.insuranceEstimate ?? 0}€/anno. Vuoi approfondire un aspetto specifico?`;
+  if (q.includes('distribuzione') || q.includes('cinghia') || q.includes('catena')) {
+    return `Per ${carName}, la sostituzione del kit cinghia di distribuzione con pompa acqua costa mediamente 380 € – 650 € compresa manodopera. Intervallo consigliato: 5-6 anni o 100.000–140.000 km.`;
+  }
+
+  return `Per ${carName}: la manutenzione periodica è nella media della categoria. Per interventi importanti e ricambi, consigliamo di verificare i prezzi online (AutoDoc, Oscaro, eBay) per confrontare il costo dei singoli pezzi rispetto al preventivo dell'officina.`;
 }

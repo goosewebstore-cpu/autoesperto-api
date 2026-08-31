@@ -28,6 +28,11 @@ function getDateModified(published: string): string {
 }
 
 const guideCtas: Record<string, { label: string; href: string; description: string }> = {
+  'autoesperto-storia': {
+    label: 'Analizza un\'auto gratis con AutoEsperto',
+    href: '/#scanner-section',
+    description: 'Carica una foto, incolla un annuncio o seleziona marca e modello: calcola prezzo reale e stato di salute gratis.',
+  },
   'analizza-annuncio': {
     label: 'Analizza annuncio con AutoEsperto',
     href: '/analizza-annuncio',

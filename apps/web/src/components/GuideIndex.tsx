@@ -33,9 +33,9 @@ function normalize(value: string) {
 
 // Slugs of top featured trending guides
 const FEATURED_SLUGS = [
+  'autoesperto-freelance-siciliano-dati-reali-mercato-usato',
   'auto-usata-10-segnali-problema-annuncio',
   'straccia-bollo-sicilia-2026-chi-puo-farlo-norme',
-  'blocco-diesel-euro-5-2026-citta-deroghe-multe',
 ];
 
 export default function GuideIndex() {

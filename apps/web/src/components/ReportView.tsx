@@ -6,12 +6,11 @@ import type { AutoReport, PriceLabel } from '@autoesperto/types';
 import {
   ArrowLeft, ArrowRight, CheckCircle2, AlertTriangle, Gauge, Wrench, Fuel, Car,
   Euro, Download, ExternalLink, ShieldCheck, GitCompareArrows, Users, ChevronDown,
-  TrendingDown, Sparkles, Activity, Search,
+  TrendingDown, Sparkles, Activity, Search, Loader2,
 } from 'lucide-react';
 import { slugify } from '@/lib/catalogo';
 import ReportScoreHero from '@/components/ReportScoreHero';
 import ReportQuickCustomizer from '@/components/ReportQuickCustomizer';
-import ConditionAssessment from '@/components/ConditionAssessment';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
 import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
@@ -84,14 +83,28 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
     { label: 'Classe Euro', value: vehicle.euroClass },
   ].filter((s) => s.value);
 
+  const handleHealthScoreAdjust = (adjustedEstimatedValue: number, healthScore: number) => {
+    setCurrentReport((prev) => ({
+      ...prev,
+      price: {
+        ...prev.price,
+        estimatedValue: adjustedEstimatedValue,
+      },
+      reliability: {
+        ...prev.reliability,
+        score: Math.min(10, Math.round((healthScore / 10) * 10) / 10),
+      },
+    }));
+  };
+
   return (
     <div className={`${embedded ? 'scanner-detailed-report max-w-none' : 'max-w-3xl mx-auto'} space-y-4 sm:space-y-5 pb-16 text-text-primary`}>
       {onBack && (
         <button
           onClick={onBack}
-          className="inline-flex items-center gap-1.5 text-xs sm:text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors py-1 px-2 -ml-2 rounded-lg"
+          className="inline-flex items-center gap-1.5 text-xs font-bold text-slate-600 hover:text-slate-900 bg-white border border-slate-200 px-3 py-1.5 rounded-xl shadow-2xs transition-colors"
         >
-          <ArrowLeft className="w-4 h-4" />
+          <ArrowLeft className="w-3.5 h-3.5" />
           Nuova ricerca
         </button>
       )}
@@ -108,24 +121,7 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
       {/* 3. KPI Cards: prezzo, affidabilità, costo annuo realistico, consumo, bollo */}
       <KpiCards report={currentReport} />
 
-      {/* 4. Action Buttons (PDF & Condividi) */}
-      <div className="grid grid-cols-2 gap-2.5 sm:gap-3">
-        <button
-          onClick={() => {
-            import('@/components/PDFButton').then((m) => m.downloadPDF(currentReport));
-          }}
-          className="h-11 sm:h-12 rounded-xl bg-brand text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 hover:bg-brand-dark active:scale-[0.99] transition-all shadow-xs"
-        >
-          <Download className="w-4 h-4 shrink-0" />
-          Scarica PDF
-        </button>
-        <ShareButton
-          title={`Valutazione ${vehicle.make} ${vehicle.model}`}
-          text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`}
-        />
-      </div>
-
-      {/* 5. PUNTI DI FORZA E CRITICITÀ */}
+      {/* 4. PUNTI DI FORZA E CRITICITÀ */}
       <section className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-5">
         <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary flex items-center gap-1.5 mb-3">
           <Users className="w-4 h-4 text-brand" />
@@ -138,25 +134,25 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               Punti di forza
             </h3>
             <ul className="space-y-1.5">
-              {strengths.slice(0, 3).map((s: string, i: number) => (
-                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-text-primary leading-relaxed">
+              {strengths.map((s: string, idx: number) => (
+                <li key={idx} className="text-xs text-text-secondary flex items-start gap-2">
                   <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 mt-1.5 shrink-0" />
-                  {s}
+                  <span>{s}</span>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="bg-rose-50/50 dark:bg-rose-950/20 border border-rose-200/60 rounded-xl p-3.5">
-            <h3 className="font-bold text-rose-800 dark:text-rose-300 flex items-center gap-1.5 mb-2 text-xs sm:text-sm">
-              <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" />
-              Possibili criticità
+          <div className="bg-amber-50/50 dark:bg-amber-950/20 border border-amber-200/60 rounded-xl p-3.5">
+            <h3 className="font-bold text-amber-800 dark:text-amber-300 flex items-center gap-1.5 mb-2 text-xs sm:text-sm">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+              Criticità da verificare
             </h3>
             <ul className="space-y-1.5">
-              {weaknesses.slice(0, 3).map((w: string, i: number) => (
-                <li key={i} className="flex items-start gap-2 text-xs sm:text-sm text-text-primary leading-relaxed">
-                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 mt-1.5 shrink-0" />
-                  {w}
+              {weaknesses.map((w: string, idx: number) => (
+                <li key={idx} className="text-xs text-text-secondary flex items-start gap-2">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 mt-1.5 shrink-0" />
+                  <span>{w}</span>
                 </li>
               ))}
             </ul>
@@ -164,46 +160,64 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         </div>
       </section>
 
-      {/* 6. PROFILO DIGITALE AUTO — SLEEK CARD */}
-      <div className="rounded-2xl border border-blue-200/90 dark:border-blue-900/60 bg-gradient-to-br from-blue-50/70 via-white to-blue-50/40 dark:from-blue-950/30 dark:via-slate-900 dark:to-blue-950/20 p-4 sm:p-5 shadow-xs space-y-3.5">
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-          <div className="flex items-start gap-3">
-            <div className="w-10 h-10 rounded-2xl bg-blue-600 text-white flex items-center justify-center shrink-0 shadow-xs">
-              <Sparkles className="w-5 h-5" />
-            </div>
-            <div>
-              <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-blue-100 dark:bg-blue-900/60 text-blue-800 dark:text-blue-200 text-[10px] font-extrabold uppercase tracking-wide mb-1">
-                <ShieldCheck className="w-3 h-3 text-blue-600" /> Profilo Digitale Auto
-              </span>
-              <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white leading-tight">
-                Salva questa auto nel tuo Garage Digitale
-              </h3>
-              <p className="text-xs text-slate-600 dark:text-slate-300 mt-1 leading-relaxed max-w-xl">
-                Conserva l'analisi, le scadenze bollo/revisione, i documenti dei tagliandi e monitora la svalutazione nel tempo.
-              </p>
-            </div>
+      {/* BANNER PROFILO DIGITALE AUTO (PASSPORT) */}
+      <div className="rounded-2xl border border-blue-200 bg-gradient-to-r from-blue-50/80 via-white to-sky-50/50 p-4 sm:p-5 shadow-xs flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+        <div className="space-y-1">
+          <div className="flex items-center gap-2">
+            <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[10px] font-black uppercase tracking-wide">
+              Novità
+            </span>
+            <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
+              Crea il Profilo Digitale di questa {vehicle.make} {vehicle.model}
+            </h3>
           </div>
-
-          <button
-            onClick={handleCreatePassport}
-            disabled={isCreatingPassport}
-            className="w-full sm:w-auto h-11 px-5 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] disabled:opacity-75 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/20 shrink-0"
-          >
-            {isCreatingPassport ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                <span>Apertura Profilo...</span>
-              </>
-            ) : (
-              <>
-                <ShieldCheck className="w-4 h-4 shrink-0" />
-                <span>Crea Profilo Digitale Gratuito</span>
-              </>
-            )}
-          </button>
+          <p className="text-xs text-slate-600 max-w-xl">
+            Ottieni un passaporto permanente con QR Code per monitorare tagliandi, scadenze bollo/revisione, libretto e cronologia riparazioni.
+          </p>
         </div>
 
-        <div className="flex items-center gap-2 text-[11px] text-slate-500 pt-1 border-t border-blue-100/80 dark:border-blue-900/40">
+        <button
+          type="button"
+          onClick={handleCreatePassport}
+          disabled={isCreatingPassport}
+          className="h-10 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 active:scale-95 text-white text-xs font-bold shadow-sm flex items-center gap-1.5 shrink-0 transition-all cursor-pointer disabled:opacity-50"
+        >
+          {isCreatingPassport ? (
+            <>
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
+              Creazione...
+            </>
+          ) : (
+            <>
+              <Sparkles className="w-3.5 h-3.5" />
+              Crea Profilo Digitale
+            </>
+          )}
+        </button>
+      </div>
+
+      {/* 5. SPECIFICHE TECNICHE ESSENZIALI */}
+      <div className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-5">
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary flex items-center gap-1.5">
+            <Car className="w-4 h-4 text-brand" />
+            Scheda Tecnica del Veicolo
+          </h2>
+          <span className="text-[11px] font-semibold text-text-secondary bg-surface-2 px-2.5 py-0.5 rounded-full border border-border">
+            {specs.length} parametri
+          </span>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-2.5">
+          {specs.map((item) => (
+            <div key={item.label} className="bg-surface-2 rounded-xl p-2.5 flex flex-col justify-center">
+              <span className="text-[10px] font-bold text-text-tertiary uppercase tracking-wider">{item.label}</span>
+              <span className="text-xs sm:text-sm font-bold text-text-primary mt-0.5 truncate">{item.value}</span>
+            </div>
+          ))}
+        </div>
+
+        <div className="mt-3 pt-3 border-t border-border flex items-center gap-1.5 text-[11px] text-text-tertiary">
           <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
           <span>100% Privato &amp; Gratuito: i dati sono salvati in sicurezza sul tuo dispositivo.</span>
         </div>
@@ -213,16 +227,19 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
       <div id="report-accordion-tools" className="space-y-3 pt-1">
         {/* Accordion 1: Health Score Veicolo & Diagnostica Componenti */}
         <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
-          <details className="group">
+          <details className="group" open>
             <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
               <span className="flex items-center gap-2">
                 <Activity className="w-4 h-4 text-brand" />
-                Diagnosi Salute & Sottosistemi Meccanici (Health Score)
+                Health Score Veicolo &amp; Analisi Danni IA (Stima Ricambi &amp; Valore)
               </span>
               <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
             </summary>
             <div className="border-t border-border p-4 sm:p-5">
-              <VehicleHealthScore report={currentReport} />
+              <VehicleHealthScore
+                report={currentReport}
+                onValuationAdjust={handleHealthScoreAdjust}
+              />
             </div>
           </details>
         </section>
@@ -245,27 +262,6 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
           </section>
         )}
 
-        {/* Accordion 3: Valutazione Condizione, Danni & Stima Ricambi */}
-        {allowPhotoTools && (
-          <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
-            <details className="group">
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
-                <span className="flex items-center gap-2">
-                  <Wrench className="w-4 h-4 text-brand" />
-                  Valutazione Condizione, Danni & Stima Ricambi
-                </span>
-                <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
-              </summary>
-              <div className="border-t border-border p-3 sm:p-4">
-                <ConditionAssessment
-                  estimatedValue={price.estimatedValue}
-                  vehicle={{ make: vehicle.make, model: vehicle.model, year: vehicle.year }}
-                  report={currentReport}
-                />
-              </div>
-            </details>
-          </section>
-        )}
 
         {/* Accordion 4: Previsione Svalutazione */}
         <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
@@ -361,18 +357,18 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
         )}
 
         {/* Accordion 7: Alternative nella Stessa Categoria */}
-        {report.alternatives && report.alternatives.length > 0 && (
+        {currentReport.alternatives && currentReport.alternatives.length > 0 && (
           <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
             <details className="group">
               <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
                 <span className="flex items-center gap-2">
                   <GitCompareArrows className="w-4 h-4 text-brand" />
-                  Alternative nella stessa categoria ({report.alternatives.length})
+                  Alternative nella stessa categoria ({currentReport.alternatives.length})
                 </span>
                 <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
               </summary>
               <div className="grid sm:grid-cols-2 gap-2.5 border-t border-border px-4 py-4 sm:px-6">
-                {report.alternatives.map((alt) => (
+                {currentReport.alternatives.map((alt) => (
                   <div key={`${alt.make}-${alt.model}`} className="bg-surface-2 rounded-xl p-3 flex items-center justify-between gap-2">
                     <div className="min-w-0">
                       <div className="flex items-center gap-1.5">
@@ -455,6 +451,24 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
             </div>
           </details>
         </section>
+      </div>
+
+      {/* ── Action Buttons (PDF & Condividi) in basso a fine report ── */}
+      <div className="grid grid-cols-2 gap-3 pt-2">
+        <button
+          type="button"
+          onClick={() => {
+            import('@/components/PDFButton').then((m) => m.downloadPDF(currentReport));
+          }}
+          className="h-12 rounded-2xl bg-blue-600 hover:bg-blue-700 active:scale-[0.99] text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 transition-all shadow-md shadow-blue-600/20"
+        >
+          <Download className="w-4 h-4 shrink-0" />
+          Scarica PDF
+        </button>
+        <ShareButton
+          title={`Valutazione ${vehicle.make} ${vehicle.model}`}
+          text={`Guarda il report di questa ${vehicle.make} ${vehicle.model} su AutoEsperto.`}
+        />
       </div>
 
       {/* Footer disclaimer */}

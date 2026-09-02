@@ -228,6 +228,11 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     href: '/consumi',
     description: 'Calcola i consumi reali in litri/100km e il costo annuo stimato del carburante per il tuo modello.',
   },
+  'aria-condizionata-salva-motore': {
+    label: 'Stima costi ricarica e riparazione clima',
+    href: '/riparazione',
+    description: 'Calcola i costi reali per ricarica gas R134a/R1234yf, sostituzione compressore o filtro abitacolo per il tuo modello.',
+  },
 };
 
 const DEFAULT_CTA = {
@@ -798,7 +803,7 @@ export default async function GuidePage({ params }: PageProps) {
 
           <div itemProp="articleBody" className="mt-8 space-y-10">
             {guide.content ? (
-              <div className="prose dark:prose-invert max-w-none space-y-6" dangerouslySetInnerHTML={{ __html: guide.content }} />
+              <div className="prose max-w-none space-y-6" dangerouslySetInnerHTML={{ __html: guide.content }} />
             ) : guide.sections ? (
               guide.sections.map((section, index) => {
                 const sectionId = slugifyHeading(section.heading);

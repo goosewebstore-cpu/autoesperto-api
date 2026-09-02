@@ -55,7 +55,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
   return (
     <>
       {/* Scroll Progress Bar at very top of screen */}
-      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-100 dark:bg-slate-800 pointer-events-none">
+      <div className="fixed top-0 left-0 right-0 z-50 h-1 bg-slate-100 pointer-events-none">
         <div
           className="h-full bg-gradient-to-r from-blue-600 to-indigo-600 transition-all duration-150 ease-out shadow-xs"
           style={{ width: `${scrollProgress}%` }}
@@ -63,8 +63,8 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
       </div>
 
       {/* Floating Quick Action Bar */}
-      <div className="my-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 dark:border-slate-800 bg-slate-50/80 dark:bg-slate-900/80 p-3 text-xs shadow-2xs">
-        <div className="flex items-center gap-2 text-slate-600 dark:text-slate-400 font-bold">
+      <div className="my-6 flex flex-wrap items-center justify-between gap-3 rounded-2xl border border-slate-200 bg-slate-50/90 p-3 text-xs shadow-2xs">
+        <div className="flex items-center gap-2 text-slate-600 font-bold">
           <Share2 className="w-3.5 h-3.5 text-blue-600" />
           <span>Condividi questa guida:</span>
         </div>
@@ -75,7 +75,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
             href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`${title} — ${url}`)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-xl border border-emerald-200 bg-emerald-50 dark:bg-emerald-950/40 dark:border-emerald-800 px-3 py-1.5 font-bold text-emerald-700 dark:text-emerald-300 hover:bg-emerald-100 transition-colors"
+            className="inline-flex items-center gap-1 rounded-xl border border-emerald-200 bg-emerald-50 px-3 py-1.5 font-bold text-emerald-700 hover:bg-emerald-100 transition-colors"
             aria-label="Condividi su WhatsApp"
           >
             <span>WhatsApp</span>
@@ -86,7 +86,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
             href={`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-xl border border-sky-200 bg-sky-50 dark:bg-sky-950/40 dark:border-sky-800 px-3 py-1.5 font-bold text-sky-700 dark:text-sky-300 hover:bg-sky-100 transition-colors"
+            className="inline-flex items-center gap-1 rounded-xl border border-sky-200 bg-sky-50 px-3 py-1.5 font-bold text-sky-700 hover:bg-sky-100 transition-colors"
             aria-label="Condividi su Telegram"
           >
             <Send className="w-3 h-3" />
@@ -98,7 +98,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
             href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center gap-1 rounded-xl border border-blue-200 bg-blue-50 dark:bg-blue-950/40 dark:border-blue-800 px-3 py-1.5 font-bold text-blue-700 dark:text-blue-300 hover:bg-blue-100 transition-colors"
+            className="inline-flex items-center gap-1 rounded-xl border border-blue-200 bg-blue-50 px-3 py-1.5 font-bold text-blue-700 hover:bg-blue-100 transition-colors"
             aria-label="Condividi su Facebook"
           >
             <svg className="w-3.5 h-3.5 fill-current" viewBox="0 0 24 24">
@@ -111,7 +111,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
           <button
             type="button"
             onClick={handleShare}
-            className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 px-3 py-1.5 font-bold text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 font-bold text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-colors cursor-pointer"
           >
             <Share2 className="w-3.5 h-3.5" />
             <span>Altro</span>
@@ -121,7 +121,7 @@ export default function ArticleInteractiveBar({ title, url }: ArticleInteractive
           <button
             type="button"
             onClick={handleCopyLink}
-            className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 px-3 py-1.5 font-bold text-slate-700 dark:text-slate-300 hover:border-blue-500 hover:text-blue-600 transition-colors"
+            className="inline-flex items-center gap-1 rounded-xl border border-slate-200 bg-white px-3 py-1.5 font-bold text-slate-700 hover:border-blue-500 hover:text-blue-600 transition-colors cursor-pointer"
           >
             {copied ? (
               <>
@@ -145,7 +145,7 @@ export function ArticleFeedbackBox() {
   const [feedback, setFeedback] = useState<'yes' | 'no' | null>(null);
 
   return (
-    <div className="mt-10 rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50/70 via-white to-slate-50 dark:border-slate-800 dark:bg-slate-900 p-6 text-center shadow-xs">
+    <div className="mt-10 rounded-3xl border border-blue-200 bg-gradient-to-br from-blue-50/70 via-white to-slate-50 p-6 text-center shadow-xs">
       {feedback === null ? (
         <>
           <div className="flex justify-center mb-2">
@@ -153,17 +153,17 @@ export function ArticleFeedbackBox() {
               <Sparkles className="w-4 h-4" />
             </span>
           </div>
-          <h3 className="text-sm sm:text-base font-extrabold text-slate-900 dark:text-white">
+          <h3 className="text-sm sm:text-base font-extrabold text-slate-900">
             Ti è stata utile questa guida?
           </h3>
-          <p className="text-xs text-slate-500 dark:text-slate-400 mt-1 max-w-sm mx-auto">
+          <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
             Il tuo voto anonimo aiuta la nostra redazione ad aggiornare le normative e migliorare i contenuti.
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
             <button
               type="button"
               onClick={() => setFeedback('yes')}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 px-5 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 shadow-2xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-800 hover:border-emerald-500 hover:bg-emerald-50 hover:text-emerald-700 shadow-2xs transition-all cursor-pointer"
             >
               <ThumbsUp className="w-4 h-4 text-emerald-600" />
               Sì, molto chiara
@@ -171,7 +171,7 @@ export function ArticleFeedbackBox() {
             <button
               type="button"
               onClick={() => setFeedback('no')}
-              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 px-5 py-2.5 text-xs font-bold text-slate-800 dark:text-slate-200 hover:border-rose-500 hover:bg-rose-50 hover:text-rose-700 shadow-2xs transition-all cursor-pointer"
+              className="inline-flex items-center gap-2 rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-xs font-bold text-slate-800 hover:border-rose-500 hover:bg-rose-50 hover:text-rose-700 shadow-2xs transition-all cursor-pointer"
             >
               <ThumbsDown className="w-4 h-4 text-rose-600" />
               Da migliorare
@@ -179,7 +179,7 @@ export function ArticleFeedbackBox() {
           </div>
         </>
       ) : (
-        <div className="py-2 text-xs sm:text-sm font-bold text-emerald-700 dark:text-emerald-400 flex items-center justify-center gap-2">
+        <div className="py-2 text-xs sm:text-sm font-bold text-emerald-700 flex items-center justify-center gap-2">
           <Check className="w-4 h-4" />
           <span>Grazie per il tuo feedback! Il tuo voto è stato registrato.</span>
         </div>

@@ -16,6 +16,114 @@ export { GUIDE_CATEGORIES };
 
 export const guides: Guide[] = [
   {
+    slug: 'aria-condizionata-auto-salva-motore-batteria-caldo-2026',
+    title: 'Aria condizionata auto col caldo record: come non rompere il compressore, salvare motore e batteria',
+    description:
+      'Con le temperature a 42°C in Italia, il climatizzatore dell\'auto è sotto assedio: come capire se devi ripararlo o ricaricarlo, come proteggere motore e batteria da sforzi letali e quando accenderlo e spegnerlo per non farlo rompere.',
+    published: '2026-09-02',
+    category: 'manutenzione',
+    cta: 'aria-condizionata-salva-motore',
+    image: '/images/guide/aria-condizionata-auto-salva-motore-batteria-caldo-2026.jpg',
+    readTime: '8 min',
+    featured: true,
+    sections: [
+      {
+        heading: 'Estate 2026 e caldo record in Italia: perché oggi il clima rischia di cedere',
+        paragraphs: [
+          'Entrare in auto dopo due ore sotto il sole, in questi giorni di estate 2026, è un\'esperienza estrema. Con l\'anticiclone africano che spinge i termometri stabilmente tra i 38°C e i 42°C in gran parte della penisola — da Roma a Milano, da Bologna a Catania — e l\'asfalto autostradale che supera abbondantemente i 60°C, l\'abitacolo si trasforma rapidamente in un forno a oltre 65°C.',
+          'In queste condizioni ambientali estreme, il climatizzatore non è più un semplice accessorio di comfort: è un presidio di sicurezza indispensabile per evitare colpi di calore, disidratazione e cali di riflessi alla guida. Ma è anche il componente meccanico più sollecitato in assoluto dell\'intera automobile.',
+          'Il compressore del clima lavora pompando gas refrigerante a pressioni che, con 40°C esterni e auto ferma in coda sotto il sole cocente, possono toccare livelli critici tra i 25 e i 30 bar. Se l\'impianto ha qualche anno alle spalle o non riceve la giusta manutenzione, il rischio di un grippaggio improvviso del compressore o di una perdita dal radiatore condensatore è altissimo. E rimanere a piedi con il clima rotto in autostrada a metà agosto, con la famiglia a bordo e le officine chiuse per ferie, è un incubo che può costare carissimo: nel 2026 i costi di ricambio per un compressore nuovo e la manodopera sono aumentati di oltre il 25%.',
+          'Ecco la guida chiara e pratica per capire in anticipo se il tuo impianto sta cedendo, come usarlo senza sovraccaricare motore e batteria, e le regole d\'oro per non distruggerlo.',
+        ],
+      },
+      {
+        heading: 'Come capire se l\'aria condizionata sta cedendo (i 6 sintomi prima del guasto)',
+        paragraphs: [
+          'Un climatizzatore per auto raramente si rompe di colpo senza dare prima dei segnali precisi. Nella maggior parte dei casi, l\'impianto lancia una serie di campanelli d\'allarme che molti automobilisti tendono a ignorare fino a quando dalle bocchette non esce solo aria rovente. Ecco i 6 segnali inequivocabili che richiedono un controllo immediato:',
+        ],
+        list: [
+          '**Aria tiepida o refrigerazione lenta.** Se accendi il clima al massimo e l\'aria che esce dalle bocchette centrali impiega più di 3-4 minuti a diventare gelida (la temperatura d\'uscita corretta deve scendere tra i 6°C e gli 8°C), il livello del gas refrigerante è sceso sotto il 40-50%. Guidare con poco gas costringe il compressore a girare continuamente senza pause per tentare di raffreddare, surriscaldandosi fino al grippaggio.',
+          '**Fischio, sibilo o ronzio metallico quando premi il tasto A/C.** Se nel momento in cui si inserisce la frizione elettromagnetica del clima senti un cigolio acuto o un ronzio che sale di giri con il motore, il cuscinetto della puleggia o i pistoni interni del compressore stanno lavorando a secco. Insieme al gas, nel circuito circola infatti l\'olio lubrificante sintetico (olio PAG o POE): se il gas scappa per una microperdita, se ne va anche l\'olio.',
+          '**Puzza di muffa o cantina umida all\'accensione.** L\'odore sgradevole nei primi 30 secondi di ventilazione è causato da spore fungine e colonie batteriche proliferate sull\'evaporatore (il radiatore freddo nascosto sotto la plancia) a causa della condensa rimasta stagnante a motore spento, combinata con un filtro abitacolo intasato di polvere e smog.',
+          '**Vetri che si appannano invece di asciugarsi.** Se d\'estate, magari durante un temporale improvviso, accendi il clima e i vetri si appannano all\'istante invece di disappannarsi in 10 secondi, l\'impianto ha perso la capacità di deumidificare l\'aria oppure c\'è un ristagno d\'acqua nel condotto di ventilazione.',
+          '**Nessuna goccia d\'acqua sotto l\'auto.** Quando il clima funziona a pieno regime con 38°C e alta umidità, è del tutto normale (anzi, doveroso) vedere una pozzanghera d\'acqua limpida gocciolare a terra sotto il vano motore o la scocca: è la condensa scaricata all\'esterno. Se dopo mezz\'ora di clima acceso a terra è tutto asciutto, il tubicino di scarico della condensa è quasi sicuramente otturato e l\'acqua sta colando sotto la moquette dei piedi del passeggero.',
+          '**Portata d\'aria fiacca anche con la ventola al massimo.** Se senti il motore della ventola ruggire ma dalle bocchette esce un soffio debole, il filtro abitacolo (antipolline) è completamente ostruito da foglie, piumini e sporcizia, oppure l\'evaporatore si è letteralmente ghiacciato a causa di un sensore di temperatura difettoso.',
+        ],
+      },
+      {
+        heading: 'Come non distruggere il motore con l\'aria condizionata accesa',
+        paragraphs: [
+          'Molti guidatori dimenticano che il climatizzatore non è un elettrodomestico alimentato a costo zero: il compressore è un pesante organo meccanico trascinato direttamente dall\'albero motore tramite la cinghia servizi (o un motore elettrico ad alto voltaggio nelle ibride ed elettriche).',
+          'Su un motore a combustione tradizionale, il compressore assorbe tra i 3 e i 7 cavalli (circa 2,5 - 5 kW di potenza meccanica continua). Su una vettura con motore di piccola cilindrata (come i moderni 1.0 a 3 cilindri, o i classici 1.2 a benzina), sottrarre 5 cavalli al motore significa togliere fino al 10% della potenza utile, percepibile soprattutto nelle ripartenze e nei sorpassi. Ma il vero pericolo con il caldo record è termico:',
+        ],
+        list: [
+          '**Il radiatore del clima scalda il motore.** Davanti al radiatore del liquido di raffreddamento del motore è posizionato il condensatore dell\'aria condizionata. Quando il clima è acceso con 40°C all\'esterno, il condensatore espelle aria rovente a 65-75°C che investe direttamente il radiatore del motore posto subito dietro. Il motore fatica enormemente di più a dissipare il proprio calore.',
+          '**Spegni il clima sulle salite ripide col caldo estremo.** Se stai affrontando un passo di montagna, una salita autostradale ripida con la vettura a pieno carico (bagagli e passeggeri) e la temperatura esterna sfiora i 40°C, tieni sempre d\'occhio la lancetta o l\'indicatore della temperatura del liquido refrigerante motore. Se noti che sale oltre i normali 90°C verso la zona rossa, disattiva immediatamente il tasto A/C: toglierai all\'istante 5 cavalli di sforzo al motore e abbatterai di 15-20°C la temperatura dell\'aria che attraversa il radiatore motore.',
+          '**Evita di tenere l\'auto ferma al minimo con il clima al massimo per mezz\'ora.** Aspettare qualcuno in sosta con il motore acceso al minimo e il clima a palla è micidiale: a vettura ferma non c\'è il flusso d\'aria dinamico generato dalla velocità, l\'elettroventola deve girare alla velocità massima ininterrottamente e l\'asfalto rovente sotto l\'auto rimbalza calore nel vano motore, surriscaldando alternatore, olio motore e liquidi.',
+          '**Controlla e pulisci il frontale dell\'auto.** Moscerini, insetti, polvere e foglie secche che si accumulano tra la griglia del paraurti e le alette del condensatore formano una barriera impenetrabile. Pulire delicatamente le alette con un getto d\'acqua a bassa pressione ripristina lo scambio termico e fa lavorare il motore molto più fresco.',
+        ],
+      },
+      {
+        heading: 'Batteria e alternatore sotto sforzo: gli errori madornali che ti lasciano a piedi',
+        paragraphs: [
+          'Si pensa sempre che le batterie dell\'auto muoiano d\'inverno col gelo. In realtà, la chimica dell\'accumulatore dice esattamente il contrario: le batterie muoiono d\'estate con il caldo record a causa dell\'evaporazione dell\'elettrolita e della corrosione accelerata delle piastre di piombo, per poi cedere definitivamente al primo freddo.',
+          'Con il climatizzatore acceso in estate, l\'impianto elettrico dell\'auto è sottoposto a uno stress gigantesco:',
+        ],
+        list: [
+          '**L\'errore capitale: accendere il clima prima di avviare il motore.** Lasciare l\'aria condizionata e la ventola al massimo accese quando spegni l\'auto significa che al successivo avviamento, quando giri la chiave o premi il pulsante Start, la batteria deve alimentare contemporaneamente la ventola abitacolo, le centraline e il motorino di avviamento. Questo picco di assorbimento (che supera i 300-400 Ampere) può dare il colpo di grazia a una batteria che ha più di 3 o 4 anni di vita.',
+          '**L\'alternatore al limite: oltre 60 Ampere di assorbimento continuo.** Con il clima attivo col gran caldo, lavorano insieme la frizione del compressore, la ventola dell\'abitacolo alla massima velocità e l\'elettroventola principale del radiatore al massimo regime (che da sola assorbe tra i 25 e i 35 Ampere). Se l\'alternatore è usurato o la cinghia servizi è allentata o logora, la batteria non riceve carica sufficiente e può scaricarsi persino mentre stai viaggiando.',
+          '**Disattiva lo Start&Stop nei blocchi urbani a 42°C.** Nei percorsi cittadini con frequenti code e semafori, il sistema Start&Stop spegne continuamente il motore termico. A motore spento il compressore tradizionale non gira più (esce aria umida e tiepida) mentre la potente ventola del radiatore e quella interna continuano ad assorbire decine di ampere dalla sola batteria. Disattivare temporaneamente lo Start&Stop durante le canicole estive evita scariche profonde cicliche e allunga sensibilmente la vita della batteria AGM o EFB.',
+          '**Attenzione particolare per auto ibride ed elettriche.** Sulle auto ibride ed elettriche il compressore del clima è alimentato direttamente dal pacco batterie ad alto voltaggio (da 300V a 800V) ed è fondamentale non solo per i passeggeri, ma anche per raffreddare a liquido le celle della batteria di trazione. Se il clima non raffredda a dovere, l\'inverter o la batteria possono andare in protezione termica tagliando drasticamente la potenza del veicolo.',
+        ],
+      },
+      {
+        heading: 'Quando accendere e spegnere: la sequenza corretta step-by-step',
+        paragraphs: [
+          'Utilizzare il climatizzatore in modo intelligente fa la differenza tra un impianto che dura 15 anni senza problemi e uno che si guasta ogni due estati. Ecco la sequenza esatta da seguire per preservare meccanica, consumi e salute:',
+        ],
+        list: [
+          '**Fase 1: Auto parcheggiata al sole (non accendere subito il clima a vetri chiusi).** Se l\'auto è rimasta sotto il sole a 40°C, dentro ci sono 65°C. Salire, chiudere i finestrini e sparare il clima a 16°C è il modo peggiore per sforzare compressore e motore. La procedura corretta: apri tutte le portiere per 30 secondi, avvia il motore senza clima, parti e percorri i primi 200-300 metri con tutti i finestrini abbassati per far fuoriuscire la bolla d\'aria rovente sfruttando la ventilazione naturale.',
+          '**Fase 2: Chiudi i vetri e attiva il clima con ricircolo temporaneo.** Una volta espulsa l\'aria infuocata, alza i finestrini, attiva il clima impostando una temperatura ragionevole (tra 22°C e 24°C) e attiva il pulsante del ricircolo dell\'aria per i primi 3-5 minuti. Il ricircolo fa pescare all\'impianto aria interna che è già più fresca di quella esterna a 42°C, riducendo lo sforzo del compressore per portarla a regime.',
+          '**Fase 3: Disattiva il ricircolo dopo pochi minuti.** Non tenere il ricircolo sempre acceso per tutto il viaggio. Dopo 5 minuti, disattivalo per far entrare aria fresca dall\'esterno: tenere il ricircolo fisso consuma rapidamente l\'ossigeno nell\'abitacolo aumentando la concentrazione di anidride carbonica (causa principale di sonnolenza e colpi di sonno) e fa salire l\'umidità corporea.',
+          '**Fase 4: La regola d\'oro dei 2 minuti prima di spegnere l\'auto.** Questa è la regola più importante e quasi nessuno la applica: spegni il pulsante A/C (lasciando la sola ventola accesa alla velocità 2 o 3) esattamente 2 o 3 minuti prima di arrivare a destinazione. Perché? Disattivando il freddo ma lasciando scorrere l\'aria a temperatura ambiente, permetti all\'evaporatore di scaldarsi e asciugarsi completamente prima dello spegnimento dell\'auto. In questo modo elimini al 100% l\'umidità stagnante, impedendo per sempre la nascita di funghi, muffe, puzza di marcio e proteggendo l\'evaporatore dalla corrosione prematura.',
+          '**Fase 5: Mai più di 5-7°C di differenza rispetto all\'esterno.** Se fuori ci sono 40°C, impostare il climatizzatore a 18°C è una follia: costringe il compressore a un lavoro continuo senza sosta, aumenta i consumi fino al 25-30% (puoi verificarlo calcolando l\'impatto sul tuo modello con il nostro calcolatore di [consumi reali](/consumi)) e sottopone il corpo a uno shock termico violento all\'uscita con rischio di congestioni e cervicali.',
+          '**Fase 6: Accendilo anche d\'inverno per 10 minuti.** L\'errore più diffuso è spegnere il clima a settembre e riaccenderlo a giugno. Il circuito contiene guarnizioni in gomma (O-ring) che rimangono morbide e sigillate solo se bagnate dall\'olio lubrificante trascinato dal gas: accendere il clima almeno 10 minuti ogni due settimane anche d\'inverno (sfruttandolo per sbrinare i vetri) evita che le guarnizioni si secchino causando le tipiche perdite estive di gas.',
+        ],
+      },
+      {
+        heading: 'Quanto costa riparare il climatizzatore nel 2026: ricarica gas, compressore e filtri',
+        paragraphs: [
+          'Se l\'impianto non raffredda più o si è rotto, preparati a cifre ben diverse da quelle di qualche anno fa. Nel 2026 i costi di manutenzione e ricarica dell\'aria condizionata sono fortemente condizionati dal tipo di gas omologato sul tuo veicolo e dall\'inflazione sui ricambi automobilistici:',
+          'Puoi stimare con precisione i costi per il tuo specifico modello e anno nella nostra guida dedicata alla [stima riparazione e tagliandi](/riparazione) o monitorare la storia degli interventi registrandola nel [Profilo Digitale Auto](/passport). Ecco i prezzi medi di mercato in Italia aggiornati al 2026:',
+        ],
+        list: [
+          '**Ricarica Gas tradizionale R134a (auto immatricolate fino al 2016-2017):** tra 70 € e 100 € compreso il vuoto dell\'impianto e l\'aggiunta dell\'olio tracciante UV.',
+          '**Ricarica Gas ecologico R1234yf (obbligatorio su tutte le auto nuove dal 2017 in poi):** tra 160 € e 240 €. Questo gas di nuova generazione a basso impatto ambientale costa alla fonte quasi 4 volte più del vecchio R134a: una ricarica completa con 500 grammi di gas supera facilmente i 200 €.',
+          '**Sostituzione Filtro Abitacolo (Antipolline ai carboni attivi):** tra 25 € e 55 € compresa installazione. È il ricambio più economico ma più decisivo per la portata d\'aria e la salute respiratoria.',
+          '**Sostituzione Condensatore (radiatore clima frontale):** tra 280 € e 480 € compresi ricambio, manodopera di smontaggio paraurti e nuova ricarica gas. Essendo esposto frontalmente, è il pezzo che si fora più facilmente per l\'impatto con pietrisco autostradale.',
+          '**Sostituzione Compressore Clima (nuovo o revisionato garantito):** tra 650 € e 1.350 € inclusa manodopera qualificata, lavaggio chimico del circuito (indispensabile per eliminare i trucioli metallici del vecchio compressore grippato) e carica gas. Sui marchi premium tedeschi o sulle ibride con compressore elettrico a 400V la spesa può salire fino a 1.800 €.',
+          '**Sanificazione antibatterica con ozono o schiuma all\'evaporatore:** tra 30 € e 60 €, ideale a inizio estate per azzerare cattivi odori e riniti allergiche.',
+        ],
+      },
+      {
+        heading: 'In sintesi: i 7 comandamenti per non rompere il climatizzatore e viaggiare al fresco',
+        paragraphs: [
+          'Ecco il riassunto operativo con le regole pratiche che ogni automobilista dovrebbe seguire per superare l\'estate 2026 al fresco e senza sorprese meccaniche da migliaia di euro:',
+        ],
+        list: [
+          '**Non accendere mai il clima prima del motore:** accendi l\'A/C solo dopo che il motore gira regolarmente al minimo per proteggere batteria e motorino di avviamento.',
+          '**Arieggia l\'auto prima di partire:** primi 200 metri a finestrini aperti per espellere i 65°C interni, poi finestrini su e clima a 23°C.',
+          '**Ricircolo solo per i primi 3 minuti:** serve solo a velocizzare il raffreddamento iniziale, poi va spento per mantenere ossigenata l\'aria ed evitare colpi di sonno.',
+          '**Spegni l\'A/C 2 minuti prima di arrivare:** lascia attiva solo la ventola per asciugare la condensa dell\'evaporatore e dire addio a muffe, puzza e batteri.',
+          '**Disattiva lo Start&Stop nel traffico estivo a 40°C:** eviterai di prosciugare la batteria dell\'auto con ventole al massimo a motore spento.',
+          '**Stacca il clima se il motore scalda in salita:** se la temperatura dell\'acqua sale verso i 100°C su una salita ripida, spegni l\'A/C per salvare la guarnizione della testata.',
+          '**Se l\'aria non gela entro 3 minuti, fermati:** non insistere per settimane con il clima tiepido; prima ricarichi il gas e verifichi l\'olio, meno rischi di distruggere un compressore da 1.000 €.',
+          'Se stai pensando di acquistare un veicolo usato in estate, verifica sempre il funzionamento del climatizzatore con un termometro durante il test drive e controlla lo storico manutenzioni e il prezzo reale con la nostra [valutazione auto usate](/valutazione) o con l\'[analisi annuncio con AI](/analizza-annuncio) prima di firmare o lasciare una caparra.',
+        ],
+      },
+    ],
+  },
+  {
     slug: 'benzina-quasi-da-record-guida-risparmiare-1500-euro',
     title: 'Benzina quasi da record: la guida per risparmiare fino a 1.500 € l\'anno',
     description:

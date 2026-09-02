@@ -36,6 +36,7 @@ const FEATURED_SLUGS = [
   'autoesperto-freelance-siciliano-dati-reali-mercato-usato',
   'auto-usata-10-segnali-problema-annuncio',
   'straccia-bollo-sicilia-2026-chi-puo-farlo-norme',
+  'le-10-auto-piu-rubate-italia-2026',
 ];
 
 export default function GuideIndex() {

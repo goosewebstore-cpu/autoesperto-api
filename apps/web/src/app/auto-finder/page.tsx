@@ -28,11 +28,48 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 86400; // 1 giorno di cache ISR
+
+const FAQS = [
+  {
+    q: 'Come funziona l\'Auto Finder di AutoEsperto?',
+    a: 'Imposti il tuo budget massimo, i chilometri annui previsti e il tipo di utilizzo (città, famiglia, autostrada, lavoro). Il Matching Engine incrocia i dati di affidabilità, consumi e costi di gestione per calcolare un Match Score da 0 a 100.',
+  },
+  {
+    q: 'I risultati considerano i costi reali di mantenimento (TCO)?',
+    a: 'Sì. Per ogni vettura proposta calcoliamo il Total Cost of Ownership: stima del bollo auto, consumo reale di carburante sui km indicati, assicurazione RCA indicativa e manutenzione ordinaria.',
+  },
+  {
+    q: 'Posso salvare le mie auto preferite?',
+    a: 'Sì, puoi aggiungere qualsiasi vettura alla tua Buying Room personale per confrontarla e monitorarla prima dell\'acquisto.',
+  },
+];
+
 export default function AutoFinderPage() {
-  const jsonLd = {
+  const faqSchema = {
     '@context': 'https://schema.org',
-    '@type': 'SoftwareApplication',
+    '@type': 'FAQPage',
+    mainEntity: FAQS.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  };
+
+  const breadcrumbSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Home', item: `${siteUrl}/` },
+      { '@type': 'ListItem', position: 2, name: 'Auto Finder', item: `${siteUrl}/auto-finder` },
+    ],
+  };
+
+  const appSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'WebApplication',
     name: 'AutoEsperto Auto Finder',
+    url: `${siteUrl}/auto-finder`,
     applicationCategory: 'BusinessApplication',
     operatingSystem: 'Web',
     offers: {
@@ -47,7 +84,7 @@ export default function AutoFinderPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        dangerouslySetInnerHTML={{ __html: JSON.stringify([faqSchema, breadcrumbSchema, appSchema]) }}
       />
       <AutoFinderClient />
     </>

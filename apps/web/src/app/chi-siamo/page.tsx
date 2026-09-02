@@ -89,43 +89,52 @@ function JsonLd() {
   const schema = [
     {
       '@context': 'https://schema.org',
+      '@type': 'Organization',
+      name: 'AutoEsperto',
+      alternateName: 'AutoEsperto.it',
+      url: siteUrl,
+      logo: `${siteUrl}/icon-192.png`,
+      image: `${siteUrl}/og-image.png`,
+      description:
+        'Piattaforma tecnologica indipendente per la valutazione, il controllo pre-acquisto e il passaporto digitale delle auto usate in Italia con dati reali di mercato.',
+      email: 'supporto@autoesperto.it',
+      address: {
+        '@type': 'PostalAddress',
+        addressLocality: 'Siracusa',
+        addressRegion: 'SR',
+        postalCode: '96100',
+        addressCountry: 'IT',
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        contactType: 'customer support',
+        email: 'supporto@autoesperto.it',
+        availableLanguage: ['Italian'],
+      },
+      founder: {
+        '@type': 'Person',
+        name: 'Ralfh',
+        jobTitle: 'Fondatore & Sviluppatore Freelance',
+      },
+      sameAs: [
+        'https://www.instagram.com/autoesperto_it',
+        'https://tiktok.com/@autoesperto',
+      ],
+      knowsAbout: [
+        'Valutazione auto usate',
+        'Quotazioni auto di mercato reale',
+        'Affidabilità e diagnostica guasti motori',
+        'Passaporto Digitale del Veicolo',
+        'Mercato auto usata Italia',
+      ],
+    },
+    {
+      '@context': 'https://schema.org',
       '@type': 'AboutPage',
       name: 'Chi siamo — AutoEsperto',
       url: `${siteUrl}/chi-siamo`,
       description:
         'AutoEsperto aiuta chi compra o vende un\'auto usata con dati reali di mercato, analisi di affidabilità e trasparenza metodologica.',
-      mainEntity: {
-        '@type': 'WebSite',
-        name: 'AutoEsperto',
-        url: siteUrl,
-        logo: `${siteUrl}/icon-192.png`,
-        description:
-          'Piattaforma tecnologica indipendente per la valutazione, il controllo pre-acquisto e il passaporto digitale delle auto usate in Italia, sviluppata da Ralfh.',
-        foundingDate: '2026',
-        creator: {
-          '@type': 'Person',
-          name: 'Ralfh',
-          jobTitle: 'Sviluppatore Freelance & Fondatore',
-        },
-        address: {
-          '@type': 'PostalAddress',
-          addressLocality: 'Siracusa',
-          addressRegion: 'SR',
-          addressCountry: 'IT',
-        },
-        contactPoint: {
-          '@type': 'ContactPoint',
-          contactType: 'customer support',
-          email: 'supporto@autoesperto.it',
-        },
-        knowsAbout: [
-          'Valutazione auto usate',
-          'Quotazioni auto di mercato reale',
-          'Affidabilità e diagnostica guasti motori',
-          'Passaporto Digitale del Veicolo UE 2026/1738',
-          'Mercato auto usata Italia',
-        ],
-      },
     },
     {
       '@context': 'https://schema.org',

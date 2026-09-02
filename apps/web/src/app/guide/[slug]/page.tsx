@@ -223,6 +223,11 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     href: '/passport',
     description: 'Digitalizza lo storico di tagliandi, manutenzioni e scadenze del tuo veicolo.',
   },
+  'risparmio-carburante': {
+    label: 'Calcola i consumi della tua auto',
+    href: '/consumi',
+    description: 'Calcola i consumi reali in litri/100km e il costo annuo stimato del carburante per il tuo modello.',
+  },
 };
 
 const DEFAULT_CTA = {
@@ -331,6 +336,29 @@ function slugify(value: string): string {
     .replace(/^-+|-+$/g, '');
 }
 
+function renderTextWithBold(text: string): React.ReactNode {
+  if (!text.includes('**')) return text;
+  const boldRegex = /\*\*([^*]+)\*\*/g;
+  const parts: React.ReactNode[] = [];
+  let lastIndex = 0;
+  let match: RegExpExecArray | null;
+  while ((match = boldRegex.exec(text)) !== null) {
+    if (match.index > lastIndex) {
+      parts.push(text.slice(lastIndex, match.index));
+    }
+    parts.push(
+      <strong key={`b-${match.index}`} className="font-semibold text-slate-900">
+        {match[1]}
+      </strong>
+    );
+    lastIndex = match.index + match[0].length;
+  }
+  if (lastIndex < text.length) {
+    parts.push(text.slice(lastIndex));
+  }
+  return parts.length > 0 ? parts : text;
+}
+
 function renderParagraphWithLinks(text: string) {
   const markdownRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
   const parts: React.ReactNode[] = [];
@@ -339,7 +367,7 @@ function renderParagraphWithLinks(text: string) {
 
   while ((match = markdownRegex.exec(text)) !== null) {
     if (match.index > lastIndex) {
-      parts.push(text.slice(lastIndex, match.index));
+      parts.push(renderTextWithBold(text.slice(lastIndex, match.index)));
     }
     const label = match[1];
     const href = match[2];
@@ -360,24 +388,29 @@ function renderParagraphWithLinks(text: string) {
   }
 
   if (lastIndex < text.length) {
-    parts.push(text.slice(lastIndex));
+    parts.push(renderTextWithBold(text.slice(lastIndex)));
   }
 
-  return parts.length > 0 ? parts : text;
+  return parts.length > 0 ? parts : renderTextWithBold(text);
 }
 
 function countWords(guide: Guide): number {
   let count = guide.title.split(/\s+/).length + guide.description.split(/\s+/).length;
-  for (const s of guide.sections) {
-    count += s.heading.split(/\s+/).length;
-    if (s.paragraphs) {
-      for (const p of s.paragraphs) {
-        count += p.split(/\s+/).length;
+  if (guide.content) {
+    count += guide.content.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+  }
+  if (guide.sections) {
+    for (const s of guide.sections) {
+      count += s.heading.split(/\s+/).length;
+      if (s.paragraphs) {
+        for (const p of s.paragraphs) {
+          count += p.split(/\s+/).length;
+        }
       }
-    }
-    if (s.list) {
-      for (const item of s.list) {
-        count += item.split(/\s+/).length;
+      if (s.list) {
+        for (const item of s.list) {
+          count += item.split(/\s+/).length;
+        }
       }
     }
   }
@@ -386,6 +419,7 @@ function countWords(guide: Guide): number {
 
 function extractFaqs(guide: Guide): Array<{ question: string; answer: string }> {
   const faqs: Array<{ question: string; answer: string }> = [];
+  if (!guide.sections) return faqs;
   const questionStarters = ['come', 'quanto', 'perché', 'perche', 'quale', 'cosa', 'quando', 'chi', 'dove'];
 
   for (const section of guide.sections) {
@@ -447,10 +481,12 @@ const PRECOMPUTED_MENTIONS = POPULAR_MENTIONS.map((item) => ({
 }));
 
 function getMentionedModels(guide: Guide): Array<{ make: string; model: string }> {
-  let fullText = guide.title + ' ' + guide.description + ' ';
-  for (const s of guide.sections) {
-    fullText += s.heading + ' ';
-    if (s.paragraphs) fullText += s.paragraphs.join(' ') + ' ';
+  let fullText = guide.title + ' ' + guide.description + ' ' + (guide.content ? guide.content.replace(/<[^>]*>/g, ' ') : '') + ' ';
+  if (guide.sections) {
+    for (const s of guide.sections) {
+      fullText += s.heading + ' ';
+      if (s.paragraphs) fullText += s.paragraphs.join(' ') + ' ';
+    }
   }
   const normText = normalize(fullText);
   const result: Array<{ make: string; model: string }> = [];
@@ -494,7 +530,7 @@ function extractFirstSmartSentence(text?: string): string {
 
 function extractGuideTakeaways(guide: Guide): Array<{ topic: string; summary: string }> {
   const takeaways: Array<{ topic: string; summary: string }> = [];
-  const validSections = guide.sections.filter((s) => {
+  const validSections = (guide.sections || []).filter((s) => {
     const lower = s.heading.toLowerCase();
     return !lower.includes('domande frequenti') &&
            !lower.includes('faq') &&
@@ -665,7 +701,7 @@ export default async function GuidePage({ params }: PageProps) {
     })),
   } : null;
 
-  const tocItems = guide.sections.map((sec) => ({
+  const tocItems = (guide.sections || []).map((sec) => ({
     heading: sec.heading,
     id: slugifyHeading(sec.heading),
   }));
@@ -761,32 +797,36 @@ export default async function GuidePage({ params }: PageProps) {
           )}
 
           <div itemProp="articleBody" className="mt-8 space-y-10">
-            {guide.sections.map((section, index) => {
-              const sectionId = slugifyHeading(section.heading);
-              return (
-                <section key={section.heading} id={sectionId} className="scroll-mt-28">
-                  <h2 className="text-xl font-bold text-slate-900">
-                    {section.heading}
-                  </h2>
-                  {section.paragraphs.map((paragraph) => (
-                    <p key={paragraph.slice(0, 40)} className="text-slate-600 text-base leading-relaxed mt-3">
-                      {renderParagraphWithLinks(paragraph)}
-                    </p>
-                  ))}
-                  {section.list && (
-                    <ul className="mt-4 space-y-2">
-                      {section.list.map((item) => (
-                        <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-slate-600 leading-relaxed">
-                          <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
-                          <span>{renderParagraphWithLinks(item)}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  )}
-                  {index === 1 && guide.sections.length > 3 && <AdInArticle />}
-                </section>
-              );
-            })}
+            {guide.content ? (
+              <div className="prose dark:prose-invert max-w-none space-y-6" dangerouslySetInnerHTML={{ __html: guide.content }} />
+            ) : guide.sections ? (
+              guide.sections.map((section, index) => {
+                const sectionId = slugifyHeading(section.heading);
+                return (
+                  <section key={section.heading} id={sectionId} className="scroll-mt-28">
+                    <h2 className="text-xl font-bold text-slate-900">
+                      {section.heading}
+                    </h2>
+                    {(section.paragraphs || []).map((paragraph) => (
+                      <p key={paragraph.slice(0, 40)} className="text-slate-600 text-base leading-relaxed mt-3">
+                        {renderParagraphWithLinks(paragraph)}
+                      </p>
+                    ))}
+                    {section.list && (
+                      <ul className="mt-4 space-y-2">
+                        {section.list.map((item) => (
+                          <li key={item.slice(0, 40)} className="flex gap-2.5 text-sm text-slate-600 leading-relaxed">
+                            <span className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-blue-600" />
+                            <span>{renderParagraphWithLinks(item)}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                    {index === 1 && guide.sections && guide.sections.length > 3 && <AdInArticle />}
+                  </section>
+                );
+              })
+            ) : null}
 
             {/* Highlights / Key Takeaways Box — Sintesi conclusiva dell'esperto a fine articolo */}
             {takeaways.length > 0 && (

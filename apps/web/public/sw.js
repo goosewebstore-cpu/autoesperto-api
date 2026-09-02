@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'autoesperto-static-v5';
+const STATIC_CACHE = 'autoesperto-static-v6';
 const MAX_CACHE_ENTRIES = 80;
 
 const PRECACHE_URLS = [

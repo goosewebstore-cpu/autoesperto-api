@@ -6,6 +6,7 @@ export default function robots(): MetadataRoute.Robots {
     '/api/',
     '/account',
     '/accesso',
+    '/buying-room',
   ];
 
   return {

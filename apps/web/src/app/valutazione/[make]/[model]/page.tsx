@@ -1,9 +1,10 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
-import { ArrowLeft, ArrowRight, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
+import { ArrowLeft, ArrowRight, BookOpen, Car, HelpCircle, Info, MessageCircle, Send, Share2, ShieldCheck } from 'lucide-react';
 import { findMakeBySlug, findModelBySlug, slugify } from '@/lib/catalogo';
 import { getRecentModelYears } from '@/lib/model-years';
+import { guides, type Guide } from '@/lib/guides';
 import ModelReportCard from '@/components/ModelReportCard';
 import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
@@ -101,6 +102,18 @@ export default async function ModelValutazionePage({ params }: PageProps) {
     })),
   };
   const relatedModels = make.models.filter((m) => m !== model).slice(0, 8);
+
+  const normMake = make.name.toLowerCase();
+  const normModel = model.toLowerCase();
+  const modelGuides = guides.filter((g) => {
+    const text = `${g.title} ${g.description} ${g.slug}`.toLowerCase();
+    return text.includes(normModel) || text.includes(normMake);
+  });
+  const defaultGuides = guides.filter((g) =>
+    ['auto-usata-10-segnali-problema-annuncio', 'come-controllare-annuncio-auto-usata', 'come-capire-se-auto-usata-e-affare'].includes(g.slug)
+  );
+  const relatedGuides = [...modelGuides, ...defaultGuides.filter((d) => !modelGuides.some((m) => m.slug === d.slug))].slice(0, 3);
+
   const breadcrumbSchema = {
     '@context': 'https://schema.org',
     '@type': 'BreadcrumbList',
@@ -312,6 +325,38 @@ export default async function ModelValutazionePage({ params }: PageProps) {
                   className="rounded-lg border border-border bg-white px-3 py-1.5 text-sm font-semibold text-text-primary hover:border-accent hover:text-accent transition-colors"
                 >
                   {related}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {/* Guide correlate */}
+        {relatedGuides.length > 0 && (
+          <section className="mt-8 rounded-2xl bg-slate-50 border border-slate-200/80 p-5">
+            <h2 className="text-base font-bold text-slate-900 mb-2 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-blue-600" />
+              Guide e consigli per {make.name} {model}
+            </h2>
+            <p className="text-xs text-slate-500 mb-3.5">
+              Approfondimenti tecnici, consigli di trattativa e controlli prima dell&apos;acquisto:
+            </p>
+            <div className="grid gap-2.5">
+              {relatedGuides.map((guide) => (
+                <Link
+                  key={guide.slug}
+                  href={`/guide/${guide.slug}`}
+                  className="flex items-center justify-between p-3 rounded-xl bg-white border border-slate-200 hover:border-blue-600 hover:shadow-xs transition-all group"
+                >
+                  <div className="min-w-0 pr-3">
+                    <h3 className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors line-clamp-1">
+                      {guide.title}
+                    </h3>
+                    <p className="text-[11px] text-slate-500 line-clamp-1 mt-0.5">
+                      {guide.description}
+                    </p>
+                  </div>
+                  <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-blue-600 group-hover:translate-x-0.5 transition-all shrink-0" />
                 </Link>
               ))}
             </div>

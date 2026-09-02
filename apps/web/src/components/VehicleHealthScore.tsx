@@ -47,9 +47,7 @@ export default function VehicleHealthScore({ report, onValuationAdjust }: Vehicl
   const [photoUrl, setPhotoUrl] = useState<string | null>(null);
   const [isScanning, setIsScanning] = useState<boolean>(false);
   const [costMode, setCostMode] = useState<'diy' | 'mechanic'>('mechanic');
-  const [healthResult, setHealthResult] = useState<HealthScoreResult | null>(() => {
-    return computeHealthScore(null, report.vehicle);
-  });
+  const [healthResult, setHealthResult] = useState<HealthScoreResult | null>(null);
   const [appliedAdjustment, setAppliedAdjustment] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
 

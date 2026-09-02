@@ -100,10 +100,18 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
               </a>
             </div>
           ) : (
-            <div className="bg-surface-2 rounded-xl p-4">
-              <div className="text-xs font-medium text-text-secondary mb-1 flex items-center gap-1.5">
-                <TrendingUp className="w-3.5 h-3.5" />
-                Stima indicativa di mercato
+            <div className="bg-surface-2 rounded-xl p-4 border border-slate-200">
+              <div className="flex flex-wrap items-center justify-between gap-2 mb-2">
+                <div className="text-xs font-medium text-text-secondary flex items-center gap-1.5">
+                  <TrendingUp className="w-3.5 h-3.5 text-blue-600" />
+                  Stima indicativa di mercato
+                </div>
+                {report.price.isSegmentEstimate && (
+                  <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-amber-100 text-amber-800 text-[11px] font-bold border border-amber-200">
+                    <AlertTriangle className="w-3 h-3 text-amber-600" />
+                    Stima di categoria
+                  </span>
+                )}
               </div>
               <div className="text-3xl font-extrabold text-text-primary number-mono">
                 {formatPrice(report.price.estimatedValue)}
@@ -111,6 +119,11 @@ export default function ModelReportCard({ make, model, year, initialReport, isLo
               <div className="text-xs text-text-secondary mt-0.5">
                 Range: {formatPrice(report.price.min)} – {formatPrice(report.price.max)}
               </div>
+              {report.price.isSegmentEstimate && (
+                <div className="mt-3 p-2.5 rounded-lg bg-amber-50 border border-amber-200/80 text-[11px] text-amber-900 leading-relaxed">
+                  <strong>Trasparenza stima:</strong> Per questo modello raro o a bassa tiratura, il prezzo e l&apos;affidabilità sono stimati statisticamente sulla categoria/segmento di appartenenza e non su un volume sufficiente di annunci verificati.
+                </div>
+              )}
             </div>
           )}
 

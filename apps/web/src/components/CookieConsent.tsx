@@ -112,7 +112,7 @@ export default function CookieConsent() {
   if (view === 'banner') {
     return (
       <div
-        className="fixed bottom-0 inset-x-0 z-50 p-4 sm:p-6 animate-slide-up"
+        className="fixed bottom-[76px] md:bottom-0 inset-x-0 z-[100] p-3 sm:p-6 animate-slide-up"
         role="dialog"
         aria-label="Consenso cookie"
       >
@@ -174,7 +174,7 @@ export default function CookieConsent() {
   // ── Preferences panel ──
   return (
     <div
-      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/40 backdrop-blur-sm animate-fade-in"
+      className="fixed inset-0 z-[100] flex items-end sm:items-center justify-center bg-black/50 backdrop-blur-md animate-fade-in"
       role="dialog"
       aria-label="Preferenze cookie"
       aria-modal="true"

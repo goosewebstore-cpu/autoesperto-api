@@ -203,7 +203,32 @@ export default function HomeClient({ stats }: HomeClientProps) {
                 </Link>
               </div>
 
-
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                {FEATURED_GUIDES.map((g) => (
+                  <Link
+                    key={g.slug}
+                    href={`/guide/${g.slug}`}
+                    className="group flex flex-col justify-between rounded-2xl border border-slate-200/80 bg-white p-5 hover:border-blue-500 hover:shadow-lg transition-all"
+                  >
+                    <div>
+                      <div className="flex items-center justify-between gap-2 mb-3">
+                        <span className="inline-block rounded-md bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-blue-700">
+                          {g.tag}
+                        </span>
+                        <span className="text-[11px] text-slate-400 font-medium flex items-center gap-1">
+                          <Clock className="w-3 h-3" /> {g.readTime}
+                        </span>
+                      </div>
+                      <h3 className="text-sm font-bold text-slate-900 group-hover:text-blue-600 transition-colors leading-snug line-clamp-2">
+                        {g.title}
+                      </h3>
+                    </div>
+                    <span className="mt-4 inline-flex items-center gap-1 text-xs font-bold text-blue-600">
+                      Leggi guida <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+                    </span>
+                  </Link>
+                ))}
+              </div>
             </section>
 
             {/* ─── FAQ ─── */}

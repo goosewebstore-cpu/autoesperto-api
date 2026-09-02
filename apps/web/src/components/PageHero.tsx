@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { ChevronRight, Home } from 'lucide-react';
 
 interface PageHeroProps {
@@ -13,8 +14,16 @@ export default function PageHero({ title, subtitle, crumb, photo, children }: Pa
   return (
     <section className="page-hero">
       {photo && (
-        // eslint-disable-next-line @next/next/no-img-element
-        <img className="page-hero-photo" src={photo} alt="" aria-hidden="true" loading="eager" />
+        <Image
+          className="page-hero-photo"
+          src={photo}
+          alt=""
+          aria-hidden="true"
+          fill
+          priority
+          sizes="100vw"
+          quality={75}
+        />
       )}
       <div className="page-hero-inner">
         <Link href="/" className="page-hero-crumb">

@@ -427,11 +427,11 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
 
 const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili/i.test(s);
 
-function buildAdvice(knowledge: ReturnType<typeof getVehicleKnowledge>, make: string, model: string, source: 'plate' | 'model' | undefined): string[] {
+function buildAdvice(knowledge: ReturnType<typeof getVehicleKnowledge>, make: string, model: string, source: 'plate' | 'model' | 'segment_fallback' | undefined): string[] {
   const advice: string[] = [];
   if (knowledge.versionsToAvoid.length) advice.push(`Evita: ${knowledge.versionsToAvoid.slice(0, 2).join(' · ')}.`);
   if (knowledge.versionsRecommended.length) advice.push(`Preferisci: ${knowledge.versionsRecommended.slice(0, 2).join(' · ')}.`);
-  if (source === 'model') {
+  if (source === 'model' || source === 'segment_fallback') {
     advice.push('Dati basati sul modello: verifica l\'esemplare specifico prima dell\'acquisto.');
   } else {
     advice.push('Richiedi lo storico tagliandi e verifica revisione e cinghia/distribuzione.');

@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import {
   BadgeEuro,
@@ -88,18 +86,9 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
   const style = CATEGORY_STYLES[guide.category] || CATEGORY_STYLES.acquisto;
   const readTime = estimateReadingTime(guide);
 
-  const handleClick = () => {
-    if (typeof window !== 'undefined') {
-      window.scrollTo({ top: 0, behavior: 'instant' });
-    }
-  };
-
   return (
     <Link
       href={`/guide/${guide.slug}`}
-      prefetch={true}
-      scroll={true}
-      onClick={handleClick}
       className={`
         group relative flex h-full flex-col justify-between rounded-3xl border bg-white p-5 sm:p-6
         transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl

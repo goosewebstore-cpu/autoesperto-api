@@ -12,11 +12,19 @@ export const metadata: Metadata = {
   },
 };
 
+export const revalidate = 86400; // 1 giorno di cache ISR
+
 export default function Home() {
-  const makes = getAllMakes();
+  let makes: ReturnType<typeof getAllMakes> = [];
+  try {
+    makes = getAllMakes();
+  } catch (err) {
+    console.error(`[Home SSR Error] ${new Date().toISOString()}:`, err);
+  }
+
   const stats = {
-    makes: makes.length,
-    models: makes.reduce((total, make) => total + make.models.length, 0),
+    makes: makes.length || 80,
+    models: makes.reduce((total, make) => total + (make.models?.length || 0), 0) || 1200,
   };
 
   return <HomeClient stats={stats} />;

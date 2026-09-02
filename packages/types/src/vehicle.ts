@@ -14,7 +14,7 @@ export interface VehicleData {
   imageUrl?: string;
   plate?: string;
   vin?: string;
-  dataSource?: 'plate' | 'model';
+  dataSource?: 'plate' | 'model' | 'segment_fallback';
 }
 
 export interface MarketListing {
@@ -131,6 +131,7 @@ export interface PriceAnalysis {
   comment: string;
   marketUrls: MarketLink[];
   market?: MarketStats;
+  isSegmentEstimate?: boolean;
 }
 
 export interface AutoReport {

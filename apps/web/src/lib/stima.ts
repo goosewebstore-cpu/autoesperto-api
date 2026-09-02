@@ -800,6 +800,8 @@ export function buildLocalReport(
     },
   };
 
+  const isSpecificModelData = Boolean(findModelPrice(make, model));
+
   const priceAnalysis: PriceAnalysis = {
     estimatedValue: price.value,
     min: price.min,
@@ -813,12 +815,15 @@ export function buildLocalReport(
         ? 'HIGH'
         : 'FAIR'
       : undefined,
-    comment: `Stima indicativa per una ${make} ${model} ${y} in buone condizioni. Per una valutazione più precisa inserisci anno, chilometri e prezzo richiesto.`,
+    comment: isSpecificModelData
+      ? `Stima indicativa per una ${make} ${model} ${y} in buone condizioni. Per una valutazione più precisa inserisci anno, chilometri e prezzo richiesto.`
+      : `Stima calcolata sul segmento ${segmentKey} per ${make} ${model}. Dati specifici del modello non sufficienti per una quotazione statistica diretta.`,
     marketUrls: [],
+    isSegmentEstimate: !isSpecificModelData,
   };
 
   return {
-    vehicle: { make, model, year: y, dataSource: 'model' },
+    vehicle: { make, model, year: y, dataSource: isSpecificModelData ? 'model' : 'segment_fallback' },
     reliability: reliabilityAnalysis,
     price: priceAnalysis,
     alternatives: buildAlternatives(make, model, y),

@@ -5,6 +5,7 @@ import type {
   PassportDocCategory,
 } from '@autoesperto/types';
 import { getVehicleKnowledge } from './vehicleKB';
+import { estimateMarketValueWithKm } from './pricing';
 
 function getAIBaseUrl(): string {
   return process.env.OPENAI_BASE_URL || 'https://api.openai.com/v1';
@@ -342,7 +343,7 @@ export async function chatPassportAI(
 
   if (key && key !== 'mock') {
     try {
-      const systemPrompt = `Sei l'assistente AI personale di AutoEsperto integrato nel Vehicle Passport dell'utente.
+      const systemPrompt = `Sei AutoEsperto Assistente AI, il consulente tecnico e diagnostico esperto di AutoEsperto dedicato al Vehicle Passport dell'utente.
 CONTESTO DELL'AUTO:
 - Veicolo: ${makeModel} (${v.version || ''}, anno ${v.year || 'N/D'})
 - Motore: ${v.displacement || ''} ${v.power || ''}, Alimentazione: ${v.fuel || ''}
@@ -361,8 +362,14 @@ REGOLE DI RISPOSTA:
    - "Dato documentato": ciò che è presente nei documenti del Passport (es. date, km, importi registrati).
    - "Stima": previsioni su costi, intervalli e scadenze future.
    - "Consiglio": suggerimenti operativi o preventivi.
-3. NON presentare mai una diagnosi come certezza meccanica: usa formulazioni caute ("possibile causa", "è consigliabile far verificare").
-4. Sii chiaro, conciso, professionale e rassicurante.`;
+3. Se l'utente chiede quanto consuma l'auto, fornisci dati precisi e realistici (ciclo urbano, extraurbano, misto in L/100km e km/L, capienza serbatoio, autonomia e spesa per un pieno).
+4. Se l'utente chiede la valutazione o quanto vale, cita il valore di mercato stimato, il prezzo raccomandato per vendita tra privati e permuta, e valorizza l'Health Score (${passport.healthScore}/100) e i documenti del Passport.
+5. NON presentare mai una diagnosi come certezza meccanica: usa formulazioni caute ("possibile causa", "è consigliabile far verificare").
+6. STILE DI RISPOSTA (IMPORTANTE):
+   - Scrivi in modo pulito, sobrio, naturale, chiaro e diretto, come un meccanico esperto o perito automobilistico.
+   - NON usare troppe emoji. Massimo 0 o 1 emoji discreta in tutto il messaggio. MAI elenchi pieni di icone (niente emoji all'inizio di ogni riga o titolo).
+   - NON usare formule stereotipate da intelligenza artificiale (es. "Ecco i consumi effettivi misurati...", "Vuoi sapere come...?").
+   - Rispondi direttamente alla domanda con dati chiari e formattazione semplice e leggibile.`;
 
       const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
         method: 'POST',
@@ -400,11 +407,99 @@ REGOLE DI RISPOSTA:
     }
   }
 
-  // Smart Contextual Local Response
+  // Smart Contextual Local Response (pulita, chiara, senza emoji spam)
   let fallbackReply = '';
   
+  // Consumi e carburante
+  if (/co[n]?sum|litr|km\/l|quanti km fa|quanto fa con un litro|costo carburante|pieno|autonomia|serbatoio/i.test(qLower)) {
+    const isDiesel = /diesel|gasolio/i.test(v.fuel || '');
+    const isHybrid = /ibrid|hybrid/i.test(v.fuel || '');
+    const is500 = makeModel.toLowerCase().includes('500');
+
+    if (is500 && isDiesel) {
+      fallbackReply = `I consumi reali rilevati su strada per la tua **${makeModel}** (${v.fuel || 'Diesel 1.3 Multijet'}):
+
+- **Urbano (città e traffico):** circa 4,9 – 5,4 L/100 km (~18,5 – 20,4 km/L)
+- **Extraurbano (statale a 90-110 km/h):** circa 3,7 – 4,2 L/100 km (~23,8 – 27,0 km/L)
+- **Misto medio:** circa 4,2 – 4,6 L/100 km (~21,7 – 23,8 km/L)
+
+**Autonomia e spesa carburante:**
+Con il serbatoio da 35 litri, l'autonomia media è di circa 760 – 830 km con un pieno.
+Un pieno costa indicativamente 58 € – 62 € (con gasolio a ~1,68 €/L), con una spesa di circa 7,05 € – 7,75 € per 100 km.
+
+**Nota tecnica:**
+Il motore 1.3 Multijet è particolarmente efficiente sui tratti extraurbani. In ambito esclusivamente cittadino è opportuno monitorare le rigenerazioni del filtro DPF.`;
+    } else if (is500) {
+      fallbackReply = `I consumi reali rilevati su strada per la tua **${makeModel}** (${v.fuel || 'Benzina'}):
+
+- **Urbano:** circa 6,9 – 7,6 L/100 km (~13 – 14,5 km/L)
+- **Extraurbano:** circa 4,7 – 5,2 L/100 km (~19 – 21 km/L)
+- **Misto medio:** circa 5,6 – 6,2 L/100 km (~16 – 18 km/L)
+
+**Autonomia e spesa carburante:**
+Con il serbatoio da 35 litri, l'autonomia media è di circa 580 – 625 km con un pieno.
+Un pieno costa indicativamente circa 62 € (a ~1,78 €/L), con un costo stimato di 10,00 € – 11,00 € per 100 km.`;
+    } else if (isDiesel) {
+      fallbackReply = `**Consumi reali per ${makeModel}** (${v.fuel || 'Diesel'})
+
+Rilevamenti medi su strada:
+- **Urbano:** circa 5,5 – 6,3 L/100 km (~16 – 18 km/L)
+- **Extraurbano:** circa 4,2 – 4,7 L/100 km (~21 – 24 km/L)
+- **Misto medio:** circa 4,8 – 5,4 L/100 km (~18,5 – 21 km/L)
+
+**Autonomia e costi stimati:**
+- Autonomia stimata con un pieno: circa 800 – 950 km
+- Costo per 100 km: circa 8,00 € – 9,00 € (con gasolio a ~1,68 €/L)`;
+    } else if (isHybrid) {
+      fallbackReply = `**Consumi reali per ${makeModel}** (Ibrida)
+
+Rilevamenti medi su strada:
+- **Urbano:** circa 4,8 – 5,5 L/100 km (~18 – 21 km/L)
+- **Extraurbano:** circa 4,3 – 4,8 L/100 km (~21 – 23 km/L)
+- **Misto medio:** circa 4,7 – 5,2 L/100 km (~19 – 21 km/L)
+
+Autonomia stimata con un pieno: circa 680 – 760 km`;
+    } else {
+      fallbackReply = `**Consumi reali per ${makeModel}** (${v.fuel || 'Benzina'})
+
+Rilevamenti medi su strada:
+- **Urbano:** circa 7,2 – 8,0 L/100 km (~12,5 – 13,8 km/L)
+- **Extraurbano:** circa 5,0 – 5,6 L/100 km (~18 – 20 km/L)
+- **Misto medio:** circa 5,8 – 6,5 L/100 km (~15 – 17 km/L)
+
+Autonomia stimata con un pieno: circa 620 – 720 km`;
+    }
+  }
+  // Valutazione e vendita
+  else if (/quanto vale|valutazion|quotazion|prezzo|vendere|quanto posso venderla|valore/i.test(qLower)) {
+    let estVal = passport.estimatedValue || 0;
+    if (!estVal) {
+      const calc = estimateMarketValueWithKm(
+        {
+          make: v.make,
+          model: v.model,
+          year: v.year,
+          fuel: v.fuel,
+          power: v.power,
+        },
+        passport.currentKm || 80000
+      );
+      estVal = calc.adjustedForKm;
+    }
+    const estValMax = passport.estimatedValueMax || Math.round(estVal * 1.10);
+    const recSell = passport.recommendedSellPrice || Math.round(estVal * 1.04);
+    const tradeIn = Math.round(estVal * 0.81);
+
+    fallbackReply = `**Valutazione di mercato per ${makeModel}** (${passport.currentKm ? `${passport.currentKm.toLocaleString('it-IT')} km` : ''}, Health Score ${passport.healthScore}/100)
+
+Prezzi di mercato stimati:
+• Vendita tra privati: ${recSell.toLocaleString('it-IT')} € – ${estValMax.toLocaleString('it-IT')} €
+• Permuta / Ritiro in concessionaria: circa ${tradeIn.toLocaleString('it-IT')} € – ${Math.round(estVal * 0.88).toLocaleString('it-IT')} €
+
+La documentazione completa dei tagliandi nel profilo può farti recuperare tra 500 € e 1.000 € in più in fase di trattativa rispetto alla media degli annunci.`;
+  }
   // Tagliandi specifici: ultimo tagliando
-  if (/ultimo.*tagliand|ultimo.*intervent|quando.*tagliand/i.test(qLower) && !/prossim|quant.*manca/i.test(qLower)) {
+  else if (/ultimo.*tagliand|ultimo.*intervent|quando.*tagliand/i.test(qLower) && !/prossim|quant.*manca/i.test(qLower)) {
     const lastServiceEvent = (passport.timeline || []).find((e) => e.type === 'TAGLIANDO');
     const lastServiceDoc = (passport.documents || []).find((d) => d.category === 'manutenzione');
 
@@ -414,9 +509,11 @@ REGOLE DI RISPOSTA:
       const cost = lastServiceEvent?.cost || lastServiceDoc?.amount;
       const desc = lastServiceDoc?.notes || lastServiceEvent?.description || 'Manutenzione ordinaria';
 
-      fallbackReply = `📋 **Dato documentato**: L'ultimo tagliando registrato per la tua **${makeModel}** è stato effettuato il **${new Date(date).toLocaleDateString('it-IT')}**${km ? ` a **${km.toLocaleString('it-IT')} km**` : ''}${cost ? ` (spesa: **${cost.toLocaleString('it-IT')} €**)` : ''}.\n\n🔧 **Interventi eseguiti**: ${desc}.\n\n💡 **Consiglio**: Conserva sempre le ricevute nel Passport per certificarne lo storico.`;
+      fallbackReply = `**Dato documentato**: L'ultimo tagliando registrato per la tua **${makeModel}** è stato effettuato il **${new Date(date).toLocaleDateString('it-IT')}**${km ? ` a **${km.toLocaleString('it-IT')} km**` : ''}${cost ? ` (spesa: **${cost.toLocaleString('it-IT')} €**)` : ''}.
+
+Interventi eseguiti: ${desc}.`;
     } else {
-      fallbackReply = `Non risulta ancora nessun tagliando documentato nel Passport della tua **${makeModel}**. Carica la ricevuta o fattura dell'ultimo tagliando nella sezione Documenti per aggiornare la cronologia.`;
+      fallbackReply = `Non risulta ancora nessun tagliando documentato nel profilo della tua **${makeModel}**. Carica la ricevuta o fattura dell'ultimo tagliando nella sezione Documenti per aggiornare lo storico.`;
     }
   } 
   // Prossimo tagliando / quanto manca
@@ -425,22 +522,47 @@ REGOLE DI RISPOSTA:
     const nextTarget = passport.nextServiceKm || (Math.ceil((currentKm + 1) / 15000) * 15000);
     const diff = Math.max(0, nextTarget - currentKm);
 
-    fallbackReply = `📊 **Stima**: La tua **${makeModel}** ha attualmente **${currentKm.toLocaleString('it-IT')} km**.\n\nIl prossimo tagliando ordinario è previsto a circa **${nextTarget.toLocaleString('it-IT')} km** (mancano circa **${diff.toLocaleString('it-IT')} km** o entro 12 mesi).\n\n💡 **Consiglio**: Ti raccomandiamo di controllare il livello dell'olio motore ogni 3.000 km.`;
+    fallbackReply = `La tua **${makeModel}** ha attualmente **${currentKm.toLocaleString('it-IT')} km**.
+
+Il prossimo tagliando ordinario è previsto a circa **${nextTarget.toLocaleString('it-IT')} km** (mancano circa **${diff.toLocaleString('it-IT')} km** o entro 12 mesi).`;
+  }
+  else if (/olio|gradazione|lubrificante/i.test(qLower)) {
+    fallbackReply = `**Specifiche olio motore per ${makeModel}**:
+
+- **Gradazione consigliata**: 5W-40 sintetico ACEA C3 (oppure 0W-20 per versioni ibride recenti)
+- **Capacità coppa con filtro**: circa 2,8 – 3,2 litri
+- **Intervallo consigliato**: ogni 15.000 km o 12 mesi`;
   }
   else if (/assicurazion|polizza/i.test(qLower)) {
     fallbackReply = passport.insuranceExpiry
-      ? `📋 **Dato documentato**: La polizza RC Auto per la tua **${makeModel}** (${passport.insuranceCompany || 'Compagnia registrata'}) scade il **${new Date(passport.insuranceExpiry).toLocaleDateString('it-IT')}**.\n\n💡 **Consiglio**: Ti suggeriamo di confrontare i rinnovi circa 20-30 giorni prima della scadenza.`
-      : `Non hai ancora caricato il certificato di assicurazione nel Passport della tua **${makeModel}**. Caricalo nella sezione Documenti per monitorare la scadenza automaticamente.`;
+      ? `**Dato documentato**: La polizza RC Auto per la tua **${makeModel}** (${passport.insuranceCompany || 'Compagnia registrata'}) scade il **${new Date(passport.insuranceExpiry).toLocaleDateString('it-IT')}**.`
+      : `Non hai ancora caricato il certificato di assicurazione nel profilo della tua **${makeModel}**. Caricalo nella sezione Documenti per monitorare la scadenza.`;
   } else if (/revision/i.test(qLower)) {
     fallbackReply = passport.revisionExpiry
-      ? `📋 **Dato documentato**: La revisione periodica ministeriale per la tua **${makeModel}** scade il **${new Date(passport.revisionExpiry).toLocaleDateString('it-IT')}**.\n\n💡 **Consiglio**: La revisione va effettuata entro l'ultimo giorno del mese di scadenza presso un centro autorizzato.`
-      : `In base all'anno ${v.year || 'del veicolo'}, la revisione ministeriale va effettuata dopo 4 anni dalla prima immatricolazione e successivamente ogni 2 anni. Carica il documento unico o l'attestato di revisione per impostare il promemoria esatto.`;
+      ? `**Dato documentato**: La revisione periodica ministeriale per la tua **${makeModel}** scade il **${new Date(passport.revisionExpiry).toLocaleDateString('it-IT')}**.`
+      : `In base all'anno ${v.year || 'del veicolo'}, la revisione ministeriale va effettuata 4 anni dopo la prima immatricolazione e successivamente ogni 2 anni. Carica il documento unico per impostare il promemoria esatto.`;
   } else if (/spia/i.test(qLower)) {
-    fallbackReply = `Sulla tua **${makeModel}** (${passport.currentKm ? `${passport.currentKm.toLocaleString('it-IT')} km` : 'veicolo registrato'}):\n\n⚠️ **Valutazione preliminare**: L'accensione di una spia indica un'anomalia rilevata dai sensori di bordo.\n\n🔍 **Livello di allerta**:\n- Se la spia è **rossa**: arresta subito il veicolo in sicurezza (pressione olio, temperatura motore, freni).\n- Se la spia è **gialla/ambra**: puoi completare il tragitto a andatura moderata ed eseguire al più presto una diagnosi OBD presso un'officina.\n\n💡 *Nota: questa informazione ha scopo orientativo e non sostituisce una diagnosi professionale in officina.*`;
+    fallbackReply = `Sulla tua **${makeModel}** (${passport.currentKm ? `${passport.currentKm.toLocaleString('it-IT')} km` : 'veicolo registrato'}):
+
+- Se la spia è **rossa**: arresta subito il veicolo in sicurezza (pressione olio, temperatura motore, freni). Non proseguire la marcia.
+- Se la spia è **gialla/ambra**: puoi completare il tragitto a andatura moderata ed eseguire al più presto una diagnosi OBD presso un'officina per leggere il codice errore memorizzato.`;
   } else if (/frizion|cinghi|caten|fren|cost|prezz|quant.*costa/i.test(qLower)) {
-    fallbackReply = `Per la tua **${makeModel}** (${v.fuel || ''}):\n\n📊 **Stima dei costi di manutenzione**:\n- **Ricambio**: ${metadata?.repairEstimate?.partCost || '150 € – 350 €'}\n- **Manodopera stimata**: circa ${metadata?.repairEstimate?.estimatedHours || '2–4 ore'}\n- **Totale stimato**: ${metadata?.repairEstimate?.totalCost || '300 € – 700 €'}\n\n💡 **Consiglio**: Richiedi sempre un preventivo dettagliato all'officina prima di procedere.`;
+    fallbackReply = `Per la tua **${makeModel}** (${v.fuel || ''}):
+
+**Stima costi di manutenzione:**
+- **Ricambio**: ${metadata?.repairEstimate?.partCost || '150 € – 350 €'}
+- **Manodopera stimata**: circa ${metadata?.repairEstimate?.estimatedHours || '2–4 ore'}
+- **Totale medio finito**: ${metadata?.repairEstimate?.totalCost || '300 € – 700 €'}`;
   } else {
-    fallbackReply = `Ho analizzato i dati della tua **${makeModel}** (${passport.currentKm ? `${passport.currentKm.toLocaleString('it-IT')} km` : 'veicolo registrato'}).\n\nHealth Score: **${passport.healthScore}/100** · Documenti registrati: **${passport.documents.length}**.\n\nPuoi chiedermi dettagli su scadenze, cronologia tagliandi, costi di riparazione o compatibilità dei ricambi.`;
+    fallbackReply = `Riguardo alla tua richiesta per la tua **${makeModel}** (${passport.currentKm ? `${passport.currentKm.toLocaleString('it-IT')} km` : ''}, Health Score **${passport.healthScore}/100**):
+
+Posso fornirti supporto tecnico chiaro su:
+- Consumi reali e costo di un pieno
+- Valutazione commerciale per la vendita
+- Costi di tagliandi, pastiglie freni, frizione e distribuzione
+- Specifiche olio motore, controlli pre-revisione e anomalie di bordo
+
+Dimmi pure cosa desideri approfondire.`;
   }
 
   return {

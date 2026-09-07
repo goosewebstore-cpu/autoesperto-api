@@ -12,6 +12,11 @@ import type {
   VehicleData,
 } from '@autoesperto/types';
 import type { AutoReport } from '@autoesperto/types';
+import {
+  resolveVehicleImage,
+  getVehiclePassportPhoto,
+  isOldHardcodedBMWUrl,
+} from './vehicleImageResolver';
 
 const PASSPORTS_STORAGE_KEY = 'autoesperto_vehicle_passports_v2';
 const LEGACY_STORAGE_KEY = 'autoesperto_vehicle_passports_v1';
@@ -139,13 +144,40 @@ export function getAllPassports(): VehiclePassportData[] {
 }
 
 function sanitizePassport(p: any): VehiclePassportData {
+  const vehicle = p.vehicle || {};
+  const photo = getVehiclePassportPhoto(p);
+  const isBmw = (vehicle.make || '').toLowerCase().includes('bmw');
+  const existingPhotos = Array.isArray(p.photos) ? p.photos : [];
+  const sanitizedPhotos = existingPhotos
+    .filter((ph: any) => ph && ph.url)
+    .map((ph: any) => {
+      if (isOldHardcodedBMWUrl(ph.url) && !isBmw) {
+        return { ...ph, url: photo };
+      }
+      return ph;
+    });
+
+  if (sanitizedPhotos.length === 0 && photo) {
+    sanitizedPhotos.push({
+      id: `photo-${Date.now()}-1`,
+      url: photo,
+      category: 'auto',
+      title: `${vehicle.make || 'Auto'} ${vehicle.model || ''}`.trim(),
+      description: 'Foto principale veicolo',
+      date: (p.lastKmDate || new Date().toISOString().split('T')[0]),
+    });
+  }
+
   const clean: VehiclePassportData = {
     id: p.id || `pass-${Date.now()}`,
     shareCode: p.shareCode || generateShareCode(),
     userId: p.userId,
-    vehicle: p.vehicle || {},
-    nickname: p.nickname || `${p.vehicle?.make || 'Auto'} ${p.vehicle?.model || ''}`.trim(),
-    mainPhoto: p.mainPhoto || p.vehicle?.imageUrl,
+    vehicle: {
+      ...vehicle,
+      imageUrl: photo,
+    },
+    nickname: p.nickname || `${vehicle.make || 'Auto'} ${vehicle.model || ''}`.trim(),
+    mainPhoto: photo,
     currentKm: Number(p.currentKm) || 50000,
     lastKmDate: p.lastKmDate || new Date().toISOString().split('T')[0],
     healthScore: p.healthScore || 88,
@@ -159,7 +191,7 @@ function sanitizePassport(p: any): VehiclePassportData {
     revisionExpiry: p.revisionExpiry,
     nextServiceKm: p.nextServiceKm,
     nextServiceDate: p.nextServiceDate,
-    photos: Array.isArray(p.photos) ? p.photos : [],
+    photos: sanitizedPhotos,
     inspections: Array.isArray(p.inspections) ? p.inspections : [],
     analysisSnapshot: p.analysisSnapshot,
     documents: Array.isArray(p.documents) ? p.documents : [],
@@ -383,7 +415,12 @@ export function createPassportFromReport(report: AutoReport, customNickname?: st
   ];
 
   // Photos from analysis if available
-  const photoUrl = vehicle.imageUrl || (report as any).mainPhoto || (report as any).photoUrl || (vehicle as any).photo || (report as any).photos?.[0];
+  let photoUrl = vehicle.imageUrl || (report as any).mainPhoto || (report as any).photoUrl || (vehicle as any).photo || (report as any).photos?.[0];
+  const isBmw = (vehicle.make || '').toLowerCase().includes('bmw');
+  if (!photoUrl || (isOldHardcodedBMWUrl(photoUrl) && !isBmw)) {
+    photoUrl = resolveVehicleImage(vehicle.make, vehicle.model, vehicle.body || (vehicle as any).bodyType);
+  }
+
   const initialPhotos: PassportPhotoItem[] = [];
   if (photoUrl) {
     initialPhotos.push({
@@ -423,10 +460,10 @@ export function createPassportFromReport(report: AutoReport, customNickname?: st
     shareCode,
     vehicle: {
       ...vehicle,
-      imageUrl: photoUrl || vehicle.imageUrl,
+      imageUrl: photoUrl,
     },
     nickname: customNickname || `${vehicle.make || 'Auto'} ${vehicle.model || ''}`.trim(),
-    mainPhoto: photoUrl || vehicle.imageUrl,
+    mainPhoto: photoUrl,
     currentKm: km,
     lastKmDate: now.split('T')[0],
     healthScore: calculatedHealth,
@@ -530,12 +567,21 @@ export function createNewPassport(input: {
     dismissed: false,
   });
 
+  let photoUrl = input.mainPhoto || input.vehicle.imageUrl;
+  const isBmw = (input.vehicle.make || '').toLowerCase().includes('bmw');
+  if (!photoUrl || (isOldHardcodedBMWUrl(photoUrl) && !isBmw)) {
+    photoUrl = resolveVehicleImage(input.vehicle.make, input.vehicle.model, input.vehicle.body);
+  }
+
   const passport: VehiclePassportData = {
     id,
     shareCode,
-    vehicle: input.vehicle,
+    vehicle: {
+      ...input.vehicle,
+      imageUrl: photoUrl,
+    },
     nickname: input.nickname || `${input.vehicle.make} ${input.vehicle.model}`,
-    mainPhoto: input.mainPhoto || input.vehicle.imageUrl,
+    mainPhoto: photoUrl,
     currentKm: km,
     lastKmDate: now.split('T')[0],
     healthScore: 88,
@@ -547,11 +593,11 @@ export function createNewPassport(input: {
     insuranceCompany: input.insuranceCompany,
     revisionExpiry: input.revisionExpiry,
     nextServiceKm,
-    photos: input.mainPhoto
+    photos: photoUrl
       ? [
           {
             id: `photo-${Date.now()}`,
-            url: input.mainPhoto,
+            url: photoUrl,
             category: 'auto',
             title: `${input.vehicle.make} ${input.vehicle.model}`,
             date: now.split('T')[0],

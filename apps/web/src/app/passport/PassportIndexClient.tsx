@@ -40,6 +40,7 @@ import {
   getTrustBadgeForPassport,
 } from '@/lib/passportStorage';
 import { scanPassportDoc } from '@/lib/api';
+import { getVehiclePassportPhoto } from '@/lib/vehicleImageResolver';
 import type { VehiclePassportData } from '@autoesperto/types';
 
 // Preset dei modelli più popolari in Italia per compilazione istantanea
@@ -277,11 +278,7 @@ export default function PassportIndexClient() {
             {passports.map((p) => {
               const v = p.vehicle;
               const health = p.healthBreakdown || computeDynamicHealthScore(p);
-              const photo =
-                p.mainPhoto ||
-                p.photos?.[0]?.url ||
-                v.imageUrl ||
-                'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80';
+              const photo = getVehiclePassportPhoto(p);
 
               return (
                 <div

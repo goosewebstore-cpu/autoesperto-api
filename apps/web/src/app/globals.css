@@ -799,7 +799,8 @@ body {
   text-transform: uppercase;
   color: var(--text-2);
 }
-.scanner-field input {
+.scanner-field input,
+.scanner-field select {
   width: 100%;
   min-height: 48px;
   padding: 0.65rem 0.95rem;
@@ -812,7 +813,13 @@ body {
   font-family: inherit;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
 }
-.scanner-field input:focus {
+.scanner-field select:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background: #f1f5f9;
+}
+.scanner-field input:focus,
+.scanner-field select:focus {
   outline: none;
   background: #ffffff;
   border-color: var(--brand);

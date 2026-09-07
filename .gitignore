@@ -6,14 +6,8 @@ out/
 *.tsbuildinfo
 .DS_Store
 data/
-node_modules/
-.next/
-dist/
-out/
-.env
-*.tsbuildinfo
-.DS_Store
-data/
+!data/databases/
+!data/training/
 api.log
 web.log
 *.db

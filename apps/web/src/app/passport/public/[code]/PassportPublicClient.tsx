@@ -28,6 +28,7 @@ import {
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { getPassportByShareCode, ensureSamplePassport, computeDynamicHealthScore, getTrustBadgeForPassport } from '@/lib/passportStorage';
+import { getVehiclePassportPhoto } from '@/lib/vehicleImageResolver';
 import type { VehiclePassportData } from '@autoesperto/types';
 
 export default function PassportPublicClient({ code }: { code: string }) {
@@ -83,11 +84,7 @@ export default function PassportPublicClient({ code }: { code: string }) {
 
   const health = passport.healthBreakdown || computeDynamicHealthScore(passport);
   const selling = passport.sellingConfig;
-  const mainPhoto =
-    passport.mainPhoto ||
-    passport.photos?.[0]?.url ||
-    v.imageUrl ||
-    'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80';
+  const mainPhoto = getVehiclePassportPhoto(passport);
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-100/70 dark:bg-slate-950 text-slate-900 dark:text-white">

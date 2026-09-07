@@ -1,5 +1,6 @@
 import type { ParsedAdData } from './adParser';
 import { VEHICLE_DATABASE } from './finderEngine';
+import { generateInstantReport } from './reportFallback';
 
 export interface TrustScoreCategory {
   category: string;
@@ -52,17 +53,48 @@ export function computeAdTrustScore(ad: ParsedAdData): TrustScoreResult {
   const ageYears = Math.max(1, currentYear - year);
   const kmPerYear = Math.round(km / ageYears);
 
-  // Find matching profile from database or fallback estimation
+  // Calcolo dinamico del valore stimato in base ad ANNO, km e modello reale
   const carProfile = VEHICLE_DATABASE.find(
     (c) =>
       c.make.toLowerCase() === (ad.make || '').toLowerCase() &&
       c.model.toLowerCase() === (ad.model || '').toLowerCase()
   );
 
-  const basePriceAvg = carProfile ? carProfile.priceAvg : price;
-  const estMin = carProfile ? Math.round(carProfile.priceMin) : Math.round(price * 0.88);
-  const estMax = carProfile ? Math.round(carProfile.priceMax) : Math.round(price * 1.12);
-  const estAvg = Math.round((estMin + estMax) / 2);
+  let estMin: number;
+  let estMax: number;
+  let estAvg: number;
+
+  if (ad.make && ad.model) {
+    const instant = generateInstantReport({
+      make: ad.make,
+      model: ad.model,
+      year,
+      km,
+      requestedPrice: price,
+      fuel: ad.fuel,
+    });
+    if (instant.report?.price?.estimatedValue) {
+      estAvg = instant.report.price.estimatedValue;
+      estMin = instant.report.price.min;
+      estMax = instant.report.price.max;
+    } else {
+      const base = carProfile ? carProfile.priceAvg : price;
+      const refYear = carProfile?.yearMinTypical || (currentYear - 4);
+      const yearDiff = year - refYear;
+      const yearFactor = Math.pow(1.085, yearDiff);
+      estAvg = Math.max(800, Math.round(base * yearFactor));
+      estMin = Math.round(estAvg * 0.88);
+      estMax = Math.round(estAvg * 1.12);
+    }
+  } else {
+    const base = carProfile ? carProfile.priceAvg : price;
+    const refYear = carProfile?.yearMinTypical || (currentYear - 4);
+    const yearDiff = year - refYear;
+    const yearFactor = Math.pow(1.085, yearDiff);
+    estAvg = Math.max(800, Math.round(base * yearFactor));
+    estMin = Math.round(estAvg * 0.88);
+    estMax = Math.round(estAvg * 1.12);
+  }
 
   const diffPct = Math.round(((price - estAvg) / estAvg) * 100);
   const isOverpriced = diffPct > 8;

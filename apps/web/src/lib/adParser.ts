@@ -3,12 +3,56 @@ import { getAllMakes, slugify } from './catalogo';
 export interface ParsedAdData {
   make?: string;
   model?: string;
+  version?: string;
   year?: number;
   km?: number;
   price?: number;
   fuel?: string;
+  transmission?: string;
   powerCv?: number;
+  photo?: string;
+  city?: string;
+  source?: string;
+  title?: string;
   rawText?: string;
+}
+
+export async function fetchAndParseAd(input: string): Promise<ParsedAdData> {
+  const localFallback = parseListingTextOrUrl(input);
+  const trimmed = input.trim();
+  if (!/^https?:\/\//i.test(trimmed)) {
+    return localFallback;
+  }
+
+  try {
+    const res = await fetch('/api/parse-ad', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ url: trimmed }),
+      signal: AbortSignal.timeout(9500),
+    });
+
+    if (res.ok) {
+      const json = await res.json();
+      if (json.success && json.data) {
+        return {
+          ...localFallback,
+          ...json.data,
+          make: json.data.make || localFallback.make,
+          model: json.data.model || localFallback.model,
+          year: json.data.year || localFallback.year,
+          km: json.data.km || localFallback.km,
+          price: json.data.price || localFallback.price,
+          fuel: json.data.fuel || localFallback.fuel,
+          version: json.data.version || localFallback.version,
+        };
+      }
+    }
+  } catch (err) {
+    console.warn('Network parse-ad fallback to local extraction:', err);
+  }
+
+  return localFallback;
 }
 
 const COMMON_FUELS = [

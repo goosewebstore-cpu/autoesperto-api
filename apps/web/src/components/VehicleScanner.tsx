@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import {
   AlertTriangle,
@@ -17,6 +17,13 @@ import {
   Sparkles,
   Upload,
   MapPin,
+  ExternalLink,
+  Globe,
+  Gauge,
+  Calendar,
+  Fuel,
+  Info,
+  Edit3,
 } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import {
@@ -29,11 +36,18 @@ import {
   type AnalyzePayload,
 } from '@/lib/api';
 import { generateInstantReport } from '@/lib/reportFallback';
+import { resolveVehicleImage } from '@/lib/vehicleImageResolver';
 import { REGIONS_CONFIG } from '@/lib/bollo';
 import { trackEvent } from '@/lib/analytics';
 import ReportView from '@/components/ReportView';
 import ReportErrorBoundary from '@/components/ReportErrorBoundary';
-import { parseListingTextOrUrl, type ParsedAdData } from '@/lib/adParser';
+import { parseListingTextOrUrl, fetchAndParseAd, type ParsedAdData } from '@/lib/adParser';
+import {
+  getAllMakes,
+  getModelsForMake,
+  getTrimVersionsForModel,
+  POPULAR_MAKES_ITALY,
+} from '@/lib/catalogo';
 
 const POPULAR_CHIPS = [
   { make: 'Fiat', model: 'Panda' },
@@ -45,6 +59,9 @@ const POPULAR_CHIPS = [
   { make: 'Ford', model: 'Puma' },
   { make: 'Jeep', model: 'Renegade' },
 ];
+
+const AVAILABLE_YEARS = Array.from({ length: 32 }, (_, i) => 2026 - i);
+const QUICK_KM_CHIPS = [20000, 45000, 75000, 100000, 130000, 160000, 200000];
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
 
@@ -83,6 +100,9 @@ export default function VehicleScanner({
   const [tab, setTab] = useState<'foto' | 'manual' | 'annuncio'>('foto');
   const [adInput, setAdInput] = useState('');
   const [parsedAd, setParsedAd] = useState<ParsedAdData | null>(null);
+  const [isParsingAd, setIsParsingAd] = useState(false);
+  const parseDebounceTimerRef = useRef<NodeJS.Timeout | null>(null);
+
   const [photos, setPhotos] = useState<string[]>([]);
   const [mainPhoto, setMainPhoto] = useState('');
   const [scan, setScan] = useState<FreeScanResult | null>(null);
@@ -91,6 +111,8 @@ export default function VehicleScanner({
   const [manualMake, setManualMake] = useState('');
   const [manualModel, setManualModel] = useState('');
   const [manualVersion, setManualVersion] = useState('');
+  const [customModelMode, setCustomModelMode] = useState(false);
+  const [customVersionMode, setCustomVersionMode] = useState(false);
   const [manualYear, setManualYear] = useState('');
   const [manualKm, setManualKm] = useState('');
   const [manualPrice, setManualPrice] = useState('');
@@ -99,6 +121,26 @@ export default function VehicleScanner({
   const [manualRegion, setManualRegion] = useState('lombardia');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
+
+  // Catalog computations
+  const allCatalogMakes = useMemo(() => getAllMakes().map((m) => m.name), []);
+  const popularMakes = useMemo(
+    () => POPULAR_MAKES_ITALY.filter((m) => allCatalogMakes.some((cm) => cm.toLowerCase() === m.toLowerCase())),
+    [allCatalogMakes]
+  );
+  const otherMakes = useMemo(
+    () => allCatalogMakes.filter((m) => !POPULAR_MAKES_ITALY.some((p) => p.toLowerCase() === m.toLowerCase())),
+    [allCatalogMakes]
+  );
+  const availableModels = useMemo(() => {
+    if (!manualMake) return [];
+    return getModelsForMake(manualMake);
+  }, [manualMake]);
+
+  const availableVersions = useMemo(() => {
+    if (!manualMake || !manualModel || manualModel === '__custom__') return [];
+    return getTrimVersionsForModel(manualMake, manualModel);
+  }, [manualMake, manualModel]);
 
   useEffect(() => {
     fetch(`${API_URL}/health`).catch(() => {});
@@ -133,36 +175,113 @@ export default function VehicleScanner({
   const handleAdInputChange = (value: string) => {
     setAdInput(value);
     setError('');
-    const parsed = parseListingTextOrUrl(value);
-    setParsedAd(parsed);
-    if (parsed.make) setManualMake(parsed.make);
-    if (parsed.model) setManualModel(parsed.model);
-    if (parsed.year) setManualYear(String(parsed.year));
-    if (parsed.km) setManualKm(String(parsed.km));
-    if (parsed.price) setManualPrice(String(parsed.price));
+
+    // Instant local regex extraction for quick feedback
+    const local = parseListingTextOrUrl(value);
+    setParsedAd(local);
+    if (local.make) setManualMake(local.make);
+    if (local.model) setManualModel(local.model);
+    if (local.year) setManualYear(String(local.year));
+    if (local.km) setManualKm(String(local.km));
+    if (local.price) setManualPrice(String(local.price));
+    if (local.fuel) setManualFuel(local.fuel);
+
+    if (parseDebounceTimerRef.current) {
+      clearTimeout(parseDebounceTimerRef.current);
+    }
+
+    const trimmed = value.trim();
+    if (/^https?:\/\//i.test(trimmed)) {
+      setIsParsingAd(true);
+      parseDebounceTimerRef.current = setTimeout(async () => {
+        try {
+          const remote = await fetchAndParseAd(trimmed);
+          setParsedAd(remote);
+          if (remote.make) setManualMake(remote.make);
+          if (remote.model) setManualModel(remote.model);
+          if (remote.version) setManualVersion(remote.version);
+          if (remote.year) setManualYear(String(remote.year));
+          if (remote.km) setManualKm(String(remote.km));
+          if (remote.price) setManualPrice(String(remote.price));
+          if (remote.fuel) setManualFuel(remote.fuel);
+          if (remote.transmission) setManualTransmission(remote.transmission);
+          if (remote.photo) {
+            setMainPhoto(remote.photo);
+            setPhotos([remote.photo]);
+          }
+        } catch (e) {
+          console.error('Error fetching remote ad:', e);
+        } finally {
+          setIsParsingAd(false);
+        }
+      }, 400);
+    } else {
+      setIsParsingAd(false);
+    }
   };
 
-  const handleAnalyzeAd = () => {
-    const parsed = parseListingTextOrUrl(adInput);
-    const make = parsed.make || parsedAd?.make || manualMake;
-    const model = parsed.model || parsedAd?.model || manualModel;
+  const handleAnalyzeAd = async () => {
+    setError('');
+    let currentParsed = parsedAd;
+    let make = currentParsed?.make || manualMake;
+    let model = currentParsed?.model || manualModel;
+
+    // If it's a URL and we don't have make/model yet or is currently parsing, await remote fetch
+    if ((!make || !model || isParsingAd) && /^https?:\/\//i.test(adInput.trim())) {
+      setIsParsingAd(true);
+      setManualLoading(true);
+      try {
+        currentParsed = await fetchAndParseAd(adInput.trim());
+        setParsedAd(currentParsed);
+        if (currentParsed.make) {
+          make = currentParsed.make;
+          setManualMake(currentParsed.make);
+        }
+        if (currentParsed.model) {
+          model = currentParsed.model;
+          setManualModel(currentParsed.model);
+        }
+        if (currentParsed.version) setManualVersion(currentParsed.version);
+        if (currentParsed.year) setManualYear(String(currentParsed.year));
+        if (currentParsed.km) setManualKm(String(currentParsed.km));
+        if (currentParsed.price) setManualPrice(String(currentParsed.price));
+        if (currentParsed.fuel) setManualFuel(currentParsed.fuel);
+        if (currentParsed.transmission) setManualTransmission(currentParsed.transmission);
+        if (currentParsed.photo) {
+          setMainPhoto(currentParsed.photo);
+          setPhotos([currentParsed.photo]);
+        }
+      } catch (err) {
+        console.warn('Ad fetch failed:', err);
+      } finally {
+        setIsParsingAd(false);
+        setManualLoading(false);
+      }
+    }
+
+    make = make || currentParsed?.make || manualMake;
+    model = model || currentParsed?.model || manualModel;
+
     if (!make || !model) {
       setError('Incolla il link (es. Autohero, AutoScout24, Subito) o testo con almeno marca e modello (es. "Mazda CX-3" o "Fiat Panda 2021").');
       return;
     }
-    void handleManualSubmit({
+
+    await handleManualSubmit({
       make,
       model,
-      year: parsed.year ?? parsedAd?.year ?? (manualYear ? Number(manualYear) : undefined),
-      km: parsed.km ?? parsedAd?.km ?? (manualKm ? Number(manualKm) : undefined),
-      requestedPrice: parsed.price ?? parsedAd?.price ?? (manualPrice ? Number(manualPrice) : undefined),
+      year: currentParsed?.year ?? (manualYear ? Number(manualYear) : undefined),
+      km: currentParsed?.km ?? (manualKm ? Number(manualKm) : undefined),
+      requestedPrice: currentParsed?.price ?? (manualPrice ? Number(manualPrice) : undefined),
     });
   };
 
   const reset = () => {
     setPhotos([]); setMainPhoto(''); setScan(null); setReport(null); setError(''); setStage('idle');
-    setManualMake(''); setManualModel(''); setManualYear(''); setManualLoading(false);
+    setManualMake(''); setManualModel(''); setManualVersion(''); setManualYear(''); setManualLoading(false);
     setManualKm(''); setManualPrice(''); setAdInput(''); setParsedAd(null);
+    setIsParsingAd(false); setCustomModelMode(false); setCustomVersionMode(false);
+    if (parseDebounceTimerRef.current) clearTimeout(parseDebounceTimerRef.current);
     if (inputRef.current) inputRef.current.value = '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -183,6 +302,7 @@ export default function VehicleScanner({
     }
     if (result.report?.vehicle) {
       result.report.vehicle.imageUrl = photoUrl;
+      (result.report as any).mainPhoto = photoUrl;
       if (isEv) result.report.vehicle.transmission = 'Automatico';
     }
 
@@ -271,6 +391,16 @@ export default function VehicleScanner({
           region: regObj.name,
           city: regObj.name,
         };
+        const photoToUse =
+          mainPhoto ||
+          photos[0] ||
+          result.report.vehicle.imageUrl ||
+          resolveVehicleImage(result.vehicle.make, result.vehicle.model);
+        result.report.vehicle.imageUrl = photoToUse;
+        (result.report as any).mainPhoto = photoToUse;
+        if (!mainPhoto) {
+          setMainPhoto(photoToUse);
+        }
       }
 
       setScan(result);
@@ -542,11 +672,17 @@ export default function VehicleScanner({
           ) : tab === 'manual' ? (
             <form
               className="scanner-manual-form"
-              onSubmit={(event) => { event.preventDefault(); void handleManualSubmit(); }}
+              onSubmit={(event) => {
+                event.preventDefault();
+                void handleManualSubmit();
+              }}
             >
               {/* Quick Select Popular Chips */}
               <div className="mb-3 space-y-1.5">
-                <span className="text-[11px] font-bold text-slate-500">Scelta rapida modelli diffusi:</span>
+                <span className="text-[11px] font-bold text-slate-500 flex items-center gap-1">
+                  <Sparkles className="w-3 h-3 text-blue-600" />
+                  Scelta rapida modelli più diffusi:
+                </span>
                 <div className="flex flex-wrap gap-1.5">
                   {POPULAR_CHIPS.map((chip) => (
                     <button
@@ -555,9 +691,13 @@ export default function VehicleScanner({
                       onClick={() => {
                         setManualMake(chip.make);
                         setManualModel(chip.model);
+                        setManualVersion('');
+                        setCustomModelMode(false);
+                        setCustomVersionMode(false);
                       }}
                       className={`px-2.5 py-1 rounded-xl text-xs font-semibold border transition-all ${
-                        manualMake.toLowerCase() === chip.make.toLowerCase() && manualModel.toLowerCase() === chip.model.toLowerCase()
+                        manualMake.toLowerCase() === chip.make.toLowerCase() &&
+                        manualModel.toLowerCase() === chip.model.toLowerCase()
                           ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
                           : 'bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400'
                       }`}
@@ -569,50 +709,174 @@ export default function VehicleScanner({
               </div>
 
               <div className="scanner-manual-row">
+                {/* 1. MARCA (Dropdown con tutte le marche) */}
                 <label className="scanner-field">
                   <span>Marca *</span>
-                  <input
-                    type="text"
+                  <select
                     value={manualMake}
-                    onChange={(e) => setManualMake(e.target.value)}
-                    placeholder="es. Fiat"
-                    autoComplete="off"
+                    onChange={(e) => {
+                      const val = e.target.value;
+                      setManualMake(val);
+                      setManualModel('');
+                      setManualVersion('');
+                      setCustomModelMode(false);
+                      setCustomVersionMode(false);
+                    }}
                     required
-                  />
+                  >
+                    <option value="">-- Seleziona la marca --</option>
+                    <optgroup label="⭐ Marche più popolari in Italia">
+                      {popularMakes.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </optgroup>
+                    <optgroup label="Tutte le altre marche (A-Z)">
+                      {otherMakes.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </optgroup>
+                  </select>
                 </label>
+
+                {/* 2. MODELLO (Dropdown con tutti i modelli della marca) */}
                 <label className="scanner-field">
                   <span>Modello *</span>
-                  <input
-                    type="text"
-                    value={manualModel}
-                    onChange={(e) => setManualModel(e.target.value)}
-                    placeholder="es. Panda"
-                    autoComplete="off"
-                    required
-                  />
+                  {customModelMode ? (
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        value={manualModel}
+                        onChange={(e) => setManualModel(e.target.value)}
+                        placeholder="Scrivi modello..."
+                        autoFocus
+                        required
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCustomModelMode(false);
+                          setManualModel('');
+                        }}
+                        className="px-2 py-1 text-[11px] font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-lg hover:text-slate-900 shrink-0"
+                      >
+                        Lista
+                      </button>
+                    </div>
+                  ) : (
+                    <select
+                      value={manualModel}
+                      disabled={!manualMake}
+                      onChange={(e) => {
+                        if (e.target.value === '__custom__') {
+                          setCustomModelMode(true);
+                          setManualModel('');
+                        } else {
+                          setManualModel(e.target.value);
+                          setManualVersion('');
+                        }
+                      }}
+                      required
+                    >
+                      <option value="">
+                        {!manualMake
+                          ? 'Seleziona prima la marca'
+                          : `-- Seleziona modello (${availableModels.length}) --`}
+                      </option>
+                      {manualMake && !availableModels.includes(manualModel) && manualModel && (
+                        <option value={manualModel}>{manualModel}</option>
+                      )}
+                      {availableModels.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                      {manualMake && (
+                        <option value="__custom__">Altro modello (scrivi a mano)…</option>
+                      )}
+                    </select>
+                  )}
                 </label>
+
+                {/* 3. VERSIONE / ALLESTIMENTO (Dropdown allestimenti reali) */}
                 <label className="scanner-field">
-                  <span>Versione (opz.)</span>
-                  <input
-                    type="text"
-                    value={manualVersion}
-                    onChange={(e) => setManualVersion(e.target.value)}
-                    placeholder="es. Lounge, R-Line"
-                    autoComplete="off"
-                  />
+                  <span>Versione / Allestimento (opz.)</span>
+                  {customVersionMode ? (
+                    <div className="flex gap-1.5">
+                      <input
+                        type="text"
+                        value={manualVersion}
+                        onChange={(e) => setManualVersion(e.target.value)}
+                        placeholder="es. Lounge, R-Line..."
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCustomVersionMode(false);
+                          setManualVersion('');
+                        }}
+                        className="px-2 py-1 text-[11px] font-bold text-slate-600 bg-slate-100 dark:bg-slate-800 rounded-lg hover:text-slate-900 shrink-0"
+                      >
+                        Lista
+                      </button>
+                    </div>
+                  ) : (
+                    <select
+                      value={manualVersion}
+                      disabled={!manualMake || !manualModel}
+                      onChange={(e) => {
+                        if (e.target.value === '__custom__') {
+                          setCustomVersionMode(true);
+                          setManualVersion('');
+                        } else {
+                          setManualVersion(e.target.value);
+                        }
+                      }}
+                    >
+                      <option value="">
+                        {!manualModel
+                          ? 'Tutte le versioni / Base'
+                          : availableVersions.length > 0
+                          ? '-- Seleziona versione / allestimento --'
+                          : 'Versione base'}
+                      </option>
+                      {manualVersion && !availableVersions.includes(manualVersion) && (
+                        <option value={manualVersion}>{manualVersion}</option>
+                      )}
+                      {availableVersions.map((v) => (
+                        <option key={v} value={v}>
+                          {v}
+                        </option>
+                      ))}
+                      {manualModel && (
+                        <option value="__custom__">Altra versione (scrivi a mano)…</option>
+                      )}
+                    </select>
+                  )}
                 </label>
+
+                {/* 4. ANNO (Dropdown anni 2026-1995) */}
                 <label className="scanner-field">
                   <span>Anno (opz.)</span>
-                  <input
-                    type="number"
-                    inputMode="numeric"
+                  <select
                     value={manualYear}
                     onChange={(e) => setManualYear(e.target.value)}
-                    placeholder="es. 2018"
-                    min={1900}
-                    max={2100}
-                  />
+                  >
+                    <option value="">Tutti gli anni / Non specificato</option>
+                    {AVAILABLE_YEARS.map((y) => (
+                      <option key={y} value={y}>
+                        {y}
+                      </option>
+                    ))}
+                    <option value="1994">Prima del 1995 (Storica)</option>
+                  </select>
                 </label>
+
+                {/* 5. KM (Input con quick-chips) */}
                 <label className="scanner-field">
                   <span>Km (opz.)</span>
                   <input
@@ -625,6 +889,8 @@ export default function VehicleScanner({
                     max={1000000}
                   />
                 </label>
+
+                {/* 6. PREZZO (€ opz.) */}
                 <label className="scanner-field">
                   <span>Prezzo (€ opz.)</span>
                   <input
@@ -637,6 +903,34 @@ export default function VehicleScanner({
                     max={10000000}
                   />
                 </label>
+              </div>
+
+              {/* Quick km chips */}
+              <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
+                <span className="text-[10px] font-bold text-slate-500">Km veloci:</span>
+                {QUICK_KM_CHIPS.map((kmVal) => (
+                  <button
+                    key={kmVal}
+                    type="button"
+                    onClick={() => setManualKm(String(kmVal))}
+                    className={`px-2 py-0.5 rounded-md text-[11px] font-semibold border transition-all ${
+                      manualKm === String(kmVal)
+                        ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                        : 'bg-slate-50 dark:bg-slate-800 text-slate-600 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-400'
+                    }`}
+                  >
+                    {kmVal.toLocaleString('it-IT')} km
+                  </button>
+                ))}
+                {manualKm && (
+                  <button
+                    type="button"
+                    onClick={() => setManualKm('')}
+                    className="text-[10px] font-bold text-slate-400 hover:text-slate-600 ml-1 underline"
+                  >
+                    Azzera km
+                  </button>
+                )}
               </div>
 
               {/* Selettori Carburante & Cambio */}
@@ -720,29 +1014,35 @@ export default function VehicleScanner({
                 {manualLoading ? (
                   <><Loader2 className="animate-spin" /> Calcolo in corso…</>
                 ) : (
-                  <><ScanSearch /> Calcola valore <ArrowRight /></>
+                  <><ScanSearch /> Calcola valore e report completo <ArrowRight /></>
                 )}
               </button>
             </form>
           ) : (
             <div className="space-y-4 pt-1">
               <div className="space-y-2">
-                <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
-                  Incolla il link dell&apos;annuncio o il testo dell&apos;offerta:
-                </label>
+                <div className="flex items-center justify-between gap-2">
+                  <label className="block text-xs font-bold text-slate-700 dark:text-slate-300">
+                    Incolla il link dell&apos;annuncio o il testo dell&apos;offerta:
+                  </label>
+                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                    AutoScout24 · Subito · Autohero · Marketplace
+                  </span>
+                </div>
+
                 <div className="relative">
                   <textarea
                     rows={3}
                     value={adInput}
                     onChange={(e) => handleAdInputChange(e.target.value)}
-                    placeholder="Incolla qui il link di AutoScout24, Subito.it, Facebook Marketplace oppure copia il testo dell'annuncio (es. 'Fiat Panda 1.2 Lounge 2021 45.000 km 9.500 €')..."
+                    placeholder="Incolla qui il link di AutoScout24, Subito.it, Autohero, Facebook Marketplace o copia il testo dell'annuncio (es. 'Fiat Panda 1.2 Lounge 2021 45.000 km 9.500 €')..."
                     className="w-full p-3.5 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-xs sm:text-sm text-slate-900 dark:text-white placeholder:text-slate-400 focus:border-blue-600 outline-none transition-all resize-none shadow-xs"
                   />
                   {adInput && (
                     <button
                       type="button"
                       onClick={() => handleAdInputChange('')}
-                      className="absolute top-3 right-3 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md"
+                      className="absolute top-3 right-3 text-xs text-slate-400 hover:text-slate-600 bg-slate-100 dark:bg-slate-800 px-2 py-0.5 rounded-md transition-colors"
                     >
                       Pulisci
                     </button>
@@ -750,43 +1050,130 @@ export default function VehicleScanner({
                 </div>
               </div>
 
-              {/* Live Extracted Fields Preview Pill Tags */}
-              {parsedAd && (parsedAd.make || parsedAd.model || parsedAd.year || parsedAd.price) && (
-                <div className="p-3 rounded-2xl bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-2">
-                  <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
-                    <Sparkles className="w-3.5 h-3.5" /> Dati estratti automaticamente:
+              {/* Status Parsing Live Feedback */}
+              {isParsingAd && (
+                <div className="p-3.5 rounded-2xl bg-blue-50/90 dark:bg-blue-950/50 border border-blue-200 dark:border-blue-900/60 flex items-center gap-3 animate-pulse">
+                  <Loader2 className="w-5 h-5 text-blue-600 animate-spin shrink-0" />
+                  <div>
+                    <p className="text-xs font-bold text-blue-900 dark:text-blue-200">
+                      Connessione all&apos;annuncio in corso…
+                    </p>
+                    <p className="text-[11px] text-blue-700 dark:text-blue-400">
+                      Stiamo leggendo marca, modello, km, prezzo e foto per il calcolo automatico.
+                    </p>
                   </div>
-                  <div className="flex flex-wrap gap-1.5 text-xs font-semibold text-slate-800 dark:text-slate-200">
-                    {parsedAd.make && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Marca: <strong>{parsedAd.make}</strong>
+                </div>
+              )}
+
+              {/* Rich Extracted Card Preview */}
+              {!isParsingAd && parsedAd && (parsedAd.make || parsedAd.model || parsedAd.photo || parsedAd.price) && (
+                <div className="p-3.5 rounded-2xl bg-slate-50 dark:bg-slate-900/80 border border-slate-200 dark:border-slate-800 space-y-3">
+                  <div className="flex items-center justify-between gap-2 border-b border-slate-200 dark:border-slate-800 pb-2">
+                    <div className="flex items-center gap-1.5 text-xs font-black text-slate-900 dark:text-white">
+                      <Sparkles className="w-4 h-4 text-blue-600" />
+                      Dati rilevati dall&apos;annuncio:
+                    </div>
+                    {parsedAd.source && (
+                      <span className="text-[10px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200 dark:border-blue-800">
+                        {parsedAd.source}
                       </span>
                     )}
-                    {parsedAd.model && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Modello: <strong>{parsedAd.model}</strong>
-                      </span>
-                    )}
-                    {parsedAd.year && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Anno: <strong>{parsedAd.year}</strong>
-                      </span>
-                    )}
-                    {parsedAd.km && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Km: <strong>{parsedAd.km.toLocaleString('it-IT')}</strong>
-                      </span>
-                    )}
-                    {parsedAd.price && (
-                      <span className="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-700">
-                        Prezzo: <strong>{parsedAd.price.toLocaleString('it-IT')} €</strong>
-                      </span>
-                    )}
-                    {parsedAd.fuel && (
-                      <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
-                        Alim.: <strong>{parsedAd.fuel}</strong>
-                      </span>
-                    )}
+                  </div>
+
+                  <div className="flex flex-col sm:flex-row gap-3 items-start">
+                    {parsedAd.photo ? (
+                      <div className="relative w-full sm:w-28 h-20 shrink-0 rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700 shadow-xs">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img
+                          src={parsedAd.photo}
+                          alt={parsedAd.title || 'Foto annuncio'}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ) : null}
+
+                    <div className="flex-1 min-w-0">
+                      <h4 className="text-sm font-black text-slate-900 dark:text-white truncate">
+                        {[parsedAd.make || manualMake, parsedAd.model || manualModel, parsedAd.version || manualVersion].filter(Boolean).join(' ')}
+                      </h4>
+                      {parsedAd.title && (
+                        <p className="text-[11px] text-slate-500 dark:text-slate-400 line-clamp-1 mt-0.5">
+                          {parsedAd.title}
+                        </p>
+                      )}
+
+                      <div className="flex flex-wrap gap-1.5 mt-2 text-[11px] font-semibold">
+                        {(parsedAd.make || manualMake) && (
+                          <span className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                            Marca: <strong>{parsedAd.make || manualMake}</strong>
+                          </span>
+                        )}
+                        {(parsedAd.model || manualModel) && (
+                          <span className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                            Modello: <strong>{parsedAd.model || manualModel}</strong>
+                          </span>
+                        )}
+                        {(parsedAd.year || manualYear) && (
+                          <span className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                            Anno: <strong>{parsedAd.year || manualYear}</strong>
+                          </span>
+                        )}
+                        {(parsedAd.km || manualKm) && (
+                          <span className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                            Km: <strong>{Number(parsedAd.km || manualKm).toLocaleString('it-IT')}</strong>
+                          </span>
+                        )}
+                        {(parsedAd.price || manualPrice) && (
+                          <span className="px-2 py-0.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-200 border border-emerald-300 dark:border-emerald-800">
+                            Prezzo: <strong>{Number(parsedAd.price || manualPrice).toLocaleString('it-IT')} €</strong>
+                          </span>
+                        )}
+                        {(parsedAd.fuel || manualFuel) && (
+                          <span className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-800 dark:text-slate-200">
+                            {parsedAd.fuel || manualFuel}
+                          </span>
+                        )}
+                        {parsedAd.city && (
+                          <span className="px-2 py-0.5 rounded-lg bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-slate-600 dark:text-slate-300">
+                            📍 {parsedAd.city}
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Possibilità di ritoccare Anno, Km o Prezzo prima dell'invio se mancavano nell'annuncio */}
+                  <div className="pt-2 border-t border-slate-200 dark:border-slate-800 grid grid-cols-3 gap-2 text-left">
+                    <label className="text-[10px] font-bold text-slate-500">
+                      Anno
+                      <input
+                        type="number"
+                        value={manualYear}
+                        onChange={(e) => setManualYear(e.target.value)}
+                        placeholder="es. 2019"
+                        className="mt-0.5 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 dark:text-white"
+                      />
+                    </label>
+                    <label className="text-[10px] font-bold text-slate-500">
+                      Km effettivi
+                      <input
+                        type="number"
+                        value={manualKm}
+                        onChange={(e) => setManualKm(e.target.value)}
+                        placeholder="es. 75000"
+                        className="mt-0.5 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 dark:text-white"
+                      />
+                    </label>
+                    <label className="text-[10px] font-bold text-slate-500">
+                      Prezzo (€)
+                      <input
+                        type="number"
+                        value={manualPrice}
+                        onChange={(e) => setManualPrice(e.target.value)}
+                        placeholder="es. 12500"
+                        className="mt-0.5 w-full bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg px-2 py-1 text-xs font-bold text-slate-900 dark:text-white"
+                      />
+                    </label>
                   </div>
                 </div>
               )}
@@ -796,11 +1183,13 @@ export default function VehicleScanner({
               <button
                 type="button"
                 onClick={handleAnalyzeAd}
-                disabled={manualLoading}
+                disabled={manualLoading || isParsingAd}
                 className="scanner-submit w-full"
               >
                 {manualLoading ? (
-                  <><Loader2 className="animate-spin" /> Analisi annuncio in corso…</>
+                  <><Loader2 className="animate-spin" /> Elaborazione analisi e verdetto…</>
+                ) : isParsingAd ? (
+                  <><Loader2 className="animate-spin" /> Lettura annuncio in corso…</>
                 ) : (
                   <><ScanSearch /> Ottieni il Verdetto sull&apos;Annuncio <ArrowRight /></>
                 )}
@@ -911,6 +1300,16 @@ export default function VehicleScanner({
             km,
             requestedPrice,
           }).report : null);
+
+          if (finalReport && finalReport.vehicle) {
+            const photoToUse =
+              mainPhoto ||
+              photos[0] ||
+              finalReport.vehicle.imageUrl ||
+              resolveVehicleImage(finalReport.vehicle.make, finalReport.vehicle.model);
+            finalReport.vehicle.imageUrl = photoToUse;
+            (finalReport as any).mainPhoto = photoToUse;
+          }
 
           return finalReport ? (
             <ReportErrorBoundary onRetry={reset}>

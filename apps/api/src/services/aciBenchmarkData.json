@@ -1,0 +1,65 @@
+{
+  "fiat panda": {
+    "segment": "citycar",
+    "official_wltp_l100km": 5.0,
+    "costo_km_aci_15000": 0.38,
+    "quota_carburante_km": 0.085,
+    "quota_manutenzione_km": 0.038,
+    "quota_ammortamento_capitale": 0.17,
+    "tank_liters": 38
+  },
+  "fiat 500": {
+    "segment": "citycar",
+    "official_wltp_l100km": 5.1,
+    "costo_km_aci_15000": 0.41,
+    "quota_carburante_km": 0.088,
+    "quota_manutenzione_km": 0.04,
+    "quota_ammortamento_capitale": 0.19,
+    "tank_liters": 35
+  },
+  "lancia ypsilon": {
+    "segment": "citycar",
+    "official_wltp_l100km": 5.2,
+    "costo_km_aci_15000": 0.4,
+    "quota_carburante_km": 0.089,
+    "quota_manutenzione_km": 0.041,
+    "quota_ammortamento_capitale": 0.185,
+    "tank_liters": 38
+  },
+  "renault clio": {
+    "segment": "utilitaria",
+    "official_wltp_l100km": 4.9,
+    "costo_km_aci_15000": 0.43,
+    "quota_carburante_km": 0.084,
+    "quota_manutenzione_km": 0.042,
+    "quota_ammortamento_capitale": 0.205,
+    "tank_liters": 42
+  },
+  "volkswagen golf": {
+    "segment": "compatta",
+    "official_wltp_l100km": 5.3,
+    "costo_km_aci_15000": 0.52,
+    "quota_carburante_km": 0.092,
+    "quota_manutenzione_km": 0.052,
+    "quota_ammortamento_capitale": 0.26,
+    "tank_liters": 50
+  },
+  "jeep renegade": {
+    "segment": "suv_crossover",
+    "official_wltp_l100km": 5.8,
+    "costo_km_aci_15000": 0.55,
+    "quota_carburante_km": 0.101,
+    "quota_manutenzione_km": 0.058,
+    "quota_ammortamento_capitale": 0.275,
+    "tank_liters": 48
+  },
+  "toyota yaris": {
+    "segment": "utilitaria",
+    "official_wltp_l100km": 4.0,
+    "costo_km_aci_15000": 0.41,
+    "quota_carburante_km": 0.068,
+    "quota_manutenzione_km": 0.039,
+    "quota_ammortamento_capitale": 0.21,
+    "tank_liters": 36
+  }
+}

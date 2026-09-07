@@ -121,93 +121,94 @@ router.post('/ask', async (req: Request, res: Response, next: NextFunction) => {
           repairTopic.split('_').some(word => issue.toLowerCase().includes(word))
         );
         if (relevantIssues.length > 0) {
-          answer += `💡 **Nota specifica per ${vehicle?.make}**: ${relevantIssues[0]}\n\n`;
+          answer += `Nota per ${vehicle?.make}: ${relevantIssues[0]}\n\n`;
         }
       }
 
-      answer += `Hai già notato sintomi specifici durante la guida (come rumori anomali o perdite di efficienza), o stai pianificando una manutenzione preventiva?`;
+      answer += `Hai già riscontrato sintomi specifici durante la guida (rumori anomali o cali di resa), o stai pianificando una manutenzione preventiva?`;
     }
     // Dashboard lights / warning questions
     else if (qLower.includes('spia') || qLower.includes('cruscotto') || qLower.includes('warning') || qLower.includes('motore accesa')) {
       answer = `Sulla tua **${makeModel}**${yearStr}${kmStr}, l'accensione di una spia segnala un'anomalia registrata dalla centralina:\n\n` +
-        `🔴 **Spia ROSSA**: arresta subito l'auto in sicurezza (pressione olio, freni, temperatura motore).\n` +
-        `🟡 **Spia GIALLA / Check Engine**: anomalia a iniezione, scarico (EGR/DPF/lambda) o sensori. Puoi guidare a andatura moderata fino all'officina.\n\n`;
+        `- **Spia rossa:** arresta subito l'auto in sicurezza (pressione olio, impianto frenante, temperatura liquido di raffreddamento).\n` +
+        `- **Spia gialla / avaria motore:** anomalia su iniezione, scarico (EGR/DPF/sonda lambda) o sensori. Puoi completare il tragitto ad andatura moderata fino all'officina.\n\n`;
 
       if (condition?.dashboardLights?.length) {
-        answer += `Le anomalie indicate richiedono una diagnosi OBD2 in officina (costo: 20-50€) o un lettore diagnostico portatile (15-30€ su Amazon).\n\n`;
+        answer += `Le anomalie indicate richiedono una diagnosi OBD2 in officina (costo medio: 20-40 €) per risalire al codice errore esatto.\n\n`;
       }
 
       if (kb) {
-        answer += `💡 **Criticità tipica per ${vehicle?.make}**: ${kb.common[0]}\n\n`;
+        answer += `Criticità tipica per ${vehicle?.make}: ${kb.common[0]}\n\n`;
       }
 
-      answer += `La spia è **fissa o lampeggiante**? L'auto ha vuoti di potenza o rumori insoliti?`;
+      answer += `La spia è fissa o lampeggiante? L'auto manifesta vuoti di potenza o rumori inconsueti?`;
 
     }
     // Buy/sell advice
     else if (qLower.includes('vender') || qLower.includes('conviene') || qLower.includes('comprare') || qLower.includes('acquist')) {
-      answer = `Ecco un'analisi strategica per **${makeModel}**${yearStr}${kmStr}:\n\n`;
+      answer = `Analisi tecnica e di mercato per **${makeModel}**${yearStr}${kmStr}:\n\n`;
 
       if (kb) {
-        answer += `📊 **Affidabilità complessiva**: ${kb.reliabilityScore}/10\n`;
-        answer += `💸 **Costi di gestione**: ${kb.maintenance}\n\n`;
+        answer += `- **Affidabilità complessiva:** ${kb.reliabilityScore}/10\n`;
+        answer += `- **Costi di gestione:** ${kb.maintenance}\n\n`;
 
         if (kb.versionsRecommended.length > 0) {
-          answer += `✅ **Versioni consigliate**: ${kb.versionsRecommended.join(', ')}\n`;
+          answer += `- **Versioni consigliate:** ${kb.versionsRecommended.join(', ')}\n`;
         }
         if (kb.versionsToAvoid.length > 0) {
-          answer += `❌ **Motorizzazioni/versioni da verificare o evitare**: ${kb.versionsToAvoid.join(', ')}\n`;
+          answer += `- **Motorizzazioni da verificare con cura:** ${kb.versionsToAvoid.join(', ')}\n`;
         }
 
-        answer += `\n📋 **Punti di controllo chiave**:\n`;
-        kb.common.slice(0, 3).forEach(issue => { answer += `• ${issue}\n`; });
+        answer += `\n**Punti di controllo prioritari:**\n`;
+        kb.common.slice(0, 3).forEach(issue => { answer += `- ${issue}\n`; });
       } else {
-        answer += `💡 **Regola d'oro**: se il preventivo di ripristino supera il 35-40% del valore attuale di mercato, conviene pianificare la vendita o la permuta.\n\n`;
-        answer += `📋 **Controlli essenziali prima di decidere**:\n`;
-        answer += `• Libretto tagliandi e cronologia interventi\n`;
-        answer += `• Diagnosi OBD2 per errori memorizzati\n`;
-        answer += `• Stato cinghia/catena di distribuzione e frizione\n`;
+        answer += `Nota di mercato: se il preventivo di ripristino supera il 35-40% del valore attuale dell'auto, conviene pianificare la permuta o vendita diretta.\n\n`;
+        answer += `**Controlli essenziali prima di decidere:**\n`;
+        answer += `- Libretto tagliandi e cronologia interventi\n`;
+        answer += `- Diagnosi OBD2 per errori memorizzati\n`;
+        answer += `- Stato cinghia/catena di distribuzione e frizione\n`;
       }
       answer += `\nQual è il prezzo richiesto o il preventivo di cui disponi? Posso confrontarlo con la quotazione di mercato.`;
     }
     // Where to buy parts
     else if (qLower.includes('ricamb') || qLower.includes('pezzo') || qLower.includes('dove') || qLower.includes('compra') || qLower.includes('ebay') || qLower.includes('autodoc') || qLower.includes('oscaro')) {
       answer = `Per ordinare i ricambi per la tua **${makeModel}**${yearStr}:\n\n` +
-        `1. **eBay.it** — Ideale per ricambi usati originali OEM (specchietti, fanali, centraline, alternatori).\n` +
+        `1. **eBay.it** — Ricambi usati originali OEM garantiti (specchietti, fanali, centraline, alternatori).\n` +
         `2. **Autodoc.it** — Catalogo completo per pastiglie, dischi, filtri e sospensioni nuove certificate.\n` +
-        `3. **Oscaro.it** — Ottimo per kit frizione e cinghie di distribuzione a prezzi competitivi.\n` +
-        `4. **Amazon.it** — Consigliato per fluidi, olio motore, lampadine e attrezzi fai-da-te.\n\n` +
-        `Quale componente specifico devi sostituire? Posso aiutarti a trovare il tipo esatto.`;
+        `3. **Oscaro.it** — Kit frizione e cinghie di distribuzione a prezzi competitivi.\n` +
+        `4. **Amazon.it** — Fluidi, olio motore conforme e lampadine.\n\n` +
+        `Quale componente specifico devi sostituire?`;
     }
     // General mechanic questions
     else if (qLower.includes('meccanic') || qLower.includes('motore') || qLower.includes('fumo') || qLower.includes('rumore') || qLower.includes('vibrazio')) {
       answer = `Per problemi meccanici su **${makeModel}**${yearStr}${kmStr}:\n\n`;
 
       if (kb) {
-        answer += `🔧 **Motore**: ${kb.engine}\n\n`;
-        answer += `⚙️ **Trasmissione**: ${kb.transmission}\n\n`;
+        answer += `- **Motore:** ${kb.engine}\n`;
+        answer += `- **Trasmissione:** ${kb.transmission}\n\n`;
       }
 
-      answer += `📋 **Procedura consigliata**:\n`;
-      answer += `1. Diagnosi OBD2 in officina (20-50€) per isolare l'origine del problema\n`;
-      answer += `2. Preventivo dettagliato che separi costo manodopera e ricambi\n`;
-      answer += `3. Verifica disponibilità ricambi OEM/aftermarket su Autodoc o eBay per risparmiare\n\n`;
-      answer += `Da quando hai notato il problema e in quali situazioni si manifesta (es. accelerazione, a freddo, in frenata)?`;
+      answer += `**Procedura consigliata:**\n`;
+      answer += `1. Diagnosi OBD2 in officina (20-40 €) per isolare con certezza l'origine del problema\n`;
+      answer += `2. Preventivo dettagliato con distinzione tra manodopera e ricambi\n`;
+      answer += `3. Verifica disponibilità ricambi compatibili certificati per contenere la spesa\n\n`;
+      answer += `Da quando hai notato il problema e in quali situazioni si presenta (es. accelerazione, a freddo, in frenata)?`;
     }
     // Fallback: use KB if available
     else {
-      answer = `Riguardo a "${question}" per **${makeModel}**${yearStr}${kmStr}:\n\n`;
+      answer = `Riguardo alla richiesta per **${makeModel}**${yearStr}${kmStr}:\n\n`;
 
       if (kb) {
-        answer += `📊 **Affidabilità**: ${kb.reliabilityScore}/10 — **Manutenzione**: ${kb.maintenance}\n\n`;
-        answer += `🔧 **Scheda tecnica**: ${kb.engine}\n\n`;
-        answer += `📋 **Note sul modello**:\n`;
-        kb.common.slice(0, 3).forEach(issue => { answer += `• ${issue}\n`; });
-        answer += `\nCosa vorresti approfondire in particolare su questo veicolo?`;
+        answer += `- **Affidabilità:** ${kb.reliabilityScore}/10\n`;
+        answer += `- **Manutenzione:** ${kb.maintenance}\n`;
+        answer += `- **Scheda tecnica:** ${kb.engine}\n\n`;
+        answer += `**Note sul modello:**\n`;
+        kb.common.slice(0, 3).forEach(issue => { answer += `- ${issue}\n`; });
+        answer += `\nCosa desideri approfondire in particolare?`;
       } else {
-        answer += `Per piccoli difetti estetici (graffi, specchietti, plastiche) i ricambi online consentono un forte risparmio.\n`;
-        answer += `Per problemi meccanici o spie, ti consiglio una lettura errori OBD2 in officina prima di sostituire componenti a caso.\n\n`;
-        answer += `Vuoi verificare una stima dei costi per un componente specifico?`;
+        answer += `Per piccoli difetti estetici (graffi, plastiche) i ricambi online consentono un buon risparmio.\n`;
+        answer += `Per anomalie meccaniche o spie di bordo, è sempre consigliabile una rapida lettura OBD in officina prima di sostituire componenti.\n\n`;
+        answer += `Vuoi una stima di costo per un intervento specifico?`;
       }
     }
 

@@ -136,15 +136,27 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     const rawAsking = marketStats.priceAvg!;
     const transAvg = marketStats.transactionPriceAvg || Math.round(rawAsking * 0.91 / 100) * 100;
 
-    // 2. Rettifica se la media km degli annunci diverge dai km del veicolo dell'utente
-    let kmAdjusted = transAvg;
+    // 2. Rettifica anno: se la media anno degli annunci diverge dall'anno effettivo del veicolo (es. annunci 2021 vs auto 2018)
+    let yearAdjusted = transAvg;
+    const sampleYear = (marketStats.yearMin && marketStats.yearMax)
+      ? Math.round((marketStats.yearMin + marketStats.yearMax) / 2)
+      : (marketStats.yearMin || marketStats.yearMax || marketStats.comparison?.targetYear);
+
+    if (vehicle.year && sampleYear && sampleYear > 1990) {
+      const yearDiff = vehicle.year - sampleYear;
+      const yearFactor = Math.pow(1.085, yearDiff);
+      yearAdjusted = Math.round(transAvg * yearFactor);
+    }
+
+    // 3. Rettifica km se diverge dalla media
+    let kmAdjusted = yearAdjusted;
     if (input.km && marketStats.kmAvg && marketStats.kmAvg > 0) {
       const kmDiff = input.km - marketStats.kmAvg;
       const kmAdjFactor = Math.max(-0.18, Math.min(0.14, -(kmDiff / 100000) * 0.12));
-      kmAdjusted = Math.round(transAvg * (1 + kmAdjFactor) / 100) * 100;
+      kmAdjusted = Math.round(yearAdjusted * (1 + kmAdjFactor) / 100) * 100;
     }
 
-    // 3. Ponderazione bilanciata: unisce il mercato reale e il listino Quattroruote/Eurotax
+    // 4. Ponderazione bilanciata: unisce il mercato reale e il listino Quattroruote/Eurotax
     // Campione solido (>= 5): 65% mercato reale transato, 35% stima algoritmica
     // Campione ridotto (2-4): 50% mercato reale transato, 50% stima algoritmica
     const marketWeight = marketSample >= 5 ? 0.65 : 0.50;

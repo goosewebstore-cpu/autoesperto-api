@@ -52,6 +52,11 @@ export default function AdAnalysisLandingClient() {
 
   const [inputVal, setInputVal] = useState<string>('');
   const [parsed, setParsed] = useState<ParsedAdData | null>(null);
+  const [overrideMake, setOverrideMake] = useState<string>('');
+  const [overrideModel, setOverrideModel] = useState<string>('');
+  const [overrideYear, setOverrideYear] = useState<string>('');
+  const [overrideKm, setOverrideKm] = useState<string>('');
+  const [overridePrice, setOverridePrice] = useState<string>('');
   const [trustResult, setTrustResult] = useState<TrustScoreResult | null>(null);
   const [dealResult, setDealResult] = useState<DealScoreResult | null>(null);
   const [decisionCard, setDecisionCard] = useState<DecisionCardData | null>(null);
@@ -71,6 +76,12 @@ export default function AdAnalysisLandingClient() {
     const qKm = searchParams.get('km');
 
     if (qMake && qModel) {
+      if (qMake) setOverrideMake(qMake);
+      if (qModel) setOverrideModel(qModel);
+      if (qYear) setOverrideYear(qYear);
+      if (qKm) setOverrideKm(qKm);
+      if (qPrice) setOverridePrice(qPrice);
+
       const initialAd: ParsedAdData = {
         make: qMake,
         model: qModel,
@@ -88,6 +99,45 @@ export default function AdAnalysisLandingClient() {
     setInputVal(val);
     const p = parseListingTextOrUrl(val);
     setParsed(p);
+    if (p.make) setOverrideMake(p.make);
+    if (p.model) setOverrideModel(p.model);
+    if (p.year) setOverrideYear(String(p.year));
+    if (p.km) setOverrideKm(String(p.km));
+    if (p.price) setOverridePrice(String(p.price));
+  };
+
+  const handleFieldChange = (field: 'make' | 'model' | 'year' | 'km' | 'price', val: string) => {
+    let nextMake = overrideMake;
+    let nextModel = overrideModel;
+    let nextYear = overrideYear;
+    let nextKm = overrideKm;
+    let nextPrice = overridePrice;
+
+    if (field === 'make') { nextMake = val; setOverrideMake(val); }
+    if (field === 'model') { nextModel = val; setOverrideModel(val); }
+    if (field === 'year') { nextYear = val; setOverrideYear(val); }
+    if (field === 'km') { nextKm = val; setOverrideKm(val); }
+    if (field === 'price') { nextPrice = val; setOverridePrice(val); }
+
+    const numYear = nextYear ? parseInt(nextYear.replace(/\D/g, ''), 10) : undefined;
+    const numKm = nextKm ? parseInt(nextKm.replace(/\D/g, ''), 10) : undefined;
+    const numPrice = nextPrice ? parseInt(nextPrice.replace(/\D/g, ''), 10) : undefined;
+
+    const updatedAd: ParsedAdData = {
+      ...(parsed || {}),
+      make: nextMake || parsed?.make,
+      model: nextModel || parsed?.model,
+      year: numYear,
+      km: numKm,
+      price: numPrice,
+      rawText: inputVal,
+    };
+    setParsed(updatedAd);
+
+    // Se il report è già visualizzato, ricalcola istantaneamente con il nuovo anno/prezzo/km!
+    if (trustResult) {
+      runFullAnalysis(updatedAd);
+    }
   };
 
   const runFullAnalysis = (ad: ParsedAdData) => {
@@ -135,12 +185,28 @@ export default function AdAnalysisLandingClient() {
   };
 
   const handleAnalyze = () => {
-    if (!parsed || (!parsed.make && !parsed.model)) {
+    const activeMake = overrideMake || parsed?.make;
+    const activeModel = overrideModel || parsed?.model;
+
+    if (!activeMake && !activeModel) {
       alert('Incolla un link di AutoScout24, Subito.it o un testo con almeno marca e modello (es. "Fiat Panda 2021 45.000 km 9.500 €")');
       return;
     }
 
-    runFullAnalysis(parsed);
+    const numYear = overrideYear ? parseInt(overrideYear.replace(/\D/g, ''), 10) : parsed?.year;
+    const numKm = overrideKm ? parseInt(overrideKm.replace(/\D/g, ''), 10) : parsed?.km;
+    const numPrice = overridePrice ? parseInt(overridePrice.replace(/\D/g, ''), 10) : parsed?.price;
+
+    const finalAd: ParsedAdData = {
+      ...(parsed || {}),
+      make: activeMake,
+      model: activeModel,
+      year: numYear,
+      km: numKm,
+      price: numPrice,
+      rawText: inputVal,
+    };
+    runFullAnalysis(finalAd);
     window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
@@ -205,18 +271,70 @@ export default function AdAnalysisLandingClient() {
               className="w-full p-4 rounded-2xl border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-950 text-xs sm:text-sm text-slate-900 dark:text-white outline-none focus:border-blue-600 resize-none transition-all"
             />
 
-            {/* Extracted fields preview */}
-            {parsed && (parsed.make || parsed.model || parsed.year || parsed.price) && (
-              <div className="p-3.5 rounded-2xl bg-blue-50 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-1.5">
-                <div className="flex items-center gap-1.5 text-[11px] font-bold text-blue-700 dark:text-blue-300">
-                  <Sparkles className="w-3.5 h-3.5" /> Parametri estratti dal testo:
+            {/* Extracted fields preview & editor */}
+            {parsed && (parsed.make || parsed.model || overrideMake || overrideModel) && (
+              <div className="p-4 rounded-2xl bg-blue-50/70 dark:bg-blue-950/40 border border-blue-200 dark:border-blue-900/60 space-y-3">
+                <div className="flex flex-wrap items-center justify-between gap-1 text-[11px] font-bold text-blue-700 dark:text-blue-300">
+                  <div className="flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5" /> Dati rilevati (puoi modificarli se errati):
+                  </div>
+                  <span className="text-[10px] text-slate-500 font-normal">
+                    Se l&apos;anno o i km differiscono dall&apos;annuncio, correggili qui sotto
+                  </span>
                 </div>
-                <div className="flex flex-wrap gap-1.5 text-xs font-semibold">
-                  {parsed.make && <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border">Marca: <strong>{parsed.make}</strong></span>}
-                  {parsed.model && <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border">Modello: <strong>{parsed.model}</strong></span>}
-                  {parsed.year && <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border">Anno: <strong>{parsed.year}</strong></span>}
-                  {parsed.km && <span className="px-2.5 py-1 rounded-lg bg-white dark:bg-slate-800 border">Km: <strong>{parsed.km.toLocaleString('it-IT')}</strong></span>}
-                  {parsed.price && <span className="px-2.5 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-950 text-emerald-900 dark:text-emerald-200 border border-emerald-300">Prezzo: <strong>€{parsed.price.toLocaleString('it-IT')}</strong></span>}
+                <div className="grid grid-cols-2 sm:grid-cols-5 gap-2 text-xs">
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-slate-500 block mb-0.5">Marca</label>
+                    <input
+                      type="text"
+                      value={overrideMake}
+                      onChange={(e) => handleFieldChange('make', e.target.value)}
+                      placeholder="Marca"
+                      className="w-full px-2.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-slate-500 block mb-0.5">Modello</label>
+                    <input
+                      type="text"
+                      value={overrideModel}
+                      onChange={(e) => handleFieldChange('model', e.target.value)}
+                      placeholder="Modello"
+                      className="w-full px-2.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-blue-600 dark:text-blue-400 block mb-0.5">Anno *</label>
+                    <input
+                      type="number"
+                      min="1980"
+                      max={new Date().getFullYear()}
+                      value={overrideYear}
+                      onChange={(e) => handleFieldChange('year', e.target.value)}
+                      placeholder="Es. 2018"
+                      className="w-full px-2.5 py-1.5 rounded-xl border-2 border-blue-500 bg-white dark:bg-slate-900 font-extrabold text-blue-700 dark:text-blue-300"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-slate-500 block mb-0.5">Chilometri</label>
+                    <input
+                      type="number"
+                      value={overrideKm}
+                      onChange={(e) => handleFieldChange('km', e.target.value)}
+                      placeholder="Es. 65000"
+                      className="w-full px-2.5 py-1.5 rounded-xl border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 font-bold text-slate-900 dark:text-white"
+                    />
+                  </div>
+                  <div>
+                    <label className="text-[10px] font-bold uppercase text-emerald-600 block mb-0.5">Prezzo (€)</label>
+                    <input
+                      type="number"
+                      value={overridePrice}
+                      onChange={(e) => handleFieldChange('price', e.target.value)}
+                      placeholder="Es. 9500"
+                      className="w-full px-2.5 py-1.5 rounded-xl border border-emerald-400 bg-white dark:bg-slate-900 font-extrabold text-emerald-700 dark:text-emerald-300"
+                    />
+                  </div>
                 </div>
               </div>
             )}
@@ -239,7 +357,7 @@ export default function AdAnalysisLandingClient() {
               <div>
                 <span className="text-[11px] font-bold text-slate-500 block uppercase tracking-wider">Report di Valutazione Indipendente</span>
                 <h2 className="text-lg font-black text-slate-900 dark:text-white">
-                  {parsed?.make} {parsed?.model} ({parsed?.year || 'Usata'})
+                  {overrideMake || parsed?.make} {overrideModel || parsed?.model} ({overrideYear || parsed?.year || 'Usata'})
                 </h2>
               </div>
 
@@ -260,6 +378,45 @@ export default function AdAnalysisLandingClient() {
                   {shareCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Share2 className="w-3.5 h-3.5" />}
                   {shareCopied ? 'Link Copiato!' : 'Invia a un amico'}
                 </button>
+              </div>
+            </div>
+
+            {/* Quick Param Adjust Bar in Report */}
+            <div className="bg-white dark:bg-slate-900 p-4 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-xs flex flex-wrap items-center justify-between gap-3">
+              <div className="flex items-center gap-2">
+                <span className="text-xs font-black text-slate-900 dark:text-white">Regola Parametri Veicolo:</span>
+                <span className="text-[11px] text-slate-500 hidden sm:inline">Ricalcola valore di mercato e punteggio in tempo reale se modifichi l&apos;anno</span>
+              </div>
+              <div className="flex flex-wrap items-center gap-2 text-xs">
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <label className="text-[11px] font-bold text-blue-600 dark:text-blue-400">Anno:</label>
+                  <input
+                    type="number"
+                    min="1990"
+                    max={new Date().getFullYear()}
+                    value={overrideYear}
+                    onChange={(e) => handleFieldChange('year', e.target.value)}
+                    className="w-16 px-1.5 py-0.5 text-xs font-black rounded-lg border border-blue-400 bg-white dark:bg-slate-900 text-blue-700 dark:text-blue-300 text-center outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <label className="text-[11px] font-bold text-slate-500">Km:</label>
+                  <input
+                    type="number"
+                    value={overrideKm}
+                    onChange={(e) => handleFieldChange('km', e.target.value)}
+                    className="w-20 px-1.5 py-0.5 text-xs font-black rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-900 text-slate-900 dark:text-white text-center outline-none focus:ring-1 focus:ring-blue-500"
+                  />
+                </div>
+                <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">
+                  <label className="text-[11px] font-bold text-emerald-600">Prezzo €:</label>
+                  <input
+                    type="number"
+                    value={overridePrice}
+                    onChange={(e) => handleFieldChange('price', e.target.value)}
+                    className="w-20 px-1.5 py-0.5 text-xs font-black rounded-lg border border-emerald-400 bg-white dark:bg-slate-900 text-emerald-700 dark:text-emerald-300 text-center outline-none focus:ring-1 focus:ring-emerald-500"
+                  />
+                </div>
               </div>
             </div>
 

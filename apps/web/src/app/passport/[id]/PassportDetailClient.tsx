@@ -65,6 +65,7 @@ import {
   getTrustBadgeForPassport,
   generatePassportTransfer,
 } from '@/lib/passportStorage';
+import { getVehiclePassportPhoto } from '@/lib/vehicleImageResolver';
 import { askPassportAI } from '@/lib/api';
 import type {
   VehiclePassportData,
@@ -201,7 +202,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
         {
           id: 'welcome-1',
           role: 'assistant',
-          content: `Ciao! Sono il tuo assistente AI dedicato a questa **${p.vehicle.make} ${p.vehicle.model}**.\n\nConosco lo storico dei tuoi tagliandi, i chilometri attuali (${p.currentKm.toLocaleString('it-IT')} km), le scadenze e le specifiche tecniche della vettura. Come posso aiutarti oggi?`,
+          content: `Ciao! Sono **AutoEsperto Assistente AI**, il tuo consulente tecnico e diagnostico per la tua **${p.vehicle.make} ${p.vehicle.model}**.\n\nConosco lo storico dei tuoi tagliandi, i chilometri attuali (${p.currentKm.toLocaleString('it-IT')} km), i consumi reali su strada e le specifiche tecniche della vettura. Di cosa ha bisogno la tua auto oggi?`,
           createdAt: new Date().toISOString(),
         },
       ]);
@@ -232,11 +233,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
 
   const v = passport.vehicle;
   const health = passport.healthBreakdown || computeDynamicHealthScore(passport);
-  const mainPhoto =
-    passport.mainPhoto ||
-    passport.photos?.[0]?.url ||
-    v.imageUrl ||
-    'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80';
+  const mainPhoto = getVehiclePassportPhoto(passport);
 
   const handleUpdateKm = () => {
     const num = Number(newKmInput);
@@ -629,7 +626,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
                 : 'bg-white dark:bg-slate-900 text-slate-600 dark:text-slate-400 hover:bg-slate-200'
             }`}
           >
-            <MessageCircle className="w-4 h-4" /> Assistente AI Auto
+            <MessageCircle className="w-4 h-4" /> AutoEsperto Assistente AI
           </button>
         </div>
 
@@ -983,9 +980,9 @@ export default function PassportDetailClient({ id }: { id: string }) {
                 </span>
                 <div>
                   <h3 className="text-sm font-extrabold text-slate-900 dark:text-white">
-                    Assistente AI {v.make} {v.model}
+                    AutoEsperto Assistente AI · {v.make} {v.model}
                   </h3>
-                  <p className="text-xs text-slate-500">Chiedi consigli su manutenzione, costi ricambi o anomalie</p>
+                  <p className="text-xs text-slate-500">Consulenza tecnica, consumi reali, valore di mercato e preventivi ricambi</p>
                 </div>
               </div>
             </div>
@@ -1015,12 +1012,12 @@ export default function PassportDetailClient({ id }: { id: string }) {
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
               <span className="text-[11px] font-bold text-slate-400 dark:text-slate-500 shrink-0">Suggeriti:</span>
               {[
-                'Cambiare pastiglie freni',
+                'Quanto consuma?',
+                'Quanto vale adesso?',
+                'Olio motore consigliato',
+                'Pregi e difetti noti',
                 'Spia motore accesa',
-                'Quanto costa il tagliando?',
-                'Quando fare la distribuzione?',
-                'Fischiano in frenata',
-                'Fai-da-te o Meccanico?',
+                'Costo prossimo tagliando',
               ].map((chip) => (
                 <button
                   key={chip}
@@ -1038,7 +1035,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
             <div className="flex gap-2 pt-1">
               <input
                 type="text"
-                placeholder="Es. Quando devo cambiare la cinghia? Quanto costa il prossimo tagliando?"
+                placeholder="Es. Quanto consuma in città? Quanto vale adesso? Quale olio motore usare?"
                 value={chatInput}
                 onChange={(e) => setChatInput(e.target.value)}
                 onKeyDown={(e) => {

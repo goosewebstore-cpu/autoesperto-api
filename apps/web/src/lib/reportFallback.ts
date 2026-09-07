@@ -3,6 +3,7 @@ import type { FreeScanResult } from './api';
 import { buildAlternatives } from './stima';
 import { findModelEra, resolveVehicleDefaultYear } from './modelEra';
 import { calculateBolloAccurate } from './bollo';
+import { resolveVehicleImage } from './vehicleImageResolver';
 
 const MODEL_BASE_PRICES: Record<string, number> = {
   // Utilitarie e compatte molto diffuse in Italia
@@ -150,6 +151,7 @@ export function generateInstantReport(input: {
     transmission: isElectric ? 'Automatico' : (input.transmission || 'Manuale'),
     version: input.version || (era ? `${input.make} ${input.model} ${resolvedFuel}` : undefined),
     dataSource: 'model',
+    imageUrl: resolveVehicleImage(input.make, input.model, era?.body),
   };
 
   const yearDisplay = input.year ? `${year}` : `circa ${year}`;

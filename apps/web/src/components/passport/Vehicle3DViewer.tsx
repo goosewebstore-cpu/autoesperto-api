@@ -13,6 +13,7 @@ import {
   Eye,
   Info,
 } from 'lucide-react';
+import { resolveVehicleImage, isOldHardcodedBMWUrl } from '@/lib/vehicleImageResolver';
 
 interface Vehicle3DViewerProps {
   make: string;
@@ -34,9 +35,11 @@ export default function Vehicle3DViewer({
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [activeHotspot, setActiveHotspot] = useState<string | null>(null);
 
+  const isBmw = (make || '').toLowerCase().includes('bmw');
   const fallbackImage =
-    mainPhoto ||
-    'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&w=1200&q=80';
+    mainPhoto && !(isOldHardcodedBMWUrl(mainPhoto) && !isBmw)
+      ? mainPhoto
+      : resolveVehicleImage(make, model);
 
   const handleRotateLeft = () => setRotationAngle((prev) => (prev - 45 + 360) % 360);
   const handleRotateRight = () => setRotationAngle((prev) => (prev + 45) % 360);

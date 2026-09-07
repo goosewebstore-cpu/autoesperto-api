@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""
+AutoEsperto AI Fine-Tuning Dataset Generator
+============================================
+Genera un dataset di fine-tuning in formato JSONL conforme agli standard
+(OpenAI fine-tuning / Hugging Face / Mistral / LLaMA) per addestrare
+AutoEsperto Assistente AI sulle consulenze diagnostiche, manutentive
+e valutative del mercato auto italiano.
+"""
+
+import json
+import os
+
+SYSTEM_PROMPT = (
+    "Sei AutoEsperto Assistente AI, il consulente tecnico e diagnostico di AutoEsperto. "
+    "Fornisci consigli tecnici precisi, stime di manutenzione, valutazioni di mercato e verifiche "
+    "pre-acquisto per automobilisti italiani. Scrivi in modo pulito, sobrio, naturale e chiaro, "
+    "senza formule stereotipate da AI e senza elenchi pieni di emoji."
+)
+
+DATASET_ENTRIES = [
+    # 1. Valutazione Fiat 500
+    {
+        "user": "Ho una Fiat 500 1.2 Benzina del 2018 con 55.000 km, allestimento Lounge. Quanto posso chiedere vendendola da privato?",
+        "assistant": (
+            "Per una Fiat 500 1.2 Lounge del 2018 con 55.000 km, la fascia di prezzo realistica è la seguente:\n\n"
+            "• Vendita tra privati: 9.800 € – 10.600 €\n"
+            "• Ritiro / Permuta concessionario: 8.000 € – 8.600 €\n\n"
+            "Il chilometraggio è inferiore alla media (circa 7.000 km/anno contro i 12.000 standard), "
+            "il che costituisce un punto di forza nella trattativa se puoi esibire le fatture dei tagliandi biennali. "
+            "Il motore 1.2 Fire a 4 cilindri è particolarmente ricercato da neopatentati e per l'affidabilità generale."
+        )
+    },
+    # 2. Consumi Fiat 500 Diesel vs Hybrid
+    {
+        "user": "Quanto consuma realmente una Fiat 500 1.3 Multijet a gasolio rispetto alla nuova 1.0 Hybrid?",
+        "assistant": (
+            "I consumi reali rilevati su strada evidenziano differenze sostanziali in base al percorso:\n\n"
+            "1. Fiat 500 1.3 Multijet (Diesel 95 CV):\n"
+            "• Città: 5.0 – 5.5 L/100 km (~18 – 20 km/L)\n"
+            "• Statale / Autostrada: 3.8 – 4.3 L/100 km (~23 – 26 km/L)\n"
+            "• Misto reale: 4.4 L/100 km (~22.7 km/L)\n\n"
+            "2. Fiat 500 1.0 FireFly Mild Hybrid (Benzina 70 CV):\n"
+            "• Città: 5.4 – 5.9 L/100 km (~17 – 18.5 km/L)\n"
+            "• Statale / Autostrada: 4.6 – 5.2 L/100 km (~19 – 21.7 km/L)\n"
+            "• Misto reale: 5.0 L/100 km (~20 km/L)\n\n"
+            "In sintesi: la Hybrid è ideale per un utilizzo prettamente urbano grazie all'esenzione dai blocchi del traffico e al sistema di veleggio sotto i 30 km/h; "
+            "la 1.3 Multijet resta imbattibile sui tragitti autostradali ed extraurbani, ma soffre in città per le rigenerazioni del filtro antiparticolato (DPF)."
+        )
+    },
+    # 3. Manutenzione Cinghia Distribuzione VW Golf
+    {
+        "user": "A quanti km o anni va cambiata la cinghia di distribuzione sulla Volkswagen Golf 7 1.6 TDI?",
+        "assistant": (
+            "Sulla Golf 7 con motore 1.6 TDI (famiglia EA288), le indicazioni ufficiali e le buone pratiche d'officina prevedono:\n\n"
+            "• Scadenza chilometrica ufficiale: 210.000 km.\n"
+            "• Scadenza temporale raccomandata: non oltre 6 – 7 anni, indipendentemente dal chilometraggio.\n\n"
+            "Anche se la vettura ha percorso pochi chilometri (es. 90.000 km), la gomma della cinghia e il cuscinetto tenditore "
+            "subiscono invecchiamento ed escursioni termiche nel vano motore. In fase di intervento è fondamentale sostituire il kit completo "
+            "(cinghia, tendicinghia, galoppini) e la pompa dell'acqua con nuovo liquido refrigerante G13/G12evo.\n\n"
+            "Costo indicativo presso officina indipendente qualificata: tra 450 € e 650 € ricambi e manodopera inclusi."
+        )
+    },
+    # 4. Diagnostica Spia DPF e olio motore degradato
+    {
+        "user": "Mi si è accesa la spia del filtro antiparticolato e sul quadro appare 'far cambiare olio motore' su Alfa Romeo Giulietta 1.6 JTDm. Cosa significa?",
+        "assistant": (
+            "I due avvisi sono strettamente correlati:\n\n"
+            "1. Causa tecnica: i tragitti brevi e a bassa velocità hanno interrotto le rigenerazioni automatiche del DPF. "
+            "Durante i tentativi di rigenerazione la centralina inietta gasolio supplementare che, non bruciando completamente, "
+            "scende lungo le pareti dei cilindri e si miscela con l'olio motore nella coppa.\n\n"
+            "2. Cosa fare subito:\n"
+            "• Non effettuare lunghi viaggi ad alto carico senza prima verificare il livello dell'olio con l'astina manuale: se il livello supera il massimo, c'è rischio di autoalimentazione del motore.\n"
+            "• Eseguire al più presto il cambio di olio e filtro (specifica Selenia WR Forward 0W-30 o equivalente ACEA C2).\n"
+            "• Far resettare con strumento diagnostico sia il service che il contatore di degrado olio in centralina (fondamentale sui motori JTDm).\n"
+            "• Percorrere un tratto extraurbano a regime costante (2.000-2.500 giri per circa 20 minuti) per completare la rigenerazione."
+        )
+    },
+    # 5. Valutazione Jeep Renegade usata
+    {
+        "user": "Sto valutando una Jeep Renegade 1.6 Multijet del 2017 con 135.000 km a 11.500 €. Il prezzo è corretto o è alto?",
+        "assistant": (
+            "Il prezzo di 11.500 € per una Renegade 1.6 Multijet 120 CV del 2017 con 135.000 km si colloca nella media di mercato per un acquisto da privato, "
+            "a condizione che rispetti precisi requisiti manutentivi:\n\n"
+            "• Valore corretto da privato: 10.800 € – 11.700 €\n"
+            "• Valore presso concessionario (con 12 mesi di garanzia conformità): 12.200 € – 13.000 €\n\n"
+            "Cosa verificare prima di concludere:\n"
+            "1. Cinghia di distribuzione: sul 1.6 Multijet va fatta a 120.000 km o 5 anni. Se non è mai stata fatta, richiedi uno sconto di 500 € – 600 € sul prezzo.\n"
+            "2. Supporti motore: tendono a cedere intorno ai 120.000 km, provocando vibrazioni evidenti al minimo nell'abitacolo.\n"
+            "3. Storico revisioni: verifica su Portale dell'Automobilista la coerenza delle letture chilometriche alle revisioni del 2021 e 2023."
+        )
+    },
+    # 6. Revisione Ministeriale cosa viene controllato
+    {
+        "user": "Cosa controllano esattamente alla revisione ministeriale dell'auto e quali sono i motivi più comuni di bocciatura?",
+        "assistant": (
+            "La revisione periodica (art. 80 Codice della Strada) prevede controlli strumentali standardizzati:\n\n"
+            "1. Prova freni su banco a rulli: misura forza frenante, squilibrio tra ruota destra e sinistra (max 30%) e freno a mano.\n"
+            "2. Analisi emissioni gas di scarico: opacimetro per diesel (indice di fumo K), sonda lambda e CO per benzina/GPL.\n"
+            "3. Prova giochi e articolazioni (ponte prova giochi): testine di sterzo, bracci oscillanti, silent block e cuffie semiassi.\n"
+            "4. Impianto visivo e sicurezza: allineamento e intensità fari con centrafari, integrità parabrezza (nessuna crepa nel campo visivo guidatore), cinture di sicurezza e clacson.\n"
+            "5. Pneumatici: profondità battistrada (minimo legale 1,6 mm su tutta la superficie) e corrispondenza misura e codice velocità con quanto indicato alla carta di circolazione.\n\n"
+            "I motivi più frequenti di esito 'Ripetere': fari opacizzati o mal regolati, squilibrio frenata posteriore, emissioni fuori norma (EGR o catalizzatore intasati) e gomme usurate."
+        )
+    },
+    # 7. Batteria Start&Stop
+    {
+        "user": "La mia auto con Start&Stop fa fatica ad avviarsi la mattina. Posso montare una normale batteria al piombo per risparmiare?",
+        "assistant": (
+            "No, non è consigliabile montare una batteria ad acido libero tradizionale su un'auto dotata di sistema Start&Stop. Le ragioni sono tecniche:\n\n"
+            "1. Tecnologia incompatibile: i veicoli con Start&Stop richiedono batterie EFB (Enhanced Flooded Battery) o AGM (Absorbent Glass Mat). "
+            "Le batterie tradizionali non reggono i cicli continui di carica rapida e scarica profonda e si esauriscono nel giro di 3-6 mesi.\n"
+            "2. Ricarica intelligente e sensore IBS: l'alternatore gestisce il recupero dell'energia in frenata con tensioni fino a 14.8V, "
+            "che surriscaldano ed evaporano l'elettrolita di una batteria classica.\n"
+            "3. Codifica in centralina: su molte vetture (gruppo VAG, BMW, Mercedes, Ford) dopo l'installazione occorre codificare il nuovo amperaggio e la tecnologia tramite presa OBD per evitare che la centralina continui a caricarla con profili errati.\n\n"
+            "Spesa indicativa per una buona batteria AGM 70Ah di marca (Varta, Exide, Bosch): 130 € – 180 €."
+        )
+    },
+    # 8. Tagliando costi e componenti
+    {
+        "user": "Quanto costa mediamente un tagliando completo per una Renault Clio 1.5 dCi e cosa deve comprendere?",
+        "assistant": (
+            "Per una Renault Clio 1.5 dCi (K9K), un tagliando completo di manutenzione ordinaria prevede:\n\n"
+            "• Olio motore sintetico conforme specifica Renault RN0720 / RN17 (5W-30 a basso tenore di ceneri C4): circa 4,5 litri.\n"
+            "• Filtro olio con guarnizione nuova.\n"
+            "• Filtro aria motore.\n"
+            "• Filtro abitacolo (antiparticolato o carboni attivi).\n"
+            "• Filtro gasolio con sensore presenza acqua (fondamentale su questo motore ogni 30.000-40.000 km per preservare la pompa ad alta pressione Delphi/Bosch).\n\n"
+            "Costi indicativi medi in Italia:\n"
+            "• Officina indipendente / generica: 190 € – 260 € (ricambi + 1.5 ore di manodopera).\n"
+            "• Rete ufficiale Renault: 290 € – 380 €."
+        )
+    },
+    # 9. Cambio automatico a doppia frizione
+    {
+        "user": "Il cambio DSG a 7 marce della mia Golf vibra quando parto da fermo in prima marcia. Cosa può essere?",
+        "assistant": (
+            "Sulla Golf con cambio DSG a 7 marce a secco (codice DQ200), le vibrazioni o strappi in partenza da fermo e nel passaggio tra 1ª e 2ª marcia "
+            "sono un sintomo noto con due possibili origini:\n\n"
+            "1. Usura del pacco frizioni a secco K1/K2: la superficie dei dischi frizione si vetrifica o si usura in modo disomogeneo, "
+            "specialmente se l'auto è stata guidata a lungo nel traffico cittadino con frequenti partenze in salita.\n"
+            "2. Disallineamento meccatronica / software: prima di intervenire meccanicamente, un'officina specializzata deve tentare "
+            "un ciclo di 'adattamento base' (basic setting) della meccatronica tramite diagnosi OBD per ricalibrare i punti di innesto.\n\n"
+            "Se l'adattamento non risolve, è necessaria la sostituzione del kit doppio disco frizione con spessimetratura di precisione. "
+            "Costo indicativo: 750 € – 1.100 € presso riparatore specializzato in trasmissioni automatiche."
+        )
+    },
+    # 10. Valutazione BMW Serie 1
+    {
+        "user": "Quanto vale una BMW 118d del 2016 con 160.000 km allestimento MSport?",
+        "assistant": (
+            "Per una BMW 118d (F20 restyling con motore B47 da 150 CV) immatricolata nel 2016 con 160.000 km in allestimento MSport:\n\n"
+            "• Vendita tra privati: 12.500 € – 13.800 €\n"
+            "• Permuta concessionario: 10.000 € – 11.000 €\n\n"
+            "L'allestimento MSport originale a libretto (paraurti, cerchi, volante M, assetto) mantiene un forte appeal sul mercato dell'usato "
+            "e spunta circa 1.200 € – 1.500 € in più rispetto alle versioni base o Advantage. "
+            "Nota tecnica positiva: il motore B47 montato dal restyling 2015 ha risolto definitivamente le criticità della catena di distribuzione "
+            "che affliggevano il precedente propulsore N47."
+        )
+    }
+]
+
+def main():
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    target_path = os.path.join(base_dir, "data", "training", "autoesperto_ai_finetune.jsonl")
+    os.makedirs(os.path.dirname(target_path), exist_ok=True)
+    
+    count = 0
+    with open(target_path, "w", encoding="utf-8") as f:
+        for entry in DATASET_ENTRIES:
+            record = {
+                "messages": [
+                    {"role": "system", "content": SYSTEM_PROMPT},
+                    {"role": "user", "content": entry["user"]},
+                    {"role": "assistant", "content": entry["assistant"]},
+                ]
+            }
+            f.write(json.dumps(record, ensure_ascii=False) + "\n")
+            count += 1
+            
+    print(f"[OK] Generato dataset di fine-tuning con {count} campioni completi in: {target_path}")
+
+if __name__ == "__main__":
+    main()

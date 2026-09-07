@@ -1,0 +1,517 @@
+{
+  "acquisto": [
+    {
+      "slug": "auto-usata-10-segnali-problema-annuncio",
+      "cat": "acquisto",
+      "title": "Auto usata: 10 segnali che l’annuncio nasconde un problema",
+      "desc": "Come capire se stai trovando un vero affare o se stai per comprare un’auto che potrebbe costarti migliaia di euro: i 10 segnali d'allarme prima di lasciare una caparra e la verifica con il metodo AutoEsperto.",
+      "content_sample": ""
+    },
+    {
+      "slug": "diesel-benzina-ibrida-2026-quale-comprare-conviene",
+      "cat": "acquisto",
+      "title": "Diesel, benzina o ibrida nel 2026? Quale conviene comprare per costi e svalutazione",
+      "desc": "Guida alla scelta della motorizzazione nel 2026: diesel vs benzina vs full hybrid vs plug-in. Calcolo chilometrico di convenienza, costi di carburante, blocchi ambientali e valore di rivendita.",
+      "content_sample": ""
+    },
+    {
+      "slug": "migliori-auto-usate-10000-euro-2026",
+      "cat": "acquisto",
+      "title": "Le 10 auto usate migliori da comprare con 10.000 € nel 2026: affidabili e moderne",
+      "desc": "Guida alle 10 migliori auto usate sotto i 10.000 euro nel 2026: modelli affidabili, economici da mantenere e con consumi contenuti, selezionati dall'algoritmo di AutoEsperto.",
+      "content_sample": ""
+    },
+    {
+      "slug": "5-cose-da-controllare-prima-comprare-auto-usata",
+      "cat": "acquisto",
+      "title": "5 cose fondamentali da controllare prima di comprare un'auto usata (guida anti-fregature)",
+      "desc": "La checklist indispensabile in 5 passaggi per verificare un'auto usata da privato o concessionario: chilometri scalati, incidenti nascosti, documentazione e test drive.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-100000-km-conviene-comprare",
+      "cat": "acquisto",
+      "title": "Auto usata con 100.000 km: conviene comprarla nel 2026? La verità su durata e manutenzione",
+      "desc": "Ha ancora senso acquistare un'auto usata con 100.000 km? Quali motori durano oltre 300.000 km, quali componenti sostituire e come trattare sul prezzo.",
+      "content_sample": ""
+    },
+    {
+      "slug": "come-capire-se-auto-usata-incidentata",
+      "cat": "acquisto",
+      "title": "Come capire se un'auto usata è stata incidentata: i 7 indizi nascosti da cercare",
+      "desc": "Come smascherare un'auto usata incidentata prima di comprarla: fessure disallineate, punti di saldatura non originali, date dei vetri e fari asimmetrici.",
+      "content_sample": ""
+    },
+    {
+      "slug": "diesel-euro-5-2026-posso-ancora-comprarlo-blocchi",
+      "cat": "acquisto",
+      "title": "Diesel Euro 5 nel 2026: posso ancora comprarlo? Blocchi del traffico, Move-In e prezzi",
+      "desc": "Conviene comprare un'auto diesel Euro 5 nel 2026? Normative sui blocchi invernali in Pianura Padana e grandi città, scatola nera Move-In, crollo dei prezzi e svalutazione.",
+      "content_sample": ""
+    },
+    {
+      "slug": "passaporto-digitale-veicolo-regolamento-ue-2026-1738",
+      "cat": "acquisto",
+      "title": "Passaporto Digitale del Veicolo (Regolamento UE 2026/1738): cos'è, quando entra in vigore e cosa cambia per l'usato",
+      "desc": "Guida completa al nuovo Regolamento UE 2026/1738 sul Passaporto Digitale di Circolarità del Veicolo: dati obbligatori, storico chilometri, salute della batteria (SoH), date di entrata in vigore e impatto sulle compravendite di auto usate.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-sotto-3000-euro-guida",
+      "cat": "acquisto",
+      "title": "Migliori Auto Usate Sotto i 3.000 Euro: Modelli Affidabili e Costi Reali",
+      "desc": "Guida all'acquisto economico: citycar robuste, motori indistruttibili e cosa controllare prima del passaggio.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-sotto-5000-euro-scelta",
+      "cat": "acquisto",
+      "title": "Migliori Auto Usate Sotto i 5.000 Euro: Quale Scegliere nel 2026",
+      "desc": "Le migliori occasioni sul mercato dell'usato tra i 3.000 e i 5.000 euro con spese di gestione ridotte.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-sotto-15000-euro-migliori",
+      "cat": "acquisto",
+      "title": "Migliori Auto Usate Entro i 15.000 Euro: SUV, Berlina o Crossover",
+      "desc": "Analisi di mercato per il budget di 15.000 euro: modelli recenti, bassi chilometraggi e garanzie inclusi.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-sotto-20000-euro-premium",
+      "cat": "acquisto",
+      "title": "Auto Usate Premium Sotto i 20.000 Euro: Audi, BMW e Mercedes",
+      "desc": "Come acquistare una vettura di fascia alta usata mantenendo sotto controllo i costi di manutenzione e bollo.",
+      "content_sample": ""
+    },
+    {
+      "slug": "migliori-auto-neopatentati-usate-norme",
+      "cat": "acquisto",
+      "title": "Auto Usate per Neopatentati 2026: Limiti di Potenza e Scelte Consigliate",
+      "desc": "Le regole del Codice della Strada per i neopatentati ed i modelli usati più sicuri ed economici.",
+      "content_sample": ""
+    },
+    {
+      "slug": "migliori-suv-usati-economici-scelta",
+      "cat": "acquisto",
+      "title": "Migliori SUV Usati Economici: Modelli Affidabili e Consumi Ridotti",
+      "desc": "I crossover usati più richiesti in Italia con il miglior rapporto qualità-prezzo e trazione integrale o 2WD.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-ibride-usate-conviene-controlli",
+      "cat": "acquisto",
+      "title": "Auto Ibridate Usate: Conviene Davvero? Guida a Batterie e Usura",
+      "desc": "Analisi tecnica sui sistemi Mild Hybrid, Full Hybrid e Plug-in usati: stato di salute della batteria e garanzia.",
+      "content_sample": ""
+    },
+    {
+      "slug": "diesel-vs-ibrida-usata-confronto",
+      "cat": "acquisto",
+      "title": "Diesel o Ibrida Usata nel 2026: Quale Alimentazione Conviene di Più",
+      "desc": "Confronto tra motori turbodiesel Euro 6d ed ibridi per chi percorre oltre 20.000 km all'anno.",
+      "content_sample": ""
+    },
+    {
+      "slug": "garanzia-auto-usata-commerciale-legale",
+      "cat": "acquisto",
+      "title": "Garanzia Auto Usata: Differenza tra Garanzia Legale e Commerciale",
+      "desc": "Diritti dell'acquirente secondo il Codice del Consumo: 12 o 24 mesi di conformità ed esclusioni pratiche.",
+      "content_sample": ""
+    },
+    {
+      "slug": "controlli-pre-acquisto-auto-usata-lista",
+      "cat": "acquisto",
+      "title": "Checklist Controlli Pre-Acquisto Auto Usata: 25 Punti da Verificare",
+      "desc": "La guida passo-passo per ispezionare vano motore, carrozzeria, freni, documenti e prova su strada.",
+      "content_sample": ""
+    },
+    {
+      "slug": "comprare-auto-da-privato-vs-concessionario",
+      "cat": "acquisto",
+      "title": "Comprare Auto da Privato o Concessionario: Pro, Contro e Rischi",
+      "desc": "Confronto su garanzie, prezzo finale, trattativa e tutele legali nell'acquisto da privato o salone.",
+      "content_sample": ""
+    },
+    {
+      "slug": "aste-auto-usate-come-funzionano-rischi",
+      "cat": "acquisto",
+      "title": "Aste Judiciali ed Auto Usate: Come Partecipare Evitando Rischi",
+      "desc": "Come acquistare veicoli da aste fallimentari o giudiziarie in sicurezza valutando la perizia tecnica.",
+      "content_sample": ""
+    },
+    {
+      "slug": "importare-auto-usata-germania-costi",
+      "cat": "acquisto",
+      "title": "Importare un'Auto Usata dalla Germania: Costi, Immatricolazione e Nazionalizzazione",
+      "desc": "La procedura completa per importare vetture tedesche: F24 elemento F24, nazionalizzazione alla Motorizzazione ed immatricolazione.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-gpl-metano-conviene",
+      "cat": "acquisto",
+      "title": "Auto a GPL e Metano Usate: Risparmio Carburante e Scadenza Bombole",
+      "desc": "Guida alle vetture bifuel usate: sostituzione serbatoio GPL decennale e collaudo bombole metano.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-elettrica-usata-autonomia-batteria",
+      "cat": "acquisto",
+      "title": "Auto Elettrica Usata: Come Verificare lo Stato di Salute (SOH) della Batteria",
+      "desc": "Diagnosi SOH della batteria di trazione, degrado chilometrico e garanzie residue sui veicoli elettrici usati.",
+      "content_sample": ""
+    },
+    {
+      "slug": "chilometri-scalati-auto-usata-truffa",
+      "cat": "acquisto",
+      "title": "Come Scoprire se l'Auto Usata ha i Chilometri Scalati: 7 Segnali Inequivocabili",
+      "desc": "Tecniche di verifica chilometrica tramite revisioni Ministero dei Trasporti, centraline centrali e visure visive.",
+      "content_sample": ""
+    },
+    {
+      "slug": "acquisto-auto-con-fermo-amministrativo",
+      "cat": "acquisto",
+      "title": "Auto Usata con Fermo Amministrativo: Si Può Comprare? Rischi e Soluzioni",
+      "desc": "Cosa prevede la legge per la vendita di veicoli gravati da ganasce fiscali ed i controlli al PRA.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-aziendale-ex-noleggio",
+      "cat": "acquisto",
+      "title": "Auto Usate Aziendali ed Ex Noleggio: Conviene Comprarle?",
+      "desc": "Manutenzione certificata, usura chilometrica e pro/contro delle flotte aziendali rientrate dal leasing.",
+      "content_sample": ""
+    },
+    {
+      "slug": "caparra-acquisto-auto-usata-regole",
+      "cat": "acquisto",
+      "title": "Caparra Confirmatoria per Auto Usata: Quanto Versare e Come Tutelarsi",
+      "desc": "Differenza tra caparra confirmatoria e penitenziale nella compravendita di veicoli usati tra privati.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-per-famiglia-monovolume",
+      "cat": "acquisto",
+      "title": "Migliori Auto Usate per Famiglie: Monovolume e Station Wagon Spaziose",
+      "desc": "Spazio bagagliaio, attacchi ISOFIX e modularità interna per chi cerca una vettura familiare affidabile.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-sportiva-economica",
+      "cat": "acquisto",
+      "title": "Auto Sportive Usate Economiche: Divertimento a Basso Costo",
+      "desc": "Coupé e hot hatch usate sotto i 15.000 euro con costi di bollo e manutenzione sostenibili.",
+      "content_sample": ""
+    },
+    {
+      "slug": "passaggio-proprieta-auto-usata-costi",
+      "cat": "acquisto",
+      "title": "Passaggio di Proprietà Auto Usata: Calcolo Costi ed Esenzioni IPT",
+      "desc": "Quanto costa la voltura in ACI o agenzia pratiche auto: calcolo kW, IPT provinciale e marca da bollo.",
+      "content_sample": ""
+    },
+    {
+      "slug": "finanziamento-auto-usata-conviene",
+      "cat": "acquisto",
+      "title": "Finanziamento Auto Usata: Tassi TAN e TAEG, Maxirata e Cessione del Quinto",
+      "desc": "Come valutare un prestito auto usata, tassi reali ed evitare costi nascosti nei contratti con concessionari.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-con-cambio-automatico",
+      "cat": "acquisto",
+      "title": "Auto Usate con Cambio Automatico: Quale Scegliere e Quali Evitare",
+      "desc": "Differenze tra convertitore di coppia, doppia frizione (DSG/EDC) e variatore continuo (CVT) sul mercato usato.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-per-neopatentati-gpl",
+      "cat": "acquisto",
+      "title": "Auto Usate GPL per Neopatentati: Economiche e Compatibili con la Legge",
+      "desc": "I modelli a gas entro i limiti di potenza per neopatentati con bassissimi costi chilometrici.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-4x4-fuoristrada-economici",
+      "cat": "acquisto",
+      "title": "Migliori Fuoristrada 4x4 Usati Economici per Montagna e Neve",
+      "desc": "Trazione integrale inseribile, ridotte e modelli indistruttibili per la guida fuoristrada ed invernale.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-con-gancio-traino",
+      "cat": "acquisto",
+      "title": "Auto Usata con Gancio Traino: Omologazione, Masse e Certificazioni",
+      "desc": "Cosa verificare per il traino di rimorchi, caravan e barche: massa rimorchiabile e collaudo alla Motorizzazione.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-per-citta-citycar",
+      "cat": "acquisto",
+      "title": "Migliori Citycar Usate per la Città: Agilità, Parcheggio e Consumi",
+      "desc": "Le auto compatte più pratiche per l'uso urbano quotidiano e blocchi del traffico.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usate-con-bassi-consumi",
+      "cat": "acquisto",
+      "title": "Auto Usate che Consumano Meno: Modelli da Oltre 25 km/l Reali",
+      "desc": "Classifica delle vetture usate a benzina, diesel ed ibride con i consumi reali più bassi nelle prove su strada.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-per-cani-e-animali",
+      "cat": "acquisto",
+      "title": "Auto Usata Ideale per Trasporto Cani e Animali Domestici",
+      "desc": "Bagagliaio con soglia di carico bassa, accessori divisori e tessuti lavabili per viaggiare in sicurezza.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-garanzia-12-mesi-copertura",
+      "cat": "acquisto",
+      "title": "Garanzia 12 Mesi Auto Usata: Cosa Copre Davvero e Cosa è Escluso",
+      "desc": "Dettaglio dei componenti garantiti per legge: motore, cambio, sterzo ed usura dei materiali.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-sito-annunci-sicurezza",
+      "cat": "acquisto",
+      "title": "Siti di Annunci Auto Usate: Come Evitare Truffe e Falsi Venditori",
+      "desc": "Indicatori di rischio negli annunci online, foto ritoccate, numeri di telaio errati e metodi di pagamento sicuri.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-chilometri-illimitati",
+      "cat": "acquisto",
+      "title": "Auto Usata con Alti Chilometraggi: Quando Conviene Comprare Oltre 150.000 km",
+      "desc": "Quali motori ed organi meccanici sopportano chilometraggi elevati senza richiedere riparazioni costose.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-per-lavoro-agenti",
+      "cat": "acquisto",
+      "title": "Auto Usata per Agenti di Commercio e Professionisti: Comfort e Km",
+      "desc": "Station wagon diesel affidabili per percorrere oltre 40.000 km all'anno in autostrada con massimo comfort.",
+      "content_sample": ""
+    },
+    {
+      "slug": "auto-usata-acquisto-online-consegna",
+      "cat": "acquisto",
+      "title": "Acquistare un'Auto Usata Online con Consegna a Domicilio: Guida e Diritto di Recesso",
+      "desc": "Come funziona l'acquisto a distanza, il periodo di prova di 14 giorni ed il diritto di recesso tutelato dal Codice del Consumo.",
+      "content_sample": ""
+    }
+  ],
+  "vendita": [
+    {
+      "slug": "come-fissare-prezzo-vendita-auto",
+      "cat": "vendita",
+      "title": "Come Fissare il Prezzo Giusto per Vendere un'Auto Usata Velocemente",
+      "desc": "Metodologia di quotazione: analisi della concorrenza locale, chilometraggio, stato carrozzeria ed optional.",
+      "content_sample": ""
+    },
+    {
+      "slug": "annuncio-auto-usata-perfetto-guida",
+      "cat": "vendita",
+      "title": "Come Scrivere un Annuncio Auto Usata che Vende Subito: Testo e Foto",
+      "desc": "Struttura della descrizione, dettagli tecnici trasparenti e tecniche fotografiche da smartphone per valorizzare il veicolo.",
+      "content_sample": ""
+    },
+    {
+      "slug": "foto-auto-usata-da-caricare-guida",
+      "cat": "vendita",
+      "title": "Fotografare l'Auto Usata per la Vendita: 10 Angolazioni Fondamentali",
+      "desc": "Come illuminare il veicolo, inquadrature per interni, vano motore, battistrada pneumatici e dettagli di pregio.",
+      "content_sample": ""
+    },
+    {
+      "slug": "permuta-auto-usata-conviene-calcolo",
+      "cat": "vendita",
+      "title": "Permuta Auto Usata in Concessionario: Conviene o Meglio Vendere a Privato?",
+      "desc": "Differenza di valore tra valore di rientro in concessionaria e vendita diretta sul mercato dell'usato.",
+      "content_sample": ""
+    },
+    {
+      "slug": "pagamento-sicuro-vendita-auto-usata",
+      "cat": "vendita",
+      "title": "Pagamento Sicuro Vendita Auto Usata: Bonifico Istantaneo vs Assegno Circolare",
+      "desc": "Come evitare truffe al momento della consegna del veicolo ed eseguire la verifica dell'assegno prima del passaggio.",
+      "content_sample": ""
+    },
+    {
+      "slug": "atto-di-vendita-auto-usata-autentica",
+      "cat": "vendita",
+      "title": "Atto di Vendita Auto Usata: Dove Autenticare la Firma a Costo Zero",
+      "desc": "Come autenticare la firma del certificato di proprietà in Comune o in ACI evitando spese agenzia.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-con-finanziamento-in-corso",
+      "cat": "vendita",
+      "title": "Vendere un'Auto Usata con Finanziamento in Corso: Procedura ed Estinzione",
+      "desc": "Come estinguere il prestito prima della vendita o effettuare il subentro del finanziamento in sicurezza.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-senza-revisione",
+      "cat": "vendita",
+      "title": "Vendere Auto Usata Scaduta di Revisione: Si Può Fare? Regole e Sanzioni",
+      "desc": "Cosa prevede il Codice della Strada per il passaggio di proprietà di veicoli privi di revisione valida.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-con-danni-carrozzeria",
+      "cat": "vendita",
+      "title": "Vendere Auto Usata con Danni o Graffi: Conviene Ripararla Prima?",
+      "desc": "Analisi costi/benefici: quando la riparazione dal carrozziere aumenta il valore di vendita e quando vendere 'visto e piaciuto'.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-per-esportazione-estero",
+      "cat": "vendita",
+      "title": "Vendere Auto Usata per Esportazione all'Estero: Radiazione PRA e Documenti",
+      "desc": "La procedura aggiornata per la radiazione dal Pubblico Registro Automobilistico per definitiva esportazione UE o extra-UE.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-a-compro-auto",
+      "cat": "vendita",
+      "title": "Servizi 'Compro Auto Usate': Valutazione Immediata, Pro e Contro",
+      "desc": "Analisi dei servizi di acquisto diretto: velocità di pagamento, spese di voltura e margine di svalutazione.",
+      "content_sample": ""
+    },
+    {
+      "slug": "valore-residuo-auto-usata-fattori",
+      "cat": "vendita",
+      "title": "I 10 Fattori che Determinano il Valore di Mercato della Tua Auto",
+      "desc": "Anno, chilometri, storico tagliandi, colore, proprietari precedenti, normative ambientali e popolarità del modello.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-storico-tagliandi",
+      "cat": "vendita",
+      "title": "Come lo Storico Tagliandi Aumenta il Valore di Vendita dell'Auto fino al 15%",
+      "desc": "L'importance del libretto manutenzione timbrato e delle fatture dei ricambi per giustificare un prezzo più alto.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-tra-parenti",
+      "cat": "vendita",
+      "title": "Passaggio di Proprietà Auto tra Parenti: Costi, Donazione e Successione",
+      "desc": "Procedura ed imposte per trasferire un veicolo usati a familiari, figli o in caso di eredità.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-con-doppia-chiave",
+      "cat": "vendita",
+      "title": "Perché la Doppia Chiave ed i Manuali Aumentano la Fiducia del Compratore",
+      "desc": "Piccoli dettagli che accelerano la vendita dell'usato ed evitano contestazioni durante la trattativa.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-garanzia-tra-privati",
+      "cat": "vendita",
+      "title": "Vendita Auto Usata Tra Privati: Esiste la Garanzia 'Visto e Piaciuto'?",
+      "desc": "Come redigere la clausola visto e piaciuto nella scrittura privata per tutelarsi da vizi occulti.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-in-conto-vendita",
+      "cat": "vendita",
+      "title": "Lasciare l'Auto in Conto Vendita al Concessionario: Come Funziona",
+      "desc": "Contratto di custodia, provvigione del salone e responsabilità per danni durante la giacenza.",
+      "content_sample": ""
+    },
+    {
+      "slug": "preparare-auto-usata-alla-vendita",
+      "cat": "vendita",
+      "title": "Detailing ed Igienizzazione Auto Prima della Vendita: Quanto Rende?",
+      "desc": "Come pulire sedili, lucidare carrozzeria e ripristinare i fari opachi per aumentare il valore percepito.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-all-asta-online",
+      "cat": "vendita",
+      "title": "Vendere la Propria Auto su Piattaforme d'Asta Online: Guida Pratica",
+      "desc": "Come funzionano le aste online per privati: commissioni, riserva di prezzo ed organizzazione del ritiro.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-con-fermo-fiscale",
+      "cat": "vendita",
+      "title": "Come Cancellare il Fermo Amministrativo per Vendere l'Auto Usata",
+      "desc": "Procedura per la cancellazione dell'iscrizione ipotecaria al PRA a seguito di saldo cartella esattoriale.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-all-estero-senza-iva",
+      "cat": "vendita",
+      "title": "Vendita Auto Usata ad Acquirente Estero: Regime IVA e Bolla Doganale",
+      "desc": "Adempimenti fiscali ed IVA per vendita di autoveicoli usati a soggetti comunitari ed extracomunitari.",
+      "content_sample": ""
+    },
+    {
+      "slug": "trattativa-prezzo-vendita-auto-usata",
+      "cat": "vendita",
+      "title": "Come Gestire la Trattativa sul Prezzo dell'Auto Senza Svuotare il Margine",
+      "desc": "Strategie psicologiche e tecniche per difendere il valore del proprio veicolo davanti alle offerte al ribasso.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-incidentata-o-fusa",
+      "cat": "vendita",
+      "title": "Vendere Auto Usata Incidentata, Non Marciante o con Motore Fuso",
+      "desc": "Valutazione per pezzi di ricambio, demolitori autorizzati e vendita a commercianti specializzati.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-di-societa-o-partita-iva",
+      "cat": "vendita",
+      "title": "Vendere Auto Usata Intestata a Società o Partita IVA: Fatturazione e IVA",
+      "desc": "Come emettere la fattura di vendita auto usata: regime del margine, IVA esente art. 10 o IVA esposta.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-con-bollo-scaduto",
+      "cat": "vendita",
+      "title": "Vendere Auto Usata con Bollo Auto Scaduto: Chi Deve Pagare l'Arretrato?",
+      "desc": "Cosa stabilisce la giurisprudenza in merito ai bolli arretrati durante il passaggio di proprietà del veicolo.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-elettrica-batteria",
+      "cat": "vendita",
+      "title": "Come Valorizzare uno Stato di Salute Batteria (SOH) Elevato nella Vendita",
+      "desc": "Certificato di diagnosi batteria e garanzia residua come leva principale per spuntare il prezzo massimo.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-con-impianto-gpl",
+      "cat": "vendita",
+      "title": "Vendere Auto GPL o Metano: Come Certificare la Sicurezza dell'Impianto",
+      "desc": "Documenti della Motorizzazione necessari e scadenza bombole per rassicurare il nuovo proprietario.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-in-sicurezza-test-drive",
+      "cat": "vendita",
+      "title": "Prova su Strada con il Compratore: Come Organizzarla in Sicurezza",
+      "desc": "Copertura assicurativa durante il test drive con sconosciuti, identificazione del conducente e precauzioni antifurto.",
+      "content_sample": ""
+    },
+    {
+      "slug": "vendere-auto-usata-d-epoca-valutazione",
+      "cat": "vendita",
+      "title": "Vendere un'Auto Trentennale o d'Epoca: Valorizzare l'Iscrizione ASI",
+      "desc": "Come determinare la quotazione collezionistica per vetture iscritte nei registri storici e targa oro.",
+      "content_sample": ""
+    },
+    {
+      "slug": "consegna-auto-usata-verbale-passaggio",
+      "cat": "vendita",
+      "title": "Verbale di Consegna dell'Auto Usata: Il Documento che Cancella la Responsabilità",
+      "desc": "Modello di verbale di consegna chiavi e veicolo per evitare multe e responsabilità dopo l'atto di vendita.",
+      "content_sample": ""
+    }
+  ]
+}

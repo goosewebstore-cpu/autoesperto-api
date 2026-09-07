@@ -24,3 +24,5 @@ packages/database/src/generated/
 .open-next/
 .wrangler/
 scratch/
+scripts/*_cache/
+scripts/__pycache__/

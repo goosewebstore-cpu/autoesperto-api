@@ -27,9 +27,10 @@ const allMakes = Object.keys(brands)
   .sort((a, b) => a.localeCompare(b, 'it'))
   .map((name) => ({ name, slug: slugify(name), models: brands[name] || [] }));
 
-// 2. Read guides
+// 2. Read guides from both guides.ts and guides-articoli.ts
 const guidesPath = path.resolve(__dirname, '../src/lib/guides.ts');
-const guidesContent = fs.readFileSync(guidesPath, 'utf8');
+const guidesArticoliPath = path.resolve(__dirname, '../src/lib/guides-articoli.ts');
+const guidesContent = fs.readFileSync(guidesPath, 'utf8') + '\n' + fs.readFileSync(guidesArticoliPath, 'utf8');
 
 // Match each guide's slug and published date
 const guideMatches = [...guidesContent.matchAll(/"?slug"?:\s*['"]([^'"]+)['"][\s\S]*?"?published"?:\s*['"]([^'"]+)['"]/g)];

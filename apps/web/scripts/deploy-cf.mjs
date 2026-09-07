@@ -3,6 +3,9 @@ import path from 'path';
 import { execSync } from 'child_process';
 import * as esbuild from 'esbuild';
 
+console.log('=== Step 0: Generating Sitemaps ===');
+execSync('node scripts/generate-sitemaps.mjs', { stdio: 'inherit' });
+
 console.log('=== Step 1: Building with opennextjs-cloudflare ===');
 execSync('npx opennextjs-cloudflare build', { stdio: 'inherit' });
 

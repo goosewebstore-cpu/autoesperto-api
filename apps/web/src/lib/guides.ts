@@ -1,20 +1,22 @@
 /**
  * ============================================================================
- * AUTOESPERTO - AUTHORITATIVE GUIDES DATABASE (195 COMPREHENSIVE GUIDES)
+ * AUTOESPERTO - AUTHORITATIVE GUIDES DATABASE (230 COMPREHENSIVE GUIDES)
  * ============================================================================
  * CRITICAL WARNING FOR AI ASSISTANTS:
  * DO NOT OVERWRITE, TRUNCATE, OR DELETE THIS FILE!
  * THIS FILE CONTAINS 19 USER CUSTOM ARTICLES (MUST REMAIN INTACT) PLUS AT LEAST
  * 30 COMPREHENSIVE GUIDES PER CATEGORY (ACQUISTO, VENDITA, VALUTAZIONE, MANUTENZIONE, AFFIDABILITÀ).
+ * 36 additional article guides are imported from guides-articoli.ts.
  * ============================================================================
  */
 
 import type { Guide, GuideCategory } from './guide-types';
 import { GUIDE_CATEGORIES } from './guide-types';
+import { articoliGuides } from './guides-articoli';
 export type { Guide, GuideCategory };
 export { GUIDE_CATEGORIES };
 
-export const guides: Guide[] = [
+const initialGuides: Guide[] = [
   {
     "slug": "aria-condizionata-auto-salva-motore-batteria-caldo-2026",
     "title": "Aria condizionata auto col caldo record: come non rompere il compressore, salvare motore e batteria",
@@ -270,14 +272,14 @@ export const guides: Guide[] = [
     ]
   },
   {
-    "slug": "autoesperto-cerca-investitori-seed-round-ai-automotive",
-    "title": "AutoEsperto apre il Seed Round: l'AI che rivoluziona la compravendita dell'usato cerca investitori",
-    "description": "Con oltre 5,2 milioni di passaggi annui e 25 miliardi transati, AutoEsperto apre il primo round di finanziamento: l'infrastruttura di Computer Vision e pricing reale creata da un solo sviluppatore freelance per portare trasparenza nell'usato.",
+    "slug": "autoesperto-cerca-investitori-ai-auto-usate",
+    "title": "AutoEsperto cerca investitori: investi nel futuro dell'auto usata con l'intelligenza artificiale",
+    "description": "Un progetto italiano di intelligenza artificiale per valutare le auto usate cerca i primi investitori. Nessun minimo di investimento: aperto a tutti coloro che vogliono salire a bordo fin dall'inizio. Ecosistema completo con profilo digitale del veicolo, annunci per chi vende e un'AI che impara e cresce ogni giorno.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "autoesperto-storia",
-    "image": "/images/guide/autoesperto-cerca-investitori-seed-round-ai-automotive.jpg",
-    "readTime": "7 min",
+    "image": "/images/guide/autoesperto-cerca-investitori-ai-auto-usate.jpg",
+    "readTime": "11 min",
     "featured": true,
     "sections": [
       {
@@ -286,19 +288,19 @@ export const guides: Guide[] = [
           "Comprare o vendere un'automobile usata in Italia è un'esperienza che coinvolge ogni anno oltre 5,2 milioni di cittadini, per un volume economico transato che supera abbondantemente i 25 miliardi di euro secondo le rilevazioni ufficiali dell'ACI e del PRA.",
           "Eppure, nonostante le dimensioni monumentali di questo mercato, la compravendita dell'usato è ancora afflitta da un'opacità strutturale senza pari nel panorama del commercio moderno: prezzi in vetrina gonfiati fino al 15% rispetto al reale valore di chiusura, timori fondati di chilometraggi scalati, difetti occulti mascherati con lucidature superficiali e un labirinto burocratico-fiscale fatto di bolli regionali disomogenei e severe limitazioni ambientali ZTL.",
           "In questo contesto nasce [AutoEsperto.it](/): la prima piattaforma tecnologica italiana progettata per portare trasparenza radicale, perizia visiva istantanea e intelligenza decisionale nella compravendita di veicoli usati.",
-          "Oggi il progetto annuncia ufficialmente l'apertura del suo primo **Round di Finanziamento Pre-Seed / Seed (Target: € 150.000 – € 350.000)**, rivolto a Business Angel, fondi di venture capital ed investitori strategici nei settori automotive, insurtech e fintech per accelerare la crescita su scala nazionale."
+          "Oggi il progetto annuncia ufficialmente l'apertura del suo primo **Round di Raccolta Fondi (Obiettivo complessivo: € 150.000 – € 350.000)**, con una caratteristica fondamentale e trasparente: **non c'è alcun minimo di investimento**. Il round è aperto a chiunque voglia credere nel progetto e partecipare alla sua crescita futura, dai piccoli risparmiatori e appassionati con quote accessibili, fino a imprenditori, business angel e partner strategici nei settori automotive, tech e digitale."
         ]
       },
       {
-        "heading": "La storia del fondatore: un solo sviluppatore freelance in bootstrapping estremo",
+        "heading": "La storia del fondatore: uno sviluppatore autonomo che ha creato tutto da solo",
         "paragraphs": [
           "Dietro la tecnologia di AutoEsperto non c'è un consorzio di concessionarie né un'azienda storica della Silicon Valley, ma la determinazione di un singolo ingegnere e costruttore software: **Ralfh Javier**, sviluppatore full-stack e AI builder indipendente con base a Siracusa.",
-          "Operando in **puro bootstrapping come libero professionista freelance** (attualmente senza partita IVA e in fase pre-incorporation societaria), Ralfh ha progettato, addestrato e sviluppato l'intera architettura tecnologica di AutoEsperto in totale autonomia, dimostrando un'efficienza di capitale del 100%:"
+          "Lavorando **in totale autonomia con le proprie forze e risorse** (attualmente libero professionista e pronto alla costituzione societaria), Ralfh ha progettato, addestrato e sviluppato l'intera architettura tecnologica di AutoEsperto, dimostrando un'efficienza economica del 100%:"
         ],
         "list": [
           "**Zero sprechi di capitale in agenzie o consulenze esterne**: Ogni componente del sistema — dallo scanner di Computer Vision per la perizia danni alla complessa logica predittiva dei prezzi reali, dal calcolo bollo per tutte le 20 regioni italiane al frontend ultra-veloce a 60fps — è stato scritto e ingegnerizzato direttamente dal fondatore.",
-          "**Velocità di esecuzione decuplicata**: Mentre le startup tradizionali e i giganti del settore impiegano mesi e budget a sei zeri per sviluppare semplici prototipi, AutoEsperto ha messo online un'infrastruttura completa con oltre 2.400 allestimenti storici mappati (coprendo auto fino a 25 anni di età) e una suite di test con 26 verifiche automatizzate.",
-          "**Costituzione Startup Innovativa**: I fondi raccolti nel round saranno utilizzati per costituire formalmente la **S.r.l. come Startup Innovativa**, consentendo a tutti gli investitori aderenti di beneficiare delle **detrazioni fiscali IRPEF/IRES al 30% - 50%** previste dalla legge italiana."
+          "**Velocità di esecuzione decuplicata**: Mentre le aziende tradizionali e i giganti del settore impiegano mesi e budget enormi per sviluppare semplici prototipi, AutoEsperto ha messo online un'infrastruttura completa con oltre 2.400 allestimenti storici mappati (coprendo auto fino a 25 anni di età) e una suite di test con 26 verifiche automatizzate.",
+          "**Costituzione Startup Innovativa**: I capitali raccolti saranno utilizzati per costituire formalmente la **S.r.l. come Startup Innovativa**, consentendo a tutti gli investitori aderenti di beneficiare delle **detrazioni fiscali IRPEF/IRES al 30% - 50%** previste dalla legge italiana."
         ]
       },
       {
@@ -335,9 +337,55 @@ export const guides: Guide[] = [
         ]
       },
       {
-        "heading": "Il round Seed (€150.000 – €350.000), detrazioni fiscali al 50% e allocazione fondi",
+        "heading": "Pubblicità e visibilità per chi vende: privati, concessionari e autosaloni",
         "paragraphs": [
-          "I capitali raccolti con il round di investimento saranno destinati a finanziare la roadmap di sviluppo per i successivi 18 mesi con la seguente allocazione trasparente:"
+          "Una delle fonti di ricavo più interessanti e immediate per AutoEsperto è la piattaforma pubblicitaria integrata dedicata a chi vende auto usate. Il concetto è semplice ma potente: ogni giorno migliaia di persone cercano su AutoEsperto il valore reale della propria auto prima di metterla in vendita. Questo traffico altamente qualificato — utenti con un'intenzione di vendita concreta e verificata — rappresenta un'audience pubblicitaria di enorme valore.",
+          "I venditori privati potranno promuovere il proprio annuncio direttamente sulla piattaforma, con inserzioni mirate che raggiungono compratori già informati sul reale valore di mercato del veicolo. A differenza di Subito.it o AutoScout24, dove l'annuncio si perde tra migliaia di inserzioni generiche, su AutoEsperto la pubblicità è contestuale e intelligente: viene mostrata agli utenti che stanno cercando esattamente quel tipo di auto, in quella fascia di prezzo, in quella zona geografica.",
+          "Per concessionari e autosaloni, il modello diventa ancora più redditizio. Potranno acquistare spazi pubblicitari premium per promuovere il proprio inventario, con annunci sponsorizzati che appaiono nelle ricerche di valutazione degli utenti. Un concessionario di Fiat a Milano, ad esempio, potrà comparire quando un utente milanese cerca il valore di una Fiat Panda usata — intercettando il momento esatto in cui il potenziale cliente decide di comprare o vendere."
+        ],
+        "list": [
+          "**Annunci sponsorizzati per privati**: Promozione del proprio veicolo con visibilità garantita a compratori qualificati, a partire da € 2,90 per 30 giorni.",
+          "**Vetrina Premium per concessionari**: Pagina dedicata con inventario completo, recensioni verificate e posizionamento privilegiato nelle ricerche degli utenti.",
+          "**Campagne geolocalizzate per autosaloni**: Targeting per provincia e regione per raggiungere solo i clienti nella propria area di competenza.",
+          "**Report di performance**: Dashboard con statistiche dettagliate su visualizzazioni, clic e contatti generati da ogni inserzione."
+        ]
+      },
+      {
+        "heading": "Il Profilo Digitale del Veicolo: il futuro della compravendita con un QR Code",
+        "paragraphs": [
+          "Immagina di avvicinarti a un'auto usata in un piazzale, puntare il telefono su un QR Code e avere immediatamente accesso a tutta la storia di quel veicolo: valore di mercato aggiornato in tempo reale, storico dei tagliandi, eventuali sinistri pregressi, costi annuali di mantenimento, scadenze assicurative e revisione, blocchi del traffico attivi nella tua zona. Questo è il Profilo Digitale del Veicolo di AutoEsperto, e rappresenta il futuro concreto della compravendita dell'usato.",
+          "Ogni veicolo analizzato su AutoEsperto genera automaticamente un profilo digitale permanente, accessibile tramite un QR Code unico. Questo profilo non è un semplice documento statico: è un fascicolo vivo che si aggiorna automaticamente con i nuovi dati di mercato, le variazioni di valore e le scadenze imminenti. Quando il proprietario decide di vendere l'auto, il profilo diventa uno strumento di vendita potentissimo: il compratore può verificare in totale autonomia e trasparenza tutto ciò che serve sapere, riducendo drasticamente la diffidenza che blocca il 40% delle trattative tra privati.",
+          "Ma la vera rivoluzione è nella trasferibilità: quando l'auto viene venduta, il Profilo Digitale si trasferisce automaticamente al nuovo proprietario, che continuerà ad arricchirlo con nuovi tagliandi, valutazioni e documenti. Con il tempo, ogni auto avrà una storia digitale completa e certificata — un vero e proprio 'curriculum vitae' del veicolo che ne certifica il valore e l'affidabilità nel tempo.",
+          "Chi vuole vendere direttamente dalla piattaforma potrà farlo con un semplice clic: il profilo digitale si trasforma in un annuncio di vendita completo, già precompilato con tutti i dati tecnici, la valutazione certificata e la documentazione disponibile. Il compratore non dovrà più fidarsi delle parole del venditore: avrà i dati."
+        ]
+      },
+      {
+        "heading": "Un'intelligenza artificiale che migliora ogni giorno: la nostra sfida ai giganti del settore",
+        "paragraphs": [
+          "AutoEsperto non è un prodotto finito: è un sistema di intelligenza artificiale che impara, si adatta e diventa più preciso con ogni singola analisi effettuata. Ogni auto scansionata, ogni prezzo confrontato, ogni feedback degli utenti alimenta gli algoritmi di machine learning, rendendo le valutazioni progressivamente più accurate e le previsioni di mercato sempre più affidabili. Più persone usano AutoEsperto, più il sistema diventa intelligente — un circolo virtuoso che crea un vantaggio competitivo crescente e difficile da replicare.",
+          "Il nostro obiettivo dichiarato è ambizioso ma concreto: costruire un ecosistema completo che includa tutti i dati di cui hai bisogno per qualsiasi decisione legata alla tua auto. Non solo il prezzo, ma i costi reali di gestione, la storia completa del veicolo, i confronti con modelli alternativi, le previsioni di svalutazione e persino il momento migliore per vendere o comprare in base ai trend stagionali.",
+          "Stiamo costruendo questo ecosistema per sfidare frontalmente i colossi del settore — AutoHero, AutoScout24, Subito.it, noicompriamoauto.it — con un approccio radicalmente diverso. Mentre queste piattaforme si limitano a fare da bacheca per annunci o ad acquistare auto a prezzi stracciati per rivenderle con margini opachi, AutoEsperto mette il potere nelle mani del consumatore. Noi non compriamo e rivendiamo auto: noi ti diamo gli strumenti per capire il vero valore della tua auto e per fare la scelta giusta.",
+          "La differenza fondamentale è nel modello: i giganti del settore guadagnano dall'opacità del mercato (comprando a poco e rivendendo a tanto), mentre AutoEsperto guadagna dalla trasparenza. Il nostro successo economico è direttamente legato alla soddisfazione dell'utente — e questo allineamento di interessi è ciò che rende il progetto sostenibile e scalabile nel lungo periodo."
+        ]
+      },
+      {
+        "heading": "Nessun minimo di investimento: aperto a tutti coloro che credono nel futuro del progetto",
+        "paragraphs": [
+          "A differenza dei classici round per addetti ai lavori, riservati a pochi grandi fondi con soglie d'ingresso inaccessibili da decine di migliaia di euro, per AutoEsperto abbiamo stabilito una regola semplice e democratica: **non c'è alcun minimo di investimento**.",
+          "Crediamo fortemente che chiunque voglia sostenere questa rivoluzione nel mercato dell'usato debba poter salire a bordo fin dal primo giorno. Che si tratti di un piccolo risparmiatore o appassionato che vuole investire un importo contenuto, di un automobilista che vuole far parte dell'ecosistema, o di un business angel e imprenditore che desidera entrare con quote importanti, ogni partecipazione ha pari valore strategico e pieno riconoscimento.",
+          "Tutti gli aderenti parteciperanno alla costituzione della **Startup Innovativa S.r.l.** con quote trasparenti e proporzionali all'importo versato, beneficiando delle **detrazioni fiscali IRPEF o deduzioni IRES fino al 50%** previste dalla normativa italiana a supporto delle startup innovative."
+        ],
+        "list": [
+          "**Nessuna soglia minima di ingresso**: Puoi decidere liberamente la cifra da destinare al progetto in base alle tue preferenze, senza alcun vincolo o barriera.",
+          "**Valutazione di ingresso favorevole**: Entrare nella fase iniziale permette di ottenere condizioni di valore nettamente più vantaggiose rispetto ai round successivi alla diffusione di massa.",
+          "**Agevolazione fiscale diretta**: Detrazione dalle imposte fino al 50% del capitale investito per i contribuenti italiani.",
+          "**Canale diretto con il fondatore**: Aggiornamenti periodici e trasparenti su metriche, sviluppo tecnologico e roadmap di crescita."
+        ]
+      },
+      {
+        "heading": "Il round di finanziamento (€150.000 – €350.000), detrazioni fiscali al 50% e allocazione fondi",
+        "paragraphs": [
+          "I capitali raccolti con la campagna di finanziamento saranno destinati a supportare la roadmap di sviluppo per i successivi 18 mesi con la seguente allocazione trasparente:"
         ],
         "list": [
           "**50% – Digital Growth, Lancio al Grande Pubblico e Brand Awareness**: Campagne di posizionamento nazionale, partnership con creator automotive e acquisizione organica su larga scala.",
@@ -347,105 +395,16 @@ export const guides: Guide[] = [
         ]
       },
       {
-        "heading": "Contatti diretti per investitori e richiesta Data Room: ralfhjavier@gmail.com",
+        "heading": "Contatti diretti per investitori e richiesta informazioni: ralfhjavier@gmail.com",
         "paragraphs": [
-          "Gli investitori qualificati, business angel e partner industriali che desiderano visionare l'Investor Deck completo, il modello finanziario quinquennale e accedere alla data room riservata possono mettersi in contatto diretto con il fondatore:"
+          "Chiunque sia interessato a investire — a prescindere dalla cifra che desidera impiegare, senza alcun minimo — o voglia visionare la presentazione completa, il piano di sviluppo e dialogare direttamente con il fondatore può mettersi in contatto senza intermediari:",
+          "Riceverai una risposta personale, trasparente e tempestiva entro 24 ore."
         ],
         "list": [
           "**Fondatore e Lead AI Engineer**: Ralfh Javier.",
           "**Email Ufficiale per Investitori**: ralfhjavier@gmail.com.",
-          "**Oggetto della comunicazione**: AutoEsperto Seed Round 2026 - Richiesta Pitch Deck / Info.",
-          "**Disponibilità**: Demo tecnica live della piattaforma, walk-through dell'infrastruttura software e colloquio strategico per l'ingresso nel capitale della costituenda startup."
-        ]
-      }
-    ]
-  },
-  {
-    "slug": "autoesperto-cerca-investitori-seed-round-ai-automotive",
-    "title": "AutoEsperto apre il Seed Round: l'AI che rivoluziona la compravendita dell'usato cerca investitori",
-    "description": "Con oltre 5,2 milioni di passaggi annui e 25 miliardi transati, AutoEsperto apre il primo round di finanziamento: l'infrastruttura di Computer Vision e pricing reale creata da un solo sviluppatore freelance per portare trasparenza nell'usato.",
-    "published": "2026-09-04",
-    "category": "valutazione",
-    "cta": "autoesperto-storia",
-    "image": "/images/guide/autoesperto-cerca-investitori-seed-round-ai-automotive.jpg",
-    "readTime": "7 min",
-    "featured": true,
-    "sections": [
-      {
-        "heading": "Un mercato opaco da oltre 25 miliardi di euro all'anno in Italia",
-        "paragraphs": [
-          "Comprare o vendere un'automobile usata in Italia è un'esperienza che coinvolge ogni anno oltre 5,2 milioni di cittadini, per un volume economico transato che supera abbondantemente i 25 miliardi di euro secondo le rilevazioni ufficiali dell'ACI e del PRA.",
-          "Eppure, nonostante le dimensioni monumentali di questo mercato, la compravendita dell'usato è ancora afflitta da un'opacità strutturale senza pari nel panorama del commercio moderno: prezzi in vetrina gonfiati fino al 15% rispetto al reale valore di chiusura, timori fondati di chilometraggi scalati, difetti occulti mascherati con lucidature superficiali e un labirinto burocratico-fiscale fatto di bolli regionali disomogenei e severe limitazioni ambientali ZTL.",
-          "In questo contesto nasce [AutoEsperto.it](/): la prima piattaforma tecnologica italiana progettata per portare trasparenza radicale, perizia visiva istantanea e intelligenza decisionale nella compravendita di veicoli usati.",
-          "Oggi il progetto annuncia ufficialmente l'apertura del suo primo **Round di Finanziamento Pre-Seed / Seed (Target: € 150.000 – € 350.000)**, rivolto a Business Angel, fondi di venture capital ed investitori strategici nei settori automotive, insurtech e fintech per accelerare la crescita su scala nazionale."
-        ]
-      },
-      {
-        "heading": "La storia del fondatore: un solo sviluppatore freelance in bootstrapping estremo",
-        "paragraphs": [
-          "Dietro la tecnologia di AutoEsperto non c'è un consorzio di concessionarie né un'azienda storica della Silicon Valley, ma la determinazione di un singolo ingegnere e costruttore software: **Ralfh Javier**, sviluppatore full-stack e AI builder indipendente con base a Siracusa.",
-          "Operando in **puro bootstrapping come libero professionista freelance** (attualmente senza partita IVA e in fase pre-incorporation societaria), Ralfh ha progettato, addestrato e sviluppato l'intera architettura tecnologica di AutoEsperto in totale autonomia, dimostrando un'efficienza di capitale del 100%:"
-        ],
-        "list": [
-          "**Zero sprechi di capitale in agenzie o consulenze esterne**: Ogni componente del sistema — dallo scanner di Computer Vision per la perizia danni alla complessa logica predittiva dei prezzi reali, dal calcolo bollo per tutte le 20 regioni italiane al frontend ultra-veloce a 60fps — è stato scritto e ingegnerizzato direttamente dal fondatore.",
-          "**Velocità di esecuzione decuplicata**: Mentre le startup tradizionali e i giganti del settore impiegano mesi e budget a sei zeri per sviluppare semplici prototipi, AutoEsperto ha messo online un'infrastruttura completa con oltre 2.400 allestimenti storici mappati (coprendo auto fino a 25 anni di età) e una suite di test con 26 verifiche automatizzate.",
-          "**Costituzione Startup Innovativa**: I fondi raccolti nel round saranno utilizzati per costituire formalmente la **S.r.l. come Startup Innovativa**, consentendo a tutti gli investitori aderenti di beneficiare delle **detrazioni fiscali IRPEF/IRES al 30% - 50%** previste dalla legge italiana."
-        ]
-      },
-      {
-        "heading": "L'architettura proprietaria: Computer Vision, IQR predittivo e fiscalità su 20 regioni",
-        "paragraphs": [
-          "Il vantaggio tecnologico di AutoEsperto risiede nell'integrazione armoniosa di tre motori computazionali proprietari:"
-        ],
-        "list": [
-          "**Computer Vision Istantanea da Smartphone**: Caricando una foto dell'auto o incollando il link di un annuncio, l'intelligenza artificiale riconosce allestimento, generazione, stato visibile della carrozzeria e parti danneggiate, calcolando un preventivo indicativo per i ricambi e la manodopera.",
-          "**Fair Value Algoritmico Transato (Non di Vetrina)**: A differenza dei portali convenzionali che si limitano a mostrare i prezzi arbitrari richiesti dai venditori, l'algoritmo di AutoEsperto ripulisce gli annunci con il metodo dell'intervallo interquartile (IQR), esclude i prezzi civetta e determina il reale valore di scambio.",
-          "**Motore Fiscale e Territoriale Dedicato**: Il calcolo del valore e dei costi di possesso è parametrato sulle 20 regioni italiane, tenendo conto delle aliquote del bollo regionale, dei blocchi feriali per i Diesel (es. Milano Area B o Bacino Padano) e delle dinamiche di prezzo locali.",
-          "**Doppia Guida Tattica (Acquirente vs Venditore)**: Un cockpit interattivo che adatta i consigli a seconda che l'utente stia comprando (offrendo le 4 leve per abbassare il prezzo di € 400 - € 600) o vendendo (indicando il prezzo vetrina maggiorato del 9% per proteggere il margine di trattativa)."
-        ]
-      },
-      {
-        "heading": "La strategia di go-to-market: 100% gratuito per l'adozione, poi modello Freemium con perizia certificata",
-        "paragraphs": [
-          "La strategia di crescita commerciale di AutoEsperto è articolata in due fasi chiaramente definite e sinergiche:"
-        ],
-        "list": [
-          "**Fase 1 (Attuale: Piattaforma 100% Gratuita)**: Per abbattere qualsiasi barriera all'ingresso, creare un potente effetto passaparola e perfezionare gli algoritmi di machine learning con milioni di dati reali, il servizio è attualmente completamente accessibile a titolo gratuito. Questa scelta consente di consolidare un formidabile posizionamento SEO organico su migliaia di chiavi di ricerca senza dover spendere cifre ingenti in advertising a pagamento.",
-          "**Fase 2 (Post-Round: Lancio Stabile Freemium)**: Con il completamento del round di finanziamento e il rilascio stabile della piattaforma, verrà introdotto il modello Freemium bilanciato. La scansione base rimarrà gratuita, mentre le perizie approfondite, i dossier certificati in PDF con validità contrattuale per la trattativa e le visure cronologiche PRA in tempo reale faranno parte dei servizi premium on-demand (€ 4,90 – € 9,90)."
-        ]
-      },
-      {
-        "heading": "Modello di business diversificato: B2C, lead generation e B2B SaaS per concessionari",
-        "paragraphs": [
-          "Oltre alla monetizzazione diretta dei report certificati verso gli automobilisti privati, il modello economico prevede canali B2B ad altissima marginalità:"
-        ],
-        "list": [
-          "**Qualified Lead Generation**: Raccordo profilato dell'utente verso le officine e carrozzerie partner geolocalizzate, agenzie telematiche per il passaggio di proprietà e broker per polizze RC Auto e garanzie guasti.",
-          "**Piattaforma B2B SaaS per Dealer e Periti**: Cruscotto professionale per saloni automobilistici e concessionari per stimare istantaneamente il margine di ritiro sulle permute usate, prevedendo i tempi medi di rivendita sul mercato locale.",
-          "**Passaporto Digitale del Veicolo**: Fascicolo permanente condivisibile tramite QR Code, allineato alle normative europee sulla tracciabilità dei chilometri e delle scadenze manutentive."
-        ]
-      },
-      {
-        "heading": "Il round Seed (€150.000 – €350.000), detrazioni fiscali al 50% e allocazione fondi",
-        "paragraphs": [
-          "I capitali raccolti con il round di investimento saranno destinati a finanziare la roadmap di sviluppo per i successivi 18 mesi con la seguente allocazione trasparente:"
-        ],
-        "list": [
-          "**50% – Digital Growth, Lancio al Grande Pubblico e Brand Awareness**: Campagne di posizionamento nazionale, partnership con creator automotive e acquisizione organica su larga scala.",
-          "**25% – Sviluppo App Mobile Nativa (iOS / Android)**: Rilascio dell'applicazione mobile con fotocamera AR per scansionare le auto usate direttamente nei piazzali dei concessionari.",
-          "**15% – Integrazioni Dati Ufficiali (ACI, PRA, Banche Dati Sinistri)**: Connessione telematica certificata con i registri PRA e le banche dati storiche sui sinistri pregressi.",
-          "**10% – Legal, Costituzione Societaria e Brevettazione**: Formalizzazione della Startup Innovativa S.r.l., protezione dei marchi e degli algoritmi di computer vision."
-        ]
-      },
-      {
-        "heading": "Contatti diretti per investitori e richiesta Data Room: ralfhjavier@gmail.com",
-        "paragraphs": [
-          "Gli investitori qualificati, business angel e partner industriali che desiderano visionare l'Investor Deck completo, il modello finanziario quinquennale e accedere alla data room riservata possono mettersi in contatto diretto con il fondatore:"
-        ],
-        "list": [
-          "**Fondatore e Lead AI Engineer**: Ralfh Javier.",
-          "**Email Ufficiale per Investitori**: ralfhjavier@gmail.com.",
-          "**Oggetto della comunicazione**: AutoEsperto Seed Round 2026 - Richiesta Pitch Deck / Info.",
+          "**Oggetto consigliato**: AutoEsperto - Opportunità Investitori 2026 - Richiesta Presentazione / Info.",
+          "**Cosa indicare nel messaggio**: Una breve presentazione e l'importo indicativo che valuteresti di investire (ricordando che non esiste alcun minimo richiesto).",
           "**Disponibilità**: Demo tecnica live della piattaforma, walk-through dell'infrastruttura software e colloquio strategico per l'ingresso nel capitale della costituenda startup."
         ]
       }
@@ -649,6 +608,21 @@ export const guides: Guide[] = [
           "Qual è la scadenza per aderire allo Straccia Bollo? La scadenza indicata dalla norma regionale è il 31 ottobre 2026.",
           "Posso vendere l'auto se aderisco allo Straccia Bollo? Sì, non appena effettuato il saldo della quota capitale e registrato lo sblocco del fermo amministrativo, l'auto può essere venduta o radiata regolarmente."
         ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
+        ]
       }
     ]
   },
@@ -695,6 +669,21 @@ export const guides: Guide[] = [
           "Per difenderti: combina sempre un antifurto meccanico (bloccasterzo blindato sul piantone) con un sistema di protezione per la presa diagnostica OBD e un localizzatore GPS autoalimentato.",
           "Se stai acquistando un'auto usata appartenente alla Top 10, usa AutoEsperto per scansionare il veicolo, verificare la congruità del prezzo e controllare che non sia stato ricostruito con pezzi non tracciabili."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -735,6 +724,21 @@ export const guides: Guide[] = [
         "heading": "3. Come calcolare i costi di gestione della tua auto",
         "paragraphs": [
           "Prima di scegliere la tua prossima auto, calcola il costo totale di possesso (TCO) su AutoEsperto: inserisci marca, modello e allestimento per conoscere subito bollo stimato, consumi reali, costi di manutenzione e svalutazione."
+        ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
         ]
       }
     ]
@@ -778,6 +782,21 @@ export const guides: Guide[] = [
         "paragraphs": [
           "Usa il tool di confronto modelli di AutoEsperto per mettere a confronto fianco a fianco due motorizzazioni: potrai confrontare consumi reali, costi di gestione a 5 anni e indice di tenuta del prezzo."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -815,6 +834,21 @@ export const guides: Guide[] = [
         "heading": "2. Come trovare l'occasione perfetta senza rischi",
         "paragraphs": [
           "Prima di versare una caparra per un'auto da 10.000 euro, analizzala gratuitamente con lo scanner di AutoEsperto: verifica se il prezzo richiesto è in linea con gli annunci reali di tutta Italia ed esegui i controlli della nostra checklist anti-fregature."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -914,6 +948,21 @@ export const guides: Guide[] = [
         "paragraphs": [
           "Prima di formulare un'offerta al venditore o di pubblicare il tuo annuncio di vendita, inserisci la targa o i dettagli del veicolo nel nostro strumento di [valutazione Fiat Panda](/valutazione): otterrai il prezzo reale parametrato alla tua regione e il calcolo esatto del [bollo auto](/calcolo-bollo)."
         ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
+        ]
       }
     ]
   },
@@ -963,6 +1012,21 @@ export const guides: Guide[] = [
         "heading": "Calcola la quotazione della tua Fiat 500 su AutoEsperto",
         "paragraphs": [
           "Usa il nostro servizio gratuito di [valutazione Fiat 500](/valutazione) per scoprire istantaneamente la stima del valore di mercato, consultare la scheda tecnica e calcolare il costo del [passaggio di proprietà](/passaggio-proprieta)."
+        ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
         ]
       }
     ]
@@ -1016,6 +1080,21 @@ export const guides: Guide[] = [
         "heading": "Usa lo Scanner di AutoEsperto",
         "paragraphs": [
           "Carica le foto dell'annuncio su AutoEsperto per ricevere un report istantaneo con identificazione modello, stima di prezzo di mercato e checklist dei punti deboli specifici per quella vettura."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -1191,6 +1270,21 @@ export const guides: Guide[] = [
           "Se decidi di acquistare un diesel Euro 5, verifica con la diagnosi elettronica lo stato di saturazione del filtro antiparticolato (FAP/DPF): se l'auto precedente è stata usata solo per brevi tragitti cittadini, il filtro potrebbe essere intasato.",
           "Controlla la classe ambientale esatta e le limitazioni attive consultando la sezione [blocchi del traffico su AutoEsperto](/blocchi-traffico)."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -1292,6 +1386,21 @@ export const guides: Guide[] = [
         "heading": "2. Confronta l'affidabilità su AutoEsperto",
         "paragraphs": [
           "Prima di scegliere la tua prossima auto, consulta la sezione Affidabilità e Guasti su AutoEsperto: scopri i punti deboli noti, i richiami ufficiali e le opinioni degli esperti per oltre 4.000 modelli."
+        ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
         ]
       }
     ]
@@ -1482,6 +1591,27 @@ export const guides: Guide[] = [
           "Quando decidi di vendere l'auto, puoi generare con un click un link pubblico o un QR code protetto: i potenziali acquirenti potranno consultare lo storico manutenzioni, le foto ad alta risoluzione e il verdetto AutoEsperto senza vedere i tuoi dati personali sensibili.",
           "La trasparenza totale azzera la diffidenza dell'acquirente e ti permette di difendere il prezzo senza subire sconti ingiustificati."
         ]
+      },
+      {
+        "heading": "Quando rivolgersi a un meccanico e quando fare da soli",
+        "paragraphs": [
+          "Alcune operazioni di manutenzione ordinaria possono essere effettuate in autonomia anche da chi non ha esperienza meccanica specifica: il controllo del livello dell'olio motore, la verifica della pressione degli pneumatici, il rabbocco del liquido lavavetri e la sostituzione delle spazzole tergicristallo sono interventi alla portata di tutti che non richiedono attrezzi specializzati.",
+          "Per tutto il resto — e in particolare per qualsiasi intervento che coinvolga l'impianto frenante, il sistema di alimentazione, la distribuzione, l'impianto elettrico o il sistema di climatizzazione — è fondamentale rivolgersi a un meccanico qualificato. Un intervento mal eseguito può causare danni ben più costosi del risparmio iniziale e, nel caso dell'impianto frenante, mettere a rischio la sicurezza stradale.",
+          "Il consiglio pratico è trovare un'officina di fiducia indipendente (non necessariamente il concessionario ufficiale, i cui prezzi sono mediamente più alti del 30-40%) e costruire un rapporto di fiducia nel tempo. Un meccanico che conosce la storia della tua auto è in grado di anticipare i problemi e consigliarti interventi preventivi che nel lungo periodo ti fanno risparmiare."
+        ]
+      },
+      {
+        "heading": "Costi indicativi degli interventi più comuni nel 2026",
+        "paragraphs": [
+          "Conoscere i costi medi degli interventi di manutenzione ti permette di valutare in anticipo se un preventivo è ragionevole e di pianificare il budget annuale per la gestione del veicolo. I prezzi variano sensibilmente tra Nord e Sud Italia e tra officine indipendenti e rete ufficiale, ma le seguenti fasce danno un'indicazione utile per orientarsi."
+        ],
+        "list": [
+          "**Tagliando completo (olio + filtri)**: € 150-350 in officina indipendente, € 250-500 presso la rete ufficiale, a seconda del modello e del tipo di motore.",
+          "**Sostituzione pastiglie freno anteriori**: € 80-180 (materiale e manodopera), con dischi da aggiungere eventualmente per € 100-250 in più.",
+          "**Sostituzione pneumatici (4 gomme)**: € 200-600 per gomme di qualità media, montaggio e convergenza inclusi.",
+          "**Distribuzione (cinghia o catena)**: € 400-900 per la cinghia, operazione da effettuare ogni 80.000-120.000 km a seconda del modello.",
+          "**Ricarica climatizzatore**: € 60-120, operazione consigliata ogni 2-3 anni per mantenere l'efficienza dell'impianto."
+        ]
       }
     ]
   },
@@ -1531,6 +1661,21 @@ export const guides: Guide[] = [
           "**Maxi-tagliando iniziale**: preventivare circa 250-350 € per cambio olio, filtro olio, filtro aria, candele e liquido freni.",
           "**Stato degli pneumatici**: 4 gomme nuove economiche montate costano tra 200 € e 300 €; gomme lisce o vetrificate vanno sostituite immediatamente.",
           "**Verifica revisione ministeriale**: controlla sul Portale dell'Automobilista lo storico dei chilometri registrati nelle ultime revisioni e la data di scadenza biennale."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -1582,6 +1727,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -1632,6 +1792,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -1681,6 +1856,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -1733,6 +1923,21 @@ export const guides: Guide[] = [
           "**Evita motorizzazioni turbodiesel con DPF se guidi solo in città**: i tragitti brevi casa-scuola o casa-lavoro intasano il filtro antiparticolato causando frequenti visite in officina.",
           "**Controlla i punti critici di usura**: pneumatici, spessore freni e stato frizione; i neopatentati tendono a sollecitare maggiormente la frizione in salita e nelle manovre."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -1782,6 +1987,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -1833,6 +2053,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -1882,6 +2117,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -1933,6 +2183,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -1982,6 +2247,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2033,6 +2313,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2082,6 +2377,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2133,6 +2443,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2182,6 +2507,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2233,6 +2573,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2282,6 +2637,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2333,6 +2703,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2382,6 +2767,21 @@ export const guides: Guide[] = [
           "**Certificato di Proprietà Digitale (CDPD)**: controlla il codice di autenticità stampato sul foglio complementare.",
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2433,6 +2833,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2482,6 +2897,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2533,6 +2963,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2582,6 +3027,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2633,6 +3093,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2682,6 +3157,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Verifica finale prima di firmare",
+        "paragraphs": [
+          "Prima di versare qualsiasi caparra o firmare il contratto di vendita, effettua queste verifiche essenziali: controlla che il numero di telaio stampigliato sulla scocca corrisponda esattamente a quello riportato sul libretto di circolazione. Verifica che la targa non risulti rubata o clonata. Assicurati che il venditore sia effettivamente il proprietario risultante dal certificato di proprietà.",
+          "Se acquisti da un privato, pretendi sempre un contratto di compravendita scritto che includa: dati completi di entrambe le parti, descrizione del veicolo (targa, telaio, km), prezzo pattuito, dichiarazione del venditore sullo stato del veicolo e sull'assenza di vizi occulti noti. Questo documento ti tutela legalmente in caso di contestazioni successive."
         ]
       }
     ]
@@ -2734,6 +3216,21 @@ export const guides: Guide[] = [
           "**Evita motorizzazioni turbodiesel con DPF se guidi solo in città**: i tragitti brevi casa-scuola o casa-lavoro intasano il filtro antiparticolato causando frequenti visite in officina.",
           "**Controlla i punti critici di usura**: pneumatici, spessore freni e stato frizione; i neopatentati tendono a sollecitare maggiormente la frizione in salita e nelle manovre."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2783,6 +3280,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2834,6 +3346,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2883,6 +3410,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -2934,6 +3476,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -2983,6 +3540,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -3034,6 +3606,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -3083,6 +3670,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -3134,6 +3736,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -3183,6 +3800,21 @@ export const guides: Guide[] = [
           "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+        ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
         ]
       }
     ]
@@ -3234,6 +3866,21 @@ export const guides: Guide[] = [
           "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
           "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
         ]
+      },
+      {
+        "heading": "Consigli pratici prima dell'acquisto",
+        "paragraphs": [
+          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
+          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
+          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+        ]
+      },
+      {
+        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "paragraphs": [
+          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
+          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+        ]
       }
     ]
   },
@@ -3283,6 +3930,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3334,6 +3996,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3383,6 +4060,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3434,6 +4126,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3483,6 +4190,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3534,6 +4256,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3583,6 +4320,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3634,6 +4386,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3683,6 +4450,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3734,6 +4516,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3783,6 +4580,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3834,6 +4646,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3883,6 +4710,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -3934,6 +4776,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -3983,6 +4840,21 @@ export const guides: Guide[] = [
           "**Certificato di Proprietà Digitale (CDPD)**: controlla il codice di autenticità stampato sul foglio complementare.",
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4034,6 +4906,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4083,6 +4970,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4134,6 +5036,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4183,6 +5100,21 @@ export const guides: Guide[] = [
           "**Certificato di Proprietà Digitale (CDPD)**: controlla il codice di autenticità stampato sul foglio complementare.",
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4234,6 +5166,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4283,6 +5230,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4334,6 +5296,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4383,6 +5360,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Come stabilire il prezzo giusto di vendita",
+        "paragraphs": [
+          "Il prezzo di vendita ideale per un'auto usata è quello che attira contatti qualificati nel minor tempo possibile, senza svenderla. La regola pratica è partire dalla valutazione realistica di mercato (che puoi ottenere con AutoEsperto) e aggiungere un margine di trattativa del 8-12%. Questo ti dà spazio per negoziare con il compratore, che si aspetta sempre di 'ottenere uno sconto', senza partire da un prezzo irrealistico che scoraggia i contatti.",
+          "Attenzione a non sopravvalutare la tua auto per motivi affettivi: il valore sentimentale che attribuisci al tuo veicolo (i viaggi fatti, i ricordi, gli optional che hai scelto con cura) non si traduce in valore di mercato. Il compratore valuta l'auto per quello che è oggi, non per quello che ha rappresentato per te."
         ]
       }
     ]
@@ -4434,6 +5418,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4483,6 +5482,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4534,6 +5548,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4583,6 +5612,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4634,6 +5678,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4683,6 +5742,21 @@ export const guides: Guide[] = [
           "**Registrazione al PRA entro 60 giorni**: assicurati che l'acquirente provveda alla trascrizione del passaggio di proprietà o esegui la pratica contestuale presso un'agenzia pratiche auto.",
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
+        ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
         ]
       }
     ]
@@ -4734,6 +5808,21 @@ export const guides: Guide[] = [
           "**Disdetta o trasferimento della polizza assicurativa**: invia alla tua compagnia assicurativa la copia dell'atto di vendita con la ricevuta del passaggio per il rimborso del premio non goduto.",
           "**Conserva copia dell'atto per almeno 5 anni**: fondamentale per dimostrare la data e l'ora esatta del passaggio di proprietà in caso di verbali o cartelle notificate per errore."
         ]
+      },
+      {
+        "heading": "Come presentare l'auto per ottenere il miglior prezzo",
+        "paragraphs": [
+          "La prima impressione conta moltissimo nella vendita di un'auto usata. Un lavaggio interno ed esterno accurato, la lucidatura della carrozzeria e la pulizia dei sedili possono incrementare il valore percepito del veicolo di diverse centinaia di euro — un investimento di 30-50 euro che si ripaga ampiamente. Non trascurare i dettagli: vetri puliti, cerchi lavati, portabagagli svuotato e ordinato, tappetini aspirati.",
+          "Prepara in anticipo tutta la documentazione: libretto di circolazione, certificato di proprietà, fatture dei tagliandi e delle riparazioni più recenti, certificato di revisione valido. Un compratore che trova un venditore organizzato e trasparente è disposto a pagare un premio di prezzo, perché percepisce minore rischio nella transazione.",
+          "Quando scrivi l'annuncio, sii onesto ma strategico: menziona i punti di forza del veicolo (basso chilometraggio relativo alla categoria, optional di serie, pneumatici recenti, freni nuovi) e non nascondere i difetti evidenti — un graffio o un ammaccatura minore non sono un problema se dichiarati, ma diventano un enorme sconto se il compratore li scopre durante il sopralluogo."
+        ]
+      },
+      {
+        "heading": "Tempistiche e stagionalità nella vendita dell'usato",
+        "paragraphs": [
+          "Il mercato dell'usato in Italia ha una stagionalità marcata che influisce notevolmente sui tempi di vendita e sui prezzi realizzabili. La domanda è generalmente più forte tra marzo e giugno (con l'arrivo della bella stagione e le esigenze di mobilità estiva) e tra settembre e novembre (rientro dalle vacanze e necessità di un'auto per lavoro e scuola). Luglio e agosto vedono un rallentamento, così come il periodo natalizio.",
+          "Per le decappottabili e le spider, il momento migliore per vendere è tra aprile e giugno, quando la domanda è ai massimi. Per le berline e le station wagon, il mercato è più stabile durante tutto l'anno. I SUV e i fuoristrada vedono un picco di domanda tra ottobre e dicembre, in vista della stagione invernale."
+        ]
       }
     ]
   },
@@ -4783,6 +5872,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -4834,6 +5930,13 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Differenze regionali che incidono sul valore dell'auto",
+        "paragraphs": [
+          "L'Italia è un paese in cui la burocrazia automobilistica varia enormemente da regione a regione, e queste differenze hanno un impatto concreto sul valore di mercato dei veicoli usati. Il bollo auto, ad esempio, può variare di centinaia di euro all'anno tra una regione e l'altra per lo stesso identico veicolo — e questa differenza viene scontata direttamente nel prezzo di vendita dell'usato nelle regioni più costose.",
+          "Le limitazioni alla circolazione dei diesel (blocchi Euro 4, Euro 5 e persino Euro 6 in alcune aree della Pianura Padana) hanno creato una frattura netta nel mercato dell'usato: lo stesso diesel Euro 5 che in Sicilia o Calabria vale 8.000 euro, a Milano o Torino può valerne 5.000-6.000, perché il compratore locale sa che non potrà circolare liberamente durante i mesi invernali. AutoEsperto tiene conto di tutte queste variabili regionali nella propria valutazione, fornendo un prezzo realistico calibrato sulla zona in cui l'auto verrà utilizzata."
+        ]
       }
     ]
   },
@@ -4883,6 +5986,21 @@ export const guides: Guide[] = [
           "**Certificato di Proprietà Digitale (CDPD)**: controlla il codice di autenticità stampato sul foglio complementare.",
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
+        ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
         ]
       }
     ]
@@ -4934,6 +6052,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Punti deboli noti e cosa controllare prima dell'acquisto",
+        "paragraphs": [
+          "Ogni modello ha i suoi talloni d'Achille e conoscerli in anticipo ti permette di fare una verifica mirata durante il sopralluogo. Per i modelli Fiat più diffusi, i punti critici da verificare includono l'usura della frizione (specialmente nei veicoli utilizzati prevalentemente in città), lo stato della cinghia di distribuzione (intervallo di sostituzione spesso sottovalutato dai proprietari) e il funzionamento corretto dell'impianto elettrico, che su alcune annate può presentare problemi intermittenti difficili da diagnosticare.",
+          "Un altro aspetto da non sottovalutare è lo stato della carrozzeria nei punti più soggetti a ruggine: passaruota, bordi delle portiere, sottoscocca e zona intorno al lunotto posteriore. I modelli prodotti prima del 2015 sono particolarmente esposti a questo problema, soprattutto se hanno trascorso la loro vita in zone costiere o dove si usa il sale antigelo sulle strade."
+        ]
+      },
+      {
+        "heading": "Il mercato dell'usato per questo modello: tendenze e previsioni",
+        "paragraphs": [
+          "Il mercato dell'usato per i modelli Fiat in Italia è tra i più attivi e liquidi: la domanda resta costante durante tutto l'anno grazie alla popolarità del marchio e alla capillare rete di assistenza. Questo si traduce in tempi di vendita generalmente brevi (2-4 settimane per un annuncio ben fatto con prezzo corretto) e in una svalutazione annua relativamente contenuta rispetto ad altri marchi generalisti.",
+          "Per il 2026, le previsioni indicano una stabilizzazione dei prezzi dopo gli aumenti anomali del periodo 2022-2024 causati dalla crisi dei semiconduttori e dalla carenza di auto nuove. Chi vuole vendere farebbe bene a non aspettare troppo: con il ritorno alla normalità della produzione di auto nuove, i prezzi dell'usato tenderanno a scendere gradualmente nei prossimi 12-18 mesi."
+        ]
       }
     ]
   },
@@ -4983,6 +6115,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Punti deboli noti e cosa controllare prima dell'acquisto",
+        "paragraphs": [
+          "Ogni modello ha i suoi talloni d'Achille e conoscerli in anticipo ti permette di fare una verifica mirata durante il sopralluogo. Per i modelli Fiat più diffusi, i punti critici da verificare includono l'usura della frizione (specialmente nei veicoli utilizzati prevalentemente in città), lo stato della cinghia di distribuzione (intervallo di sostituzione spesso sottovalutato dai proprietari) e il funzionamento corretto dell'impianto elettrico, che su alcune annate può presentare problemi intermittenti difficili da diagnosticare.",
+          "Un altro aspetto da non sottovalutare è lo stato della carrozzeria nei punti più soggetti a ruggine: passaruota, bordi delle portiere, sottoscocca e zona intorno al lunotto posteriore. I modelli prodotti prima del 2015 sono particolarmente esposti a questo problema, soprattutto se hanno trascorso la loro vita in zone costiere o dove si usa il sale antigelo sulle strade."
+        ]
+      },
+      {
+        "heading": "Il mercato dell'usato per questo modello: tendenze e previsioni",
+        "paragraphs": [
+          "Il mercato dell'usato per i modelli Fiat in Italia è tra i più attivi e liquidi: la domanda resta costante durante tutto l'anno grazie alla popolarità del marchio e alla capillare rete di assistenza. Questo si traduce in tempi di vendita generalmente brevi (2-4 settimane per un annuncio ben fatto con prezzo corretto) e in una svalutazione annua relativamente contenuta rispetto ad altri marchi generalisti.",
+          "Per il 2026, le previsioni indicano una stabilizzazione dei prezzi dopo gli aumenti anomali del periodo 2022-2024 causati dalla crisi dei semiconduttori e dalla carenza di auto nuove. Chi vuole vendere farebbe bene a non aspettare troppo: con il ritorno alla normalità della produzione di auto nuove, i prezzi dell'usato tenderanno a scendere gradualmente nei prossimi 12-18 mesi."
         ]
       }
     ]
@@ -5034,6 +6180,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Affidabilità del gruppo VAG e problemi ricorrenti",
+        "paragraphs": [
+          "I veicoli del gruppo Volkswagen (che include anche Škoda, SEAT e Audi) sono generalmente apprezzati per la qualità costruttiva e la guidabilità, ma presentano alcuni problemi ricorrenti che è fondamentale conoscere prima di acquistare un esemplare usato. I motori TSI delle prime generazioni (2008-2013) possono soffrire di consumo olio eccessivo dovuto a difetti dei segmenti dei pistoni, mentre i diesel TDI con sistema di iniezione common-rail Piezo richiedono una manutenzione attenta del sistema AdBlue nelle versioni Euro 6.",
+          "Il cambio automatico a doppia frizione DSG, pur essendo eccezionale quando funziona correttamente, può presentare problemi di meccatronica e di usura delle frizioni soprattutto nei modelli con coppia elevata o uso prevalentemente urbano. La sostituzione della meccatronica ha un costo che può superare i 2.000 euro — un dettaglio da verificare attentamente durante la prova su strada, prestando attenzione a eventuali esitazioni o strappi nel cambio marcia a bassa velocità."
+        ]
+      },
+      {
+        "heading": "Costi di gestione reali rispetto alla concorrenza",
+        "paragraphs": [
+          "I veicoli tedeschi del gruppo VAG hanno costi di manutenzione mediamente superiori del 15-25% rispetto ai corrispettivi italiani o francesi, ma questa differenza si riduce significativamente se ci si rivolge a officine indipendenti specializzate anziché alla rete ufficiale. Un tagliando completo per una Golf, ad esempio, costa circa 180-280 euro in un'officina indipendente contro i 300-450 euro della concessionaria ufficiale, senza differenze sostanziali nella qualità dell'intervento.",
+          "La ricambistica aftermarket per i modelli più diffusi (Golf, Polo, Tiguan) è ampia e competitiva, il che contribuisce a contenere i costi nel lungo periodo. AutoEsperto ti aiuta a calcolare il costo totale di possesso annuo, includendo bollo, assicurazione, manutenzione programmata e svalutazione — così puoi confrontare oggettivamente il costo reale di un modello tedesco rispetto alle alternative."
+        ]
       }
     ]
   },
@@ -5083,6 +6243,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -5134,6 +6301,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Auto francesi e rumene usate: cosa aspettarsi",
+        "paragraphs": [
+          "Le auto francesi hanno compiuto enormi passi avanti in termini di affidabilità negli ultimi dieci anni. I modelli Renault e Peugeot delle generazioni più recenti (dal 2018 in poi) presentano tassi di difettosità comparabili a quelli dei concorrenti tedeschi e giapponesi, smentendo in larga misura la vecchia reputazione di scarsa affidabilità. Dacia, in particolare, si è affermata come punto di riferimento per chi cerca l'essenziale a un prezzo imbattibile, con una semplicità meccanica che si traduce in minori possibilità di guasto.",
+          "I punti di attenzione restano l'elettronica di bordo (i sistemi infotainment e gli ADAS delle auto francesi possono presentare bug software e malfunzionamenti intermittenti) e la qualità dei materiali interni, che nelle versioni base tende ad essere inferiore rispetto alla concorrenza tedesca. Niente di drammatico, ma vale la pena verificare il funzionamento di tutti i comandi e dei sistemi elettronici durante la prova su strada."
+        ]
+      },
+      {
+        "heading": "Perché Dacia Duster e Sandero dominano l'usato economico",
+        "paragraphs": [
+          "Dacia ha rivoluzionato il mercato dell'usato economico in Italia con un approccio disarmante nella sua semplicità: auto essenziali ma robuste, con meccanica collaudata Renault, a prezzi che sfidano qualsiasi concorrente. Un Duster usato di 3-4 anni con 60.000 km si trova a 12.000-15.000 euro — circa il 30-40% in meno rispetto a un SUV comparabile di altri marchi.",
+          "Il segreto del successo di Dacia nell'usato è la manutenzione economica (ricambi tra i più economici del mercato), l'assenza di tecnologie complesse che possono guastarsi e un rapporto spazio-prezzo imbattibile. Per chi cerca un'auto usata funzionale senza fronzoli, i modelli Dacia rappresentano probabilmente la scelta più razionale sul mercato italiano."
+        ]
       }
     ]
   },
@@ -5183,6 +6364,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Auto premium usate: il fascino del lusso accessibile e i costi nascosti",
+        "paragraphs": [
+          "Acquistare un'auto premium usata — BMW Serie 3, Audi A4, Mercedes Classe C, Alfa Romeo Giulia — è una delle esperienze più appaganti del mercato dell'usato: la qualità costruttiva, il piacere di guida e il livello di equipaggiamento di questi veicoli rimangono superiori alla media anche dopo anni di utilizzo. Il problema è che i costi di manutenzione e riparazione restano 'premium' anche quando il prezzo d'acquisto è sceso a livelli generalisti.",
+          "Un esempio concreto: una BMW Serie 3 F30 del 2016 con 100.000 km si può acquistare a 14.000-18.000 euro (prezzo da auto generalista), ma la sostituzione della distribuzione costa 800-1.200 euro, un set di pneumatici 245/40 R18 supera i 500 euro e un intervento al cambio automatico ZF può arrivare a 2.500 euro. Prima di lasciarti sedurre dal prezzo d'acquisto conveniente, calcola sempre il costo totale di possesso dei successivi 2-3 anni."
+        ]
+      },
+      {
+        "heading": "Consigli specifici per l'acquisto di un'auto premium usata",
+        "paragraphs": [
+          "Se decidi di acquistare un'auto premium usata, segui queste regole d'oro: primo, pretendi sempre lo storico manutentivo completo — su questi veicoli la manutenzione programmata è più costosa e più critica, e un proprietario che ha saltato i tagliandi ti sta consegnando una bomba a orologeria meccanica. Secondo, fai eseguire una diagnosi elettronica completa (non solo la lettura degli errori, ma anche il controllo dei parametri di funzionamento dei sensori) perché l'elettronica sofisticata di queste auto può nascondere problemi latenti invisibili a occhio nudo.",
+          "Terzo, informati sulla disponibilità e sul costo dei ricambi specifici per l'allestimento e la motorizzazione che stai valutando. Alcune versioni (motori V6, cambi automatici particolari, sistemi di sospensioni attive) hanno ricambi molto più costosi delle versioni base — e questa differenza può vanificare completamente il risparmio iniziale sull'acquisto."
         ]
       }
     ]
@@ -5234,6 +6429,21 @@ export const guides: Guide[] = [
           "**Attuatore turbina a geometria variabile (sulle versioni 85-95 CV)**: verificare che la wastegate o la geometria non sia bloccata da incrostazioni carboniose.",
           "**Regola d'oro per la longevità**: sostituisci l'olio motore (specifica 5W-30 ACEA C2 o 0W-30) ogni 12.000-15.000 km o ogni 12 mesi senza attendere le scadenze del computer di bordo."
         ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
+        ]
       }
     ]
   },
@@ -5283,6 +6493,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "L'affidabilità leggendaria giapponese: mito o realtà?",
+        "paragraphs": [
+          "La reputazione di affidabilità delle auto giapponesi è supportata da dati concreti: nei report TÜV tedeschi (la più vasta indagine indipendente sull'affidabilità in Europa), Toyota, Honda e Mazda occupano stabilmente le prime posizioni nella classifica dei modelli con meno difetti rilevati durante le revisioni periodiche. Questo si traduce in costi di manutenzione straordinaria mediamente inferiori del 20-30% rispetto ai modelli europei di pari segmento.",
+          "Nella pratica, la differenza si nota soprattutto dopo i 100.000 km: mentre molti modelli europei iniziano a presentare problemi elettrici, elettronici o meccanici significativi, le auto giapponesi tendono a mantenere un funzionamento regolare e prevedibile, con interventi di manutenzione che restano nell'ambito dell'ordinario (freni, pneumatici, filtri, liquidi)."
+        ]
+      },
+      {
+        "heading": "Valore residuo e svalutazione nel tempo",
+        "paragraphs": [
+          "Uno dei vantaggi più concreti delle auto giapponesi è la svalutazione contenuta: una Toyota Yaris o una Honda Jazz perdono mediamente il 15-18% del valore nel primo anno e il 10-12% negli anni successivi, contro il 20-25% e 12-15% dei modelli generalisti europei. Questo significa che acquistare un'auto giapponese usata è un investimento più sicuro, perché la perdita di valore durante il periodo di possesso sarà inferiore.",
+          "Per chi sta valutando l'acquisto, il consiglio è cercare esemplari di 3-5 anni con 50.000-80.000 km: è la fascia in cui il rapporto prezzo/affidabilità è più vantaggioso, perché il primo proprietario ha già assorbito la svalutazione maggiore e il veicolo ha ancora davanti a sé anni di funzionamento affidabile."
         ]
       }
     ]
@@ -5334,6 +6558,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Auto francesi e rumene usate: cosa aspettarsi",
+        "paragraphs": [
+          "Le auto francesi hanno compiuto enormi passi avanti in termini di affidabilità negli ultimi dieci anni. I modelli Renault e Peugeot delle generazioni più recenti (dal 2018 in poi) presentano tassi di difettosità comparabili a quelli dei concorrenti tedeschi e giapponesi, smentendo in larga misura la vecchia reputazione di scarsa affidabilità. Dacia, in particolare, si è affermata come punto di riferimento per chi cerca l'essenziale a un prezzo imbattibile, con una semplicità meccanica che si traduce in minori possibilità di guasto.",
+          "I punti di attenzione restano l'elettronica di bordo (i sistemi infotainment e gli ADAS delle auto francesi possono presentare bug software e malfunzionamenti intermittenti) e la qualità dei materiali interni, che nelle versioni base tende ad essere inferiore rispetto alla concorrenza tedesca. Niente di drammatico, ma vale la pena verificare il funzionamento di tutti i comandi e dei sistemi elettronici durante la prova su strada."
+        ]
+      },
+      {
+        "heading": "Perché Dacia Duster e Sandero dominano l'usato economico",
+        "paragraphs": [
+          "Dacia ha rivoluzionato il mercato dell'usato economico in Italia con un approccio disarmante nella sua semplicità: auto essenziali ma robuste, con meccanica collaudata Renault, a prezzi che sfidano qualsiasi concorrente. Un Duster usato di 3-4 anni con 60.000 km si trova a 12.000-15.000 euro — circa il 30-40% in meno rispetto a un SUV comparabile di altri marchi.",
+          "Il segreto del successo di Dacia nell'usato è la manutenzione economica (ricambi tra i più economici del mercato), l'assenza di tecnologie complesse che possono guastarsi e un rapporto spazio-prezzo imbattibile. Per chi cerca un'auto usata funzionale senza fronzoli, i modelli Dacia rappresentano probabilmente la scelta più razionale sul mercato italiano."
+        ]
       }
     ]
   },
@@ -5383,6 +6621,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -5434,6 +6679,20 @@ export const guides: Guide[] = [
           "**Prova su strada dell'impianto frenante**: verifica che la frenata sia progressiva e che il pedale non risulti legnoso o rigido alle basse velocità.",
           "**Storico consumi di lubrificante**: chiedi al venditore con quale frequenza rabbocca l'olio motore e controlla l'astina a motore spento e freddo."
         ]
+      },
+      {
+        "heading": "Auto francesi e rumene usate: cosa aspettarsi",
+        "paragraphs": [
+          "Le auto francesi hanno compiuto enormi passi avanti in termini di affidabilità negli ultimi dieci anni. I modelli Renault e Peugeot delle generazioni più recenti (dal 2018 in poi) presentano tassi di difettosità comparabili a quelli dei concorrenti tedeschi e giapponesi, smentendo in larga misura la vecchia reputazione di scarsa affidabilità. Dacia, in particolare, si è affermata come punto di riferimento per chi cerca l'essenziale a un prezzo imbattibile, con una semplicità meccanica che si traduce in minori possibilità di guasto.",
+          "I punti di attenzione restano l'elettronica di bordo (i sistemi infotainment e gli ADAS delle auto francesi possono presentare bug software e malfunzionamenti intermittenti) e la qualità dei materiali interni, che nelle versioni base tende ad essere inferiore rispetto alla concorrenza tedesca. Niente di drammatico, ma vale la pena verificare il funzionamento di tutti i comandi e dei sistemi elettronici durante la prova su strada."
+        ]
+      },
+      {
+        "heading": "Perché Dacia Duster e Sandero dominano l'usato economico",
+        "paragraphs": [
+          "Dacia ha rivoluzionato il mercato dell'usato economico in Italia con un approccio disarmante nella sua semplicità: auto essenziali ma robuste, con meccanica collaudata Renault, a prezzi che sfidano qualsiasi concorrente. Un Duster usato di 3-4 anni con 60.000 km si trova a 12.000-15.000 euro — circa il 30-40% in meno rispetto a un SUV comparabile di altri marchi.",
+          "Il segreto del successo di Dacia nell'usato è la manutenzione economica (ricambi tra i più economici del mercato), l'assenza di tecnologie complesse che possono guastarsi e un rapporto spazio-prezzo imbattibile. Per chi cerca un'auto usata funzionale senza fronzoli, i modelli Dacia rappresentano probabilmente la scelta più razionale sul mercato italiano."
+        ]
       }
     ]
   },
@@ -5483,6 +6742,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Auto francesi e rumene usate: cosa aspettarsi",
+        "paragraphs": [
+          "Le auto francesi hanno compiuto enormi passi avanti in termini di affidabilità negli ultimi dieci anni. I modelli Renault e Peugeot delle generazioni più recenti (dal 2018 in poi) presentano tassi di difettosità comparabili a quelli dei concorrenti tedeschi e giapponesi, smentendo in larga misura la vecchia reputazione di scarsa affidabilità. Dacia, in particolare, si è affermata come punto di riferimento per chi cerca l'essenziale a un prezzo imbattibile, con una semplicità meccanica che si traduce in minori possibilità di guasto.",
+          "I punti di attenzione restano l'elettronica di bordo (i sistemi infotainment e gli ADAS delle auto francesi possono presentare bug software e malfunzionamenti intermittenti) e la qualità dei materiali interni, che nelle versioni base tende ad essere inferiore rispetto alla concorrenza tedesca. Niente di drammatico, ma vale la pena verificare il funzionamento di tutti i comandi e dei sistemi elettronici durante la prova su strada."
+        ]
+      },
+      {
+        "heading": "Perché Dacia Duster e Sandero dominano l'usato economico",
+        "paragraphs": [
+          "Dacia ha rivoluzionato il mercato dell'usato economico in Italia con un approccio disarmante nella sua semplicità: auto essenziali ma robuste, con meccanica collaudata Renault, a prezzi che sfidano qualsiasi concorrente. Un Duster usato di 3-4 anni con 60.000 km si trova a 12.000-15.000 euro — circa il 30-40% in meno rispetto a un SUV comparabile di altri marchi.",
+          "Il segreto del successo di Dacia nell'usato è la manutenzione economica (ricambi tra i più economici del mercato), l'assenza di tecnologie complesse che possono guastarsi e un rapporto spazio-prezzo imbattibile. Per chi cerca un'auto usata funzionale senza fronzoli, i modelli Dacia rappresentano probabilmente la scelta più razionale sul mercato italiano."
         ]
       }
     ]
@@ -5534,6 +6807,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
+        ]
       }
     ]
   },
@@ -5583,6 +6870,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
         ]
       }
     ]
@@ -5634,6 +6935,13 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+        ]
       }
     ]
   },
@@ -5683,6 +6991,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -5734,6 +7049,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
+        ]
       }
     ]
   },
@@ -5783,6 +7112,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -5834,6 +7170,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -5883,6 +7233,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
         ]
       }
     ]
@@ -5934,6 +7298,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
+        ]
       }
     ]
   },
@@ -5983,6 +7361,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -6034,6 +7419,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
+        ]
       }
     ]
   },
@@ -6083,6 +7482,21 @@ export const guides: Guide[] = [
           "**Certificato di Proprietà Digitale (CDPD)**: controlla il codice di autenticità stampato sul foglio complementare.",
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
+        ]
+      },
+      {
+        "heading": "Come viene calcolato il valore reale di un'auto usata",
+        "paragraphs": [
+          "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
+          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
+        ]
+      },
+      {
+        "heading": "Perché il chilometraggio non è l'unico fattore che conta",
+        "paragraphs": [
+          "Un errore diffusissimo tra chi valuta un'auto usata è concentrarsi ossessivamente sul chilometraggio, trascurando fattori altrettanto determinanti. Un'auto con 150.000 km percorsi interamente in autostrada (chilometri 'buoni' per il motore, con regime costante e usura ridotta su freni e frizione) può essere in condizioni meccaniche migliori di un'auto con 80.000 km percorsi prevalentemente nel traffico urbano (continui stop-and-go, frizione sollecitata, filtro antiparticolato sotto stress, freni usurati).",
+          "Allo stesso modo, un veicolo con 120.000 km e manutenzione certificata presso la rete ufficiale vale significativamente di più di un esemplare identico con 90.000 km ma senza alcuna documentazione di tagliandi. Lo storico manutentivo è il vero indicatore della salute di un veicolo — non il semplice numero sul contachilometri."
         ]
       }
     ]
@@ -6134,6 +7548,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
+        ]
       }
     ]
   },
@@ -6183,6 +7611,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -6234,6 +7676,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -6283,6 +7739,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
         ]
       }
     ]
@@ -6334,6 +7804,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
+        ]
       }
     ]
   },
@@ -6383,6 +7867,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -6434,6 +7925,13 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+        ]
       }
     ]
   },
@@ -6483,6 +7981,20 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Fattori che influenzano il valore oltre il chilometraggio",
+        "paragraphs": [
+          "Il chilometraggio è solo uno dei tanti fattori che determinano il valore di un'auto usata. Lo stato reale della carrozzeria (ammaccature, graffi profondi, tracce di ruggine), la completezza e la regolarità dello storico manutentivo, la presenza di optional ricercati (navigatore, sedili in pelle, tetto panoramico, pacchetto ADAS) e persino il colore della carrozzeria incidono significativamente sulla valutazione finale.",
+          "In Italia, le auto di colore bianco, grigio e nero si vendono mediamente più velocemente e a prezzi leggermente superiori rispetto ai colori meno convenzionali (verde, arancione, giallo), con l'eccezione del rosso per i modelli sportivi dove è considerato un valore aggiunto. AutoEsperto tiene conto di tutti questi fattori nella propria stima di valore, fornendo una valutazione che riflette le reali dinamiche del mercato locale."
+        ]
+      },
+      {
+        "heading": "Come usare la valutazione AutoEsperto nella trattativa",
+        "paragraphs": [
+          "Avere in mano una valutazione attendibile e basata su dati reali prima di iniziare la trattativa cambia radicalmente il rapporto di forza tra compratore e venditore. Se stai comprando, saprai esattamente quanto vale davvero l'auto e potrai argomentare la tua offerta con numeri concreti, senza sembrare il classico 'tiratore di prezzo' — ma un acquirente preparato che conosce il mercato.",
+          "Se stai vendendo, una valutazione realistica ti permette di fissare un prezzo di partenza credibile (mediamente il 8-12% sopra il valore di chiusura atteso, per lasciare margine alla trattativa) e di rispondere con sicurezza alle obiezioni del compratore. In entrambi i casi, la conoscenza del dato reale ti mette in una posizione di vantaggio negoziale decisiva."
         ]
       }
     ]
@@ -6534,6 +8046,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Auto premium usate: il fascino del lusso accessibile e i costi nascosti",
+        "paragraphs": [
+          "Acquistare un'auto premium usata — BMW Serie 3, Audi A4, Mercedes Classe C, Alfa Romeo Giulia — è una delle esperienze più appaganti del mercato dell'usato: la qualità costruttiva, il piacere di guida e il livello di equipaggiamento di questi veicoli rimangono superiori alla media anche dopo anni di utilizzo. Il problema è che i costi di manutenzione e riparazione restano 'premium' anche quando il prezzo d'acquisto è sceso a livelli generalisti.",
+          "Un esempio concreto: una BMW Serie 3 F30 del 2016 con 100.000 km si può acquistare a 14.000-18.000 euro (prezzo da auto generalista), ma la sostituzione della distribuzione costa 800-1.200 euro, un set di pneumatici 245/40 R18 supera i 500 euro e un intervento al cambio automatico ZF può arrivare a 2.500 euro. Prima di lasciarti sedurre dal prezzo d'acquisto conveniente, calcola sempre il costo totale di possesso dei successivi 2-3 anni."
+        ]
+      },
+      {
+        "heading": "Consigli specifici per l'acquisto di un'auto premium usata",
+        "paragraphs": [
+          "Se decidi di acquistare un'auto premium usata, segui queste regole d'oro: primo, pretendi sempre lo storico manutentivo completo — su questi veicoli la manutenzione programmata è più costosa e più critica, e un proprietario che ha saltato i tagliandi ti sta consegnando una bomba a orologeria meccanica. Secondo, fai eseguire una diagnosi elettronica completa (non solo la lettura degli errori, ma anche il controllo dei parametri di funzionamento dei sensori) perché l'elettronica sofisticata di queste auto può nascondere problemi latenti invisibili a occhio nudo.",
+          "Terzo, informati sulla disponibilità e sul costo dei ricambi specifici per l'allestimento e la motorizzazione che stai valutando. Alcune versioni (motori V6, cambi automatici particolari, sistemi di sospensioni attive) hanno ricambi molto più costosi delle versioni base — e questa differenza può vanificare completamente il risparmio iniziale sull'acquisto."
+        ]
       }
     ]
   },
@@ -6583,6 +8109,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -6634,6 +8167,20 @@ export const guides: Guide[] = [
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -6683,6 +8230,13 @@ export const guides: Guide[] = [
           "**Crea il Profilo Digitale gratuito**: digitalizza i tagliandi e le fatture per dimostrare all'acquirente la scrupolosa cura del veicolo.",
           "**Considera i costi di ripristino stimati**: ogni manutenzione imminente (gomme, freni, tagliando, distribuzione) va computata oggettivamente nella negoziazione.",
           "**Verifica finale su annunci concorrenti**: confronta almeno 5-10 annunci comparabili per anno e km per posizionare il prezzo in modo competitivo."
+        ]
+      },
+      {
+        "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
+        "paragraphs": [
+          "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
+          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
         ]
       }
     ]
@@ -6734,6 +8288,20 @@ export const guides: Guide[] = [
           "**Motori con catena di distribuzione posteriore o complessa (BMW N47, Mercedes OM651)**: tra 1.200 € e 1.800 € per l'elevato numero di ore di manodopera.",
           "**Verifica etichetta vano motore**: le officine serie appongono una targhetta adesiva sul coperchio di plastica o sul montante con la data e i chilometri in cui è stata rifatta la distribuzione."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -6783,6 +8351,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -6834,6 +8416,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -6883,6 +8479,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -6934,6 +8544,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -6983,6 +8607,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -7034,6 +8672,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7083,6 +8735,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -7134,6 +8800,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7183,6 +8863,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -7234,6 +8928,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7283,6 +8991,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -7334,6 +9056,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7383,6 +9119,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -7434,6 +9184,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
+        ]
       }
     ]
   },
@@ -7483,6 +9247,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -7534,6 +9312,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7583,6 +9375,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -7634,6 +9440,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
+        ]
       }
     ]
   },
@@ -7683,6 +9503,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -7734,6 +9568,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
+        ]
       }
     ]
   },
@@ -7783,6 +9631,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -7834,6 +9696,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7883,6 +9759,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -7934,6 +9824,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -7983,6 +9887,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -8034,6 +9952,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
+        ]
       }
     ]
   },
@@ -8083,6 +10015,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -8134,6 +10080,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -8183,6 +10143,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -8234,6 +10208,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -8283,6 +10271,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
         ]
       }
     ]
@@ -8334,6 +10336,20 @@ export const guides: Guide[] = [
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è semplice: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che compare e scompare, una spia che lampeggia solo a freddo, una vibrazione percepibile solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare un intervento da 100-200 euro in una riparazione da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva, ovvero intervenire solo quando qualcosa si rompe. La ragione è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Tieni sempre un registro aggiornato degli interventi effettuati con data, chilometraggio e officina. Questo storico non solo ti aiuta a programmare i prossimi interventi, ma aumenta significativamente il valore di rivendita del veicolo quando deciderai di venderlo."
+        ]
       }
     ]
   },
@@ -8383,6 +10399,20 @@ export const guides: Guide[] = [
           "**Registra l'intervento nel Profilo Digitale Auto**: conservare la prova dell'intervento accresce la fiducia e il valore di rivendita del veicolo sul mercato dell'usato.",
           "**Non posticipare le scadenze critiche**: intervenire tempestivamente costa mediamente un terzo rispetto al ripristino di un danno esteso.",
           "**Controllo contestuale degli organi adiacenti**: approfittare dello smontaggio per verificare lo stato di cuscinetti, guarnizioni e fluidi ausiliari."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -8434,6 +10464,20 @@ export const guides: Guide[] = [
           "**Prova su strada dell'impianto frenante**: verifica che la frenata sia progressiva e che il pedale non risulti legnoso o rigido alle basse velocità.",
           "**Storico consumi di lubrificante**: chiedi al venditore con quale frequenza rabbocca l'olio motore e controlla l'astina a motore spento e freddo."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -8483,6 +10527,21 @@ export const guides: Guide[] = [
           "**Avviamento a freddo**: verifica che il motore parta al primo colpo senza fumo bianco o grigio persistente allo scarico.",
           "**Stato del filtro DPF**: effettua un test su percorso extraurbano per verificare che non vi siano rigenerazioni interrotte o messaggi di \"Antinquinamento controllare\".",
           "**Controllo perdite gasolio**: ispeziona visivamente i tubicini di ritorno degli iniettori nel vano motore per escludere perdite o odore di carburante nell'abitacolo."
+        ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
         ]
       }
     ]
@@ -8534,6 +10593,21 @@ export const guides: Guide[] = [
           "**Diagnosi OBD specifica**: scansiona la centralina del cambio per controllare i blocchi valori (misura usura dischi K1 e K2 e storico codici errore P17BF / P189C).",
           "**Verifica aggiornamenti software**: assicurati che la centralina del cambio abbia ricevuto gli aggiornamenti di calibrazione più recenti della casa madre."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -8584,6 +10658,21 @@ export const guides: Guide[] = [
           "**Attuatore turbina a geometria variabile (sulle versioni 85-95 CV)**: verificare che la wastegate o la geometria non sia bloccata da incrostazioni carboniose.",
           "**Regola d'oro per la longevità**: sostituisci l'olio motore (specifica 5W-30 ACEA C2 o 0W-30) ogni 12.000-15.000 km o ogni 12 mesi senza attendere le scadenze del computer di bordo."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -8632,6 +10721,21 @@ export const guides: Guide[] = [
           "**Accelerazione a cofano aperto**: fai dare brevi colpi di acceleratore da fermo (da 1.000 a 2.500 giri) ascoltando se vicino al coperchio punterie compare un fruscio metallico anomalo.",
           "**Assenza di messaggi \"Difetto motore / Emissioni\"**: verifica sul display centrale che non compaiano spie motore o avvisi di mancato avviamento tra 1.000 km.",
           "**Esame del libretto e delle fatture**: verifica che l'olio motore utilizzato sia esclusivamente quello con specifica approvata e che non siano stati superati i limiti chilometrici."
+        ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
         ]
       }
     ]
@@ -8683,6 +10787,13 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
+        ]
       }
     ]
   },
@@ -8732,6 +10843,21 @@ export const guides: Guide[] = [
           "**Test di ripartenza in salita**: fermati su una rampa ripida e riparti: il cambio non deve strappare o emettere vibrazioni rugose.",
           "**Diagnosi OBD specifica**: scansiona la centralina del cambio per controllare i blocchi valori (misura usura dischi K1 e K2 e storico codici errore P17BF / P189C).",
           "**Verifica aggiornamenti software**: assicurati che la centralina del cambio abbia ricevuto gli aggiornamenti di calibrazione più recenti della casa madre."
+        ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
         ]
       }
     ]
@@ -8783,6 +10909,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Affidabilità del gruppo VAG e problemi ricorrenti",
+        "paragraphs": [
+          "I veicoli del gruppo Volkswagen (che include anche Škoda, SEAT e Audi) sono generalmente apprezzati per la qualità costruttiva e la guidabilità, ma presentano alcuni problemi ricorrenti che è fondamentale conoscere prima di acquistare un esemplare usato. I motori TSI delle prime generazioni (2008-2013) possono soffrire di consumo olio eccessivo dovuto a difetti dei segmenti dei pistoni, mentre i diesel TDI con sistema di iniezione common-rail Piezo richiedono una manutenzione attenta del sistema AdBlue nelle versioni Euro 6.",
+          "Il cambio automatico a doppia frizione DSG, pur essendo eccezionale quando funziona correttamente, può presentare problemi di meccatronica e di usura delle frizioni soprattutto nei modelli con coppia elevata o uso prevalentemente urbano. La sostituzione della meccatronica ha un costo che può superare i 2.000 euro — un dettaglio da verificare attentamente durante la prova su strada, prestando attenzione a eventuali esitazioni o strappi nel cambio marcia a bassa velocità."
+        ]
+      },
+      {
+        "heading": "Costi di gestione reali rispetto alla concorrenza",
+        "paragraphs": [
+          "I veicoli tedeschi del gruppo VAG hanno costi di manutenzione mediamente superiori del 15-25% rispetto ai corrispettivi italiani o francesi, ma questa differenza si riduce significativamente se ci si rivolge a officine indipendenti specializzate anziché alla rete ufficiale. Un tagliando completo per una Golf, ad esempio, costa circa 180-280 euro in un'officina indipendente contro i 300-450 euro della concessionaria ufficiale, senza differenze sostanziali nella qualità dell'intervento.",
+          "La ricambistica aftermarket per i modelli più diffusi (Golf, Polo, Tiguan) è ampia e competitiva, il che contribuisce a contenere i costi nel lungo periodo. AutoEsperto ti aiuta a calcolare il costo totale di possesso annuo, includendo bollo, assicurazione, manutenzione programmata e svalutazione — così puoi confrontare oggettivamente il costo reale di un modello tedesco rispetto alle alternative."
+        ]
       }
     ]
   },
@@ -8832,6 +10972,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Affidabilità del gruppo VAG e problemi ricorrenti",
+        "paragraphs": [
+          "I veicoli del gruppo Volkswagen (che include anche Škoda, SEAT e Audi) sono generalmente apprezzati per la qualità costruttiva e la guidabilità, ma presentano alcuni problemi ricorrenti che è fondamentale conoscere prima di acquistare un esemplare usato. I motori TSI delle prime generazioni (2008-2013) possono soffrire di consumo olio eccessivo dovuto a difetti dei segmenti dei pistoni, mentre i diesel TDI con sistema di iniezione common-rail Piezo richiedono una manutenzione attenta del sistema AdBlue nelle versioni Euro 6.",
+          "Il cambio automatico a doppia frizione DSG, pur essendo eccezionale quando funziona correttamente, può presentare problemi di meccatronica e di usura delle frizioni soprattutto nei modelli con coppia elevata o uso prevalentemente urbano. La sostituzione della meccatronica ha un costo che può superare i 2.000 euro — un dettaglio da verificare attentamente durante la prova su strada, prestando attenzione a eventuali esitazioni o strappi nel cambio marcia a bassa velocità."
+        ]
+      },
+      {
+        "heading": "Costi di gestione reali rispetto alla concorrenza",
+        "paragraphs": [
+          "I veicoli tedeschi del gruppo VAG hanno costi di manutenzione mediamente superiori del 15-25% rispetto ai corrispettivi italiani o francesi, ma questa differenza si riduce significativamente se ci si rivolge a officine indipendenti specializzate anziché alla rete ufficiale. Un tagliando completo per una Golf, ad esempio, costa circa 180-280 euro in un'officina indipendente contro i 300-450 euro della concessionaria ufficiale, senza differenze sostanziali nella qualità dell'intervento.",
+          "La ricambistica aftermarket per i modelli più diffusi (Golf, Polo, Tiguan) è ampia e competitiva, il che contribuisce a contenere i costi nel lungo periodo. AutoEsperto ti aiuta a calcolare il costo totale di possesso annuo, includendo bollo, assicurazione, manutenzione programmata e svalutazione — così puoi confrontare oggettivamente il costo reale di un modello tedesco rispetto alle alternative."
         ]
       }
     ]
@@ -8883,6 +11037,21 @@ export const guides: Guide[] = [
           "**Controllo collettore di aspirazione e flap (farfalle)**: verifica lo stato delle lamelle turbolenza per scongiurare che finiscano risucchiate nei cilindri.",
           "**Frequenza cambio olio**: dimezza l'intervallo chilometrico BMW (da 30.000 a 15.000 km) utilizzando solo olio con specifica BMW Longlife-04 di alta qualità."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -8932,6 +11101,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -8983,6 +11166,21 @@ export const guides: Guide[] = [
           "**Documento di identità e codice fiscale del venditore**: l'intestatario presente sul libretto deve essere la medesima persona fisica che firma l'atto di vendita.",
           "**Regolarità del bollo auto**: controlla che le ultime annualità del bollo siano state saldate per evitare rivalse o blocchi amministrativi successivi."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -9032,6 +11230,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
         ]
       }
     ]
@@ -9083,6 +11288,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "L'affidabilità leggendaria giapponese: mito o realtà?",
+        "paragraphs": [
+          "La reputazione di affidabilità delle auto giapponesi è supportata da dati concreti: nei report TÜV tedeschi (la più vasta indagine indipendente sull'affidabilità in Europa), Toyota, Honda e Mazda occupano stabilmente le prime posizioni nella classifica dei modelli con meno difetti rilevati durante le revisioni periodiche. Questo si traduce in costi di manutenzione straordinaria mediamente inferiori del 20-30% rispetto ai modelli europei di pari segmento.",
+          "Nella pratica, la differenza si nota soprattutto dopo i 100.000 km: mentre molti modelli europei iniziano a presentare problemi elettrici, elettronici o meccanici significativi, le auto giapponesi tendono a mantenere un funzionamento regolare e prevedibile, con interventi di manutenzione che restano nell'ambito dell'ordinario (freni, pneumatici, filtri, liquidi)."
+        ]
+      },
+      {
+        "heading": "Valore residuo e svalutazione nel tempo",
+        "paragraphs": [
+          "Uno dei vantaggi più concreti delle auto giapponesi è la svalutazione contenuta: una Toyota Yaris o una Honda Jazz perdono mediamente il 15-18% del valore nel primo anno e il 10-12% negli anni successivi, contro il 20-25% e 12-15% dei modelli generalisti europei. Questo significa che acquistare un'auto giapponese usata è un investimento più sicuro, perché la perdita di valore durante il periodo di possesso sarà inferiore.",
+          "Per chi sta valutando l'acquisto, il consiglio è cercare esemplari di 3-5 anni con 50.000-80.000 km: è la fascia in cui il rapporto prezzo/affidabilità è più vantaggioso, perché il primo proprietario ha già assorbito la svalutazione maggiore e il veicolo ha ancora davanti a sé anni di funzionamento affidabile."
+        ]
       }
     ]
   },
@@ -9132,6 +11351,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
         ]
       }
     ]
@@ -9183,6 +11409,21 @@ export const guides: Guide[] = [
           "**Attuatore turbina a geometria variabile (sulle versioni 85-95 CV)**: verificare che la wastegate o la geometria non sia bloccata da incrostazioni carboniose.",
           "**Regola d'oro per la longevità**: sostituisci l'olio motore (specifica 5W-30 ACEA C2 o 0W-30) ogni 12.000-15.000 km o ogni 12 mesi senza attendere le scadenze del computer di bordo."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -9232,6 +11473,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Affidabilità del gruppo VAG e problemi ricorrenti",
+        "paragraphs": [
+          "I veicoli del gruppo Volkswagen (che include anche Škoda, SEAT e Audi) sono generalmente apprezzati per la qualità costruttiva e la guidabilità, ma presentano alcuni problemi ricorrenti che è fondamentale conoscere prima di acquistare un esemplare usato. I motori TSI delle prime generazioni (2008-2013) possono soffrire di consumo olio eccessivo dovuto a difetti dei segmenti dei pistoni, mentre i diesel TDI con sistema di iniezione common-rail Piezo richiedono una manutenzione attenta del sistema AdBlue nelle versioni Euro 6.",
+          "Il cambio automatico a doppia frizione DSG, pur essendo eccezionale quando funziona correttamente, può presentare problemi di meccatronica e di usura delle frizioni soprattutto nei modelli con coppia elevata o uso prevalentemente urbano. La sostituzione della meccatronica ha un costo che può superare i 2.000 euro — un dettaglio da verificare attentamente durante la prova su strada, prestando attenzione a eventuali esitazioni o strappi nel cambio marcia a bassa velocità."
+        ]
+      },
+      {
+        "heading": "Costi di gestione reali rispetto alla concorrenza",
+        "paragraphs": [
+          "I veicoli tedeschi del gruppo VAG hanno costi di manutenzione mediamente superiori del 15-25% rispetto ai corrispettivi italiani o francesi, ma questa differenza si riduce significativamente se ci si rivolge a officine indipendenti specializzate anziché alla rete ufficiale. Un tagliando completo per una Golf, ad esempio, costa circa 180-280 euro in un'officina indipendente contro i 300-450 euro della concessionaria ufficiale, senza differenze sostanziali nella qualità dell'intervento.",
+          "La ricambistica aftermarket per i modelli più diffusi (Golf, Polo, Tiguan) è ampia e competitiva, il che contribuisce a contenere i costi nel lungo periodo. AutoEsperto ti aiuta a calcolare il costo totale di possesso annuo, includendo bollo, assicurazione, manutenzione programmata e svalutazione — così puoi confrontare oggettivamente il costo reale di un modello tedesco rispetto alle alternative."
         ]
       }
     ]
@@ -9283,6 +11538,21 @@ export const guides: Guide[] = [
           "**Stato del filtro DPF**: effettua un test su percorso extraurbano per verificare che non vi siano rigenerazioni interrotte o messaggi di \"Antinquinamento controllare\".",
           "**Controllo perdite gasolio**: ispeziona visivamente i tubicini di ritorno degli iniettori nel vano motore per escludere perdite o odore di carburante nell'abitacolo."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -9332,6 +11602,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
         ]
       }
     ]
@@ -9383,6 +11660,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Auto francesi e rumene usate: cosa aspettarsi",
+        "paragraphs": [
+          "Le auto francesi hanno compiuto enormi passi avanti in termini di affidabilità negli ultimi dieci anni. I modelli Renault e Peugeot delle generazioni più recenti (dal 2018 in poi) presentano tassi di difettosità comparabili a quelli dei concorrenti tedeschi e giapponesi, smentendo in larga misura la vecchia reputazione di scarsa affidabilità. Dacia, in particolare, si è affermata come punto di riferimento per chi cerca l'essenziale a un prezzo imbattibile, con una semplicità meccanica che si traduce in minori possibilità di guasto.",
+          "I punti di attenzione restano l'elettronica di bordo (i sistemi infotainment e gli ADAS delle auto francesi possono presentare bug software e malfunzionamenti intermittenti) e la qualità dei materiali interni, che nelle versioni base tende ad essere inferiore rispetto alla concorrenza tedesca. Niente di drammatico, ma vale la pena verificare il funzionamento di tutti i comandi e dei sistemi elettronici durante la prova su strada."
+        ]
+      },
+      {
+        "heading": "Perché Dacia Duster e Sandero dominano l'usato economico",
+        "paragraphs": [
+          "Dacia ha rivoluzionato il mercato dell'usato economico in Italia con un approccio disarmante nella sua semplicità: auto essenziali ma robuste, con meccanica collaudata Renault, a prezzi che sfidano qualsiasi concorrente. Un Duster usato di 3-4 anni con 60.000 km si trova a 12.000-15.000 euro — circa il 30-40% in meno rispetto a un SUV comparabile di altri marchi.",
+          "Il segreto del successo di Dacia nell'usato è la manutenzione economica (ricambi tra i più economici del mercato), l'assenza di tecnologie complesse che possono guastarsi e un rapporto spazio-prezzo imbattibile. Per chi cerca un'auto usata funzionale senza fronzoli, i modelli Dacia rappresentano probabilmente la scelta più razionale sul mercato italiano."
+        ]
       }
     ]
   },
@@ -9432,6 +11723,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
         ]
       }
     ]
@@ -9483,6 +11781,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Punti deboli noti e cosa controllare prima dell'acquisto",
+        "paragraphs": [
+          "Ogni modello ha i suoi talloni d'Achille e conoscerli in anticipo ti permette di fare una verifica mirata durante il sopralluogo. Per i modelli Fiat più diffusi, i punti critici da verificare includono l'usura della frizione (specialmente nei veicoli utilizzati prevalentemente in città), lo stato della cinghia di distribuzione (intervallo di sostituzione spesso sottovalutato dai proprietari) e il funzionamento corretto dell'impianto elettrico, che su alcune annate può presentare problemi intermittenti difficili da diagnosticare.",
+          "Un altro aspetto da non sottovalutare è lo stato della carrozzeria nei punti più soggetti a ruggine: passaruota, bordi delle portiere, sottoscocca e zona intorno al lunotto posteriore. I modelli prodotti prima del 2015 sono particolarmente esposti a questo problema, soprattutto se hanno trascorso la loro vita in zone costiere o dove si usa il sale antigelo sulle strade."
+        ]
+      },
+      {
+        "heading": "Il mercato dell'usato per questo modello: tendenze e previsioni",
+        "paragraphs": [
+          "Il mercato dell'usato per i modelli Fiat in Italia è tra i più attivi e liquidi: la domanda resta costante durante tutto l'anno grazie alla popolarità del marchio e alla capillare rete di assistenza. Questo si traduce in tempi di vendita generalmente brevi (2-4 settimane per un annuncio ben fatto con prezzo corretto) e in una svalutazione annua relativamente contenuta rispetto ad altri marchi generalisti.",
+          "Per il 2026, le previsioni indicano una stabilizzazione dei prezzi dopo gli aumenti anomali del periodo 2022-2024 causati dalla crisi dei semiconduttori e dalla carenza di auto nuove. Chi vuole vendere farebbe bene a non aspettare troppo: con il ritorno alla normalità della produzione di auto nuove, i prezzi dell'usato tenderanno a scendere gradualmente nei prossimi 12-18 mesi."
+        ]
       }
     ]
   },
@@ -9532,6 +11844,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Affidabilità del gruppo VAG e problemi ricorrenti",
+        "paragraphs": [
+          "I veicoli del gruppo Volkswagen (che include anche Škoda, SEAT e Audi) sono generalmente apprezzati per la qualità costruttiva e la guidabilità, ma presentano alcuni problemi ricorrenti che è fondamentale conoscere prima di acquistare un esemplare usato. I motori TSI delle prime generazioni (2008-2013) possono soffrire di consumo olio eccessivo dovuto a difetti dei segmenti dei pistoni, mentre i diesel TDI con sistema di iniezione common-rail Piezo richiedono una manutenzione attenta del sistema AdBlue nelle versioni Euro 6.",
+          "Il cambio automatico a doppia frizione DSG, pur essendo eccezionale quando funziona correttamente, può presentare problemi di meccatronica e di usura delle frizioni soprattutto nei modelli con coppia elevata o uso prevalentemente urbano. La sostituzione della meccatronica ha un costo che può superare i 2.000 euro — un dettaglio da verificare attentamente durante la prova su strada, prestando attenzione a eventuali esitazioni o strappi nel cambio marcia a bassa velocità."
+        ]
+      },
+      {
+        "heading": "Costi di gestione reali rispetto alla concorrenza",
+        "paragraphs": [
+          "I veicoli tedeschi del gruppo VAG hanno costi di manutenzione mediamente superiori del 15-25% rispetto ai corrispettivi italiani o francesi, ma questa differenza si riduce significativamente se ci si rivolge a officine indipendenti specializzate anziché alla rete ufficiale. Un tagliando completo per una Golf, ad esempio, costa circa 180-280 euro in un'officina indipendente contro i 300-450 euro della concessionaria ufficiale, senza differenze sostanziali nella qualità dell'intervento.",
+          "La ricambistica aftermarket per i modelli più diffusi (Golf, Polo, Tiguan) è ampia e competitiva, il che contribuisce a contenere i costi nel lungo periodo. AutoEsperto ti aiuta a calcolare il costo totale di possesso annuo, includendo bollo, assicurazione, manutenzione programmata e svalutazione — così puoi confrontare oggettivamente il costo reale di un modello tedesco rispetto alle alternative."
         ]
       }
     ]
@@ -9583,6 +11909,13 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
+        ]
       }
     ]
   },
@@ -9632,6 +11965,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -9683,6 +12030,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   },
@@ -9732,6 +12093,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Auto francesi e rumene usate: cosa aspettarsi",
+        "paragraphs": [
+          "Le auto francesi hanno compiuto enormi passi avanti in termini di affidabilità negli ultimi dieci anni. I modelli Renault e Peugeot delle generazioni più recenti (dal 2018 in poi) presentano tassi di difettosità comparabili a quelli dei concorrenti tedeschi e giapponesi, smentendo in larga misura la vecchia reputazione di scarsa affidabilità. Dacia, in particolare, si è affermata come punto di riferimento per chi cerca l'essenziale a un prezzo imbattibile, con una semplicità meccanica che si traduce in minori possibilità di guasto.",
+          "I punti di attenzione restano l'elettronica di bordo (i sistemi infotainment e gli ADAS delle auto francesi possono presentare bug software e malfunzionamenti intermittenti) e la qualità dei materiali interni, che nelle versioni base tende ad essere inferiore rispetto alla concorrenza tedesca. Niente di drammatico, ma vale la pena verificare il funzionamento di tutti i comandi e dei sistemi elettronici durante la prova su strada."
+        ]
+      },
+      {
+        "heading": "Perché Dacia Duster e Sandero dominano l'usato economico",
+        "paragraphs": [
+          "Dacia ha rivoluzionato il mercato dell'usato economico in Italia con un approccio disarmante nella sua semplicità: auto essenziali ma robuste, con meccanica collaudata Renault, a prezzi che sfidano qualsiasi concorrente. Un Duster usato di 3-4 anni con 60.000 km si trova a 12.000-15.000 euro — circa il 30-40% in meno rispetto a un SUV comparabile di altri marchi.",
+          "Il segreto del successo di Dacia nell'usato è la manutenzione economica (ricambi tra i più economici del mercato), l'assenza di tecnologie complesse che possono guastarsi e un rapporto spazio-prezzo imbattibile. Per chi cerca un'auto usata funzionale senza fronzoli, i modelli Dacia rappresentano probabilmente la scelta più razionale sul mercato italiano."
         ]
       }
     ]
@@ -9783,6 +12158,21 @@ export const guides: Guide[] = [
           "**Attuatore turbina a geometria variabile (sulle versioni 85-95 CV)**: verificare che la wastegate o la geometria non sia bloccata da incrostazioni carboniose.",
           "**Regola d'oro per la longevità**: sostituisci l'olio motore (specifica 5W-30 ACEA C2 o 0W-30) ogni 12.000-15.000 km o ogni 12 mesi senza attendere le scadenze del computer di bordo."
         ]
+      },
+      {
+        "heading": "Come valutare l'affidabilità prima dell'acquisto",
+        "paragraphs": [
+          "L'affidabilità di un'auto usata non si giudica solo dalla reputazione del marchio, ma da un insieme di fattori concreti e verificabili. Il primo indicatore è lo storico manutentivo: un veicolo con tutti i tagliandi documentati presso officine autorizzate o indipendenti certificate è statisticamente molto più affidabile di uno con storico mancante o incompleto.",
+          "Il secondo fattore è il chilometraggio in rapporto all'età: un'auto di 8 anni con 90.000 km ha avuto un utilizzo regolare e fisiologico; la stessa auto con 30.000 km potrebbe aver trascorso lunghi periodi ferma (con tutti i problemi che ne derivano: guarnizioni secche, batteria deteriorata, freni ossidati). Un utilizzo troppo basso è un segnale d'allarme tanto quanto uno troppo alto.",
+          "Infine, informati sui problemi noti del modello specifico che stai valutando. Ogni auto ha i suoi punti deboli caratteristici — il motore che consuma olio, il cambio automatico che si surriscalda, l'elettronica che dà problemi dopo un certo chilometraggio — e conoscerli in anticipo ti permette di verificarli durante la prova e di negoziare il prezzo di conseguenza."
+        ]
+      },
+      {
+        "heading": "I marchi e i modelli più affidabili secondo i dati reali",
+        "paragraphs": [
+          "Le statistiche internazionali di affidabilità (TÜV Report in Germania, Consumer Reports negli Stati Uniti, indagini JD Power) concordano nell'indicare Toyota e Lexus come i marchi più affidabili in assoluto nel lungo periodo, seguiti da Mazda e Honda. Nel segmento europeo, Volkswagen e Škoda si distinguono per la buona affidabilità meccanica, mentre le auto francesi (Peugeot, Citroën, Renault) hanno migliorato significativamente la propria reputazione negli ultimi anni.",
+          "Per il mercato italiano, le Fiat Panda e Fiat 500 rimangono tra le auto usate più richieste e generalmente affidabili, soprattutto nelle versioni con motore aspirato. I modelli premium tedeschi (BMW Serie 3, Audi A3/A4, Mercedes Classe C) offrono un'esperienza di guida superiore ma richiedono budget manutentivi mediamente più elevati, specialmente dopo i 100.000 km."
+        ]
       }
     ]
   },
@@ -9832,6 +12222,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Affidabilità del gruppo VAG e problemi ricorrenti",
+        "paragraphs": [
+          "I veicoli del gruppo Volkswagen (che include anche Škoda, SEAT e Audi) sono generalmente apprezzati per la qualità costruttiva e la guidabilità, ma presentano alcuni problemi ricorrenti che è fondamentale conoscere prima di acquistare un esemplare usato. I motori TSI delle prime generazioni (2008-2013) possono soffrire di consumo olio eccessivo dovuto a difetti dei segmenti dei pistoni, mentre i diesel TDI con sistema di iniezione common-rail Piezo richiedono una manutenzione attenta del sistema AdBlue nelle versioni Euro 6.",
+          "Il cambio automatico a doppia frizione DSG, pur essendo eccezionale quando funziona correttamente, può presentare problemi di meccatronica e di usura delle frizioni soprattutto nei modelli con coppia elevata o uso prevalentemente urbano. La sostituzione della meccatronica ha un costo che può superare i 2.000 euro — un dettaglio da verificare attentamente durante la prova su strada, prestando attenzione a eventuali esitazioni o strappi nel cambio marcia a bassa velocità."
+        ]
+      },
+      {
+        "heading": "Costi di gestione reali rispetto alla concorrenza",
+        "paragraphs": [
+          "I veicoli tedeschi del gruppo VAG hanno costi di manutenzione mediamente superiori del 15-25% rispetto ai corrispettivi italiani o francesi, ma questa differenza si riduce significativamente se ci si rivolge a officine indipendenti specializzate anziché alla rete ufficiale. Un tagliando completo per una Golf, ad esempio, costa circa 180-280 euro in un'officina indipendente contro i 300-450 euro della concessionaria ufficiale, senza differenze sostanziali nella qualità dell'intervento.",
+          "La ricambistica aftermarket per i modelli più diffusi (Golf, Polo, Tiguan) è ampia e competitiva, il che contribuisce a contenere i costi nel lungo periodo. AutoEsperto ti aiuta a calcolare il costo totale di possesso annuo, includendo bollo, assicurazione, manutenzione programmata e svalutazione — così puoi confrontare oggettivamente il costo reale di un modello tedesco rispetto alle alternative."
         ]
       }
     ]
@@ -9883,6 +12287,20 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "L'affidabilità leggendaria giapponese: mito o realtà?",
+        "paragraphs": [
+          "La reputazione di affidabilità delle auto giapponesi è supportata da dati concreti: nei report TÜV tedeschi (la più vasta indagine indipendente sull'affidabilità in Europa), Toyota, Honda e Mazda occupano stabilmente le prime posizioni nella classifica dei modelli con meno difetti rilevati durante le revisioni periodiche. Questo si traduce in costi di manutenzione straordinaria mediamente inferiori del 20-30% rispetto ai modelli europei di pari segmento.",
+          "Nella pratica, la differenza si nota soprattutto dopo i 100.000 km: mentre molti modelli europei iniziano a presentare problemi elettrici, elettronici o meccanici significativi, le auto giapponesi tendono a mantenere un funzionamento regolare e prevedibile, con interventi di manutenzione che restano nell'ambito dell'ordinario (freni, pneumatici, filtri, liquidi)."
+        ]
+      },
+      {
+        "heading": "Valore residuo e svalutazione nel tempo",
+        "paragraphs": [
+          "Uno dei vantaggi più concreti delle auto giapponesi è la svalutazione contenuta: una Toyota Yaris o una Honda Jazz perdono mediamente il 15-18% del valore nel primo anno e il 10-12% negli anni successivi, contro il 20-25% e 12-15% dei modelli generalisti europei. Questo significa che acquistare un'auto giapponese usata è un investimento più sicuro, perché la perdita di valore durante il periodo di possesso sarà inferiore.",
+          "Per chi sta valutando l'acquisto, il consiglio è cercare esemplari di 3-5 anni con 50.000-80.000 km: è la fascia in cui il rapporto prezzo/affidabilità è più vantaggioso, perché il primo proprietario ha già assorbito la svalutazione maggiore e il veicolo ha ancora davanti a sé anni di funzionamento affidabile."
+        ]
       }
     ]
   },
@@ -9932,6 +12350,20 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
         ]
       }
     ]
@@ -9983,6 +12415,13 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
+        ]
       }
     ]
   },
@@ -10032,6 +12471,13 @@ export const guides: Guide[] = [
           "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+        ]
+      },
+      {
+        "heading": "Cosa controllare durante il sopralluogo",
+        "paragraphs": [
+          "Quando vai a vedere un'auto usata di questo modello, concentrati su questi punti chiave: avvia il motore a freddo e ascolta attentamente i rumori dei primi 30-60 secondi (ticchettii, fischi, vibrazioni anomale che scompaiono a caldo sono spesso indicatori di problemi latenti). Controlla il colore del fumo allo scarico: fumo bianco persistente può indicare problemi alla guarnizione della testata, fumo azzurrino segnala consumo d'olio, fumo nero nei diesel suggerisce problemi al sistema di iniezione.",
+          "Durante la prova su strada, presta attenzione al comportamento del cambio (deve innestare tutte le marce in modo fluido, senza grattare o esitare), ai freni (la frenata deve essere rettilinea, senza vibrazioni al volante o al pedale) e allo sterzo (non deve avere giochi o rumori in fase di sterzata). Questi controlli richiedono 20 minuti ma possono farti risparmiare migliaia di euro."
         ]
       }
     ]
@@ -10083,19 +12529,39 @@ export const guides: Guide[] = [
           "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
           "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
         ]
+      },
+      {
+        "heading": "Segnali d'allarme da non ignorare",
+        "paragraphs": [
+          "Ogni componente meccanico prima di cedere completamente manda segnali di avvertimento che, se riconosciuti in tempo, permettono di intervenire con una spesa contenuta evitando danni a catena ben più costosi. Imparare a riconoscere questi segnali — rumori anomali, vibrazioni insolite, spie che si accendono brevemente, perdite di efficienza o di potenza — è una delle competenze più preziose per qualsiasi automobilista.",
+          "La regola d'oro è: non rimandare mai un controllo quando noti qualcosa di diverso dal solito. Un rumore che 'va e viene', una spia che si accende solo a freddo, una vibrazione che compare solo a certe velocità — sono tutti sintomi che tendono a peggiorare progressivamente e che, se trascurati, possono trasformare una riparazione da 100-200 euro in un intervento da 800-1.500 euro."
+        ]
+      },
+      {
+        "heading": "Manutenzione preventiva vs manutenzione correttiva: quanto risparmi davvero",
+        "paragraphs": [
+          "La manutenzione preventiva (sostituire i componenti prima che si rompano, seguendo gli intervalli consigliati dal costruttore) costa mediamente il 40-60% in meno rispetto alla manutenzione correttiva (intervenire solo quando qualcosa si rompe). Il motivo è semplice: quando un componente cede, spesso danneggia altri elementi collegati, moltiplicando il costo dell'intervento.",
+          "Un esempio pratico: sostituire la cinghia di distribuzione al chilometraggio previsto costa 400-700 euro. Se la cinghia si rompe durante la marcia, i danni al motore (valvole piegate, pistoni rovinati, testata da rettificare) possono superare i 3.000-5.000 euro — rendendo spesso più conveniente acquistare un motore usato completo piuttosto che riparare quello danneggiato."
+        ]
       }
     ]
   }
 ];
 
+export const guides: Guide[] = [...initialGuides, ...articoliGuides];
+
 export function getGuide(slug: string): Guide | undefined {
-  return guides.find((g) => g.slug === slug);
+  return guides.find(g => g.slug === slug);
 }
 
 export function getGuidesByCategory(category: GuideCategory): Guide[] {
-  return guides.filter((g) => g.category === category);
+  return guides.filter(g => g.category === category);
+}
+
+export function getAllCategories(): GuideCategory[] {
+  return Object.keys(GUIDE_CATEGORIES) as GuideCategory[];
 }
 
 export function getFeaturedGuides(): Guide[] {
-  return guides.filter((g) => g.featured);
+  return guides.filter(g => g.featured);
 }

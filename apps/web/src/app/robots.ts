@@ -17,6 +17,10 @@ export default function robots(): MetadataRoute.Robots {
         disallow: disallowList,
       },
       {
+        userAgent: 'Mediapartners-Google',
+        allow: '/',
+      },
+      {
         userAgent: 'Googlebot',
         allow: '/',
         disallow: disallowList,

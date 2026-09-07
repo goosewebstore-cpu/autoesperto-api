@@ -66,12 +66,6 @@ export function sitemapNames(): string[] {
     'guides',
     'makes',
     'models',
-    'rip-makes',
-    'rip-models',
-    'aff-makes',
-    'aff-models',
-    'cons-makes',
-    'cons-models',
   ];
 }
 

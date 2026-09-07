@@ -11,7 +11,7 @@ const ctaKeys = new Set([
   'trattare-prezzo', 'permuta-o-vendita', 'ibride-convengono', 'durata-auto',
   'auto-estero', 'chilometraggio-reale', 'valutazione-auto', 'controllo-usato',
   'costi-riparazione', 'consumi-modello', 'confronto-modelli', 'analisi-ai',
-  'affidabilita-modello', 'valore-vendita'
+  'affidabilita-modello', 'valore-vendita', 'car-finder', 'calcolo-bollo', 'profilo-digitale', 'risparmio-carburante', 'aria-condizionata-salva-motore', 'autoesperto-storia', 'analizza-annuncio'
 ]);
 
 for (let i = 0; i < guides.length; i++) {

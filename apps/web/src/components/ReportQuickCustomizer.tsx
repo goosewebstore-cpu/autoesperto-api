@@ -25,12 +25,14 @@ import {
   Camera,
   Loader2,
   Upload,
+  MapPin,
 } from 'lucide-react';
-import { calculateBolloAccurate } from '@/lib/bollo';
+import { calculateBolloAccurate, REGIONS_CONFIG, resolveLocationFromCap } from '@/lib/bollo';
 import { estimateReliability } from '@/lib/affidabilita';
 import { estimateConsumption } from '@/lib/consumi';
 import { buildAlternatives } from '@/lib/stima';
 import { analyzeVehiclePhoto } from '@/lib/api';
+import { LocationSelector, type LocationInfo } from './LocationSelector';
 
 interface Props {
   report: AutoReport;
@@ -48,13 +50,11 @@ const AVAILABLE_OPTIONALS: OptionalItem[] = [
   { id: 'led', label: 'Fari Full LED / Matrix', baseValueAdd: 120, desc: 'Illuminazione LED avanzata' },
   { id: 'nav_carplay', label: 'Navigatore & Apple CarPlay / Android Auto', baseValueAdd: 90, desc: 'Infotainment con mirroring smartphone' },
   { id: 'camera_sensors', label: 'Sensori Park + Retrocamera', baseValueAdd: 80, desc: 'Ausilio al parcheggio anteriore/posteriore' },
-  { id: 'sunroof', label: 'Tetto Panoramico / Apribile', baseValueAdd: 140, desc: 'Tetto in cristallo o apribile' },
-  { id: 'leather', label: 'Interni in Pelle / Sedili Riscaldati', baseValueAdd: 110, desc: 'Rivestimenti pregiati e comfort' },
-  { id: 'alloys', label: 'Cerchi in Lega Maggiorati', baseValueAdd: 70, desc: 'Cerchi da 17"/18"/19"' },
-  { id: 'sport_pack', label: 'Pacchetto Sport (R-Line, M-Sport, AMG, ST-Line)', baseValueAdd: 160, desc: 'Assetto, paraurti e volante sportivo' },
-  { id: 'service_history', label: 'Tagliandi Ufficiali Certificati', baseValueAdd: 140, desc: 'Cronologia manutenzione tracciabile' },
-  { id: 'extra_wheels', label: 'Doppio treno di Gomme (Invernali)', baseValueAdd: 80, desc: 'Set di pneumatici termici aggiuntivo' },
-  { id: 'tow_hook', label: 'Gancio Traino Omologato', baseValueAdd: 90, desc: 'Omologato a libretto' },
+  { id: 'leather', label: 'Interni in Pelle / Sedili Riscaldabili', baseValueAdd: 100, desc: 'Selleria in pelle pregiata' },
+  { id: 'panoramic_roof', label: 'Tetto Panoramico / Apribile', baseValueAdd: 110, desc: 'Tetto in cristallo panoramico' },
+  { id: 'adas_acc', label: 'Guida Assistita L2 / Cruise Adattivo', baseValueAdd: 140, desc: 'Mantenimento corsia + ACC' },
+  { id: 'tow_hitch', label: 'Gancio Traino Omologato', baseValueAdd: 70, desc: 'Gancio traino a libretto' },
+  { id: 'audio_premium', label: 'Impianto Audio Premium (Bose/B&O)', baseValueAdd: 70, desc: 'Audio ad alta fedeltà' },
 ];
 
 const CONDITION_OPTIONS = [
@@ -78,14 +78,24 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
   const initialVersion = report.vehicle?.version || '';
   const initialYear = report.price?.inputYear || report.vehicle?.year || currentYear - 5;
   const initialKm = report.price?.inputKm || (report.vehicle as any)?.mileage || 100000;
-  const initialTrans = report.vehicle?.transmission || 'Manuale';
   const initialFuel = report.vehicle?.fuel || 'Diesel';
+  const isEvInit = (initialFuel || '').toLowerCase().includes('elettr') || (initialFuel || '').toLowerCase().includes('ev') || /tesla|polestar|byd/.test(initialMake.toLowerCase());
+  const initialTrans = isEvInit ? 'Automatico' : (report.vehicle?.transmission || 'Manuale');
   const initialPrice = report.price?.requestedPrice || '';
   const initialPower = report.vehicle?.power || '';
   const initialDisplacement = report.vehicle?.displacement || '';
   const initialBody = report.vehicle?.body || '';
   const initialColor = report.vehicle?.color || '';
   const initialEuroClass = report.vehicle?.euroClass || '';
+
+  const initialLocInfo: LocationInfo = useMemo(() => {
+    const loc = report.vehicle?.location;
+    if (loc?.cap) {
+      const res = resolveLocationFromCap(loc.cap);
+      return { cap: loc.cap, city: loc.city || res.city, province: loc.province || res.province, regionId: res.regionId, regionName: res.regionName };
+    }
+    return { regionId: 'lombardia', regionName: 'Lombardia', city: 'Milano' };
+  }, [report.vehicle?.location]);
 
   // Editable state
   const [make, setMake] = useState<string>(initialMake);
@@ -95,6 +105,7 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
   const [km, setKm] = useState<number>(initialKm);
   const [transmission, setTransmission] = useState<string>(initialTrans);
   const [fuel, setFuel] = useState<string>(initialFuel);
+  const [location, setLocation] = useState<LocationInfo>(initialLocInfo);
   const [requestedPrice, setRequestedPrice] = useState<string>(initialPrice ? String(initialPrice) : '');
   const [power, setPower] = useState<string>(initialPower);
   const [displacement, setDisplacement] = useState<string>(initialDisplacement);
@@ -179,19 +190,23 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
     else if (fLower.includes('elettric')) fuelFactor = 0.97;
     else if (fLower.includes('gpl') || fLower.includes('metano')) fuelFactor = 1.02;
 
-    // 5. Valore Aggiunto Optional (calibrato e con tetto massimo del 6% del valore)
+    // 5. Fattore Mercato Territoriale / Regionale
+    const regConfig = REGIONS_CONFIG[location.regionId] || REGIONS_CONFIG.lombardia;
+    const marketFactor = regConfig.marketFactor || 1.0;
+
+    // 6. Valore Aggiunto Optional (calibrato e con tetto massimo del 6% del valore)
     const rawOptionalsSum = selectedOptionals.reduce((acc, optId) => {
       const found = optionalsWithDynamicValues.find((o) => o.id === optId);
       return acc + (found ? found.valueAdd : 0);
     }, 0);
     const optionalsSum = Math.min(Math.round(origVal * 0.06), rawOptionalsSum);
 
-    // 6. Condizione / Stato d'uso
+    // 7. Condizione / Stato d'uso
     const condObj = CONDITION_OPTIONS.find((c) => c.id === condition) || CONDITION_OPTIONS[1];
     const conditionFactor = condObj.factor;
 
     // Calcolo finale aggregato
-    const subtotal = (origVal * yearFactor * kmFactor * fuelFactor + transBonus) * conditionFactor;
+    const subtotal = (origVal * yearFactor * kmFactor * fuelFactor * marketFactor + transBonus) * conditionFactor;
     const finalValue = Math.max(1000, Math.round((subtotal + optionalsSum) / 50) * 50);
 
     return {
@@ -202,7 +217,7 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
       min: Math.round(finalValue * 0.91),
       max: Math.round(finalValue * 1.09),
     };
-  }, [report, year, km, transmission, fuel, selectedOptionals, condition, currentYear, optionalsWithDynamicValues]);
+  }, [report, year, km, transmission, fuel, location, selectedOptionals, condition, currentYear, optionalsWithDynamicValues]);
 
   const handleApplyChanges = () => {
     const numReqPrice = requestedPrice ? parseFloat(requestedPrice.replace(/\D/g, '')) : undefined;
@@ -218,10 +233,15 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
       else priceLabel = 'FAIR';
     }
 
+    const isElectric = (fuel || '').toLowerCase().includes('elettr') || (fuel || '').toLowerCase().includes('ev') || (fuel || '').toLowerCase().includes('bev') || /tesla|polestar|byd/.test(make.toLowerCase());
+    const effectiveTrans = isElectric ? 'Automatico' : transmission;
+    const isDiesel = (fuel || '').toLowerCase().includes('diesel');
+
     const kw = power ? parseInt(String(power).replace(/\D/g, '')) : (report.vehicle?.power ? parseInt(String(report.vehicle.power).replace(/\D/g, '')) : 85);
-    const bolloCalc = calculateBolloAccurate(kw, fuel, year);
-    const newReliability = estimateReliability(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year);
-    const newConsumption = estimateConsumption(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year);
+    const bolloCalc = calculateBolloAccurate(kw, fuel, year, location.regionId, euroClass);
+
+    const newReliability = estimateReliability(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year, fuel);
+    const newConsumption = estimateConsumption(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year, fuel);
     const dynAlternatives = buildAlternatives(make || report.vehicle?.make || 'Auto', model || report.vehicle?.model || '', year);
 
     const updated: AutoReport = {
@@ -232,13 +252,19 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
         model: model || report.vehicle?.model,
         version: version || report.vehicle?.version,
         year: year,
-        transmission: transmission,
+        transmission: effectiveTrans,
         fuel: fuel,
         power: power || report.vehicle?.power,
         displacement: displacement || report.vehicle?.displacement,
         body: body || report.vehicle?.body,
         color: color || report.vehicle?.color,
         euroClass: euroClass || report.vehicle?.euroClass,
+        location: {
+          cap: location.cap,
+          city: location.city,
+          province: location.province,
+          region: location.regionName,
+        },
       },
       price: {
         ...report.price,
@@ -254,12 +280,30 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
       reliability: {
         ...report.reliability,
         score: newReliability.score,
+        verdictLabel: newReliability.label,
         taxAnnual: bolloCalc.totale,
+        strengths: newReliability.strengths,
+        weaknesses: newReliability.weaknesses,
+        engine: isElectric
+          ? 'Powertrain 100% elettrico: nessuna manutenzione di olio motore, filtri carburante o candele.'
+          : isDiesel
+          ? 'Motore Turbodiesel: verificare regolarità tagliandi con olio specifico e stato FAP/DPF.'
+          : report.reliability?.engine,
+        transmission: isElectric
+          ? 'Presa diretta monomarcia senza frizione.'
+          : effectiveTrans === 'Automatico'
+          ? 'Cambio automatico a controllo elettronico.'
+          : report.reliability?.transmission,
         consumption: {
           city: newConsumption.urban,
           highway: newConsumption.extraurban,
           combined: newConsumption.combined,
-          fuelType: fuel,
+          fuelType: newConsumption.unit,
+        },
+        futureCosts: {
+          ...report.reliability?.futureCosts,
+          annualMaintenance: isElectric ? 100 : newReliability.maintenanceMin,
+          fuelCostPer100Km: newConsumption.costPer100km,
         },
       },
       alternatives: dynAlternatives && dynAlternatives.length > 0 ? dynAlternatives : report.alternatives,
@@ -272,7 +316,7 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
   useEffect(() => {
     handleApplyChanges();
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [year, km, transmission, fuel, requestedPrice, selectedOptionals, condition, version, make, model, power, displacement, body, color, euroClass]);
+  }, [year, km, transmission, fuel, location, requestedPrice, selectedOptionals, condition, version, make, model, power, displacement, body, color, euroClass]);
 
   const handleExteriorPhotoUpload = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
@@ -507,7 +551,10 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
                       <button
                         key={f}
                         type="button"
-                        onClick={() => setFuel(f)}
+                        onClick={() => {
+                          setFuel(f);
+                          if (f === 'Elettrica') setTransmission('Automatico');
+                        }}
                         className={`h-9 px-2 rounded-xl text-xs font-bold border transition-all ${
                           isSel
                             ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
@@ -526,25 +573,44 @@ export default function ReportQuickCustomizer({ report, onUpdate }: Props) {
                 <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
                   <Cog className="w-3.5 h-3.5 text-blue-600" /> Trasmissione / Cambio
                 </label>
-                <div className="grid grid-cols-2 gap-2">
-                  {TRANS_OPTIONS.map((t) => {
-                    const isSel = transmission.toLowerCase().includes(t.toLowerCase());
-                    return (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => setTransmission(t)}
-                        className={`h-9 px-3 rounded-xl text-xs font-bold border transition-all ${
-                          isSel
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                            : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
-                        }`}
-                      >
-                        {t} {t === 'Automatico' ? '(+450 €)' : ''}
-                      </button>
-                    );
-                  })}
-                </div>
+                {(fuel.toLowerCase().includes('elettr') || fuel.toLowerCase().includes('ev') || /tesla|polestar|byd/.test(make.toLowerCase())) ? (
+                  <div className="h-9 px-3 rounded-xl text-xs font-bold bg-blue-50 text-blue-700 border border-blue-200 flex items-center gap-1.5">
+                    <CheckCircle2 className="w-4 h-4 text-blue-600" />
+                    <span>Automatico (Presa diretta EV monomarcia)</span>
+                  </div>
+                ) : (
+                  <div className="grid grid-cols-2 gap-2">
+                    {TRANS_OPTIONS.map((t) => {
+                      const isSel = transmission.toLowerCase().includes(t.toLowerCase());
+                      return (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setTransmission(t)}
+                          className={`h-9 px-3 rounded-xl text-xs font-bold border transition-all ${
+                            isSel
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300 hover:bg-blue-50/40'
+                          }`}
+                        >
+                          {t} {t === 'Automatico' ? '(+450 €)' : ''}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
+              </div>
+
+              {/* Localizzazione & Bollo Regionale */}
+              <div>
+                <label className="text-xs font-bold text-slate-700 block mb-1.5 flex items-center gap-1">
+                  <MapPin className="w-3.5 h-3.5 text-blue-600" /> Localizzazione Fiscale & Mercato
+                </label>
+                <LocationSelector
+                  initialCap={location.cap}
+                  initialRegionId={location.regionId}
+                  onChange={setLocation}
+                />
               </div>
 
               {/* Potenza, Cilindrata, Carrozzeria */}

@@ -20,6 +20,39 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 /** Compute a realistic dateModified for freshness signals.
  *  Returns the 1st of the current month, or the published date if it's more recent. */
+
+const IT_MONTHS_LONG = [
+  'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
+  'luglio', 'agosto', 'settembre', 'ottobre', 'novembre', 'dicembre'
+];
+
+function formatLongDate(dateStr: string): string {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length >= 3) {
+    const day = parseInt(parts[2], 10);
+    const monthIdx = parseInt(parts[1], 10) - 1;
+    const year = parts[0];
+    if (!isNaN(day) && monthIdx >= 0 && monthIdx < 12) {
+      return `${day} ${IT_MONTHS_LONG[monthIdx]} ${year}`;
+    }
+  }
+  return dateStr;
+}
+
+function formatMonthYear(dateStr: string): string {
+  if (!dateStr) return '';
+  const parts = dateStr.split('-');
+  if (parts.length >= 2) {
+    const monthIdx = parseInt(parts[1], 10) - 1;
+    const year = parts[0];
+    if (monthIdx >= 0 && monthIdx < 12) {
+      return `${IT_MONTHS_LONG[monthIdx]} ${year}`;
+    }
+  }
+  return dateStr;
+}
+
 function getDateModified(published: string): string {
   const pub = new Date(published);
   const now = new Date();
@@ -28,6 +61,12 @@ function getDateModified(published: string): string {
 }
 
 const guideCtas: Record<string, { label: string; href: string; description: string }> = {
+  'car-finder': {
+    label: 'Trova l\'auto giusta per il tuo budget',
+    href: '/auto-finder',
+    description: 'Inserisci il tuo budget e le tue esigenze: scopri i modelli usati migliori sul mercato.',
+  },
+
   'autoesperto-storia': {
     label: 'Analizza un\'auto gratis con AutoEsperto',
     href: '/#scanner-section',
@@ -244,6 +283,7 @@ const DEFAULT_CTA = {
 function getGuideCta(ctaKey?: string): { label: string; href: string; description: string } {
   if (!ctaKey) return DEFAULT_CTA;
   if (guideCtas[ctaKey]) return guideCtas[ctaKey];
+  if (ctaKey.toLowerCase().includes('profilo') || ctaKey.toLowerCase().includes('passaporto')) return guideCtas['profilo-digitale'] || DEFAULT_CTA;
   if (ctaKey.length > 25) {
     return {
       label: 'Analizza la tua auto gratis',
@@ -273,7 +313,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
     : `${siteUrl}/og-image.png`;
 
   return {
-    title: `${guide.title} | AutoEsperto`,
+    title: guide.title,
     description: guide.description,
     robots: {
       index: true,
@@ -660,11 +700,19 @@ export default async function GuidePage({ params }: PageProps) {
       'https://www.mit.gov.it/',
       'https://ec.europa.eu/safety-gate',
     ],
-    author: {
-      '@type': 'Organization',
-      name: 'Redazione Tecnica & Giornalismo Automotive AutoEsperto',
-      url: `${siteUrl}/guide`,
-    },
+    author: [
+      {
+        '@type': 'Person',
+        name: 'Ralfh',
+        jobTitle: 'Fondatore & Analista Mercato Auto',
+        url: `${siteUrl}/chi-siamo`,
+      },
+      {
+        '@type': 'Organization',
+        name: 'Redazione Tecnica AutoEsperto',
+        url: `${siteUrl}/chi-siamo`,
+      },
+    ],
     publisher: {
       '@type': 'Organization',
       name: 'AutoEsperto',
@@ -754,13 +802,13 @@ export default async function GuidePage({ params }: PageProps) {
               </span>
               <span className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1.5 bg-slate-100/90 rounded-full px-2.5 py-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
-                A cura della Redazione Automotive
+                A cura di Ralfh · Redazione Tecnica
               </span>
               <span className="text-text-tertiary">·</span>
               <div className="flex items-center gap-1 text-xs text-text-tertiary font-medium">
                 <Calendar className="w-3.5 h-3.5" />
                 <time dateTime={guide.published} itemProp="datePublished">
-                  {new Date(guide.published).toLocaleDateString('it-IT', { day: 'numeric', month: 'long', year: 'numeric' })}
+                  {formatLongDate(guide.published)}
                 </time>
               </div>
               <span className="text-slate-300">·</span>
@@ -770,7 +818,7 @@ export default async function GuidePage({ params }: PageProps) {
               </div>
               <span className="text-slate-300">·</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 px-2 py-0.5 text-[11px] font-bold">
-                ✓ Aggiornato {new Date(getDateModified(guide.published)).toLocaleDateString('it-IT', { month: 'long', year: 'numeric' })}
+                ✓ Aggiornato {formatMonthYear(getDateModified(guide.published))}
               </span>
             </div>
 
@@ -866,10 +914,39 @@ export default async function GuidePage({ params }: PageProps) {
 
           <ArticleFeedbackBox />
 
-          <div className="mt-10 rounded-2xl bg-slate-50 border border-slate-200 p-5">
+          {/* Autore dell'articolo & E-E-A-T */}
+          <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50/70 p-5 sm:p-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white font-black text-lg shadow-md shadow-blue-600/20">
+                R
+              </div>
+              <div className="flex-1">
+                <div className="flex flex-wrap items-center gap-2">
+                  <h3 className="text-sm font-bold text-slate-900">A cura di Ralfh</h3>
+                  <span className="rounded-full bg-blue-100 text-blue-800 px-2 py-0.5 text-[11px] font-bold">
+                    Fondatore &amp; Analista Mercato Auto
+                  </span>
+                </div>
+                <p className="text-xs text-slate-600 leading-relaxed mt-1.5">
+                  Esperto indipendente di dinamiche di compravendita e valutazioni di mercato in Italia. Cura la metodologia di analisi prezzi, l&apos;incrocio con i registri storici MCTC / Safety Gate UE e la revisione tecnica delle guide di AutoEsperto.it.
+                </p>
+                <div className="mt-2.5 flex items-center gap-3 text-xs">
+                  <Link href="/chi-siamo" className="font-bold text-blue-600 hover:text-blue-700 hover:underline">
+                    Scopri chi siamo &amp; la nostra indipendenza &rarr;
+                  </Link>
+                  <span className="text-slate-300">·</span>
+                  <Link href="/contatti" className="text-slate-500 hover:text-slate-700 hover:underline">
+                    Segnala una rettifica
+                  </Link>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="mt-6 rounded-2xl bg-slate-50 border border-slate-200 p-5">
             <div className="flex items-center gap-2 text-sm font-bold text-slate-900 uppercase tracking-wide">
               <ShieldCheck className="w-4 h-4 text-blue-600" />
-              <span>Metodologia Giornalistica & Fonti Tecniche</span>
+              <span>Metodologia Giornalistica &amp; Fonti Tecniche</span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed mt-2.5">
               Questa guida e analisi di mercato è redatta dalla <strong>Redazione Tecnica di AutoEsperto</strong> con approccio da giornalismo automotive indipendente ed esperienza sul campo. I dati su quotazioni, difettosità e costi di gestione sono elaborati incrociando l&apos;osservatorio annunci italiano con banche dati ufficiali (Safety Gate UE, NHTSA, bollettini tecnici ministeriali).

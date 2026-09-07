@@ -2,6 +2,7 @@ import type { AutoReport, PriceLabel, VehicleData } from '@autoesperto/types';
 import { lookupPlate, type RegCheckRawData } from './regcheck';
 import { normalizeVehicleData } from './vehicleKB';
 import { searchModel } from './modelDB';
+import { findModelEra } from './modelEra';
 import { estimateMarketValue, estimateMarketValueWithKm } from './pricing';
 import { fetchSubitoMarketStats, getMarketSearchUrls } from './market';
 import { analyzeVehicle } from './ai';
@@ -16,14 +17,18 @@ export interface ReportInput {
   year?: number;
   km?: number;
   requestedPrice?: number;
+  fuel?: string;
+  transmission?: string;
+  version?: string;
 }
 
 const PLATE_TTL = 24 * 60 * 60 * 1000;
 const MODEL_REPORT_TTL = 7 * 24 * 60 * 60 * 1000;
 
-function priceLabelFor(requestedPrice: number, estimate: number): PriceLabel {
-  if (requestedPrice < estimate * 0.95) return 'GOOD';
-  if (requestedPrice > estimate * 1.05) return 'HIGH';
+function priceLabelFor(requestedPrice: number, value: number): PriceLabel {
+  const diff = (requestedPrice - value) / value;
+  if (diff <= -0.05) return 'GOOD';
+  if (diff >= 0.05) return 'HIGH';
   return 'FAIR';
 }
 
@@ -42,14 +47,27 @@ function buildPriceComment(requestedPrice: number | undefined, value: number, km
 async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   if (!input.plate) {
     if (!input.make || !input.model) throw badRequest('Inserisci marca e modello');
-    const found = searchModel(input.make, input.model);
-    if (found) return input.year ? { ...found, year: input.year } : found;
-    return {
+    const found = searchModel(input.make, input.model, input.fuel);
+    const era = findModelEra(input.make, input.model);
+    const resolvedYear = input.year || found?.year || era?.medianYear;
+
+    const vehicle: VehicleData = found ? { ...found } : {
       make: input.make.trim(),
       model: input.model.trim(),
-      year: input.year,
+      year: resolvedYear,
+      fuel: input.fuel || era?.fuel || 'Benzina',
+      body: era?.body || 'Berlina',
+      power: era?.powerCv ? `${era.powerCv} CV` : undefined,
       dataSource: 'model',
     };
+    if (resolvedYear) vehicle.year = resolvedYear;
+    if (input.fuel || (!vehicle.fuel && era?.fuel)) vehicle.fuel = input.fuel || era?.fuel;
+    if (!vehicle.body && era?.body) vehicle.body = era.body;
+    if (!vehicle.power && era?.powerCv) vehicle.power = `${era.powerCv} CV`;
+    const isEv = (vehicle.fuel || '').toLowerCase().includes('elettr') || (vehicle.fuel || '').toLowerCase().includes('ev') || /tesla|polestar|byd/.test((vehicle.make || '').toLowerCase()) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((vehicle.model || '').toLowerCase());
+    vehicle.transmission = isEv ? 'Automatico' : (input.transmission || vehicle.transmission || 'Manuale');
+    if (input.version) vehicle.version = input.version;
+    return vehicle;
   }
 
   const cacheKey = cacheKeyFor(input);
@@ -62,13 +80,17 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   const vehicle = normalizeVehicleData(raw);
   vehicle.plate = input.plate;
   vehicle.dataSource = 'plate';
+  if (input.fuel) vehicle.fuel = input.fuel;
+  if (input.year) vehicle.year = input.year;
+  const isEvPlate = (vehicle.fuel || '').toLowerCase().includes('elettr') || (vehicle.fuel || '').toLowerCase().includes('ev') || /tesla|polestar|byd/.test((vehicle.make || '').toLowerCase()) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((vehicle.model || '').toLowerCase());
+  if (isEvPlate) vehicle.transmission = 'Automatico';
   return vehicle;
 }
 
 function cacheKeyFor(input: ReportInput): string {
   return input.plate
     ? `plate:${input.plate.toUpperCase()}`
-    : `model:${(input.make || '').toLowerCase()}:${(input.model || '').toLowerCase()}`;
+    : `model:${(input.make || '').toLowerCase()}:${(input.model || '').toLowerCase()}:${(input.fuel || '').toLowerCase()}`;
 }
 
 function reportKeyFor(input: ReportInput): string {
@@ -88,6 +110,9 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     : { ...estimateMarketValue(vehicle), adjustedForKm: 0, kmAdjustment: 0 };
 
   let comparisonValue = adjustedForKm > 0 ? adjustedForKm : value;
+  const initialSpread = Math.round((comparisonValue * 0.10) / 100) * 100;
+  let finalMin = comparisonValue - initialSpread;
+  let finalMax = comparisonValue + initialSpread;
 
   const alternatives = getAlternatives(vehicle.make, vehicle.model).slice(0, 4);
 
@@ -102,19 +127,32 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
   ]);
 
   // Se gli annunci reali restituiscono un prezzo medio attendibile, il valore
-  // stimato usa il mercato reale (già filtrato per anno e km confrontabili).
+  // stimato combina il prezzo di mercato reale (con sconto trattativa) e la curva algoritmica.
   const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
   const useMarket = Boolean(marketStats?.priceAvg && marketSample >= 2);
-  let finalValue = value;
-  let finalMin = min;
-  let finalMax = max;
+  let finalValue = comparisonValue;
   if (useMarket && marketStats) {
-    finalValue = Math.round(marketStats.priceAvg! / 100) * 100;
-    const spread = Math.round((finalValue * 0.2) / 100) * 100;
-    // Range reale ma con spread contenuto: gli annunci estremi sporcano min/max.
-    finalMin = marketStats.priceMin ? Math.max(Math.round(marketStats.priceMin / 100) * 100, finalValue - spread) : finalValue - spread;
-    finalMax = marketStats.priceMax ? Math.min(Math.round(marketStats.priceMax / 100) * 100, finalValue + spread) : finalValue + spread;
-    // Il campione è già filtrato per km: niente ulteriore aggiustamento.
+    // 1. Prezzo reale stimato di transazione (margine trattativa dedotto rispetto al prezzo in vetrina)
+    const rawAsking = marketStats.priceAvg!;
+    const transAvg = marketStats.transactionPriceAvg || Math.round(rawAsking * 0.91 / 100) * 100;
+
+    // 2. Rettifica se la media km degli annunci diverge dai km del veicolo dell'utente
+    let kmAdjusted = transAvg;
+    if (input.km && marketStats.kmAvg && marketStats.kmAvg > 0) {
+      const kmDiff = input.km - marketStats.kmAvg;
+      const kmAdjFactor = Math.max(-0.18, Math.min(0.14, -(kmDiff / 100000) * 0.12));
+      kmAdjusted = Math.round(transAvg * (1 + kmAdjFactor) / 100) * 100;
+    }
+
+    // 3. Ponderazione bilanciata: unisce il mercato reale e il listino Quattroruote/Eurotax
+    // Campione solido (>= 5): 65% mercato reale transato, 35% stima algoritmica
+    // Campione ridotto (2-4): 50% mercato reale transato, 50% stima algoritmica
+    const marketWeight = marketSample >= 5 ? 0.65 : 0.50;
+    finalValue = Math.round((kmAdjusted * marketWeight + comparisonValue * (1 - marketWeight)) / 100) * 100;
+
+    const spread = Math.round((finalValue * 0.09) / 100) * 100;
+    finalMin = finalValue - spread;
+    finalMax = finalValue + spread;
     comparisonValue = finalValue;
   }
 

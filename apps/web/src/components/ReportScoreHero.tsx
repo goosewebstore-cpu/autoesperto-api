@@ -212,6 +212,11 @@ export default function ReportScoreHero({
   const annualMaint = reliability.futureCosts?.annualMaintenance ?? 450;
   const costInfo = getCostLabel(annualMaint);
 
+  const fuelStr = (vehicle.fuel || '').toLowerCase();
+  const isElectric = fuelStr.includes('elettr') || fuelStr.includes('ev') || fuelStr.includes('bev') ||
+    /tesla|polestar|byd/.test((vehicle.make || '').toLowerCase()) ||
+    /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((vehicle.model || '').toLowerCase());
+
   // Subscores structured data with intuitive, unambiguous labels
   const subScores: SubScoreItem[] = [
     {
@@ -224,11 +229,11 @@ export default function ReportScoreHero({
     },
     {
       key: 'reliability',
-      label: 'Affidabilità Meccanica',
+      label: isElectric ? 'Affidabilità Powertrain EV' : 'Affidabilità Meccanica',
       value: scores.reliabilityScore,
       tone: toneOf(scores.reliabilityScore),
       statusLabel: scores.reliabilityScore >= 75 ? 'Ottima' : scores.reliabilityScore >= 50 ? 'Nella media' : 'Criticità note',
-      description: 'Motore, cambio ed elettronica del modello',
+      description: isElectric ? 'Motore elettrico, batteria e gestione termica' : 'Motore, cambio ed elettronica del modello',
     },
     {
       key: 'costs',
@@ -236,15 +241,15 @@ export default function ReportScoreHero({
       value: scores.costScore,
       tone: toneOf(scores.costScore),
       statusLabel: scores.costScore >= 75 ? 'Economica' : scores.costScore >= 50 ? 'Nella media' : 'Costi elevati',
-      description: 'Tagliandi, bollo e manutenzione periodica',
+      description: isElectric ? 'Manutenzione ridotta, ricarica ed esenzione bollo' : 'Tagliandi, bollo e manutenzione periodica',
     },
     {
       key: 'consumption',
-      label: 'Consumi ed Efficienza',
+      label: isElectric ? 'Efficienza Energetica' : 'Consumi ed Efficienza',
       value: scores.consumptionScore,
       tone: toneOf(scores.consumptionScore),
       statusLabel: scores.consumptionScore >= 75 ? 'Molto efficiente' : scores.consumptionScore >= 50 ? 'Buoni consumi' : 'Consumi alti',
-      description: 'Chilometri per litro e carburante',
+      description: isElectric ? 'Consumo in kWh/100 km e costi di ricarica' : 'Chilometri per litro e carburante',
     },
     {
       key: 'risk',

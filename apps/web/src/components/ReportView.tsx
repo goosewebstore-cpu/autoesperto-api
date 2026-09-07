@@ -14,9 +14,11 @@ import ReportQuickCustomizer from '@/components/ReportQuickCustomizer';
 import ReliabilityRadar from '@/components/ReliabilityRadar';
 import DepreciationChart from '@/components/DepreciationChart';
 import KpiCards from '@/components/KpiCards';
+import ReportDeepAnalysis from '@/components/ReportDeepAnalysis';
 import VehicleHealthScore from '@/components/VehicleHealthScore';
 import { ShareButton } from '@/components/ShareButton';
 import { SellAdGenerator } from '@/components/SellAdGenerator';
+import { NearbyServicesLocator } from '@/components/NearbyServicesLocator';
 import { createPassportFromReport } from '@/lib/passportStorage';
 
 function formatPrice(n: number | undefined | null) {
@@ -121,7 +123,13 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
       {/* 3. KPI Cards: prezzo, affidabilità, costo annuo realistico, consumo, bollo */}
       <KpiCards report={currentReport} />
 
-      {/* 4. PUNTI DI FORZA E CRITICITÀ */}
+      {/* 4. Analisi Dettagliata: Trattativa, Km reali, Costi al Mese/Km, ZTL e Checklist */}
+      <ReportDeepAnalysis
+        report={currentReport}
+        onUpdateReport={(updated) => setCurrentReport(updated)}
+      />
+
+      {/* 5. PUNTI DI FORZA E CRITICITÀ */}
       <section className="bg-surface rounded-2xl shadow-card border border-border p-4 sm:p-5">
         <h2 className="text-xs sm:text-sm font-extrabold uppercase tracking-wide text-text-primary flex items-center gap-1.5 mb-3">
           <Users className="w-4 h-4 text-brand" />
@@ -239,6 +247,34 @@ export default function ReportView({ report, onBack, embedded = false, showAds =
               <VehicleHealthScore
                 report={currentReport}
                 onValuationAdjust={handleHealthScoreAdjust}
+              />
+            </div>
+          </details>
+        </section>
+
+        {/* Accordion: Officine & Carrozzerie Partner Google */}
+        <section className="bg-surface rounded-2xl shadow-card border border-border overflow-hidden">
+          <details className="group" open={Boolean(currentReport.photoAnalysis?.damage?.visible)}>
+            <summary className="flex cursor-pointer list-none items-center justify-between gap-4 p-4 sm:p-5 text-xs sm:text-sm font-bold text-text-primary hover:bg-surface-2/50 transition-colors">
+              <span className="flex items-center gap-2">
+                <Wrench className="w-4 h-4 text-brand" />
+                Officine e Carrozzerie Vicine (Google Maps) &amp; Guida Riparazioni
+              </span>
+              <ChevronDown className="h-4 w-4 text-text-tertiary transition-transform group-open:rotate-180" />
+            </summary>
+            <div className="border-t border-border p-3 sm:p-4">
+              <NearbyServicesLocator
+                make={vehicle.make}
+                model={vehicle.model}
+                damage={currentReport.photoAnalysis?.damage}
+                repairRange={currentReport.photoAnalysis?.repairRange}
+                location={vehicle.location ? {
+                  cap: vehicle.location.cap,
+                  city: vehicle.location.city,
+                  province: vehicle.location.province,
+                  regionName: vehicle.location.region || 'Lombardia',
+                  regionId: 'lombardia',
+                } : undefined}
               />
             </div>
           </details>

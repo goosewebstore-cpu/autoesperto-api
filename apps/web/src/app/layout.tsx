@@ -66,6 +66,9 @@ export const metadata: Metadata = {
   verification: {
     google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || '',
   },
+  other: {
+    'google-adsense-account': 'ca-pub-4052961089956241',
+  },
   icons: {
     icon: [
       { url: '/favicon.png', sizes: '64x64', type: 'image/png' },
@@ -179,6 +182,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="it" className={`${outfit.variable} ${dmSans.variable}`} data-scroll-behavior="smooth">
       <head>
         <link rel="apple-touch-icon" href="/icon-192.png" />
+        {/* Google AdSense official verification meta tag */}
+        <meta name="google-adsense-account" content="ca-pub-4052961089956241" />
         {/* Google Consent Mode v2 default initialization — 100% GDPR compliant */}
         <script
           dangerouslySetInnerHTML={{

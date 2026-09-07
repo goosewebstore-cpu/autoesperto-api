@@ -20,10 +20,32 @@ export interface PhotoAnalysisInput {
 }
 
 export interface PhotoAnalysisResult {
-  vehicle: { make?: string; model?: string; generation?: string; year?: number; color?: string; bodyType?: string; confidence: 'bassa' | 'media' | 'alta' };
+  vehicle: {
+    make?: string;
+    model?: string;
+    generation?: string;
+    year?: number;
+    color?: string;
+    bodyType?: string;
+    fuel?: string;
+    confidence: 'bassa' | 'media' | 'alta';
+  };
   damage: {
     visible: boolean;
-    category: 'graffio' | 'ammaccatura' | 'paraurti' | 'fanale' | 'specchietto' | 'cerchio_gomma' | 'vetro' | 'carrozzeria' | 'nessun_danno_evidente' | 'non_chiaro';
+    category:
+      | 'graffio'
+      | 'ammaccatura'
+      | 'paraurti'
+      | 'fanale'
+      | 'specchietto'
+      | 'cerchio_gomma'
+      | 'vetro'
+      | 'carrozzeria'
+      | 'frontale_grave'
+      | 'strutturale_telaio'
+      | 'meccanica_sospensioni'
+      | 'nessun_danno_evidente'
+      | 'non_chiaro';
     severity: 'lieve' | 'media' | 'alta';
     description: string;
     /** Zona del veicolo interessata (es. "paraurti anteriore sinistro"). */
@@ -72,27 +94,39 @@ function estimateCosts(vehicle: VehicleData, fuel: string, power: number) {
   const isPremium = /bmw|mercedes|audi|land rover|jaguar|volvo|alfa romeo|lexus/.test(brand);
   const isCityCar = /panda|500|ypsilon|aygo|c1|c3|clio|208|i10|i20|picanto|polo|fiesta|micra|twingo|up|smart|yaris/.test(model);
 
+  const f = fuel.toLowerCase();
+  const isElectric = f.includes('elettr') || f.includes('ev') || f.includes('bev') || /tesla|polestar|byd/.test(brand) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(model);
+  const isHybrid = f.includes('ibrid') || f.includes('hybrid') || f.includes('phev') || f.includes('hev');
+  const isDiesel = f.includes('diesel') || f.includes('tdi') || f.includes('jtd') || f.includes('dci');
+  const isGpl = f.includes('gpl') || f.includes('lpg');
+  const isMetano = f.includes('metano') || f.includes('cng');
+
   let maintenance = 180;
-  if (isSupercar) {
+  if (isElectric) {
+    // Le auto elettriche non hanno cambio olio motore, filtri combustibile, candele, cinghie o frizione
+    maintenance = isSupercar ? 260 : isPremium ? (age > 8 ? 160 : 130) : isCityCar ? 90 : 110;
+  } else if (isSupercar) {
     maintenance = 650;
   } else if (isPremium) {
     maintenance = age > 8 ? 340 : 280;
   } else if (isCityCar) {
-    maintenance = 160;
+    maintenance = isDiesel ? 180 : 160;
   } else {
-    maintenance = 210;
+    maintenance = isDiesel ? 230 : 200;
   }
 
-  const f = fuel.toLowerCase();
-  const fuelCost = f.includes('diesel')
-    ? 7.8
-    : f.includes('elettr') || f.includes('ev')
-    ? 3.6
-    : f.includes('ibrid') || f.includes('hybrid')
-    ? 7.2
-    : f.includes('gpl') || f.includes('metano')
-    ? 5.0
-    : 9.6;
+  // Costo energetico / carburante stimato per 100 km (€)
+  const fuelCost = isElectric
+    ? 3.6  // ~15 kWh/100km * 0.24 €/kWh
+    : isDiesel
+    ? 8.0  // ~4.7 L/100km * 1.70 €/L
+    : isHybrid
+    ? 7.2  // ~4.1 L/100km * 1.78 €/L
+    : isGpl
+    ? 5.0  // ~7.2 L/100km * 0.70 €/L
+    : isMetano
+    ? 5.5  // ~4.2 kg/100km * 1.30 €/kg
+    : 10.3; // ~5.8 L/100km * 1.78 €/L (Benzina)
 
   let insurance = 290;
   if (power < 75) insurance = 240;
@@ -110,18 +144,27 @@ function deriveCategoryScores(
 ): { engine: number; transmission: number; electronics: number; suspension: number; body: number } {
   const brand = (vehicle.make || '').toLowerCase();
   const fuel = (vehicle.fuel || '').toLowerCase();
+  const model = (vehicle.model || '').toLowerCase();
   const isPremium = /bmw|mercedes|audi|volvo|lexus|alfa/.test(brand);
   const isJapanese = /toyota|honda|mazda|nissan|suzuki|lexus|subaru/.test(brand);
-  const isEuropean = /fiat|alfa|lancia|peugeot|renault|citroen|vw|audi|bmw|mercedes|skoda|seat|volvo|opel/.test(brand);
+  const isElectric = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') || /tesla|polestar|byd/.test(brand) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(model);
 
   let engine = baseScore;
-  if (fuel.includes('diesel') && /n47|ea189|tdi.*old/.test(knowledge.engine.toLowerCase())) engine -= 0.5;
-  if (isJapanese) engine += 0.3;
+  if (isElectric) {
+    engine = Math.max(8.8, baseScore + 1.2); // Powertrain elettrico affidabile con pochissime parti in movimento
+  } else {
+    if (fuel.includes('diesel') && /n47|ea189|tdi.*old/.test(knowledge.engine.toLowerCase())) engine -= 0.5;
+    if (isJapanese) engine += 0.3;
+  }
 
   let transmission = baseScore - 0.3;
-  if (/manuale/.test((vehicle.transmission || '').toLowerCase())) transmission += 0.6;
-  if (/dsg|s.tronic|powershift|edc|tct|dualogic/.test(knowledge.transmission.toLowerCase())) transmission -= 0.6;
-  if (isJapanese) transmission += 0.4;
+  if (isElectric) {
+    transmission = Math.max(9.0, baseScore + 1.4); // Presa diretta monomarcia senza frizione meccanica
+  } else {
+    if (/manuale/.test((vehicle.transmission || '').toLowerCase())) transmission += 0.6;
+    if (/dsg|s.tronic|powershift|edc|tct|dualogic/.test(knowledge.transmission.toLowerCase())) transmission -= 0.6;
+    if (isJapanese) transmission += 0.4;
+  }
 
   let electronics = baseScore - 0.5;
   if (isPremium) electronics -= 0.4;
@@ -150,26 +193,42 @@ function deriveCategoryScores(
 function deriveConsumption(vehicle: VehicleData, fuel: string): { city: number; highway: number; combined: number; fuelType?: string } {
   const f = fuel.toLowerCase();
   const makeNorm = (vehicle.make || '').toLowerCase();
+  const modelNorm = (vehicle.model || '').toLowerCase();
   let hash = 0;
   for (let i = 0; i < makeNorm.length; i++) hash += makeNorm.charCodeAt(i);
 
+  const isElectric = f.includes('elettr') || f.includes('ev') || f.includes('bev') || /tesla|polestar|byd/.test(makeNorm) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(modelNorm);
+  const isDiesel = f.includes('diesel') || f.includes('tdi') || f.includes('dci') || f.includes('multijet');
+  const isHybrid = f.includes('ibrid') || f.includes('hybrid') || f.includes('phev') || f.includes('hev');
+  const isGpl = f.includes('gpl') || f.includes('lpg');
+  const isMetano = f.includes('metano') || f.includes('cng');
+
+  if (isElectric) {
+    const isSmallEv = /500e|twingo|spring|smart|zoe|e-208|i3/.test(modelNorm);
+    const isSuvEv = /model y|ix|e-tron|eqc|q4|id\.4|id\.5|enyaq|ev6|ioniq 5/.test(modelNorm);
+    const combined = isSmallEv ? 13.8 : isSuvEv ? 17.5 : 15.2;
+    const city = Math.round(combined * 0.88 * 10) / 10;
+    const highway = Math.round(combined * 1.18 * 10) / 10;
+    return { city, highway, combined, fuelType: 'kWh/100 km' };
+  }
+
   const rawDisp = parseFloat((vehicle.displacement || '').replace(/[^0-9.]/g, '')) || (1.2 + (hash % 8) * 0.2);
   const displacement = rawDisp > 20 ? rawDisp / 1000 : rawDisp; // convert cc to Liters
-  const isDiesel = f.includes('diesel');
-  const isHybrid = f.includes('ibrid');
-  const isElectric = f.includes('elettr') || f.includes('ev');
-  const isGpl = f.includes('gpl') || f.includes('metano');
+  const isCityCar = /panda|500|ypsilon|aygo|c1|c3|clio|208|i10|i20|picanto|polo|fiesta|micra|twingo|up|smart|yaris/.test(modelNorm);
+  const isSuv = /suv|crossover|tiguan|qashqai|sportage|tucson|kuga|stelvio|x3|glc|rav4/.test(modelNorm) || /(suv|crossover)/i.test(vehicle.body || '');
 
-  if (isElectric) return { city: 16, highway: 13, combined: 14.5, fuelType: 'kWh/100km' };
+  let baseL100 = isDiesel ? (isCityCar ? 4.3 : isSuv ? 5.6 : 4.8)
+    : isHybrid ? (isCityCar ? 3.8 : isSuv ? 4.8 : 4.2)
+    : isGpl ? (isCityCar ? 6.5 : isSuv ? 8.2 : 7.2)
+    : isMetano ? (isCityCar ? 3.6 : 4.4)
+    : (isCityCar ? 5.2 : isSuv ? 6.8 : 5.8);
 
-  // Consumption in L/100 km
-  const baseL100 = isDiesel ? 4.9 : isHybrid ? 4.3 : isGpl ? 6.8 : 5.8;
-  const displacementFactor = Math.max(0.88, Math.min(1.35, 0.75 + (displacement / 2.0) * 0.35));
+  const displacementFactor = Math.max(0.9, Math.min(1.3, 0.8 + (displacement / 2.0) * 0.3));
   const combined = Math.round(baseL100 * displacementFactor * 10) / 10;
-  const city = Math.round(combined * 1.2 * 10) / 10;
-  const highway = Math.round(combined * 0.85 * 10) / 10;
+  const city = Math.round(combined * (isHybrid ? 0.92 : 1.22) * 10) / 10;
+  const highway = Math.round(combined * (isHybrid ? 1.08 : 0.86) * 10) / 10;
 
-  return { city, highway, combined, fuelType: 'L/100 km' };
+  return { city, highway, combined, fuelType: isMetano ? 'kg/100 km' : 'L/100 km' };
 }
 
 function extractKw(powerInput?: string | number): number {
@@ -244,12 +303,15 @@ function getVisionModel() {
 const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], [number, number]>> = {
   graffio: { lieve: [120, 280], media: [250, 550], alta: [450, 900] },
   ammaccatura: { lieve: [150, 350], media: [300, 700], alta: [600, 1400] },
-  paraurti: { lieve: [220, 500], media: [450, 950], alta: [800, 1800] },
-  fanale: { lieve: [120, 300], media: [250, 700], alta: [500, 1500] },
+  paraurti: { lieve: [220, 500], media: [450, 950], alta: [800, 2200] },
+  fanale: { lieve: [150, 350], media: [300, 800], alta: [600, 1800] },
   specchietto: { lieve: [100, 250], media: [180, 450], alta: [350, 800] },
   cerchio_gomma: { lieve: [80, 200], media: [160, 450], alta: [300, 900] },
   vetro: { lieve: [150, 400], media: [300, 800], alta: [600, 1800] },
-  carrozzeria: { lieve: [200, 450], media: [400, 900], alta: [700, 1600] },
+  carrozzeria: { lieve: [250, 600], media: [500, 1200], alta: [900, 2400] },
+  frontale_grave: { lieve: [2000, 4200], media: [4200, 8500], alta: [7500, 16000] },
+  strutturale_telaio: { lieve: [2800, 5500], media: [5500, 11000], alta: [9500, 22000] },
+  meccanica_sospensioni: { lieve: [700, 1600], media: [1600, 3400], alta: [3200, 6800] },
   nessun_danno_evidente: { lieve: [0, 0], media: [0, 0], alta: [0, 0] },
   non_chiaro: { lieve: [0, 0], media: [0, 0], alta: [0, 0] },
 };
@@ -263,9 +325,25 @@ const repairDays: Record<PhotoAnalysisResult['damage']['category'], Record<Photo
   cerchio_gomma: { lieve: 1, media: 1, alta: 2 },
   vetro: { lieve: 1, media: 2, alta: 3 },
   carrozzeria: { lieve: 2, media: 4, alta: 7 },
+  frontale_grave: { lieve: 5, media: 10, alta: 20 },
+  strutturale_telaio: { lieve: 7, media: 14, alta: 25 },
+  meccanica_sospensioni: { lieve: 2, media: 4, alta: 8 },
   nessun_danno_evidente: { lieve: 0, media: 0, alta: 0 },
   non_chiaro: { lieve: 0, media: 0, alta: 0 },
 };
+
+export function getRepairMultiplier(make?: string, model?: string, fuel?: string): number {
+  const m = (make || '').toLowerCase();
+  const mod = (model || '').toLowerCase();
+  const f = (fuel || '').toLowerCase();
+  const isEv = f.includes('elettr') || f.includes('ev') || /tesla|polestar|byd|lucid|rivian/.test(m) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(mod);
+
+  if (/ferrari|lamborghini|porsche|maserati|aston martin|bentley|rolls/.test(m)) return 2.5;
+  if (/tesla|lucid|rivian/.test(m) || (isEv && /taycan|eqs|eqe|ix|i4|i5|i7|e-tron/.test(mod))) return 2.2;
+  if (/bmw|mercedes|audi|land rover|jaguar|volvo|alfa romeo|lexus/.test(m)) return 1.6;
+  if (isEv) return 1.4;
+  return 1.0;
+}
 
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
   const geminiKey = process.env.GEMINI_API_KEY;
@@ -286,8 +364,8 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   const isGroq = isGroqProvider();
   const isAggressive = input.aggressive === true;
   const prompt = isAggressive
-    ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Anche se non sei completamente sicuro, NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata basata su forme, proporzioni, fanali, griglia e altri dettagli visivi. Per eventuali danni esterni visibili indica anche "area" (zona del veicolo, es. "paraurti anteriore sinistro") e "repairHint" (come intervenire, es. "Lucidatura e ritocco", "Sostituzione componente"). Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`
-    : `Veicolo dichiarato: ${vehicleContext}. Riconosci, se possibile, marca, modello, generazione, anno indicativo, colore e categoria di carrozzeria visibili. Non inventare i campi incerti: omettili. Per eventuali danni esterni visibili indica anche "area" (zona del veicolo, es. "parafango posteriore destro") e "repairHint" (come intervenire, es. "Verniciatura e stuccatura", "Sostituzione fanale"). Poi restituisci UNICAMENTE il seguente JSON, senza altri testi, senza markdown, senza ragionamento: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`;
+    ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, alimentazione, colore e categoria di carrozzeria visibili. Riconosci dettagli come fari/LED, griglia (aperta vs chiusa/carenata per EV), loghi/badge (es. TDI, Hybrid, e-tron, EV, Dual Motor, PureTech) e scarichi. NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata. Per "fuel" indica 'Elettrica' | 'Diesel' | 'Benzina' | 'Ibrida' | 'GPL' | 'Metano'. Per eventuali danni esterni: se il muso o frontale o scocca presentano impatto, radiatori esposti, fari frantumati, cofano piegato o lamiere distrutte, usa SEMPRE 'frontale_grave' o 'strutturale_telaio' con severity 'alta'. Restituisci UNICAMENTE questo JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`
+    : `Veicolo dichiarato: ${vehicleContext}. Riconosci con precisione marca, modello esatto, generazione, anno indicativo, alimentazione ('Elettrica'|'Diesel'|'Benzina'|'Ibrida'|'GPL'|'Metano'), colore e categoria di carrozzeria visibili. Valuta griglia (chiusa su EV), badge (Hybrid, TDI, e-tron, EV, ecc.) e fanali. Non inventare i campi incerti: omettili. Per danni esterni visibili: se il muso o carrozzeria presentano collisione evidente, fari distrutti o lamiere deformate, usa 'frontale_grave' o 'strutturale_telaio' con severity 'alta'. Restituisci UNICAMENTE questo JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`;
 
   const attempt = async (extra: Record<string, unknown> = {}) => {
     const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
@@ -302,8 +380,8 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
         max_tokens: 900,
         messages: [
           { role: 'system', content: isAggressive
-            ? 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Se non sei sicuro, fai comunque una stima ragionata basata su forme, proporzioni e dettagli visivi. Non lasciare mai vuoti make e model. Ignora targhe, persone, indirizzi e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo.'
-            : 'Sei AutoEsperto. Analizza SOLO elementi visibili esterni dell\'auto. Ignora completamente targhe, persone, indirizzi e dati personali: non trascriverli. Non diagnosticare motore, telaio o danni interni. Rispondi con un solo oggetto JSON valido, senza markdown, senza testo prima o dopo, senza ragionamento.' },
+            ? 'Sei AutoEsperto. Analizza la foto dell\'automobile con la massima accuratezza di forme, fari, griglia, badge e proporzioni per identificare marca, modello, generazione, anno e alimentazione (incluso se elettrica o ibrida). Non lasciare mai vuoti make e model. Se ci sono incidenti o frontale distrutto, indica la severità e la categoria reale (es. frontale_grave). Ignora targhe, persone e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown.'
+            : 'Sei AutoEsperto. Analizza la foto dell\'automobile riconoscendo marca, modello esatto, generazione, anno e tipo di alimentazione dai dettagli visivi. Se ci sono danni o urti importanti, stima accuratamente categoria (frontale_grave, carrozzeria, paraurti) e severità. Ignora targhe e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown.' },
           { role: 'user', content: [
             { type: 'text', text: prompt },
             { type: 'image_url', image_url: { url: input.imageData, ...(isGroq || isAggressive ? {} : { detail: 'low' }) } },
@@ -349,13 +427,16 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';
   const severity = ['lieve', 'media', 'alta'].includes(parsed?.damage?.severity) ? parsed.damage.severity : 'media';
   const visible = Boolean(parsed?.damage?.visible) && category !== 'nessun_danno_evidente' && category !== 'non_chiaro';
-  const range = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
+  const multiplier = getRepairMultiplier(parsed?.vehicle?.make, parsed?.vehicle?.model, parsed?.vehicle?.fuel);
+  const baseRange = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
+  const range = baseRange ? [Math.round(baseRange[0] * multiplier), Math.round(baseRange[1] * multiplier)] : undefined;
   return {
     vehicle: {
       make: typeof parsed?.vehicle?.make === 'string' ? parsed.vehicle.make.slice(0, 50) : undefined,
       model: typeof parsed?.vehicle?.model === 'string' ? parsed.vehicle.model.slice(0, 50) : undefined,
       generation: typeof parsed?.vehicle?.generation === 'string' ? parsed.vehicle.generation.slice(0, 80) : undefined,
       year: Number.isInteger(parsed?.vehicle?.year) && parsed.vehicle.year >= 1950 && parsed.vehicle.year <= new Date().getFullYear() + 1 ? parsed.vehicle.year : undefined,
+      fuel: typeof parsed?.vehicle?.fuel === 'string' ? parsed.vehicle.fuel.slice(0, 30) : undefined,
       color: typeof parsed?.vehicle?.color === 'string' ? parsed.vehicle.color.slice(0, 40) : undefined,
       bodyType: typeof parsed?.vehicle?.bodyType === 'string' ? parsed.vehicle.bodyType.slice(0, 50) : undefined,
       confidence: ['bassa', 'media', 'alta'].includes(parsed?.vehicle?.confidence) ? parsed.vehicle.confidence : 'bassa',
@@ -370,7 +451,7 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     },
     repairRange: range ? { min: range[0], max: range[1] } : undefined,
     estimatedTimeDays: visible ? repairDays[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined,
-    note: 'Stima visiva indicativa: ricambi, verniciatura, sensori e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
+    note: 'Stima visiva indicativa: ricambi originali, sensori ADAS, verniciatura e manodopera specializzata possono incidere sul preventivo finale.',
   };
 }
 
@@ -382,14 +463,13 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   let raw = '';
   let lastError = '';
 
-
   for (const model of models) {
     const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
       method: 'POST', signal: AbortSignal.timeout(25000),
       headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
       body: JSON.stringify({
         contents: [{ parts: [
-          { text: 'Sei il riconoscimento visivo di AutoEsperto. Riconosci con attenzione la vettura nella foto usando logo, calandra, fari, carrozzeria e proporzioni. Indica marca, modello, generazione, anno indicativo, colore e tipo di carrozzeria solo quando sono ragionevolmente identificabili; ometti i campi incerti e non inventare dettagli. Ignora completamente targhe, persone e dati personali: non leggerli, non trascriverli e non citarli. Descrivi esclusivamente danni esterni chiaramente visibili, senza diagnosticare danni interni, meccanici o incidenti pregressi. Per eventuali danni visibili indica "area" (zona del veicolo) e "repairHint" (come intervenire). Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"","area":"","repairHint":""}}.' },
+          { text: 'Sei il riconoscimento visivo esperto di AutoEsperto. Riconosci con precisione la vettura nella foto usando logo, firma fari LED, calandra (aperta vs chiusa per EV), carrozzeria e badge (es. TDI, Hybrid, e-tron, EV, Dual Motor, PureTech). Indica marca, modello esatto, generazione, anno indicativo, alimentazione (\'Elettrica\'|\'Diesel\'|\'Benzina\'|\'Ibrida\'|\'GPL\'|\'Metano\'), colore e tipo di carrozzeria. Ometti campi incerti e non inventare. Ignora completamente targhe, persone e dati personali. Se sono visibili urti anteriori o collisioni, usa "frontale_grave" o "strutturale_telaio" con severity "alta". Descrivi esclusivamente danni chiaramente visibili con "area" e "repairHint". Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"","area":"","repairHint":""}}.' },
           { inline_data: { mime_type: match[1], data: match[2] } },
         ] }],
         generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
@@ -408,9 +488,20 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   const category = categories.includes(parsed?.damage?.category) ? parsed.damage.category : 'non_chiaro';
   const severity = ['lieve', 'media', 'alta'].includes(parsed?.damage?.severity) ? parsed.damage.severity : 'media';
   const visible = Boolean(parsed?.damage?.visible) && category !== 'nessun_danno_evidente' && category !== 'non_chiaro';
-  const range = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
+  const multiplier = getRepairMultiplier(parsed?.vehicle?.make, parsed?.vehicle?.model, parsed?.vehicle?.fuel);
+  const baseRange = visible ? repairRanges[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined;
+  const range = baseRange ? [Math.round(baseRange[0] * multiplier), Math.round(baseRange[1] * multiplier)] : undefined;
   return {
-    vehicle: { make: typeof parsed?.vehicle?.make === 'string' ? parsed.vehicle.make.slice(0, 50) : undefined, model: typeof parsed?.vehicle?.model === 'string' ? parsed.vehicle.model.slice(0, 50) : undefined, generation: typeof parsed?.vehicle?.generation === 'string' ? parsed.vehicle.generation.slice(0, 80) : undefined, year: Number.isInteger(parsed?.vehicle?.year) && parsed.vehicle.year >= 1950 && parsed.vehicle.year <= new Date().getFullYear() + 1 ? parsed.vehicle.year : undefined, color: typeof parsed?.vehicle?.color === 'string' ? parsed.vehicle.color.slice(0, 40) : undefined, bodyType: typeof parsed?.vehicle?.bodyType === 'string' ? parsed.vehicle.bodyType.slice(0, 50) : undefined, confidence: ['bassa', 'media', 'alta'].includes(parsed?.vehicle?.confidence) ? parsed.vehicle.confidence : 'bassa' },
+    vehicle: {
+      make: typeof parsed?.vehicle?.make === 'string' ? parsed.vehicle.make.slice(0, 50) : undefined,
+      model: typeof parsed?.vehicle?.model === 'string' ? parsed.vehicle.model.slice(0, 50) : undefined,
+      generation: typeof parsed?.vehicle?.generation === 'string' ? parsed.vehicle.generation.slice(0, 80) : undefined,
+      year: Number.isInteger(parsed?.vehicle?.year) && parsed.vehicle.year >= 1950 && parsed.vehicle.year <= new Date().getFullYear() + 1 ? parsed.vehicle.year : undefined,
+      fuel: typeof parsed?.vehicle?.fuel === 'string' ? parsed.vehicle.fuel.slice(0, 30) : undefined,
+      color: typeof parsed?.vehicle?.color === 'string' ? parsed.vehicle.color.slice(0, 40) : undefined,
+      bodyType: typeof parsed?.vehicle?.bodyType === 'string' ? parsed.vehicle.bodyType.slice(0, 50) : undefined,
+      confidence: ['bassa', 'media', 'alta'].includes(parsed?.vehicle?.confidence) ? parsed.vehicle.confidence : 'bassa',
+    },
     damage: {
       visible,
       category,
@@ -421,14 +512,21 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
     },
     repairRange: range ? { min: range[0], max: range[1] } : undefined,
     estimatedTimeDays: visible ? repairDays[category as PhotoAnalysisResult['damage']['category']][severity as PhotoAnalysisResult['damage']['severity']] : undefined,
-    note: 'Stima visiva indicativa: ricambi e manodopera possono cambiare il preventivo. La foto non certifica danni nascosti o meccanici.',
+    note: 'Stima visiva indicativa: ricambi originali, sensori ADAS, verniciatura e manodopera specializzata possono incidere sul preventivo finale.',
   };
 }
 
 const isGeneric = (s: string) => /verifica|controlla|cerca su|non disponibili/i.test(s);
 
-function buildAdvice(knowledge: ReturnType<typeof getVehicleKnowledge>, make: string, model: string, source: 'plate' | 'model' | 'segment_fallback' | undefined): string[] {
+function buildAdvice(knowledge: ReturnType<typeof getVehicleKnowledge>, make: string, model: string, source: 'plate' | 'model' | 'segment_fallback' | undefined, isEv = false): string[] {
   const advice: string[] = [];
+  if (isEv) {
+    advice.push('Richiedi un test diagnostico dello stato di salute della batteria di trazione (SoH > 85%).');
+    advice.push('Verifica la dotazione e integrità dei cavi di ricarica (Tipo 2 per colonnine e Schuko domestico).');
+    advice.push('Fai un test drive di almeno 30 minuti verificando l\'efficienza della frenata rigenerativa e la silenziosità.');
+    advice.push('Controlla l\'usura uniforme del battistrada dei pneumatici.');
+    return advice;
+  }
   if (knowledge.versionsToAvoid.length) advice.push(`Evita: ${knowledge.versionsToAvoid.slice(0, 2).join(' · ')}.`);
   if (knowledge.versionsRecommended.length) advice.push(`Preferisci: ${knowledge.versionsRecommended.slice(0, 2).join(' · ')}.`);
   if (source === 'model' || source === 'segment_fallback') {
@@ -453,10 +551,18 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
   const cached = cacheGet<ReliabilityAnalysis>(cacheKey);
   if (cached) return cached;
 
-  const knowledge = getVehicleKnowledge(vehicle.make);
+  const fuel = (vehicle.fuel || '').toLowerCase();
+  const makeLower = (vehicle.make || '').toLowerCase();
+  const modelLower = (vehicle.model || '').toLowerCase();
+  const isElectric = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') || /tesla|polestar|byd/.test(makeLower) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(modelLower);
+
+  if (isElectric) {
+    vehicle.transmission = 'Automatico';
+  }
+
+  const knowledge = getVehicleKnowledge(vehicle.make, vehicle.fuel, vehicle.model);
   const km = input.km || 100000;
   const power = parseInt((vehicle.power || '').replace(/\D/g, '')) || 100;
-  const fuel = (vehicle.fuel || '').toLowerCase();
 
   const score = computeReliabilityScore(vehicle, km, knowledge);
   const { verdict, label } = getVerdict(score);
@@ -464,7 +570,7 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
   const costs = estimateCosts(vehicle, fuel, power);
   const consumption = deriveConsumption(vehicle, fuel);
   const taxAnnual = deriveTaxAnnual(vehicle.power || power, fuel, vehicle.year);
-  const serviceIntervalKm = fuel.includes('diesel') ? 20000 : 15000;
+  const serviceIntervalKm = isElectric ? 25000 : fuel.includes('diesel') ? 20000 : 15000;
   const categoryScores = deriveCategoryScores(vehicle, score, knowledge);
 
   const { value: estimatedValue } = estimateMarketValue(vehicle);
@@ -481,23 +587,35 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
 
   const weaknesses = knowledge.common.slice(0, 3).filter((w: string) => !isGeneric(w));
 
+  const strengths = isElectric
+    ? [
+        `Affidabilità elevata ${knowledge.reliabilityScore}/10 (powertrain elettrico semplificato).`,
+        'Costi di manutenzione ridotti di oltre il 50% (nessun cambio olio, filtro carburante o cinghia).',
+        'Esenzione bollo per 5 anni e bassissimo costo per 100 km.',
+      ]
+    : [
+        `Affidabilità complessiva ${knowledge.reliabilityScore}/10 per ${vehicle.make}.`,
+        knowledge.robust,
+        `Costi manutenzione ${knowledge.maintenance} per la categoria.`,
+      ].filter(Boolean);
+
   const analysis: ReliabilityAnalysis = {
     score,
     verdict,
     verdictLabel: label,
     summary,
-    strengths: [
-      `Affidabilità complessiva ${knowledge.reliabilityScore}/10 per ${vehicle.make}.`,
-      knowledge.robust,
-      `Costi manutenzione ${knowledge.maintenance} per la categoria.`,
-    ].filter(Boolean),
+    strengths,
     weaknesses: weaknesses.length ? weaknesses : ['Nessuna criticità grave segnalata per questo modello.'],
-    advice: buildAdvice(knowledge, vehicle.make, vehicle.model, vehicle.dataSource),
+    advice: buildAdvice(knowledge, vehicle.make, vehicle.model, vehicle.dataSource, isElectric),
     engine: !isGeneric(knowledge.engine)
       ? knowledge.engine
+      : isElectric
+      ? 'Powertrain 100% elettrico: nessuna manutenzione di olio o candele. Verificare stato di salute batteria (SoH).'
       : `Motori ${vehicle.make}: affidabilità media, verificare condizioni reali dell'esemplare.`,
     transmission: !isGeneric(knowledge.transmission)
       ? knowledge.transmission
+      : isElectric
+      ? 'Trasmissione a presa diretta monomarcia senza frizione.'
       : `Cambio ${vehicle.make}: preferire versioni con cambio manuale o automatico con tagliandi documentati.`,
     maintenance: knowledge.maintenance,
     commonIssues: knowledge.common.filter((i: string) => !isGeneric(i)),
@@ -546,21 +664,26 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
 async function enrichWithAI(input: AIAnalysisInput, base: ReliabilityAnalysis, key: string): Promise<ReliabilityAnalysis | null> {
   const { vehicle } = input;
   const fullModel = `${vehicle.make} ${vehicle.model} ${vehicle.year || ''}`.trim();
+  const fuel = (vehicle.fuel || '').toLowerCase();
+  const isEv = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') || /tesla|polestar|byd/.test((vehicle.make || '').toLowerCase()) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((vehicle.model || '').toLowerCase());
+
   const prompt = `Analizza questo veicolo (${fullModel}) per un report di acquisto:
 
 Modello: ${fullModel}
 Versione: ${vehicle.version || 'N/A'}
-Alimentazione: ${vehicle.fuel || 'N/A'}
+Alimentazione: ${vehicle.fuel || (isEv ? 'Elettrica' : 'N/A')}
 Anno immatricolazione: ${vehicle.year || 'N/A'}
+
+${isEv ? 'IMPORTANTE: Questo veicolo è 100% ELETTRICO (EV). NON menzionare MAI olio motore, filtri carburante, candele, cinghia di distribuzione, frizione, FAP/DPF o gas di scarico. Concentrati su stato batteria (SoH), autonomia, frenata rigenerativa, cavi di ricarica, software/infotainment e usura gomme.' : ''}
 
 Usa la tua conoscenza su forum italiani (Quattroruote, forumauto.it), Reddit (r/cars_it) e recensioni YouTube.
 Fornisci UNA SOLA risposta JSON valida con:
 - "summary": analisi specifica (max 180 caratteri) basata sul modello reale, non generica
 - "strengths": 3 punti di forza specifici di ${vehicle.make} ${vehicle.model}
-- "weaknesses": 3 punti deboli specifici di ${vehicle.make} ${vehicle.model} (es. "Frizione pesante nel traffico", "Infotainment lento", "Materiali interni plastici"). NON scrivere frasi su prezzo o chilometraggio
+- "weaknesses": 3 punti deboli specifici di ${vehicle.make} ${vehicle.model} (NON scrivere frasi su prezzo o chilometraggio)
 - "advice": 3 consigli pratici prima dell'acquisto specifici per ${vehicle.make} ${vehicle.model}
-- "engine": analisi del motore specifica per ${vehicle.make} ${vehicle.model} (es. "1.6 Multijet 120 CV: affidabile, attenzione FAP se uso urbano"). NON scrivere "verifica", "controlla" o consigli generici
-- "transmission": consigli specifici sul cambio per ${vehicle.make} ${vehicle.model} (es. "Manuale preciso, automatico ZF 8HP raccomandato"). NON scrivere "verifica", "controlla" o consigli generici
+- "engine": analisi del powertrain specifica per ${vehicle.make} ${vehicle.model} (${isEv ? 'motore elettrico e batteria' : 'es. 1.6 Multijet 120 CV: affidabile, attenzione FAP se uso urbano'}). NON scrivere "verifica", "controlla" o consigli generici
+- "transmission": consigli specifici sul cambio/trazione per ${vehicle.make} ${vehicle.model} (${isEv ? 'presa diretta monomarcia' : 'es. Manuale preciso, automatico ZF 8HP raccomandato'}). NON scrivere "verifica", "controlla" o consigli generici
 - "commonIssues": 3 problemi specifici noti presso i proprietari di ${vehicle.make} ${vehicle.model}`;
 
   const resp = await fetch(`${getAIBaseUrl()}/chat/completions`, {
@@ -572,7 +695,9 @@ Fornisci UNA SOLA risposta JSON valida con:
       messages: [
         {
           role: 'system',
-          content: 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione", non "verifica il cambio").',
+          content: isEv
+            ? 'Sei un ingegnere e consulente automotive specializzato in veicoli elettrici. Rispondi SOLO con JSON valido in italiano specifico per questo modello EV. Nessun riferimento a componenti termici (olio, candele, cinghie).'
+            : 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione", non "verifica il cambio").',
         },
         { role: 'user', content: prompt },
       ],

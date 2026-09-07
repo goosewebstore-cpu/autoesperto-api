@@ -5,6 +5,7 @@ import { prisma } from '@autoesperto/database';
 import { buildReport } from '../services/reportService';
 import { analyzeVehiclePhoto, askAutoEsperto, type PhotoAnalysisResult } from '../services/ai';
 import { searchModel } from '../services/modelDB';
+import { findModelEra } from '../services/modelEra';
 import { verifyAuthToken } from '../services/auth';
 import { asyncHandler, serviceUnavailable } from '../http';
 
@@ -25,6 +26,9 @@ const reportSchema = z
     year: z.coerce.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
     km: z.coerce.number().int().min(0).max(1000000).optional(),
     requestedPrice: z.coerce.number().int().min(0).max(10000000).optional(),
+    fuel: z.string().trim().optional(),
+    transmission: z.string().trim().optional(),
+    version: z.string().trim().optional(),
   })
   .refine((data) => Boolean(data.plate) !== Boolean(data.make && data.model), {
     message: 'Indica la targa oppure marca e modello',
@@ -38,7 +42,7 @@ const askSchema = z.object({
 
 const photoSchema = z.object({
   imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
-  vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.coerce.number().int().optional() }).optional(),
+  vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.coerce.number().int().optional(), fuel: z.string().optional() }).optional(),
 });
 
 const freeScanSchema = z
@@ -53,6 +57,9 @@ const freeScanSchema = z
     year: z.coerce.number().int().min(1950).max(new Date().getFullYear() + 1).optional(),
     km: z.coerce.number().int().min(0).max(1000000).optional(),
     requestedPrice: z.coerce.number().int().min(0).max(10000000).optional(),
+    fuel: z.string().trim().optional(),
+    transmission: z.string().trim().optional(),
+    version: z.string().trim().optional(),
     freeUsed: z.boolean().optional(),
   })
   .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
@@ -70,12 +77,13 @@ function getOptionalUserId(req: Request): string | null {
   }
 }
 
-function manualPhotoAnalysis(make: string, model: string, year?: number): PhotoAnalysisResult {
+function manualPhotoAnalysis(make: string, model: string, year?: number, fuel?: string): PhotoAnalysisResult {
   return {
     vehicle: {
       make,
       model,
       year,
+      fuel,
       confidence: 'media',
     },
     damage: {
@@ -84,9 +92,10 @@ function manualPhotoAnalysis(make: string, model: string, year?: number): PhotoA
       severity: 'media',
       description: 'Inserimento manuale di marca e modello.',
     },
-    note: 'Analisi basata su marca e modello inseriti a mano.',
+    note: 'Analisi basata su dati inseriti a mano.',
   };
 }
+
 router.post(
   '/analyze',
   asyncHandler(async (req, res) => {
@@ -142,6 +151,7 @@ router.post(
     let make: string | undefined;
     let model: string | undefined;
     let year: number | undefined;
+    let fuel: string | undefined = input.fuel;
 
     if (input.imageData) {
       // Primo tentativo normale
@@ -177,16 +187,28 @@ router.post(
       make = photo.vehicle.make;
       model = photo.vehicle.model;
       year = photo.vehicle.year;
+      if (!fuel && photo.vehicle.fuel) {
+        fuel = photo.vehicle.fuel;
+      }
       photoAnalysis = photo;
     } else {
       make = input.make;
       model = input.model;
       year = input.year;
-      const found = searchModel(make!, model!);
-      photoAnalysis = manualPhotoAnalysis(make!, model!, year);
-      if (found && !year) {
-        photoAnalysis.vehicle.year = found.year;
-        year = found.year;
+      const found = searchModel(make!, model!, fuel);
+      const era = findModelEra(make!, model!);
+      if (!year) {
+        year = found?.year || era?.medianYear;
+      }
+      if (!fuel) {
+        fuel = found?.fuel || era?.fuel;
+      }
+      photoAnalysis = manualPhotoAnalysis(make!, model!, year, fuel);
+      if (year && !photoAnalysis.vehicle.year) {
+        photoAnalysis.vehicle.year = year;
+      }
+      if (fuel && !photoAnalysis.vehicle.fuel) {
+        photoAnalysis.vehicle.fuel = fuel;
       }
     }
 
@@ -195,19 +217,27 @@ router.post(
       model,
       generation: photoAnalysis.vehicle.generation,
       year: photoAnalysis.vehicle.year,
+      fuel: fuel || photoAnalysis.vehicle.fuel,
       color: photoAnalysis.vehicle.color,
       bodyType: photoAnalysis.vehicle.bodyType,
       confidence: photoAnalysis.vehicle.confidence,
     };
 
     // Analisi base e report completo sempre gratuiti.
-    // Il salvataggio richiede un account: l'anonimo riceve il report completo
-    // ma senza account non può conservarlo nelle proprie analisi.
     const userId = getOptionalUserId(req);
 
     let report;
     try {
-      ({ report } = await buildReport({ make, model, year, km: input.km, requestedPrice: input.requestedPrice }));
+      ({ report } = await buildReport({
+        make,
+        model,
+        year,
+        km: input.km,
+        requestedPrice: input.requestedPrice,
+        fuel: vehicle.fuel,
+        transmission: input.transmission,
+        version: input.version,
+      }));
     } catch (error) {
       console.warn('free scan price unavailable:', error);
       throw serviceUnavailable('Veicolo riconosciuto, ma il calcolo del prezzo non è disponibile in questo momento. Riprova tra poco.');

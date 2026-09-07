@@ -142,12 +142,25 @@ export async function fetchSubitoMarketStats(
 
     // Selezione progressiva degli annunci confrontabili. Cerchiamo prima lo stesso
     // anno (±1) e km simili (tolleranza 25%, minimo 15.000 km); se non raggiungiamo
+    // 1. Esclusione varianti sportive estreme se non cercate esplicitamente
+    const modelLower = model.toLowerCase();
+    const isSportSearch = /(\bgr\b|\bgti\b|\bgtd\b|\br\b|\bamg\b|\babarth\b|\bm135\b|\bm140\b|\bm2\b|\bm3\b|\bm4\b|\bm5\b|\bquadrifoglio\b|\brs\b|\bst\b|\bcupra\b|\bv8\b)/i.test(modelLower);
+    
+    const standardAds = isSportSearch ? ads : ads.filter((ad) => {
+      const sub = (ad.subject || '').toLowerCase();
+      const hasSportKeyword = /(\byaris\s+gr\b|\bgr\s+yaris\b|\bgr4\b|\bgti\b|\bgtd\b|\bgolf\s+r\b|\bamg\b|\babarth\b|\bm135\b|\bm140\b|\bquadrifoglio\b|\brs[3-7]\b|\bfocus\s+rs\b|\bclio\s+rs\b|\bmegane\s+rs\b)/i.test(sub);
+      return !hasSportKeyword;
+    });
+    const baseAds = standardAds.length >= MIN_SAMPLE ? standardAds : ads;
+
+    // Selezione progressiva degli annunci confrontabili. Cerchiamo prima lo stesso
+    // anno (±1) e km simili (tolleranza 25%, minimo 15.000 km); se non raggiungiamo
     // un campione attendibile, allarghiamo in modo controllato e segnaliamo nel report
     // quale livello è stato usato (non spacciamo per "esatto" un confronto approssimato).
-    const yearPool = year ? ads.filter((a) => {
+    const yearPool = year ? baseAds.filter((a) => {
       const y = yearOf(a);
       return y !== undefined && y >= year - 1 && y <= year + 1;
-    }) : ads;
+    }) : baseAds;
     const yearMatched = !year || yearPool.length >= MIN_SAMPLE;
 
     const kmTolerance = km ? Math.max(15000, Math.round(km * 0.25)) : 0;
@@ -165,7 +178,7 @@ export async function fetchSubitoMarketStats(
       : kmPool.length >= MIN_SAMPLE ? kmPool
       : yearPool.length >= TARGET_SAMPLE ? yearPool
       : yearPool.length >= MIN_SAMPLE ? yearPool
-      : ads;
+      : baseAds;
     let disclosure: string;
     if (filtered === kmPool && kmPool.length >= TARGET_SAMPLE) {
       if (year) {
@@ -186,17 +199,34 @@ export async function fetchSubitoMarketStats(
         disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model}. Prezzo medio indicativo.`;
       }
     } else {
-      disclosure = `Campione ridotto (${ads.length} annunci totali): non ho trovato ${TARGET_SAMPLE} annunci con anno e chilometri confrontabili. Prezzo medio indicativo su tutto il modello.`;
+      disclosure = `Campione ridotto (${baseAds.length} annunci totali): non ho trovato ${TARGET_SAMPLE} annunci con anno e chilometri confrontabili. Prezzo medio indicativo su tutto il modello.`;
     }
 
-    const prices = filtered.map(priceOf).filter((p): p is number => p !== undefined);
-    const kms = filtered.map(kmOf).filter((k): k is number => k !== undefined);
-    const years = filtered.map(yearOf).filter((y): y is number => y !== undefined);
+    const rawPrices = filtered.map(priceOf).filter((p): p is number => p !== undefined && p > 500);
+    if (rawPrices.length < MIN_SAMPLE) return undefined;
+
+    // 2. Filtro statistico outlier (rimuove prezzi gonfiati o anomalie > 1.45x della mediana o < 0.55x)
+    rawPrices.sort((a, b) => a - b);
+    const midIdx = Math.floor(rawPrices.length / 2);
+    const medianPrice = rawPrices.length % 2 === 0 ? (rawPrices[midIdx - 1] + rawPrices[midIdx]) / 2 : rawPrices[midIdx];
+    const cleanFiltered = filtered.filter((ad) => {
+      const p = priceOf(ad);
+      return p !== undefined && p >= medianPrice * 0.55 && p <= medianPrice * 1.45;
+    });
+
+    const effectiveList = cleanFiltered.length >= MIN_SAMPLE ? cleanFiltered : filtered;
+    const prices = effectiveList.map(priceOf).filter((p): p is number => p !== undefined && p > 500);
+    const kms = effectiveList.map(kmOf).filter((k): k is number => k !== undefined);
+    const years = effectiveList.map(yearOf).filter((y): y is number => y !== undefined);
 
     if (prices.length < MIN_SAMPLE) return undefined;
-    const priceAvg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length / 100) * 100;
 
-    const listings = filtered
+    // Prezzo medio lordo richiesto negli annunci
+    const priceAvg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length / 100) * 100;
+    // Prezzo reale stimato di transazione (applica margine medio di trattativa 9% tipico del mercato italiano)
+    const transactionPriceAvg = Math.round((priceAvg * 0.91) / 100) * 100;
+
+    const listings = effectiveList
       .map(listingFromAd)
       .filter((listing): listing is MarketListing => Boolean(listing))
       .sort((a, b) => Math.abs(a.price - priceAvg) - Math.abs(b.price - priceAvg))
@@ -206,6 +236,7 @@ export async function fetchSubitoMarketStats(
       source: 'subito.it',
       total: prices.length,
       priceAvg,
+      transactionPriceAvg,
       priceMin: Math.min(...prices),
       priceMax: Math.max(...prices),
       kmAvg: kms.length ? Math.round(kms.reduce((a, b) => a + b, 0) / kms.length / 100) * 100 : undefined,

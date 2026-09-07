@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {
   BadgeEuro,
@@ -7,7 +9,6 @@ import {
   Wrench,
   ArrowRight,
   Clock,
-  Sparkles,
   BookOpen,
 } from 'lucide-react';
 import { GUIDE_CATEGORIES, type Guide, type GuideCategory } from '@/lib/guide-types';
@@ -48,20 +49,27 @@ const CATEGORY_STYLES: Record<GuideCategory, { badge: string; borderHover: strin
   },
 };
 
+const IT_MONTHS = ['gen', 'feb', 'mar', 'apr', 'mag', 'giu', 'lug', 'ago', 'set', 'ott', 'nov', 'dic'];
+
 export function formatGuideDate(published: string): string {
-  try {
-    return new Date(published).toLocaleDateString('it-IT', {
-      day: 'numeric',
-      month: 'short',
-      year: 'numeric',
-    });
-  } catch {
-    return published;
+  if (!published) return '';
+  const parts = published.split('-');
+  if (parts.length === 3) {
+    const year = parts[0];
+    const monthIdx = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    if (!isNaN(day) && monthIdx >= 0 && monthIdx < 12) {
+      return `${day} ${IT_MONTHS[monthIdx]} ${year}`;
+    }
   }
+  return published;
 }
 
 function estimateReadingTime(guide: Guide): number {
   let words = (guide.title?.split(/\s+/).length || 0) + (guide.description?.split(/\s+/).length || 0);
+  if (guide.content) {
+    words += guide.content.replace(/<[^>]*>/g, ' ').split(/\s+/).filter(Boolean).length;
+  }
   for (const s of guide.sections || []) {
     words += (s.heading?.split(/\s+/).length || 0);
     for (const p of s.paragraphs || []) {
@@ -86,21 +94,30 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
   const style = CATEGORY_STYLES[guide.category] || CATEGORY_STYLES.acquisto;
   const readTime = estimateReadingTime(guide);
 
+  const handleClick = () => {
+    if (typeof window !== 'undefined') {
+      window.scrollTo({ top: 0, behavior: 'instant' });
+    }
+  };
+
   return (
     <Link
       href={`/guide/${guide.slug}`}
+      prefetch={false}
+      scroll={true}
+      onClick={handleClick}
       className={`
         group relative flex h-full flex-col justify-between rounded-3xl border bg-white p-5 sm:p-6
         transition-all duration-300 ease-out hover:-translate-y-1 hover:shadow-xl
         cursor-pointer text-left focus:outline-none focus:ring-2 focus:ring-blue-600/30
         border-slate-200/80 dark:border-slate-800 dark:bg-slate-900
         ${style.borderHover} ${style.glow}
-        ${featured ? 'ring-1 ring-blue-500/30 bg-gradient-to-b from-blue-50/20 to-white' : ''}
+        ${featured ? 'ring-1 ring-blue-500/30 bg-gradient-to-b from-blue-50/20 to-white dark:from-slate-900 dark:to-slate-900' : ''}
       `}
     >
       <div>
         {/* Top Badges: Category & Read Time / Date */}
-        <div className="flex flex-wrap items-center justify-between gap-2">
+        <div className="flex flex-wrap items-center justify-between gap-2 pointer-events-none">
           <span
             className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold tracking-tight shadow-2xs ${style.badge}`}
           >
@@ -122,29 +139,29 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
 
         {/* Image thumbnail if present */}
         {guide.image && (
-          <div className="relative mt-3.5 h-44 w-full overflow-hidden rounded-2xl bg-slate-950 shadow-xs">
+          <div className="relative mt-3.5 h-44 w-full overflow-hidden rounded-2xl bg-slate-950 shadow-xs pointer-events-none">
             <img
               src={guide.image}
               alt={guide.title}
-              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105 pointer-events-none"
+              className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
             />
           </div>
         )}
 
         {/* Title */}
-        <h3 className="mt-3.5 text-base sm:text-lg font-black leading-snug text-slate-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400">
+        <h3 className="mt-3.5 text-base sm:text-lg font-black leading-snug text-slate-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400 pointer-events-none">
           {guide.title}
         </h3>
 
         {/* Description */}
-        <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-3">
+        <p className="mt-2 text-xs sm:text-sm leading-relaxed text-slate-600 dark:text-slate-400 line-clamp-3 pointer-events-none">
           {guide.description}
         </p>
       </div>
 
       {/* Footer Action */}
-      <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between">
+      <div className="mt-5 pt-3.5 border-t border-slate-100 dark:border-slate-800/80 flex items-center justify-between pointer-events-none">
         <span className="text-xs font-extrabold text-blue-600 dark:text-blue-400 flex items-center gap-1">
           Leggi la guida completa
         </span>

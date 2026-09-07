@@ -372,6 +372,54 @@ const kb: Record<string, VehicleKnowledge> = {
     versionsToAvoid: ['Easytronic robotizzato', '1.4 Turbo con catena rumorosa'],
     versionsRecommended: ['1.6 CDTI 110 CV', '1.4 Turbo 125/150 CV', '1.2 Turbo 100 CV']
   },
+  tesla: {
+    reliabilityScore: 8.2,
+    maintenance: 'basso',
+    common: ['Allineamento pannelli e rumorini assemblaggio prime serie', 'Usura rapida pneumatici per coppia istantanea', 'Degrado naturale batteria nel lungo periodo'],
+    engine: 'Powertrain 100% elettrico ultra-efficiente: nessuna manutenzione di olio, candele, cinghie o filtri carburante. Controllare stato di salute batteria (SoH).',
+    transmission: 'Trazione diretta monomarcia senza frizione: nessuna usura meccanica del cambio.',
+    robust: 'Piattaforma EV con baricentro basso e massima sicurezza strutturale crash-test (5 stelle Euro NCAP).',
+    bestFor: { city: 'Eccellente', family: 'Eccellente', highway: 'Ottima', newDriver: 'Buona' },
+    generations: ['Model 3 (2017-2023)', 'Model 3 Highland (2023-)', 'Model Y (2020-)', 'Model S (2012-)'],
+    versionsToAvoid: ['Esemplari con batteria molto degradata (SoH < 80%) o incidentati'],
+    versionsRecommended: ['Model 3 Long Range AWD', 'Model Y RWD batteria LFP', 'Model 3 Performance']
+  },
+  polestar: {
+    reliabilityScore: 8.0,
+    maintenance: 'basso',
+    common: ['Consumi autostradali elevati su versioni Dual Motor', 'Infotainment Android Automotive sporadici riavvii'],
+    engine: 'Motori elettrici sincroni ad alta efficienza: manutenzione quasi azzerata, nessun cambio olio o cinghia.',
+    transmission: 'Presa diretta monomarcia ad alta affidabilità.',
+    robust: 'Sicurezza passiva derivata dagli standard Volvo, telaio rigidissimo.',
+    bestFor: { city: 'Buona', family: 'Eccellente', highway: 'Ottima', newDriver: 'Buona' },
+    generations: ['Polestar 2 (2020-)', 'Polestar 3 (2023-)'],
+    versionsToAvoid: ['Standard Range ante-2022 con autonomia limitata'],
+    versionsRecommended: ['Polestar 2 Long Range Single Motor', 'Polestar 2 Long Range Dual Motor']
+  },
+  byd: {
+    reliabilityScore: 7.8,
+    maintenance: 'basso',
+    common: ['Taratura ADAS invasiva nelle prime release software', 'Rete assistenza in espansione in Italia'],
+    engine: 'Batteria Blade Battery LFP ultra-sicura e motori elettrici affidabili: zero manutenzione termica.',
+    transmission: 'Monomarcia a controllo elettronico.',
+    robust: 'Piattaforma e-Platform 3.0 solida con ottima protezione pacco batteria.',
+    bestFor: { city: 'Eccellente', family: 'Eccellente', highway: 'Buona', newDriver: 'Buona' },
+    generations: ['Atto 3 (2022-)', 'Dolphin (2023-)', 'Seal (2023-)'],
+    versionsToAvoid: ['Esemplari di importazione senza garanzia ufficiale europea'],
+    versionsRecommended: ['Atto 3 Design 60 kWh', 'Seal Design RWD', 'Dolphin Comfort']
+  },
+  smart: {
+    reliabilityScore: 7.5,
+    maintenance: 'basso',
+    common: ['Autonomia limitata su versioni EQ ante-2023', 'Ammortizzatori posteriori rigidi sulle buche'],
+    engine: 'Motori elettrici compatti e affidabili. Versioni termiche vecchie (0.9/1.0 benzina) richiedono manutenzione.',
+    transmission: 'Presa diretta su versioni elettriche EQ/#1/#3; Twinamic sulle vecchie termiche.',
+    robust: 'Cellula di sicurezza Tridion iconica e indistruttibile.',
+    bestFor: { city: 'Eccellente', family: 'Scarsa', highway: 'Discreta', newDriver: 'Ottima' },
+    generations: ['Fortwo EQ (2018-2024)', 'Smart #1 (2022-)', 'Smart #3 (2023-)'],
+    versionsToAvoid: ['Smart termica 3 cilindri con catena rumorosa o turbo usurato'],
+    versionsRecommended: ['Fortwo EQ 82 CV per uso urbano', 'Smart #1 Pro+ 66 kWh']
+  },
   lti: {
     reliabilityScore: 7.4,
     maintenance: 'medio',
@@ -412,13 +460,34 @@ function normalizeMake(make: string): string {
   return aliases[m] !== undefined ? aliases[m] : m.replace(/-/g, ' ').replace(/\s+/g, ' ').replace(/\s?\(.*\)$/, '');
 }
 
-export function getVehicleKnowledge(make: string): VehicleKnowledge {
+export function getVehicleKnowledge(make: string, fuelInput?: string, modelInput?: string): VehicleKnowledge {
   const key = normalizeMake(make);
-  const byKey = kb[key];
-  if (byKey) return byKey;
-  const root = key.split(' ')[0];
-  const byRoot = kb[root];
-  if (byRoot) return byRoot;
+  const fuel = (fuelInput || '').toLowerCase();
+  const model = (modelInput || '').toLowerCase();
+  const isEv = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') || /tesla|polestar|byd/.test(key) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe|enyaq|ev6|ioniq 5|ioniq 6/.test(model);
+
+  const base = kb[key] || kb[key.split(' ')[0]];
+
+  if (isEv) {
+    return {
+      reliabilityScore: base ? Math.max(7.8, base.reliabilityScore + 0.5) : 8.0,
+      maintenance: 'basso',
+      common: [
+        `Verifica stato di salute della batteria di trazione (SoH - State of Health, consigliato > 85%)`,
+        `Controllo usura uniforme dei pneumatici (coppia istantanea e peso vettura)`,
+        `Verifica integrità cavi di ricarica Tipo 2 e funzionamento presa di bordo`,
+      ],
+      engine: `Powertrain 100% elettrico a zero emissioni locali: nessuna manutenzione di olio motore, filtri carburante, candele o cinghie. Verificare SoH della batteria.`,
+      transmission: `Trasmissione monomarcia a presa diretta: massima fluidità e assenza di organi d'attrito frizione.`,
+      robust: `Piattaforma elettrica con baricentro basso, frenata rigenerativa che riduce drasticamente l'usura pastiglie.`,
+      bestFor: { city: 'Eccellente', family: 'Buona', highway: 'Buona', newDriver: 'Ottima' },
+      generations: base?.generations || [],
+      versionsToAvoid: ['Esemplari con batteria fortemente degradata (SoH < 80%) o privi di cavi originali'],
+      versionsRecommended: ['Versioni con batteria Long Range / LFP e tagliandi impianto elettrico documentati'],
+    };
+  }
+
+  if (base) return base;
 
   const h = hashString(make);
   const scores = [6.2, 6.7, 7.1, 7.5, 6.4, 6.9];
@@ -426,15 +495,34 @@ export function getVehicleKnowledge(make: string): VehicleKnowledge {
   const reliabilityScore = scores[h % scores.length];
   const maintenance = maints[h % maints.length];
 
+  const isDiesel = fuel.includes('diesel') || fuel.includes('tdi') || fuel.includes('dci');
+  const isHybrid = fuel.includes('ibrid') || fuel.includes('hybrid');
+
   return {
     reliabilityScore,
     maintenance,
-    common: [
-      `Storico tagliandi regolare essenziale per ${make}: verifica libretto manutenzione`,
-      `Verifica richiami aperti su sicurezza-europa.eu per ${make}`,
-      `Controlla cinghia/catena distribuzione e tagliando olio motore su ${make}`,
-    ],
-    engine: `Motori ${make}: verificare consumo olio, problemi cinghia/catena distribuzione e turbo (se presente). Preferire versioni con documentazione tagliandi.`,
+    common: isDiesel
+      ? [
+          `Verifica libretto tagliandi e intervalli cambio olio low-SAPS per filtro DPF/FAP`,
+          `Controllo efficienza valvola EGR e rigenerazioni FAP`,
+          `Verifica stato cinghia/catena di distribuzione su ${make}`,
+        ]
+      : isHybrid
+      ? [
+          `Verifica efficienza pacco batteria ibrido e inverter`,
+          `Controllo storico tagliandi e garanzia sistema ibrido su ${make}`,
+          `Verifica stato usura impianto frenante e fluidi`,
+        ]
+      : [
+          `Storico tagliandi regolare essenziale per ${make}: verifica libretto manutenzione`,
+          `Verifica richiami aperti su sicurezza-europa.eu per ${make}`,
+          `Controlla cinghia/catena distribuzione e tagliando olio motore su ${make}`,
+        ],
+    engine: isDiesel
+      ? `Motori Diesel ${make}: verificare regolarità tagliandi con olio specifico, stato FAP/iniettori e cinghia/catena di distribuzione.`
+      : isHybrid
+      ? `Powertrain Ibrido ${make}: ottima efficienza urbana e affidabilità meccanica. Verificare salute batteria ibrida.`
+      : `Motori ${make}: verificare consumo olio, problemi cinghia/catena distribuzione e turbo (se presente). Preferire versioni con documentazione tagliandi.`,
     transmission: `Cambio: preferire versioni con tagliandi cambio documentati. Per automatici, verificare sostituzione olio cambio entro i 60.000 km.`,
     robust: `Robustezza nella media per la categoria ${make}. Verificare condizioni sospensioni e impianto frenante.`,
     bestFor: { city: 'Discreta', family: 'Buona', highway: 'Buona', newDriver: 'Discreta' },

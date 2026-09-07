@@ -16,6 +16,7 @@ import {
   ShieldCheck,
   Sparkles,
   Upload,
+  MapPin,
 } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
 import {
@@ -28,6 +29,7 @@ import {
   type AnalyzePayload,
 } from '@/lib/api';
 import { generateInstantReport } from '@/lib/reportFallback';
+import { REGIONS_CONFIG } from '@/lib/bollo';
 import { trackEvent } from '@/lib/analytics';
 import ReportView from '@/components/ReportView';
 import ReportErrorBoundary from '@/components/ReportErrorBoundary';
@@ -94,6 +96,7 @@ export default function VehicleScanner({
   const [manualPrice, setManualPrice] = useState('');
   const [manualFuel, setManualFuel] = useState('Diesel');
   const [manualTransmission, setManualTransmission] = useState('Manuale');
+  const [manualRegion, setManualRegion] = useState('lombardia');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
 
@@ -172,6 +175,17 @@ export default function VehicleScanner({
     setManualMake(result.vehicle.make || '');
     setManualModel(result.vehicle.model || '');
     if (result.vehicle.year) setManualYear(String(result.vehicle.year));
+    if (result.vehicle.fuel) setManualFuel(result.vehicle.fuel);
+    
+    const isEv = (result.vehicle.fuel || '').toLowerCase().includes('elettr') || (result.vehicle.fuel || '').toLowerCase().includes('ev') || /tesla|polestar|byd/.test((result.vehicle.make || '').toLowerCase()) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((result.vehicle.model || '').toLowerCase());
+    if (isEv) {
+      setManualTransmission('Automatico');
+    }
+    if (result.report?.vehicle) {
+      result.report.vehicle.imageUrl = photoUrl;
+      if (isEv) result.report.vehicle.transmission = 'Automatico';
+    }
+
     trackEvent('car_selected', { make: result.vehicle.make || '', model: result.vehicle.model || '' });
     setStage('vehicle-found');
     return true;
@@ -238,6 +252,9 @@ export default function VehicleScanner({
         ...(year && !isNaN(year) ? { year } : {}),
         ...(km && !isNaN(km) ? { km } : {}),
         ...(requestedPrice && !isNaN(requestedPrice) ? { requestedPrice } : {}),
+        ...(manualFuel ? { fuel: manualFuel } : {}),
+        ...(manualTransmission ? { transmission: manualTransmission } : {}),
+        ...(manualVersion ? { version: manualVersion } : {}),
       });
       if (!result.recognized || !result.vehicle) {
         setError(result.message || 'Non riesco a riconoscere il veicolo. Riprova.');
@@ -248,6 +265,12 @@ export default function VehicleScanner({
         if (manualFuel) result.report.vehicle.fuel = manualFuel;
         if (manualTransmission) result.report.vehicle.transmission = manualTransmission;
         if (manualVersion) result.report.vehicle.version = manualVersion;
+        const regObj = REGIONS_CONFIG[manualRegion] || REGIONS_CONFIG.lombardia;
+        result.report.vehicle.location = {
+          ...result.report.vehicle.location,
+          region: regObj.name,
+          city: regObj.name,
+        };
       }
 
       setScan(result);
@@ -379,43 +402,62 @@ export default function VehicleScanner({
   if (stage !== 'result') {
     if (embedded) {
       return (
-        <div className="scanner-box">
-          <div className="scanner-tabs" role="tablist" aria-label="Come vuoi analizzare l'auto">
+        <div className="scanner-box shadow-xl border border-slate-200/90 rounded-2xl overflow-hidden">
+          {/* App-like Segmented Pill Bar */}
+          <div className="p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-xl m-2.5 flex items-center gap-1.5" role="tablist" aria-label="Come vuoi analizzare l'auto">
             <button
               type="button"
               role="tab"
               aria-selected={tab === 'foto'}
-              className={`scanner-tab${tab === 'foto' ? ' active' : ''}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${
+                tab === 'foto'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
               onClick={() => { setTab('foto'); setError(''); }}
             >
-              <Camera className="h-4 w-4" /> Da foto / screenshot
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={tab === 'manual'}
-              className={`scanner-tab${tab === 'manual' ? ' active' : ''}`}
-              onClick={() => { setTab('manual'); setError(''); }}
-            >
-              <Car className="h-4 w-4" /> Marca e modello
+              <Camera className="h-4 w-4 shrink-0 text-blue-600" />
+              <span>Scanner Foto</span>
+              <span className="hidden sm:inline-flex items-center gap-0.5 text-[10px] font-extrabold uppercase px-1.5 py-0.5 rounded-full bg-blue-50 dark:bg-blue-950/80 text-blue-700 dark:text-blue-300 border border-blue-200/60 dark:border-blue-800">
+                <Sparkles className="w-2.5 h-2.5" /> IA
+              </span>
             </button>
             <button
               type="button"
               role="tab"
               aria-selected={tab === 'annuncio'}
-              className={`scanner-tab${tab === 'annuncio' ? ' active' : ''}`}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${
+                tab === 'annuncio'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
               onClick={() => { setTab('annuncio'); setError(''); }}
             >
-              <Link2 className="h-4 w-4" /> Controlla annuncio
+              <Link2 className="h-4 w-4 shrink-0" />
+              <span>Link Annuncio</span>
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'manual'}
+              className={`flex-1 flex items-center justify-center gap-2 py-2.5 px-3 rounded-lg text-xs sm:text-sm font-bold transition-all ${
+                tab === 'manual'
+                  ? 'bg-white dark:bg-slate-900 text-blue-600 dark:text-blue-400 shadow-sm border border-slate-200/60 dark:border-slate-700'
+                  : 'text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white'
+              }`}
+              onClick={() => { setTab('manual'); setError(''); }}
+            >
+              <Car className="h-4 w-4 shrink-0" />
+              <span>Cerca Modello</span>
             </button>
           </div>
 
           {tab === 'foto' ? (
-            <div className="scanner-photo-tab">
+            <div className="p-3 sm:p-5">
               <button
                 type="button"
                 disabled={manualLoading}
-                className={`scanner-dropzone ${isDragOver ? 'ring-4 ring-blue-500/20 border-blue-600 bg-blue-50/50' : ''} ${manualLoading ? 'opacity-75 cursor-wait' : ''}`}
+                className={`scanner-dropzone group ${isDragOver ? 'ring-4 ring-blue-500/20 border-blue-600 bg-blue-50/50' : ''} ${manualLoading ? 'opacity-75 cursor-wait' : ''}`}
                 onClick={() => !manualLoading && inputRef.current?.click()}
                 onDragOver={(e) => { e.preventDefault(); setIsDragOver(true); }}
                 onDragLeave={() => setIsDragOver(false)}
@@ -427,23 +469,75 @@ export default function VehicleScanner({
                   }
                 }}
               >
-                <span className="scanner-drop-icon">
-                  {manualLoading ? <Loader2 className="h-6 w-6 animate-spin text-blue-600" /> : <Camera className="h-6 w-6" />}
+                <span className="scanner-drop-icon transition-transform group-hover:scale-110">
+                  {manualLoading ? <Loader2 className="h-7 w-7 animate-spin text-blue-600" /> : <Camera className="h-7 w-7 text-blue-600" />}
                 </span>
-                <span className="scanner-drop-main">
-                  {manualLoading ? 'Analisi foto / screenshot in corso…' : isDragOver ? 'Rilascia qui le immagini' : 'Trascina o carica foto o screenshot dell\'annuncio'}
+                <span className="scanner-drop-main text-base sm:text-lg font-black text-slate-900">
+                  {manualLoading ? 'Analisi foto / screenshot con IA…' : isDragOver ? 'Rilascia qui le immagini' : 'Carica foto o screenshot dell\'annuncio'}
                 </span>
-                <span className="scanner-drop-sub">
-                  {manualLoading ? 'Riconoscimento IA e generazione verdetto…' : 'JPG, PNG o WebP · max 5 MB l\'una · fino a 6 foto'}
+                <span className="scanner-drop-sub text-xs text-slate-500 max-w-sm text-center">
+                  {manualLoading ? 'Riconoscimento automatico e generazione del verdetto in corso…' : 'Trascina qui l\'immagine, oppure tocca per scattare da fotocamera smartphone'}
+                </span>
+
+                <span className="mt-3 inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm font-bold shadow-md shadow-blue-500/20 transition-transform group-hover:scale-105 active:scale-95">
+                  <Upload className="w-4 h-4" />
+                  Scegli file o scatta foto
                 </span>
               </button>
+
               {error && <p className="scanner-box-error mt-3" role="alert">{error}</p>}
-              <div className="scanner-box-promises" aria-label="Cosa ricevi">
-                {promises.map((item) => (
-                  <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
-                ))}
+
+              {/* 1-Click Interactive AI Presets */}
+              <div className="mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800">
+                <div className="flex items-center justify-between gap-2 mb-2">
+                  <span className="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
+                    <Sparkles className="w-3.5 h-3.5 text-blue-600" />
+                    Non hai una foto adesso? Prova l&apos;IA con 1 tocco:
+                  </span>
+                  <span className="text-[10px] font-bold text-blue-600 bg-blue-50 dark:bg-blue-950/60 px-2 py-0.5 rounded-md">
+                    Esempi reali
+                  </span>
+                </div>
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                  {[
+                    { make: 'Fiat', model: 'Panda', year: 2019, km: 65000, price: 8900, tag: 'City car' },
+                    { make: 'Volkswagen', model: 'Golf', year: 2020, km: 78000, price: 18500, tag: 'Compatta' },
+                    { make: 'Toyota', model: 'Yaris', year: 2021, km: 42000, price: 16400, tag: 'Ibrida' },
+                    { make: 'Jeep', model: 'Renegade', year: 2018, km: 95000, price: 13800, tag: 'SUV' },
+                  ].map((demo) => (
+                    <button
+                      key={`${demo.make}-${demo.model}`}
+                      type="button"
+                      disabled={manualLoading}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setManualMake(demo.make);
+                        setManualModel(demo.model);
+                        setManualYear(String(demo.year));
+                        setManualKm(String(demo.km));
+                        setManualPrice(String(demo.price));
+                        void handleManualSubmit({
+                          make: demo.make,
+                          model: demo.model,
+                          year: demo.year,
+                          km: demo.km,
+                          requestedPrice: demo.price,
+                        });
+                      }}
+                      className="p-2.5 rounded-xl border border-slate-200/90 bg-slate-50/80 hover:bg-blue-50/80 hover:border-blue-300 transition-all text-left group shadow-xs cursor-pointer active:scale-98"
+                    >
+                      <span className="text-[10px] font-bold text-blue-600 uppercase tracking-wider block">{demo.tag}</span>
+                      <span className="text-xs font-bold text-slate-900 group-hover:text-blue-600 transition-colors block truncate">
+                        {demo.make} {demo.model}
+                      </span>
+                      <span className="text-[11px] text-slate-500 block">
+                        {demo.year} · {demo.km.toLocaleString('it-IT')} km
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
-              <p className="scanner-box-micro">Analisi gratuita al 100% e senza registrazione.</p>
+              <p className="scanner-box-micro text-[11px] text-slate-400 mt-3 text-center">Analisi IA gratuita al 100% e senza registrazione.</p>
             </div>
           ) : tab === 'manual' ? (
             <form
@@ -554,7 +648,10 @@ export default function VehicleScanner({
                       <button
                         key={f}
                         type="button"
-                        onClick={() => setManualFuel(f)}
+                        onClick={() => {
+                          setManualFuel(f);
+                          if (f === 'Elettrica') setManualTransmission('Automatico');
+                        }}
                         className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all ${
                           manualFuel.toLowerCase().includes(f.toLowerCase())
                             ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
@@ -569,23 +666,53 @@ export default function VehicleScanner({
 
                 <div>
                   <span className="text-[11px] font-bold text-slate-500 block mb-1.5">Cambio:</span>
-                  <div className="flex flex-wrap gap-1">
-                    {['Manuale', 'Automatico'].map((t) => (
-                      <button
-                        key={t}
-                        type="button"
-                        onClick={() => setManualTransmission(t)}
-                        className={`px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${
-                          manualTransmission.toLowerCase().includes(t.toLowerCase())
-                            ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
-                            : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-300'
-                        }`}
-                      >
-                        {t}
-                      </button>
-                    ))}
+                  <div className="flex flex-wrap items-center gap-1">
+                    {(manualFuel.toLowerCase().includes('elettr') || manualMake.toLowerCase().includes('tesla')) ? (
+                      <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-lg text-[11px] font-bold bg-blue-50 text-blue-700 border border-blue-200 dark:bg-blue-950/60 dark:text-blue-300 dark:border-blue-800">
+                        Automatico (Presa diretta EV)
+                      </span>
+                    ) : (
+                      ['Manuale', 'Automatico'].map((t) => (
+                        <button
+                          key={t}
+                          type="button"
+                          onClick={() => setManualTransmission(t)}
+                          className={`px-3 py-1 rounded-lg text-[11px] font-bold border transition-all ${
+                            manualTransmission.toLowerCase().includes(t.toLowerCase())
+                              ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                              : 'bg-white dark:bg-slate-800 text-slate-700 dark:text-slate-300 border-slate-200 dark:border-slate-700 hover:border-blue-300'
+                          }`}
+                        >
+                          {t}
+                        </button>
+                      ))
+                    )}
                   </div>
                 </div>
+              </div>
+
+              {/* Selettore Regione di Vendita */}
+              <div className="mt-3 pt-2.5 border-t border-slate-100 dark:border-slate-800 text-left">
+                <div className="flex items-center justify-between gap-2 mb-1.5">
+                  <span className="text-[11px] font-bold text-slate-600 dark:text-slate-400 flex items-center gap-1">
+                    <MapPin className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                    Regione / Dove si trova l&apos;auto:
+                  </span>
+                  <span className="text-[10px] text-blue-600 dark:text-blue-400 font-bold">
+                    Aggiorna stima &amp; bollo regionale
+                  </span>
+                </div>
+                <select
+                  value={manualRegion}
+                  onChange={(e) => setManualRegion(e.target.value)}
+                  className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 dark:text-slate-200 cursor-pointer focus:ring-2 focus:ring-blue-500"
+                >
+                  {Object.values(REGIONS_CONFIG).map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name} ({Math.round((r.marketFactor - 1.0) * 100) > 0 ? `+${Math.round((r.marketFactor - 1.0) * 100)}%` : Math.round((r.marketFactor - 1.0) * 100) < 0 ? `${Math.round((r.marketFactor - 1.0) * 100)}%` : '0%'})
+                    </option>
+                  ))}
+                </select>
               </div>
 
               {error && <p className="scanner-box-error mt-3" role="alert">{error}</p>}
@@ -678,12 +805,7 @@ export default function VehicleScanner({
                   <><ScanSearch /> Ottieni il Verdetto sull&apos;Annuncio <ArrowRight /></>
                 )}
               </button>
-
-              <div className="scanner-box-promises" aria-label="Cosa ricevi">
-                {promises.map((item) => (
-                  <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>
-                ))}
-              </div>
+              <p className="scanner-box-micro text-[11px] text-slate-400 mt-3 text-center">Analisi IA gratuita al 100% e senza registrazione.</p>
             </div>
           )}
           <input

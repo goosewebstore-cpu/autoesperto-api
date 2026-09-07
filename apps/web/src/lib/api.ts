@@ -22,10 +22,22 @@ export interface AnalyzePayload {
   year?: number;
   km?: number;
   requestedPrice?: number;
+  fuel?: string;
+  transmission?: string;
+  version?: string;
 }
 
 export interface PhotoAnalysis {
-  vehicle: { make?: string; model?: string; generation?: string; year?: number; color?: string; bodyType?: string; confidence: 'bassa' | 'media' | 'alta' };
+  vehicle: {
+    make?: string;
+    model?: string;
+    generation?: string;
+    year?: number;
+    fuel?: string;
+    color?: string;
+    bodyType?: string;
+    confidence: 'bassa' | 'media' | 'alta';
+  };
   damage: { visible: boolean; category: string; severity: string; description: string; area?: string; repairHint?: string };
   repairRange?: { min: number; max: number };
   estimatedTimeDays?: number;
@@ -191,7 +203,7 @@ export async function warmUpApi(): Promise<boolean> {
   }
 }
 
-export async function freeScanVehiclePhoto(imageData: string, extra: { km?: number; requestedPrice?: number } = {}): Promise<FreeScanResult> {
+export async function freeScanVehiclePhoto(imageData: string, extra: { km?: number; requestedPrice?: number; fuel?: string; transmission?: string; version?: string } = {}): Promise<FreeScanResult> {
   try {
     void warmUpApi().catch(() => {});
     return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, ...extra }) }, 25000, false);
@@ -201,7 +213,7 @@ export async function freeScanVehiclePhoto(imageData: string, extra: { km?: numb
   }
 }
 
-export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number }): Promise<FreeScanResult> {
+export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number; fuel?: string; transmission?: string; version?: string }): Promise<FreeScanResult> {
   try {
     return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 7500, false);
   } catch (err) {

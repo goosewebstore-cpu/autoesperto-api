@@ -60,3 +60,22 @@ test('500X non viene confusa con la 500 (match più lungo vince)', () => {
   const cinquecento = estimateMarketValue({ make: 'Fiat', model: '500 1.2', year: 2019, fuel: 'Benzina', body: 'Utilitaria' });
   assert.ok(x.value > cinquecento.value, '500X vale più della 500');
 });
+
+test('Elettrica vs Diesel vs Benzina hanno depreciation curve coerenti', () => {
+  const ev = estimateMarketValue({ make: 'Tesla', model: 'Model 3', year: 2023, fuel: 'Elettrica' });
+  const diesel = estimateMarketValue({ make: 'BMW', model: 'Serie 3', year: 2013, fuel: 'Diesel' });
+  const benzina = estimateMarketValue({ make: 'BMW', model: 'Serie 3', year: 2013, fuel: 'Benzina' });
+  assert.ok(ev.value > 20000, 'Tesla recente mantiene valore');
+  assert.ok(benzina.value >= diesel.value * 0.98, 'Diesel vecchio svaluta di più per blocchi traffico');
+});
+
+test('Alfa Romeo 147 con 190.000 km → stima realistica tra 1.000€ e 2.500€ (mai 12.000€)', () => {
+  const km = estimateMarketValueWithKm({ make: 'Alfa Romeo', model: '147', fuel: 'Diesel', body: 'Berlina' }, 190000);
+  inRange(km.adjustedForKm, 1000, 2500, 'Alfa 147 190k km');
+  assert.ok(km.adjustedForKm < 3000, 'Alfa 147 con 190k km non supera 3000 euro');
+});
+
+test('Fiat Punto 2007 con 180.000 km → stima realistica tra 900€ e 2.000€', () => {
+  const km = estimateMarketValueWithKm({ make: 'Fiat', model: 'Punto', year: 2007, fuel: 'Benzina' }, 180000);
+  inRange(km.adjustedForKm, 900, 2000, 'Punto 2007 180k km');
+});

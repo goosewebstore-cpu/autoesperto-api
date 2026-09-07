@@ -32,8 +32,8 @@ const guidesPath = path.resolve(__dirname, '../src/lib/guides.ts');
 const guidesContent = fs.readFileSync(guidesPath, 'utf8');
 
 // Match each guide's slug and published date
-const guideMatches = [...guidesContent.matchAll(/slug:\s*['"]([^'"]+)['"][\s\S]*?published:\s*['"]([^'"]+)['"]/g)];
-const guideSlugs = [...guidesContent.matchAll(/slug:\s*['"]([^'"]+)['"]/g)].map(m => m[1]);
+const guideMatches = [...guidesContent.matchAll(/"?slug"?:\s*['"]([^'"]+)['"][\s\S]*?"?published"?:\s*['"]([^'"]+)['"]/g)];
+const guideSlugs = [...guidesContent.matchAll(/"?slug"?:\s*['"]([^'"]+)['"]/g)].map(m => m[1]);
 
 const guides = guideSlugs.map((slug) => {
   const match = guideMatches.find(m => m[1] === slug);
@@ -194,10 +194,12 @@ for (const name of sitemapNames) {
   console.log(`[sitemap-gen] Generated ${filePath} with ${sitemaps[name].length} URLs (${(xml.length / 1024).toFixed(1)} KB).`);
 }
 
+const primarySitemaps = ['static', 'guides', 'makes', 'models'];
+
 // Generate sitemap.xml index with <lastmod>
 const indexXml = `<?xml version="1.0" encoding="UTF-8"?>
 <sitemapindex xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-${sitemapNames
+${primarySitemaps
   .map(
     (name) => `  <sitemap>
     <loc>${siteUrl}/sitemaps/${name}.xml</loc>
@@ -209,4 +211,4 @@ ${sitemapNames
 
 const indexPath = path.join(publicDir, 'sitemap.xml');
 fs.writeFileSync(indexPath, indexXml, 'utf8');
-console.log(`[sitemap-gen] Generated index at ${indexPath} (${sitemapNames.length} sitemaps).`);
+console.log(`[sitemap-gen] Generated curated index at ${indexPath} (${primarySitemaps.length} primary sitemaps).`);

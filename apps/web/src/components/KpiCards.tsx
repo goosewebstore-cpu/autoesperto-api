@@ -33,11 +33,14 @@ export function calculateRealisticAnnualCost(report: AutoReport): {
   const age = Math.max(1, currentYear - (vehicle.year || currentYear - 5));
 
   // 2. Bollo esatto con esenzioni regionali (elettrico 0€ per 5 anni, ibrido sconto, GPL -25%)
-  const bolloCalc = calculateBolloAccurate(vehicle.power || kw, vehicle.fuel, vehicle.year);
+  const regionKey = (vehicle.location as any)?.regionId || vehicle.location?.region || 'lombardia';
+  const bolloCalc = calculateBolloAccurate(vehicle.power || kw, vehicle.fuel, vehicle.year, regionKey, vehicle.euroClass);
   const tax = rel.taxAnnual !== undefined ? rel.taxAnnual : bolloCalc.totale;
 
   // 3. Tipologia motore & consumi reali su percorrenza media italiana (10.000 km/anno)
-  const isElectric = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev');
+  const isElectric = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') ||
+    /tesla|polestar|byd/.test(make) ||
+    /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(model);
   const isHybrid = fuel.includes('ibrid') || fuel.includes('hybrid') || fuel.includes('phev') || fuel.includes('hev');
   const isDiesel = fuel.includes('diesel') || fuel.includes('jtd') || fuel.includes('tdi') || fuel.includes('dci') || fuel.includes('hdi') || fuel.includes('cdti');
   const isGpl = fuel.includes('gpl') || fuel.includes('lpg');
@@ -47,20 +50,20 @@ export function calculateRealisticAnnualCost(report: AutoReport): {
 
   let combL100 = 5.4;
   let rawComb = rel.consumption?.combined;
-  if (rawComb && rawComb > 0 && rawComb < 22) {
+  if (rawComb && rawComb > 0 && rawComb < 28) {
     combL100 = rel.consumption?.fuelType?.toLowerCase().includes('km/l')
       ? 100 / Math.max(1, rawComb)
       : rawComb;
     
     // Normalizzazione consumi realistici per classe
-    if (combL100 > 9.5 && !/porsche|ferrari|lamborghini|maserati|v8|amg|m3|m5|rs[4-7]|quadrifoglio/.test(model)) {
-      combL100 = isDiesel ? 4.9 : isHybrid ? 4.2 : isElectric ? 14.5 : isGpl ? 7.2 : 5.8;
+    if (combL100 > 9.5 && !isElectric && !/porsche|ferrari|lamborghini|maserati|v8|amg|m3|m5|rs[4-7]|quadrifoglio/.test(model)) {
+      combL100 = isDiesel ? 4.9 : isHybrid ? 4.2 : isGpl ? 7.2 : 5.8;
     }
   } else {
-    combL100 = isDiesel ? 4.9 : isHybrid ? 4.2 : isElectric ? 14.5 : isGpl ? 7.2 : isMetano ? 4.2 : 5.8;
+    combL100 = isDiesel ? 4.9 : isHybrid ? 4.2 : isElectric ? 15.2 : isGpl ? 7.2 : isMetano ? 4.2 : 5.8;
   }
 
-  // Prezzi carburanti medi Italia 2026
+  // Prezzi energetici medi Italia 2026
   let fuelCost = 0;
   let fuelTypeLabel = 'Benzina';
   if (isElectric) {
@@ -88,8 +91,11 @@ export function calculateRealisticAnnualCost(report: AutoReport): {
   const isPremium = /bmw|mercedes|audi|land rover|jaguar|volvo|alfa romeo|lexus/.test(make);
   const isCityCar = /panda|500|ypsilon|aygo|c1|c3|clio|208|i10|i20|picanto|polo|fiesta|micra|twingo|up|smart|yaris/.test(model);
   
-  let maintenance = 180; // Default compatta standard (es. Golf, Focus, Tipo)
-  if (isSupercar) {
+  let maintenance = 180;
+  if (isElectric) {
+    // Le vetture elettriche non hanno cambio olio, candele, filtri carburante o cinghie
+    maintenance = isSupercar ? 260 : isPremium ? (age > 8 ? 160 : 130) : isCityCar ? 90 : 110;
+  } else if (isSupercar) {
     maintenance = 650;
   } else if (isPremium) {
     maintenance = age > 8 ? 340 : 280;
@@ -99,7 +105,7 @@ export function calculateRealisticAnnualCost(report: AutoReport): {
     maintenance = 210;
   }
 
-  // 5. Assicurazione RC base standard indicativa (classe di merito media con comparatore online)
+  // 5. Assicurazione RC base standard indicativa
   let insurance = 290;
   if (kw <= 55) {
     insurance = 240; // Piccole utilitarie (< 75 CV)
@@ -128,18 +134,23 @@ export default function KpiCards({ report }: Props) {
   const [showCostModal, setShowCostModal] = useState(false);
   const rel = report?.reliability || ({} as any);
   const pr = report?.price || ({} as any);
+  const vehicle = report?.vehicle || ({} as any);
   const scoreNum = Number(rel.score) || 7.5;
   const normalizedScore = (scoreNum > 10 ? scoreNum / 10 : scoreNum).toFixed(1);
 
   const rawUnit = (rel.consumption?.fuelType || '').toLowerCase();
-  const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || (report?.vehicle?.fuel || '').toLowerCase().includes('elettr');
+  const fuelLower = (vehicle.fuel || '').toLowerCase();
+  const makeLower = (vehicle.make || '').toLowerCase();
+  const modelLower = (vehicle.model || '').toLowerCase();
+
+  const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || fuelLower.includes('elettr') || fuelLower.includes('ev') || /tesla|polestar|byd/.test(makeLower) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(modelLower);
   const isKmL = rawUnit.includes('km/l') || rawUnit.includes('km/litro');
 
-  let consumptionDisplay = '5.2 L/100 km';
+  let consumptionDisplay = isElectric ? '15.2 kWh/100 km' : '5.2 L/100 km';
   if (rel.consumption?.combined) {
     let combVal = rel.consumption.combined;
-    if (combVal > 9.5 && !/porsche|ferrari|maserati|v8|amg|m3|m5/.test((report?.vehicle?.model || '').toLowerCase())) {
-      combVal = (report?.vehicle?.fuel || '').toLowerCase().includes('diesel') ? 4.9 : 5.8;
+    if (combVal > 9.5 && !isElectric && !/porsche|ferrari|maserati|v8|amg|m3|m5/.test(modelLower)) {
+      combVal = fuelLower.includes('diesel') ? 4.9 : 5.8;
     }
     const unit = isElectric ? 'kWh/100 km' : isKmL ? 'km/L' : 'L/100 km';
     consumptionDisplay = `${combVal} ${unit}`;
@@ -167,13 +178,13 @@ export default function KpiCards({ report }: Props) {
       label: 'Costo Annuo Totale',
       value: `${euro(costBreakdown.total)} €`,
       sub: '≈ ' + euro(costBreakdown.total / 12) + ' €/mese',
-      desc: 'Carburante + Bollo + Manutenz.',
+      desc: isElectric ? 'Ricarica + Bollo + Manutenz.' : 'Carburante + Bollo + Manutenz.',
       tone: 'slate',
       clickable: true,
     },
     {
       icon: Fuel,
-      label: 'Consumo Medio',
+      label: isElectric ? 'Consumo Energetico' : 'Consumo Medio',
       value: consumptionDisplay,
       desc: 'Ciclo combinato',
       tone: 'sky',
@@ -274,7 +285,7 @@ export default function KpiCards({ report }: Props) {
               <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                 <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                   <Fuel className="w-3.5 h-3.5 text-sky-500" />
-                  Carburante ({costBreakdown.fuelTypeLabel})
+                  {isElectric ? 'Ricarica Elettrica (energia)' : `Carburante (${costBreakdown.fuelTypeLabel})`}
                 </span>
                 <span className="font-bold text-slate-900 dark:text-white number-mono">
                   {euro(costBreakdown.fuel)} € / anno
@@ -287,7 +298,7 @@ export default function KpiCards({ report }: Props) {
                   Bollo Auto (tassa di possesso)
                 </span>
                 <span className="font-bold text-slate-900 dark:text-white number-mono">
-                  {costBreakdown.tax === 0 ? '0 € (Esente)' : `${euro(costBreakdown.tax)} € / anno`}
+                  {costBreakdown.tax === 0 ? '0 € (Esente 5 anni)' : `${euro(costBreakdown.tax)} € / anno`}
                 </span>
               </div>
 
@@ -304,7 +315,7 @@ export default function KpiCards({ report }: Props) {
               <div className="flex items-center justify-between p-2.5 rounded-xl bg-slate-50 dark:bg-slate-800/60">
                 <span className="font-semibold text-slate-700 dark:text-slate-300 flex items-center gap-2">
                   <Wallet className="w-3.5 h-3.5 text-amber-500" />
-                  Manutenzione ordinaria & tagliando
+                  {isElectric ? 'Manutenzione EV (filtro clima, freni, check SoH)' : 'Manutenzione ordinaria & tagliando'}
                 </span>
                 <span className="font-bold text-slate-900 dark:text-white number-mono">
                   {euro(costBreakdown.maintenance)} € / anno

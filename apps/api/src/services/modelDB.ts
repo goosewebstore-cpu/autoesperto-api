@@ -17,8 +17,13 @@ export const ModelDB: ModelEntry[] = [
   // Fiat
   { make: 'Fiat', model: 'Panda', version: '1.2 Lounge 69 CV', year: 2020, fuel: 'Benzina', displacement: '1.2 L', power: '69 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
   { make: 'Fiat', model: '500', version: '1.2 Lounge 69 CV', year: 2018, fuel: 'Benzina', displacement: '1.2 L', power: '69 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 3 },
+  { make: 'Fiat', model: 'Punto', version: '1.2 Classic 60 CV', year: 2007, fuel: 'Benzina', displacement: '1.2 L', power: '60 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
+  { make: 'Fiat', model: 'Grande Punto', version: '1.3 Multijet Dynamic 75 CV', year: 2008, fuel: 'Diesel', displacement: '1.3 L', power: '75 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
   { make: 'Fiat', model: 'Tipo', version: '1.6 Multijet 120 CV', year: 2018, fuel: 'Diesel', displacement: '1.6 L', power: '120 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
   { make: 'Fiat', model: '500X', version: '1.3 Multijet 95 CV', year: 2018, fuel: 'Diesel', displacement: '1.3 L', power: '95 CV', transmission: 'Manuale', body: 'SUV', doors: 5 },
+  { make: 'Fiat', model: 'Stilo', version: '1.9 JTD Active 115 CV', year: 2004, fuel: 'Diesel', displacement: '1.9 L', power: '115 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
+  { make: 'Fiat', model: 'Bravo', version: '1.6 Multijet Emotion 120 CV', year: 2010, fuel: 'Diesel', displacement: '1.6 L', power: '120 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
+  { make: 'Fiat', model: 'Multipla', version: '1.6 Natural Power Dynamic 103 CV', year: 2005, fuel: 'Metano', displacement: '1.6 L', power: '103 CV', transmission: 'Manuale', body: 'Monovolume', doors: 5 },
   // Volkswagen
   { make: 'Volkswagen', model: 'Golf', version: 'VII 1.6 TDI Highline 115 CV', year: 2018, fuel: 'Diesel', displacement: '1.6 L', power: '115 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
   { make: 'Volkswagen', model: 'Polo', version: '1.0 TSI 95 CV', year: 2018, fuel: 'Benzina', displacement: '1.0 L', power: '95 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
@@ -49,6 +54,8 @@ export const ModelDB: ModelEntry[] = [
   { make: 'Renault', model: 'Megane', version: '1.5 dCi 110 CV', year: 2017, fuel: 'Diesel', displacement: '1.5 L', power: '110 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
   // Peugeot
   { make: 'Peugeot', model: '208', version: '1.2 PureTech 100 CV', year: 2019, fuel: 'Benzina', displacement: '1.2 L', power: '100 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
+  { make: 'Peugeot', model: '206', version: '1.4 HDi XT 68 CV', year: 2005, fuel: 'Diesel', displacement: '1.4 L', power: '68 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
+  { make: 'Peugeot', model: '207', version: '1.4 HDi X-Line 68 CV', year: 2009, fuel: 'Diesel', displacement: '1.4 L', power: '68 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
   { make: 'Peugeot', model: '308', version: '1.5 BlueHDi 130 CV', year: 2019, fuel: 'Diesel', displacement: '1.5 L', power: '130 CV', transmission: 'Automatico', body: 'Berlina', doors: 5 },
   { make: 'Peugeot', model: '2008', version: '1.2 PureTech 110 CV', year: 2019, fuel: 'Benzina', displacement: '1.2 L', power: '110 CV', transmission: 'Manuale', body: 'SUV', doors: 5 },
   // Honda
@@ -68,6 +75,10 @@ export const ModelDB: ModelEntry[] = [
   // Alfa Romeo
   { make: 'Alfa Romeo', model: 'Giulietta', version: '2.0 JTDM 150 CV', year: 2018, fuel: 'Diesel', displacement: '2.0 L', power: '150 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
   { make: 'Alfa Romeo', model: 'MiTo', version: '1.4 TB 120 CV', year: 2015, fuel: 'Benzina', displacement: '1.4 L', power: '120 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 3 },
+  { make: 'Alfa Romeo', model: '147', version: '1.9 JTD Distinctive 120 CV', year: 2006, fuel: 'Diesel', displacement: '1.9 L', power: '120 CV', transmission: 'Manuale', body: 'Berlina', doors: 5 },
+  { make: 'Alfa Romeo', model: '156', version: '1.9 JTD Progression 115 CV', year: 2002, fuel: 'Diesel', displacement: '1.9 L', power: '115 CV', transmission: 'Manuale', body: 'Berlina', doors: 4 },
+  { make: 'Alfa Romeo', model: '159', version: '1.9 JTDm Progression 150 CV', year: 2008, fuel: 'Diesel', displacement: '1.9 L', power: '150 CV', transmission: 'Manuale', body: 'Berlina', doors: 4 },
+  { make: 'Alfa Romeo', model: 'GT', version: '1.9 JTDm 150 CV', year: 2007, fuel: 'Diesel', displacement: '1.9 L', power: '150 CV', transmission: 'Manuale', body: 'Coupé', doors: 3 },
   // Volvo
   { make: 'Volvo', model: 'V40', version: 'D2 115 CV', year: 2018, fuel: 'Diesel', displacement: '2.0 L', power: '115 CV', transmission: 'Manuale', body: 'Station wagon', doors: 5 },
   { make: 'Volvo', model: 'XC60', version: 'D4 190 CV', year: 2019, fuel: 'Diesel', displacement: '2.0 L', power: '190 CV', transmission: 'Automatico', body: 'SUV', doors: 5 },
@@ -89,6 +100,19 @@ export const ModelDB: ModelEntry[] = [
   // Citroen
   { make: 'Citroen', model: 'C3', version: '1.2 PureTech 83 CV', year: 2019, fuel: 'Benzina', displacement: '1.2 L', power: '83 CV', transmission: 'Manuale', body: 'Utilitaria', doors: 5 },
   { make: 'Citroen', model: 'C4 Cactus', version: '1.2 PureTech 110 CV', year: 2018, fuel: 'Benzina', displacement: '1.2 L', power: '110 CV', transmission: 'Manuale', body: 'Crossover', doors: 5 },
+  // Tesla
+  { make: 'Tesla', model: 'Model 3', version: 'RWD 60 kWh 283 CV', year: 2022, fuel: 'Elettrica', displacement: '', power: '283 CV', transmission: 'Automatico', body: 'Berlina', doors: 4 },
+  { make: 'Tesla', model: 'Model Y', version: 'Long Range Dual Motor 514 CV', year: 2022, fuel: 'Elettrica', displacement: '', power: '514 CV', transmission: 'Automatico', body: 'SUV', doors: 5 },
+  // Fiat EV
+  { make: 'Fiat', model: '500e', version: 'Icon 42 kWh 118 CV', year: 2021, fuel: 'Elettrica', displacement: '', power: '118 CV', transmission: 'Automatico', body: 'Utilitaria', doors: 3 },
+  // Smart EV
+  { make: 'Smart', model: 'Fortwo EQ', version: 'passion 82 CV', year: 2020, fuel: 'Elettrica', displacement: '', power: '82 CV', transmission: 'Automatico', body: 'Utilitaria', doors: 3 },
+  // Renault EV
+  { make: 'Renault', model: 'Zoe', version: 'R135 52 kWh 135 CV', year: 2021, fuel: 'Elettrica', displacement: '', power: '135 CV', transmission: 'Automatico', body: 'Utilitaria', doors: 5 },
+  // Peugeot EV
+  { make: 'Peugeot', model: 'e-208', version: 'GT 50 kWh 136 CV', year: 2021, fuel: 'Elettrica', displacement: '', power: '136 CV', transmission: 'Automatico', body: 'Utilitaria', doors: 5 },
+  // Volkswagen EV
+  { make: 'Volkswagen', model: 'ID.3', version: 'Pro Performance 58 kWh 204 CV', year: 2021, fuel: 'Elettrica', displacement: '', power: '204 CV', transmission: 'Automatico', body: 'Berlina', doors: 5 },
 ];
 
 const ALIASES: Record<string, string> = {
@@ -111,12 +135,22 @@ function compact(s: string): string {
   return s.toLowerCase().replace(/[^a-z0-9]/g, '');
 }
 
-export function searchModel(make: string, model: string): VehicleData | null {
+export function searchModel(make: string, model: string, fuel?: string): VehicleData | null {
   const mk = normalizeMake(make);
   const modelCompact = compact(model);
 
   const candidates = ModelDB.filter((e) => e.make.toLowerCase() === mk);
   if (candidates.length === 0) return null;
+
+  if (fuel) {
+    const fLower = fuel.toLowerCase();
+    const fuelMatch = candidates.find((e) =>
+      (compact(e.model) === modelCompact || compact(e.model).includes(modelCompact) || modelCompact.includes(compact(e.model))) &&
+      e.fuel.toLowerCase().includes(fLower)
+    );
+    if (fuelMatch) return toVehicleData(fuelMatch);
+  }
+
   if (candidates.length === 1) return toVehicleData(candidates[0]);
 
   const exact = candidates.find((e) => compact(e.model) === modelCompact);

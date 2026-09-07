@@ -3,6 +3,7 @@ import { estimateReliability } from './affidabilita';
 import { estimateConsumption } from './consumi';
 import { detectSegment, type SegmentKey } from './riparazione';
 import { getAllMakes } from './catalogo';
+import { findModelEra, resolveVehicleDefaultYear } from './modelEra';
 
 /**
  * Stima locale e deterministica di un report. Serve a garantire che ogni pagina
@@ -262,8 +263,9 @@ const BODY_ADJUSTMENT: Record<string, number> = {
 };
 
 const DEPRECIATION_CURVE: Array<[number, number]> = [
-  [0, 1.0], [1, 0.82], [2, 0.74], [3, 0.67], [4, 0.63], [5, 0.58], [6, 0.56], [7, 0.51],
-  [8, 0.46], [9, 0.42], [10, 0.38], [11, 0.35], [12, 0.32], [13, 0.30], [14, 0.28], [15, 0.26],
+  [0, 0.86], [1, 0.76], [2, 0.67], [3, 0.59], [4, 0.52], [5, 0.45], [6, 0.39], [7, 0.34],
+  [8, 0.30], [9, 0.26], [10, 0.23], [11, 0.20], [12, 0.17], [13, 0.15], [14, 0.13], [15, 0.115],
+  [16, 0.10], [17, 0.09], [18, 0.08], [19, 0.075], [20, 0.07],
 ];
 
 function normalize(text: string): string {
@@ -345,7 +347,7 @@ function getFuelFactor(fuel: string, age: number): number {
 
 function getResidual(age: number): number {
   const clamped = Math.max(0, age);
-  if (clamped >= 15) return Math.max(0.12, 0.26 - (clamped - 15) * 0.015);
+  if (clamped >= 20) return Math.max(0.055, 0.07 - (clamped - 20) * 0.003);
   let residual = DEPRECIATION_CURVE[0][1];
   for (const [ageAt, value] of DEPRECIATION_CURVE) {
     if (ageAt <= clamped) residual = value;
@@ -375,15 +377,16 @@ export function estimateMarketValue(
   model: string,
   options: MarketValueOptions = {}
 ): { value: number; min: number; max: number } {
-  const year = options.year || 2020;
+  const currentYear = new Date().getFullYear();
+  const year = resolveVehicleDefaultYear(make, model, options.year);
   const power = parseInt((options.power || '').replace(/\D/g, '')) || 100;
   const fuel = options.fuel || '';
   const body = options.body || '';
 
-  const modelPrice = findModelPrice(make, model);
+  const era = findModelEra(make, model);
+  const modelPrice = findModelPrice(make, model) ?? era?.basePrice;
   const base = modelPrice ?? findBrandBase(make) + getBodyAdjust(body);
 
-  const currentYear = new Date().getFullYear();
   const age = Math.max(0, currentYear - year);
 
   let residual = getResidual(age);
@@ -393,7 +396,8 @@ export function estimateMarketValue(
 
   const powerFactor = 1 + (Math.min(power, 300) - 100) * 0.0015;
   let value = Math.round((base * residual * powerFactor) / 100) * 100;
-  value = Math.max(1500, value);
+  const minFloor = age >= 16 ? 1200 : age >= 12 ? 1500 : 2000;
+  value = Math.max(minFloor, value);
 
   const range = Math.round((value * 0.1) / 100) * 100;
   return { value, min: value - range, max: value + range };

@@ -174,5 +174,27 @@ describe('AutoEsperto API (MVP)', () => {
       const r = await req('/reports/free-scan', { method: 'POST', body: {} });
       assert.strictEqual(r.status, 400);
     });
+
+    it('free-scan veicolo elettrico (Tesla/500e) → consumo in kWh/100 km, trasmissione Automatico ed esenzione bollo/manutenzione EV', async () => {
+      const r = await req('/reports/free-scan', {
+        method: 'POST',
+        body: { make: 'Tesla', model: 'Model 3', year: 2022, fuel: 'Elettrica' },
+      });
+      assert.strictEqual(r.status, 200);
+      assert.strictEqual(r.data.success, true);
+      assert.strictEqual(r.data.report.vehicle.transmission, 'Automatico');
+      assert.strictEqual(r.data.report.reliability.consumption.fuelType, 'kWh/100 km');
+      assert.strictEqual(r.data.report.reliability.taxAnnual, 0);
+      assert.ok(!r.data.report.reliability.engine.toLowerCase().includes('olio motore'));
+      assert.ok(r.data.report.reliability.futureCosts.annualMaintenance <= 160);
+    });
+
+    it('getRepairMultiplier applica moltiplicatori corretti per Tesla ed esotiche', async () => {
+      const { getRepairMultiplier } = await import('../src/services/ai.js');
+      assert.strictEqual(getRepairMultiplier('Tesla', 'Model 3', 'Elettrica'), 2.2);
+      assert.strictEqual(getRepairMultiplier('Porsche', '911', 'Benzina'), 2.5);
+      assert.strictEqual(getRepairMultiplier('BMW', 'Serie 3', 'Diesel'), 1.6);
+      assert.strictEqual(getRepairMultiplier('Fiat', 'Panda', 'Benzina'), 1.0);
+    });
   });
 });

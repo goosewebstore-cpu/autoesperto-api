@@ -170,7 +170,23 @@ const BASE_ITEMS: Record<SegmentKey, BaseItem[]> = {
   ],
 };
 
-function ageDescriptor(age: number): string {
+const EV_BASE_ITEMS: BaseItem[] = [
+  { label: 'Tagliando veicolo elettrico (filtro antipolline, controllo isolamento AT, diagnosi batteria)', base: [70, 130], note: 'Manutenzione annuale o ogni 25.000–30.000 km. Nessun cambio olio motore o filtri carburante.', minAge: 0 },
+  { label: 'Controllo e sostituzione liquido freni DOT4/LV', base: [60, 110], note: 'Sostituzione igroscopica ogni 2 anni per preservare l\'impianto frenante.', minAge: 2 },
+  { label: 'Pastiglie e dischi freno anteriori', base: [160, 290], note: 'Usura molto ridotta grazie alla frenata rigenerativa.', minAge: 0 },
+  { label: 'Batteria servizi ausiliaria 12V', base: [90, 160], note: 'Durata tipica 3–4 anni, fondamentale per l\'elettronica di bordo.', minAge: 0 },
+  { label: 'Ricarica e controllo climatizzatore / pompa di calore', base: [70, 140], note: 'Impianto con gas specifico per climatizzazione e raffreddamento pacco batteria.', minAge: 2 },
+  { label: 'Ammortizzatori e silent-block bracci sospensione', base: [320, 580], note: 'Per asse. Sollecitati dalla massa elevata del pacco batterie e dalla coppia immediata.', minAge: 5 },
+  { label: 'Liquido di raffreddamento batteria e inverter', base: [90, 170], note: 'Sostituzione programmata per preservare il circuito termico alta tensione.', minAge: 4 },
+  { label: 'Check diagnostico stato di salute batteria (SoH)', base: [50, 90], note: 'Verifica capacità residua ed equilibrio celle.', minAge: 2 },
+];
+
+function ageDescriptor(age: number, isElectric = false): string {
+  if (isElectric) {
+    if (age <= 3) return 'veicolo elettrico recente: manutenzione minima e controlli di routine su filtro abitacolo e pneumatici';
+    if (age <= 7) return 'fascia intermedia EV: verificare efficienza batteria (SoH), liquido freni e bracci sospensioni';
+    return 'in cui è consigliabile una diagnosi accurata sullo stato di salute della batteria ad alta tensione (SoH)';
+  }
   if (age <= 3) return 'ancora recente: bastano la manutenzione ordinaria e controlli di base';
   if (age <= 7) return 'entrata nella fascia in cui compaiono le prime usure (freni, sospensioni, distribuzione)';
   if (age <= 12) return 'nella fascia in cui crescono le riparazioni: distribuzione, frizione, sospensioni';
@@ -184,38 +200,56 @@ function ageFactorFor(age: number): number {
   return 1.35;
 }
 
-export function estimateRepair(make: string, model: string, year: number): RepairEstimate {
+export function estimateRepair(make: string, model: string, year: number, fuelInput?: string): RepairEstimate {
+  const f = (fuelInput || '').toLowerCase();
+  const mk = make.toLowerCase();
+  const mdl = model.toLowerCase();
+  const isElectric = f.includes('elettr') || f.includes('ev') || f.includes('bev') || /tesla|polestar|byd/.test(mk) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(mdl);
+
   const segment = SEGMENTS[detectSegment(make, model)];
   const age = Math.max(0, new Date().getFullYear() - year);
   const brandF = brandFactor(make);
   const ageF = ageFactorFor(age);
   const totalF = brandF * ageF;
 
-  const items: RepairItem[] = BASE_ITEMS[segment.key]
+  const baseItemList = isElectric ? EV_BASE_ITEMS : BASE_ITEMS[segment.key];
+
+  const items: RepairItem[] = baseItemList
     .filter((it) => age >= it.minAge)
     .map((it) => ({
       label: it.label,
-      min: roundPrice(it.base[0] * segment.partsFactor * totalF),
-      max: roundPrice(it.base[1] * segment.partsFactor * totalF),
+      min: roundPrice(it.base[0] * (isElectric ? Math.min(1.15, segment.partsFactor) : segment.partsFactor) * totalF),
+      max: roundPrice(it.base[1] * (isElectric ? Math.min(1.15, segment.partsFactor) : segment.partsFactor) * totalF),
       note: it.note,
     }));
 
   const totalMin = items.reduce((s, it) => s + it.min, 0);
   const totalMax = items.reduce((s, it) => s + it.max, 0);
 
-  const maintenanceMin = Math.round(segment.yearlyMaintenance[0] * totalF);
-  const maintenanceMax = Math.round(segment.yearlyMaintenance[1] * totalF);
+  const maintenanceMin = isElectric
+    ? Math.round((segment.key === 'citycar' ? 70 : segment.key === 'suv' ? 120 : 90) * totalF)
+    : Math.round(segment.yearlyMaintenance[0] * totalF);
+
+  const maintenanceMax = isElectric
+    ? Math.round((segment.key === 'citycar' ? 120 : segment.key === 'suv' ? 180 : 140) * totalF)
+    : Math.round(segment.yearlyMaintenance[1] * totalF);
 
   const failuresKey = make.toLowerCase();
-  const commonFailures =
-    BRAND_FAILURES[failuresKey] ||
-    BRAND_FAILURES[Object.keys(BRAND_FAILURES).find((k) => failuresKey.includes(k)) || ''] ||
-    GENERIC_FAILURES;
+  const commonFailures = isElectric
+    ? [
+        'Degrado naturale capacità batteria di trazione (SoH)',
+        'Usura bracci sospensioni e pneumatici per peso vettura e coppia istantanea',
+        'Sensori ADAS e aggiornamenti firmware di bordo',
+        'Cavi e presa di ricarica Tipo 2 / CCS Combo',
+      ]
+    : BRAND_FAILURES[failuresKey] ||
+      BRAND_FAILURES[Object.keys(BRAND_FAILURES).find((k) => failuresKey.includes(k)) || ''] ||
+      GENERIC_FAILURES;
 
   return {
     segment,
     age,
-    ageLabel: ageDescriptor(age),
+    ageLabel: ageDescriptor(age, isElectric),
     ageFactor: ageF,
     items,
     totalMin,
@@ -223,8 +257,9 @@ export function estimateRepair(make: string, model: string, year: number): Repai
     maintenanceMin,
     maintenanceMax,
     commonFailures,
-    reliabilityNote:
-      segment.key === 'citycar'
+    reliabilityNote: isElectric
+      ? `La ${make} ${model} 100% elettrica gode di costi di manutenzione ordinaria ridotti di oltre il 50% grazie all'assenza di olio motore, cinghie, candele e frizione.`
+      : segment.key === 'citycar'
         ? `Una ${segment.label} come la ${make} ${model} ha costi di manutenzione tra i più bassi in circolazione.`
         : segment.key === 'sportiva'
           ? `Una ${segment.label} come la ${make} ${model} ha costi di manutenzione sopra la media: ricambi e manodopera specializzata pesano.`

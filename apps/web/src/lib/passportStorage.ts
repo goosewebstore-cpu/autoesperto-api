@@ -383,11 +383,12 @@ export function createPassportFromReport(report: AutoReport, customNickname?: st
   ];
 
   // Photos from analysis if available
+  const photoUrl = vehicle.imageUrl || (report as any).mainPhoto || (report as any).photoUrl || (vehicle as any).photo || (report as any).photos?.[0];
   const initialPhotos: PassportPhotoItem[] = [];
-  if (vehicle.imageUrl) {
+  if (photoUrl) {
     initialPhotos.push({
       id: `photo-${Date.now()}-1`,
-      url: vehicle.imageUrl,
+      url: photoUrl,
       category: 'auto',
       title: `${vehicle.make} ${vehicle.model}`,
       description: 'Foto principale acquisita durante l’analisi',
@@ -420,9 +421,12 @@ export function createPassportFromReport(report: AutoReport, customNickname?: st
   const passport: VehiclePassportData = {
     id,
     shareCode,
-    vehicle,
+    vehicle: {
+      ...vehicle,
+      imageUrl: photoUrl || vehicle.imageUrl,
+    },
     nickname: customNickname || `${vehicle.make || 'Auto'} ${vehicle.model || ''}`.trim(),
-    mainPhoto: vehicle.imageUrl,
+    mainPhoto: photoUrl || vehicle.imageUrl,
     currentKm: km,
     lastKmDate: now.split('T')[0],
     healthScore: calculatedHealth,

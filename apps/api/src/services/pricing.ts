@@ -1,4 +1,5 @@
 import type { VehicleData } from '@autoesperto/types';
+import { findModelEra, resolveVehicleDefaultYear } from './modelEra';
 
 /**
  * Prezzo di listino indicativo (€) per i modelli più diffusi, usato come base
@@ -8,8 +9,8 @@ import type { VehicleData } from '@autoesperto/types';
  */
 const MODEL_PRICE: Record<string, number> = {
   // Fiat
-  'fiat panda': 16500, 'fiat 500': 19500, 'fiat 500x': 25500, 'fiat 500l': 24500,
-  'fiat tipo': 21000, 'fiat punto': 17500, 'fiat 600': 23000, 'fiat bravo': 22500,
+  'fiat panda': 16500, 'fiat 500': 19500, 'fiat 500e': 29000, 'fiat 500x': 25500, 'fiat 500l': 24500,
+  'fiat tipo': 21000, 'fiat punto': 17500, 'fiat 600': 23000, 'fiat 600e': 36000, 'fiat bravo': 22500,
   'fiat doblo': 25000, 'fiat freemont': 32000, 'fiat ducato': 35000, 'fiat sedici': 24000,
   'fiat multipla': 18000, 'fiat 124': 30000, 'fiat panda 4x4': 19000,
   // Lancia
@@ -205,10 +206,10 @@ const BODY_ADJUSTMENT: Record<string, number> = {
   coupé: 2500, monovolume: 2000,
 };
 
-/** Residuo percentuale (0..1) rispetto al prezzo nuovo, per età in anni. */
 const DEPRECIATION_CURVE: Array<[number, number]> = [
-  [0, 1.0], [1, 0.82], [2, 0.74], [3, 0.67], [4, 0.63], [5, 0.58], [6, 0.56], [7, 0.51],
-  [8, 0.46], [9, 0.42], [10, 0.38], [11, 0.35], [12, 0.32], [13, 0.30], [14, 0.28], [15, 0.26],
+  [0, 0.96], [1, 0.82], [2, 0.72], [3, 0.64], [4, 0.57], [5, 0.50], [6, 0.45], [7, 0.41],
+  [8, 0.37], [9, 0.33], [10, 0.33], [11, 0.27], [12, 0.22], [13, 0.18], [14, 0.15], [15, 0.125],
+  [16, 0.105], [17, 0.09], [18, 0.08], [19, 0.075], [20, 0.070],
 ];
 
 function normalize(text: string): string {
@@ -280,19 +281,31 @@ function getSegmentFactor(basePrice: number): number {
   return 1.0;
 }
 
-/** Fattore alimentazione: ibrida/elettrica tengono di più da nuove, i diesel vecchi perdono di più. */
+/** Fattore alimentazione: ibrida/elettrica tengono di più da nuove, i diesel vecchi perdono di più per blocchi traffico. */
 function getFuelFactor(fuel: string, age: number): number {
   const f = normalize(fuel);
-  if (f.includes('diesel') || f.includes('tdi')) return age > 10 ? 0.88 : 1.0;
-  if (f.includes('ibrid') || f.includes('hybrid')) return f.includes('mild') ? 1.0 : age <= 6 ? 1.06 : 0.98;
-  if (f.includes('elettr') || f.includes(' ev') || f === 'ev') return age <= 4 ? 1.08 : 0.9;
-  if (f.includes('gpl') || f.includes('metano')) return 0.95;
+  if (f.includes('diesel') || f.includes('tdi')) {
+    if (age > 12) return 0.82;
+    if (age > 7) return 0.90;
+    return 0.98;
+  }
+  if (f.includes('ibrid') || f.includes('hybrid')) {
+    return f.includes('mild') ? 1.0 : age <= 5 ? 1.06 : 1.0;
+  }
+  if (f.includes('elettr') || f.includes(' ev') || f === 'ev' || f.includes('bev')) {
+    return age <= 3 ? 1.08 : age <= 7 ? 0.98 : 0.88;
+  }
+  if (f.includes('gpl') || f.includes('metano')) {
+    return age <= 7 ? 1.02 : 0.94;
+  }
   return 1.0;
 }
 
 function getResidual(age: number): number {
   const clamped = Math.max(0, age);
-  if (clamped >= 15) return Math.max(0.12, 0.26 - (clamped - 15) * 0.015);
+  if (clamped >= 20) {
+    return Math.max(0.055, 0.07 - (clamped - 20) * 0.003);
+  }
   let residual = DEPRECIATION_CURVE[0][1];
   for (const [ageAt, value] of DEPRECIATION_CURVE) {
     if (ageAt <= clamped) residual = value;
@@ -315,17 +328,18 @@ function getCollectibleFloor(basePrice: number, make: string, age: number): numb
 }
 
 export function estimateMarketValue(vehicle: VehicleData): { value: number; min: number; max: number } {
-  const year = vehicle.year || 2020;
+  const currentYear = new Date().getFullYear();
+  const year = resolveVehicleDefaultYear(vehicle.make, vehicle.model, vehicle.year);
   const power = parseInt((vehicle.power || '').replace(/\D/g, '')) || 100;
   const fuel = vehicle.fuel || '';
   const body = vehicle.body || '';
 
   // Con un prezzo per modello la carrozzeria è già inclusa: l'aggiustamento
   // body/fuel si applica solo al fallback sul marchio.
-  const modelPrice = findModelPrice(vehicle.make, vehicle.model);
+  const era = findModelEra(vehicle.make, vehicle.model);
+  const modelPrice = findModelPrice(vehicle.make, vehicle.model) ?? era?.basePrice;
   const base = modelPrice ?? findBrandBase(vehicle.make) + getBodyAdjust(body);
 
-  const currentYear = new Date().getFullYear();
   const age = Math.max(0, currentYear - year);
 
   let residual = getResidual(age);
@@ -335,7 +349,8 @@ export function estimateMarketValue(vehicle: VehicleData): { value: number; min:
 
   const powerFactor = 1 + (Math.min(power, 300) - 100) * 0.0015;
   let value = Math.round(base * residual * powerFactor / 100) * 100;
-  value = Math.max(1500, value);
+  const minFloor = age >= 16 ? 1200 : age >= 12 ? 1500 : 2000;
+  value = Math.max(minFloor, value);
 
   const range = Math.round(value * 0.1 / 100) * 100;
   return { value, min: value - range, max: value + range };
@@ -346,8 +361,13 @@ export function estimateMarketValueWithKm(vehicle: VehicleData, km: number): {
   adjustedForKm: number; kmAdjustment: number;
 } {
   const base = estimateMarketValue(vehicle);
+  const currentYear = new Date().getFullYear();
+  const year = resolveVehicleDefaultYear(vehicle.make, vehicle.model, vehicle.year);
+  const age = Math.max(0, currentYear - year);
+
   const kmFactor = Math.min(1.1, Math.max(0.65, 1 - (km - 50000) / 250000));
-  const adjustedForKm = Math.round(base.value * kmFactor / 100) * 100;
+  const minFloor = age >= 16 ? 1000 : age >= 12 ? 1300 : 1800;
+  const adjustedForKm = Math.max(minFloor, Math.round(base.value * kmFactor / 100) * 100);
   return {
     ...base,
     adjustedForKm,

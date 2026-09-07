@@ -15,6 +15,12 @@ export interface VehicleData {
   plate?: string;
   vin?: string;
   dataSource?: 'plate' | 'model' | 'segment_fallback';
+  location?: {
+    cap?: string;
+    city?: string;
+    province?: string;
+    region?: string;
+  };
 }
 
 export interface MarketListing {
@@ -38,6 +44,7 @@ export interface MarketStats {
   source: string;
   total: number;
   priceAvg?: number;
+  transactionPriceAvg?: number;
   priceMin?: number;
   priceMax?: number;
   kmAvg?: number;
@@ -134,10 +141,49 @@ export interface PriceAnalysis {
   isSegmentEstimate?: boolean;
 }
 
+export interface PhotoAnalysisResult {
+  vehicle?: {
+    make?: string;
+    model?: string;
+    generation?: string;
+    year?: number;
+    fuel?: string;
+    color?: string;
+    bodyType?: string;
+    confidence: 'bassa' | 'media' | 'alta';
+  };
+  damage: {
+    visible: boolean;
+    category:
+      | 'graffio'
+      | 'ammaccatura'
+      | 'paraurti'
+      | 'fanale'
+      | 'specchietto'
+      | 'cerchio_gomma'
+      | 'vetro'
+      | 'carrozzeria'
+      | 'frontale_grave'
+      | 'strutturale_telaio'
+      | 'meccanica_sospensioni'
+      | 'nessun_danno_evidente'
+      | 'non_chiaro';
+    severity: 'lieve' | 'media' | 'alta';
+    description: string;
+    area?: string;
+    repairHint?: string;
+  };
+  repairRange?: { min: number; max: number };
+  estimatedTimeDays?: number;
+  note: string;
+}
+
 export interface AutoReport {
   vehicle: VehicleData;
   reliability: ReliabilityAnalysis;
   price: PriceAnalysis;
   alternatives?: AlternativeVehicle[];
+  photoAnalysis?: PhotoAnalysisResult;
   createdAt: string;
 }
+

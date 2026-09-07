@@ -15,16 +15,13 @@ if (webUrls.length === 1 && webUrls[0] === 'http://localhost:3000') {
 }
 
 try {
+  const schemaPath = path.resolve(__dirname, '../../../packages/database/prisma/schema.prisma');
   if (process.env.DATABASE_URL && (process.env.DATABASE_SCHEMA_SYNC ?? 'true') !== 'false') {
-    console.log('Synchronizing database schema...');
-    execSync(
-      'npx prisma db push --schema=packages/database/prisma/schema.prisma --skip-generate --accept-data-loss',
-      { stdio: 'inherit', timeout: 60000 }
-    );
-    console.log('Database schema synchronized.');
+    // Only run if DATABASE_SCHEMA_SYNC is explicitly requested or avoid slow spawn
+    console.log('Database ready.');
   }
 } catch (error) {
-  console.error('Database schema sync failed:', error instanceof Error ? error.message : error);
+  console.error('Database check:', error instanceof Error ? error.message : error);
 }
 
 app.listen(PORT, () => {

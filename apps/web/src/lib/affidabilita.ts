@@ -137,14 +137,33 @@ function verdictNoteFor(score: number, make: string, model: string, age: number)
   return `La ${full} richiede più attenzione alla manutenzione preventiva: alcuni punti deboli del modello vanno controllati con regolarità per evitare riparazioni costose.`;
 }
 
-export function estimateReliability(make: string, model: string, year: number): ReliabilityEstimate {
+export function estimateReliability(make: string, model: string, year: number, fuelInput?: string): ReliabilityEstimate {
+  const f = (fuelInput || '').toLowerCase();
+  const mk = make.toLowerCase();
+  const mdl = model.toLowerCase();
+  const isElectric = f.includes('elettr') || f.includes('ev') || f.includes('bev') || /tesla|polestar|byd/.test(mk) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(mdl);
+
   const segmentKey = detectSegment(make, model);
   const age = Math.max(0, new Date().getFullYear() - year);
-  const raw = SEGMENT_BASE[segmentKey] + brandScoreFor(make) + ageAdjust(age);
+  const raw = SEGMENT_BASE[segmentKey] + (isElectric ? 0.4 : brandScoreFor(make)) + ageAdjust(age);
   const score = Math.min(9.8, Math.max(3.5, Math.round(raw * 10) / 10));
-  const repair = estimateRepair(make, model, year);
+  const repair = estimateRepair(make, model, year, fuelInput);
 
-  const weaknesses = brandFailuresFor(make).slice(0, 4);
+  const weaknesses = isElectric
+    ? [
+        'Degrado naturale capacità batteria di trazione (SoH)',
+        'Usura accelerata pneumatici per coppia istantanea e peso vettura',
+        'Sensori ADAS e aggiornamenti software',
+      ]
+    : brandFailuresFor(make).slice(0, 4);
+
+  const strengths = isElectric
+    ? [
+        'Powertrain 100% elettrico con pochissime parti soggette a usura',
+        'Costi di manutenzione ordinaria ridotti di oltre il 50% (zero olio o candele)',
+        'Frenata rigenerativa che preserva pastiglie e dischi freno',
+      ]
+    : SEGMENT_STRENGTHS[segmentKey];
 
   return {
     make,
@@ -155,10 +174,12 @@ export function estimateReliability(make: string, model: string, year: number): 
     label: verdictFor(score),
     segment: SEGMENT_LABEL[segmentKey],
     segmentKey,
-    strengths: SEGMENT_STRENGTHS[segmentKey],
+    strengths,
     weaknesses,
     maintenanceMin: repair.maintenanceMin,
     maintenanceMax: repair.maintenanceMax,
-    verdictNote: verdictNoteFor(score, make, model, age),
+    verdictNote: isElectric
+      ? `La ${make} ${model} 100% elettrica garantisce un'eccellente affidabilità meccanica grazie all'assenza di candele, cinghie, filtri combustibile e frizione. Verificare lo stato di salute della batteria (SoH).`
+      : verdictNoteFor(score, make, model, age),
   };
 }

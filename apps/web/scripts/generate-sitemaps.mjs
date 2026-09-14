@@ -195,6 +195,11 @@ for (const name of sitemapNames) {
   console.log(`[sitemap-gen] Generated ${filePath} with ${sitemaps[name].length} URLs (${(xml.length / 1024).toFixed(1)} KB).`);
 }
 
+// Generate static aliases so Google Search Console historical submissions never return 404
+const guideXmlPath = path.join(sitemapsDir, 'guide.xml');
+fs.writeFileSync(guideXmlPath, toXml(sitemaps['guides']), 'utf8');
+console.log(`[sitemap-gen] Generated alias ${guideXmlPath} (${sitemaps['guides'].length} URLs).`);
+
 const primarySitemaps = ['static', 'guides', 'makes', 'models'];
 
 // Generate sitemap.xml index with <lastmod>

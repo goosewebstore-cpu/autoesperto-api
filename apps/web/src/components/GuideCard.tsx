@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import {
   BadgeEuro,
@@ -100,6 +101,9 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
     }
   };
 
+  const [imageError, setImageError] = useState(false);
+  const imageSrc = guide.image || `/images/guide/${guide.slug}.jpg`;
+
   return (
     <Link
       href={`/guide/${guide.slug}`}
@@ -117,7 +121,7 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
     >
       <div>
         {/* Top Badges: Category & Read Time / Date */}
-        <div className="flex flex-wrap items-center justify-between gap-2 pointer-events-none">
+        <div className="flex flex-wrap items-center justify-between gap-2 pointer-events-none mb-3">
           <span
             className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-[11px] font-bold tracking-tight shadow-2xs ${style.badge}`}
           >
@@ -137,12 +141,13 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
           </div>
         </div>
 
-        {/* Image thumbnail if present */}
-        {guide.image && (
-          <div className="relative mt-3.5 h-44 w-full overflow-hidden rounded-2xl bg-slate-950 shadow-xs pointer-events-none">
+        {/* Image thumbnail con fallback e altezza identica per tutte le card */}
+        {!imageError && (
+          <div className="relative mb-3.5 h-44 w-full overflow-hidden rounded-2xl bg-slate-950 shadow-xs pointer-events-none">
             <img
-              src={guide.image}
+              src={imageSrc}
               alt={guide.title}
+              onError={() => setImageError(true)}
               className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
               loading="lazy"
             />
@@ -150,7 +155,7 @@ export default function GuideCard({ guide, featured = false }: GuideCardProps) {
         )}
 
         {/* Title */}
-        <h3 className="mt-3.5 text-base sm:text-lg font-black leading-snug text-slate-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400 pointer-events-none">
+        <h3 className="text-base sm:text-lg font-black leading-snug text-slate-900 dark:text-white transition-colors group-hover:text-blue-600 dark:group-hover:text-blue-400 pointer-events-none line-clamp-2">
           {guide.title}
         </h3>
 

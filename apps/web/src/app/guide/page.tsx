@@ -43,7 +43,7 @@ export const metadata: Metadata = {
 import Link from 'next/link';
 
 function GuideSsrFallback() {
-  const initialGuides = guides.slice(0, 12);
+  const initialGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 12);
   return (
     <div>
       <PageHero

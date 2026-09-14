@@ -7,6 +7,12 @@ export default function robots(): MetadataRoute.Robots {
     '/account',
     '/accesso',
     '/buying-room',
+    // Protezione Crawl Budget: blocca l'esplosione combinatoria delle ~200k pagine anno
+    // che ha causato il sovraccarico CPU del worker e 3.169 errori 5xx
+    '/valutazione/*/*/*',
+    '/affidabilita/*/*/*',
+    '/consumi/*/*/*',
+    '/riparazione/*/*/*',
   ];
 
   return {

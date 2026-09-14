@@ -1,10 +1,22 @@
 import { buildSitemap, sitemapNames, toXml } from '@/lib/sitemaps';
 
 export const dynamic = 'force-static';
-export const dynamicParams = false;
+export const dynamicParams = true;
 
 export function generateStaticParams() {
-  return sitemapNames().map((name) => ({ file: `${name}.xml` }));
+  const allNames = [
+    ...sitemapNames(),
+    'guide',
+    'make',
+    'model',
+    'rip-makes',
+    'rip-models',
+    'aff-makes',
+    'aff-models',
+    'cons-makes',
+    'cons-models',
+  ];
+  return Array.from(new Set(allNames)).map((name) => ({ file: `${name}.xml` }));
 }
 
 export async function GET(_request: Request, { params }: { params: Promise<{ file: string }> }) {

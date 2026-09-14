@@ -17,6 +17,7 @@ import {
   Calculator,
 } from 'lucide-react';
 import { guides, GUIDE_CATEGORIES, type GuideCategory, type Guide } from '@/lib/guides';
+import { GUIDE_PAGE_FEATURED, GUIDE_PRIORITY_ORDER } from '@/config/guides-positions';
 import GuideCard from '@/components/GuideCard';
 import PageHero from '@/components/PageHero';
 import AdBanner from '@/components/ads/AdBanner';
@@ -31,14 +32,6 @@ function normalize(value: string) {
     .replace(/[\u0300-\u036f]/g, '');
 }
 
-// Slugs of top featured trending guides
-const FEATURED_SLUGS = [
-  'aria-condizionata-auto-salva-motore-batteria-caldo-2026',
-  'benzina-quasi-da-record-guida-risparmiare-1500-euro',
-  'autoesperto-freelance-siciliano-dati-reali-mercato-usato',
-  'auto-usata-10-segnali-problema-annuncio',
-];
-
 export default function GuideIndex() {
   const searchParams = useSearchParams();
   const rawCategory = searchParams.get('categoria') || undefined;
@@ -50,6 +43,7 @@ export default function GuideIndex() {
   const [category, setCategory] = useState<GuideCategory | undefined>(initialCategory);
   const [page, setPage] = useState<number>(initialPage);
   const [query, setQuery] = useState(searchParams.get('q') || '');
+  const [sortBy, setSortBy] = useState<'recenti' | 'popolari' | 'alfabetico' | 'lettura'>('recenti');
 
   useEffect(() => {
     const urlCat = searchParams.get('categoria');
@@ -74,15 +68,42 @@ export default function GuideIndex() {
   }, [category, q]);
 
   const sorted = useMemo(() => {
-    return [...filtered].sort((a, b) => b.published.localeCompare(a.published));
-  }, [filtered]);
+    const list = [...filtered];
+    switch (sortBy) {
+      case 'popolari':
+        return list.sort((a, b) => {
+          const aFeat = GUIDE_PAGE_FEATURED.includes(a.slug) ? 1 : 0;
+          const bFeat = GUIDE_PAGE_FEATURED.includes(b.slug) ? 1 : 0;
+          if (aFeat !== bFeat) return bFeat - aFeat;
+          return b.published.localeCompare(a.published);
+        });
+      case 'alfabetico':
+        return list.sort((a, b) => a.title.localeCompare(b.title, 'it'));
+      case 'lettura':
+        return list.sort((a, b) => {
+          const aM = parseInt(a.readTime || '5', 10);
+          const bM = parseInt(b.readTime || '5', 10);
+          return aM - bM;
+        });
+      case 'recenti':
+      default:
+        return list.sort((a, b) => {
+          const aPriority = GUIDE_PRIORITY_ORDER.indexOf(a.slug);
+          const bPriority = GUIDE_PRIORITY_ORDER.indexOf(b.slug);
+          if (aPriority !== -1 && bPriority !== -1) return aPriority - bPriority;
+          if (aPriority !== -1) return -1;
+          if (bPriority !== -1) return 1;
+          return b.published.localeCompare(a.published);
+        });
+    }
+  }, [filtered, sortBy]);
 
   const totalPages = Math.max(1, Math.ceil(sorted.length / PAGE_SIZE));
   const current = q ? 1 : Math.min(page, totalPages);
   const pageItems = sorted.slice((current - 1) * PAGE_SIZE, current * PAGE_SIZE);
 
   const featuredGuides = useMemo(() => {
-    return FEATURED_SLUGS.map((slug) => guides.find((g) => g.slug === slug)).filter(Boolean) as Guide[];
+    return GUIDE_PAGE_FEATURED.map((slug) => guides.find((g) => g.slug === slug)).filter(Boolean) as Guide[];
   }, []);
 
   const handleCategorySelect = (newCat?: GuideCategory) => {
@@ -251,8 +272,8 @@ export default function GuideIndex() {
           </div>
         </section>
 
-        {/* Counter Info */}
-        <div className="flex items-center justify-between gap-3 mb-6">
+        {/* Counter Info & Sort Selector */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-6">
           <p className="text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
             <BookOpen className="w-4 h-4 text-blue-600" />
             <span>
@@ -261,11 +282,29 @@ export default function GuideIndex() {
               {q ? ` per "${query.trim()}"` : ''}
             </span>
           </p>
-          {totalPages > 1 && (
-            <span className="text-xs text-slate-400 font-semibold">
-              Pagina {current} di {totalPages}
-            </span>
-          )}
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1.5 text-xs text-slate-500">
+              <span className="font-medium">Ordina:</span>
+              <select
+                value={sortBy}
+                onChange={(e) => {
+                  setSortBy(e.target.value as 'recenti' | 'popolari' | 'alfabetico' | 'lettura');
+                  setPage(1);
+                }}
+                className="rounded-xl border border-slate-200 bg-white dark:border-slate-700 dark:bg-slate-800 px-2.5 py-1 text-xs font-bold text-slate-700 dark:text-slate-200 shadow-2xs focus:outline-none focus:ring-1 focus:ring-blue-600 cursor-pointer"
+              >
+                <option value="recenti">Più recenti</option>
+                <option value="popolari">In primo piano</option>
+                <option value="alfabetico">Titolo (A-Z)</option>
+                <option value="lettura">Lettura rapida</option>
+              </select>
+            </div>
+            {totalPages > 1 && (
+              <span className="text-xs text-slate-400 font-semibold border-l border-slate-200 dark:border-slate-700 pl-3">
+                Pagina {current} di {totalPages}
+              </span>
+            )}
+          </div>
         </div>
 
         {/* Guides Grid */}

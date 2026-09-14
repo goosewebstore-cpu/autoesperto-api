@@ -202,6 +202,11 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     href: '/riparazione',
     description: 'Costi di manodopera e ricambi per il tuo modello e anno.',
   },
+  'danni-carrozzeria': {
+    label: 'Stima i costi di riparazione e trova carrozziere',
+    href: '/riparazione',
+    description: 'Calcola manodopera oraria, costo ricambi per paraurti e componenti e verifica officine e carrozzieri.',
+  },
   'consumi-modello': {
     label: 'Scopri i consumi del tuo modello',
     href: '/consumi',

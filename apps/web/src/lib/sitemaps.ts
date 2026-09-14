@@ -70,7 +70,9 @@ export function sitemapNames(): string[] {
 }
 
 export function buildSitemap(name: string): UrlEntry[] {
-  switch (name) {
+  // Support singular and legacy aliases so Search Console submissions never 404
+  const normalized = name === 'guide' ? 'guides' : name === 'make' ? 'makes' : name === 'model' ? 'models' : name;
+  switch (normalized) {
     case 'static':
       return staticPages;
     case 'guides':

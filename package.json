@@ -7,6 +7,7 @@
     "dev": "node scripts/workspace-run.mjs apps/web npm run dev",
     "dev:api": "node scripts/workspace-run.mjs apps/api npm run dev",
     "build": "node scripts/workspace-run.mjs packages/database npm run build && node scripts/workspace-run.mjs apps/web npm run build && node scripts/workspace-run.mjs apps/api npm run build",
+    "deploy": "node scripts/workspace-run.mjs apps/web npm run deploy",
     "test": "node scripts/workspace-run.mjs apps/api npm test",
     "lint": "node scripts/workspace-run.mjs packages/database npm run lint && node scripts/workspace-run.mjs packages/types npm run lint && node scripts/workspace-run.mjs packages/ui npm run lint && node scripts/workspace-run.mjs apps/api npm run lint && node scripts/workspace-run.mjs apps/web npm run lint",
     "db:generate": "node scripts/workspace-run.mjs packages/database npm run db:generate",
@@ -28,9 +29,7 @@
     "@prisma/engines@5.22.0": true,
     "sharp@0.34.5": true
   },
-  "devDependencies": {
-    "@cloudflare/next-on-pages": "^1.13.16"
-  },
+  "devDependencies": {},
   "dependencies": {
     "react-is": "^19.2.8"
   }

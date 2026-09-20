@@ -347,14 +347,14 @@ export function getRepairMultiplier(make?: string, model?: string, fuel?: string
 
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
   const geminiKey = process.env.GEMINI_API_KEY;
-  if (geminiKey && !isGroqProvider()) {
+  if (geminiKey) {
     try {
       return await analyzeVehiclePhotoWithGemini(input, geminiKey);
     } catch (error) {
-      // A free Gemini quota can be exhausted independently of the OpenAI quota.
-      // If OpenAI is configured, use it rather than failing every photo scan.
+      // A free Gemini quota can be exhausted or the account not enabled for a model.
+      // If an OpenAI-compatible provider is configured (OpenAI or Groq), use it instead of failing.
       if (!process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY === 'mock') throw error;
-      console.warn('Gemini vision unavailable; falling back to OpenAI vision:', error instanceof Error ? error.message : error);
+      console.warn('Gemini vision unavailable; falling back to OpenAI-compatible vision:', error instanceof Error ? error.message : error);
     }
   }
   const key = process.env.OPENAI_API_KEY;
@@ -459,7 +459,7 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   const match = input.imageData.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,(.+)$/);
   if (!match) throw new Error('Formato immagine non valido.');
   const configuredModel = process.env.GEMINI_VISION_MODEL?.trim();
-  const models = configuredModel ? [configuredModel] : ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
+  const models = configuredModel ? [configuredModel] : ['gemini-3.5-flash', 'gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
   let raw = '';
   let lastError = '';
 

@@ -61,6 +61,9 @@ const freeScanSchema = z
     transmission: z.string().trim().optional(),
     version: z.string().trim().optional(),
     freeUsed: z.boolean().optional(),
+    // La foto viene prima usata per un riconoscimento rapido; il report parte
+    // solo dopo che l'utente ha confermato anno e chilometri.
+    recognitionOnly: z.boolean().optional(),
   })
   .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
     message: 'Indica una foto oppure marca e modello',
@@ -222,6 +225,21 @@ router.post(
       bodyType: photoAnalysis.vehicle.bodyType,
       confidence: photoAnalysis.vehicle.confidence,
     };
+
+    // Non bloccare lo scanner fotografico con scraping annunci e costruzione
+    // dell'intero report. Il client raccoglie subito anno, km e alimentazione
+    // effettivi, quindi invia una seconda richiesta con dati migliori.
+    if (input.recognitionOnly) {
+      res.set('Cache-Control', 'no-store');
+      res.json({
+        success: true,
+        recognized: true,
+        vehicle,
+        saved: false,
+        freeUsed: true,
+      });
+      return;
+    }
 
     // Analisi base e report completo sempre gratuiti.
     const userId = getOptionalUserId(req);

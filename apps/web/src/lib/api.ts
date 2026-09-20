@@ -206,7 +206,7 @@ export async function warmUpApi(): Promise<boolean> {
 export async function freeScanVehiclePhoto(imageData: string, extra: { km?: number; requestedPrice?: number; fuel?: string; transmission?: string; version?: string } = {}): Promise<FreeScanResult> {
   try {
     void warmUpApi().catch(() => {});
-    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, ...extra }) }, 25000, false);
+    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify({ imageData, recognitionOnly: true, ...extra }) }, 25000, false);
   } catch (err) {
     console.warn('Backend photo scan failed, returning fallback manual mode:', err);
     throw err;
@@ -407,4 +407,3 @@ export async function askPassportAI(
     };
   }
 }
-

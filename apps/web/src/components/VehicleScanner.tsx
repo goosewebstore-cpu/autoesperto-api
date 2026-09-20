@@ -69,6 +69,7 @@ const promises = ['Valutazione accurata', 'Prezzo reale di mercato', 'Affidabili
 
 const MAX_PHOTOS = 6;
 const MAX_PHOTO_BYTES = 5 * 1024 * 1024;
+const ANALYSIS_MAX_DIMENSION = 1600;
 
 const wait = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -78,6 +79,36 @@ function readFileAsDataURL(file: File): Promise<string> {
     reader.onload = () => resolve(String(reader.result));
     reader.onerror = () => reject(new Error('Impossibile leggere la foto.'));
     reader.readAsDataURL(file);
+  });
+}
+
+async function optimiseImageForAnalysis(file: File): Promise<string> {
+  const source = await readFileAsDataURL(file);
+
+  return new Promise((resolve) => {
+    const image = new Image();
+    image.onload = () => {
+      const longestSide = Math.max(image.naturalWidth, image.naturalHeight);
+      if (!longestSide || longestSide <= ANALYSIS_MAX_DIMENSION) {
+        resolve(source);
+        return;
+      }
+
+      const scale = ANALYSIS_MAX_DIMENSION / longestSide;
+      const canvas = document.createElement('canvas');
+      canvas.width = Math.round(image.naturalWidth * scale);
+      canvas.height = Math.round(image.naturalHeight * scale);
+      const context = canvas.getContext('2d');
+      if (!context) {
+        resolve(source);
+        return;
+      }
+
+      context.drawImage(image, 0, 0, canvas.width, canvas.height);
+      resolve(canvas.toDataURL('image/jpeg', 0.84));
+    };
+    image.onerror = () => resolve(source);
+    image.src = source;
   });
 }
 
@@ -328,17 +359,18 @@ export default function VehicleScanner({
 
     trackEvent('car_image_uploaded', { count: valid.length });
     try {
-      const imageDatas = await Promise.all(valid.map(readFileAsDataURL));
+      const imageDatas = await Promise.all(valid.map(optimiseImageForAnalysis));
       setPhotos(imageDatas);
       setMainPhoto(imageDatas[0]);
       trackEvent('analysis_started', { analysis_type: 'photo', photos: imageDatas.length });
 
-      for (const imageData of imageDatas) {
-        const result = await freeScanVehiclePhoto(imageData);
-        if (await applyResult(result, imageData)) {
-          setManualLoading(false);
-          return;
-        }
+      // Una sola foto basta per identificare marca e modello. Analizzarle una
+      // dopo l'altra rendeva l'attesa proporzionale al numero di allegati.
+      const recognitionImage = imageDatas[0];
+      const result = await freeScanVehiclePhoto(recognitionImage);
+      if (await applyResult(result, recognitionImage)) {
+        setManualLoading(false);
+        return;
       }
       // Se non riconosciuta, passa al tab manuale con messaggio
       setTab('manual');
@@ -360,17 +392,26 @@ export default function VehicleScanner({
       return;
     }
 
+    const year = overrides?.year ?? (manualYear.trim() ? Number(manualYear.trim()) : undefined);
+    const km = overrides?.km ?? (manualKm.trim() ? Number(manualKm.trim()) : undefined);
+    if (!year || !Number.isInteger(year)) {
+      setError('Inserisci l’anno di immatricolazione: serve a identificare la generazione corretta.');
+      return;
+    }
+    if (km === undefined || !Number.isFinite(km) || km < 0) {
+      setError('Inserisci i km effettivi: incidono direttamente sulla stima del prezzo.');
+      return;
+    }
+
     setManualLoading(true); setError('');
     trackEvent('analysis_started', { analysis_type: 'manual', make, model });
     try {
-      const year = overrides?.year ?? (manualYear.trim() ? Number(manualYear.trim()) : undefined);
-      const km = overrides?.km ?? (manualKm.trim() ? Number(manualKm.trim()) : undefined);
       const requestedPrice = overrides?.requestedPrice ?? (manualPrice.trim() ? Number(manualPrice.trim()) : undefined);
       const result = await freeScanManual({
         make,
         model,
-        ...(year && !isNaN(year) ? { year } : {}),
-        ...(km && !isNaN(km) ? { km } : {}),
+        year,
+        km,
         ...(requestedPrice && !isNaN(requestedPrice) ? { requestedPrice } : {}),
         ...(manualFuel ? { fuel: manualFuel } : {}),
         ...(manualTransmission ? { transmission: manualTransmission } : {}),
@@ -437,7 +478,7 @@ export default function VehicleScanner({
             {scan.vehicle.make} {scan.vehicle.model}
           </h3>
           <p className="text-xs sm:text-sm text-slate-500 mt-1 font-medium max-w-md mx-auto leading-relaxed">
-            Per uno score più preciso e verificare i difetti specifici dell&apos;annata, inserisci anno e km (opzionale):
+            Conferma anno, km e alimentazione: sono necessari per distinguere la generazione e calcolare un prezzo attendibile.
           </p>
         </div>
 
@@ -448,9 +489,9 @@ export default function VehicleScanner({
           </div>
         )}
 
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-left">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-left">
           <label className="scanner-field">
-            <span>Anno (es. 2017)</span>
+            <span>Anno di immatricolazione *</span>
             <input
               type="number"
               value={manualYear}
@@ -461,13 +502,22 @@ export default function VehicleScanner({
             />
           </label>
           <label className="scanner-field">
-            <span>Km effettivi</span>
+            <span>Km effettivi *</span>
             <input
               type="number"
               value={manualKm}
               onChange={(e) => setManualKm(e.target.value)}
               placeholder="es. 95000"
               min={0}
+            />
+          </label>
+          <label className="scanner-field">
+            <span>Versione / allestimento</span>
+            <input
+              type="text"
+              value={manualVersion}
+              onChange={(e) => setManualVersion(e.target.value)}
+              placeholder="es. Hybrid, Long Range, 1.6 TDI"
             />
           </label>
           <label className="scanner-field">
@@ -480,6 +530,29 @@ export default function VehicleScanner({
               min={0}
             />
           </label>
+        </div>
+
+        <div className="text-left">
+          <span className="text-[11px] font-bold text-slate-500 block mb-1.5">Alimentazione *</span>
+          <div className="flex flex-wrap gap-1.5">
+            {['Benzina', 'Diesel', 'Ibrida', 'Elettrica', 'GPL', 'Metano'].map((fuel) => (
+              <button
+                key={fuel}
+                type="button"
+                onClick={() => {
+                  setManualFuel(fuel);
+                  if (fuel === 'Elettrica') setManualTransmission('Automatico');
+                }}
+                className={`px-2.5 py-1 rounded-lg text-[11px] font-bold border transition-all ${
+                  manualFuel.toLowerCase().includes(fuel.toLowerCase())
+                    ? 'bg-blue-600 text-white border-blue-600 shadow-xs'
+                    : 'bg-white text-slate-700 border-slate-200 hover:border-blue-300'
+                }`}
+              >
+                {fuel}
+              </button>
+            ))}
+          </div>
         </div>
 
         {error && <p className="scanner-box-error" role="alert">{error}</p>}
@@ -508,22 +581,6 @@ export default function VehicleScanner({
             )}
           </button>
 
-          <button
-            type="button"
-            onClick={() => {
-              const v = scan.vehicle;
-              setReport(scan.report ?? null);
-              setStage('result');
-              if (v?.make && v?.model) {
-                trackEvent('analysis_completed', { make: v.make, model: v.model });
-                trackEvent('result_viewed', { make: v.make, model: v.model });
-              }
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }}
-            className="text-xs font-bold text-slate-500 hover:text-slate-800 py-1.5 transition-colors block mx-auto underline decoration-slate-300"
-          >
-            Salta e vedi stima base indicativa →
-          </button>
         </div>
       </div>
     );
@@ -861,12 +918,12 @@ export default function VehicleScanner({
 
                 {/* 4. ANNO (Dropdown anni 2026-1995) */}
                 <label className="scanner-field">
-                  <span>Anno (opz.)</span>
+                  <span>Anno di immatricolazione *</span>
                   <select
                     value={manualYear}
                     onChange={(e) => setManualYear(e.target.value)}
                   >
-                    <option value="">Tutti gli anni / Non specificato</option>
+                    <option value="">Seleziona l’anno</option>
                     {AVAILABLE_YEARS.map((y) => (
                       <option key={y} value={y}>
                         {y}
@@ -878,7 +935,7 @@ export default function VehicleScanner({
 
                 {/* 5. KM (Input con quick-chips) */}
                 <label className="scanner-field">
-                  <span>Km (opz.)</span>
+                  <span>Km effettivi *</span>
                   <input
                     type="number"
                     inputMode="numeric"
@@ -907,7 +964,7 @@ export default function VehicleScanner({
 
               {/* Quick km chips */}
               <div className="mt-2.5 flex items-center gap-1.5 flex-wrap">
-                <span className="text-[10px] font-bold text-slate-500">Km veloci:</span>
+                <span className="text-[10px] font-bold text-slate-500">Km richiesti · scelta rapida:</span>
                 {QUICK_KM_CHIPS.map((kmVal) => (
                   <button
                     key={kmVal}

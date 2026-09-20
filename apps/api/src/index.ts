@@ -4,6 +4,9 @@ import { execSync } from 'child_process';
 import { app, defaultWebUrls } from './app';
 
 dotenv.config({ path: path.resolve(process.cwd(), '.env') });
+// Avvio dalla root del monorepo: le chiavi dell'API sono nel servizio API.
+// dotenv non sovrascrive le variabili già fornite dall'ambiente di produzione.
+dotenv.config({ path: path.resolve(process.cwd(), 'apps/api/.env') });
 
 const PORT = process.env.PORT || 4000;
 

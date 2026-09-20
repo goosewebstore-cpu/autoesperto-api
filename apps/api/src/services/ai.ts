@@ -295,9 +295,11 @@ function getAIModel() { return process.env.AI_MODEL || 'gpt-4o-mini'; }
 function isGroqProvider() {
   return getAIBaseUrl().includes('api.groq.com') || process.env.OPENAI_API_KEY?.startsWith('gsk_');
 }
-function getVisionModel() {
-  if (process.env.VISION_MODEL) return process.env.VISION_MODEL;
-  return isGroqProvider() ? 'qwen/qwen3.6-27b' : 'gpt-4o-mini';
+function getVisionModels() {
+  if (process.env.VISION_MODEL) return [process.env.VISION_MODEL];
+  // Groq abilita i modelli per account: proviamo una riserva reale invece di
+  // fermarci sul primo modello vision non disponibile per quella chiave.
+  return isGroqProvider() ? ['qwen/qwen3.8-27b', 'qwen/qwen3.6-27b'] : ['gpt-4o-mini'];
 }
 
 const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], [number, number]>> = {
@@ -367,13 +369,13 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, alimentazione, colore e categoria di carrozzeria visibili. Riconosci dettagli come fari/LED, griglia (aperta vs chiusa/carenata per EV), loghi/badge (es. TDI, Hybrid, e-tron, EV, Dual Motor, PureTech) e scarichi. NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata. Per "fuel" indica 'Elettrica' | 'Diesel' | 'Benzina' | 'Ibrida' | 'GPL' | 'Metano'. Per eventuali danni esterni: se il muso o frontale o scocca presentano impatto, radiatori esposti, fari frantumati, cofano piegato o lamiere distrutte, usa SEMPRE 'frontale_grave' o 'strutturale_telaio' con severity 'alta'. Restituisci UNICAMENTE questo JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`
     : `Veicolo dichiarato: ${vehicleContext}. Riconosci con precisione marca, modello esatto, generazione, anno indicativo, alimentazione ('Elettrica'|'Diesel'|'Benzina'|'Ibrida'|'GPL'|'Metano'), colore e categoria di carrozzeria visibili. Valuta griglia (chiusa su EV), badge (Hybrid, TDI, e-tron, EV, ecc.) e fanali. Non inventare i campi incerti: omettili. Per danni esterni visibili: se il muso o carrozzeria presentano collisione evidente, fari distrutti o lamiere deformate, usa 'frontale_grave' o 'strutturale_telaio' con severity 'alta'. Restituisci UNICAMENTE questo JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`;
 
-  const attempt = async (extra: Record<string, unknown> = {}) => {
+  const attempt = async (model: string, extra: Record<string, unknown> = {}) => {
     const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
       method: 'POST',
       signal: AbortSignal.timeout(isGroq ? 45000 : 20000),
       headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
       body: JSON.stringify({
-        model: isAggressive && !isGroq ? 'gpt-4o' : getVisionModel(),
+        model: isAggressive && !isGroq ? 'gpt-4o' : model,
         temperature: isAggressive ? 0.4 : 0.1,
         ...(isGroq ? { reasoning_effort: 'none' } : { response_format: { type: 'json_object' } }),
         ...extra,
@@ -392,11 +394,21 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     return response;
   };
 
-  let response = await attempt();
-  let data = await response.json() as any;
-  if (!response.ok) {
-    const msg = typeof data?.error?.message === 'string' ? data.error.message : `HTTP ${response.status}`;
-    throw new Error(msg);
+  let response: Response | undefined;
+  let data: any;
+  let selectedModel = getVisionModels()[0];
+  let lastError = '';
+  for (const model of getVisionModels()) {
+    response = await attempt(model);
+    data = await response.json() as any;
+    if (response.ok) {
+      selectedModel = model;
+      break;
+    }
+    lastError = typeof data?.error?.message === 'string' ? data.error.message : `HTTP ${response.status}`;
+  }
+  if (!response?.ok) {
+    throw new Error(lastError || 'Il servizio vision non ha restituito un risultato.');
   }
 
   let message = data.choices?.[0]?.message;
@@ -404,7 +416,7 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   try {
     parsed = parseJsonContent<any>(message?.content || message?.reasoning || message?.reasoning_content || '');
   } catch {
-    response = await attempt({ reasoning_format: 'hidden' });
+    response = await attempt(selectedModel, { reasoning_format: 'hidden' });
     data = await response.json() as any;
     message = data.choices?.[0]?.message;
     try {
@@ -459,7 +471,9 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   const match = input.imageData.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,(.+)$/);
   if (!match) throw new Error('Formato immagine non valido.');
   const configuredModel = process.env.GEMINI_VISION_MODEL?.trim();
-  const models = configuredModel ? [configuredModel] : ['gemini-3.5-flash', 'gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
+  // Gemini 3.6 è il modello vision attualmente disponibile più rapido per
+  // questo riconoscimento strutturato; gli altri restano solo come riserva.
+  const models = configuredModel ? [configuredModel] : ['gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
   let raw = '';
   let lastError = '';
 
@@ -480,7 +494,9 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
     if (response.ok && raw) break;
     lastError = data?.error?.message || `Gemini non ha restituito un risultato (HTTP ${response.status}).`;
     raw = '';
-    if (!/(not available|not found|not exist|unsupported|access)/i.test(lastError)) break;
+    // Saturazione e limiti temporanei non devono bloccare il riconoscimento:
+    // prova il modello Gemini successivo prima di attivare il provider di riserva.
+    if (!/(not available|not found|not exist|unsupported|access|high demand|rate limit|quota|resource exhausted|temporar)/i.test(lastError)) break;
   }
   if (!raw) throw new Error(lastError || 'Gemini non ha restituito un risultato.');
   const parsed = parseJsonContent<any>(raw);
@@ -579,19 +595,30 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
   const future3 = Math.round(estimatedValue * (fuel.includes('diesel') ? 0.55 : 0.62) / 100) * 100;
   const future5 = Math.round(estimatedValue * (fuel.includes('diesel') ? 0.35 : 0.42) / 100) * 100;
 
-  const summary = verdict === 'BUY'
+  const summary = isElectric
+    ? `${vehicle.make} ${vehicle.model} elettrica: per questo esemplare contano autonomia reale, salute della batteria, ricarica e garanzia residua più dei soli km.`
+    : verdict === 'BUY'
     ? `${vehicle.make} ${vehicle.model} è un modello complessivamente affidabile e con costi di gestione contenuti.`
     : verdict === 'NEGOTIATE'
     ? `${vehicle.make} ${vehicle.model} può essere una scelta valida, ma richiede controlli mirati: verifica storico manutenzione e condizioni generali.`
     : `${vehicle.make} ${vehicle.model} presenta alcuni rischi noti di affidabilità o costi elevati: valuta con molta attenzione.`;
 
-  const weaknesses = knowledge.common.slice(0, 3).filter((w: string) => !isGeneric(w));
+  const modelSpecificEvIssue = knowledge.common.find((issue: string) =>
+    !isGeneric(issue) && !/(olio|cinghia|candele|fap|dpf|iniettor|frizione|scarico)/i.test(issue)
+  );
+  const weaknesses = isElectric
+    ? [
+        'Stato di salute batteria (SoH): i km da soli non misurano capacità residua e autonomia reale.',
+        'Ricarica AC/DC: prova presa, sportellino, cavo e verifica che la curva di ricarica sia regolare.',
+        modelSpecificEvIssue || 'Software, infotainment e climatizzazione: controlla aggiornamenti e assenza di avvisi in plancia.',
+      ]
+    : knowledge.common.slice(0, 3).filter((w: string) => !isGeneric(w));
 
   const strengths = isElectric
     ? [
-        `Affidabilità elevata ${knowledge.reliabilityScore}/10 (powertrain elettrico semplificato).`,
+        `Powertrain elettrico semplificato: nessun cambio olio, FAP/DPF, frizione o cinghia di distribuzione.`,
         'Costi di manutenzione ridotti di oltre il 50% (nessun cambio olio, filtro carburante o cinghia).',
-        'Esenzione bollo per 5 anni e bassissimo costo per 100 km.',
+        `Con ${km.toLocaleString('it-IT')} km, la verifica decisiva resta il SoH documentato della batteria e non il solo contachilometri.`,
       ]
     : [
         `Affidabilità complessiva ${knowledge.reliabilityScore}/10 per ${vehicle.make}.`,
@@ -607,15 +634,15 @@ export async function analyzeVehicle(input: AIAnalysisInput, options: AIAnalysis
     strengths,
     weaknesses: weaknesses.length ? weaknesses : ['Nessuna criticità grave segnalata per questo modello.'],
     advice: buildAdvice(knowledge, vehicle.make, vehicle.model, vehicle.dataSource, isElectric),
-    engine: !isGeneric(knowledge.engine)
+    engine: isElectric
+      ? `Trazione elettrica ${vehicle.make} ${vehicle.model}: richiedi un report SoH, confronta autonomia stimata e reale e verifica garanzia residua della batteria.`
+      : !isGeneric(knowledge.engine)
       ? knowledge.engine
-      : isElectric
-      ? 'Powertrain 100% elettrico: nessuna manutenzione di olio o candele. Verificare stato di salute batteria (SoH).'
       : `Motori ${vehicle.make}: affidabilità media, verificare condizioni reali dell'esemplare.`,
-    transmission: !isGeneric(knowledge.transmission)
+    transmission: isElectric
+      ? 'Presa diretta monomarcia: in prova verifica fluidità in rilascio, rigenerazione, riduttore e assenza di rumori anomali.'
+      : !isGeneric(knowledge.transmission)
       ? knowledge.transmission
-      : isElectric
-      ? 'Trasmissione a presa diretta monomarcia senza frizione.'
       : `Cambio ${vehicle.make}: preferire versioni con cambio manuale o automatico con tagliandi documentati.`,
     maintenance: knowledge.maintenance,
     commonIssues: knowledge.common.filter((i: string) => !isGeneric(i)),

@@ -48,7 +48,7 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   if (!input.plate) {
     if (!input.make || !input.model) throw badRequest('Inserisci marca e modello');
     const found = searchModel(input.make, input.model, input.fuel);
-    const era = findModelEra(input.make, input.model);
+    const era = findModelEra(input.make, input.model, input.year);
     const resolvedYear = input.year || found?.year || era?.medianYear;
 
     const vehicle: VehicleData = found ? { ...found } : {
@@ -94,7 +94,9 @@ function cacheKeyFor(input: ReportInput): string {
 }
 
 function reportKeyFor(input: ReportInput): string {
-  return `${cacheKeyFor(input)}:${input.year || ''}:${input.km || ''}:${input.requestedPrice || ''}`;
+  const version = (input.version || '').trim().toLowerCase();
+  const transmission = (input.transmission || '').trim().toLowerCase();
+  return `${cacheKeyFor(input)}:${input.year || ''}:${input.km || ''}:${input.requestedPrice || ''}:${version}:${transmission}`;
 }
 
 export async function buildReport(input: ReportInput, options: { requireDetailedModelAnalysis?: boolean } = {}): Promise<{ report: AutoReport; cached: boolean }> {

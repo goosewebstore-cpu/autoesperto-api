@@ -3,7 +3,7 @@ import { z } from 'zod';
 import type { Request } from 'express';
 import { prisma } from '@autoesperto/database';
 import { buildReport } from '../services/reportService';
-import { analyzeVehiclePhoto, askAutoEsperto, type PhotoAnalysisResult } from '../services/ai';
+import { analyzeVehiclePhoto, askAutoEsperto, isVisionConfigured, type PhotoAnalysisResult } from '../services/ai';
 import { searchModel } from '../services/modelDB';
 import { findModelEra } from '../services/modelEra';
 import { verifyAuthToken } from '../services/auth';
@@ -157,25 +157,26 @@ router.post(
     let fuel: string | undefined = input.fuel;
 
     if (input.imageData) {
-      // Primo tentativo normale
-      try {
-        photo = await analyzeVehiclePhoto({ imageData: input.imageData });
-      } catch (error) {
-        console.warn('free scan first attempt failed:', error);
-      }
-
-      // Se il primo è fallito o non ha riconosciuto, secondo tentativo aggressive
-      if (!photo?.vehicle?.make || !photo?.vehicle?.model) {
+      // Un solo tentativo di riconoscimento: i loop AI sequenziali multipli
+      // ritardavano la risposta oltre ogni budget. Se l'AI non è configurata o
+      // il primo tentativo non riconosce l'auto, rispondiamo subito con
+      // recognized:false e il cliente compila a mano (nessun errore bloccante).
+      if (isVisionConfigured()) {
         try {
-          photo = await analyzeVehiclePhoto({ imageData: input.imageData, aggressive: true });
+          photo = await analyzeVehiclePhoto({ imageData: input.imageData });
         } catch (error) {
-          console.warn('free scan aggressive attempt failed:', error);
+          console.warn('free scan recognition failed:', error);
         }
       }
 
-      // Se il servizio è completamente down
       if (!photo) {
-        throw serviceUnavailable('Il riconoscimento gratuito non è disponibile in questo momento. Riprova tra poco.');
+        res.set('Cache-Control', 'no-store');
+        res.json({
+          success: true,
+          recognized: false,
+          message: 'Non riusciamo a riconoscere l\'auto dalla foto in questo momento. Inserisci marca e modello a mano e procedi subito.',
+        });
+        return;
       }
 
       if (!photo.vehicle.make || !photo.vehicle.model) {

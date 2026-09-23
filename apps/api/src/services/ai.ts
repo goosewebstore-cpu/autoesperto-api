@@ -302,6 +302,55 @@ function getVisionModels() {
   return isGroqProvider() ? ['qwen/qwen3.8-27b', 'qwen/qwen3.6-27b'] : ['gpt-4o-mini'];
 }
 
+const VISION_CACHE_TTL = 24 * 60 * 60 * 1000;
+
+function visionCacheKey(imageData: string, aggressive: boolean): string {
+  let hash = 5381;
+  for (let i = 0; i < imageData.length; i++) {
+    hash = ((hash << 5) + hash + imageData.charCodeAt(i)) >>> 0;
+  }
+  return `vision:${hash}:${aggressive ? '1' : '0'}`;
+}
+
+const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+function isRetryableStatus(status: number): boolean {
+  return status === 429 || status >= 500;
+}
+
+function isRetryableError(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  if (err.name === 'AbortError' || err.name === 'TimeoutError') return true;
+  return /ECONNRESET|ETIMEDOUT|ENOTFOUND|EAI_AGAIN|socket prematurely|network error/i.test(err.message);
+}
+
+async function readJsonBody(res: Response): Promise<any> {
+  try {
+    return await res.json();
+  } catch {
+    throw new Error(res.ok
+      ? 'Il provider IA ha restituito una risposta vuota o non valida.'
+      : `Il provider IA ha risposto con errore (HTTP ${res.status}).`);
+  }
+}
+
+async function callWithRetry(run: () => Promise<Response>, attempts: number, backoffMs: number): Promise<Response> {
+  let lastError: unknown;
+  for (let attempt = 0; attempt < attempts; attempt++) {
+    const isLast = attempt === attempts - 1;
+    try {
+      const res = await run();
+      if (res.ok || !isRetryableStatus(res.status) || isLast) return res;
+      lastError = new Error(`Il provider IA ha risposto con errore (HTTP ${res.status}).`);
+    } catch (err) {
+      lastError = err;
+      if (isLast || !isRetryableError(err)) throw err;
+    }
+    await sleep(backoffMs * (attempt + 1));
+  }
+  throw lastError instanceof Error ? lastError : new Error('Errore imprevisto durante la chiamata al provider IA.');
+}
+
 const repairRanges: Record<PhotoAnalysisResult['damage']['category'], Record<PhotoAnalysisResult['damage']['severity'], [number, number]>> = {
   graffio: { lieve: [120, 280], media: [250, 550], alta: [450, 900] },
   ammaccatura: { lieve: [150, 350], media: [300, 700], alta: [600, 1400] },
@@ -347,7 +396,23 @@ export function getRepairMultiplier(make?: string, model?: string, fuel?: string
   return 1.0;
 }
 
+export function isVisionConfigured(): boolean {
+  if (process.env.GEMINI_API_KEY) return true;
+  const key = process.env.OPENAI_API_KEY;
+  return Boolean(key && key !== 'mock');
+}
+
 export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
+  const cacheKey = visionCacheKey(input.imageData, input.aggressive === true);
+  const cached = cacheGet<PhotoAnalysisResult>(cacheKey);
+  if (cached) return cached;
+
+  const result = await analyzeVehiclePhotoUncached(input);
+  cacheSet(cacheKey, result, VISION_CACHE_TTL);
+  return result;
+}
+
+async function analyzeVehiclePhotoUncached(input: PhotoAnalysisInput): Promise<PhotoAnalysisResult> {
   const geminiKey = process.env.GEMINI_API_KEY;
   if (geminiKey) {
     try {
@@ -369,40 +434,49 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
     ? `Veicolo dichiarato: ${vehicleContext}. Analizza questa foto di un'automobile e fai la tua MIGLIORE STIMA possibile di marca, modello, generazione, anno indicativo, alimentazione, colore e categoria di carrozzeria visibili. Riconosci dettagli come fari/LED, griglia (aperta vs chiusa/carenata per EV), loghi/badge (es. TDI, Hybrid, e-tron, EV, Dual Motor, PureTech) e scarichi. NON lasciare mai vuoti i campi "make" e "model": fai sempre una stima ragionata. Per "fuel" indica 'Elettrica' | 'Diesel' | 'Benzina' | 'Ibrida' | 'GPL' | 'Metano'. Per eventuali danni esterni: se il muso o frontale o scocca presentano impatto, radiatori esposti, fari frantumati, cofano piegato o lamiere distrutte, usa SEMPRE 'frontale_grave' o 'strutturale_telaio' con severity 'alta'. Restituisci UNICAMENTE questo JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`
     : `Veicolo dichiarato: ${vehicleContext}. Riconosci con precisione marca, modello esatto, generazione, anno indicativo, alimentazione ('Elettrica'|'Diesel'|'Benzina'|'Ibrida'|'GPL'|'Metano'), colore e categoria di carrozzeria visibili. Valuta griglia (chiusa su EV), badge (Hybrid, TDI, e-tron, EV, ecc.) e fanali. Non inventare i campi incerti: omettili. Per danni esterni visibili: se il muso o carrozzeria presentano collisione evidente, fari distrutti o lamiere deformate, usa 'frontale_grave' o 'strutturale_telaio' con severity 'alta'. Restituisci UNICAMENTE questo JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":true,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"max 180 caratteri","area":"","repairHint":""}}.`;
 
-  const attempt = async (model: string, extra: Record<string, unknown> = {}) => {
-    const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
-      method: 'POST',
-      signal: AbortSignal.timeout(isGroq ? 45000 : 20000),
-      headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
-      body: JSON.stringify({
-        model: isAggressive && !isGroq ? 'gpt-4o' : model,
-        temperature: isAggressive ? 0.4 : 0.1,
-        ...(isGroq ? { reasoning_effort: 'none' } : { response_format: { type: 'json_object' } }),
-        ...extra,
-        max_tokens: 900,
-        messages: [
-          { role: 'system', content: isAggressive
-            ? 'Sei AutoEsperto. Analizza la foto dell\'automobile con la massima accuratezza di forme, fari, griglia, badge e proporzioni per identificare marca, modello, generazione, anno e alimentazione (incluso se elettrica o ibrida). Non lasciare mai vuoti make e model. Se ci sono incidenti o frontale distrutto, indica la severità e la categoria reale (es. frontale_grave). Ignora targhe, persone e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown.'
-            : 'Sei AutoEsperto. Analizza la foto dell\'automobile riconoscendo marca, modello esatto, generazione, anno e tipo di alimentazione dai dettagli visivi. Se ci sono danni o urti importanti, stima accuratamente categoria (frontale_grave, carrozzeria, paraurti) e severità. Ignora targhe e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown.' },
-          { role: 'user', content: [
-            { type: 'text', text: prompt },
-            { type: 'image_url', image_url: { url: input.imageData, ...(isGroq || isAggressive ? {} : { detail: 'low' }) } },
-          ] },
-        ],
-      }),
-    });
-    return response;
+  const visionModels = getVisionModels();
+  const attempt = async (model: string, extra: Record<string, unknown> = {}, timeoutMs: number) => {
+    return callWithRetry(async () => {
+      return fetch(`${getAIBaseUrl()}/chat/completions`, {
+        method: 'POST',
+        signal: AbortSignal.timeout(timeoutMs),
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${key}` },
+        body: JSON.stringify({
+          model: isAggressive && !isGroq ? 'gpt-4o' : model,
+          temperature: isAggressive ? 0.4 : 0.1,
+          ...(isGroq ? { reasoning_effort: 'none' } : { response_format: { type: 'json_object' } }),
+          ...extra,
+          max_tokens: 900,
+          messages: [
+            { role: 'system', content: isAggressive
+              ? 'Sei AutoEsperto. Analizza la foto dell\'automobile con la massima accuratezza di forme, fari, griglia, badge e proporzioni per identificare marca, modello, generazione, anno e alimentazione (incluso se elettrica o ibrida). Non lasciare mai vuoti make e model. Se ci sono incidenti o frontale distrutto, indica la severità e la categoria reale (es. frontale_grave). Ignora targhe, persone e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown.'
+              : 'Sei AutoEsperto. Analizza la foto dell\'automobile riconoscendo marca, modello esatto, generazione, anno e tipo di alimentazione dai dettagli visivi. Se ci sono danni o urti importanti, stima accuratamente categoria (frontale_grave, carrozzeria, paraurti) e severità. Ignora targhe e dati personali. Rispondi con un solo oggetto JSON valido, senza markdown.' },
+            { role: 'user', content: [
+              { type: 'text', text: prompt },
+              { type: 'image_url', image_url: { url: input.imageData, ...(isGroq || isAggressive ? {} : { detail: 'low' }) } },
+            ] },
+          ],
+        }),
+      });
+    }, 2, 350);
   };
 
   let response: Response | undefined;
   let data: any;
-  let selectedModel = getVisionModels()[0];
+  let selectedModel = visionModels[0];
   let lastError = '';
-  for (const model of getVisionModels()) {
-    response = await attempt(model);
-    data = await response.json() as any;
+  for (let i = 0; i < visionModels.length; i++) {
+    const timeoutMs = isGroq ? (i === 0 ? 45000 : 25000) : (i === 0 ? 20000 : 15000);
+    try {
+      response = await attempt(visionModels[i], {}, timeoutMs);
+      data = await readJsonBody(response);
+    } catch (err) {
+      lastError = err instanceof Error ? err.message : String(err);
+      response = undefined;
+      continue;
+    }
     if (response.ok) {
-      selectedModel = model;
+      selectedModel = visionModels[i];
       break;
     }
     lastError = typeof data?.error?.message === 'string' ? data.error.message : `HTTP ${response.status}`;
@@ -416,8 +490,8 @@ export async function analyzeVehiclePhoto(input: PhotoAnalysisInput): Promise<Ph
   try {
     parsed = parseJsonContent<any>(message?.content || message?.reasoning || message?.reasoning_content || '');
   } catch {
-    response = await attempt(selectedModel, { reasoning_format: 'hidden' });
-    data = await response.json() as any;
+    response = await attempt(selectedModel, { reasoning_format: 'hidden' }, isGroq ? 25000 : 20000);
+    data = await readJsonBody(response);
     message = data.choices?.[0]?.message;
     try {
       parsed = parseJsonContent<any>(message?.content || message?.reasoning || message?.reasoning_content || '');
@@ -471,32 +545,40 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   const match = input.imageData.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,(.+)$/);
   if (!match) throw new Error('Formato immagine non valido.');
   const configuredModel = process.env.GEMINI_VISION_MODEL?.trim();
-  // Gemini 3.6 è il modello vision attualmente disponibile più rapido per
-  // questo riconoscimento strutturato; gli altri restano solo come riserva.
-  const models = configuredModel ? [configuredModel] : ['gemini-3.6-flash', 'gemini-3.8-flash', 'gemini-3.5-flash', 'gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-flash-latest'];
+  // Solo i modelli flash più rapidi: il loop lungo di 7 modelli sequenziali
+  // faceva attendere l'utente fino a 2 minuti prima di un eventuale fallback.
+  const models = configuredModel ? [configuredModel] : ['gemini-3.6-flash', 'gemini-2.5-flash'];
   let raw = '';
   let lastError = '';
 
   for (const model of models) {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-      method: 'POST', signal: AbortSignal.timeout(25000),
-      headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
-      body: JSON.stringify({
-        contents: [{ parts: [
-          { text: 'Sei il riconoscimento visivo esperto di AutoEsperto. Riconosci con precisione la vettura nella foto usando logo, firma fari LED, calandra (aperta vs chiusa per EV), carrozzeria e badge (es. TDI, Hybrid, e-tron, EV, Dual Motor, PureTech). Indica marca, modello esatto, generazione, anno indicativo, alimentazione (\'Elettrica\'|\'Diesel\'|\'Benzina\'|\'Ibrida\'|\'GPL\'|\'Metano\'), colore e tipo di carrozzeria. Ometti campi incerti e non inventare. Ignora completamente targhe, persone e dati personali. Se sono visibili urti anteriori o collisioni, usa "frontale_grave" o "strutturale_telaio" con severity "alta". Descrivi esclusivamente danni chiaramente visibili con "area" e "repairHint". Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"","area":"","repairHint":""}}.' },
-          { inline_data: { mime_type: match[1], data: match[2] } },
-        ] }],
-        generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
-      }),
-    });
-    const data = await response.json() as any;
-    raw = data.candidates?.[0]?.content?.parts?.map((part: any) => part.text || '').join('') || '';
-    if (response.ok && raw) break;
-    lastError = data?.error?.message || `Gemini non ha restituito un risultato (HTTP ${response.status}).`;
-    raw = '';
-    // Saturazione e limiti temporanei non devono bloccare il riconoscimento:
-    // prova il modello Gemini successivo prima di attivare il provider di riserva.
-    if (!/(not available|not found|not exist|unsupported|access|high demand|rate limit|quota|resource exhausted|temporar)/i.test(lastError)) break;
+    try {
+      const response = await callWithRetry(async () => {
+        return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
+          method: 'POST', signal: AbortSignal.timeout(15000),
+          headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
+          body: JSON.stringify({
+            contents: [{ parts: [
+              { text: 'Sei il riconoscimento visivo esperto di AutoEsperto. Riconosci con precisione la vettura nella foto usando logo, firma fari LED, calandra (aperta vs chiusa per EV), carrozzeria e badge (es. TDI, Hybrid, e-tron, EV, Dual Motor, PureTech). Indica marca, modello esatto, generazione, anno indicativo, alimentazione (\'Elettrica\'|\'Diesel\'|\'Benzina\'|\'Ibrida\'|\'GPL\'|\'Metano\'), colore e tipo di carrozzeria. Ometti campi incerti e non inventare. Ignora completamente targhe, persone e dati personali. Se sono visibili urti anteriori o collisioni, usa "frontale_grave" o "strutturale_telaio" con severity "alta". Descrivi esclusivamente danni chiaramente visibili con "area" e "repairHint". Rispondi SOLO con JSON: {"vehicle":{"make":"","model":"","generation":"","year":2021,"fuel":"Elettrica|Diesel|Benzina|Ibrida|GPL|Metano","color":"","bodyType":"","confidence":"bassa|media|alta"},"damage":{"visible":false,"category":"graffio|ammaccatura|paraurti|fanale|specchietto|cerchio_gomma|vetro|carrozzeria|frontale_grave|strutturale_telaio|meccanica_sospensioni|nessun_danno_evidente|non_chiaro","severity":"lieve|media|alta","description":"","area":"","repairHint":""}}.' },
+              { inline_data: { mime_type: match[1], data: match[2] } },
+            ] }],
+            generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
+          }),
+        });
+      }, 2, 350);
+
+      const data = await readJsonBody(response);
+      raw = data.candidates?.[0]?.content?.parts?.map((part: any) => part.text || '').join('') || '';
+      if (response.ok && raw) break;
+      lastError = data?.error?.message || `Gemini non ha restituito un risultato (HTTP ${response.status}).`;
+      raw = '';
+      // Saturazione e limiti temporanei non devono bloccare il riconoscimento:
+      // prova il modello Gemini successivo prima di attivare il provider di riserva.
+      if (!/(not available|not found|not exist|unsupported|access|high demand|rate limit|quota|resource exhausted|temporar)/i.test(lastError)) break;
+    } catch (err) {
+      raw = '';
+      lastError = err instanceof Error ? err.message : String(err);
+    }
   }
   if (!raw) throw new Error(lastError || 'Gemini non ha restituito un risultato.');
   const parsed = parseJsonContent<any>(raw);
@@ -713,26 +795,29 @@ Fornisci UNA SOLA risposta JSON valida con:
 - "transmission": consigli specifici sul cambio/trazione per ${vehicle.make} ${vehicle.model} (${isEv ? 'presa diretta monomarcia' : 'es. Manuale preciso, automatico ZF 8HP raccomandato'}). NON scrivere "verifica", "controlla" o consigli generici
 - "commonIssues": 3 problemi specifici noti presso i proprietari di ${vehicle.make} ${vehicle.model}`;
 
-  const resp = await fetch(`${getAIBaseUrl()}/chat/completions`, {
-    method: 'POST',
-    signal: AbortSignal.timeout(12000),
-    headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
-    body: JSON.stringify({
-      model: getAIModel(),
-      messages: [
-        {
-          role: 'system',
-          content: isEv
-            ? 'Sei un ingegnere e consulente automotive specializzato in veicoli elettrici. Rispondi SOLO con JSON valido in italiano specifico per questo modello EV. Nessun riferimento a componenti termici (olio, candele, cinghie).'
-            : 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione", non "verifica il cambio").',
-        },
-        { role: 'user', content: prompt },
-      ],
-      temperature: 0.4,
-      response_format: { type: 'json_object' },
-    }),
-  });
-  const data = await resp.json() as any;
+  const resp = await callWithRetry(async () => {
+    return fetch(`${getAIBaseUrl()}/chat/completions`, {
+      method: 'POST',
+      signal: AbortSignal.timeout(15000),
+      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${key}` },
+      body: JSON.stringify({
+        model: getAIModel(),
+        messages: [
+          {
+            role: 'system',
+            content: isEv
+              ? 'Sei un ingegnere e consulente automotive specializzato in veicoli elettrici. Rispondi SOLO con JSON valido in italiano specifico per questo modello EV. Nessun riferimento a componenti termici (olio, candele, cinghie).'
+              : 'Sei un meccanico esperto e consulente automotive italiano. Rispondi SOLO con JSON valido in italiano. Le tue risposte devono essere specifiche al modello (es. "DSG DQ200 ha recall frizione", non "verifica il cambio").',
+          },
+          { role: 'user', content: prompt },
+        ],
+        temperature: 0.4,
+        response_format: { type: 'json_object' },
+      }),
+    });
+  }, 2, 350);
+  if (!resp.ok) return null;
+  const data = await readJsonBody(resp);
   if (data.error) return null;
   const content = data.choices?.[0]?.message?.content;
   if (!content) return null;
@@ -805,20 +890,23 @@ export async function askAutoEsperto(question: string, vehicle: VehicleData, ana
   }
 
   try {
-    const response = await fetch(`${getAIBaseUrl()}/chat/completions`, {
-      method: 'POST',
-      signal: AbortSignal.timeout(15000),
-      headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
-      body: JSON.stringify({
-        model: getAIModel(),
-        messages: [
-          { role: 'system', content: 'Sei AutoEsperto, un consulente automotive italiano esperto. Rispondi in modo professionale, conciso e utile.' },
-          { role: 'user', content: `Veicolo: ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}. Analisi: ${analysis.summary || ''}. Domanda: ${question}` },
-        ],
-        temperature: 0.6,
-      }),
-    });
-    const data = await response.json() as any;
+    const response = await callWithRetry(async () => {
+      return fetch(`${getAIBaseUrl()}/chat/completions`, {
+        method: 'POST',
+        signal: AbortSignal.timeout(15000),
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${openaiKey}` },
+        body: JSON.stringify({
+          model: getAIModel(),
+          messages: [
+            { role: 'system', content: 'Sei AutoEsperto, un consulente automotive italiano esperto. Rispondi in modo professionale, conciso e utile.' },
+            { role: 'user', content: `Veicolo: ${vehicle.make} ${vehicle.model} ${vehicle.year || ''}. Analisi: ${analysis.summary || ''}. Domanda: ${question}` },
+          ],
+          temperature: 0.6,
+        }),
+      });
+    }, 2, 350);
+    if (!response.ok) return mockAnswer(question, vehicle, analysis);
+    const data = await readJsonBody(response);
     if (data.error) return mockAnswer(question, vehicle, analysis);
     const content = data.choices?.[0]?.message?.content;
     return content || mockAnswer(question, vehicle, analysis);

@@ -334,10 +334,9 @@ export function estimateMarketValue(vehicle: VehicleData): { value: number; min:
   const fuel = vehicle.fuel || '';
   const body = vehicle.body || '';
 
-  // Con un prezzo per modello la carrozzeria è già inclusa: l'aggiustamento
-  // body/fuel si applica solo al fallback sul marchio.
-  const era = findModelEra(vehicle.make, vehicle.model);
-  const modelPrice = findModelPrice(vehicle.make, vehicle.model) ?? era?.basePrice;
+  // Risoluzione prezzo base: verifica prima se esiste un listino generazionale per l'anno effettivo
+  const era = findModelEra(vehicle.make, vehicle.model, year);
+  const modelPrice = era?.basePrice ?? findModelPrice(vehicle.make, vehicle.model);
   const base = modelPrice ?? findBrandBase(vehicle.make) + getBodyAdjust(body);
 
   const age = Math.max(0, currentYear - year);
@@ -365,7 +364,14 @@ export function estimateMarketValueWithKm(vehicle: VehicleData, km: number): {
   const year = resolveVehicleDefaultYear(vehicle.make, vehicle.model, vehicle.year);
   const age = Math.max(0, currentYear - year);
 
-  const kmFactor = Math.min(1.1, Math.max(0.65, 1 - (km - 50000) / 250000));
+  // Calcolo chilometraggio atteso per l'età (media italiana ~12.500 km/anno)
+  const expectedKm = Math.max(25000, age * 12500);
+  const kmDiff = km - expectedKm;
+
+  // Rettifica progressiva: penalizza solo i km in eccesso rispetto alla vita utile del veicolo
+  let kmFactor = 1 - (kmDiff / 250000) * 0.25;
+  kmFactor = Math.min(1.10, Math.max(0.65, kmFactor));
+
   const minFloor = age >= 16 ? 1000 : age >= 12 ? 1300 : 1800;
   const adjustedForKm = Math.max(minFloor, Math.round(base.value * kmFactor / 100) * 100);
   return {

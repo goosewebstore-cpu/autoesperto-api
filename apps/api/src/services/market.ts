@@ -30,8 +30,12 @@ export function getMarketSearchUrls(vehicle: VehicleData): MarketLink[] {
   ];
 }
 
-export function getSubitoSearchUrl(make: string, model: string): string {
-  return `${SUBITO_BASE}/annunci-italia/vendita/auto/${subitoSlug(make)}/${subitoSlug(model)}/`;
+export function getSubitoSearchUrl(make: string, model: string, year?: number): string {
+  const base = `${SUBITO_BASE}/annunci-italia/vendita/auto/${subitoSlug(make)}/${subitoSlug(model)}/`;
+  if (year && year >= 1990) {
+    return `${base}?ys=${year - 1}&ye=${year + 1}`;
+  }
+  return base;
 }
 
 function subitoSlug(value: string): string {
@@ -73,9 +77,9 @@ function featValue(ad: SubitoAd, key: string): string | undefined {
 function featNum(ad: SubitoAd, key: string): number | undefined {
   const f = ad.features?.[key];
   const raw = f?.values?.[0]?.key;
-  if (raw === undefined || raw === null) return undefined;
-  const n = Number(String(raw).replace(/\D/g, ''));
-  return Number.isFinite(n) && n > 0 ? n : undefined;
+  if (!raw) return undefined;
+  const n = parseInt(raw, 10);
+  return isNaN(n) ? undefined : n;
 }
 
 function listingFromAd(ad: SubitoAd, index: number): MarketListing | undefined {
@@ -103,7 +107,7 @@ export async function fetchSubitoMarketStats(
   year?: number,
   km?: number
 ): Promise<MarketStats | undefined> {
-  const url = getSubitoSearchUrl(make, model);
+  const url = getSubitoSearchUrl(make, model, year);
   const cacheKey = `subito:${make.toLowerCase()}:${model.toLowerCase()}:${year || 'any'}:${km || 'any'}`;
   const cached = cacheGet<MarketStats>(cacheKey);
   if (cached) return cached;
@@ -140,8 +144,6 @@ export async function fetchSubitoMarketStats(
     const kmOf = (ad: SubitoAd) => featNum(ad, '/mileage_scalar');
     const yearOf = (ad: SubitoAd) => featNum(ad, '/year');
 
-    // Selezione progressiva degli annunci confrontabili. Cerchiamo prima lo stesso
-    // anno (±1) e km simili (tolleranza 25%, minimo 15.000 km); se non raggiungiamo
     // 1. Esclusione varianti sportive estreme se non cercate esplicitamente
     const modelLower = model.toLowerCase();
     const isSportSearch = /(\bgr\b|\bgti\b|\bgtd\b|\br\b|\bamg\b|\babarth\b|\bm135\b|\bm140\b|\bm2\b|\bm3\b|\bm4\b|\bm5\b|\bquadrifoglio\b|\brs\b|\bst\b|\bcupra\b|\bv8\b)/i.test(modelLower);
@@ -153,17 +155,30 @@ export async function fetchSubitoMarketStats(
     });
     const baseAds = standardAds.length >= MIN_SAMPLE ? standardAds : ads;
 
-    // Selezione progressiva degli annunci confrontabili. Cerchiamo prima lo stesso
-    // anno (±1) e km simili (tolleranza 25%, minimo 15.000 km); se non raggiungiamo
-    // un campione attendibile, allarghiamo in modo controllato e segnaliamo nel report
-    // quale livello è stato usato (non spacciamo per "esatto" un confronto approssimato).
-    const yearPool = year ? baseAds.filter((a) => {
+    // Selezione progressiva degli annunci confrontabili per anno
+    let yearPool = year ? baseAds.filter((a) => {
       const y = yearOf(a);
       return y !== undefined && y >= year - 1 && y <= year + 1;
     }) : baseAds;
+
+    // Se il campione a ±1 anno è troppo piccolo, espandi a ±2 anni
+    if (year && yearPool.length < MIN_SAMPLE) {
+      yearPool = baseAds.filter((a) => {
+        const y = yearOf(a);
+        return y !== undefined && y >= year - 2 && y <= year + 2;
+      });
+    }
+
     const yearMatched = !year || yearPool.length >= MIN_SAMPLE;
 
-    const kmTolerance = km ? Math.max(15000, Math.round(km * 0.25)) : 0;
+    // CRITICO: se l'utente cerca un anno specifico (es. 2014) e non ci sono annunci
+    // di quell'epoca, NON cadere sulle auto moderne di altri anni (es. 2024 a 18.000€)!
+    // Ritorna undefined per consentire alla quotazione algoritmica calibrata di operare.
+    if (year && !yearMatched) {
+      return undefined;
+    }
+
+    const kmTolerance = km ? Math.max(18000, Math.round(km * 0.30)) : 0;
     const kmPool = km
       ? yearPool.filter((a) => {
           const adKm = kmOf(a);
@@ -173,12 +188,17 @@ export async function fetchSubitoMarketStats(
     const kmMatched = !km || kmPool.length >= MIN_SAMPLE;
 
     // Scegli il campione più specifico che raggiunga almeno TARGET_SAMPLE annunci;
-    // altrimenti scendi fino al minimo affidabile e dichiaralo.
+    // altrimenti scendi a yearPool. Non ricadere mai su baseAds di anni spaiati!
     let filtered = kmPool.length >= TARGET_SAMPLE ? kmPool
       : kmPool.length >= MIN_SAMPLE ? kmPool
       : yearPool.length >= TARGET_SAMPLE ? yearPool
       : yearPool.length >= MIN_SAMPLE ? yearPool
-      : baseAds;
+      : (year ? [] : baseAds);
+
+    if (filtered.length < MIN_SAMPLE) {
+      return undefined;
+    }
+
     let disclosure: string;
     if (filtered === kmPool && kmPool.length >= TARGET_SAMPLE) {
       if (year) {
@@ -192,14 +212,12 @@ export async function fetchSubitoMarketStats(
       } else {
         disclosure = `Campione di ${kmPool.length} annunci di ${make} ${model}. Prezzo medio indicativo.`;
       }
-    } else if (filtered === yearPool) {
-      if (year) {
-        disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model} con anno ${year} (±1). I chilometri non erano abbastanza confrontabili, quindi il confronto resta indicativo.`;
-      } else {
-        disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model}. Prezzo medio indicativo.`;
-      }
     } else {
-      disclosure = `Campione ridotto (${baseAds.length} annunci totali): non ho trovato ${TARGET_SAMPLE} annunci con anno e chilometri confrontabili. Prezzo medio indicativo su tutto il modello.`;
+      if (year) {
+        disclosure = `Prezzo medio calcolato su ${yearPool.length} annunci di ${make} ${model} con anno ${year} (±1/±2).`;
+      } else {
+        disclosure = `Prezzo medio calcolato su ${baseAds.length} annunci di ${make} ${model}. Prezzo medio indicativo su tutto il modello.`;
+      }
     }
 
     const rawPrices = filtered.map(priceOf).filter((p): p is number => p !== undefined && p > 500);

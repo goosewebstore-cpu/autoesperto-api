@@ -113,7 +113,6 @@ const MODEL_ERA_MAP: Record<string, ModelEraInfo> = {
   // Citroen
   'citroen c1': { productionStart: 2005, productionEnd: 2014, medianYear: 2009, basePrice: 11000, fuel: 'Benzina', body: 'Citycar', powerCv: 68 },
   'citroen c2': { productionStart: 2003, productionEnd: 2009, medianYear: 2006, basePrice: 13500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 68 },
-  'citroen c3 1': { productionStart: 2002, productionEnd: 2009, medianYear: 2006, basePrice: 14000, fuel: 'Diesel', body: 'Utilitaria', powerCv: 68 },
   'citroen c4 1': { productionStart: 2004, productionEnd: 2010, medianYear: 2007, basePrice: 18500, fuel: 'Diesel', body: 'Berlina', powerCv: 110 },
   'citroen xsara picasso': { productionStart: 1999, productionEnd: 2010, medianYear: 2005, basePrice: 18000, fuel: 'Diesel', body: 'Monovolume', powerCv: 90 },
   'citroen saxo': { productionStart: 1996, productionEnd: 2003, medianYear: 2000, basePrice: 10000, fuel: 'Benzina', body: 'Citycar', powerCv: 60 },
@@ -171,44 +170,123 @@ const MODEL_ERA_MAP: Record<string, ModelEraInfo> = {
   // Nissan
   'nissan micra k12': { productionStart: 2002, productionEnd: 2010, medianYear: 2006, basePrice: 13000, fuel: 'Benzina', body: 'Citycar', powerCv: 65 },
   'nissan note': { productionStart: 2006, productionEnd: 2013, medianYear: 2009, basePrice: 15500, fuel: 'Diesel', body: 'Monovolume', powerCv: 86 },
-  'nissan qashqai 1': { productionStart: 2007, productionEnd: 2013, medianYear: 2010, basePrice: 22500, fuel: 'Diesel', body: 'SUV', powerCv: 106 },
+  'nissan qashqai 1': { productionStart: 2007, productionEnd: 2013, medianYear: 2010, basePrice: 21500, fuel: 'Diesel', body: 'SUV', powerCv: 106 },
+  'nissan qashqai 2': { productionStart: 2014, productionEnd: 2020, medianYear: 2017, basePrice: 24500, fuel: 'Diesel', body: 'SUV', powerCv: 115 },
+  'nissan qashqai 3': { productionStart: 2021, productionEnd: 2026, medianYear: 2023, basePrice: 34000, fuel: 'Ibrida', body: 'SUV', powerCv: 140 },
+  'nissan juke 1': { productionStart: 2010, productionEnd: 2019, medianYear: 2015, basePrice: 18500, fuel: 'Benzina', body: 'SUV', powerCv: 110 },
+  'nissan juke 2': { productionStart: 2020, productionEnd: 2026, medianYear: 2022, basePrice: 26000, fuel: 'Ibrida', body: 'SUV', powerCv: 114 },
+
+  // Generazioni Peugeot moderne
+  'peugeot 2008 1': { productionStart: 2013, productionEnd: 2019, medianYear: 2016, basePrice: 19500, fuel: 'Benzina', body: 'SUV', powerCv: 110 },
+  'peugeot 2008 2': { productionStart: 2020, productionEnd: 2026, medianYear: 2022, basePrice: 28500, fuel: 'Benzina', body: 'SUV', powerCv: 130 },
+  'peugeot 208 1': { productionStart: 2012, productionEnd: 2019, medianYear: 2016, basePrice: 15500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 82 },
+  'peugeot 208 2': { productionStart: 2020, productionEnd: 2026, medianYear: 2022, basePrice: 22000, fuel: 'Benzina', body: 'Utilitaria', powerCv: 100 },
+  'peugeot 308 2': { productionStart: 2013, productionEnd: 2021, medianYear: 2017, basePrice: 22500, fuel: 'Diesel', body: 'Berlina', powerCv: 120 },
+  'peugeot 308 3': { productionStart: 2021, productionEnd: 2026, medianYear: 2023, basePrice: 30000, fuel: 'Ibrida', body: 'Berlina', powerCv: 130 },
+  'peugeot 3008 1': { productionStart: 2009, productionEnd: 2016, medianYear: 2013, basePrice: 24000, fuel: 'Diesel', body: 'SUV', powerCv: 115 },
+  'peugeot 3008 2': { productionStart: 2016, productionEnd: 2023, medianYear: 2020, basePrice: 32500, fuel: 'Diesel', body: 'SUV', powerCv: 130 },
+  'peugeot 3008 3': { productionStart: 2024, productionEnd: 2026, medianYear: 2025, basePrice: 40500, fuel: 'Ibrida', body: 'SUV', powerCv: 136 },
+
+  // Generazioni Renault moderne
+  'renault captur 1': { productionStart: 2013, productionEnd: 2019, medianYear: 2016, basePrice: 18500, fuel: 'Diesel', body: 'SUV', powerCv: 90 },
+  'renault captur 2': { productionStart: 2020, productionEnd: 2026, medianYear: 2022, basePrice: 26500, fuel: 'Ibrida', body: 'SUV', powerCv: 100 },
+  'renault clio 4': { productionStart: 2012, productionEnd: 2019, medianYear: 2016, basePrice: 15500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 75 },
+  'renault clio 5': { productionStart: 2019, productionEnd: 2026, medianYear: 2022, basePrice: 20000, fuel: 'Ibrida', body: 'Utilitaria', powerCv: 90 },
+
+  // Generazioni Volkswagen moderne
+  'volkswagen golf 7': { productionStart: 2012, productionEnd: 2019, medianYear: 2016, basePrice: 24500, fuel: 'Diesel', body: 'Berlina', powerCv: 115 },
+  'volkswagen golf 8': { productionStart: 2020, productionEnd: 2026, medianYear: 2022, basePrice: 33000, fuel: 'Benzina', body: 'Berlina', powerCv: 130 },
+  'volkswagen polo 5': { productionStart: 2009, productionEnd: 2017, medianYear: 2013, basePrice: 15500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 75 },
+  'volkswagen polo 6': { productionStart: 2017, productionEnd: 2026, medianYear: 2021, basePrice: 22500, fuel: 'Benzina', body: 'Utilitaria', powerCv: 95 },
+  'volkswagen tiguan 1': { productionStart: 2007, productionEnd: 2015, medianYear: 2012, basePrice: 28500, fuel: 'Diesel', body: 'SUV', powerCv: 140 },
+  'volkswagen tiguan 2': { productionStart: 2016, productionEnd: 2023, medianYear: 2019, basePrice: 35000, fuel: 'Diesel', body: 'SUV', powerCv: 150 },
+
+  // Generazioni Fiat & Jeep moderne
+  'fiat 500x 1': { productionStart: 2014, productionEnd: 2018, medianYear: 2016, basePrice: 20500, fuel: 'Diesel', body: 'SUV', powerCv: 120 },
+  'fiat 500x 2': { productionStart: 2019, productionEnd: 2026, medianYear: 2022, basePrice: 25500, fuel: 'Ibrida', body: 'SUV', powerCv: 120 },
+  'fiat panda 2': { productionStart: 2003, productionEnd: 2011, medianYear: 2008, basePrice: 10500, fuel: 'Benzina', body: 'Citycar', powerCv: 60 },
+  'fiat panda 3': { productionStart: 2012, productionEnd: 2020, medianYear: 2016, basePrice: 12500, fuel: 'Benzina', body: 'Citycar', powerCv: 69 },
+  'fiat panda 4': { productionStart: 2020, productionEnd: 2026, medianYear: 2023, basePrice: 16500, fuel: 'Ibrida', body: 'Citycar', powerCv: 70 },
+  'fiat 500 1': { productionStart: 2007, productionEnd: 2015, medianYear: 2011, basePrice: 13500, fuel: 'Benzina', body: 'Citycar', powerCv: 69 },
+  'fiat 500 2': { productionStart: 2015, productionEnd: 2020, medianYear: 2018, basePrice: 15500, fuel: 'Benzina', body: 'Citycar', powerCv: 69 },
+  'fiat 500 3': { productionStart: 2020, productionEnd: 2026, medianYear: 2023, basePrice: 19500, fuel: 'Ibrida', body: 'Citycar', powerCv: 70 },
+  'jeep renegade 1': { productionStart: 2014, productionEnd: 2018, medianYear: 2016, basePrice: 22000, fuel: 'Diesel', body: 'SUV', powerCv: 120 },
+  'jeep renegade 2': { productionStart: 2019, productionEnd: 2026, medianYear: 2022, basePrice: 27500, fuel: 'Ibrida', body: 'SUV', powerCv: 120 },
+
+  // Generazioni Ford & Dacia moderne
+  'ford fiesta 6': { productionStart: 2008, productionEnd: 2017, medianYear: 2013, basePrice: 14500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 75 },
+  'ford fiesta 7': { productionStart: 2017, productionEnd: 2023, medianYear: 2020, basePrice: 19500, fuel: 'Benzina', body: 'Utilitaria', powerCv: 100 },
+  'ford focus 3': { productionStart: 2011, productionEnd: 2018, medianYear: 2015, basePrice: 21500, fuel: 'Diesel', body: 'Berlina', powerCv: 120 },
+  'ford focus 4': { productionStart: 2018, productionEnd: 2026, medianYear: 2021, basePrice: 28500, fuel: 'Diesel', body: 'Berlina', powerCv: 125 },
+  'dacia duster 1': { productionStart: 2010, productionEnd: 2017, medianYear: 2014, basePrice: 14000, fuel: 'Diesel', body: 'SUV', powerCv: 110 },
+  'dacia duster 2': { productionStart: 2018, productionEnd: 2023, medianYear: 2020, basePrice: 17500, fuel: 'Diesel', body: 'SUV', powerCv: 115 },
+  'dacia duster 3': { productionStart: 2024, productionEnd: 2026, medianYear: 2025, basePrice: 21500, fuel: 'Benzina', body: 'SUV', powerCv: 130 },
+  'dacia sandero 1': { productionStart: 2008, productionEnd: 2012, medianYear: 2010, basePrice: 9500, fuel: 'Benzina', body: 'Utilitaria', powerCv: 75 },
+  'dacia sandero 2': { productionStart: 2013, productionEnd: 2020, medianYear: 2016, basePrice: 11500, fuel: 'Benzina', body: 'Utilitaria', powerCv: 75 },
+  'dacia sandero 3': { productionStart: 2021, productionEnd: 2026, medianYear: 2023, basePrice: 15500, fuel: 'GPL', body: 'Utilitaria', powerCv: 100 },
+
+  // Citroen & Toyota moderne
+  'citroen c3 1': { productionStart: 2002, productionEnd: 2009, medianYear: 2006, basePrice: 12500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 70 },
+  'citroen c3 2': { productionStart: 2009, productionEnd: 2016, medianYear: 2013, basePrice: 14500, fuel: 'Diesel', body: 'Utilitaria', powerCv: 75 },
+  'citroen c3 3': { productionStart: 2016, productionEnd: 2023, medianYear: 2019, basePrice: 17500, fuel: 'Benzina', body: 'Utilitaria', powerCv: 82 },
+  'citroen c3 4': { productionStart: 2024, productionEnd: 2026, medianYear: 2025, basePrice: 20500, fuel: 'Benzina', body: 'Utilitaria', powerCv: 100 },
+  'citroen c4 cactus': { productionStart: 2014, productionEnd: 2020, medianYear: 2017, basePrice: 18500, fuel: 'Diesel', body: 'Crossover', powerCv: 100 },
+  'toyota yaris 3': { productionStart: 2011, productionEnd: 2019, medianYear: 2015, basePrice: 16500, fuel: 'Ibrida', body: 'Utilitaria', powerCv: 100 },
+  'toyota yaris 4': { productionStart: 2020, productionEnd: 2026, medianYear: 2023, basePrice: 23500, fuel: 'Ibrida', body: 'Utilitaria', powerCv: 116 },
 };
+
+function modelMatchesEraKey(normMake: string, normModel: string, key: string): boolean {
+  const combined = `${normMake} ${normModel}`.trim();
+  if (key === combined) return true;
+  if (combined.startsWith(key)) return true;
+  if (key.startsWith(combined)) return true;
+
+  if (key.startsWith(normMake)) {
+    const keyModelPart = key.replace(normMake, '').trim();
+    // Rimozione suffisso generazione tipo " 1", " 2", " gen 1", " vii", " mk7", ecc.
+    const cleanKeyModel = keyModelPart.replace(/\s+(?:[1-9]|gen\s*[1-9]|mk[1-9]|b[5-8]|w1[678][0-9]|e[489][0-9]|f[24][0-9]|8[lvp])$/i, '').trim();
+    if (cleanKeyModel && (normModel.startsWith(cleanKeyModel) || cleanKeyModel.startsWith(normModel))) {
+      return true;
+    }
+  }
+  return false;
+}
 
 /**
  * Cerca se una combinazione marca/modello corrisponde a un modello con era definita.
+ * Se year è specificato, individua con massima precisione la generazione corretta
+ * con il relativo listino storico originale.
  */
-export function findModelEra(make: string, model: string): ModelEraInfo | null {
+export function findModelEra(make: string, model: string, year?: number): ModelEraInfo | null {
   const normMake = normalizeKey(make);
   const normModel = normalizeKey(model);
   const combined = `${normMake} ${normModel}`;
 
-  // 1. Corrispondenza esatta chiave
-  if (MODEL_ERA_MAP[combined]) {
-    return MODEL_ERA_MAP[combined];
-  }
-
-  // 2. Corrispondenza per inclusione (es. "147 1.9 jtd" include "147")
-  let bestMatch: ModelEraInfo | null = null;
-  let bestLen = 0;
+  // Raccogli tutti i match possibili
+  const candidates: Array<{ key: string; info: ModelEraInfo; matchLen: number; yearMatches: boolean }> = [];
 
   for (const [key, info] of Object.entries(MODEL_ERA_MAP)) {
-    // Se la chiave è contenuta in make + model
-    if (combined.includes(key) || key.includes(combined)) {
-      if (key.length > bestLen) {
-        bestMatch = info;
-        bestLen = key.length;
-      }
-    }
-    // Oppure se la marca coincide e il modello contiene la chiave
-    if (key.startsWith(normMake) && (normModel.includes(key.replace(normMake, '').trim()) || key.replace(normMake, '').trim().includes(normModel))) {
-      if (key.length > bestLen) {
-        bestMatch = info;
-        bestLen = key.length;
-      }
+    if (modelMatchesEraKey(normMake, normModel, key)) {
+      const yearMatches = Boolean(year && year >= info.productionStart && year <= info.productionEnd);
+      const isExact = key === combined;
+      const matchLen = isExact ? key.length + 50 : key.length;
+      candidates.push({ key, info, matchLen, yearMatches });
     }
   }
 
-  return bestMatch;
+  if (candidates.length === 0) return null;
+
+  // Se l'anno è noto, privilegia la generazione esatta che copre quell'anno
+  if (year) {
+    const exact = candidates
+      .filter((c) => c.yearMatches)
+      .sort((a, b) => b.matchLen - a.matchLen)[0];
+    if (exact) return exact.info;
+  }
+
+  // Altrimenti seleziona la corrispondenza più specifica
+  candidates.sort((a, b) => b.matchLen - a.matchLen);
+  return candidates[0].info;
 }
 
 /**
@@ -222,7 +300,7 @@ export function resolveVehicleDefaultYear(make: string, model: string, userYear?
     return userYear;
   }
 
-  const era = findModelEra(make, model);
+  const era = findModelEra(make, model, userYear);
   if (era) {
     return era.medianYear;
   }

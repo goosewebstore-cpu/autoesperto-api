@@ -131,19 +131,29 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
   // Se gli annunci reali restituiscono un prezzo medio attendibile, il valore
   // stimato combina il prezzo di mercato reale (con sconto trattativa) e la curva algoritmica.
   const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
-  const useMarket = Boolean(marketStats?.priceAvg && marketSample >= 2);
+  const sampleYear = (marketStats?.yearMin && marketStats?.yearMax)
+    ? Math.round((marketStats.yearMin + marketStats.yearMax) / 2)
+    : (marketStats?.yearMin || marketStats?.yearMax || marketStats?.comparison?.targetYear);
+
+  const yearDiffExceeded = Boolean(
+    vehicle.year && sampleYear && Math.abs(vehicle.year - sampleYear) > 2
+  );
+
+  const useMarket = Boolean(
+    marketStats?.priceAvg &&
+    marketSample >= 3 &&
+    marketStats.comparison?.yearMatched !== false &&
+    !yearDiffExceeded
+  );
+
   let finalValue = comparisonValue;
   if (useMarket && marketStats) {
     // 1. Prezzo reale stimato di transazione (margine trattativa dedotto rispetto al prezzo in vetrina)
     const rawAsking = marketStats.priceAvg!;
     const transAvg = marketStats.transactionPriceAvg || Math.round(rawAsking * 0.91 / 100) * 100;
 
-    // 2. Rettifica anno: se la media anno degli annunci diverge dall'anno effettivo del veicolo (es. annunci 2021 vs auto 2018)
+    // 2. Rettifica anno: se la media anno degli annunci diverge leggermente (±1-2 anni)
     let yearAdjusted = transAvg;
-    const sampleYear = (marketStats.yearMin && marketStats.yearMax)
-      ? Math.round((marketStats.yearMin + marketStats.yearMax) / 2)
-      : (marketStats.yearMin || marketStats.yearMax || marketStats.comparison?.targetYear);
-
     if (vehicle.year && sampleYear && sampleYear > 1990) {
       const yearDiff = vehicle.year - sampleYear;
       const yearFactor = Math.pow(1.085, yearDiff);
@@ -160,7 +170,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
 
     // 4. Ponderazione bilanciata: unisce il mercato reale e il listino Quattroruote/Eurotax
     // Campione solido (>= 5): 65% mercato reale transato, 35% stima algoritmica
-    // Campione ridotto (2-4): 50% mercato reale transato, 50% stima algoritmica
+    // Campione ridotto (3-4): 50% mercato reale transato, 50% stima algoritmica
     const marketWeight = marketSample >= 5 ? 0.65 : 0.50;
     finalValue = Math.round((kmAdjusted * marketWeight + comparisonValue * (1 - marketWeight)) / 100) * 100;
 

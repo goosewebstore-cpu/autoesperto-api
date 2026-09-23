@@ -28,6 +28,12 @@ function parseJson(value: string): unknown {
   }
 }
 
+// Il client può staccare la richiesta mentre il server lavora. In quel caso
+// non deve consumare il credito né salvare un'analisi mai mostrata.
+function clientAborted(req: import('express').Request, res: import('express').Response): boolean {
+  return Boolean((req as any).destroyed || res.writableEnded);
+}
+
 function storedAnalysis(analysis: {
   id: string;
   title: string;
@@ -69,6 +75,10 @@ router.post(
   requireAuth,
   asyncHandler(async (req, res) => {
     const { userId } = (req as AuthenticatedRequest).auth;
+    if (clientAborted(req, res)) {
+      console.warn('paid analysis aborted by client before start; credito non utilizzato');
+      return;
+    }
     const { imageData } = analysisSchema.parse(req.body);
     const [analysisCount, paidPurchase, subscription] = await Promise.all([
       prisma.analysis.count({ where: { userId } }),
@@ -103,6 +113,13 @@ router.post(
       throw serviceUnavailable('Il report specifico per questo modello non è disponibile in questo momento. Riprova più tardi: il credito non è stato utilizzato.');
     }
     const title = [make, model, photoAnalysis.vehicle.generation, year].filter(Boolean).join(' ');
+
+    // Se il client ha già abbandonato, interrompi prima del salvataggio:
+    // il credito è basato sul numero di analisi salvate.
+    if (clientAborted(req, res)) {
+      console.warn('paid analysis aborted by client before saving; credito non utilizzato');
+      return;
+    }
 
     const analysis = await prisma.analysis.create({
       data: {

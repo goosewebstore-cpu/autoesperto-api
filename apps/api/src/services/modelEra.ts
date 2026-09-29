@@ -282,6 +282,10 @@ export function findModelEra(make: string, model: string, year?: number): ModelE
       .filter((c) => c.yearMatches)
       .sort((a, b) => b.matchLen - a.matchLen)[0];
     if (exact) return exact.info;
+    // Do not reuse an unrelated older generation when the requested year is
+    // outside every known production range; pricing can then use its generic
+    // model fallback instead.
+    return null;
   }
 
   // Altrimenti seleziona la corrispondenza più specifica

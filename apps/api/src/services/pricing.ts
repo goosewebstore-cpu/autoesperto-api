@@ -342,6 +342,15 @@ export function estimateMarketValue(vehicle: VehicleData): { value: number; min:
   const age = Math.max(0, currentYear - year);
 
   let residual = getResidual(age);
+  // Calibrazione prudente per due utilitarie molto diffuse: gli annunci italiani
+  // attuali per Panda e Sandero di 7-10 anni restano spesso sopra la curva
+  // generica. È una correzione degli asking price, non un prezzo di vendita
+  // verificato; se sono disponibili comparabili validi, buildReport li pondera.
+  const compactKey = `${normalizeMake(vehicle.make)} ${normalize(vehicle.model)}`;
+  const compactKeepsValue =
+    (compactKey.startsWith('fiat panda') || compactKey.startsWith('dacia sandero')) &&
+    age >= 7 && age <= 10;
+  if (compactKeepsValue) residual = Math.max(residual, 0.50);
   residual *= getSegmentFactor(base);
   residual *= getFuelFactor(fuel, age);
   residual = Math.max(residual, getCollectibleFloor(base, vehicle.make, age));

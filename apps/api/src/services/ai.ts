@@ -297,9 +297,8 @@ function isGroqProvider() {
 }
 function getVisionModels() {
   if (process.env.VISION_MODEL) return [process.env.VISION_MODEL];
-  // Groq abilita i modelli per account: proviamo una riserva reale invece di
-  // fermarci sul primo modello vision non disponibile per quella chiave.
-  return isGroqProvider() ? ['qwen/qwen3.8-27b', 'qwen/qwen3.6-27b'] : ['gpt-4o-mini'];
+  // Usa modelli vision ancora attivi; i Llama 3.2 Vision Preview sono stati dismessi.
+  return isGroqProvider() ? ['qwen/qwen3.8-27b'] : ['gpt-4o-mini'];
 }
 
 const VISION_CACHE_TTL = 24 * 60 * 60 * 1000;
@@ -458,7 +457,7 @@ async function analyzeVehiclePhotoUncached(input: PhotoAnalysisInput): Promise<P
           ],
         }),
       });
-    }, 2, 350);
+    }, 1, 200);
   };
 
   let response: Response | undefined;
@@ -466,7 +465,7 @@ async function analyzeVehiclePhotoUncached(input: PhotoAnalysisInput): Promise<P
   let selectedModel = visionModels[0];
   let lastError = '';
   for (let i = 0; i < visionModels.length; i++) {
-    const timeoutMs = isGroq ? (i === 0 ? 45000 : 25000) : (i === 0 ? 20000 : 15000);
+    const timeoutMs = isGroq ? (i === 0 ? 12000 : 9000) : (i === 0 ? 12000 : 10000);
     try {
       response = await attempt(visionModels[i], {}, timeoutMs);
       data = await readJsonBody(response);
@@ -545,8 +544,7 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
   const match = input.imageData.match(/^data:(image\/(?:jpeg|jpg|png|webp));base64,(.+)$/);
   if (!match) throw new Error('Formato immagine non valido.');
   const configuredModel = process.env.GEMINI_VISION_MODEL?.trim();
-  // Solo i modelli flash più rapidi: il loop lungo di 7 modelli sequenziali
-  // faceva attendere l'utente fino a 2 minuti prima di un eventuale fallback.
+  // Gemini 2.0 Flash e 1.5 Flash sono stati dismessi: usa ID Flash stabili attivi.
   const models = configuredModel ? [configuredModel] : ['gemini-3.6-flash', 'gemini-2.5-flash'];
   let raw = '';
   let lastError = '';
@@ -555,7 +553,7 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
     try {
       const response = await callWithRetry(async () => {
         return fetch(`https://generativelanguage.googleapis.com/v1beta/models/${encodeURIComponent(model)}:generateContent`, {
-          method: 'POST', signal: AbortSignal.timeout(15000),
+          method: 'POST', signal: AbortSignal.timeout(12000),
           headers: { 'Content-Type': 'application/json', 'x-goog-api-key': key },
           body: JSON.stringify({
             contents: [{ parts: [
@@ -565,7 +563,7 @@ async function analyzeVehiclePhotoWithGemini(input: PhotoAnalysisInput, key: str
             generationConfig: { responseMimeType: 'application/json', temperature: 0.1 },
           }),
         });
-      }, 2, 350);
+      }, 1, 200);
 
       const data = await readJsonBody(response);
       raw = data.candidates?.[0]?.content?.parts?.map((part: any) => part.text || '').join('') || '';

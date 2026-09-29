@@ -208,7 +208,7 @@ router.get(
 
     clearStateCookie(res);
     const token = signAuthToken(userId);
-    res.redirect(`${frontendUrl()}/accesso?google=1&token=${encodeURIComponent(token)}`);
+    res.redirect(`${frontendUrl()}/api/auth/google-complete?token=${encodeURIComponent(token)}`);
   })
 );
 

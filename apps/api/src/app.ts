@@ -25,7 +25,7 @@ export function createApp(options: AppOptions = {}) {
   const app = express();
   app.set('trust proxy', 1);
 
-  app.use(helmet({ contentSecurityPolicy: false }));
+  app.use(helmet());
   const isAllowedOrigin = (origin: string) => {
     if (!origin || webUrls.includes(origin)) return true;
     // I deploy di anteprima di Vercel usano sottodomini *.vercel.app
@@ -67,6 +67,16 @@ export function createApp(options: AppOptions = {}) {
     message: { success: false, error: 'Troppi tentativi. Riprova tra qualche minuto.' },
   });
   app.use('/auth', authLimiter);
+
+  const passportAiLimiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: 30,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, error: 'Troppe richieste di analisi. Riprova tra un minuto.' },
+  });
+  app.use('/passport/scan-document', passportAiLimiter);
+  app.use('/passport/chat', passportAiLimiter);
 
   const startedAt = Date.now();
   app.get('/health', (_req, res) => {

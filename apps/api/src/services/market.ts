@@ -241,8 +241,6 @@ export async function fetchSubitoMarketStats(
 
     // Prezzo medio lordo richiesto negli annunci
     const priceAvg = Math.round(prices.reduce((a, b) => a + b, 0) / prices.length / 100) * 100;
-    // Prezzo reale stimato di transazione (applica margine medio di trattativa 9% tipico del mercato italiano)
-    const transactionPriceAvg = Math.round((priceAvg * 0.91) / 100) * 100;
 
     const listings = effectiveList
       .map(listingFromAd)
@@ -254,7 +252,6 @@ export async function fetchSubitoMarketStats(
       source: 'subito.it',
       total: prices.length,
       priceAvg,
-      transactionPriceAvg,
       priceMin: Math.min(...prices),
       priceMax: Math.max(...prices),
       kmAvg: kms.length ? Math.round(kms.reduce((a, b) => a + b, 0) / kms.length / 100) * 100 : undefined,

@@ -44,7 +44,6 @@ export interface MarketStats {
   source: string;
   total: number;
   priceAvg?: number;
-  transactionPriceAvg?: number;
   priceMin?: number;
   priceMax?: number;
   kmAvg?: number;

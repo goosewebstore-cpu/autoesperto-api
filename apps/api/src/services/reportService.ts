@@ -36,12 +36,12 @@ function buildPriceComment(requestedPrice: number | undefined, value: number, km
   if (!requestedPrice) {
     return km
       ? `Stima indicativa per circa ${km.toLocaleString('it-IT')} km. Inserisci il prezzo richiesto per il confronto.`
-      : 'Stima indicativa di mercato. Inserisci il prezzo richiesto per il confronto.';
+      : 'Stima indicativa, non una quotazione garantita. Inserisci il prezzo richiesto per il confronto.';
   }
   const diff = Math.round(((requestedPrice - value) / value) * 100);
   if (requestedPrice < value * 0.95) return `Prezzo inferiore di circa il ${Math.abs(diff)}% rispetto alla stima: potenziale buon affare, verifica comunque lo stato.`;
   if (requestedPrice > value * 1.05) return `Prezzo superiore di circa il ${diff}% rispetto alla stima: prova a trattare.`;
-  return 'Prezzo allineato alla stima di mercato.';
+  return 'Prezzo allineato alla stima indicativa.';
 }
 
 async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
@@ -128,8 +128,8 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     }, { requireDetailedModelAnalysis: options.requireDetailedModelAnalysis }),
   ]);
 
-  // Se gli annunci reali restituiscono un prezzo medio attendibile, il valore
-  // stimato combina il prezzo di mercato reale (con sconto trattativa) e la curva algoritmica.
+  // Gli annunci riportano prezzi richiesti, non prezzi di compravendite concluse.
+  // La stima li combina con il valore algoritmico senza simulare uno sconto di trattativa.
   const marketSample = marketStats?.comparison?.sampleSize ?? (marketStats?.total ?? 0);
   const sampleYear = (marketStats?.yearMin && marketStats?.yearMax)
     ? Math.round((marketStats.yearMin + marketStats.yearMax) / 2)
@@ -148,16 +148,16 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
 
   let finalValue = comparisonValue;
   if (useMarket && marketStats) {
-    // 1. Prezzo reale stimato di transazione (margine trattativa dedotto rispetto al prezzo in vetrina)
+    // 1. Prezzo medio richiesto negli annunci comparabili
     const rawAsking = marketStats.priceAvg!;
-    const transAvg = marketStats.transactionPriceAvg || Math.round(rawAsking * 0.91 / 100) * 100;
+    const askingAvg = rawAsking;
 
     // 2. Rettifica anno: se la media anno degli annunci diverge leggermente (±1-2 anni)
-    let yearAdjusted = transAvg;
+    let yearAdjusted = askingAvg;
     if (vehicle.year && sampleYear && sampleYear > 1990) {
       const yearDiff = vehicle.year - sampleYear;
       const yearFactor = Math.pow(1.085, yearDiff);
-      yearAdjusted = Math.round(transAvg * yearFactor);
+      yearAdjusted = Math.round(askingAvg * yearFactor);
     }
 
     // 3. Rettifica km se diverge dalla media
@@ -168,9 +168,9 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       kmAdjusted = Math.round(yearAdjusted * (1 + kmAdjFactor) / 100) * 100;
     }
 
-    // 4. Ponderazione bilanciata: unisce il mercato reale e il listino Quattroruote/Eurotax
-    // Campione solido (>= 5): 65% mercato reale transato, 35% stima algoritmica
-    // Campione ridotto (3-4): 50% mercato reale transato, 50% stima algoritmica
+    // 4. Ponderazione bilanciata tra prezzi richiesti e stima algoritmica
+    // Campione solido (>= 5): 65% annunci, 35% stima algoritmica
+    // Campione ridotto (3-4): 50% annunci, 50% stima algoritmica
     const marketWeight = marketSample >= 5 ? 0.65 : 0.50;
     finalValue = Math.round((kmAdjusted * marketWeight + comparisonValue * (1 - marketWeight)) / 100) * 100;
 
@@ -197,9 +197,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
         : undefined,
       priceLabel: input.requestedPrice ? priceLabelFor(input.requestedPrice, comparisonValue) : undefined,
       comment: useMarket && !input.requestedPrice
-        ? (input.km
-          ? `Prezzo medio reale da ${marketStats!.total} annunci simili su ${marketStats!.source} (filtro anno e km confrontabili). Inserisci il prezzo richiesto per il confronto.`
-          : `Prezzo medio reale da ${marketStats!.total} annunci simili su ${marketStats!.source}. Inserisci il prezzo richiesto per il confronto.`)
+        ? `Stima indicativa basata sui prezzi richiesti in ${marketStats!.total} annunci simili su ${marketStats!.source}${input.km ? ' (confrontati per anno e chilometraggio)' : ''}. I prezzi pubblicati non sono prezzi di compravendite concluse. Inserisci il prezzo richiesto per il confronto.`
         : buildPriceComment(input.requestedPrice, comparisonValue, input.km),
       marketUrls: getMarketSearchUrls(vehicle),
       market: marketStats,

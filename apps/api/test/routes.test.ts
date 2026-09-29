@@ -197,4 +197,62 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(getRepairMultiplier('Fiat', 'Panda', 'Benzina'), 1.0);
     });
   });
+
+  describe('passport share security', () => {
+    const shareCode = `AE-TEST${Date.now().toString(36).toUpperCase()}`;
+    const safePassport = {
+      c: shareCode,
+      v: { mk: 'Fiat', md: 'Panda', pl: 'AB123CD', internalNote: 'non deve uscire' },
+      km: 42000,
+      hs: 91,
+      secret: 'non deve uscire',
+    };
+
+    it('rifiuta payload senza i campi obbligatori', async () => {
+      const r = await req('/passport/share', { method: 'POST', body: { c: shareCode } });
+      assert.strictEqual(r.status, 400);
+    });
+
+    it('conserva solo campi consentiti e imposta no-store', async () => {
+      const saved = await req('/passport/share', { method: 'POST', body: safePassport });
+      assert.strictEqual(saved.status, 200);
+
+      const shown = await fetch(`${BASE}/passport/public/${shareCode}`);
+      const payload = await shown.json() as any;
+      assert.strictEqual(shown.status, 200);
+      assert.strictEqual(shown.headers.get('cache-control'), 'no-store');
+      assert.strictEqual(payload.payload.km, 42000);
+      assert.strictEqual(payload.payload.v.mk, 'Fiat');
+      assert.strictEqual(payload.payload.v.pl, undefined);
+      assert.strictEqual(payload.payload.v.internalNote, undefined);
+      assert.strictEqual(payload.payload.secret, undefined);
+    });
+
+    it('impedisce di sovrascrivere una scheda pubblica già condivisa', async () => {
+      const r = await req('/passport/share', {
+        method: 'POST',
+        body: { ...safePassport, km: 43000 },
+      });
+      assert.strictEqual(r.status, 409);
+    });
+
+    it('non salva km, punteggio, valore e foto esclusi dalla condivisione', async () => {
+      const code = `AE-HIDDEN${Date.now().toString(36).toUpperCase()}`;
+      const saved = await req('/passport/share', { method: 'POST', body: {
+        ...safePassport, c: code, v: { mk: 'Fiat', md: 'Panda', y: 2020, img: 'https://example.com/photo.jpg' },
+        sc: { showMileage: false, showHealthScore: false, showValuation: false, showPhotos: false, showVehicleInfo: false, showTimeline: false },
+        ev: 10000, ph: [{ u: 'https://example.com/photo.jpg' }], tm: [{ d: '2026-01-01', k: 42000, t: 'ALTRO', ti: 'Evento' }],
+      } });
+      assert.strictEqual(saved.status, 200);
+      const shown = await fetch(`${BASE}/passport/public/${code}`);
+      const body = await shown.json() as any;
+      assert.strictEqual(body.payload.km, undefined);
+      assert.strictEqual(body.payload.hs, undefined);
+      assert.strictEqual(body.payload.ev, undefined);
+      assert.strictEqual(body.payload.v.y, undefined);
+      assert.strictEqual(body.payload.v.img, undefined);
+      assert.strictEqual(body.payload.ph, undefined);
+      assert.strictEqual(body.payload.tm, undefined);
+    });
+  });
 });

@@ -143,6 +143,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     marketStats?.priceAvg &&
     marketSample >= 3 &&
     marketStats.comparison?.yearMatched !== false &&
+    (!input.km || marketStats.comparison?.kmMatched === true) &&
     !yearDiffExceeded
   );
 
@@ -197,8 +198,10 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
         : undefined,
       priceLabel: input.requestedPrice ? priceLabelFor(input.requestedPrice, comparisonValue) : undefined,
       comment: useMarket && !input.requestedPrice
-        ? `Stima indicativa basata sui prezzi richiesti in ${marketStats!.total} annunci simili su ${marketStats!.source}${input.km ? ' (confrontati per anno e chilometraggio)' : ''}. I prezzi pubblicati non sono prezzi di compravendite concluse. Inserisci il prezzo richiesto per il confronto.`
-        : buildPriceComment(input.requestedPrice, comparisonValue, input.km),
+          ? `Stima indicativa basata sui prezzi richiesti in ${marketSample} annunci simili su ${marketStats!.source}${input.km ? ' (confrontati per anno e chilometraggio)' : ''}. I prezzi pubblicati non sono prezzi di compravendite concluse. Inserisci il prezzo richiesto per il confronto.`
+        : marketStats && input.km && marketStats.comparison?.kmMatched === false
+          ? `Annunci con anno e chilometraggio abbastanza simili insufficienti: valore algoritmico indicativo, non prezzo di mercato verificato. ${marketStats.comparison.disclosure}`
+          : buildPriceComment(input.requestedPrice, comparisonValue, input.km),
       marketUrls: getMarketSearchUrls(vehicle),
       market: marketStats,
     },

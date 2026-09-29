@@ -153,6 +153,7 @@ export interface PassportReminderItem {
 export interface PassportShareConfig {
   enabled: boolean;
   showVehicleInfo: boolean;
+  showMileage?: boolean;
   showMaintenance: boolean;
   showRepairs: boolean;
   showRevisions: boolean;

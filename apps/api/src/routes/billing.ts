@@ -7,11 +7,18 @@ import { getAnalysisPrice, getStripe, recordPaidCheckout, getPremiumConfig } fro
 
 const router = Router();
 const confirmSchema = z.object({ sessionId: z.string().trim().startsWith('cs_').max(255) });
+const checkoutSchema = z.object({
+  returnTo: z.string().max(300).optional().default('/account'),
+});
 
 router.post(
   '/checkout',
   requireAuth,
   asyncHandler(async (req, res) => {
+    const { returnTo: requestedReturnTo } = checkoutSchema.parse(req.body || {});
+    const returnTo = requestedReturnTo.startsWith('/') && !requestedReturnTo.startsWith('//') && !requestedReturnTo.includes('\\')
+      ? requestedReturnTo
+      : '/account';
     const { userId } = (req as AuthenticatedRequest).auth;
     const user = await prisma.user.findUnique({
       where: { id: userId },
@@ -23,7 +30,7 @@ router.post(
     });
     if (!user) throw forbidden('Account non trovato.');
 
-    const { amountCents, currency, promotional } = getAnalysisPrice();
+    const { amountCents, currency } = getAnalysisPrice();
     const purchase = await prisma.purchase.create({
       data: { userId, amountCents, currency, status: 'PENDING' },
     });
@@ -44,10 +51,8 @@ router.post(
               currency,
               unit_amount: amountCents,
               product_data: {
-                name: promotional ? 'Analisi completa AutoEsperto \u2014 prezzo promozionale' : 'Analisi completa AutoEsperto',
-                description: promotional
-                  ? 'Un’analisi completa AutoEsperto, salvata nel tuo account. Offerta a tempo limitato.'
-                  : 'Un’analisi completa AutoEsperto, salvata nel tuo account.',
+                name: 'Analisi completa AutoEsperto',
+                description: 'Un’analisi completa AutoEsperto, salvata nel tuo account. Pagamento singolo, senza rinnovi.',
               },
             },
           },
@@ -57,8 +62,8 @@ router.post(
         phone_number_collection: { enabled: !user.phone },
         billing_address_collection: 'auto',
         automatic_tax: { enabled: process.env.STRIPE_AUTOMATIC_TAX === 'true' },
-        success_url: `${webUrl}/account?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${webUrl}/account?checkout=cancelled`,
+        success_url: `${webUrl}${returnTo}${returnTo.includes('?') ? '&' : '?'}checkout=success&session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url: `${webUrl}${returnTo}${returnTo.includes('?') ? '&' : '?'}checkout=cancelled`,
       });
       void prisma.analyticsEvent.create({
         data: { type: 'checkout', path: '/account', userId },

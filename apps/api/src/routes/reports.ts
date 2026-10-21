@@ -8,6 +8,8 @@ import { searchModel } from '../services/modelDB';
 import { findModelEra } from '../services/modelEra';
 import { verifyAuthToken } from '../services/auth';
 import { asyncHandler, serviceUnavailable } from '../http';
+import { getAccountEntitlement } from '../services/entitlement';
+import { getAnalysisPrice } from '../services/billing';
 
 const router = Router();
 
@@ -242,8 +244,26 @@ router.post(
       return;
     }
 
-    // Analisi base e report completo sempre gratuiti.
     const userId = getOptionalUserId(req);
+    if (!userId) {
+      res.status(401).json({
+        success: false,
+        error: 'Accedi o crea un account per iniziare con la tua analisi gratuita.',
+        needsLogin: true,
+      });
+      return;
+    }
+
+    const entitlement = await getAccountEntitlement(userId);
+    if (!entitlement.entitled) {
+      res.status(402).json({
+        success: false,
+        error: 'Hai terminato l’analisi gratuita. Acquista un’analisi singola a 1,99 €.',
+        needsUpgrade: true,
+        amountCents: getAnalysisPrice().amountCents,
+      });
+      return;
+    }
 
     let report;
     try {
@@ -266,23 +286,21 @@ router.post(
 
     let saved = false;
     let analysis: { id: string; createdAt: Date } | null = null;
-    if (userId) {
-      const stored = await prisma.analysis.create({
-        data: {
-          userId,
-          title,
-          vehicleJson: JSON.stringify(photoAnalysis.vehicle),
-          photoAnalysisJson: JSON.stringify(photoAnalysis),
-          reportJson: JSON.stringify(report),
-          sourceImageStored: false,
-          immediateExecutionAccepted: true,
-          consentAt: new Date(),
-          termsVersion: '2026-08-02',
-        },
-      });
-      saved = true;
-      analysis = { id: stored.id, createdAt: stored.createdAt };
-    }
+    const stored = await prisma.analysis.create({
+      data: {
+        userId,
+        title,
+        vehicleJson: JSON.stringify(photoAnalysis.vehicle),
+        photoAnalysisJson: JSON.stringify(photoAnalysis),
+        reportJson: JSON.stringify(report),
+        sourceImageStored: false,
+        immediateExecutionAccepted: true,
+        consentAt: new Date(),
+        termsVersion: '2026-08-02',
+      },
+    });
+    saved = true;
+    analysis = { id: stored.id, createdAt: stored.createdAt };
 
     res.set('Cache-Control', 'no-store');
     void prisma.analyticsEvent.create({

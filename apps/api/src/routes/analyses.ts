@@ -6,7 +6,8 @@ import { asyncHandler, badRequest, conflict, forbidden, serviceUnavailable } fro
 import { type AuthenticatedRequest, requireAuth } from '../services/auth';
 import { analyzeVehiclePhoto } from '../services/ai';
 import { buildReport } from '../services/reportService';
-import { isOwnerEmail } from '../services/owner';
+import { getAccountEntitlement } from '../services/entitlement';
+import { getAnalysisPrice } from '../services/billing';
 
 const router = Router();
 
@@ -80,14 +81,14 @@ router.post(
       return;
     }
     const { imageData } = analysisSchema.parse(req.body);
-    const [analysisCount, paidPurchase, subscription] = await Promise.all([
-      prisma.analysis.count({ where: { userId } }),
-      prisma.purchase.findFirst({ where: { userId, status: 'PAID' }, select: { id: true } }),
-      prisma.user.findUnique({ where: { id: userId }, select: { email: true, subscription: { select: { plan: true, status: true } } } }),
-    ]);
-    const premiumActive = subscription?.subscription?.plan === 'PREMIUM' && subscription?.subscription?.status === 'ACTIVE';
-    if (analysisCount > 0 && !paidPurchase && !premiumActive && !isOwnerEmail(subscription?.email)) {
-      throw forbidden('Hai già usato la tua analisi gratuita. Passa a Premium per salvare e analizzare altre auto senza limiti.');
+    const entitlement = await getAccountEntitlement(userId);
+    if (!entitlement.entitled) {
+      return res.status(402).json({
+        success: false,
+        error: 'Hai terminato l’analisi gratuita. Acquista un’analisi singola a 1,99 €.',
+        needsUpgrade: true,
+        amountCents: getAnalysisPrice().amountCents,
+      });
     }
 
     let photoAnalysis: Awaited<ReturnType<typeof analyzeVehiclePhoto>>;

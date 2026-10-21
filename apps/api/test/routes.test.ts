@@ -139,35 +139,23 @@ describe('AutoEsperto API (MVP)', () => {
   });
 
   describe('POST /reports/free-scan', () => {
-    it('input manuale senza account → report completo gratuito, non salvato', async () => {
+    it('input manuale senza account → richiede accesso per collegare prova e pagamenti', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016 },
       });
-      assert.strictEqual(r.status, 200);
-      assert.strictEqual(r.data.success, true);
-      assert.strictEqual(r.data.recognized, true);
-      assert.strictEqual(r.data.vehicle.make, 'BMW');
-      assert.strictEqual(r.data.vehicle.model, 'Serie 3');
-      assert.ok(r.data.report);
-      assert.ok(r.data.report.reliability.score > 0);
-      assert.strictEqual(r.data.saved, false);
-      assert.strictEqual(r.data.freeUsed, true);
+      assert.strictEqual(r.status, 401);
+      assert.strictEqual(r.data.success, false);
+      assert.strictEqual(r.data.needsLogin, true);
     });
 
-    it('input manuale senza account con freeUsed → report completo comunque (tutto gratis)', async () => {
+    it('freeUsed non permette di saltare il login', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016, freeUsed: true },
       });
-      assert.strictEqual(r.status, 200);
-      assert.strictEqual(r.data.success, true);
-      assert.strictEqual(r.data.recognized, true);
-      assert.strictEqual(r.data.vehicle.make, 'BMW');
-      assert.ok(r.data.report, 'il report è completo e sempre gratuito');
-      assert.ok(r.data.report.reliability.score > 0);
-      assert.strictEqual(r.data.saved, false);
-      assert.strictEqual(r.data.needsUpgrade, undefined);
+      assert.strictEqual(r.status, 401);
+      assert.strictEqual(r.data.needsLogin, true);
     });
 
     it('né foto né marca/modello → 400', async () => {
@@ -175,18 +163,13 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.status, 400);
     });
 
-    it('free-scan veicolo elettrico (Tesla/500e) → consumo in kWh/100 km, trasmissione Automatico ed esenzione bollo/manutenzione EV', async () => {
+    it('il report completo richiede un account anche per i modelli elettrici', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
         body: { make: 'Tesla', model: 'Model 3', year: 2022, fuel: 'Elettrica' },
       });
-      assert.strictEqual(r.status, 200);
-      assert.strictEqual(r.data.success, true);
-      assert.strictEqual(r.data.report.vehicle.transmission, 'Automatico');
-      assert.strictEqual(r.data.report.reliability.consumption.fuelType, 'kWh/100 km');
-      assert.strictEqual(r.data.report.reliability.taxAnnual, 0);
-      assert.ok(!r.data.report.reliability.engine.toLowerCase().includes('olio motore'));
-      assert.ok(r.data.report.reliability.futureCosts.annualMaintenance <= 160);
+      assert.strictEqual(r.status, 401);
+      assert.strictEqual(r.data.needsLogin, true);
     });
 
     it('getRepairMultiplier applica moltiplicatori corretti per Tesla ed esotiche', async () => {

@@ -141,8 +141,8 @@ export default function AccountDashboard() {
           <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
             <div>
               <p className="text-xs font-extrabold uppercase tracking-[.14em] text-emerald-600">Le tue analisi</p>
-              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">Le analisi salvate gratis</h2>
-              <p className="mt-1 text-sm text-slate-600">Tutte le analisi complete sono salvate nel tuo account e restano consultabili quando vuoi, senza scadenza.</p>
+              <h2 className="mt-2 text-2xl font-extrabold tracking-tight text-slate-950 sm:text-3xl">Le tue analisi salvate</h2>
+              <p className="mt-1 text-sm text-slate-600">Le analisi completate, gratuite o acquistate, restano consultabili nel tuo account.</p>
             </div>
             <Link href="/#scanner-section" className="inline-flex h-11 shrink-0 items-center justify-center gap-2 rounded-xl bg-accent px-5 text-sm font-extrabold text-white transition hover:bg-accent-hover">
               <Search className="h-4 w-4" /> Nuova analisi

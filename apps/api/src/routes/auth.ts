@@ -59,7 +59,6 @@ async function accountSummary(userId: string) {
         purchases: {
           where: { status: 'PAID' },
           orderBy: { paidAt: 'desc' },
-          take: 1,
           select: { id: true, paidAt: true, amountCents: true, currency: true },
         },
       },
@@ -68,9 +67,12 @@ async function accountSummary(userId: string) {
   ]);
   if (!user) throw unauthorized('Account non trovato');
   const owner = isOwnerEmail(user.email);
-  const paid = user.purchases.length > 0 || owner;
+  const paidPurchases = user.purchases.length;
+  const premium = user.subscription?.plan === 'PREMIUM' && user.subscription?.status === 'ACTIVE';
+  const paid = paidPurchases > 0;
   const emailVerified = !!user.emailVerified;
-  const trialAvailable = !paid && analysisCount === 0;
+  const trialAvailable = !owner && !premium && analysisCount === 0;
+  const included = owner || premium ? 999 : (trialAvailable ? 1 : 0) + paidPurchases;
   return {
     ...user,
     subscription: user.subscription ? {
@@ -83,9 +85,9 @@ async function accountSummary(userId: string) {
     analyses: undefined,
     analysis: user.analyses[0] || null,
     entitlement: {
-      included: paid ? 999 : 1,
+      included,
       used: analysisCount,
-      remaining: Math.max(0, (paid ? 999 : 1) - analysisCount),
+      remaining: Math.max(0, included - analysisCount),
       paid,
       emailVerified,
       freeUsed: !trialAvailable && !paid,

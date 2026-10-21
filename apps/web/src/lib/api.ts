@@ -124,7 +124,11 @@ async function doFetch<T>(path: string, options?: RequestInit, timeoutMs: number
     });
     if (!res.ok) {
       const err = await res.json().catch(() => ({ error: `Errore ${res.status}` }));
-      throw new Error(err.error || `Errore ${res.status}`);
+      throw Object.assign(new Error(err.error || `Errore ${res.status}`), {
+        status: res.status,
+        needsLogin: Boolean(err.needsLogin),
+        needsUpgrade: Boolean(err.needsUpgrade),
+      });
     }
     return res.json();
   } catch (err) {
@@ -214,12 +218,7 @@ export async function freeScanVehiclePhoto(imageData: string, extra: { km?: numb
 }
 
 export async function freeScanManual(input: { make: string; model: string; year?: number; km?: number; requestedPrice?: number; fuel?: string; transmission?: string; version?: string }): Promise<FreeScanResult> {
-  try {
-    return await fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 7500, false);
-  } catch (err) {
-    console.warn('Backend API unavailable or slow, generating instant accurate report client-side:', err);
-    return generateInstantReport(input);
-  }
+  return fetchJson('/reports/free-scan', { method: 'POST', body: JSON.stringify(input) }, 90000, false);
 }
 
 export async function registerAccount(input: { name: string; identifier: string; password: string; termsAccepted: true }) {
@@ -251,8 +250,8 @@ export async function getMyAccount() {
   return fetchJson<{ success: true; user: AccountUser }>('/auth/me');
 }
 
-export async function createCheckout() {
-  return fetchJson<{ success: true; url: string }>('/billing/checkout', { method: 'POST', body: '{}' });
+export async function createCheckout(returnTo = '/account') {
+  return fetchJson<{ success: true; url: string }>('/billing/checkout', { method: 'POST', body: JSON.stringify({ returnTo }) });
 }
 
 export async function confirmCheckout(sessionId: string) {

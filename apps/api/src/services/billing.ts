@@ -11,23 +11,10 @@ export function getStripe(): Stripe {
   return stripeClient;
 }
 
-const STANDARD_ANALYSIS_PRICE_CENTS = 599;
-const DEFAULT_PROMO_PRICE_CENTS = 199;
-const DEFAULT_PROMO_END_AT = '2026-08-13T21:59:59.999Z'; // 23:59:59 in Italia (CEST)
+const ANALYSIS_PRICE_CENTS = 199;
 
-export function getAnalysisPrice(now = new Date()): { amountCents: number; currency: string; promotional: boolean } {
-  const standardConfigured = Number(process.env.ANALYSIS_PRICE_CENTS || STANDARD_ANALYSIS_PRICE_CENTS);
-  const standardAmountCents = Number.isInteger(standardConfigured) && standardConfigured >= 100
-    ? standardConfigured
-    : STANDARD_ANALYSIS_PRICE_CENTS;
-  const promoEndAt = new Date(process.env.ANALYSIS_PROMO_END_AT || DEFAULT_PROMO_END_AT);
-  const promoConfigured = Number(process.env.ANALYSIS_PROMO_PRICE_CENTS || DEFAULT_PROMO_PRICE_CENTS);
-  const promoAmountCents = Number.isInteger(promoConfigured) && promoConfigured >= 100
-    ? promoConfigured
-    : DEFAULT_PROMO_PRICE_CENTS;
-  const promotional = !Number.isNaN(promoEndAt.getTime()) && now <= promoEndAt;
-
-  return { amountCents: promotional ? promoAmountCents : standardAmountCents, currency: 'eur', promotional };
+export function getAnalysisPrice(): { amountCents: number; currency: string; promotional: false } {
+  return { amountCents: ANALYSIS_PRICE_CENTS, currency: 'eur', promotional: false };
 }
 
 export async function recordPaidCheckout(session: Stripe.Checkout.Session): Promise<void> {

@@ -31,6 +31,8 @@ import {
   freeScanVehiclePhoto,
   freeScanManual,
   getMyAccount,
+  createCheckout,
+  confirmCheckout,
   type FreeScanResult,
   type AccountUser,
   type AnalyzePayload,
@@ -64,6 +66,19 @@ const AVAILABLE_YEARS = Array.from({ length: 32 }, (_, i) => 2026 - i);
 const QUICK_KM_CHIPS = [20000, 45000, 75000, 100000, 130000, 160000, 200000];
 
 type ScannerStage = 'idle' | 'recognition' | 'vehicle-found' | 'result' | 'error' | 'manual-input';
+
+type ManualAnalysisInput = {
+  make: string;
+  model: string;
+  year: number;
+  km: number;
+  requestedPrice?: number;
+  fuel?: string;
+  transmission?: string;
+  version?: string;
+};
+
+const PENDING_ANALYSIS_KEY = 'autoesperto.pending-analysis.v1';
 
 const promises = ['Valutazione accurata', 'Prezzo reale di mercato', 'Affidabilità e difetti noti', 'Calcolo bollo esatto', 'Controlli pre-acquisto'];
 
@@ -152,6 +167,11 @@ export default function VehicleScanner({
   const [manualRegion, setManualRegion] = useState('lombardia');
   const [manualLoading, setManualLoading] = useState(false);
   const [user, setUser] = useState<AccountUser | null>(null);
+  const [accountResolved, setAccountResolved] = useState(false);
+  const [pendingAnalysis, setPendingAnalysis] = useState<ManualAnalysisInput | null>(null);
+  const [paymentGate, setPaymentGate] = useState<'login' | 'payment' | null>(null);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+  const resumeStartedRef = useRef(false);
 
   // Catalog computations
   const allCatalogMakes = useMemo(() => getAllMakes().map((m) => m.name), []);
@@ -179,7 +199,7 @@ export default function VehicleScanner({
       if (res.success && res.user) {
         setUser(res.user);
       }
-    }).catch(() => {});
+    }).catch(() => {}).finally(() => setAccountResolved(true));
   }, []);
 
   useEffect(() => {
@@ -384,7 +404,7 @@ export default function VehicleScanner({
     }
   };
 
-  const handleManualSubmit = async (overrides?: { make?: string; model?: string; year?: number; km?: number; requestedPrice?: number }) => {
+  const handleManualSubmit = async (overrides?: Partial<ManualAnalysisInput>) => {
     const make = overrides?.make?.trim() || manualMake.trim();
     const model = overrides?.model?.trim() || manualModel.trim();
     if (!make || !model) {
@@ -403,20 +423,22 @@ export default function VehicleScanner({
       return;
     }
 
-    setManualLoading(true); setError('');
+    const requestedPrice = overrides?.requestedPrice ?? (manualPrice.trim() ? Number(manualPrice.trim()) : undefined);
+    const analysisInput: ManualAnalysisInput = {
+      make,
+      model,
+      year,
+      km,
+      ...(requestedPrice && !isNaN(requestedPrice) ? { requestedPrice } : {}),
+      ...(overrides?.fuel || manualFuel ? { fuel: overrides?.fuel || manualFuel } : {}),
+      ...(overrides?.transmission || manualTransmission ? { transmission: overrides?.transmission || manualTransmission } : {}),
+      ...(overrides?.version || manualVersion ? { version: overrides?.version || manualVersion } : {}),
+    };
+
+    setManualLoading(true); setError(''); setPaymentGate(null);
     trackEvent('analysis_started', { analysis_type: 'manual', make, model });
     try {
-      const requestedPrice = overrides?.requestedPrice ?? (manualPrice.trim() ? Number(manualPrice.trim()) : undefined);
-      const result = await freeScanManual({
-        make,
-        model,
-        year,
-        km,
-        ...(requestedPrice && !isNaN(requestedPrice) ? { requestedPrice } : {}),
-        ...(manualFuel ? { fuel: manualFuel } : {}),
-        ...(manualTransmission ? { transmission: manualTransmission } : {}),
-        ...(manualVersion ? { version: manualVersion } : {}),
-      });
+      const result = await freeScanManual(analysisInput);
       if (!result.recognized || !result.vehicle) {
         setError(result.message || 'Non riesco a riconoscere il veicolo. Riprova.');
         setStage('idle');
@@ -453,6 +475,17 @@ export default function VehicleScanner({
       window.scrollTo({ top: 0, behavior: 'smooth' });
     } catch (err) {
       const msg = err instanceof Error ? err.message : '';
+      const status = (err as Error & { status?: number }).status;
+      if (status === 401 || status === 402) {
+        setPendingAnalysis(analysisInput);
+        setPaymentGate(status === 401 ? 'login' : 'payment');
+        setStage('idle');
+        setError(status === 401
+          ? 'Crea un account per avere la prima analisi completa gratuita. I dati dell’auto resteranno pronti dopo l’accesso.'
+          : 'La prova gratuita è terminata. La prossima analisi costa 1,99 € e viene salvata nel tuo account.');
+        try { window.sessionStorage.setItem(PENDING_ANALYSIS_KEY, JSON.stringify(analysisInput)); } catch { /* storage may be unavailable */ }
+        return;
+      }
       if (msg.includes('impiegando troppo tempo') || msg.includes('500') || msg.includes('servizio')) {
         setError('Il server sta elaborando la richiesta. Riprova tra pochi istanti.');
       } else {
@@ -464,7 +497,128 @@ export default function VehicleScanner({
     }
   };
 
+  const continueToAccount = () => {
+    if (!pendingAnalysis) return;
+    try { window.sessionStorage.setItem(PENDING_ANALYSIS_KEY, JSON.stringify(pendingAnalysis)); } catch { /* storage may be unavailable */ }
+    router.push(`/accesso?next=${encodeURIComponent('/?resumeAnalysis=1#scanner-section')}`);
+  };
+
+  const continueToCheckout = async () => {
+    if (!pendingAnalysis) return;
+    if (!user) {
+      continueToAccount();
+      return;
+    }
+    try {
+      setCheckoutLoading(true);
+      window.sessionStorage.setItem(PENDING_ANALYSIS_KEY, JSON.stringify(pendingAnalysis));
+      const checkout = await createCheckout('/');
+      window.location.assign(checkout.url);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Non riesco ad aprire il pagamento. Riprova.');
+    } finally {
+      setCheckoutLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    if (!accountResolved || resumeStartedRef.current) return;
+    const params = new URLSearchParams(window.location.search);
+    const checkoutState = params.get('checkout');
+    const shouldResume = params.get('resumeAnalysis') === '1' || checkoutState === 'success';
+    const wasCancelled = checkoutState === 'cancelled';
+    if (!shouldResume && !wasCancelled) return;
+
+    let pending: ManualAnalysisInput | null = null;
+    try {
+      const raw = window.sessionStorage.getItem(PENDING_ANALYSIS_KEY);
+      if (raw) pending = JSON.parse(raw) as ManualAnalysisInput;
+    } catch { /* ignore invalid session data */ }
+    if (!pending) return;
+    if (checkoutState === 'success' && !user) {
+      setPendingAnalysis(pending);
+      setPaymentGate('login');
+      setError('Accedi con lo stesso account per verificare il pagamento e riprendere l’analisi.');
+      return;
+    }
+
+    resumeStartedRef.current = true;
+    const cleanUrl = new URL(window.location.href);
+    cleanUrl.searchParams.delete('checkout');
+    cleanUrl.searchParams.delete('session_id');
+    cleanUrl.searchParams.delete('resumeAnalysis');
+    window.history.replaceState({}, '', `${cleanUrl.pathname}${cleanUrl.search}${cleanUrl.hash}`);
+    setPendingAnalysis(pending);
+    setManualMake(pending.make);
+    setManualModel(pending.model);
+    setManualYear(String(pending.year));
+    setManualKm(String(pending.km));
+    if (pending.requestedPrice) setManualPrice(String(pending.requestedPrice));
+    if (pending.fuel) setManualFuel(pending.fuel);
+    if (pending.transmission) setManualTransmission(pending.transmission);
+    if (pending.version) setManualVersion(pending.version);
+
+    const resume = async () => {
+      if (checkoutState === 'success') {
+        const sessionId = params.get('session_id');
+        if (!sessionId || !user) {
+          setPaymentGate('login');
+          setError('Accedi con lo stesso account per verificare il pagamento e riprendere l’analisi.');
+          return;
+        }
+        try {
+          const confirmation = await confirmCheckout(sessionId);
+          if (!confirmation.paid) {
+            setPaymentGate('payment');
+            setError('Il pagamento è ancora in elaborazione. Riprova tra qualche istante.');
+            return;
+          }
+          const account = await getMyAccount();
+          if (account.success) setUser(account.user);
+        } catch (err) {
+          setPaymentGate('payment');
+          setError(err instanceof Error ? err.message : 'Non riesco a verificare il pagamento.');
+          return;
+        }
+      } else if (wasCancelled) {
+        setPaymentGate(user ? 'payment' : 'login');
+        setError('Pagamento annullato. La tua auto è ancora pronta per l’analisi.');
+        return;
+      } else if (!user) {
+        setPaymentGate('login');
+        setError('Accedi o crea un account per riprendere l’analisi gratuita.');
+        return;
+      }
+
+      window.sessionStorage.removeItem(PENDING_ANALYSIS_KEY);
+      setPaymentGate(null);
+      window.setTimeout(() => { void handleManualSubmit(pending); }, 0);
+    };
+    void resume();
+  }, [accountResolved, user]);
+
   const [isDragOver, setIsDragOver] = useState(false);
+  const paywallNotice = paymentGate && pendingAnalysis ? (
+    <div className="mx-4 mb-4 rounded-2xl border border-amber-200 bg-amber-50 p-4 text-left shadow-sm sm:mx-5" role="status">
+      <p className="text-sm font-extrabold text-slate-900">
+        {paymentGate === 'login' ? 'Inizia con un’analisi completa gratuita' : 'La tua prossima analisi costa 1,99 €'}
+      </p>
+      <p className="mt-1 text-xs leading-relaxed text-slate-600">
+        {paymentGate === 'login'
+          ? 'Accedi o crea un account: l’auto che hai inserito è conservata e riprenderemo da qui.'
+          : 'Pagamento singolo, senza rinnovo. Dopo il pagamento riprendiamo automaticamente questa analisi.'}
+      </p>
+      <button
+        type="button"
+        onClick={paymentGate === 'login' ? continueToAccount : continueToCheckout}
+        disabled={checkoutLoading}
+        className="mt-3 inline-flex min-h-10 items-center justify-center gap-2 rounded-xl bg-blue-700 px-4 py-2 text-sm font-extrabold text-white transition hover:bg-blue-800 disabled:cursor-wait disabled:opacity-70"
+      >
+        {checkoutLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : null}
+        {paymentGate === 'login' ? 'Accedi o crea account' : checkoutLoading ? 'Apro il pagamento…' : 'Continua a 1,99 €'}
+      </button>
+    </div>
+  ) : null;
 
   if (stage === 'vehicle-found' && scan?.vehicle) {
     return (
@@ -590,6 +744,8 @@ export default function VehicleScanner({
     if (embedded) {
       return (
         <div className="scanner-box shadow-xl border border-slate-200/90 rounded-2xl overflow-hidden">
+          {paywallNotice}
+          <p className="px-4 pt-3 text-center text-xs font-semibold text-slate-500">Prima analisi completa gratuita con account · poi 1,99 € per analisi</p>
           {/* App-like Segmented Pill Bar */}
           <div className="p-1.5 bg-slate-100 dark:bg-slate-800/80 rounded-xl m-2.5 flex items-center gap-1.5" role="tablist" aria-label="Come vuoi analizzare l'auto">
             <button
@@ -724,7 +880,7 @@ export default function VehicleScanner({
                   ))}
                 </div>
               </div>
-              <p className="scanner-box-micro text-[11px] text-slate-400 mt-3 text-center">Analisi IA gratuita al 100% e senza registrazione.</p>
+              <p className="scanner-box-micro text-[11px] text-slate-400 mt-3 text-center">Prima analisi completa gratuita con account · poi 1,99 € per analisi.</p>
             </div>
           ) : tab === 'manual' ? (
             <form
@@ -1251,7 +1407,7 @@ export default function VehicleScanner({
                   <><ScanSearch /> Ottieni il Verdetto sull&apos;Annuncio <ArrowRight /></>
                 )}
               </button>
-              <p className="scanner-box-micro text-[11px] text-slate-400 mt-3 text-center">Analisi IA gratuita al 100% e senza registrazione.</p>
+              <p className="scanner-box-micro text-[11px] text-slate-400 mt-3 text-center">Prima analisi completa gratuita con account · poi 1,99 € per analisi.</p>
             </div>
           )}
           <input
@@ -1270,14 +1426,15 @@ export default function VehicleScanner({
       <section className="scanner-hero">
         <div className="scanner-glow scanner-glow-one" /><div className="scanner-glow scanner-glow-two" />
         <div className="scanner-hero-copy">
+          {paywallNotice}
           <div className="scanner-kicker"><Camera className="h-4 w-4" /> Riconoscimento auto da foto</div>
           <h1>Analizza l’auto.<br className="hidden sm:block" /> Scopri modello e prezzo.</h1>
           <p className="scanner-lead">Da una o più foto riconosciamo marca, modello e anno, stimiamo il prezzo e generiamo un report per quel modello.</p>
            <div className="scanner-promises" aria-label="Informazioni analizzate">
             {promises.map((item) => <span key={item}><Check className="h-3.5 w-3.5" /> {item}</span>)}
           </div>
-            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Analizza un&apos;auto gratis <ChevronRight className="h-5 w-5" /></button>
-            <p className="scanner-microcopy">Analisi sempre gratuita, senza account e senza limiti. Un account gratuito consente di salvare i report.</p>
+            <button type="button" className="scanner-cta" onClick={() => inputRef.current?.click()}><Camera className="h-5 w-5" /> Prova la prima analisi gratis <ChevronRight className="h-5 w-5" /></button>
+            <p className="scanner-microcopy">Prima analisi completa gratuita con account. Dopo, 1,99 € per ogni analisi.</p>
           <div className="scanner-privacy"><ShieldCheck className="h-4 w-4" /> Salviamo il report, non la fotografia originale.</div>
            <p className="mt-3 flex items-start gap-2 text-xs max-w-xl" style={{ color: 'var(--text-2)' }}>
              <Check className="h-3.5 w-3.5 mt-0.5 shrink-0" style={{ color: 'var(--success)' }} />
@@ -1342,9 +1499,9 @@ export default function VehicleScanner({
         <div className="scanner-result-banner">
           <ShieldCheck className="h-4 w-4" />
           {user ? (
-             <span>Analisi salvata gratuitamente. La trovi nell&apos;<button type="button" onClick={() => router.push('/account')} className="scanner-result-banner-link">account</button>.</span>
+             <span>Analisi completata e salvata nel tuo <button type="button" onClick={() => router.push('/account')} className="scanner-result-banner-link">account</button>.</span>
           ) : (
-             <span>Analisi gratuita. Per salvarla, <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">crea un account gratuito</button>.</span>
+             <span>Analisi completata. <button type="button" onClick={() => router.push('/accesso?next=/account')} className="scanner-result-banner-link">Accedi al tuo account</button> per consultarla in seguito.</span>
           )}
         </div>
 

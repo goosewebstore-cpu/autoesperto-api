@@ -1,3 +1,4 @@
+import { imageDataSchema } from '../services/imageValidation';
 import { Router, type Request, type Response, type NextFunction } from 'express';
 import { z } from 'zod';
 import { scanPassportDocument, chatPassportAI } from '../services/passportAI';
@@ -7,7 +8,7 @@ import rateLimit from 'express-rate-limit';
 const router = Router();
 
 const ScanDocSchema = z.object({
-  imageData: z.string().min(10, 'Immagine non valida.'),
+  imageData: imageDataSchema,
   categoryHint: z
     .enum(['veicolo', 'assicurazione', 'manutenzione', 'riparazioni', 'revisioni', 'altro'])
     .optional(),

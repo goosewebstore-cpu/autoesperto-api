@@ -1,3 +1,4 @@
+import { matchesVariant } from './marketMatching';
 import type { MarketLink, MarketListing, MarketStats, VehicleData } from '@autoesperto/types';
 import { cacheGet, cacheSet } from './cache';
 
@@ -105,10 +106,12 @@ export async function fetchSubitoMarketStats(
   make: string,
   model: string,
   year?: number,
-  km?: number
+  km?: number,
+  fuel?: string,
+  version?: string
 ): Promise<MarketStats | undefined> {
   const url = getSubitoSearchUrl(make, model, year);
-  const cacheKey = `subito:${make.toLowerCase()}:${model.toLowerCase()}:${year || 'any'}:${km || 'any'}`;
+  const cacheKey = `subito:${make.toLowerCase()}:${model.toLowerCase()}:${year || 'any'}:${km ?? 'any'}:${fuel || ''}:${version || ''}`;
   const cached = cacheGet<MarketStats>(cacheKey);
   if (cached) return cached;
 
@@ -153,7 +156,14 @@ export async function fetchSubitoMarketStats(
       const hasSportKeyword = /(\byaris\s+gr\b|\bgr\s+yaris\b|\bgr4\b|\bgti\b|\bgtd\b|\bgolf\s+r\b|\bamg\b|\babarth\b|\bm135\b|\bm140\b|\bquadrifoglio\b|\brs[3-7]\b|\bfocus\s+rs\b|\bclio\s+rs\b|\bmegane\s+rs\b)/i.test(sub);
       return !hasSportKeyword;
     });
-    const baseAds = standardAds.length >= MIN_SAMPLE ? standardAds : ads;
+    const seen = new Set<string>();
+    const baseAds = standardAds.filter((ad) => {
+      const identity = ad.urls?.default || `${ad.subject}:${priceOf(ad)}:${kmOf(ad)}:${yearOf(ad)}`;
+      if (seen.has(identity)) return false;
+      seen.add(identity);
+      const details = [ad.subject, ...Object.values(ad.features || {}).flatMap(feature => (feature.values || []).map(v => v.value || v.label || ''))].join(' ');
+      return matchesVariant(details, fuel, version);
+    });
 
     // Selezione progressiva degli annunci confrontabili per anno
     let yearPool = year ? baseAds.filter((a) => {
@@ -178,14 +188,14 @@ export async function fetchSubitoMarketStats(
       return undefined;
     }
 
-    const kmTolerance = km ? Math.max(18000, Math.round(km * 0.30)) : 0;
-    const kmPool = km
+    const kmTolerance = km !== undefined ? Math.max(18000, Math.round(km * 0.30)) : 0;
+    const kmPool = km !== undefined
       ? yearPool.filter((a) => {
           const adKm = kmOf(a);
           return adKm !== undefined && Math.abs(adKm - km) <= kmTolerance;
         })
       : yearPool;
-    const kmMatched = !km || kmPool.length >= MIN_SAMPLE;
+    const kmMatched = km === undefined || kmPool.length >= MIN_SAMPLE;
 
     // Scegli il campione più specifico che raggiunga almeno TARGET_SAMPLE annunci;
     // altrimenti scendi a yearPool. Non ricadere mai su baseAds di anni spaiati!
@@ -202,13 +212,13 @@ export async function fetchSubitoMarketStats(
     let disclosure: string;
     if (filtered === kmPool && kmPool.length >= TARGET_SAMPLE) {
       if (year) {
-        disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} con anno ${year} (±1) e chilometri simili (${km ? `${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km` : 'qualsiasi'}).`;
+        disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} con anno ${year} (±1/±2) e chilometri simili (${km ? `${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km` : 'qualsiasi'}).`;
       } else {
         disclosure = `Prezzo medio calcolato su ${kmPool.length} annunci di ${make} ${model} su tutti gli anni di produzione${km ? ` e chilometri simili (${Math.max(0, km - kmTolerance).toLocaleString('it-IT')}–${(km + kmTolerance).toLocaleString('it-IT')} km)` : ''}.`;
       }
     } else if (filtered === kmPool) {
       if (year) {
-        disclosure = `Campione ridotto (${kmPool.length} annunci): ho usato quelli con anno ${year} (±1) e km simili, ma non ho trovato almeno ${TARGET_SAMPLE} annunci. Prezzo medio indicativo.`;
+        disclosure = `Campione ridotto (${kmPool.length} annunci): ho usato quelli con anno ${year} (±1/±2) e km simili, ma non ho trovato almeno ${TARGET_SAMPLE} annunci. Prezzo medio indicativo.`;
       } else {
         disclosure = `Campione di ${kmPool.length} annunci di ${make} ${model}. Prezzo medio indicativo.`;
       }
@@ -232,7 +242,8 @@ export async function fetchSubitoMarketStats(
       return p !== undefined && p >= medianPrice * 0.55 && p <= medianPrice * 1.45;
     });
 
-    const effectiveList = cleanFiltered.length >= MIN_SAMPLE ? cleanFiltered : filtered;
+    if (cleanFiltered.length < MIN_SAMPLE) return undefined;
+    const effectiveList = cleanFiltered;
     const prices = effectiveList.map(priceOf).filter((p): p is number => p !== undefined && p > 500);
     const kms = effectiveList.map(kmOf).filter((k): k is number => k !== undefined);
     const years = effectiveList.map(yearOf).filter((y): y is number => y !== undefined);
@@ -267,7 +278,7 @@ export async function fetchSubitoMarketStats(
         kmMatched,
         sampleSize: prices.length,
         targetSample: TARGET_SAMPLE,
-        disclosure,
+        disclosure: `${prices.length} annunci dopo i filtri. ${disclosure} ${fuel ? `Alimentazione richiesta: ${fuel}.` : 'Alimentazione non specificata.'} ${version ? `Versione richiesta: ${version}.` : 'Allestimento non specificato.'}`,
       },
     };
 

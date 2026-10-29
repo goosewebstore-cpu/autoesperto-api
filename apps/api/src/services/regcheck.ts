@@ -31,10 +31,12 @@ export interface RegCheckRawData {
 
 export async function lookupPlate(plate: string): Promise<RegCheckRawData> {
   const plateKey = plate.toUpperCase();
-  if (DEMO_MODE) {
+  if (DEMO_MODE && process.env.NODE_ENV !== 'production') {
     const demoData = RegCheckDemoData[plateKey];
     if (demoData) return demoData;
   }
+
+  if (DEMO_MODE && process.env.NODE_ENV === 'production') throw serviceUnavailable('Ricerca per targa non configurata. Inserisci marca, modello, anno e chilometri.');
 
   const apiUrl = `${API_BASE}/CheckItaly?RegistrationNumber=${encodeURIComponent(plate)}&username=${encodeURIComponent(USERNAME)}`;
   return fetchRegCheck(apiUrl, plateKey);
@@ -58,7 +60,7 @@ async function fetchRegCheck(apiUrl: string, plateKey: string): Promise<RegCheck
 
     if (resp.status === 500 && text.toLowerCase().includes('out of credit')) {
       const demoData = RegCheckDemoData[plateKey];
-      if (demoData) return demoData;
+      if (demoData && process.env.NODE_ENV !== 'production') return demoData;
       throw serviceUnavailable(SERVICE_DOWN_MESSAGE);
     }
 

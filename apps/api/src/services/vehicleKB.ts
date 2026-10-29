@@ -1,3 +1,4 @@
+import { isBatteryElectric } from './powertrain';
 import type { VehicleData } from '@autoesperto/types';
 import { getTextValue, type RegCheckRawData } from './regcheck';
 
@@ -464,7 +465,7 @@ export function getVehicleKnowledge(make: string, fuelInput?: string, modelInput
   const key = normalizeMake(make);
   const fuel = (fuelInput || '').toLowerCase();
   const model = (modelInput || '').toLowerCase();
-  const isEv = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') || /tesla|polestar|byd/.test(key) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe|enyaq|ev6|ioniq 5|ioniq 6/.test(model);
+  const isEv = isBatteryElectric(make, model, fuel);
 
   const base = kb[key] || kb[key.split(' ')[0]];
 

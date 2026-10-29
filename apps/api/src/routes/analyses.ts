@@ -1,3 +1,4 @@
+import { imageDataSchema } from '../services/imageValidation';
 import { Router } from 'express';
 import { prisma } from '@autoesperto/database';
 import type { AutoReport } from '@autoesperto/types';
@@ -12,10 +13,7 @@ import { getAnalysisPrice } from '../services/billing';
 const router = Router();
 
 const analysisSchema = z.object({
-  imageData: z
-    .string()
-    .regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP')
-    .max(7_500_000),
+  imageData: imageDataSchema,
   immediateExecutionAccepted: z.literal(true, {
     errorMap: () => ({ message: 'È necessario richiedere espressamente l’esecuzione immediata del report.' }),
   }),

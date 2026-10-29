@@ -1,3 +1,4 @@
+import { imageDataSchema } from '../services/imageValidation';
 import { Router } from 'express';
 import { z } from 'zod';
 import type { Request } from 'express';
@@ -43,16 +44,13 @@ const askSchema = z.object({
 });
 
 const photoSchema = z.object({
-  imageData: z.string().regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP').max(7_500_000),
+  imageData: imageDataSchema,
   vehicle: z.object({ make: z.string().optional(), model: z.string().optional(), year: z.coerce.number().int().optional(), fuel: z.string().optional() }).optional(),
 });
 
 const freeScanSchema = z
   .object({
-    imageData: z
-      .string()
-      .regex(/^data:image\/(jpeg|jpg|png|webp);base64,/, 'Carica una foto JPG, PNG o WebP')
-      .max(7_500_000)
+    imageData: imageDataSchema
       .optional(),
     make: z.string().trim().min(2).optional(),
     model: z.string().trim().min(1).optional(),
@@ -67,7 +65,7 @@ const freeScanSchema = z
     // solo dopo che l'utente ha confermato anno e chilometri.
     recognitionOnly: z.boolean().optional(),
   })
-  .refine((data) => Boolean(data.imageData) !== Boolean(data.make && data.model), {
+  .refine((data) => Boolean(data.imageData) || Boolean(data.make && data.model), {
     message: 'Indica una foto oppure marca e modello',
   });
 
@@ -89,7 +87,7 @@ function manualPhotoAnalysis(make: string, model: string, year?: number, fuel?: 
       model,
       year,
       fuel,
-      confidence: 'media',
+      confidence: 'bassa',
     },
     damage: {
       visible: false,
@@ -97,7 +95,7 @@ function manualPhotoAnalysis(make: string, model: string, year?: number, fuel?: 
       severity: 'media',
       description: 'Inserimento manuale di marca e modello.',
     },
-    note: 'Analisi basata su dati inseriti a mano.',
+    note: 'Identità del veicolo basata sui dati inseriti. Non è stato possibile eseguire una valutazione visiva della foto.',
   };
 }
 
@@ -165,10 +163,18 @@ router.post(
       // recognized:false e il cliente compila a mano (nessun errore bloccante).
       if (isVisionConfigured()) {
         try {
-          photo = await analyzeVehiclePhoto({ imageData: input.imageData });
+          photo = await analyzeVehiclePhoto({
+            imageData: input.imageData,
+            ...(input.make && input.model ? { vehicle: { make: input.make, model: input.model, year: input.year } } : {}),
+            aggressive: !input.recognitionOnly,
+          });
         } catch (error) {
           console.warn('free scan recognition failed:', error);
         }
+      }
+
+      if (!photo && input.make && input.model && !input.recognitionOnly) {
+        photo = manualPhotoAnalysis(input.make, input.model, input.year, fuel);
       }
 
       if (!photo) {
@@ -181,7 +187,7 @@ router.post(
         return;
       }
 
-      if (!photo.vehicle.make || !photo.vehicle.model) {
+      if ((!photo.vehicle.make || !photo.vehicle.model) && !(input.make && input.model)) {
         res.set('Cache-Control', 'no-store');
         res.json({
           success: true,
@@ -190,9 +196,9 @@ router.post(
         });
         return;
       }
-      make = photo.vehicle.make;
-      model = photo.vehicle.model;
-      year = photo.vehicle.year;
+      make = input.make || photo.vehicle.make;
+      model = input.model || photo.vehicle.model;
+      year = input.year || photo.vehicle.year;
       if (!fuel && photo.vehicle.fuel) {
         fuel = photo.vehicle.fuel;
       }
@@ -222,7 +228,7 @@ router.post(
       make,
       model,
       generation: photoAnalysis.vehicle.generation,
-      year: photoAnalysis.vehicle.year,
+      year,
       fuel: fuel || photoAnalysis.vehicle.fuel,
       color: photoAnalysis.vehicle.color,
       bodyType: photoAnalysis.vehicle.bodyType,
@@ -284,20 +290,22 @@ router.post(
 
     const title = [make, model, photoAnalysis.vehicle.generation, year].filter(Boolean).join(' ');
 
+    if (input.imageData) report.photoAnalysis = photoAnalysis;
+
     let saved = false;
     let analysis: { id: string; createdAt: Date } | null = null;
     const stored = await prisma.analysis.create({
-      data: {
-        userId,
-        title,
-        vehicleJson: JSON.stringify(photoAnalysis.vehicle),
-        photoAnalysisJson: JSON.stringify(photoAnalysis),
-        reportJson: JSON.stringify(report),
-        sourceImageStored: false,
-        immediateExecutionAccepted: true,
-        consentAt: new Date(),
-        termsVersion: '2026-08-02',
-      },
+        data: {
+          userId,
+          title,
+          vehicleJson: JSON.stringify({ ...photoAnalysis.vehicle, make, model, year, fuel: vehicle.fuel }),
+          photoAnalysisJson: JSON.stringify(photoAnalysis),
+          reportJson: JSON.stringify(report),
+          sourceImageStored: false,
+          immediateExecutionAccepted: true,
+          consentAt: new Date(),
+          termsVersion: '2026-08-02',
+        },
     });
     saved = true;
     analysis = { id: stored.id, createdAt: stored.createdAt };

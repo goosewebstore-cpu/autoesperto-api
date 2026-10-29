@@ -7,6 +7,8 @@ export interface AccountEntitlement {
   freeAvailable: boolean;
   paid: boolean;
   premium: boolean;
+  monthlyPremium?: boolean;
+  dailyAnalysisCount?: number;
   emailVerified: boolean;
   analysisCount: number;
   needsLogin: boolean;
@@ -21,19 +23,23 @@ export function calculateAccountEntitlement(input: {
   paidPurchases: number;
   analysisCount: number;
   premium: boolean;
+  monthlyPremium?: boolean;
+  dailyAnalysisCount?: number;
 }): AccountEntitlement {
   const owner = isOwnerEmail(input.email);
   const unlimited = owner || input.premium;
+  const dailyLimit = input.monthlyPremium ? 10 : null;
+  const withinDailyLimit = dailyLimit === null || (input.dailyAnalysisCount || 0) < dailyLimit;
   const freeAvailable = Boolean(input.userId) && !unlimited && input.analysisCount === 0;
   const paid = input.paidPurchases > 0;
   const paidCreditAvailable = input.paidPurchases > 0 && input.analysisCount <= input.paidPurchases;
-  const entitled = unlimited || freeAvailable || paidCreditAvailable;
+  const entitled = unlimited || (input.monthlyPremium && withinDailyLimit) || freeAvailable || paidCreditAvailable;
   return {
     entitled,
     unlimited,
     freeAvailable,
     paid,
-    premium: input.premium,
+    premium: input.premium || Boolean(input.monthlyPremium),
     emailVerified: Boolean(input.emailVerified),
     analysisCount: input.analysisCount,
     needsLogin: !input.userId,
@@ -44,7 +50,8 @@ export function calculateAccountEntitlement(input: {
 
 /**
  * Regole di accesso al report completo:
- * - Premium / owner → accesso illimitato
+ * - Annuale / owner → accesso illimitato
+ * - Mensile → 10 analisi al giorno, senza pubblicità
  * - primo account registrato (analysisCount === 0) → 1 analisi completa gratuita
  *   (nessuna verifica email richiesta per usarla)
  * - ogni acquisto singolo (€1,99) → sblocca UNA analisi completa:
@@ -67,7 +74,9 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     };
   }
 
-  const [user, analysisCount] = await Promise.all([
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const [user, analysisCount, dailyAnalysisCount] = await Promise.all([
     prisma.user.findUnique({
       where: { id: userId },
       select: {
@@ -78,6 +87,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
       },
     }),
     prisma.analysis.count({ where: { userId } }),
+    prisma.analysis.count({ where: { userId, createdAt: { gte: today } } }),
   ]);
 
   if (!user) {
@@ -95,7 +105,9 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     };
   }
 
-  const premium = user.subscription?.plan === 'PREMIUM' && user.subscription?.status === 'ACTIVE';
+  const active = user.subscription?.status === 'ACTIVE';
+  const premium = active && ['PREMIUM', 'PREMIUM_YEARLY'].includes(user.subscription?.plan || '');
+  const monthlyPremium = active && user.subscription?.plan === 'PREMIUM_MONTHLY';
   return calculateAccountEntitlement({
     userId,
     email: user.email,
@@ -103,5 +115,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     paidPurchases: user.purchases.length,
     analysisCount,
     premium,
+    monthlyPremium,
+    dailyAnalysisCount,
   });
 }

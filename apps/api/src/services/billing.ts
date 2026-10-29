@@ -39,8 +39,8 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
 }
 
 // Premium subscription config
-const PREMIUM_PRICE_CENTS_MONTHLY = 499; // 4,99 € / mese
-const PREMIUM_PRICE_CENTS_ANNUAL = 4190;  // 41,90 € / anno (~30% sconto)
+const PREMIUM_PRICE_CENTS_MONTHLY = 399; // 3,99 € / mese
+const PREMIUM_PRICE_CENTS_ANNUAL = 2999;  // 29,99 € / anno
 const PREMIUM_CURRENCY = 'eur';
 
 export function getPremiumConfig(interval: 'month' | 'year' = 'month') {
@@ -51,12 +51,13 @@ export function getPremiumConfig(interval: 'month' | 'year' = 'month') {
   };
 }
 
-export async function activatePremium(userId: string, stripeSubscriptionId: string, stripeCustomerId: string, stripePriceId: string, renewsAt: Date): Promise<void> {
+export async function activatePremium(userId: string, stripeSubscriptionId: string, stripeCustomerId: string, stripePriceId: string, renewsAt: Date, interval: 'month' | 'year' = 'month'): Promise<void> {
+  const plan = interval === 'year' ? 'PREMIUM_YEARLY' : 'PREMIUM_MONTHLY';
   await prisma.subscription.upsert({
     where: { userId },
     create: {
       userId,
-      plan: 'PREMIUM',
+      plan,
       status: 'ACTIVE',
       credits: 0,
       stripeCustomerId,
@@ -65,7 +66,7 @@ export async function activatePremium(userId: string, stripeSubscriptionId: stri
       renewsAt,
     },
     update: {
-      plan: 'PREMIUM',
+      plan,
       status: 'ACTIVE',
       stripeCustomerId,
       stripeSubscriptionId,

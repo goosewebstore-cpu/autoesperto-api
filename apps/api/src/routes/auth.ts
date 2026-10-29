@@ -68,11 +68,14 @@ async function accountSummary(userId: string) {
   if (!user) throw unauthorized('Account non trovato');
   const owner = isOwnerEmail(user.email);
   const paidPurchases = user.purchases.length;
-  const premium = user.subscription?.plan === 'PREMIUM' && user.subscription?.status === 'ACTIVE';
+  const activeSubscription = user.subscription?.status === 'ACTIVE';
+  const premium = activeSubscription && ['PREMIUM', 'PREMIUM_YEARLY'].includes(user.subscription?.plan || '');
+  const monthlyPremium = activeSubscription && user.subscription?.plan === 'PREMIUM_MONTHLY';
   const paid = paidPurchases > 0;
   const emailVerified = !!user.emailVerified;
-  const trialAvailable = !owner && !premium && analysisCount === 0;
-  const included = owner || premium ? 999 : (trialAvailable ? 1 : 0) + paidPurchases;
+  const trialAvailable = !owner && !premium && !monthlyPremium && analysisCount === 0;
+  const included = owner || premium ? 999 : monthlyPremium ? 10 : (trialAvailable ? 1 : 0) + paidPurchases;
+  const used = monthlyPremium ? await prisma.analysis.count({ where: { userId, createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } } }) : analysisCount;
   return {
     ...user,
     subscription: user.subscription ? {
@@ -86,8 +89,8 @@ async function accountSummary(userId: string) {
     analysis: user.analyses[0] || null,
     entitlement: {
       included,
-      used: analysisCount,
-      remaining: Math.max(0, included - analysisCount),
+      used,
+      remaining: Math.max(0, included - used),
       paid,
       emailVerified,
       freeUsed: !trialAvailable && !paid,

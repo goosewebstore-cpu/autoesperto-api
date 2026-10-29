@@ -24,7 +24,8 @@ export async function stripeWebhook(req: Request, res: Response): Promise<void> 
         const sub = await getStripe().subscriptions.retrieve(subId) as any;
         const renewsAt = new Date(sub.current_period_end * 1000);
         const priceId = sub.items.data[0]?.price.id || '';
-        await activatePremium(session.metadata.userId, subId, customerId, priceId, renewsAt);
+        const interval = session.metadata.interval === 'year' ? 'year' : 'month';
+        await activatePremium(session.metadata.userId, subId, customerId, priceId, renewsAt, interval);
       }
     }
 
@@ -37,7 +38,7 @@ export async function stripeWebhook(req: Request, res: Response): Promise<void> 
         if (dbSub) {
           await prisma.subscription.update({
             where: { id: dbSub.id },
-            data: { renewsAt: new Date(sub.current_period_end * 1000), status: 'ACTIVE', plan: 'PREMIUM' },
+            data: { renewsAt: new Date(sub.current_period_end * 1000), status: 'ACTIVE', plan: sub.metadata?.plan || dbSub.plan },
           });
         }
       }

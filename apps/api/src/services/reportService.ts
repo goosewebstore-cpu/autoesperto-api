@@ -1,3 +1,4 @@
+import { isBatteryElectric } from './powertrain';
 import type { AutoReport, PriceLabel, VehicleData } from '@autoesperto/types';
 import { lookupPlate, type RegCheckRawData } from './regcheck';
 import { normalizeVehicleData } from './vehicleKB';
@@ -23,7 +24,7 @@ export interface ReportInput {
 }
 
 const PLATE_TTL = 24 * 60 * 60 * 1000;
-const MODEL_REPORT_TTL = 7 * 24 * 60 * 60 * 1000;
+const MODEL_REPORT_TTL = 6 * 60 * 60 * 1000;
 
 function priceLabelFor(requestedPrice: number, value: number): PriceLabel {
   const diff = (requestedPrice - value) / value;
@@ -64,7 +65,7 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
     if (input.fuel || (!vehicle.fuel && era?.fuel)) vehicle.fuel = input.fuel || era?.fuel;
     if (!vehicle.body && era?.body) vehicle.body = era.body;
     if (!vehicle.power && era?.powerCv) vehicle.power = `${era.powerCv} CV`;
-    const isEv = (vehicle.fuel || '').toLowerCase().includes('elettr') || (vehicle.fuel || '').toLowerCase().includes('ev') || /tesla|polestar|byd/.test((vehicle.make || '').toLowerCase()) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((vehicle.model || '').toLowerCase());
+    const isEv = isBatteryElectric(vehicle.make, vehicle.model, vehicle.fuel);
     vehicle.transmission = isEv ? 'Automatico' : (input.transmission || vehicle.transmission || 'Manuale');
     if (input.version) vehicle.version = input.version;
     return vehicle;
@@ -82,7 +83,7 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   vehicle.dataSource = 'plate';
   if (input.fuel) vehicle.fuel = input.fuel;
   if (input.year) vehicle.year = input.year;
-  const isEvPlate = (vehicle.fuel || '').toLowerCase().includes('elettr') || (vehicle.fuel || '').toLowerCase().includes('ev') || /tesla|polestar|byd/.test((vehicle.make || '').toLowerCase()) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test((vehicle.model || '').toLowerCase());
+  const isEvPlate = isBatteryElectric(vehicle.make, vehicle.model, vehicle.fuel);
   if (isEvPlate) vehicle.transmission = 'Automatico';
   return vehicle;
 }
@@ -96,7 +97,7 @@ function cacheKeyFor(input: ReportInput): string {
 function reportKeyFor(input: ReportInput): string {
   const version = (input.version || '').trim().toLowerCase();
   const transmission = (input.transmission || '').trim().toLowerCase();
-  return `${cacheKeyFor(input)}:${input.year || ''}:${input.km || ''}:${input.requestedPrice || ''}:${version}:${transmission}`;
+  return `${cacheKeyFor(input)}:${input.year || ''}:${input.km ?? ''}:${input.requestedPrice || ''}:${version}:${transmission}:${input.fuel || ''}`;
 }
 
 export async function buildReport(input: ReportInput, options: { requireDetailedModelAnalysis?: boolean } = {}): Promise<{ report: AutoReport; cached: boolean }> {
@@ -107,7 +108,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
   const vehicle = await resolveVehicle(input);
   const isModelSearch = !input.plate;
 
-  const { value, min, max, adjustedForKm = 0, kmAdjustment = 0 } = input.km
+  const { value, min, max, adjustedForKm = 0, kmAdjustment = 0 } = input.km !== undefined
     ? estimateMarketValueWithKm(vehicle, input.km)
     : { ...estimateMarketValue(vehicle), adjustedForKm: 0, kmAdjustment: 0 };
 
@@ -120,7 +121,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
 
   // Run market scraping and vehicle reliability analysis in parallel
   const [marketStats, reliability] = await Promise.all([
-    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km).catch(() => undefined),
+    fetchSubitoMarketStats(vehicle.make, vehicle.model, vehicle.year, input.km, input.fuel, input.version).catch(() => undefined),
     analyzeVehicle({
       vehicle,
       km: input.km,
@@ -143,7 +144,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
     marketStats?.priceAvg &&
     marketSample >= 3 &&
     marketStats.comparison?.yearMatched !== false &&
-    (!input.km || marketStats.comparison?.kmMatched === true) &&
+    (input.km === undefined || marketStats.comparison?.kmMatched === true) &&
     !yearDiffExceeded
   );
 
@@ -163,7 +164,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
 
     // 3. Rettifica km se diverge dalla media
     let kmAdjusted = yearAdjusted;
-    if (input.km && marketStats.kmAvg && marketStats.kmAvg > 0) {
+    if (input.km !== undefined && marketStats.kmAvg && marketStats.kmAvg > 0) {
       const kmDiff = input.km - marketStats.kmAvg;
       const kmAdjFactor = Math.max(-0.18, Math.min(0.14, -(kmDiff / 100000) * 0.12));
       kmAdjusted = Math.round(yearAdjusted * (1 + kmAdjFactor) / 100) * 100;
@@ -190,7 +191,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       max: finalMax,
       adjustedForKm: useMarket ? undefined : (adjustedForKm || undefined),
       kmAdjustment: useMarket ? undefined : (kmAdjustment || undefined),
-      inputKm: input.km || undefined,
+      inputKm: input.km,
       inputYear: vehicle.year,
       requestedPrice: input.requestedPrice,
       priceVsMarketPercent: input.requestedPrice
@@ -198,7 +199,7 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
         : undefined,
       priceLabel: input.requestedPrice ? priceLabelFor(input.requestedPrice, comparisonValue) : undefined,
       comment: useMarket && !input.requestedPrice
-          ? `Stima indicativa basata sui prezzi richiesti in ${marketSample} annunci simili su ${marketStats!.source}${input.km ? ' (confrontati per anno e chilometraggio)' : ''}. I prezzi pubblicati non sono prezzi di compravendite concluse. Inserisci il prezzo richiesto per il confronto.`
+          ? `Stima indicativa basata sui prezzi richiesti in ${marketSample} annunci simili su ${marketStats!.source}${input.km !== undefined ? ' (confrontati per anno e chilometraggio)' : ''}. I prezzi pubblicati non sono prezzi di compravendite concluse. Inserisci il prezzo richiesto per il confronto.`
         : marketStats && input.km && marketStats.comparison?.kmMatched === false
           ? `Annunci con anno e chilometraggio abbastanza simili insufficienti: valore algoritmico indicativo, non prezzo di mercato verificato. ${marketStats.comparison.disclosure}`
           : buildPriceComment(input.requestedPrice, comparisonValue, input.km),
@@ -209,10 +210,10 @@ export async function buildReport(input: ReportInput, options: { requireDetailed
       const altVehicle = {
         ...alt,
         year: vehicle.year,
-        fuel: vehicle.fuel || alt.fuel,
-        body: vehicle.body || alt.body,
+        fuel: alt.fuel,
+        body: alt.body,
       };
-      const est = input.km
+      const est = input.km !== undefined
         ? estimateMarketValueWithKm(altVehicle, input.km)
         : estimateMarketValue(altVehicle);
 

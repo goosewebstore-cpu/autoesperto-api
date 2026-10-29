@@ -122,8 +122,8 @@ router.post(
           },
         },
       }],
-      metadata: { userId, product: 'premium_subscription' },
-      subscription_data: { metadata: { userId, product: 'premium_subscription' } },
+      metadata: { userId, product: 'premium_subscription', interval, plan: interval === 'year' ? 'PREMIUM_YEARLY' : 'PREMIUM_MONTHLY' },
+      subscription_data: { metadata: { userId, product: 'premium_subscription', interval, plan: interval === 'year' ? 'PREMIUM_YEARLY' : 'PREMIUM_MONTHLY' } },
       success_url: `${webUrl}/account?subscription=success&session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${webUrl}/account?subscription=cancelled`,
     });

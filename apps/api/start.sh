@@ -12,4 +12,6 @@ if [ "${DATABASE_SCHEMA_SYNC:-true}" = "true" ]; then
   echo "Synchronizing the database schema..."
   npx prisma db push --schema=packages/database/prisma/schema.prisma --skip-generate
 fi
+echo "Ensuring guide comments table is ready..."
+npx prisma db execute --schema=packages/database/prisma/schema.prisma --file=packages/database/prisma/migrations/20261029_guide_comments/migration.sql
 exec node apps/api/dist/index.js

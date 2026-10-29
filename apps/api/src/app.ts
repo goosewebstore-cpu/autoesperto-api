@@ -12,6 +12,7 @@ import analysisRoutes from './routes/analyses';
 import analyticsRoutes from './routes/analytics';
 import assistantRoutes from './routes/assistant';
 import passportRoutes from './routes/passport';
+import commentRoutes from './routes/comments';
 import { HttpError } from './http';
 import { stripeWebhook } from './webhook';
 
@@ -58,6 +59,7 @@ export function createApp(options: AppOptions = {}) {
   });
   app.use('/reports', apiLimiter);
   app.use('/analyses', apiLimiter);
+  app.use('/comments', apiLimiter);
 
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
@@ -104,6 +106,7 @@ export function createApp(options: AppOptions = {}) {
   app.use('/analytics', analyticsRoutes);
   app.use('/assistant', assistantRoutes);
   app.use('/passport', passportRoutes);
+  app.use('/comments', commentRoutes);
 
   app.use((_req, res) => {
     res.status(404).json({ success: false, error: 'Risorsa non trovata' });

@@ -30,6 +30,21 @@ model User {
   dealerProfile   DealerProfile?
   purchases       Purchase[]
   analyses        Analysis[]
+  guideComments   GuideComment[]
+}
+
+model GuideComment {
+  id        String   @id @default(cuid())
+  guideSlug String
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  body      String
+  status    String   @default("PENDING")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([guideSlug, status, createdAt])
+  @@index([userId, createdAt])
 }
 
 model Purchase {

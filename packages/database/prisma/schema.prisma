@@ -21,6 +21,7 @@ model User {
   emailVerified   DateTime?
   emailVerifyToken String?      @unique
   signupIp        String?
+  guestTrialUsedAt DateTime?
   accounts        Account[]
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
@@ -62,6 +63,14 @@ model Purchase {
   updatedAt             DateTime  @updatedAt
 
   @@index([userId, status])
+}
+
+model GuestTrial {
+  id        String   @id
+  usedAt    DateTime?
+  inputHash String?
+  resultJson String?
+  createdAt DateTime @default(now())
 }
 
 model Analysis {

@@ -9,6 +9,7 @@ import { analyzeVehiclePhoto } from '../services/ai';
 import { buildReport } from '../services/reportService';
 import { getAccountEntitlement } from '../services/entitlement';
 import { getAnalysisPrice } from '../services/billing';
+import { claimGuestTrial } from '../services/guestTrial';
 
 const router = Router();
 
@@ -79,6 +80,7 @@ router.post(
       return;
     }
     const { imageData } = analysisSchema.parse(req.body);
+    await claimGuestTrial(req, userId);
     const entitlement = await getAccountEntitlement(userId);
     if (!entitlement.entitled) {
       return res.status(402).json({

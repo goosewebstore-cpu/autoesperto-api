@@ -139,37 +139,19 @@ describe('AutoEsperto API (MVP)', () => {
   });
 
   describe('POST /reports/free-scan', () => {
-    it('input manuale senza account → richiede accesso per collegare prova e pagamenti', async () => {
+    it('il riconoscimento manuale non consuma la prova gratuita', async () => {
       const r = await req('/reports/free-scan', {
         method: 'POST',
-        body: { make: 'BMW', model: 'Serie 3', year: 2016 },
+        body: { make: 'BMW', model: 'Serie 3', year: 2016, recognitionOnly: true },
       });
-      assert.strictEqual(r.status, 401);
-      assert.strictEqual(r.data.success, false);
-      assert.strictEqual(r.data.needsLogin, true);
-    });
-
-    it('freeUsed non permette di saltare il login', async () => {
-      const r = await req('/reports/free-scan', {
-        method: 'POST',
-        body: { make: 'BMW', model: 'Serie 3', year: 2016, freeUsed: true },
-      });
-      assert.strictEqual(r.status, 401);
-      assert.strictEqual(r.data.needsLogin, true);
+      assert.strictEqual(r.status, 200);
+      assert.strictEqual(r.data.recognized, true);
+      assert.strictEqual(r.data.saved, false);
     });
 
     it('né foto né marca/modello → 400', async () => {
       const r = await req('/reports/free-scan', { method: 'POST', body: {} });
       assert.strictEqual(r.status, 400);
-    });
-
-    it('il report completo richiede un account anche per i modelli elettrici', async () => {
-      const r = await req('/reports/free-scan', {
-        method: 'POST',
-        body: { make: 'Tesla', model: 'Model 3', year: 2022, fuel: 'Elettrica' },
-      });
-      assert.strictEqual(r.status, 401);
-      assert.strictEqual(r.data.needsLogin, true);
     });
 
     it('getRepairMultiplier applica moltiplicatori corretti per Tesla ed esotiche', async () => {

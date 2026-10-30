@@ -50,6 +50,7 @@ async function accountSummary(userId: string) {
         phone: true,
         createdAt: true,
         emailVerified: true,
+        guestTrialUsedAt: true,
         subscription: true,
         analyses: {
           orderBy: { createdAt: 'desc' },
@@ -73,8 +74,8 @@ async function accountSummary(userId: string) {
   const monthlyPremium = activeSubscription && user.subscription?.plan === 'PREMIUM_MONTHLY';
   const paid = paidPurchases > 0;
   const emailVerified = !!user.emailVerified;
-  const trialAvailable = !owner && !premium && !monthlyPremium && analysisCount === 0;
-  const included = owner || premium ? 999 : monthlyPremium ? 10 : (trialAvailable ? 1 : 0) + paidPurchases;
+  const trialAvailable = !owner && !premium && !monthlyPremium && !user.guestTrialUsedAt && analysisCount === 0;
+  const included = owner || premium ? 999 : monthlyPremium ? 10 : (user.guestTrialUsedAt ? 0 : 1) + paidPurchases;
   const used = monthlyPremium ? await prisma.analysis.count({ where: { userId, createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } } }) : analysisCount;
   return {
     ...user,
@@ -93,7 +94,7 @@ async function accountSummary(userId: string) {
       remaining: Math.max(0, included - used),
       paid,
       emailVerified,
-      freeUsed: !trialAvailable && !paid,
+      freeUsed: Boolean(user.guestTrialUsedAt) || analysisCount > 0,
       trialAvailable,
       owner,
       purchase: user.purchases[0] || null,

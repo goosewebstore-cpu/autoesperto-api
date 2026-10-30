@@ -21,6 +21,16 @@ test('ogni acquisto copre esattamente una analisi successiva alla prova gratuita
   assert.equal(twoCredits.entitled, true);
 });
 
+test('la prova come ospite viene conteggiata dopo l’accesso e il pagamento apre una sola nuova analisi', () => {
+  const afterGuest = calculateAccountEntitlement({ userId: 'user-1', paidPurchases: 0, analysisCount: 0, guestTrialUsed: true, premium: false });
+  const afterPayment = calculateAccountEntitlement({ userId: 'user-1', paidPurchases: 1, analysisCount: 0, guestTrialUsed: true, premium: false });
+  const afterPaidReport = calculateAccountEntitlement({ userId: 'user-1', paidPurchases: 1, analysisCount: 1, guestTrialUsed: true, premium: false });
+  assert.equal(afterGuest.freeAvailable, false);
+  assert.equal(afterGuest.entitled, false);
+  assert.equal(afterPayment.entitled, true);
+  assert.equal(afterPaidReport.entitled, false);
+});
+
 test('account senza sessione non riceve crediti gratuiti e premium resta illimitato', () => {
   const anonymous = calculateAccountEntitlement({ userId: null, paidPurchases: 0, analysisCount: 0, premium: false });
   const premium = calculateAccountEntitlement({ userId: 'user-2', paidPurchases: 0, analysisCount: 30, premium: true });

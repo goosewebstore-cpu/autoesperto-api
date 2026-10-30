@@ -22,6 +22,7 @@ export function calculateAccountEntitlement(input: {
   emailVerified?: boolean;
   paidPurchases: number;
   analysisCount: number;
+  guestTrialUsed?: boolean;
   premium: boolean;
   monthlyPremium?: boolean;
   dailyAnalysisCount?: number;
@@ -30,9 +31,9 @@ export function calculateAccountEntitlement(input: {
   const unlimited = owner || input.premium;
   const dailyLimit = input.monthlyPremium ? 10 : null;
   const withinDailyLimit = dailyLimit === null || (input.dailyAnalysisCount || 0) < dailyLimit;
-  const freeAvailable = Boolean(input.userId) && !unlimited && input.analysisCount === 0;
+  const freeAvailable = Boolean(input.userId) && !unlimited && !input.guestTrialUsed && input.analysisCount === 0;
   const paid = input.paidPurchases > 0;
-  const paidCreditAvailable = input.paidPurchases > 0 && input.analysisCount <= input.paidPurchases;
+  const paidCreditAvailable = input.paidPurchases > 0 && input.analysisCount < input.paidPurchases + (input.guestTrialUsed ? 0 : 1);
   const entitled = unlimited || (input.monthlyPremium && withinDailyLimit) || freeAvailable || paidCreditAvailable;
   return {
     entitled,
@@ -52,11 +53,9 @@ export function calculateAccountEntitlement(input: {
  * Regole di accesso al report completo:
  * - Annuale / owner → accesso illimitato
  * - Mensile → 10 analisi al giorno, senza pubblicità
- * - primo account registrato (analysisCount === 0) → 1 analisi completa gratuita
- *   (nessuna verifica email richiesta per usarla)
+ * - una sola analisi gratuita, come ospite o con account
  * - ogni acquisto singolo (€1,99) → sblocca UNA analisi completa:
- *   ogni pagamento PAID copre una analisi (analysisCount <= paidPurchases)
- * - serve un account per usare la prova gratuita e collegare i pagamenti alle analisi
+ *   ogni pagamento PAID copre una analisi aggiuntiva
  */
 export async function getAccountEntitlement(userId: string | null): Promise<AccountEntitlement> {
   if (!userId) {
@@ -82,6 +81,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
       select: {
         email: true,
         emailVerified: true,
+        guestTrialUsedAt: true,
         purchases: { where: { status: 'PAID' }, select: { id: true } },
         subscription: { select: { plan: true, status: true } },
       },
@@ -114,6 +114,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     emailVerified: Boolean(user.emailVerified),
     paidPurchases: user.purchases.length,
     analysisCount,
+    guestTrialUsed: Boolean(user.guestTrialUsedAt),
     premium,
     monthlyPremium,
     dailyAnalysisCount,

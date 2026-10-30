@@ -1,4 +1,5 @@
 import { imageDataSchema } from '../services/imageValidation';
+import { createHash } from 'node:crypto';
 import { Router } from 'express';
 import { z } from 'zod';
 import type { Request } from 'express';
@@ -11,6 +12,7 @@ import { verifyAuthToken } from '../services/auth';
 import { asyncHandler, serviceUnavailable } from '../http';
 import { getAccountEntitlement } from '../services/entitlement';
 import { getAnalysisPrice } from '../services/billing';
+import { claimGuestTrial, ensureGuestTrial } from '../services/guestTrial';
 
 const router = Router();
 
@@ -60,7 +62,6 @@ const freeScanSchema = z
     fuel: z.string().trim().optional(),
     transmission: z.string().trim().optional(),
     version: z.string().trim().optional(),
-    freeUsed: z.boolean().optional(),
     // La foto viene prima usata per un riconoscimento rapido; il report parte
     // solo dopo che l'utente ha confermato anno e chilometri.
     recognitionOnly: z.boolean().optional(),
@@ -98,6 +99,19 @@ function manualPhotoAnalysis(make: string, model: string, year?: number, fuel?: 
     note: 'Identità del veicolo basata sui dati inseriti. Non è stato possibile eseguire una valutazione visiva della foto.',
   };
 }
+
+router.get(
+  '/trial',
+  asyncHandler(async (req, res) => {
+    const userId = getOptionalUserId(req);
+    if (userId) await claimGuestTrial(req, userId);
+    const available = userId
+      ? (await getAccountEntitlement(userId)).freeAvailable
+      : !(await ensureGuestTrial(req, res)).usedAt;
+    res.set('Cache-Control', 'no-store');
+    res.json({ success: true, available });
+  })
+);
 
 router.post(
   '/analyze',
@@ -251,17 +265,25 @@ router.post(
     }
 
     const userId = getOptionalUserId(req);
-    if (!userId) {
+    const inputHash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
+    const guestTrial = userId ? null : await ensureGuestTrial(req, res);
+    if (userId) await claimGuestTrial(req, userId);
+    if (guestTrial?.usedAt) {
+      if (guestTrial.inputHash === inputHash && guestTrial.resultJson) {
+        res.set('Cache-Control', 'no-store');
+        res.json(JSON.parse(guestTrial.resultJson));
+        return;
+      }
       res.status(401).json({
         success: false,
-        error: 'Accedi o crea un account per iniziare con la tua analisi gratuita.',
+        error: 'Hai già usato la tua analisi gratuita. Crea un account per scegliere il pagamento.',
         needsLogin: true,
       });
       return;
     }
 
-    const entitlement = await getAccountEntitlement(userId);
-    if (!entitlement.entitled) {
+    const entitlement = userId ? await getAccountEntitlement(userId) : null;
+    if (userId && !entitlement?.entitled) {
       res.status(402).json({
         success: false,
         error: 'Hai terminato l’analisi gratuita. Acquista un’analisi singola a 1,99 €.',
@@ -294,7 +316,8 @@ router.post(
 
     let saved = false;
     let analysis: { id: string; createdAt: Date } | null = null;
-    const stored = await prisma.analysis.create({
+    if (userId) {
+      const stored = await prisma.analysis.create({
         data: {
           userId,
           title,
@@ -306,15 +329,16 @@ router.post(
           consentAt: new Date(),
           termsVersion: '2026-08-02',
         },
-    });
-    saved = true;
-    analysis = { id: stored.id, createdAt: stored.createdAt };
+      });
+      saved = true;
+      analysis = { id: stored.id, createdAt: stored.createdAt };
+    }
 
     res.set('Cache-Control', 'no-store');
     void prisma.analyticsEvent.create({
       data: { type: 'scan', path: '/', meta: JSON.stringify({ make, model, recognized: true, saved }), userId },
     }).catch(() => undefined);
-    res.json({
+    const result = {
       success: true,
       recognized: true,
       vehicle,
@@ -322,7 +346,23 @@ router.post(
       saved,
       freeUsed: !userId,
       analysis: analysis ? { id: analysis.id, createdAt: analysis.createdAt.toISOString() } : undefined,
-    });
+    };
+    if (guestTrial) {
+      const claimed = await prisma.guestTrial.updateMany({
+        where: { id: guestTrial.id, usedAt: null },
+        data: { usedAt: new Date(), inputHash, resultJson: JSON.stringify(result) },
+      });
+      if (!claimed.count) {
+        const latest = await prisma.guestTrial.findUnique({ where: { id: guestTrial.id } });
+        if (latest?.inputHash === inputHash && latest.resultJson) {
+          res.json(JSON.parse(latest.resultJson));
+          return;
+        }
+        res.status(401).json({ success: false, error: 'Hai già usato la tua analisi gratuita. Accedi per proseguire.', needsLogin: true });
+        return;
+      }
+    }
+    res.json(result);
   })
 );
 

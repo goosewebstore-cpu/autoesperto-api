@@ -1,4 +1,4 @@
-import { isBatteryElectric } from './powertrain';
+import { isBatteryElectric, resolveVehicleFuel } from './powertrain';
 import type { AutoReport, PriceLabel, VehicleData } from '@autoesperto/types';
 import { lookupPlate, type RegCheckRawData } from './regcheck';
 import { normalizeVehicleData } from './vehicleKB';
@@ -65,6 +65,7 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
     if (input.fuel || (!vehicle.fuel && era?.fuel)) vehicle.fuel = input.fuel || era?.fuel;
     if (!vehicle.body && era?.body) vehicle.body = era.body;
     if (!vehicle.power && era?.powerCv) vehicle.power = `${era.powerCv} CV`;
+    vehicle.fuel = resolveVehicleFuel(vehicle.make, vehicle.model, vehicle.fuel);
     const isEv = isBatteryElectric(vehicle.make, vehicle.model, vehicle.fuel);
     vehicle.transmission = isEv ? 'Automatico' : (input.transmission || vehicle.transmission || 'Manuale');
     if (input.version) vehicle.version = input.version;
@@ -83,6 +84,7 @@ async function resolveVehicle(input: ReportInput): Promise<VehicleData> {
   vehicle.dataSource = 'plate';
   if (input.fuel) vehicle.fuel = input.fuel;
   if (input.year) vehicle.year = input.year;
+  vehicle.fuel = resolveVehicleFuel(vehicle.make, vehicle.model, vehicle.fuel);
   const isEvPlate = isBatteryElectric(vehicle.make, vehicle.model, vehicle.fuel);
   if (isEvPlate) vehicle.transmission = 'Automatico';
   return vehicle;
@@ -101,7 +103,8 @@ function reportKeyFor(input: ReportInput): string {
 }
 
 export async function buildReport(input: ReportInput, options: { requireDetailedModelAnalysis?: boolean } = {}): Promise<{ report: AutoReport; cached: boolean }> {
-  const cachePrefix = options.requireDetailedModelAnalysis ? 'report:detailed' : 'report';
+  input = { ...input, fuel: resolveVehicleFuel(input.make, input.model, input.fuel) };
+  const cachePrefix = options.requireDetailedModelAnalysis ? 'report:v2:detailed' : 'report:v2';
   const cached = cacheGet<AutoReport>(`${cachePrefix}:${reportKeyFor(input)}`);
   if (cached) return { report: cached, cached: true };
 

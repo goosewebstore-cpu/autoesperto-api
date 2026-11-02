@@ -1,3 +1,4 @@
+import { resolveVehicleFuel } from '../services/powertrain';
 import { imageDataSchema } from '../services/imageValidation';
 import { Router } from 'express';
 import { z } from 'zod';

@@ -11,24 +11,12 @@ const USER_AGENT =
   'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
 export function getMarketSearchUrls(vehicle: VehicleData): MarketLink[] {
-  const year = vehicle.year || 2020;
-  const make = encodeURIComponent(vehicle.make);
-  const model = encodeURIComponent(vehicle.model);
-
-  return [
-    {
-      source: 'AutoScout24',
-      url: `https://www.autoscout24.it/risultati/?cy=IT&make=${make}&model=${model}&fregfrom=${year - 1}&fregto=${year + 1}&sort=standard`,
-    },
-    {
-      source: 'Subito.it',
-      url: getSubitoSearchUrl(vehicle.make, vehicle.model),
-    },
-    {
-      source: 'Automobile.it',
-      url: `https://www.automobile.it/annunci/${vehicle.make.toLowerCase()}-${vehicle.model.toLowerCase().replace(/\s+/g, '-')}/?annoDa=${year - 1}&annoA=${year + 1}`,
-    },
-  ];
+  const make=subitoSlug(vehicle.make), model=subitoSlug(vehicle.model);
+  const year=vehicle.year;
+  const scout=new URL(`https://www.autoscout24.it/lst/${make}/${model}`);
+  scout.searchParams.set('cy','I');
+  if(year){scout.searchParams.set('fregfrom',String(year));scout.searchParams.set('fregto',String(year));}
+  return [{source:'AutoScout24',url:scout.toString()},{source:'Subito.it',url:getSubitoSearchUrl(vehicle.make,vehicle.model,year)},{source:'Automobile.it',url:`https://www.automobile.it/${make}-${model.replace(/-/g,'_')}`}];
 }
 
 export function getSubitoSearchUrl(make: string, model: string, year?: number): string {

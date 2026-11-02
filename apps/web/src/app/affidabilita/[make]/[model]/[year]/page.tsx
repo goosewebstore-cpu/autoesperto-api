@@ -88,7 +88,7 @@ export default async function ReliabilityYearPage({ params }: PageProps) {
     },
     {
       q: `Vale la pena comprare una ${make.name} ${model} ${yearNum} usata?`,
-      a: `Una ${make.name} ${model} del ${yearNum} con punteggio ${est.score.toFixed(1)}/10 è una scelta ${est.score >= 8 ? 'molto solida' : est.score >= 7 ? 'equilibrata' : 'da valutare con attenzione'}: prima di comprare verifica storico tagliandi, km coerenti, distribuzione già fatta e assenza di incidenti. Controlla poi il valore reale di mercato per non pagare sopra la media.`,
+      a: `Una ${make.name} ${model} del ${yearNum} con punteggio ${est.score.toFixed(1)}/10 è una scelta ${est.score >= 8 ? 'molto solida' : est.score >= 7 ? 'equilibrata' : 'da valutare con attenzione'}: prima di comprare verifica storico tagliandi, km coerenti, distribuzione già fatta e documentazione sugli incidenti. Confronta il prezzo richiesto con una stima indicativa e con esemplari simili.`,
     },
     {
       q: `Cosa controllare su una ${make.name} ${model} ${yearNum} prima dell'acquisto?`,
@@ -218,7 +218,7 @@ export default async function ReliabilityYearPage({ params }: PageProps) {
         <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50">
           <h2 className="text-lg font-bold text-text-primary">Prima di comprare: valore e costi</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            L&apos;affidabilità è solo metà della decisione: controlla il valore reale di mercato e i costi di riparazione
+            L&apos;affidabilità è solo metà della decisione: confronta la stima indicativa con il prezzo richiesto e considera i costi di riparazione
             della {make.name} {model} {yearNum}.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">

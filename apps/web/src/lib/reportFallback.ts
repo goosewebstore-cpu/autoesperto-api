@@ -1,3 +1,4 @@
+import { isBatteryElectric } from './powertrain';
 import type { AutoReport, PriceLabel, VehicleData, ReliabilityAnalysis, PriceAnalysis } from '@autoesperto/types';
 import type { FreeScanResult } from './api';
 import { buildAlternatives } from './stima';
@@ -72,9 +73,7 @@ export function generateInstantReport(input: {
   const modelLower = input.model.toLowerCase().trim();
   const fuelLower = (input.fuel || '').toLowerCase().trim();
 
-  const isElectric = fuelLower.includes('elettr') || fuelLower.includes('ev') || fuelLower.includes('bev') ||
-    /tesla|polestar|byd/.test(makeLower) ||
-    /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(modelLower);
+  const isElectric = isBatteryElectric(input.make, input.model, input.fuel);
 
   const isDiesel = fuelLower.includes('diesel') || fuelLower.includes('tdi') || fuelLower.includes('dci');
   const isHybrid = fuelLower.includes('ibrid') || fuelLower.includes('hybrid');
@@ -107,7 +106,7 @@ export function generateInstantReport(input: {
 
   let estValue = Math.round((basePrice * depRate) / 100) * 100;
 
-  if (input.km) {
+  if (input.km !== undefined) {
     let kmFactor = 1.0;
     if (input.km < 80000) {
       const bonusRatio = Math.min(1.0, (80000 - input.km) / 80000);
@@ -136,7 +135,7 @@ export function generateInstantReport(input: {
     else if (input.requestedPrice > estValue * 1.05) priceLabel = 'HIGH';
   }
 
-  const scoreNum = Math.min(9.5, Math.max(6.0, Math.round((8.2 - age * 0.15 + (priceLabel === 'GOOD' ? 0.5 : priceLabel === 'HIGH' ? -0.6 : 0) + (isElectric ? 0.3 : 0)) * 10) / 10));
+  const scoreNum = Math.min(9.5, Math.max(6.0, Math.round((8.2 - age * 0.15 + (isElectric ? 0.3 : 0)) * 10) / 10));
 
   const era = findModelEra(input.make, input.model);
   const resolvedFuel = input.fuel || (isElectric ? 'Elettrica' : isDiesel ? 'Diesel' : isHybrid ? 'Ibrida' : isGpl ? 'GPL' : isMetano ? 'Metano' : era?.fuel || 'Benzina');
@@ -160,12 +159,12 @@ export function generateInstantReport(input: {
     score: scoreNum,
     verdict: scoreNum >= 7.8 ? 'BUY' : scoreNum >= 6.8 ? 'NEGOTIATE' : 'AVOID',
     verdictLabel: scoreNum >= 7.8 ? 'Consigliata' : scoreNum >= 6.8 ? 'Da valutare' : 'Attenzione',
-    summary: `${input.make} ${input.model} (${yearDisplay}) presenta un solido equilibrio complessivo tra affidabilità meccanica, costi di gestione e tenuta del valore sul mercato.`,
+    summary: `Stima locale indicativa per ${input.make} ${input.model} (${yearDisplay}). Il servizio completo non è disponibile: punteggi e costi sono orientativi, non una diagnosi del veicolo né una quotazione verificata.`,
     strengths: isElectric
       ? [
           'Powertrain 100% elettrico ultra-efficiente e silenzioso',
-          'Costi di manutenzione ridotti di oltre il 50% (zero cambio olio o candele)',
-          'Esenzione bollo e bassi costi energetici per 100 km',
+          'Nessun cambio olio del motore termico o candele sulle elettriche pure',
+          'Bollo da verificare per regione e anno; costo energetico dipendente dalla tariffa',
         ]
       : [
           'Costi di gestione e manutenzione contenuti',
@@ -205,7 +204,7 @@ export function generateInstantReport(input: {
       ? 'Motore Turbodiesel affidabile: verificare regolarità cambio olio specifico low-SAPS per FAP.'
       : 'Motore affidabile con regolare manutenzione programmata.',
     transmission: isElectric
-      ? 'Presa diretta monomarcia senza frizione meccanica: massima affidabilità.'
+      ? 'Presa diretta monomarcia senza frizione meccanica: verificare funzionamento e manutenzione prevista.'
       : 'Cambio fluido, verificare innesti a freddo.',
     maintenance: isElectric ? 'basso' : 'medio',
     commonIssues: isElectric
@@ -308,13 +307,8 @@ export function generateInstantReport(input: {
     requestedPrice: input.requestedPrice,
     priceVsMarketPercent,
     priceLabel,
-    comment: input.requestedPrice
-      ? priceLabel === 'GOOD'
-        ? 'Prezzo vantaggioso rispetto al valore medio stimato di mercato.'
-        : priceLabel === 'HIGH'
-        ? 'Prezzo superiore alla media di mercato: ti consigliamo di negoziare.'
-        : 'Prezzo in linea con le attuali quotazioni di mercato.'
-      : `Quotazione media per ${input.make} ${input.model} (${year}). Inserisci il prezzo per il confronto.`,
+    isSegmentEstimate: true,
+    comment: 'Stima algoritmica locale: nessun campione di annunci verificato in questa risposta. Anno, chilometri e condizioni possono cambiare il prezzo; riprova l’analisi per cercare confronti aggiornati.',
     marketUrls: [
       { source: 'Subito.it', url: `https://www.subito.it/annunci-italia/vendita/auto/?q=${encodeURIComponent(`${input.make} ${input.model}`)}` },
       { source: 'AutoScout24', url: `https://www.autoscout24.it/lst/${encodeURIComponent(input.make)}/${encodeURIComponent(input.model)}` },
@@ -339,7 +333,7 @@ export function generateInstantReport(input: {
       model: input.model,
       year,
       fuel: resolvedFuel,
-      confidence: 'alta',
+      confidence: 'bassa',
     },
     report,
     saved: false,

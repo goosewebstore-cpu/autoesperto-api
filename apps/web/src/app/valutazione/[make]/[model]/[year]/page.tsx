@@ -175,7 +175,7 @@ export default async function ModelYearValutazionePage({ params }: PageProps) {
         </section>
 
         <div className="mt-6">
-          <ModelReportCard make={make.name} model={model} year={yearNum} initialReport={initialReport} />
+          <ModelReportCard make={make.name} model={model} year={yearNum} />
         </div>
 
         <Link

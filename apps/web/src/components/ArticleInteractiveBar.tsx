@@ -157,7 +157,7 @@ export function ArticleFeedbackBox() {
             Ti è stata utile questa guida?
           </h3>
           <p className="text-xs text-slate-500 mt-1 max-w-sm mx-auto">
-            Il tuo voto anonimo aiuta la nostra redazione ad aggiornare le normative e migliorare i contenuti.
+            Il tuo voto anonimo aiuta il Team AutoEsperto ad aggiornare le normative e migliorare i contenuti.
           </p>
           <div className="mt-4 flex items-center justify-center gap-3">
             <button

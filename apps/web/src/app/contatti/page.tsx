@@ -3,7 +3,7 @@ import LegalPage from '@/components/legal/LegalPage';
 
 export const metadata: Metadata = {
   title: 'Contatti e Assistenza | AutoEsperto',
-  description: 'Contatta il team di AutoEsperto per assistenza tecnica, rettifiche dati, relazioni con la stampa e partnership con officine e periti.',
+  description: 'Contatta AutoEsperto per assistenza, rettifiche, collaborazioni e proposte di pubblicità per attività locali e aziende del settore auto.',
   alternates: { canonical: '/contatti' },
 };
 
@@ -11,35 +11,48 @@ export default function ContactPage() {
   return (
     <LegalPage
       title="Contatti & Assistenza"
-      updated="25 agosto 2026"
+      updated="29 ottobre 2026"
       intro="Siamo a disposizione per assistenza su valutazioni e Passaporto Digitale, segnalazioni tecniche, relazioni con i media e collaborazioni professionali."
       sections={[
         {
           heading: 'Supporto Utenti & Segnalazioni Dati',
           paragraphs: [
-            'Per domande sul funzionamento del servizio, segnalazioni di annunci non conformi o suggerimenti metodologici: scrivi a supporto@autoesperto.it.',
-            'Il nostro team di supporto risponde dal lunedì al venerdì (09:00 - 18:00) entro 24-48 ore lavorative.',
+            'Per assistenza, richieste sul report storico del veicolo, privacy o segnalazioni: scrivi a goosewebstore@gmail.com. Disponibilità e prezzo di eventuali verifiche esterne vengono comunicati prima di procedere.',
+          ],
+        },
+        {
+          heading: 'Richiesta controllo storico CARFAX',
+          paragraphs: [
+            'Scrivi a goosewebstore@gmail.com con oggetto “Richiesta controllo storico CARFAX” e indica il veicolo e il tipo di verifica che cerchi. Ti confermeremo se il controllo è disponibile, quali dati servono, cosa include, tempi e prezzo totale. Pagherai solo dopo aver ricevuto e accettato queste informazioni.',
+            'La richiesta via email non comporta alcun addebito. Il controllo storico esterno non è incluso nell’analisi AutoEsperto da 1,99 € né nei piani mensile e annuale.',
           ],
         },
         {
           heading: 'Ufficio Stampa & Relazioni con i Media',
           paragraphs: [
-            'Per richieste di interviste, dati statistici sull\'andamento delle quotazioni dell\'usato in Italia, report sulla svalutazione delle auto elettriche o approfondimenti sul Regolamento UE 2026/1738 (Passaporto Digitale del Veicolo): stampa@autoesperto.it.',
+            'Per richieste stampa e informazioni sul progetto: goosewebstore@gmail.com.',
           ],
         },
         {
-          heading: 'Partnership con Officine, Gommisti e Periti Indipendenti',
+          heading: 'Pubblicità e collaborazioni commerciali',
           paragraphs: [
-            'Sei un\'officina meccatronica, un centro revisioni MCTC o un perito assicurativo e desideri integrare i controlli certificati di AutoEsperto o figurare nella rete di ispezione indipendente pre-acquisto? Scrivi a partner@autoesperto.it.',
+            'Hai un’officina, una carrozzeria, un’attività legata all’auto o un servizio utile agli automobilisti? Puoi proporre una collaborazione o uno spazio pubblicitario su AutoEsperto, anche per attività locali.',
+            'Scrivi a ralfhjavier@gmail.com indicando il nome dell’attività, la zona, il sito o i contatti e cosa vorresti promuovere. Valuteremo insieme disponibilità, formato e costi prima di qualsiasi accordo.',
+            'Gli eventuali contenuti sponsorizzati saranno identificati chiaramente e i piani che prevedono l’esperienza senza pubblicità manterranno tale beneficio.',
           ],
         },
         {
-          heading: 'Gestione del Progetto, Informazioni Legali & PEC',
+          heading: 'Partner e investitori',
+          paragraphs: [
+            'Per collaborazioni con officine, periti, aziende o proposte di investimento: scrivi a ralfhjavier@gmail.com.',
+          ],
+        },
+        {
+          heading: 'Informazioni sul progetto',
           paragraphs: [
             'Piattaforma: AutoEsperto.it — Progetto tecnologico indipendente gestito da Ralfh (Sviluppatore Freelance)',
             'Sede operativa: Siracusa (SR), Italia',
-            'Posta Elettronica Certificata (PEC): autoesperto@pec.it',
-            'Supporto & Privacy: supporto@autoesperto.it',
+            'Contatto generale e privacy: goosewebstore@gmail.com',
           ],
         },
       ]}

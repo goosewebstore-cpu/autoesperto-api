@@ -1,3 +1,4 @@
+import { isBatteryElectric } from './powertrain';
 import { BRAND_FAILURES, BOUTIQUE_SPORT_MAKES, detectSegment, estimateRepair, type SegmentKey } from './riparazione';
 
 export interface ReliabilityEstimate {
@@ -141,7 +142,7 @@ export function estimateReliability(make: string, model: string, year: number, f
   const f = (fuelInput || '').toLowerCase();
   const mk = make.toLowerCase();
   const mdl = model.toLowerCase();
-  const isElectric = f.includes('elettr') || f.includes('ev') || f.includes('bev') || /tesla|polestar|byd/.test(mk) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(mdl);
+  const isElectric = isBatteryElectric(mk, mdl, f);
 
   const segmentKey = detectSegment(make, model);
   const age = Math.max(0, new Date().getFullYear() - year);

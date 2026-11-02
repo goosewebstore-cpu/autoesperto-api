@@ -51,6 +51,8 @@ import SiteFooter from '@/components/SiteFooter';
 import {
   getPassportById,
   savePassport,
+  deletePassport,
+  generateShareCode,
   updatePassportKm,
   addDocumentToPassport,
   removeDocumentFromPassport,
@@ -65,7 +67,7 @@ import {
   getTrustBadgeForPassport,
   generatePassportTransfer,
 } from '@/lib/passportStorage';
-import { getVehiclePassportPhoto } from '@/lib/vehicleImageResolver';
+import { getVehiclePassportPhoto, resolveVehicleImage } from '@/lib/vehicleImageResolver';
 import { askPassportAI } from '@/lib/api';
 import type {
   VehiclePassportData,
@@ -138,29 +140,65 @@ export default function PassportDetailClient({ id }: { id: string }) {
 
   const handleSaveVehicleEdit = () => {
     if (!passport) return;
+    const isSampleCar = passport.id === 'pass-bmw-320d-sample' || passport.shareCode === 'AE-48291';
+    const newId = isSampleCar ? `pass-${Date.now()}` : passport.id;
+    const newShareCode = isSampleCar ? generateShareCode() : passport.shareCode;
+
+    const newMake = editMake.trim() || passport.vehicle.make;
+    const newModel = editModel.trim() || passport.vehicle.model;
+    const newBody = editBody || passport.vehicle.body;
+
+    const resolvedPhoto = resolveVehicleImage(newMake, newModel, newBody);
+
+    // If changing model on sample car or brand change, replace photos so it doesn't show old BMW
+    let updatedPhotos = passport.photos || [];
+    if (isSampleCar || (passport.vehicle.make.toLowerCase() !== newMake.toLowerCase())) {
+      updatedPhotos = [
+        {
+          id: `photo-${Date.now()}-1`,
+          url: resolvedPhoto,
+          category: 'auto',
+          title: `${newMake} ${newModel}`.trim(),
+          description: 'Foto veicolo aggiornata',
+          date: new Date().toISOString().split('T')[0],
+        },
+      ];
+    }
+
     const updated: VehiclePassportData = {
       ...passport,
+      id: newId,
+      shareCode: newShareCode,
       vehicle: {
         ...passport.vehicle,
-        make: editMake || passport.vehicle.make,
-        model: editModel || passport.vehicle.model,
+        make: newMake,
+        model: newModel,
         version: editVersion,
         year: editYear,
         fuel: editFuel,
         transmission: editTransmission,
         power: editPower,
         displacement: editDisplacement,
-        body: editBody,
+        body: newBody,
         color: editColor,
         euroClass: editEuroClass,
         plate: editPlate,
+        imageUrl: resolvedPhoto,
       },
-      nickname: `${editMake || passport.vehicle.make} ${editModel || passport.vehicle.model}`,
+      nickname: `${newMake} ${newModel}`.trim(),
+      mainPhoto: resolvedPhoto,
+      photos: updatedPhotos,
       updatedAt: new Date().toISOString(),
     };
+
     savePassport(updated);
     setPassport(updated);
     setShowVehicleEditModal(false);
+
+    if (isSampleCar) {
+      deletePassport('pass-bmw-320d-sample');
+      router.replace(`/passport/${newId}`);
+    }
   };
 
   const handleOpenTransfer = () => {
@@ -842,7 +880,7 @@ export default function PassportDetailClient({ id }: { id: string }) {
                   <FileText className="w-4 h-4 text-blue-600" /> Documenti, Libretto &amp; Fatture Tagliandi
                 </h2>
                 <p className="text-xs text-slate-500">
-                  Documenti certificati memorizzati in modo privato e sicuro sul tuo profilo.
+                  Documenti aggiunti al profilo. Verifica sempre originalità e validità presso la fonte competente.
                 </p>
               </div>
               <button

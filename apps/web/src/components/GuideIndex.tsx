@@ -20,6 +20,7 @@ import { guides, GUIDE_CATEGORIES, type GuideCategory, type Guide } from '@/lib/
 import { GUIDE_PAGE_FEATURED, GUIDE_PRIORITY_ORDER } from '@/config/guides-positions';
 import GuideCard from '@/components/GuideCard';
 import PageHero from '@/components/PageHero';
+import GuideEditorialOverview from '@/components/GuideEditorialOverview';
 import AdBanner from '@/components/ads/AdBanner';
 
 const PAGE_SIZE = 12;
@@ -87,14 +88,7 @@ export default function GuideIndex() {
         });
       case 'recenti':
       default:
-        return list.sort((a, b) => {
-          const aPriority = GUIDE_PRIORITY_ORDER.indexOf(a.slug);
-          const bPriority = GUIDE_PRIORITY_ORDER.indexOf(b.slug);
-          if (aPriority !== -1 && bPriority !== -1) return aPriority - bPriority;
-          if (aPriority !== -1) return -1;
-          if (bPriority !== -1) return 1;
-          return b.published.localeCompare(a.published);
-        });
+        return list.sort((a, b) => b.published.localeCompare(a.published));
     }
   }, [filtered, sortBy]);
 
@@ -188,29 +182,9 @@ export default function GuideIndex() {
       </PageHero>
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
-        {/* ── Featured Top 3 Section (when not searching and on page 1) ── */}
-        {!q && current === 1 && !category && featuredGuides.length > 0 && (
-          <section className="mb-12">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="grid h-7 w-7 place-items-center rounded-xl bg-blue-600 text-white shadow-xs">
-                <Sparkles className="w-4 h-4" />
-              </span>
-              <div>
-                <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
-                  Guide in Primo Piano — Trending 2026
-                </h2>
-                <p className="text-xs text-slate-500">I temi più letti e discussi dagli automobilisti questo mese</p>
-              </div>
-            </div>
+        {!q && current === 1 && !category && <GuideEditorialOverview />}
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-              {featuredGuides.map((guide) => (
-                <GuideCard key={`feat-${guide.slug}`} guide={guide} featured={true} />
-              ))}
-            </div>
-          </section>
-        )}
-
+        <h2 className="text-xl font-bold text-slate-900 mb-4">Cerca nell’archivio</h2>
         {/* ── Search & Filter Hub ── */}
         <section className="rounded-3xl border border-slate-200/90 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 sm:p-7 shadow-xs mb-8">
           <div className="relative">
@@ -407,7 +381,7 @@ export default function GuideIndex() {
                 Quanto vale la tua auto usata?
               </h3>
               <p className="text-xs text-slate-600 dark:text-slate-400 mt-1.5 leading-relaxed">
-                Calcola la quotazione di mercato istantanea basata sull&apos;analisi di oltre 10.000 annunci reali.
+                Ottieni una stima indicativa e consulta le fonti e i confronti disponibili per la tua auto.
               </p>
             </div>
             <Link

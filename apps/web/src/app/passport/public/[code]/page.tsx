@@ -2,9 +2,9 @@ import type { Metadata } from 'next';
 import PassportPublicClient from './PassportPublicClient';
 
 export const metadata: Metadata = {
-  title: 'Profilo Digitale Auto Certificato | AutoEsperto',
+  title: 'Profilo Digitale Auto Condiviso | AutoEsperto',
   description:
-    'Visualizza lo storico manutenzione, l\'Health Score, le foto e i dati verificati di questo veicolo su AutoEsperto.',
+    'Visualizza i dati del veicolo, le foto e lo storico che il proprietario ha scelto di condividere su AutoEsperto.',
 };
 
 export default async function PassportPublicPage({

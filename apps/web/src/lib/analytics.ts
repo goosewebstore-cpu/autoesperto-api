@@ -1,7 +1,15 @@
 import { API_URL } from '@/lib/api';
+import { hasCategory } from '@/lib/consent';
+import { fireAdsAnalysisCompleted } from '@/components/AdsTracker';
 
 export type AnalyticsEvent =
   | 'page_view'
+  | 'page_leave'
+  | 'visit'
+  | 'analysis_failed'
+  | 'photo_recognition_started'
+  | 'photo_recognition_completed'
+  | 'photo_recognition_failed'
   | 'search_car'
   | 'photo_upload'
   | 'car_selected'
@@ -14,7 +22,16 @@ export type AnalyticsEvent =
   | 'premium_checkout_started'
   | 'premium_subscribed'
   | 'report_offer_viewed'
+  | 'preview_viewed'
+  | 'unlock_clicked'
   | 'report_purchase_started'
+  | 'checkout_started'
+  | 'payment_completed'
+  | 'report_unlocked'
+  | 'credits_purchased'
+  | 'subscription_started'
+  | 'subscription_cancelled'
+  | 'subscription_payment_failed'
   | 'purchase_completed'
   | 'pdf_requested'
   | 'share_clicked'
@@ -48,13 +65,18 @@ export type AnalyticsEvent =
   | 'health_scan_completed'
   | 'health_score_applied';
 
-export function trackEvent(event: AnalyticsEvent, meta?: Record<string, unknown>): void {
+export function trackEvent(event: AnalyticsEvent, meta?: Record<string, unknown>, eventId?: string): void {
   if (typeof window === 'undefined') return;
 
+  if (event === 'analysis_completed') fireAdsAnalysisCompleted();
+  if (!hasCategory('analytics')) return;
+
+  try {
   const payload = {
     type: event,
+    eventId: eventId || crypto.randomUUID(),
     path: window.location.pathname,
-    meta: meta ? JSON.stringify(meta) : undefined,
+    meta: JSON.stringify({ ...meta, sessionId: getAnalyticsSessionId(), measurementVersion: 2 }),
     visitorId: getVisitorId(),
   };
 
@@ -63,20 +85,41 @@ export function trackEvent(event: AnalyticsEvent, meta?: Record<string, unknown>
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
+    keepalive: true,
   }).catch(() => {});
 
   // Also log in dev
   if (process.env.NODE_ENV === 'development') {
     console.log('[Analytics]', event, meta || '');
   }
+  } catch { /* Measurements must never interrupt an analysis. */ }
 }
 
-function getVisitorId(): string {
+let volatileVisitor = '';
+let volatileSession = '';
+
+export function getVisitorId(): string {
   if (typeof localStorage === 'undefined') return 'ssr';
-  let id = localStorage.getItem('ae-visitor-id');
+  try {
+  let id = localStorage.getItem('ae-visitor-id') || localStorage.getItem('ae_visitor_id');
   if (!id) {
     id = crypto.randomUUID();
     localStorage.setItem('ae-visitor-id', id);
   }
   return id;
+  } catch {
+    return volatileVisitor ||= crypto.randomUUID();
+  }
+}
+
+export function getAnalyticsSessionId(): string {
+  try {
+    const raw = sessionStorage.getItem('ae-analytics-session');
+    const session = raw ? JSON.parse(raw) : null;
+    const id = session?.id && Date.now() - session.lastSeen < 30 * 60 * 1000 ? session.id : crypto.randomUUID();
+    sessionStorage.setItem('ae-analytics-session', JSON.stringify({ id, lastSeen: Date.now() }));
+    return id;
+  } catch {
+    return volatileSession ||= crypto.randomUUID();
+  }
 }

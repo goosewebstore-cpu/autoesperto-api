@@ -172,6 +172,12 @@ export interface PhotoAnalysisResult {
     area?: string;
     repairHint?: string;
   };
+  inspection?: {
+    summary: string;
+    confidence: 'bassa' | 'media' | 'alta';
+    areas: Array<{ area: string; status: 'difetto_visibile' | 'nessun_danno_evidente' | 'non_valutabile'; details: string }>;
+    limitations: string[];
+  };
   repairRange?: { min: number; max: number };
   estimatedTimeDays?: number;
   note: string;
@@ -184,4 +190,18 @@ export interface AutoReport {
   alternatives?: AlternativeVehicle[];
   photoAnalysis?: PhotoAnalysisResult;
   createdAt: string;
+}
+
+/** Dati consentiti nella risposta gratuita; il report completo resta sul server. */
+export interface ReportPreview {
+  reportId: string;
+  accessToken: string;
+  vehicle: { make: string; model: string; year?: number; version?: string; fuel?: string };
+  requestedPrice?: number;
+  marketRange?: { min: number; max: number };
+  firstJudgment?: { label: string; explanation: string };
+  firstCheck: string;
+  confidence: 'bassa' | 'media' | 'alta';
+  missingData: string[];
+  limitations: string[];
 }

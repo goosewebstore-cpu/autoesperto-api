@@ -26,11 +26,14 @@ model User {
   createdAt       DateTime       @default(now())
   updatedAt       DateTime       @updatedAt
   subscription    Subscription?
+  proSubscription ProSubscription?
   reports         Report[]
   savedVehicles   SavedVehicle[]
   dealerProfile   DealerProfile?
   purchases       Purchase[]
   analyses        Analysis[]
+  generatedReports GeneratedReport[]
+  reportCredits   ReportCredit[]
   guideComments   GuideComment[]
 }
 
@@ -56,11 +59,17 @@ model Purchase {
   status                String    @default("PENDING")
   amountCents           Int
   currency              String    @default("eur")
+  productType           String    @default("SINGLE_ANALYSIS")
+  generatedReportId     String?   @unique
+  generatedReport      GeneratedReport? @relation(fields: [generatedReportId], references: [id], onDelete: SetNull)
+  creditsGranted        Int       @default(0)
+  checkoutAttempt      Int       @default(0)
   stripeSessionId       String?   @unique
   stripePaymentIntentId String?   @unique
   paidAt                DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
+  reportCredits         ReportCredit[]
 
   @@index([userId, status])
 }
@@ -89,6 +98,47 @@ model Analysis {
   updatedAt                  DateTime  @updatedAt
 
   @@index([userId])
+}
+
+model GeneratedReport {
+  id                String   @id
+  userId            String?
+  user              User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  accessTokenHash   String   @unique
+  title             String
+  vehicleJson       String
+  photoAnalysisJson String?
+  previewJson       String
+  reportJson        String
+  shareTokenHash    String?  @unique
+  shareExpiresAt    DateTime?
+  status            String   @default("PREVIEW")
+  expiresAt         DateTime?
+  unlockedAt        DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+  purchases         Purchase[]
+  creditUse         ReportCredit?
+
+  @@index([userId, createdAt])
+  @@index([status, expiresAt])
+}
+
+model ReportCredit {
+  id                String   @id @default(cuid())
+  userId            String
+  user              User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  purchaseId        String
+  purchase          Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  sequence          Int
+  status            String   @default("AVAILABLE")
+  generatedReportId String?  @unique
+  generatedReport   GeneratedReport? @relation(fields: [generatedReportId], references: [id], onDelete: SetNull)
+  createdAt         DateTime @default(now())
+  consumedAt        DateTime?
+
+  @@unique([purchaseId, sequence])
+  @@index([userId, status, createdAt])
 }
 
 model Account {
@@ -122,6 +172,37 @@ model Subscription {
   cancelledAt          DateTime?
   createdAt            DateTime  @default(now())
   updatedAt            DateTime  @updatedAt
+}
+
+model ProSubscription {
+  id                   String   @id @default(cuid())
+  userId               String   @unique
+  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  status               String   @default("INACTIVE")
+  stripeCustomerId     String?
+  stripeSubscriptionId String?  @unique
+  stripePriceId        String?
+  periodStart          DateTime?
+  periodEnd            DateTime?
+  cancelledAt          DateTime?
+  reportsUsed          Int      @default(0)
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  usages               ProReportUsage[]
+
+  @@index([status, periodEnd])
+}
+
+model ProReportUsage {
+  id             String         @id @default(cuid())
+  subscriptionId String
+  subscription   ProSubscription @relation(fields: [subscriptionId], references: [id], onDelete: Cascade)
+  generatedReportId String      @unique
+  usedAt         DateTime       @default(now())
+  periodStart    DateTime
+  periodEnd      DateTime
+
+  @@index([subscriptionId, usedAt])
 }
 
 model Vehicle {

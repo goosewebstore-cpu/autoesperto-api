@@ -3,8 +3,9 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
-import { Car, ChevronDown, LogOut, Menu, ScanSearch, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck, Compass, Bot, Bookmark, BookOpen } from 'lucide-react';
-import { clearAuthToken, getAuthToken } from '@/lib/auth';
+import { Car, ChevronDown, LogOut, Menu, UserRound, X, Gauge, Scale, Wrench, Fuel, SearchCheck, ArrowLeftRight, Hammer, Banknote, CreditCard, Search, Trophy, Zap, ShieldAlert, ShieldCheck, Compass, Bot, Bookmark, BookOpen } from 'lucide-react';
+import { clearAuthToken, hasAuthSession } from '@/lib/auth';
+import { getMyAccount } from '@/lib/api';
 
 const TOOLS = [
   { group: 'Acquisto & Finder Intelligente', items: [
@@ -44,11 +45,17 @@ export default function SiteHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [toolsOpen, setToolsOpen] = useState(false);
   const [userMenu, setUserMenu] = useState(false);
-  const [signedIn, setSignedIn] = useState(() => typeof window !== 'undefined' && Boolean(getAuthToken()));
+  const [signedIn, setSignedIn] = useState(() => typeof window !== 'undefined' && hasAuthSession());
   const headerRef = useRef<HTMLElement>(null);
 
   useEffect(() => {
-    setSignedIn(Boolean(getAuthToken()));
+    let active = true;
+    void getMyAccount().then(() => {
+      if (active) setSignedIn(true);
+    }).catch(() => {
+      if (active) setSignedIn(false);
+    });
+    return () => { active = false; };
   }, [pathname]);
 
   useEffect(() => {
@@ -134,12 +141,14 @@ export default function SiteHeader() {
             <button
               type="button"
               className="site-account-btn"
+              aria-label={signedIn ? "Apri menu account" : "Accedi al tuo account"}
+              title={signedIn ? "Account" : "Accedi"}
               aria-haspopup={signedIn ? 'menu' : undefined}
               aria-expanded={signedIn ? userMenu : undefined}
               onClick={() => (signedIn ? setUserMenu((value) => !value) : router.push('/accesso'))}
             >
               <UserRound className="h-4 w-4" />
-              <span className="site-account-label">{signedIn ? 'Area personale' : 'Accedi'}</span>
+              <span className="site-account-label">{signedIn ? 'Account' : 'Accedi'}</span>
               {signedIn && <ChevronDown className="site-nav-chev" />}
             </button>
             {signedIn && userMenu && (
@@ -155,10 +164,6 @@ export default function SiteHeader() {
               </div>
             )}
           </div>
-          <Link href="/#scanner-section" className="site-cta">
-            <ScanSearch className="h-4 w-4" />
-            <span className="site-cta-label">Analizza gratis</span>
-          </Link>
           <button
             type="button"
             className="site-burger"
@@ -203,7 +208,6 @@ export default function SiteHeader() {
             ) : (
               <Link href="/accesso" className="home-hero-cta-secondary" onClick={() => setMenuOpen(false)}>Accedi</Link>
             )}
-            <Link href="/#scanner-section" className="home-hero-cta" onClick={() => setMenuOpen(false)}>Analizza gratis</Link>
           </div>
         </div>
       )}

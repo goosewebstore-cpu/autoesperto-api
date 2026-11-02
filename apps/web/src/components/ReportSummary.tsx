@@ -26,6 +26,12 @@ export default function ReportSummary({ report }: { report: AutoReport }) {
   const v = getVerdictDisplay(reliability.verdict || 'BUY');
   const VIcon = v.icon;
   const costLabel = getCostLabel(reliability.futureCosts?.annualMaintenance ?? 350);
+  const priceColor =
+    price.priceLabel === 'GOOD'
+      ? 'text-emerald-700'
+      : price.priceLabel === 'HIGH'
+        ? 'text-rose-700'
+        : 'text-text-primary';
 
   // Build 3-4 key reasons
   const reasons: string[] = [];
@@ -55,7 +61,7 @@ export default function ReportSummary({ report }: { report: AutoReport }) {
       <div className="grid grid-cols-2 sm:grid-cols-4 divide-x divide-border/60">
         <div className="p-4 text-center">
           <span className="block text-[11px] font-bold uppercase tracking-wider text-text-tertiary">Valore</span>
-          <span className="block mt-1 text-lg font-extrabold text-text-primary number-mono">
+          <span className={`block mt-1 text-lg font-extrabold ${priceColor} number-mono`}>
             {euro(price.estimatedValue)}
           </span>
           <span className="block text-[11px] text-text-tertiary">

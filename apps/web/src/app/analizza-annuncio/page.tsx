@@ -50,7 +50,7 @@ const FAQS = [
   },
   {
     q: 'Il controllo dell\'annuncio è gratuito?',
-    a: 'Sì, l\'analisi è completamente gratuita, immediata e non richiede alcuna registrazione.',
+    a: 'L’anteprima dell’annuncio è gratuita. Il report completo costa 1,99 €; il pacchetto da 4,99 € include 3 report acquistati e 1 in omaggio. Pagamenti una tantum, senza rinnovo.',
   },
 ];
 
@@ -175,7 +175,7 @@ export default function AnalizzaAnnuncioPage() {
       price: '0',
       priceCurrency: 'EUR',
     },
-    description: 'Verifica annunci auto usate da link o testo: calcola Trust Score, Deal Score, valore reale di mercato e domande per il venditore.',
+    description: 'Verifica annunci auto usate da link o testo: calcola Trust Score, Deal Score, stima indicativa e domande per il venditore.',
   };
 
   return (

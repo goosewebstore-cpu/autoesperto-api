@@ -216,7 +216,7 @@ export default async function ConsumiYearPage({ params }: PageProps) {
         <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50">
           <h2 className="text-lg font-bold text-text-primary">Valore e costi totali prima di comprare</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            I consumi sono solo una parte del costo di proprietà: confrontali con il valore reale di mercato e la
+            I consumi sono solo una parte del costo di proprietà: confrontali con la stima indicativa e la
             manutenzione della {make.name} {model} {yearNum}.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">

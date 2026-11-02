@@ -516,10 +516,18 @@ body {
 
 @media (max-width: 1023px) {
   .site-nav { display: none; }
-  .site-actions .site-account-btn { display: none; }
+  .site-actions .site-account-btn { display: inline-flex; min-height: 42px; padding: 0.5rem 0.7rem; }
+  .site-actions .site-user-menu { right: -3rem; }
   .site-cta { display: inline-flex; min-height: 40px; padding: 0 0.7rem; }
   .site-cta .site-cta-label { display: none; }
   .site-burger { display: inline-grid; }
+}
+
+@media (max-width: 390px) {
+  .site-header-inner { gap: 0.4rem; padding: 0 0.6rem; }
+  .site-actions { gap: 0.35rem; }
+  .site-logo-text { font-size: 0.98rem; }
+  .site-actions .site-account-btn { font-size: 0.75rem; padding: 0.5rem; }
 }
 
 /* ÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚ÂÃƒÂ¢Ã¢â‚¬Â¢Ã‚Â
@@ -1281,6 +1289,22 @@ body {
   padding: clamp(3rem, 7vw, 6.5rem) 0;
   overflow: hidden;
 }
+.scanner-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(90deg, rgba(248,250,252,.97) 0%, rgba(248,250,252,.91) 48%, rgba(248,250,252,.24) 100%), url('/images/ui/scanner-inspection.webp') center right / cover no-repeat;
+  pointer-events: none;
+}
+.report-score-header::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, rgba(255,255,255,.96), rgba(255,255,255,.82) 55%, rgba(255,255,255,.62)), url('/images/ui/report-road.webp') center 58% / cover no-repeat;
+  pointer-events: none;
+}
+.report-score-header > * { position: relative; }
 .scanner-kicker {
   display: inline-flex;
   align-items: center;
@@ -2172,3 +2196,25 @@ body {
   .ae-cta-final p { font-size: 0.9rem; }
   .ae-section { padding: 2rem 0; }
 }
+
+/* Compact account control: retain a comfortable touch target. */
+.site-account-label { white-space: nowrap; }
+@media (max-width: 639px) {
+ .site-actions .site-account-btn { width:44px; min-width:44px; height:44px; min-height:44px; padding:0; gap:0; justify-content:center; border-radius:12px; }
+ .site-account-btn .site-account-label, .site-account-btn .site-nav-chev { display:none; }
+ .site-actions .site-user-menu { right:0; }
+}
+
+/* Desktop: give the form and report one generous working area. */
+@media (min-width:1024px) {
+ .site-header-inner {max-width:1440px;}
+ #scanner-section .scanner-box {width:100%;max-width:none;margin:0;border:0;box-shadow:none;}
+ .scanner-detailed-report {max-width:1320px;}
+}
+
+/* Compact mobile navigation: content stays clear of the bar and device inset. */
+@media (max-width: 767px) {
+  body { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }
+  .scanner-result-hero.scanner-result-identity { min-height: 0; padding: 1.25rem; }
+}
+.scanner-result-identity { background: #0f172a; box-shadow: none; min-height: 0; }

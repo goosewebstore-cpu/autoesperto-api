@@ -18,7 +18,7 @@ import {
   Search,
 } from 'lucide-react';
 import { VEHICLE_DATABASE, type VehicleProfile } from '@/lib/finderEngine';
-import { calculateVehicleTco } from '@/lib/tcoEngine';
+import { calculateVehicleTco, FUEL_PRICES } from '@/lib/tcoEngine';
 import { computeDealScore } from '@/lib/dealScore';
 import { generateWhyAndWhyNot } from '@/lib/decisionEngine';
 
@@ -30,6 +30,7 @@ export default function CompareModels({
   initialRightReport?: any;
 }) {
   const [selectedIds, setSelectedIds] = useState<string[]>(['toyota-yaris', 'fiat-panda', 'renault-clio']);
+  const [energyPrices, setEnergyPrices] = useState({ ...FUEL_PRICES });
   const [annualKm, setAnnualKm] = useState<number>(12000);
 
   const selectedVehicles: VehicleProfile[] = useMemo(
@@ -57,17 +58,14 @@ export default function CompareModels({
   // Compute "LA NOSTRA SCELTA" Winner
   const comparisonResults = useMemo(() => {
     return selectedVehicles.map((v) => {
-      const tco = calculateVehicleTco(v, annualKm);
+      const tco = calculateVehicleTco(v, annualKm, undefined, { energyPrices });
       const deal = computeDealScore(v.priceAvg, v.priceAvg, v.priceMin, v.priceMax, 64);
       const why = generateWhyAndWhyNot(v.make, v.model);
 
       // Composite rating score
       const overallIndex =
-        v.reliabilityScore * 10 +
-        (100 - v.litersPer100Km * 8) +
-        (300 - v.annualMaintenanceEst) * 0.15 +
-        v.resaleRating * 12 +
-        v.safetyRating * 10;
+        v.reliabilityScore * 10 + v.resaleRating * 12 + v.safetyRating * 10
+        - tco.breakdown.totalAnnualCost / 50;
 
       return {
         vehicle: v,
@@ -77,7 +75,7 @@ export default function CompareModels({
         overallIndex,
       };
     });
-  }, [selectedVehicles, annualKm]);
+  }, [selectedVehicles, annualKm, energyPrices]);
 
   const winner = useMemo(() => {
     if (comparisonResults.length === 0) return null;
@@ -90,10 +88,10 @@ export default function CompareModels({
       <div className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm flex flex-wrap items-center justify-between gap-4">
         <div className="space-y-1">
           <span className="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase tracking-wider flex items-center gap-1">
-            <Sparkles className="w-3.5 h-3.5" /> Confronto Intelligente Multi-Modello
+            <Sparkles className="w-3.5 h-3.5" /> Confronto tra modelli
           </span>
           <h2 className="text-lg sm:text-xl font-black text-slate-900 dark:text-white">
-            Confronta fino a 4 auto con TCO e Verdetto AI
+            Confronta fino a 4 auto e i costi annui stimati
           </h2>
         </div>
 
@@ -140,12 +138,27 @@ export default function CompareModels({
         </div>
       </div>
 
+      <section className="rounded-2xl border border-blue-200 bg-blue-50 p-5 space-y-4" aria-label="Ipotesi del confronto">
+        <h3 className="font-bold text-slate-900">Personalizza il costo dell’energia</h3>
+        <p className="text-sm text-slate-700">Prezzi iniziali di esempio, non aggiornati in tempo reale. Inserisci quelli che paghi. Il confronto usa profili medi di modello, non la versione o lo stato di una singola auto. Assicurazione, bollo e svalutazione sono ipotesi di budget; verifica il bollo effettivo con ACI.</p>
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+          {Object.entries(energyPrices).filter(([key]) => key !== 'hybrid' && key !== 'plugin').map(([key, value]) => (
+            <label key={key} className="text-xs font-semibold text-slate-700">{key} ({key === 'elettrica' ? '€/kWh' : key === 'metano' ? '€/kg' : '€/L'})
+              <input type="number" min="0.01" max="10" step="0.01" value={value} className="mt-1 w-full rounded-lg border border-slate-300 p-2 text-slate-900" onChange={e => {
+                const next = Number(e.target.value);
+                if (Number.isFinite(next) && next > 0 && next <= 10) setEnergyPrices(old => ({ ...old, [key]: next, ...(key === 'benzina' ? { hybrid: next, plugin: next } : {}) }));
+              }} />
+            </label>
+          ))}
+        </div>
+        <Link className="text-sm text-blue-700 underline" href="/calcolo-bollo">Verifica il bollo per il tuo veicolo</Link>
+      </section>
       {/* ─── "LA NOSTRA SCELTA" BANNER ─── */}
       {winner && (
         <div className="bg-gradient-to-r from-blue-600 via-indigo-600 to-indigo-700 text-white rounded-3xl p-6 sm:p-8 shadow-xl shadow-blue-600/15 space-y-4">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <div className="flex items-center gap-2 px-3 py-1 rounded-full bg-white/20 backdrop-blur-md text-white text-xs font-black uppercase tracking-wider">
-              <Trophy className="w-4 h-4 text-amber-300" /> La nostra scelta tra queste
+              <Trophy className="w-4 h-4 text-amber-300" /> Equilibrio stimato tra queste auto
             </div>
             <span className="text-xs font-semibold text-blue-100">
               Calcolato su {annualKm.toLocaleString('it-IT')} km/anno · Affidabilità, TCO e tenuta di mercato
@@ -155,10 +168,10 @@ export default function CompareModels({
           <div className="grid md:grid-cols-[1.5fr_1fr] gap-6 items-center">
             <div className="space-y-2">
               <h3 className="text-2xl sm:text-3xl font-black">
-                Per il tuo utilizzo sceglieremmo {winner.vehicle.make} {winner.vehicle.model}
+                Nel confronto indicativo emerge {winner.vehicle.make} {winner.vehicle.model}
               </h3>
               <p className="text-xs sm:text-sm text-blue-100 font-medium leading-relaxed">
-                Offre il miglior equilibrio complessivo tra costi chilometrici reali, affidabilità meccanica nel tempo e valore residuo.
+                Offre il miglior equilibrio complessivo tra costi stimati, affidabilità meccanica nel tempo e valore residuo.
               </p>
 
               <div className="space-y-1.5 pt-2">
@@ -177,7 +190,7 @@ export default function CompareModels({
             </div>
 
             <div className="bg-white/10 backdrop-blur-md rounded-2xl p-4 border border-white/20 text-center space-y-2">
-              <span className="text-[11px] uppercase font-bold text-blue-200 block">Costo Reale Stimato (TCO)</span>
+              <span className="text-[11px] uppercase font-bold text-blue-200 block">Costo annuo indicativo</span>
               <div className="text-2xl font-black font-mono">
                 €{winner.tco.breakdown.totalAnnualCost.toLocaleString('it-IT')}<span className="text-sm font-normal text-blue-200">/anno</span>
               </div>
@@ -229,7 +242,7 @@ export default function CompareModels({
                         {vehicle.make} {vehicle.model}
                       </span>
                       <span className="text-[11px] font-semibold text-slate-500 block">
-                        {vehicle.segment} · {vehicle.bodyType.toUpperCase()}
+                        {vehicle.segment} · {vehicle.availableFuels[0]} · dal {vehicle.yearMinTypical}
                       </span>
                     </div>
                     {selectedIds.length > 2 && (
@@ -238,6 +251,7 @@ export default function CompareModels({
                         onClick={() => handleRemoveVehicle(vehicle.id)}
                         className="p-1 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-all"
                         title="Rimuovi dal confronto"
+                        aria-label={`Rimuovi ${vehicle.make} ${vehicle.model} dal confronto`}
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -249,10 +263,10 @@ export default function CompareModels({
           </thead>
 
           <tbody className="divide-y divide-slate-100 dark:divide-slate-800/60">
-            {/* Prezzo Medio Usato */}
+            {/* Prezzo indicativo usato */}
             <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
               <td className="p-4 font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                <Wallet className="w-3.5 h-3.5 text-blue-600" /> Prezzo Medio Usato
+                <Wallet className="w-3.5 h-3.5 text-blue-600" /> Prezzo indicativo usato
               </td>
               {comparisonResults.map(({ vehicle }) => (
                 <td key={vehicle.id} className="p-4 font-extrabold text-slate-900 dark:text-white font-mono text-sm">
@@ -267,7 +281,7 @@ export default function CompareModels({
             {/* TCO Costo Annuo */}
             <tr className="bg-blue-50/30 dark:bg-blue-950/20 hover:bg-blue-50/60 transition-colors">
               <td className="p-4 font-black text-blue-900 dark:text-blue-200 flex items-center gap-1.5">
-                <Gauge className="w-3.5 h-3.5 text-blue-600" /> Costo Reale (TCO Annuo)
+                <Gauge className="w-3.5 h-3.5 text-blue-600" /> Costo annuo stimato
               </td>
               {comparisonResults.map(({ vehicle, tco }) => (
                 <td key={vehicle.id} className="p-4 font-black text-blue-700 dark:text-blue-300 font-mono text-sm">
@@ -301,13 +315,13 @@ export default function CompareModels({
             {/* Consumi Reali */}
             <tr className="hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors">
               <td className="p-4 font-bold text-slate-700 dark:text-slate-300 flex items-center gap-1.5">
-                <Fuel className="w-3.5 h-3.5 text-amber-600" /> Consumo Medio Reale
+                <Fuel className="w-3.5 h-3.5 text-amber-600" /> Consumo indicativo
               </td>
-              {comparisonResults.map(({ vehicle }) => (
+              {comparisonResults.map(({ vehicle, tco }) => (
                 <td key={vehicle.id} className="p-4 text-slate-800 dark:text-slate-200 font-semibold">
-                  <span className="font-bold">{vehicle.litersPer100Km} L/100 km</span>
+                  <span className="font-bold">{tco.consumption} {tco.unit}</span>
                   <span className="text-[11px] text-slate-500 block">
-                    (≈ {(100 / vehicle.litersPer100Km).toFixed(1)} km/L)
+                    Energia: €{tco.breakdown.fuelAnnual.toLocaleString('it-IT')}/anno
                   </span>
                 </td>
               ))}

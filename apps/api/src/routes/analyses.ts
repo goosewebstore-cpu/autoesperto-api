@@ -16,7 +16,7 @@ const router = Router();
 const analysisSchema = z.object({
   imageData: imageDataSchema,
   immediateExecutionAccepted: z.literal(true, {
-    errorMap: () => ({ message: 'È necessario richiedere espressamente l’esecuzione immediata del report.' }),
+    error: 'È necessario richiedere espressamente l’esecuzione immediata del report.',
   }),
 });
 
@@ -85,7 +85,7 @@ router.post(
     if (!entitlement.entitled) {
       return res.status(402).json({
         success: false,
-        error: 'Attiva AutoEsperto AI: prova di 7 giorni alla prima attivazione, poi 3,99 €/mese.',
+        error: 'Questa funzione AI avanzata non è inclusa nei nuovi piani. Puoi ottenere l’anteprima gratuita e sbloccare il report completo dalla pagina prezzi.',
         needsUpgrade: true,
         amountCents: getAnalysisPrice().amountCents,
       });

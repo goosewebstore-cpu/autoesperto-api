@@ -10,7 +10,7 @@ import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { getSsrReport } from '@/lib/ssrReports';
-import { POPULAR_MODELS } from '@/lib/popular';
+import { POPULAR_MODELS, isCuratedModel } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -35,11 +35,12 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   if (!model) return {};
 
   const title = `Quanto costa una ${make.name} ${model} usata? Prezzo di mercato ${new Date().getFullYear()}`;
-  const description = `Prezzo medio reale di ${make.name} ${model} usata: valore dagli annunci in vendita, valutazione di affidabilità e punti critici da controllare prima dell'acquisto. Analisi gratuita.`;
+  const description = `Stima indicativa di ${make.name} ${model} usata e confronto con i prezzi richiesti negli annunci disponibili, affidabilità e punti da controllare prima dell'acquisto. Analisi gratuita.`;
 
   return {
     title,
     description,
+    robots: { index: isCuratedModel(make.name, model), follow: true },
     alternates: {
       canonical: `/valutazione/${resolved.make}/${resolved.model}`,
       languages: { 'it-IT': `${siteUrl()}/valutazione/${resolved.make}/${resolved.model}` },
@@ -165,13 +166,13 @@ export default async function ModelValutazionePage({ params }: PageProps) {
             Quanto costa una {make.name} {model}{" "}usata?
           </h1>
           <p className="text-text-secondary text-base leading-relaxed mt-3">
-            Il prezzo medio reale di {make.name} {model}{" "}usata, calcolato dagli annunci in vendita,
+            Stima indicativa di {make.name} {model}{" "}usata e confronto con i prezzi richiesti negli annunci disponibili,
             con la valutazione di affidabilità e i punti critici da controllare prima dell&apos;acquisto.
           </p>
         </section>
 
         <div className="mt-6">
-          <ModelReportCard make={make.name} model={model} initialReport={initialReport} />
+          <ModelReportCard make={make.name} model={model} />
         </div>
 
         <section className="mt-6 rounded-2xl bg-slate-950 p-6 text-white">
@@ -311,7 +312,7 @@ export default async function ModelValutazionePage({ params }: PageProps) {
           </div>
         </section>
 
-        <AdBanner />
+        {isPopular && <AdBanner />}
 
         {/* Altri modelli */}
         {relatedModels.length > 0 && (

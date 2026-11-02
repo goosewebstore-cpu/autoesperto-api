@@ -13,106 +13,714 @@
 import type { Guide, GuideCategory } from './guide-types';
 import { GUIDE_CATEGORIES } from './guide-types';
 import { articoliGuides } from './guides-articoli';
+import { targhePersonalizzateGuide } from './guide-targhe-personalizzate';
 export type { Guide, GuideCategory };
 export { GUIDE_CATEGORIES };
 
 const initialGuides: Guide[] = [
+  {
+    "slug": "diesel-usato-finito-benzina-ibrido-dati-aci-settembre-2026",
+    "title": "Il diesel usato è finito? La benzina lo supera: cosa dicono davvero i dati ACI",
+    "description": "A settembre 2026 la benzina supera il diesel nei passaggi di proprietà, mentre crescono le ibride. Numeri, costi e controlli utili prima di scegliere un'auto usata.",
+    "published": "2026-10-29",
+    "updated": "2026-10-29",
+    "category": "acquisto",
+    "image": "/images/guide/diesel-usato-finito-benzina-ibrido-dati-aci-settembre-2026.png",
+    "readTime": "5 min",
+    "editorialNote": "Analisi del Team AutoEsperto pubblicata il 29 ottobre 2026. I dati di mercato si riferiscono a settembre 2026 e ai passaggi di proprietà al netto delle minivolture. La copertina è un'illustrazione fotografica generata con AI, non documenta un evento reale. L'esempio di costo usa prezzi e consumi ipotetici: non è una quotazione aggiornata né una previsione.",
+    "sources": [
+      "https://aci.gov.it/comunicati-stampa/mercato-a-settembre-ogni-100-auto-nuove-vendute-213-usate/",
+      "https://www.lautomobile.aci.it/attualita/auto-usate-piu-vendute-in-italia-a-settembre-2026/",
+      "https://www.aci.it/servizi/osservatorio-prezzi-pra/"
+    ],
+    "sections": [
+      {
+        "heading": "La risposta breve: il diesel perde terreno, ma non è scomparso",
+        "paragraphs": [
+          "A settembre 2026, nelle compravendite italiane di auto usate, la benzina ha raggiunto il 37,1% dei passaggi di proprietà e il diesel il 36,2%. È un sorpasso di 0,9 punti percentuali. Le ibride benzina/elettrico sono arrivate al 12%; le elettriche pure all'1,4%. Sono i numeri dell'[Auto-Trend ACI pubblicato il 7 ottobre](https://aci.gov.it/comunicati-stampa/mercato-a-settembre-ogni-100-auto-nuove-vendute-213-usate/).",
+          "Dire che il diesel è finito sarebbe sbagliato: più di un'auto usata su tre passata di mano a settembre era a gasolio. Dire che nulla sta cambiando sarebbe altrettanto fuorviante. Il punto interessante, per chi compra oggi, è capire se quel cambiamento riguarda anche il proprio uso dell'auto."
+        ]
+      },
+      {
+        "heading": "I numeri da leggere senza confondere quote e variazioni",
+        "paragraphs": [
+          "L'ACI conta 284.708 passaggi di proprietà di autovetture a settembre 2026, contro 288.065 nello stesso mese del 2025: -1,2%. In quel mercato, la quota del diesel è scesa dal 39,3% al 36,2%; il numero dei suoi passaggi è calato del 9,0% su base annua. La benzina è al 37,1%, quasi stabile come quota rispetto al 37,3% del 2025.",
+          "Le ibride benzina/elettrico hanno guadagnato quota dal 9,6% al 12,0%, con passaggi in aumento del 22,5%. Le elettriche sono passate dall'1,2% all'1,4%, con un +20,1% nel numero di passaggi. La crescita percentuale è forte, ma la quota elettrica resta piccola: le due informazioni vanno tenute insieme.",
+          "Guardando i primi nove mesi del 2026, il diesel conserva il 38,0% e la benzina il 36,6%. Il sorpasso di settembre descrive dunque **un mese**, non dimostra da solo che la benzina abbia già superato il diesel nell'intero anno."
+        ]
+      },
+      {
+        "heading": "Le auto che la gente compra raccontano un mercato meno semplice degli slogan",
+        "paragraphs": [
+          "I modelli più scambiati mostrano quanto siano diverse le scelte degli automobilisti italiani.",
+          "Nella [classifica ACI dei modelli usati più venduti a settembre](https://www.lautomobile.aci.it/attualita/auto-usate-piu-vendute-in-italia-a-settembre-2026/), la Fiat Panda guida con 24.796 passaggi, seguita da Fiat 500 con 8.751 e Lancia Ypsilon con 7.924. La Volkswagen Golf è sesta con 6.117 passaggi, ma è prima tra le diesel con 3.558. La Toyota Yaris chiude la top ten con 5.278 passaggi, di cui 1.923 nella versione ibrida benzina/elettrico.",
+          "Questi volumi dicono quali modelli sono stati scambiati, non quali siano i migliori acquisti. Non misurano da soli affidabilità, prezzo corretto, chilometraggio reale o quanto l'esemplare sia stato curato. Una Panda molto richiesta può essere un buon acquisto oppure un'auto pagata troppo; lo stesso vale per una Golf diesel o una Yaris ibrida."
+        ]
+      },
+      {
+        "heading": "Diesel, benzina o ibrida: comincia dai tuoi percorsi",
+        "paragraphs": [
+          "La scelta cambia con il percorso abituale e con il numero di chilometri che percorri ogni anno.",
+          "**Molti chilometri fuori città.** Un diesel può ancora avere senso se percorri spesso tratte lunghe e regolari. Prima del prezzo chiedi lo storico dei tagliandi, verifica lo stato del sistema antinquinamento e controlla se la classe ambientale dell'auto è compatibile con le zone in cui circoli. Le limitazioni cambiano per città e periodo: consulta il Comune o la Regione interessati.",
+          "**Tragitti brevi e uso urbano.** Una benzina o una full hybrid può essere più coerente con stop, partenze e percorrenze moderate. Non basta però leggere la parola “ibrida”: una mild hybrid e una full hybrid funzionano in modo diverso. Controlla la motorizzazione precisa, i consumi documentati e la storia manutentiva.",
+          "**Ricarica disponibile.** Un'elettrica usata merita un confronto separato: conta dove ricaricherai, quanto pagherai per kWh, lo stato della batteria e l'autonomia sul tuo percorso. La quota dell'1,4% non è un giudizio sulla tecnologia; dice soltanto che, nel mercato usato di quel mese, gli scambi erano ancora pochi."
+        ]
+      },
+      {
+        "heading": "Un conto semplice per capire quando il diesel conviene davvero",
+        "paragraphs": [
+          "Facciamo un esempio **puramente ipotetico**, con 15.000 km all'anno: un diesel che consuma 5,0 l/100 km a 2,20 €/l spende 11,00 € ogni 100 km, cioè 1.650 € l'anno. Una benzina che consuma 6,5 l/100 km a 2,00 €/l spende 13,00 € ogni 100 km, cioè 1.950 € l'anno. La differenza è 300 € l'anno nel solo carburante.",
+          "I prezzi dell'esempio non sono prezzi medi di oggi e i consumi non rappresentano due modelli specifici. Se per comprare e mantenere quel diesel spendessi 1.500 € in più, il risparmio teorico di carburante impiegherebbe cinque anni per pareggiare la differenza, ammesso che percorrenza, consumi e prezzi restino identici. Assicurazione, manutenzione, pneumatici, bollo e svalutazione possono cambiare il risultato.",
+          "Per il tuo caso, usa la formula: **(consumo in l/100 km × prezzo al litro) × chilometri annui ÷ 100**. Ripeti il calcolo per le auto e le tariffe che stai confrontando. Puoi partire anche dal [calcolatore consumi AutoEsperto](/consumi)."
+        ]
+      },
+      {
+        "heading": "Cinque controlli prima di firmare per un diesel usato",
+        "list": [
+          "Chiedi fatture o ricevute dei tagliandi e confronta date, chilometri e lavori dichiarati.",
+          "Verifica che targa, numero di telaio e documenti corrispondano all'auto; controlla eventuali vincoli tramite i servizi ufficiali ACI.",
+          "Fai esaminare da un professionista il motore, il sistema antinquinamento e gli eventuali messaggi di errore. Una spia spenta durante una breve prova non basta.",
+          "Controlla classe Euro e regole di circolazione nelle città che frequenti, usando le pagine ufficiali locali aggiornate.",
+          "Confronta il prezzo richiesto con annunci davvero simili per anno, motore, allestimento e chilometri; verifica anche l'[Osservatorio Prezzi PRA di ACI](https://www.aci.it/servizi/osservatorio-prezzi-pra/)."
+        ]
+      },
+      {
+        "heading": "La nostra lettura: una tendenza di mercato non sceglie l'auto al posto tuo",
+        "paragraphs": [
+          "Il dato di settembre segnala una preferenza che si sposta, ma non emette una sentenza su ogni diesel. La scelta migliore dipende dall'esemplare, dal prezzo, dai chilometri che farai e dai luoghi in cui potrai circolare. Se stai valutando un annuncio, [analizzalo con AutoEsperto](/analizza-annuncio) e poi verifica di persona documenti e condizioni meccaniche prima di pagare.",
+          "**E tu cosa sceglieresti oggi: diesel, benzina, ibrida o elettrica?** Nei commenti racconta quanti chilometri fai, su quali percorsi e quale dubbio ti frena. Un'esperienza concreta aiuta più di una classifica senza contesto."
+        ]
+      }
+    ]
+  },
+    {
+    "slug": "benzina-diesel-gpl-elettrica-costo-100-km-2026",
+    "title": "Benzina, diesel, GPL o elettrica: quanto costa fare 100 km nel 2026?",
+    "description": "Confronto chiaro tra benzina, diesel, GPL ed elettrica: formula, ipotesi di consumo, prezzi aggiornati e costi reali di modelli provati.",
+    "published": "2026-10-02",
+    "category": "manutenzione",
+    "image": "/images/guide/benzina-diesel-gpl-elettrica-costo-100-km-2026.png",
+    "readTime": "8 min",
+    "cta": "consumi-auto",
+    "sections": [
+      {
+        "heading": "In breve: cosa confrontiamo",
+        "paragraphs": [
+          "Il costo per percorrere 100 km si calcola moltiplicando l’energia consumata per il suo prezzo: litri per euro al litro, oppure kWh per euro al kWh.",
+          "Qui trovi due confronti distinti. Prima una simulazione semplice, con consumi fissati per mostrare come cambiano i costi al variare dell’alimentazione e del prezzo. Poi alcuni risultati di prove su modelli reali. La simulazione non è la media di tutte le auto; i modelli provati non sono vetture identiche, quindi non formano una classifica perfettamente alla pari.",
+          "I conti riguardano solo carburante o elettricità. Non comprendono prezzo d’acquisto, manutenzione, assicurazione, bollo, ricarica domestica da installare o svalutazione."
+        ]
+      },
+      {
+        "heading": "I prezzi di riferimento: tutti aggiornati al 1° ottobre",
+        "paragraphs": [
+          "Per mantenere un’unica fotografia dei prezzi usiamo i valori pubblicati nell’Econometro di Quattroruote al 1° ottobre 2026: benzina 2,084 €/l, diesel 2,285 €/l, GPL 0,748 €/l. Quattroruote indica che le medie dei carburanti provengono dal Ministero; il [MIMIT descrive l’Osservatorio e i dati sui prezzi](https://www.mimit.gov.it/it/mercato-e-consumatori/prezzi/mercati-dei-carburanti). Alla pompa il prezzo può cambiare per zona, impianto e modalità self o servito.",
+          "Per l’elettricità, lo stesso confronto usa tre tariffe di riferimento: 0,310 €/kWh per la ricarica domestica, 0,680 €/kWh per una colonnina pubblica AC e 0,830 €/kWh per la ricarica rapida HPC. Sono ipotesi di calcolo adottate nell’[Econometro Quattroruote](https://www.quattroruote.it/econometro/qrteco-ev.html), non il prezzo garantito a ogni automobilista. Il costo della tua bolletta o della tua app di ricarica può essere diverso."
+        ],
+        "list": [
+          "Benzina: 2,084 euro per litro",
+          "Diesel: 2,285 euro per litro",
+          "GPL: 0,748 euro per litro",
+          "Elettricità a casa: 0,310 euro per kWh",
+          "Elettricità pubblica AC: 0,680 euro per kWh",
+          "Elettricità rapida HPC: 0,830 euro per kWh"
+        ]
+      },
+      {
+        "heading": "La formula, senza passaggi nascosti",
+        "paragraphs": [
+          "Per benzina, diesel e GPL: consumo in litri per 100 km × prezzo al litro = euro per 100 km. Per l’elettrica: consumo in kWh per 100 km × prezzo al kWh = euro per 100 km.",
+          "Se il dato che hai è espresso in km/l, converti così: 100 ÷ km/l = litri necessari per 100 km. Per esempio, 13,26 km/l corrispondono a circa 7,54 litri per 100 km. Se il dato elettrico è espresso in km/kWh, fai 100 ÷ km/kWh per ricavare i kWh per 100 km."
+        ]
+      },
+      {
+        "heading": "Quanto costa fare 100 km? Un esempio con ipotesi dichiarate",
+        "paragraphs": [
+          "Per isolare l’effetto del prezzo usiamo questi consumi convenzionali: 5,5 l/100 km a benzina, 4,7 l/100 km a diesel, 7,0 l/100 km a GPL e 16,5 kWh/100 km per l’elettrica. Servono solo a fare un esempio leggibile: non sono il consumo misurato di quattro auto equivalenti, né la media ufficiale del parco circolante.",
+          "Ogni riga qui sotto mostra tutti gli elementi del conto. Nelle tre righe elettriche il consumo dell’auto resta lo stesso; cambia soltanto il luogo di ricarica e, quindi, la tariffa."
+        ],
+        "list": [
+          "Benzina: 5,5 l × 2,084 €/l = 11,46 € per 100 km",
+          "Diesel: 4,7 l × 2,285 €/l = 10,74 € per 100 km",
+          "GPL: 7,0 l × 0,748 €/l = 5,24 € per 100 km",
+          "Elettrica caricata a casa: 16,5 kWh × 0,310 €/kWh = 5,12 € per 100 km",
+          "Elettrica caricata in AC pubblica: 16,5 kWh × 0,680 €/kWh = 11,22 € per 100 km",
+          "Elettrica caricata in HPC: 16,5 kWh × 0,830 €/kWh = 13,70 € per 100 km"
+        ]
+      },
+      {
+        "heading": "La stessa simulazione su 15.000 km l’anno",
+        "paragraphs": [
+          "Per passare dal costo per 100 km alla spesa annua, moltiplica quel costo per 150: 15.000 km equivalgono a 150 tratte da 100 km. Con i consumi e i prezzi usati sopra, il conto diventa:",
+          "Poiché il costo per 100 km è arrotondato ai centesimi, anche il conto annuo è indicativo. Prezzi e consumi restano fissi per tutto l’anno: non è una previsione della bolletta né del costo totale dell’auto."
+        ],
+        "list": [
+          "GPL: 5,24 € × 150 = circa 786 € l’anno",
+          "Elettrica a casa: 5,12 € × 150 = circa 768 € l’anno",
+          "Diesel: 10,74 € × 150 = circa 1.611 € l’anno",
+          "Elettrica in AC pubblica: 11,22 € × 150 = circa 1.683 € l’anno",
+          "Benzina: 11,46 € × 150 = circa 1.719 € l’anno",
+          "Elettrica in HPC: 13,70 € × 150 = circa 2.055 € l’anno"
+        ]
+      },
+      {
+        "heading": "Esempi su strada: quanto cambia da un modello all’altro",
+        "paragraphs": [
+          "Il consumo convenzionale da 16,5 kWh/100 km non rappresenta tutte le elettriche. Nei risultati dell’Econometro, basati sulle prove su strada del Centro Prove Quattroruote, la Renault Twingo Urban Range ha registrato 7,5 km/kWh e un costo di 4,12 €/100 km con la tariffa domestica di riferimento.",
+          "Anche le auto a GPL variano: la Dacia Sandero Stepway ECO-G ha registrato 13,26 km/l, pari a 5,64 €/100 km ai prezzi di riferimento. Nel segmento C, la Peugeot 308 mild hybrid a benzina risulta a 11,51 €/100 km e la Volkswagen Golf 2.0 TDI diesel a 12,09 €/100 km.",
+          "Sono versioni specifiche e di dimensioni diverse: la Twingo è una citycar, la Sandero Stepway è più grande, mentre 308 e Golf appartengono al segmento C. I valori mostrano cosa hanno ottenuto quei modelli nella prova; non dimostrano che ogni elettrica costi 4,12 euro o che ogni diesel costi 12,09 euro. Consulta le classifiche aggiornate per [elettriche](https://www.quattroruote.it/econometro/qrteco-ev.html), [GPL](https://www.quattroruote.it/econometro/qrteco-gpl.html) e [berline del segmento C](https://www.quattroruote.it/econometro/qrteco-segmento-c.html)."
+        ]
+      },
+      {
+        "heading": "Perché il costo dell’elettrica può cambiare così tanto",
+        "paragraphs": [
+          "Nel nostro esempio, la stessa auto consuma 16,5 kWh per 100 km in tutti e tre gli scenari. A casa il costo è 5,12 euro; con la tariffa AC dell’esempio sale a 11,22 euro; in HPC arriva a 13,70 euro. Non è cambiato il consumo: è cambiato il prezzo pagato per ogni kWh.",
+          "Per fare il tuo conto sostituisci 0,310, 0,680 o 0,830 con la tariffa che paghi davvero. Se alterni casa e colonnine, calcola separatamente le quote: per esempio, metà dei kWh a casa e metà in AC. Controlla anche eventuali costi di sessione, sosta o abbonamento dell’operatore.",
+          "Le prove possono inoltre riportare il consumo dell’auto, mentre la colonnina fattura l’energia effettivamente prelevata: le perdite durante la ricarica possono far divergere i due numeri. Per la spesa personale, il dato più affidabile è quello in kWh addebitato dalla tua ricarica."
+        ]
+      },
+      {
+        "heading": "Quale alimentazione può convenire al tuo uso",
+        "paragraphs": [
+          "Elettrica: il costo di marcia può essere basso se ricarichi spesso a casa o al lavoro a una tariffa favorevole. Prima di comprarla considera accesso alla ricarica, autonomia sui tuoi percorsi e costo d’installazione di una wallbox, se necessaria.",
+          "GPL: può contenere la spesa per il carburante senza dipendere dalle colonnine. Verifica però consumo della specifica versione, disponibilità dei distributori nei tuoi tragitti, manutenzione dell’impianto e spazio del bagagliaio.",
+          "Diesel: può adattarsi a chi percorre spesso distanze lunghe e guida molto fuori città. Valuta prezzo del gasolio, tragitti abituali e limitazioni locali applicabili a quella classe Euro.",
+          "Benzina: resta semplice da rifornire e può essere adatta a percorrenze moderate o variabili. Se fai molti chilometri, calcola la spesa annua usando il consumo del modello che stai considerando."
+        ]
+      },
+      {
+        "heading": "Usa i dati della tua auto con gli strumenti AutoEsperto",
+        "paragraphs": [
+          "Per una stima più vicina al tuo caso, cerca il modello e l’anno nel [calcolatore consumi AutoEsperto](/consumi), poi inserisci i tuoi chilometri e i prezzi che paghi. Se sei indeciso tra due vetture, usa [Confronta modelli](/confronta) per affiancare i veicoli; se valuti un usato, consulta anche la [valutazione AutoEsperto](/valutazione). Le stime online sono un punto di partenza: consumi effettivi, stato dell’auto e condizioni d’uso fanno la differenza."
+        ]
+      },
+      {
+        "heading": "Conclusione: il numero giusto è quello calcolato sul tuo percorso",
+        "paragraphs": [
+          "Nel nostro esempio a consumi fissi, GPL ed elettrica ricaricata a casa risultano intorno a 5 euro ogni 100 km. La stessa elettrica costa circa 11 euro in AC e quasi 14 euro in HPC. Questi risultati valgono per gli input dichiarati: cambiando modello, prezzo o tariffa, cambia anche la classifica.",
+          "Per scegliere, confronta prima i consumi rilevati delle versioni che ti interessano. Poi applica i prezzi della tua zona, la tua tariffa elettrica e i chilometri che percorri davvero. È così che il conto diventa utile per la tua decisione."
+        ]
+      }
+    ]
+  },
 {
-  "slug": "auto-neopatentato-intestare-padre-o-figlio",
-  "title": "Auto del neopatentato: conviene intestarla al padre o al figlio?",
-  "description": "Auto al padre o al figlio neopatentato? Confronta assicurazione, RC familiare, classe di merito e limiti di guida per scegliere con preventivi reali.",
-  "published": "2026-10-11",
-  "category": "acquisto",
-  "cta": "analizza-annuncio",
-  "ctaType": "analizza-annuncio",
-  "image": "/images/guide/auto-neopatentato-intestare-padre-o-figlio.jpg",
-  "readTime": "7 min",
-  "featured": true,
+  "slug": "diesel-219-euro-tetto-prezzi-eni-enilive",
+  "title": "Diesel a 2,19 € al litro: Eni mette un tetto ai prezzi, ma perché gli automobilisti sono ancora preoccupati?",
+  "description": "Il tetto Enilive dal 28 settembre 2026, quanto costa un pieno da 50 litri e come confrontare il risparmio con i consumi della propria auto.",
+  "published": "2026-09-30",
+  "category": "manutenzione",
+  "image": "/images/guide/diesel-219-euro-tetto-prezzi-eni-enilive.jpg",
+  "readTime": "8 min",
+  "cta": "consumi-auto",
+  "editorialNote": "Articolo del Team AutoEsperto aggiornato al 30 settembre 2026. Fonti collegate nel testo; calcoli esemplificativi a prezzo costante. Copertina illustrativa generata con AI.",
+  "sources": [
+    "https://www.eni.com/it-IT/media/comunicati-stampa/2026/09/cs-eni-aggiudica-dal-28-settembre-tetto-prezzi-gasolio-benzina.html"
+  ],
   "sections": [
     {
-      "heading": "Auto al padre o al figlio: la risposta prima di comprare",
+      "heading": "Il tetto ai prezzi e il costo del pieno",
       "paragraphs": [
-        "La prima auto è pronta, ma prima del passaggio di proprietà arriva una domanda concreta: **conviene intestarla al padre oppure direttamente al figlio neopatentato?** La scelta può incidere sul premio assicurativo e sulla costruzione di una storia assicurativa personale. Il solo nome sul documento, però, non basta a stabilire quale soluzione costi meno.",
-        "Il consiglio AutoEsperto è confrontare entrambe le intestazioni sulla stessa vettura, dichiarando in tutti e due i casi che guiderà il neopatentato. Intestare l’auto al genitore può risultare più economico; intestare l’auto al figlio consente invece di iniziare una propria storia assicurativa e, se ne ricorrono i requisiti, utilizzare la RC familiare. **La convenienza si misura con preventivi reali, non con una regola valida per tutte le famiglie.**"
+        "Dal 28 settembre 2026 Eni ha deciso di mettere un tetto al prezzo dei carburanti nelle stazioni Enilive: **massimo 2,19 € al litro per il diesel e 1,99 € al litro per la benzina**.",
+        "Non significa però che il diesel sia improvvisamente tornato economico.",
+        "Anzi: il fatto che 2,19 € al litro venga oggi presentato come un prezzo “protetto” dice molto sulla situazione che stanno vivendo gli automobilisti italiani.",
+        "La misura durerà inizialmente 30 giorni e potrà essere prorogata fino alla fine del 2026 in base all'andamento del mercato e degli approvvigionamenti. Eni parla di circa 17 centesimi al litro in meno rispetto ai livelli medi precedenti."
       ]
     },
     {
-      "heading": "Proprietario, contraente e conducente: tre ruoli diversi",
+      "heading": "Cosa significa davvero il tetto di 2,19 €",
       "paragraphs": [
-        "Il **proprietario** è chi risulta intestatario dell’auto. Il **contraente** è chi sottoscrive il contratto assicurativo. Il **conducente** è chi guida. Queste persone possono coincidere oppure essere diverse: il padre può stipulare la polizza per un’auto intestata al figlio.",
-        "IVASS chiarisce che la classe bonus-malus riportata nell’attestato di rischio si riferisce al proprietario del veicolo, non al contraente. Pertanto, far firmare l’assicurazione al padre **non attribuisce automaticamente al figlio la classe del genitore**. [Fonte: FAQ IVASS](https://www.ivass.it/consumatori/quesiti/r.c.auto/index.html)."
+        "La prima cosa da chiarire è questa:",
+        "**2,19 € non è un nuovo prezzo nazionale del diesel.**",
+        "È il prezzo massimo stabilito da Eni per il gasolio venduto attraverso la rete Enilive durante il periodo dell'iniziativa.",
+        "Questo significa che una stazione Enilive può vendere il diesel anche a meno di 2,19 €, ma non dovrebbe superare questa cifra nell'ambito del price cap.",
+        "La misura vale anche sulle stazioni Enilive in autostrada.",
+        "Per un automobilista che utilizza molto l'auto, la differenza può comunque essere importante.",
+        "Con una differenza di 17 centesimi al litro, su un pieno da 50 litri il risparmio è di **8,50 €**. Il vantaggio effettivo dipende dal prezzo che pagavi e da quello esposto oggi.",
+        "Non è poco.",
+        "Ma c'è un'altra faccia della medaglia."
       ]
     },
     {
-      "heading": "Intestare l’auto al padre: quando valutare questa soluzione",
+      "heading": "Perché gli automobilisti continuano a lamentarsi?",
       "paragraphs": [
-        "È una possibilità da esaminare quando l’auto resterà un mezzo familiare e il preventivo risulta più conveniente anche includendo il giovane conducente. Non bisogna confrontare una polizza riservata al padre con una polizza che copre davvero la guida del figlio: sarebbero condizioni diverse.",
-        "Gli anni trascorsi guidando un’auto intestata al genitore non diventano automaticamente una storia assicurativa personale del figlio. Inoltre, se in futuro si decide di trasferire la proprietà, bisognerà considerare il costo del passaggio e verificare con la compagnia la nuova situazione assicurativa."
+        "Perché **2,19 € al litro rimane un prezzo molto alto**.",
+        "Facciamo un calcolo semplicissimo.",
+        "Con un serbatoio da 50 litri:",
+        "**50 × 2,19 € = 109,50 €**",
+        "Quasi 110 euro per un pieno.",
+        "Con un'auto che percorre 15.000 km l'anno e consuma mediamente 5,5 litri ogni 100 km, servono circa 825 litri di gasolio all'anno.",
+        "A 2,19 € al litro significano circa:",
+        "**1.806,75 € all'anno solo di carburante.**",
+        "E questo senza considerare assicurazione, bollo, manutenzione, gomme, revisioni e eventuali riparazioni.",
+        "Ecco perché anche una riduzione di qualche centesimo non viene necessariamente percepita dagli automobilisti come una soluzione definitiva."
       ]
     },
     {
-      "heading": "Intestare l’auto al figlio: RC familiare e autonomia",
+      "heading": "Perché il diesel è diventato così caro?",
       "paragraphs": [
-        "Se la vettura viene acquistata per il figlio e resterà sua, l’intestazione diretta evita un successivo trasferimento dal padre. La polizza collegata al veicolo può iniziare a costruire una storia assicurativa riferita al giovane proprietario.",
-        "La **RC familiare** permette, in presenza dei requisiti, di beneficiare della classe di merito più favorevole di un familiare stabilmente convivente. È quindi possibile intestare la vettura al neopatentato senza rinunciare necessariamente alla classe del padre. Non serve scegliere la stessa compagnia del genitore. [Fonte: IVASS sul Bonus Familiare](https://www.ivass.it/consumatori/quesiti/r.c.auto/index.html)."
+        "Non c'è una sola causa.",
+        "Eni attribuisce una parte importante degli aumenti alla riduzione dell'offerta internazionale di prodotti raffinati e alle tensioni geopolitiche.",
+        "C'è poi un problema più strutturale in Europa.",
+        "Secondo Eni, negli ultimi 15 anni sono state chiuse quasi **30 raffinerie europee**, riducendo la capacità del continente di trasformare petrolio in prodotti come benzina e gasolio.",
+        "Quando l'offerta diminuisce mentre la domanda resta elevata, i prezzi possono salire rapidamente.",
+        "Il diesel è particolarmente delicato perché non viene utilizzato soltanto dalle automobili.",
+        "Serve anche per:",
+        "• camion e trasporti;\n• logistica;\n• agricoltura;\n• numerose attività industriali."
       ]
     },
     {
-      "heading": "Stessa classe di merito non significa stesso prezzo",
+      "heading": "Vale la pena fare chilometri per trovare il diesel a 2,19 €?",
       "paragraphs": [
-        "Una classe favorevole è utile, ma non rende identici due profili assicurativi. Età del proprietario, residenza, caratteristiche del veicolo e condizioni di guida possono incidere sul premio: un figlio nella stessa classe del padre può ricevere un preventivo diverso. [Fonte: guida IVASS alla RC auto](https://www.ivass.it/consumatori/imparaconivass/guide/Guida_3_RC_Auto_versione_web.pdf).",
-        "Per la RC familiare vanno verificati convivenza stabile, appartenenza allo stesso nucleo familiare e identica residenza, oltre alle condizioni applicabili al contratto e all’attestato di rischio. Nei rinnovi assume rilievo anche la sinistralità degli ultimi cinque anni; per attestati con una storia più breve occorre verificare il caso concreto, senza presumere che il beneficio sia automatico."
+        "Non sempre.",
+        "È uno degli errori più comuni quando i carburanti aumentano.",
+        "Supponiamo di trovare un distributore che vende diesel a **10 centesimi in meno al litro**.",
+        "Su 50 litri:",
+        "**risparmio = 5 €**",
+        "Ma se per arrivarci devi percorrere 15-20 km in più tra andata e ritorno, una parte del vantaggio viene immediatamente consumata dal carburante utilizzato per raggiungerlo.",
+        "Quattroruote ha analizzato proprio questo problema: il vantaggio reale dipende dalla distanza, dal traffico e dal consumo della propria automobile, non soltanto dal prezzo visualizzato sul cartello.",
+        "La regola AutoEsperto è semplice:",
+        "**non guardare soltanto il prezzo al litro. Guarda quanto ti costa realmente raggiungere quel distributore.**"
       ]
     },
     {
-      "heading": "Guida esperta e guida esclusiva: controlla chi può guidare",
+      "heading": "Cosa può fare concretamente un automobilista oggi?",
       "paragraphs": [
-        "Una tariffa bassa può dipendere da una formula che limita i conducenti ammessi. La **guida esperta** richiede età o anzianità di patente definite dalla compagnia; la **guida esclusiva** ammette soltanto il conducente indicato. Non sono formule da scegliere se il figlio non rispetta le condizioni.",
-        "In caso di incidente causato da un conducente escluso dalla formula scelta, la compagnia può esercitare la rivalsa e chiedere il rimborso di parte delle somme liquidate al danneggiato. Bisogna scegliere una formula che ammetta il neopatentato e compilare correttamente tutte le informazioni richieste su chi userà la vettura. [Fonte: IVASS, formule di guida](https://www.ivass.it/consumatori/rc-auto/come-scegliere/)."
+        "Non possiamo controllare il prezzo internazionale del petrolio.",
+        "Possiamo però controllare diversi elementi che incidono sulla nostra spesa.",
+        "**1. Confronta i distributori prima di partire**",
+        "Consulta anche [Osservaprezzi carburanti del MIMIT](https://carburanti.mise.gov.it/ospzSearch/home), controllando data di aggiornamento e modalità self o servito.",
+        "Una differenza di 10 centesimi al litro significa:",
+        "• 3 € su 30 litri;\n• 5 € su 50 litri;\n• 6 € su 60 litri.",
+        "Se il distributore più economico è già lungo il tuo percorso, il risparmio è reale.",
+        "Se devi attraversare mezza città per raggiungerlo, molto meno.",
+        "**2. Non aspettare necessariamente la riserva**",
+        "Quando i prezzi sono molto volatili, aspettare sempre di arrivare quasi a zero significa essere costretti a rifornirsi nel distributore disponibile in quel momento.",
+        "Con un po' di margine puoi invece confrontare i prezzi e scegliere.",
+        "**3. Controlla la pressione delle gomme**",
+        "Gli pneumatici sgonfi aumentano la resistenza al rotolamento.",
+        "Il motore deve quindi utilizzare più energia semplicemente per mantenere la stessa velocità.",
+        "Controllare la pressione una volta al mese richiede pochi minuti e aiuta sia i consumi sia la durata degli pneumatici.",
+        "**4. Anticipa traffico e frenate**",
+        "Accelerare forte per poi frenare cento metri dopo significa trasformare carburante direttamente in calore sui freni.",
+        "Nel traffico prova invece a:",
+        "• accelerare progressivamente;\n• lasciare scorrere l'auto;\n• prevedere semafori e rallentamenti;\n• mantenere una velocità il più possibile costante.",
+        "Non serve guidare lentissimi.",
+        "Serve guidare in maniera regolare.",
+        "**5. Occhio alla velocità in autostrada**",
+        "Aumentando la velocità cresce molto la resistenza aerodinamica.",
+        "Per questo anche una differenza apparentemente piccola nella velocità di crociera può cambiare sensibilmente i consumi durante un viaggio lungo.",
+        "Se non hai fretta, qualche km/h in meno può valere più di diversi centesimi risparmiati alla pompa."
       ]
     },
     {
-      "heading": "I limiti del neopatentato valgono anche sull’auto del padre",
+      "heading": "Diesel a 2,19 €: conviene ancora comprare un'auto diesel?",
       "paragraphs": [
-        "Il nome del proprietario non cambia i limiti di guida. Per le patenti B conseguite dal **14 dicembre 2024**, nei primi tre anni si applicano il limite di **75 kW per tonnellata**, riferito alla tara, e per le autovetture M1 anche quello di **105 kW di potenza massima**, comprese elettriche e ibride plug-in.",
-        "È prevista un’eccezione quando accanto al conducente siede, in funzione di istruttore, una persona di età non superiore a 65 anni con patente valida della stessa categoria conseguita da almeno dieci anni, oppure valida per una categoria superiore. L’eccezione non sostituisce il controllo delle condizioni assicurative. Prima di scegliere la vettura, verifica la targa nel [servizio ufficiale del Portale dell’Automobilista](https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/neopatentati) e consulta la [guida AutoEsperto sulle auto per neopatentati](/guide/auto-neopatentati-2026-regole-potenza)."
+        "Qui bisogna evitare risposte troppo semplici.",
+        "**Il diesel non è improvvisamente diventato una cattiva scelta per tutti.**",
+        "Dipende dall'utilizzo.",
+        "Chi percorre molti chilometri all'anno, soprattutto extraurbani e autostradali, può ancora ottenere consumi molto bassi con un moderno motore diesel.",
+        "Al contrario, chi percorre prevalentemente pochi chilometri in città dovrebbe valutare con maggiore attenzione:",
+        "• benzina;\n• full hybrid;\n• GPL;\n• elettrico;\n• oppure semplicemente un modello più piccolo ed efficiente.",
+        "Il prezzo alla pompa è soltanto una parte del costo.",
+        "Prima di comprare un'auto conviene guardare il **costo totale annuale**:",
+        "**carburante + assicurazione + manutenzione + bollo + svalutazione + possibili riparazioni.**",
+        "Un'auto che costa 2.000 € in meno all'acquisto ma consuma molto di più potrebbe diventare più costosa nel giro di pochi anni.",
+        "Per confrontare modelli diversi, consulta i [consumi stimati su AutoEsperto](/consumi): scegli marca, modello e anno e confronta i valori con i tuoi pieni reali. Per completare il budget puoi usare anche il [calcolo indicativo del bollo](/calcolo-bollo), verificando poi l’importo ufficiale per la tua regione."
       ]
     },
     {
-      "heading": "Come confrontare i preventivi senza falsare il risultato",
+      "heading": "Quanto cambia davvero un pieno?",
       "paragraphs": [
-        "Richiedi due preventivi sulla stessa auto: uno con proprietario il padre e uno con proprietario il figlio. In entrambi indica correttamente il neopatentato tra i conducenti secondo le domande della compagnia. Puoi partire dal [preventivatore pubblico Preventivass](https://www.preventivass.it/)."
-      ],
-      "list": [
-        "**Stessa vettura e decorrenza:** marca, modello, potenza, uso e percorrenza devono essere coerenti.",
-        "**Coperture equivalenti:** confronta massimali, franchigie, rivalse e garanzie aggiuntive.",
-        "**Guida del figlio ammessa:** verifica età minima, anzianità della patente e conducenti autorizzati.",
-        "**RC familiare verificata:** chiedi conferma dell’applicabilità prima di decidere l’intestazione.",
-        "**Costo complessivo:** considera anche un eventuale futuro passaggio di proprietà e il budget per bollo e manutenzione."
+        "Prendiamo un esempio.",
+        "**Diesel a 2,36 €/l**",
+        "50 litri:",
+        "**118 €**",
+        "**Diesel a 2,19 €/l**",
+        "50 litri:",
+        "**109,50 €**",
+        "Differenza:",
+        "**8,50 € a pieno.**",
+        "Il confronto usa due prezzi di esempio, non una media nazionale verificata.",
+        "Su 20 pieni in un anno significa circa:",
+        "**170 € di differenza.**",
+        "Il price cap quindi non è irrilevante.",
+        "Ma non risolve completamente il problema del costo dell'auto."
       ]
     },
     {
-      "heading": "Un esempio pratico: quale risparmio conta davvero?",
+      "heading": "Il vero problema non è il singolo pieno",
       "paragraphs": [
-        "Immagina che il preventivo con auto intestata al padre costi 150 euro in meno all’anno rispetto a quello con auto intestata al figlio. **È un esempio ipotetico, non una tariffa di mercato.** Prima di scegliere, controlla che entrambe le offerte consentano al giovane di guidare e offrano le stesse coperture.",
-        "Se l’auto resterà del figlio per diversi anni, metti sul piatto anche la sua storia assicurativa e l’eventuale costo di un futuro trasferimento. Un piccolo risparmio iniziale può pesare meno della semplicità di intestare subito la vettura al suo proprietario definitivo. Se invece sarà un mezzo condiviso in famiglia, l’intestazione al padre può risultare coerente con l’utilizzo previsto."
+        "È facile concentrarsi sui 2,19 € mostrati sul cartello.",
+        "Il problema per molte famiglie è però la somma di tutte le spese necessarie per mantenere un'automobile.",
+        "Carburante, assicurazione, tagliandi e riparazioni possono trasformare un'auto apparentemente economica in una spesa importante.",
+        "Per questo, soprattutto quando si compra un'auto usata, il consumo reale dovrebbe essere valutato insieme al prezzo di acquisto.",
+        "Un diesel che percorre realmente 20 km/l e uno che ne percorre 14 possono avere costi annuali molto diversi, anche se vengono venduti allo stesso prezzo."
       ]
     },
     {
-      "heading": "La scelta AutoEsperto: prima i numeri, poi il nome",
+      "heading": "In sintesi",
       "paragraphs": [
-        "**Auto familiare e risparmio verificato:** valuta l’intestazione al padre, con una polizza che ammetta davvero il figlio. **Auto destinata stabilmente al giovane:** valuta l’intestazione al neopatentato e controlla l’accesso alla RC familiare. In nessuno dei due casi il risparmio va dato per scontato.",
-        "Prima di comprare, controlla anche compatibilità con i limiti di guida, stato dell’usato e costo totale di possesso. Puoi [analizzare un annuncio con AutoEsperto](/analizza-annuncio) per affiancare alla scelta assicurativa una valutazione della vettura."
+        "Dal **28 settembre 2026**, Eni/Enilive ha fissato un tetto massimo di:",
+        "**Diesel: 2,19 €/litro**",
+        "**Benzina: 1,99 €/litro**",
+        "La misura durerà inizialmente 30 giorni e potrà essere prolungata fino alla fine dell'anno.",
+        "È un aiuto concreto rispetto ai prezzi precedenti, ma 2,19 € al litro rimane un costo elevato: un pieno da 50 litri costa comunque quasi **110 €**.",
+        "Per questo il consiglio di AutoEsperto è di non inseguire soltanto il distributore con qualche centesimo in meno.",
+        "Controlla il prezzo, certo.",
+        "Ma controlla anche **quanto consuma realmente la tua auto**.",
+        "Perché sul lungo periodo il pieno più economico è quello che riesci a far durare più chilometri."
       ]
     },
     {
-      "heading": "Fonti e verifica delle informazioni",
+      "heading": "Fonti e aggiornamento",
       "paragraphs": [
-        "Riferimenti consultati per questa guida: [FAQ RC auto di IVASS](https://www.ivass.it/consumatori/quesiti/r.c.auto/index.html), [indicazioni IVASS sulla scelta della polizza](https://www.ivass.it/consumatori/rc-auto/come-scegliere/), [guida IVASS alla RC auto](https://www.ivass.it/consumatori/imparaconivass/guide/Guida_3_RC_Auto_versione_web.pdf) e [servizio neopatentati del Portale dell’Automobilista](https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/neopatentati). Verifica editoriale: 11 ottobre 2026. Le condizioni del singolo contratto vanno confermate nel preventivo e nei documenti della compagnia."
+        "Notizia verificata il 30 settembre 2026 sul [comunicato Eni del 25 settembre](https://www.eni.com/it-IT/media/comunicati-stampa/2026/09/cs-eni-aggiudica-dal-28-settembre-tetto-prezzi-gasolio-benzina.html). Per l’applicazione anche in autostrada: [Quattroruote, 25 settembre 2026](https://www.quattroruote.it/news/mercato/2026/09/25/eni_limite_massimo_prezzi_benzina.amp.html). Durata ed eventuale proroga vanno ricontrollate dopo questo aggiornamento. I calcoli sono esempi a prezzo costante, non previsioni."
       ]
     }
   ]
 },
+  {
+    "slug": "autoesperto-cerca-investitori-sistema-proprietario",
+    "title": "AutoEsperto cerca investitori: un sistema sviluppato in casa",
+    "description": "Un progetto indipendente, un sistema AutoEsperto sviluppato internamente e un obiettivo concreto: aiutare chi compra e vende auto usate a decidere meglio.",
+    "published": "2026-09-04",
+    "updated": "2026-09-28",
+    "category": "valutazione",
+    "cta": "autoesperto-investitori",
+    "image": "/images/guide/autoesperto-cerca-investitori-sistema-proprietario.jpg",
+    "readTime": "6 min",
+    "featured": true,
+    "editorialNote": "Presentazione redazionale del progetto AutoEsperto, aggiornamento 28 settembre 2026. La pagina descrive funzioni disponibili e aree di sviluppo come tali; non formula promesse di rendimento né annuncia condizioni di investimento.",
+    "sections": [
+      {
+        "heading": "Cerchiamo persone con cui costruire il prossimo passo",
+        "paragraphs": [
+          "AutoEsperto cerca investitori e partner interessati a far crescere un progetto già accessibile online, nato per rispondere a una domanda semplice: come si può comprare o vendere un’auto usata con più informazioni e meno confusione? Il punto di partenza è il lavoro sul prodotto: strumenti, percorsi di consultazione e contenuti pensati per accompagnare una decisione concreta.",
+          "AutoEsperto è un progetto indipendente curato dal Team AutoEsperto. La redazione lavora per trasformare informazioni spesso sparse in un’esperienza comprensibile, nella quale l’automobilista sappia quali dati inserire, come leggere una stima e quali controlli fare prima di scegliere.",
+          "Cerchiamo interlocutori che condividano questa impostazione e vogliano conoscere il sistema, valutarne lo stato e discutere un percorso di crescita sostenibile. Il primo passo è un confronto sul prodotto e sulle priorità, con obiettivi da definire insieme."
+        ]
+      },
+      {
+        "heading": "Un sistema AutoEsperto sviluppato internamente",
+        "paragraphs": [
+          "L’espressione “sviluppato in casa” descrive il modo in cui è stato costruito il progetto: progettazione dell’esperienza, logiche applicative, collegamento tra gli strumenti e sviluppo del sito sono curati internamente. È questo lavoro a dare al sistema AutoEsperto una direzione comune, dall’inserimento dei dati dell’auto alla lettura del risultato.",
+          "Il valore del sistema proprietario sta nel modo in cui le informazioni vengono organizzate e trasformate in un percorso utile. Lo sviluppo interno consente di intervenire sulle funzioni, correggere i problemi e far evolvere il prodotto a partire dalle esigenze di chi lo usa. L’infrastruttura si appoggia anche a tecnologie, servizi e fonti esterni: il lavoro originale di AutoEsperto riguarda la progettazione e l’integrazione del servizio.",
+          "Per un investitore, questo significa poter discutere direttamente le scelte di prodotto e le priorità di sviluppo. L’obiettivo è consolidare quanto è stato realizzato e costruire gradualmente le competenze e le risorse necessarie alla crescita."
+        ]
+      },
+      {
+        "heading": "Il problema che vogliamo affrontare",
+        "paragraphs": [
+          "Chi compra trova annunci con informazioni incomplete, prezzi difficili da confrontare e condizioni che richiedono verifiche. Chi vende deve spiegare lo stato dell’auto, raccogliere documenti e motivare la propria richiesta. In entrambi i casi, la quantità di informazioni disponibili può aumentare i dubbi invece di chiarirli.",
+          "AutoEsperto vuole rendere più semplice questo passaggio: partire dai dati della vettura, distinguere le informazioni disponibili da quelle da confermare e aiutare l’utente a preparare le domande giuste. Il prodotto deve essere utile anche a chi non conosce il linguaggio tecnico del settore.",
+          "Un esempio: due auto dello stesso modello possono differire per anno, motore, chilometri e manutenzione. Confrontare soltanto il prezzo porta facilmente a una conclusione incompleta. Il sistema deve aiutare a leggere quelle differenze e a capire che cosa meriti un controllo successivo."
+        ]
+      },
+      {
+        "heading": "Che cosa si può vedere oggi su AutoEsperto",
+        "paragraphs": [
+          "Il sito permette di esplorare gli strumenti e il percorso proposto agli automobilisti. Una presentazione del progetto può partire da casi concreti, utilizzando dati dichiarati e mettendo in evidenza anche le informazioni mancanti.",
+          "Puoi iniziare dalla [homepage di AutoEsperto](/) e dal [Profilo Digitale Auto](/passport). La dimostrazione del prodotto serve anche a discutere che cosa migliorare: chiarezza dei risultati, facilità d’uso e continuità tra strumenti e contenuti."
+        ],
+        "list": [
+          "**Valutazione dell’auto:** un punto di partenza per orientarsi sul prezzo, considerando i dati inseriti e i limiti della stima.",
+          "**Analisi di foto e annunci:** supporto alla lettura delle informazioni disponibili e dei punti da approfondire.",
+          "**Strumenti di confronto e costo:** percorsi dedicati a modelli, manutenzione e spese connesse all’auto.",
+          "**Profilo Digitale Auto:** uno spazio per raccogliere informazioni e documenti sulla vettura e organizzarne la storia.",
+          "**Guide editoriali:** spiegazioni pratiche per preparare una visita, valutare un preventivo o gestire una vendita."
+        ]
+      },
+      {
+        "heading": "La fiducia si costruisce rendendo chiari dati e limiti",
+        "paragraphs": [
+          "La qualità di una valutazione dipende dalle informazioni su cui si basa. Un prezzo ricavato da annunci, una stima indicativa e il prezzo effettivo di una compravendita sono cose diverse. Il percorso di crescita deve rendere sempre più riconoscibili fonte, aggiornamento e livello di completezza dei dati utilizzati.",
+          "Allo stesso modo, una fotografia può mostrare alcuni difetti visibili, ma non descrive da sola lo stato meccanico o i danni nascosti. AutoEsperto accompagna il controllo del veicolo: una perizia, una diagnosi e la verifica dei documenti mantengono il loro ruolo. Questa chiarezza è una parte del prodotto da sviluppare e verificare nel tempo.",
+          "Il Profilo Digitale organizza ciò che viene raccolto sulla vettura; la presenza di un documento non rende automaticamente certificata ogni dichiarazione. Distinguere dati inseriti, documenti allegati e controlli indipendenti è essenziale per costruire un servizio credibile."
+        ]
+      },
+      {
+        "heading": "Dove concentrare le risorse per crescere",
+        "paragraphs": [
+          "Le priorità di sviluppo proposte riguardano soprattutto la qualità del servizio e la sua sostenibilità. Il confronto con investitori e partner serve a definire ordine, risorse e obiettivi misurabili, senza confondere le funzioni disponibili con quelle ancora da realizzare.",
+          "Sono aree di lavoro da approfondire. Un piano condiviso dovrà stabilire quali risultati osservare, quali costi sostenere e quali ipotesi validare prima di ampliare il progetto."
+        ],
+        "list": [
+          "**Qualità dei dati:** valutare fonti autorizzate, copertura e aggiornamento delle informazioni utili alla compravendita.",
+          "**Affidabilità del prodotto:** migliorare prestazioni, gestione degli errori e verifiche dei risultati.",
+          "**Esperienza su telefono:** rendere più semplice inserire dati, leggere il report e recuperare le informazioni importanti.",
+          "**Collaborazioni professionali:** esplorare servizi con operatori del settore, definendo responsabilità e modalità di verifica.",
+          "**Sostenibilità economica:** valutare servizi aggiuntivi e collaborazioni commerciali con condizioni chiare per l’utente."
+        ]
+      },
+      {
+        "heading": "Quali investitori e partner cerchiamo",
+        "paragraphs": [
+          "Ci interessa parlare con persone che possano contribuire con capitale, esperienza di prodotto, conoscenza dell’automotive o capacità di costruire relazioni commerciali. Un partner utile può aiutare a scegliere le priorità e a valutare le opportunità con metodo, oltre a fornire risorse.",
+          "Il confronto può coinvolgere investitori privati, operatori del settore e professionisti interessati a una collaborazione. La forma della partecipazione, gli impegni e le condizioni economiche devono essere discussi e formalizzati nel contesto appropriato. Questa pagina presenta il progetto e apre un contatto: non annuncia rendimenti, quote o condizioni di investimento già definite."
+        ]
+      },
+      {
+        "heading": "Come iniziare il confronto",
+        "paragraphs": [
+          "Scrivici attraverso la [pagina contatti](/contatti), indicando come oggetto “Investitori AutoEsperto”. Presenta brevemente il tuo profilo, il tipo di interesse e il contributo che immagini di portare. Questo permette di preparare un primo confronto pertinente.",
+          "Il dialogo può partire da una dimostrazione del sistema, dalle priorità di sviluppo e dagli elementi da verificare per valutare una collaborazione. Eventuali dati economici, documenti societari e materiali riservati vanno esaminati nella loro versione effettivamente disponibile, senza sostituirli con stime promozionali.",
+          "AutoEsperto è nato da un lavoro indipendente e da una necessità concreta. Il prossimo passo è trovare le persone e le risorse con cui farlo crescere, mantenendo al centro l’utilità per chi deve comprare, vendere e conoscere meglio la propria auto."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "creare-sito-blog-auto-concessionario-privato",
+    "title": "Come vendere auto online con un sito o blog dedicato: guida strategica 2026 per privati e concessionari",
+    "description": "Guida completa 2026 alla vendita di auto online: vantaggi di un sito o blog proprietario rispetto ai portali generalisti, Local SEO, schede veicolo perfette, passaporto digitale e prevenzione truffe.",
+    "published": "2026-09-16",
+    "category": "vendita",
+    "cta": "creare-sito-blog-auto",
+    "image": "/images/guide/creare-sito-blog-auto-concessionario-privato.jpg",
+    "readTime": "10 min",
+    "featured": true,
+    "sections": [
+      {
+        "heading": "La rivoluzione digitale dell'automotive in Italia: perché il 78% degli acquisti inizia online",
+        "paragraphs": [
+          "Nel mercato automobilistico contemporaneo, il percorso di acquisto di un veicolo è radicalmente cambiato. Secondo le più recenti analisi di settore sui consumi digitali in Italia, oltre il **78% degli automobilisti** effettua ricerche approfondite sul web prima di recarsi fisicamente in un salone o contattare un venditore privato.",
+          "L'acquirente di oggi non cerca più semplici annunci sbrigativi con tre fotografie sfuocate e la solita dicitura «auto perfetta mai incidentata». Cerca **trasparenza documentale, perizie dettagliate, book fotografici ad alta risoluzione a 360 gradi, storico dei tagliandi e certificazioni chilometriche** capaci di azzerare la naturale diffidenza verso l'usato.",
+          "Sia che tu sia un **privato intenzionato a vendere un'auto speciale o di valore**, un **appassionato/restauratore** o un **concessionario/autosalone multimarca** con decine di veicoli in rotazione, la visibilità digitale rappresenta oggi il confine netto tra concludere la vendita al reale valore di mercato o essere costretti a svendere per sfinimento."
+        ]
+      },
+      {
+        "heading": "Portali terzi vs sito o blog proprietario: il confronto costi-benefici",
+        "paragraphs": [
+          "Per molti anni la norma è stata pubblicare annunci unicamente su piattaforme generaliste terze (come Subito.it o AutoScout24). Sebbene questi portali offrano un bacino iniziale di utenza, affidarsi esclusivamente ad essi presenta crescenti limiti operativi ed economici:",
+          "Ecco il confronto oggettivo tra l'affidarsi solo ai portali e possedere una piattaforma web o blog proprietario:"
+        ],
+        "list": [
+          "**Visibilità duratura e posizionamento organico su Google (SEO):** Un annuncio su un portale di annunci scade dopo 30 o 60 giorni o viene sommerso da centinaia di nuove inserzioni nel giro di poche ore. Al contrario, un sito web o un blog ben ottimizzato si posiziona stabilmente su Google per ricerche geolocalizzate e strategiche (ad esempio *«concessionaria auto usate Siracusa»* o *«Golf GTI usata tagliandata con storico certificato»*), attirando contatti profilati a costo zero nel tempo.",
+          "**Trust e credibilità immediata:** Un acquirente si fida infinitamente di più di un venditore o salone che dispone di un proprio indirizzo web ufficiale, schede tecniche approfondite, recensioni verificate, foto in alta definizione e documentazione trasparente.",
+          "**Controllo totale dei contenuti e dell'esperienza utente:** Sulle piattaforme terze sei costretto a rispettare formati rigidi, limiti sul numero di foto e campi preimpostati. Con un sito o blog dedicato puoi inserire gallery fotografiche complete, video di test-drive, grafici di svalutazione e dettagli tecnici senza alcuna restrizione.",
+          "**Hub centrale per i Social Network:** Il sito diventa il punto di atterraggio unico a cui convogliare il traffico proveniente da TikTok, Instagram Reels, Facebook, YouTube o campagne sponsorizzate, trasformando i follower in chiamate e chat WhatsApp dirette con un solo tocco.",
+          "**Zero commissioni e indipendenza commerciale:** Riduci drasticamente la dipendenza dagli abbonamenti professionali sempre più onerosi richiesti dai grandi portali di compravendita auto."
+        ]
+      },
+      {
+        "heading": "L'anatomia della scheda veicolo perfetta: i 5 elementi che trasformano i visitatori in acquirenti",
+        "paragraphs": [
+          "Una scheda auto efficace non si limita a elencare anno, chilometri e cilindrata, ma racconta la storia del mezzo e dissipa ogni dubbio prima ancora che l'acquirente prenda in mano il telefono. Una presentazione di alto livello include sempre:"
+        ],
+        "list": [
+          "**1. Book fotografico professionale a 360°:** Almeno 15-20 scatti luminosi che mostrano l'auto da tutte le angolazioni (3/4 anteriore e posteriore, fiancate, vano motore pulito, usura dei pneumatici e dettagli interni su volante, pedaliera e sedile guida). Per approfondire la tecnica di scatto, consulta la nostra guida su [come fare le foto perfette per un'auto usata](/guide/foto-auto-usata-da-caricare-guida).",
+          "**2. Storico documentato e Passaporto Digitale:** Inserisci il link al [passaporto digitale del veicolo](/passport) con cronologia revisioni ministeriali, interventi di manutenzione ordinaria e straordinaria (es. kit distribuzione o frizione) con relative fatture fiscali.",
+          "**3. Trasparenza sui prezzi di mercato:** Mostra la coerenza della tua richiesta economica incrociando i dati della [valutazione auto usate](/valutazione) di AutoEsperto.it: dimostrare che il prezzo richiesto è in linea con la media reale degli annunci attivi elimina alla radice le trattative al ribasso ingiustificate.",
+          "**4. Trasparenza totale su piccoli difetti estetici:** Fotografare onestamente un graffietto da parcheggio o una leggera abrasione sul paraurti (puoi stimarne il ripristino con la nostra guida sui [danni di carrozzeria](/guide/danno-carrozzeria-fai-da-te-o-carrozziere)) moltiplica la fiducia dell'acquirente, che apprezzerà la serietà del venditore.",
+          "**5. Canale di contatto istantaneo:** Pulsante rapido per avviare una conversazione WhatsApp o richiedere un test-drive direttamente dallo smartphone."
+        ]
+      },
+      {
+        "heading": "Local SEO: come farsi trovare da acquirenti della propria provincia su Google",
+        "paragraphs": [
+          "Per un autosalone, un concessionario indipendente o un'officina che vende usato selezionato, il vero motore di crescita commerciale è la **Local SEO (Search Engine Optimization)** su Google.",
+          "Oltre il 60% delle persone che cercano un'automobile usata include nella query la propria città o provincia di residenza. Un sito ben configurato sfrutta queste leve fondamentali:"
+        ],
+        "list": [
+          "**Integrazione con Google Business Profile (ex Google My Business):** Scheda verificata con orari, indicazioni stradali, recensioni dei clienti e link diretto all'inventario del sito web.",
+          "**Dati strutturati Schema.org (Car, Product, AutoDealer):** Marcatura semantica nel codice HTML che consente a Google di mostrare nei risultati di ricerca il prezzo, il chilometraggio, l'alimentazione e le foto direttamente nei rich snippet.",
+          "**Pagine vetrina geolocalizzate:** Contenuti ottimizzati per le ricerche territoriali (es. *«auto usate garantite Siracusa»*, *«SUV usati tagliandati Sicilia»*).",
+          "**Performance mobile supersonica (Core Web Vitals):** Poiché oltre il 75% del traffico automotive proviene da smartphone, il sito deve caricarsi in meno di 2 secondi, garantendo fluidità e immediatezza di navigazione."
+        ]
+      },
+      {
+        "heading": "Sicurezza nelle trattative online: tutela legale e prevenzione truffe",
+        "paragraphs": [
+          "La vendita sul web richiede attenzione sia per chi compra sia per chi vende. La trasparenza digitale è la migliore arma di difesa contro contenziosi legali e tentativi di frode:",
+          "Ecco le buone pratiche legali e operative raccomandate dagli analisti di AutoEsperto:"
+        ],
+        "list": [
+          "**Per i venditori privati (Tutela ex art. 1490 c.c.):** Nelle compravendite tra privati non si applica la garanzia legale di conformità del Codice del Consumo, ma vige la garanzia per vizi della cosa venduta (art. 1490 c.c.). Redigere una scheda trasparente e un verbale di consegna con lo stato d'uso e il chilometraggio certificato mette al riparo da future richieste di risarcimento per presunti vizi occulti.",
+          "**Per i concessionari (Garanzia Legale di Conformità):** Esporre schede di conformità chiare e storici manutentivi documentati previene contenziosi con i consumatori e assicura il pieno rispetto della garanzia obbligatoria di 12 o 24 mesi.",
+          "**Prevenzione truffe nei pagamenti:** Nelle trattative a distanza, non consegnare mai il veicolo prima della conferma irrevocabile dell'avvenuto accredito bancario (bonifico istantaneo verificato o assegno circolare convalidato dalla banca emittente). Diffidare di acquirenti che propongono pagamenti con sistemi non tracciabili o che chiedono anticipi per presunte commissioni doganali."
+        ]
+      },
+      {
+        "heading": "Infrastruttura tecnologica e partner di sviluppo: soluzioni agili ed economiche",
+        "paragraphs": [
+          "Uno dei timori più diffusi tra privati e rivenditori è che creare un proprio sito o blog per auto comporti costi proibitivi o richieda competenze tecniche avanzate. Oggi non è più così: le architetture web moderne consentono di realizzare soluzioni sartoriali, veloci ed economiche.",
+          "In **AutoEsperto.it** ci occupiamo dell'analisi tecnica, dei dati di mercato reali e della valutazione imparziale dei veicoli. Per supportare concretamente automobilisti, privati e autosaloni nella creazione di una presenza web efficace e professionale, collaboriamo con **Siracusa Web Store** ([siracusawebstore.it](https://siracusawebstore.it)), partner di riferimento per lo sviluppo web e la digitalizzazione d'impresa in ambito automotive.",
+          "Insieme ti accompagniamo in tutte le fasi di realizzazione:"
+        ],
+        "list": [
+          "**Scelta dell'architettura ideale:** Dalla singola landing page vetrina per un'auto speciale o d'epoca fino al portale catalogo con filtri avanzati per concessionari multimarca;",
+          "**Setup chiavi in mano:** Registrazione dominio personalizzato, hosting ultraveloce, caselle email professionali e certificati di sicurezza SSL (HTTPS);",
+          "**Grafica moderna e responsive:** Layout ottimizzato per smartphone e tablet, studiato per dare massimo risalto alle immagini e alle specifiche tecniche dei veicoli;",
+          "**Gestione autonoma:** Pannello di controllo intuitivo per aggiornare prezzi, aggiungere foto e pubblicare articoli o annunci in pochi clic senza costi di manutenzione ricorrenti;",
+          "**Integrazione con gli strumenti di AutoEsperto:** Possibilità di incorporare i widget di [valutazione auto usate](/valutazione) e i report di trasparenza direttamente nelle pagine veicolo."
+        ]
+      },
+      {
+        "heading": "La roadmap in 4 step per iniziare oggi",
+        "paragraphs": [
+          "Costruire la tua presenza online per vendere auto richiede pochi passaggi lineari:"
+        ],
+        "list": [
+          "**Step 1 — Definisci l'obiettivo del progetto:** Valorizzare una singola auto d'epoca o sportiva, lanciare un blog di approfondimenti motoristici o digitalizzare l'intero stock di un autosalone?",
+          "**Step 2 — Raccogli documentazione e foto:** Scatta fotografie dettagliate e prepara le fatture dei tagliandi e il [passaporto digitale](/passport);",
+          "**Step 3 — Progetta la struttura con professionisti:** Contatta un partner specializzato come [Siracusa Web Store](https://siracusawebstore.it) per concordare grafica, funzionalità e tempistiche di sviluppo;",
+          "**Step 4 — Vai online e promuovi i tuoi veicoli:** Pubblica il sito, collegalo ai canali social, inseriscilo nei tuoi annunci e inizia a costruire la tua autorevolezza commerciale su Google."
+        ]
+      },
+      {
+        "heading": "In sintesi & Risorse Utili AutoEsperto.it",
+        "paragraphs": [
+          "Avere un proprio sito web o blog dedicato all'automobile significa passare da una posizione di dipendenza dai portali terzi a una strategia di visibilità indipendente, trasparente e duratura nel tempo.",
+          "Prima di fissare il prezzo di vendita o pubblicare il tuo annuncio, utilizza gli strumenti gratuiti di AutoEsperto.it:"
+        ],
+        "list": [
+          "**[Valutazione Auto Usate](/valutazione):** Consulta una stima indicativa e confronta, quando disponibili, i prezzi richiesti negli annunci di modelli simili;",
+          "**[Passaporto Digitale Auto](/passport):** Crea la scheda storica del tuo veicolo con tagliandi, scadenze e documentazione peritale da condividere con i potenziali acquirenti;",
+          "**[Analisi Annuncio Auto](/analizza-annuncio):** Verifica l'affidabilità e la congruità del prezzo degli annunci online con l'intelligenza artificiale;",
+          "**[Calcolo Passaggio di Proprietà](/passaggio-proprieta):** Calcola in anticipo il costo dell'IPT provinciale e delle pratiche burocratiche per l'atto di vendita."
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "sta-arrivando-il-freddo-tempo-di-cambiare-gomme",
+    "title": "Sta arrivando il freddo: è tempo di cambiare le gomme? Date di legge, la regola dei 7°C, multe e cosa conviene davvero nel 2026",
+    "description": "Con l'arrivo dei primi freddi autunnali torna il dilemma pneumatici: quando scatta l'obbligo di legge per le gomme invernali? Come funziona la soglia dei 7°C, differenze tra termiche, 4 stagioni e catene a bordo, controlli DOT battistrada e costi reali nel 2026.",
+    "published": "2026-09-15",
+    "category": "manutenzione",
+    "cta": "analizza-annuncio",
+    "ctaType": "analizza-annuncio",
+    "image": "/images/guide/sta-arrivando-il-freddo-tempo-di-cambiare-gomme.jpg",
+    "readTime": "9 min",
+    "featured": true,
+    "sections": [
+      {
+        "heading": "L'autunno si fa sentire: perché l'asfalto freddo cambia le regole del gioco",
+        "paragraphs": [
+          "I primi brividi mattutini, l'aria che si fa pungente e le temperature che all'alba iniziano a scendere stabilmente sotto i 10°C: con l'arrivo dell'autunno, per milioni di automobilisti italiani si riaccende il consueto dilemma stagionale: **è già tempo di cambiare le gomme e montare gli pneumatici invernali o conviene aspettare la scadenza di legge?**",
+          "Troppo spesso il cambio gomme viene percepito come un mero adempimento burocratico da sbrigare all'ultimo secondo, magari quando cade il primo fiocco di neve o scatta l'allerta meteo in televisione. Ma la realtà fisica della strada è profondamente diversa: la neve è solo la punta dell'iceberg. L'asfalto autunnale e invernale, umido, sporco di fogliame viscido e con temperature del manto stradale prossime allo zero, azzera l'aderenza delle mescole estive molto prima che si veda il ghiaccio.",
+          "In questa guida tecnica peritale di AutoEsperto analizziamo il calendario ufficiale delle ordinanze in Italia, la fisica della «regola dei 7°C», il confronto spietato tra gomme termiche pure, All Season e catene da neve a bordo, le sanzioni del Codice della Strada e come verificare l'usura reale di un treno di gomme prima di rimontarlo."
+        ]
+      },
+      {
+        "heading": "Il calendario di legge in Italia: date ufficiali, deroghe e la finestra del mese di tolleranza",
+        "paragraphs": [
+          "In Italia la disciplina sull'equipaggiamento invernale dei veicoli è regolata dall'**articolo 6, comma 4, lettera e) del Codice della Strada** e dalla Direttiva del Ministero delle Infrastrutture e dei Trasporti (MIT) del 16 gennaio 2013.",
+          "Il quadro temporale ufficiale stabilisce regole precise che ogni guidatore deve conoscere per non incorrere in sanzioni o problemi assicurativi:"
+        ],
+        "list": [
+          "**1. La data di inizio obbligo (15 novembre):** Su gran parte della rete viaria italiana — autostrade, raccordi tangenziali, strade statali e provinciali soggette a ordinanza degli enti proprietari (ANAS, Comuni, Province) — vige l'obbligo di circolare con pneumatici invernali montati oppure di avere a bordo catene da neve o calze omologate idonee alla marcia su neve e ghiaccio.",
+          "**2. La deroga anticipata di montaggio (dal 15 ottobre):** Per evitare il consueto caos nelle officine e dai gommisti nei giorni immediatamente precedenti il 15 novembre, il Ministero dei Trasporti consente di montare gli pneumatici invernali a partire da **un mese prima**, ovvero dal **15 ottobre**. Chi effettua il cambio in questo arco temporale circola in totale legalità.",
+          "**3. La data di fine obbligo (15 aprile) e il mese per lo smontaggio (fino al 15 maggio):** L'obbligo di legge cessa il 15 aprile. Da quel giorno scatta un ulteriore mese di tolleranza che permette di rimontare le gomme estive entro il **15 maggio** senza rischiare sanzioni, a patto che l'indice di velocità sia conforme a quanto prescritto dalla carta di circolazione.",
+          "**4. Le eccezioni regionali e montane:** Alcune regioni a clima rigido applicano calendari anticipati o prorogati. In Valle d'Aosta l'obbligo scatta tassativamente il **15 ottobre** e termina il **15 aprile**. Anche su diversi valichi alpini e tratte appenniniche le ordinanze locali possono anticipare la decorrenza in base all'altitudine."
+        ]
+      },
+      {
+        "heading": "La regola scientifica dei 7°C: perché la fisica conta più del calendario",
+        "paragraphs": [
+          "Molti automobilisti commettono l'errore di aspettare il 15 novembre a prescindere dal clima, continuando a viaggiare con pneumatici estivi anche con temperature vicine allo zero. Dal punto di vista della sicurezza attiva, la soglia spartiacque non è una data sul calendario, ma una temperatura precisa: **7 gradi centigradi (7°C)**.",
+          "Dietro questa cifra apparentemente banale si cela una complessa legge chimico-fisica che governa i polimeri della gomma:"
+        ],
+        "list": [
+          "**Il fenomeno della «vetrificazione» della mescola estiva:** Gli pneumatici estivi sono progettati per operare ad alte temperature con mescole a base di gomma sintetica e nerofumo che garantiscono rigidità e precisione di guida. Quando la temperatura ambientale e dell'asfalto scende sotto i 7°C, questa mescola subisce una transizione vetrosa: la gomma s'irrigidisce, diventa dura come plastica e perde la capacità elastica di conformarsi alle micro-asperità dell'asfalto.",
+          "**Allungamento dello spazio di arresto:** Su asfalto bagnato o viscido a 4°C, un'automobile equipaggiata con pneumatici estivi che frena da una velocità di 80 km/h impiega fino al **25-30% in più di spazio per fermarsi** rispetto alla stessa identica vettura dotata di pneumatici invernali. Parliamo di 6-9 metri di differenza: la distanza sufficiente a tamponare il veicolo che precede o a invadere un incrocio.",
+          "**La tecnologia della silice e le lamelle autobloccanti:** Lo pneumatico invernale contiene un'elevata percentuale di silice naturale e oli vegetali speciali che mantengono il battistrada morbido, elastico e grippante anche a temperature di -15°C o -20°C. Inoltre, il disegno del battistrada non presenta semplici scanalature longitudinali, ma **migliaia di micro-lamelle sinusoidali (sipes)**: flettendosi al contatto con il suolo, queste lamelle creano un effetto ventosa e intrappolano piccoli cristalli di neve, sfruttando l'eccezionale coefficiente di attrito radente neve-contro-neve."
+        ]
+      },
+      {
+        "heading": "M+S, 3PMSF e Calze da Neve: cosa dice il Codice della Strada nel 2026",
+        "paragraphs": [
+          "Uno dei punti più controversi tra gli automobilisti riguarda le marcature impresse sulla spalla dello pneumatico. Spesso si acquistano gomme usate o su portali web senza comprendere cosa prescrive la legge europea e italiana:",
+          "Ecco la guida peritale alle sigle di conformità:"
+        ],
+        "list": [
+          "**Marcatura M+S (Mud & Snow — Fango e Neve):** È la dicitura minima richiesta per legge dal Codice della Strada italiano per considerarsi in regola con le ordinanze invernali. Tuttavia, la sigla M+S è una semplice autocertificazione del costruttore e non richiede il superamento di test dinamici di frenata su neve. Molti pneumatici cinesi economici recano la scritta M+S pur offrendo prestazioni invernali pessime.",
+          "**Marcatura 3PMSF (Three-Peak Mountain Snowflake — Pittogramma della montagna a tre cime con fiocco di neve):** È l'autentico certificato di garanzia prestazionale. Per ottenere questo marchio, lo pneumatico deve superare severi test di laboratorio e omologazione su pista innevata secondo le norme ECE/ONU. Dal 2024 in Germania e in altri Paesi europei gli pneumatici con sola marcatura M+S non sono più considerati idonei per l'inverno: la tendenza normativa europea richiede tassativamente il simbolo 3PMSF.",
+          "**Codice di velocità ammesso per le invernali:** Il Codice della Strada consente, esclusivamente per gli pneumatici invernali, di montare coperture con un codice di velocità inferiore a quello indicato sulla carta di circolazione, fino a un limite minimo di **Q (160 km/h)**. Se monti pneumatici con codice di velocità declassato, vige l'obbligo per legge di applicare una targhetta visibile al conducente sul cruscotto con l'indicazione della velocità massima e l'obbligo tassativo di smontarli entro il 15 maggio.",
+          "**Calze da neve in tessuto omologate (Norma UNI EN 16662-1):** Dal 2023, per effetto del decreto ministeriale di recepimento della norma europea UNI EN 16662-1, **le calze da neve in tessuto certificato sono ufficialmente equiparate alle tradizionali catene metalliche da neve**. Possono essere tenute a bordo nel bagagliaio per assolvere all'obbligo di legge sulle tratte con ordinanza, a patto che riportino l'omologazione EN 16662-1 o V5121."
+        ]
+      },
+      {
+        "heading": "Gomme Termiche pure o 4 Stagioni (All Season)? Il verdetto operativo di AutoEsperto",
+        "paragraphs": [
+          "Non esiste una risposta universale valida per tutti: la scelta tra il doppio treno stagionale (estive + invernali) e il treno unico 4 Stagioni (All Season) dipende esclusivamente dal profilo di utilizzo, dal chilometraggio annuale e dall'area geografica di residenza.",
+          "Segui il diagramma peritale elaborato dagli esperti di AutoEsperto per capire quale configurazione fa per te:"
+        ],
+        "list": [
+          "**Scegli gli Pneumatici Invernali dedicati (Doppio Treno) se:**\n- Percorri più di **15.000 - 20.000 km all'anno**.\n- Risiedi in zone alpine, prealpine, nell'entroterra appenninico o nella Pianura Padana centro-settentrionale, dove le temperature invernali rimangono per settimane vicine allo zero.\n- Utilizzi l'auto regolarmente nelle prime ore del mattino (tra le 5:00 e le 8:00) o a tarda notte, quando il rischio di fondo ghiacciato e galaverna è massimo.\n- Possiedi una vettura potente, una berlina/station wagon a trazione posteriore o un SUV con masse importanti superiori a 1.800 kg: il peso elevato richiede massima tenuta laterale in frenata.",
+          "**Scegli gli Pneumatici 4 Stagioni (All Season con 3PMSF) se:**\n- Percorri **meno di 10.000 - 12.000 km all'anno**.\n- Vivi in città o in zone costiere e pianeggianti del Centro-Sud, dove le nevicate sono occasionali e le temperature invernali oscillano tra i 5°C e i 14°C.\n- Vuoi azzerare i costi e le perdite di tempo del doppio cambio stagionale dal gommista (risparmiando tra 100 € e 160 € all'anno tra montaggi e stoccaggio).\n- Utilizzi l'auto prevalentemente su percorsi urbani ed extraurbani a velocità moderate e puoi permetterti di non metterti alla guida durante le nevicate eccezionali.",
+          "**Scegli Pneumatici Estivi + Catene/Calze a bordo se:**\n- Risiedi stabilmente in Sicilia, Calabria, coste pugliesi o tirreniche calde, dove le temperature invernali scendono raramente sotto i 10-12°C.\n- Affronti percorsi soggetti a ordinanza invernale solo una o due volte all'anno per turismo o trasferte. Tenere un set di calze da neve omologate nel baule (costo: 50-80 € una tantum) ti mette al riparo da sanzioni senza costringerti a montare gomme invernali inadatte al clima mite della tua zona."
+        ]
+      },
+      {
+        "heading": "Cosa si rischia a circolare non in regola? Multe, decurtazione punti e rivalsa assicurativa",
+        "paragraphs": [
+          "Ignorare le ordinanze stagionali non è solo un azzardo per la propria incolumità fisica, ma espone a pesanti conseguenze sanzionatorie e patrimoniali:",
+          "Il Codice della Strada prevede sanzioni graduate in base alla tipologia di strada percorsa:"
+        ],
+        "list": [
+          "**Centri abitati e strade urbane:** Sanzione pecuniaria amministrativa da **42 € a 173 €** (ridotta a 29,40 € se pagata entro 5 giorni dalla contestazione o notifica).",
+          "**Strade extraurbane e autostrade:** Sanzione amministrativa pecuniaria da **87 € a 345 €** (ridotta a 60,90 € entro 5 giorni).",
+          "**Decurtazione punti e fermo del veicolo:** Oltre alla sanzione pecuniaria, la violazione comporta la decurtazione di **3 punti dalla patente di guida** (art. 6 comma 14 CdS). Inoltre, l'agente accertatore intima al conducente il **fermo del veicolo (ordine di non proseguire la marcia)** fino a quando la vettura non sia stata dotata dei dispositivi antisdrucciolevoli idonei. Proseguire la marcia violando l'ordine comporta un'ulteriore multa da 84 € a 335 € e il ritiro della carta di circolazione.",
+          "**Il pericolo più grave: la rivalsa dell'assicurazione in caso di sinistro:** Se rimani coinvolto in un sinistro stradale su un tratto soggetto a ordinanza invernale mentre circoli con gomme estive inadeguate o lisce, il perito della compagnia assicurativa annoterà l'incongruenza nel verbale di constatazione. La compagnia risarcirà i terzi danneggiati ma potrà attivare l'**azione di rivalsa parziale o totale contro l'assicurato**, pretendendo il rimborso dei danni liquidati per colpa grave o vizio di conformità del mezzo."
+        ]
+      },
+      {
+        "heading": "Controllo treno gomme usate: la regola del DOT e i 4 millimetri di sicurezza",
+        "paragraphs": [
+          "Se possiedi già un treno di gomme invernali smontato in primavera o stai valutando l'acquisto di un'auto usata provvista di gomme termiche nel baule (puoi verificarne lo stato con il nostro strumento di [analisi annuncio auto usata](/analizza-annuncio)), non limitarti a controllare che le gomme siano gonfie.",
+          "Ci sono due parametri peritali inderogabili da verificare prima di rimontarle sulla vettura:"
+        ],
+        "list": [
+          "**1. La profondità del battistrada (Minimo legale 1,6 mm vs Minimo di sicurezza 4 mm):** L'art. 229 del Regolamento di esecuzione del CdS fissa il limite legale minimo di profondità del battistrada a 1,6 mm per gli autoveicoli. Tuttavia, per uno pneumatico invernale, **scendere sotto i 4 millimetri significa aver esaurito la lamellatura utile**. Sotto questa soglia, la gomma non riesce più a drenare l'acqua e il fango e le lamelle non trattengono la neve, allungando la frenata del 40%. La maggior parte dei costruttori (Michelin, Pirelli, Continental, Bridgestone) inserisce appositi indicatori di usura invernale a quota 4 mm.",
+          "**2. Il codice DOT e l'invecchiamento della mescola:** Controlla l'ovale impresso sulla spalla dello pneumatico contenente quattro cifre precedute dalla sigla DOT. Le prime due cifre indicano la settimana di fabbricazione, le ultime due l'anno (es. *«4220» indica la 42ª settimana del 2020*). Uno pneumatico invernale che ha superato i **5 o 6 anni dalla data di produzione**, anche se presenta un battistrada visivamente integro e poco consumato, ha perso la quasi totalità dei plastificanti e della silice: la gomma si è 'seccata' ed è diventata dura e vetrosa. Su asfalto bagnato o viscido si comporterà come un pattino da ghiaccio.",
+          "**3. Verifica di scalettature e deformazioni strutturali:** Passa la mano aperta sul battistrada in senso longitudinale. Se avverti un'usura 'a denti di sega' (scalettatura dei tasselli) o bolle sulla spalla dovute a impatti contro marciapiedi o buche, la gomma genererà un rombo fastidioso in velocità e rischia cedimenti strutturali sotto carico."
+        ]
+      },
+      {
+        "heading": "Quanto costa il cambio gomme nel 2026? Tabella costi, montaggio e Tyre Hotel",
+        "paragraphs": [
+          "Pianificare il cambio gomme significa mettere a budget tre voci di spesa: l'acquisto del treno, la manodopera periodica di montaggio/equilibratura e l'eventuale custodia stagionale:",
+          "Ecco la panoramica dei costi medi reali rilevati nel 2026 in Italia:"
+        ],
+        "list": [
+          "**Acquisto treno 4 pneumatici invernali di marca premium (Michelin, Pirelli, Continental, Goodyear):**\n- Utilitarie e Citycar (misure 175/65 R14 o 185/65 R15): tra **240 € e 360 €** per 4 pneumatici.\n- Compatte e Berline medie (misure 205/55 R16 o 225/45 R17): tra **380 € e 580 €**.\n- SUV compatti e Crossover (misure 215/60 R17 o 225/55 R18): tra **520 € e 780 €**.\n- Grandi SUV e Berline sportive (misure da 19 a 21 pollici): tra **800 € e 1.400 €**.",
+          "**Costo manodopera smontaggio, rimontaggio ed equilibratura:**\n- Da **40 € a 75 €** a cambio per treno completo montato sugli stessi cerchi in lega (operazione che include equilibratura elettronica e sostituzione valvole in gomma).\n- Da **25 € a 35 €** se possiedi un secondo set di cerchi in ferro o in lega dedicati all'inverno con pneumatici già calzati: in questo caso l'intervento è un semplice 'smonta e rimonta' rapido.",
+          "**Servizio «Tyre Hotel» (deposito e custodia stagionale):**\n- Molti gommisti e centri specializzati offrono la custodia del treno estivo o invernale in magazzini a temperatura e umidità controllate, al riparo dai raggi UV e dall'ozono. Il costo medio varia tra **30 € e 55 € a stagione (6 mesi)** per 4 ruote.",
+          "**Il consiglio peritale sul secondo set di cerchi:** Se intendi tenere l'auto per almeno 4-5 anni, conviene acquistare un set di cerchi in ferro o in lega usati (anche di misura inferiore, ad esempio da 16\" anziché 18\", purché omologati a libretto). Oltre a dimezzare i costi di manodopera ad ogni cambio, una spalla più alta dello pneumatico assorbe meglio buche e dissesti tipici dell'inverno e protegge i cerchi estivi dal sale corrosivo sparso sulle strade."
+        ]
+      },
+      {
+        "heading": "La parola ai lettori di AutoEsperto: come ti prepari all'inverno?",
+        "paragraphs": [
+          "Il cambio gomme stagionale divide da sempre gli automobilisti tra sostenitori intransigenti del doppio treno dedicato e convinti utilizzatori delle quattro stagioni.",
+          "Vogliamo conoscere l'esperienza diretta della community di AutoEsperto: come equipaggi la tua auto per i mesi freddi?",
+          "Lascia un commento indicando la tua **Provincia di residenza** e vota quale di queste opzioni descrive meglio la tua scelta per il 2026:"
+        ],
+        "list": [
+          "**A) Doppio treno rigoroso (Estive + Termiche pure 3PMSF):** Non accetto compromessi sulla sicurezza. Vivo o viaggio dove fa freddo e pretendo il massimo spazio di arresto su bagnato e neve.",
+          "**B) 4 Stagioni (All Season) di ultima generazione:** Percorro meno di 15.000 km/anno e abito in pianura/città. Gli All Season moderni con fiocco di neve sono il compromesso perfetto tra costo e praticità.",
+          "**C) Gomme Estive + Catene/Calze a bordo:** Vivo al Centro-Sud o sulla costa. Le temperature non scendono mai sotto i 10°C e non ha senso consumare gomme invernali sull'asfalto tiepido.",
+          "**D) Secondo set di cerchi in ferro dedicati all'inverno:** Ho 4 ruote complete in garage: faccio il cambio da solo o pago una cifra irrisoria al gommista, proteggendo i cerchi in lega estivi.",
+          "**E) Attendo sempre l'ultimo giorno (14 novembre):** Rinvio fino all'ultimo momento e mi riduco a fare la fila dal gommista quando le temperature sono già crollate."
+        ]
+      },
+      {
+        "heading": "In sintesi: i 5 comandamenti di AutoEsperto per non farsi cogliere impreparati",
+        "paragraphs": [
+          "Per affrontare la stagione fredda in totale serenità, sicurezza e conformità normativa, riassumiamo le regole auree da applicare subito:",
+          "Segui questo vademecum prima dell'arrivo delle prime gelate:"
+        ],
+        "list": [
+          "**1. Non aspettare il 15 novembre:** Prenota l'appuntamento dal gommista nella finestra di tolleranza aperta già dal **15 ottobre**, evitando code e rincari dell'ultimo minuto.",
+          "**2. Rispetta la regola dei 7°C:** Se al mattino la colonnina di mercurio scende sotto questa soglia, le gomme estive sono già in affanno e allungano la frenata, anche con asfalto apparentemente asciutto.",
+          "**3. Esigi sempre la certificazione 3PMSF:** Sia che tu scelga invernali pure o 4 Stagioni, cerca il simbolo del fiocco di neve racchiuso nella montagna a tre cime: è l'unica vera garanzia di tenuta su neve e ghiaccio.",
+          "**4. Controlla battistrada (minimo 4 mm) e codice DOT:** Se il tuo treno invernale ha più di 5 anni o ha meno di 4 mm di scanalatura, la mescola è indurita e non ti garantirà aderenza.",
+          "**5. Verifica le dotazioni dell'auto con AutoEsperto:** Se stai per acquistare un'auto usata prima dell'inverno, verifica le misure di pneumatici omologate a libretto, la conformità del veicolo e il suo valore reale con il nostro modulo gratuito di [valutazione auto usate](/valutazione) e confronta i consumi sul [calcolatore consumi](/consumi)."
+        ]
+      }
+    ]
+  },
   
   {
     "slug": "analisi-auto-report-comprare-vendere",
@@ -232,542 +840,485 @@ const initialGuides: Guide[] = [
     ]
   },
   {
-    "slug": "danno-carrozzeria-fai-da-te-o-carrozziere",
-    "title": "Danno alla carrozzeria: conviene ripararlo da soli o andare dal carrozziere? Guida a costi, rischi e come scegliere",
-    "description": "Guida tecnica e pratica per valutare i danni alla carrozzeria dell'auto: diagnosi con il test dell'unghia, tecnica tirabolli PDR, tabella prezzi reali 2026, rischi legati ai sensori ADAS e link utile per trovare un carrozziere qualificato vicino a te.",
-    "published": "2026-09-12",
-    "category": "manutenzione",
-    "cta": "danni-carrozzeria",
-    "ctaType": "valutazione-auto",
-    "image": "/images/guide/danno-carrozzeria-fai-da-te-o-carrozziere.jpg",
-    "readTime": "9 min",
-    "featured": true,
-    "sections": [
-      {
-        "heading": "Il dilemma dell'automobilista: fai da te o carrozzeria professionale?",
-        "paragraphs": [
-          "Un graffio nel parcheggio del supermercato, una sportellata sulla fiancata, l'ennesima grandinata estiva o il classico sfregamento del paraurti in manovra contro un muretto: prima o poi capita a qualsiasi automobilista.",
-          "Nel momento esatto in cui si scende dall'auto per ispezionare il danno, la domanda che sorge spontanea è sempre la stessa: **vale la pena tentare con un kit commerciale da 20 euro, oppure il rischio di fare un pasticcio è troppo alto e conviene andare subito dal carrozziere?**",
-          "Nel mercato automobilistico attuale, la risposta non è una questione di abilità manuale, ma un'attenta analisi costi-benefici che tocca tre fattori chiave: **l'estetica, la sicurezza dei moderni sensori elettronici (radar ADAS) e la tenuta del valore residuo dell'auto**.",
-          "In questa guida analizziamo con rigore tecnico come diagnosticare la profondità del danno, il funzionamento del tirabolli a freddo (PDR), la tabella aggiornata dei prezzi reali della carrozzeria in Italia e gli strumenti pratici per trovare un professionista certificato nelle tue vicinanze."
-        ]
-      },
-      {
-        "heading": "1. L'anatomia della carrozzeria moderna: i 4 strati di protezione da conoscere",
-        "paragraphs": [
-          "Prima di impugnare qualsiasi pasta abrasiva o bomboletta spray, è indispensabile comprendere che la superficie esterna di un'automobile moderna non è una semplice lamiera verniciata. È un sistema multistrato industriale applicato per cataforesi con uno spessore complessivo di appena **100 – 150 micron** (circa lo spessore di un capello):"
-        ],
-        "list": [
-          "**Trasparente protettivo (Clear Coat, 35-50 micron):** Strato lucido superficiale che protegge il pigmento dai raggi UV, dagli acidi degli escrementi di uccelli e dalle spazzole dei rulli. È l'unico strato su cui è possibile agire in autonomia con polish e lucidatrici.",
-          "**Base colore opaca (Base Coat, 15-25 micron):** Lo smalto pigmentato vero e proprio (pastello, metallizzato, perlato). Non possiede alcuna resistenza meccanica autonoma.",
-          "**Primer o fondo anticorrosivo (25-35 micron):** Strato intermedio opaco (grigio o beige) formulato per garantire l'adesione della vernice e sigillare il metallo sottostante dall'ossigeno.",
-          "**Supporto strutturale (Lamiera zincata, alluminio o tecnopolimero PP/EPDM):** Se il metallo perde la zincatura e viene a contatto con l'umidità e il sale stradale, si attiva la corrosione galvanica con comparsa rapida di ruggine passante."
-        ]
-      },
-      {
-        "heading": "2. Diagnosi pratica del danno: il test dell'unghia e il test bagnato",
-        "paragraphs": [
-          "Come capire scientificamente se il danno è rimediabile in garage o se richiede la cabina a forno del carrozziere? I periti e i detailer professionisti utilizzano due controlli empirici ma infallibili:"
-        ],
-        "list": [
-          "**Il test dell'unghia:** Fai scorrere l'unghia del pollice perpendicolarmente attraverso il solco del graffio. Se l'unghia scivola senza impigliarsi, il graffio è superficiale e interessa solo la metà superiore del trasparente: svanirà con un compound abrasivo fine. Se invece l'unghia si impiglia nettamente, il solco ha raggiunto la base o il fondo: la lucidatura è inutile e serve vernice.",
-          "**Il test bagnato (alcol o acqua):** Versa qualche goccia d'acqua o alcol isopropilico sul graffio asciutto. Se bagnandosi il graffio scompare alla vista, significa che l'acqua ricrea temporaneamente la rifrazione del trasparente: il colore è intatto e la lucidatura risolverà il problema. Se il segno bianco o nero resta visibile anche sott'acqua, la vernice è asportata."
-        ]
-      },
-      {
-        "heading": "3. Tirabolli e tecnica PDR: riparare le ammaccature senza riverniciare",
-        "paragraphs": [
-          "Non tutti i colpi richiedono stucco e riverniciatura. Le ammaccature da parcheggio (la classica sportellata ad arco) e i bolli causati dalla grandine estiva possono essere ripristinati con la tecnica **PDR (Paintless Dent Repair)**, conosciuta popolarmente come metodo tirabolli.",
-          "Gli artigiani tirabolli operano dall'interno del pannello con leve in acciaio speciale oppure dall'esterno con ventose a colla termofusibile e lampade a riflessione millimetrica. Questa tecnica riporta la lamiera alla forma originaria sfruttando la memoria elastica dell'acciaio:",
-          "I vantaggi sono straordinari: **si preserva la vernice originale di fabbrica**, si azzerano le differenze di tonalità, i tempi si riducono a 1-3 ore e i costi sono inferiori del **50-70%** rispetto a una riverniciatura tradizionale. Attenzione però: se la vernice presenta spaccature o se l'ammaccatura cade su una nervatura rigida a spigolo vivo, il PDR non è applicabile."
-        ]
-      },
-      {
-        "heading": "4. Quanto costa andare dal carrozziere? Il listino medio in Italia nel 2026",
-        "paragraphs": [
-          "Per valutare con oggettività la convenienza del fai-da-te bisogna conoscere il costo orario della manodopera professionale. In Italia nel 2026 la tariffa oraria di un carrozziere qualificato si colloca mediamente tra **45 € e 70 €/ora + IVA**, a cui si sommano i materiali ecologici all'acqua, l'energia della cabina forno a 60°C e lo smaltimento dei rifiuti speciali:",
-          "Puoi verificare i costi specifici dei singoli ricambi e della manodopera per il tuo veicolo nella nostra sezione dedicata ai [costi di riparazione auto usate](/riparazione)."
-        ],
-        "list": [
-          "**Spot repair / ritocco localizzato rapido:** da 70 € a 160 € (lucidatura e sfumatura su area inferiore a 15 cm).",
-          "**Tirabolli PDR su singola ammaccatura da parcheggio:** da 80 € a 220 € (senza verniciatura, tempo 1-2 ore).",
-          "**Riverniciatura a forno di un singolo pannello (portiera o parafango):** da 220 € a 480 €.",
-          "**Riverniciatura cofano motore o tetto:** da 300 € a 600 € (aree orizzontali ad alta esposizione termica).",
-          "**Riparazione e verniciatura paraurti in plastica:** da 250 € a 550 € (inclusa termosaldatura e primer per plastiche PP/EPDM).",
-          "**Sostituzione paraurti completo (ricambio + verniciatura + montaggio):** da 400 € a 950 €.",
-          "**Ricalibrazione sensori ADAS e radar paraurti:** da 150 € a 350 € (obbligatoria se si smontano paraurti dotati di radar anticollisione).",
-          "**Danno da grandine esteso su tutta la carrozzeria:** da 1.200 € a 3.500 €.",
-          "**Riverniciatura integrale completa dell'auto:** da 2.200 € a 5.200 € a seconda della complessità del colore (metallizzato, micalizzato o tristrato perlato)."
-        ]
-      },
-      {
-        "heading": "5. Quando il fai-da-te ha senso: 3 interventi a basso rischio",
-        "paragraphs": [
-          "Mettere le mani sulla propria auto può dare grande soddisfazione ed evitare spese superflue, a patto di limitarsi a situazioni circoscritte e a basso rischio:"
-        ],
-        "list": [
-          "**Graffi superficiali nel trasparente:** Se il test dell'unghia ha dato esito positivo, con un kit di lucidatura da 20-35 € (clay bar decontaminante, polish abrasivo medio e tampone in microfibra) puoi eliminare il difetto in 20 minuti senza rischi.",
-          "**Micro-scheggiature da pietrisco con penna ritocco OEM:** I puntini bianchi sul cofano provocati dai sassi sollevati dai camion possono essere sigillati con una boccetta di ritocco originale. Recupera il codice colore esatto (3-4 cifre) sulla targhetta nel montante della portiera o nel vano motore e applica una goccia minima con la punta di uno stuzzicadenti.",
-          "**Sostituzione di parti esterne a incastro:** Calotte degli specchietti, griglie fendinebbia o modanature paracolpi in plastica si smontano spesso a scatto o con due viti Torx. Reperire il ricambio grezzo o già verniciato presso un'autodemolizione autorizzata abbatte la spesa del 60-70%."
-        ]
-      },
-      {
-        "heading": "6. I 5 grandi pericoli del fai-da-te: quando rischi di raddoppiare il conto",
-        "paragraphs": [
-          "Ci sono invece lavorazioni in cui l'improvvisazione casalinga rischia di trasformarsi in una trappola costosa:",
-          "1. **Ruggine passante sotto il ritocco:** Se la vernice è saltata fino al metallo e applichi una bomboletta senza aver prima rimosso l'ossido microscopico con primer epossidico antiruggine, l'umidità rimarrà intrappolata. Nel giro di pochi mesi la lamiera si gonfierà dall'interno creando bolle di ruggine passante.",
-          "2. **Effetto buccia d'arancia e colature:** Le bombolette commerciali erogano vernice a pressione discontinua. Ottenere una superficie liscia e brillante in garage senza cabina pressurizzata è quasi impossibile: la polvere si incollerà al trasparente fresco creando un effetto opaco e poroso.",
-          "3. **Radar ADAS e sensori nei paraurti:** I paraurti moderni nascondono i radar millimetrici della frenata d'emergenza e del cruise control. Smontare il paraurti o applicare strati di vernice/stucco troppo spessi davanti al radar causa anomalie ai sistemi di sicurezza attiva, rendendo necessaria una costosa ricalibrazione con dime ottiche in officina specializzata (150-350 €).",
-          "4. **Danni strutturali al telaio:** Urto contro cordoli o incidenti che piegano traverse, passaruota o montanti richiedono banchi dima millimetrici. Una riparazione approssimativa compromette la sicurezza in caso di un successivo impatto.",
-          "5. **Crollo della quotazione dell'usato:** I compratori e i concessionari utilizzano spessimetri digitali per verificare lo stato della vernice. Una riparazione casalinga mal eseguita abbassa il valore commerciale dell'auto anche di 1.000-2.000 euro. Prima di vendere, verifica sempre il prezzo reale di mercato con la nostra [valutazione auto usate](/valutazione)."
-        ]
-      },
-      {
-        "heading": "7. Come trovare e scegliere un carrozziere qualificato vicino a te",
-        "paragraphs": [
-          "Quando il danno supera le possibilità del fai-da-te, la scelta del professionista a cui affidare la vettura è cruciale. Per semplificare la ricerca di un'officina o carrozzeria specializzata nelle tue immediate vicinanze con recensioni verificate e recapiti aggiornati, puoi utilizzare il link di ricerca geolocalizzato diretto:",
-          "👉 **[Cerca un Carrozziere Qualificato Vicino a Te su Google Maps](https://www.google.com/maps/search/?api=1&query=carrozzeria+auto+vicino+a+me)**",
-          "Se hai già un danno visibile e vuoi un'analisi preliminare oggettiva dei componenti interessati e della gravità prima di recarti dal carrozziere, puoi utilizzare il nostro [scanner di analisi da foto](/).",
-          "Prima di firmare il preventivo, verifica che la carrozzeria rispetti questi 4 standard qualitativi:"
-        ],
-        "list": [
-          "**Cabina forno pressurizzata con filtri cielo/terra:** Indispensabile per cuocere il trasparente a 60°C senza che particelle di polvere si depositino sulla vernice fresca.",
-          "**Spettrofotometro digitale:** Strumento ottico che scansiona la tonalità esatta della vettura compensando l'invecchiamento da sole della vernice originale, evitando il classico stacco cromatico tra la porta riverniciata e il parafango.",
-          "**Postazione di diagnosi e calibrazione ADAS:** Certificazione della taratura dei sensori radar e delle telecamere di parcheggio rimossi durante lo smontaggio.",
-          "**Garanzia scritta di conformità:** Un professionista serio rilascia una garanzia scritta sui lavori di verniciatura e lattoneria di almeno 24 mesi.",
-          "**Libera scelta del carrozziere (Legge 124/2017):** In caso di incidente con ragione (risarcimento diretto), hai per legge il diritto assoluto di scegliere la tua carrozzeria di fiducia senza penalità o tagli all'indennizzo, anche se l'assicurazione tenta di indirizzarti verso strutture convenzionate di suo gradimento."
-        ]
-      },
-      {
-        "heading": "8. Tabella riassuntiva: Fai-da-te o Carrozziere?",
-        "paragraphs": [
-          "Per prendere una decisione rapida e priva di rischi, ecco lo schema riassuntivo dei principali danni e del tipo di intervento raccomandato:"
-        ],
-        "list": [
-          "**Graffio superficiale solo nel trasparente:** Soluzione: Polish / Compound a mano. Rischio: Molto basso. Costo: 15 – 35 €.",
-          "**Scheggiatura puntiforme da sassi sul cofano:** Soluzione: Penna ritocco originale OEM. Rischio: Basso. Costo: 15 – 30 €.",
-          "**Ammaccatura da sportellata senza vernice rovinata:** Soluzione: Tecnico Tirabolli PDR. Rischio: Moderato (meglio rivolgersi a un professionista PDR). Costo: 80 – 200 €.",
-          "**Graffio profondo con lamiera o fondo a vista:** Soluzione: Carrozziere con verniciatura a forno. Rischio fai-da-te: Elevato (ruggine e macchie). Costo: 220 – 450 €.",
-          "**Paraurti deformato o con crepe nelle plastiche:** Soluzione: Carrozziere con saldatura plastica e calibrazione ADAS. Rischio fai-da-te: Elevatissimo. Costo: 250 – 550 €.",
-          "**Danno esteso da grandine:** Soluzione: Carrozzeria specializzata PDR. Rischio fai-da-te: Impossibile senza attrezzature specifiche. Costo: 1.200 – 3.000 €.",
-          "**Danno strutturale a montanti o sottoporta:** Soluzione: Carrozzeria certificata con banco dima. Rischio fai-da-te: Pericolo grave per la sicurezza. Costo: Preventivo su dima."
-        ]
-      }
-    ]
-  },
+  "slug": "danno-carrozzeria-fai-da-te-o-carrozziere",
+  "title": "Danni alla carrozzeria: fai da te o carrozziere?",
+  "description": "Graffi, ammaccature e paraurti danneggiati: quando valutare un ritocco, quando serve il carrozziere e come confrontare i preventivi.",
+  "published": "2026-09-12",
+  "category": "manutenzione",
+  "cta": "danni-carrozzeria",
+  "ctaType": "valutazione-auto",
+  "image": "/images/guide/danno-carrozzeria-fai-da-te-o-carrozziere.jpg",
+  "readTime": "5 min",
+  "featured": true,
+  "sections": [
+    {
+      "heading": "Graffi e ammaccature: da dove iniziare",
+      "paragraphs": [
+        "Il fai da te può avere senso per un piccolo difetto superficiale su una finitura compatibile con il prodotto scelto. Vernice mancante, crepe, deformazioni e problemi a sensori o chiusure richiedono invece una valutazione professionale. Prima di acquistare un kit, pulisci delicatamente la zona e osservala in buona luce.",
+        "Fotografa il danno prima di intervenire. Se potrebbe essere coinvolta un’assicurazione o un’altra persona, conserva immagini e documenti e concorda la gestione del sinistro prima di modificare la superficie. Le foto aiutano a descrivere il problema, ma non rivelano i danni nascosti."
+      ]
+    },
+    {
+      "heading": "Come capire se un graffio è superficiale?",
+      "paragraphs": [
+        "Un segno può interessare il trasparente, lo strato di colore o arrivare al supporto. Il controllo con l’unghia è solo un indizio: non misura lo spessore residuo e non stabilisce da solo se la lucidatura sia possibile. Anche un segno meno evidente da bagnato non è necessariamente eliminabile.",
+        "Le [istruzioni 3M sulla rimozione dei graffi](https://multimedia.3m.com/mws/media/642801O/scratch-removal-system-part-number-39071-dfu.pdf) spiegano che abrasione e lucidatura lavorano sul trasparente: rimuoverlo richiede una riverniciatura professionale. Segui le indicazioni del prodotto e non insistere per inseguire un risultato perfetto."
+      ]
+    },
+    {
+      "heading": "Quando valutare un piccolo intervento fai da te",
+      "paragraphs": [
+        "Comincia dall’intervento meno invasivo. Vernici opache, pellicole e superfici già riparate richiedono attenzioni specifiche: non applicare automaticamente i prodotti pensati per una vernice lucida."
+      ],
+      "list": [
+        "Pulizia: distingui sporco e depositi dal danno effettivo usando prodotti compatibili con la superficie.",
+        "Polish: valuta soltanto segni lievi e segui strumenti, dosi e limiti indicati dal fabbricante; prova prima su una piccola zona.",
+        "Ritocco: può rendere meno visibile una scheggiatura, ma non garantisce uniformità di colore o una finitura equivalente a una riverniciatura.",
+        "Fermati se compaiono aloni, variazioni di colore o un peggioramento della superficie."
+      ]
+    },
+    {
+      "heading": "Ammaccature e tirabolli: quando chiedere un parere",
+      "paragraphs": [
+        "Per un’ammaccatura con vernice integra, chiedi se sia possibile una riparazione senza riverniciatura, spesso chiamata PDR o tirabolli. Il tecnico deve valutare forma, posizione, accessibilità e condizioni del pannello. Non basta che il bollo sia piccolo.",
+        "Un kit a colla o a ventosa non garantisce il recupero della forma. Chiedi al professionista il risultato atteso, i limiti della riparazione e l’alternativa se il recupero non riesce. Non applicare percentuali di risparmio standard a danni diversi."
+      ]
+    },
+    {
+      "heading": "Paraurti, sensori e danni dopo un urto",
+      "paragraphs": [
+        "Un paraurti poco segnato può nascondere fissaggi rotti o componenti danneggiati. Se ci sono spie, parti instabili o anomalie di funzionamento, chiedi una verifica prima di considerare il danno soltanto estetico.",
+        "Per radar, telecamere e sensori, l’officina deve seguire le procedure del costruttore relative al modello e all’intervento. Chiedi se servano diagnosi o calibrazione e che siano indicate nel preventivo. Non improvvisare smontaggi o stuccature vicino ai componenti di sicurezza."
+      ]
+    },
+    {
+      "heading": "Quanto costa riparare la carrozzeria?",
+      "paragraphs": [
+        "Non c’è un prezzo unico valido per tutte le auto. Dimensione del danno, materiale, finitura, ricambi, smontaggio e lavoro sui pannelli vicini possono cambiare molto il conto. Un preventivo da fotografia può richiedere una conferma dopo l’ispezione.",
+        "Confronta almeno due preventivi per lo stesso intervento. Lo [strumento per i costi di riparazione auto](/riparazione) offre un riferimento indicativo, da confermare in officina. Non confrontare una semplice lucidatura con una riparazione che comprende verniciatura e smontaggio."
+      ],
+      "list": [
+        "Pannelli interessati e operazioni previste: riparazione oppure sostituzione.",
+        "Ricambi, materiali, ore di manodopera e IVA.",
+        "Eventuali diagnosi e calibrazioni richieste dalle procedure del veicolo.",
+        "Tempi, costi aggiuntivi e modalità di autorizzazione degli imprevisti.",
+        "Condizioni della garanzia sul lavoro ed eventuale auto sostitutiva."
+      ]
+    },
+    {
+      "heading": "Come scegliere il carrozziere",
+      "paragraphs": [
+        "Puoi partire da una [ricerca di carrozzerie su Google Maps](https://www.google.com/maps/search/?api=1&query=carrozzeria+auto+vicino+a+me), ma la presenza nei risultati non certifica la qualità. Valuta esperienza sul tuo modello, chiarezza del preventivo e disponibilità a spiegare il lavoro.",
+        "Alla riconsegna osserva la riparazione in luce naturale e controlla i componenti interessati. Conserva fattura e documentazione; se il risultato differisce da quanto concordato, segnala il problema al professionista."
+      ]
+    },
+    {
+      "heading": "Conviene riparare prima di vendere l’auto?",
+      "paragraphs": [
+        "Confronta la spesa con il beneficio realistico nella trattativa: il costo della riparazione non si trasforma automaticamente in un aumento uguale del prezzo di vendita. Per danni piccoli puoi mostrare un preventivo al compratore, descrivendo il difetto nell’annuncio.",
+        "Approfondisci [come vendere un’auto da privato](/guide/come-vendere-auto-da-privato-guida-completa). Per documentare eventuali urti in sosta, leggi anche [come scegliere una dashcam e i limiti della modalità parcheggio](/guide/dashcam-autoesperto-proteggi-auto-anche-quando-non-ci-sei)."
+      ]
+    }
+  ],
+  "updated": "2026-09-28",
+  "editorialNote": "Guida pratica: i controlli visivi sono preliminari e non sostituiscono la diagnosi in officina. Non proponiamo un listino nazionale o risparmi garantiti. Le indicazioni sulla lucidatura fanno riferimento alle istruzioni 3M collegate nel testo.",
+  "sources": [
+    "https://multimedia.3m.com/mws/media/642801O/scratch-removal-system-part-number-39071-dfu.pdf"
+  ]
+},
   {
-    "slug": "come-vendere-auto-da-privato-guida-completa",
-    "title": "Come vendere la tua auto da privato: guida completa, sicura e legale 2026",
-    "description": "Guida pratica passo dopo passo per vendere un'auto usata da privato in Italia: come calcolare il valore reale, preparare l'annuncio, evitare truffe nei pagamenti, tutelarsi legalmente su vizi e difetti e completare il passaggio di proprietà.",
-    "published": "2026-09-11",
-    "category": "vendita",
-    "cta": "valore-vendita",
-    "ctaType": "valutazione-auto",
-    "image": "/images/guide/come-vendere-auto-da-privato-guida-completa.jpg",
-    "readTime": "11 min",
-    "featured": true,
-    "sections": [
+  "slug": "come-vendere-auto-da-privato-guida-completa",
+  "title": "Come vendere un’auto da privato: prezzo, annuncio e documenti",
+  "description": "Vendere un’auto da privato: scegli il prezzo, prepara foto e annuncio, verifica il pagamento e organizza documenti e passaggio di proprietà.",
+  "published": "2026-09-11",
+  "category": "vendita",
+  "cta": "valore-vendita",
+  "ctaType": "valutazione-auto",
+  "image": "/images/guide/come-vendere-auto-da-privato-guida-completa.jpg",
+  "readTime": "11 min",
+  "featured": true,
+  "sections": [
+    {
+      "heading": "Vendere da privato o cedere al concessionario? Pregi, difetti e margini reali",
+      "paragraphs": [
+        "Per vendere un’auto da privato prepara un prezzo motivato, un annuncio chiaro e la documentazione del veicolo. Organizza gli incontri, verifica il pagamento e completa il passaggio di proprietà conservando le ricevute.",
+        "La vendita diretta permette di gestire la trattativa, ma richiede tempo. Il ritiro da un professionista può semplificare alcuni passaggi: confronta offerte concrete e condizioni senza presumere una percentuale di guadagno fissa.",
+        "Per le formalità consulta anche ACI: [devo vendere la mia auto, cosa devo fare](https://www.aci.it/servizi/devo-vendere-la-mia-auto-cosa-devo-fare/)."
+      ]
+    },
+    {
+      "heading": "1. Quanto vale davvero la tua auto? Il metodo analitico per fissare il prezzo di mercato",
+      "paragraphs": [
+        "Il primo errore psicologico commesso da molti venditori privati è decidere il prezzo di vendita guardando esclusivamente a quanto hanno pagato l'auto anni prima o a quanto hanno speso nelle ultime riparazioni.",
+        "Nel mercato automobilistico il valore di un veicolo usato non è definito dai desideri del proprietario, ma dalla legge dell'incontro tra domanda e offerta per quella specifica combinazione di caratteristiche. Come evidenziato anche dalle indicazioni tecniche dell'Automobile Club d'Italia (ACI), la quotazione corretta deve essere valutata considerando parametri oggettivi:",
+        "Usa la [valutazione auto usate](/valutazione) come punto di partenza, controllando fonte e limiti della stima. Confronta annunci simili per anno, chilometri, motore e allestimento: i prezzi richiesti non dimostrano da soli il prezzo finale di vendita."
+      ],
+      "list": [
+        "**Marca, modello e allestimento:** versioni top di gamma o con pacchetti estetici ricercati (es. R-Line, S Line, M Sport) mantengono quotazioni superiori.",
+        "**Anno e classe antinquinamento Euro:** parametro cruciale per le limitazioni al traffico nelle aree urbane (Euro 6d rispetto a Euro 5 o 6b).",
+        "**Chilometraggio e coerenza d'uso:** una percorrenza documentata inferiore alla media nazionale (12.000–15.000 km/anno) valorizza il mezzo.",
+        "**Numero di proprietari precedenti:** un veicolo uniproprietario ispira maggiore fiducia rispetto a un mezzo con 3 o 4 passaggi di mano.",
+        "**Condizioni di carrozzeria e interni:** l'assenza di ammaccature e la cura dell'abitacolo fanno la differenza a parità di meccanica.",
+        "**Storico di manutenzione certificato:** tagliandi eseguiti alle scadenze previste con relative ricevute e fatture fiscali.",
+        "**Stato degli pneumatici e scadenza della revisione ministeriale.**",
+        "**Metodo di confronto:** cerca online da 5 a 10 annunci simili, scarta i prezzi anomali (il più basso e il più alto) e individua la mediana reale, lasciando un margine di trattativa fisiologico (3-5%)."
+      ]
+    },
+    {
+      "heading": "2. Tutta la documentazione in ordine: cosa preparare prima dell'annuncio",
+      "paragraphs": [
+        "Presentarsi a un acquirente con una cartellina ordinata e completa di ogni documento attesta immediatamente serietà e cura del veicolo, riducendo drasticamente le obiezioni durante la negoziazione.",
+        "Prima di inserire l'annuncio online, raccogli e verifica con cura:"
+      ],
+      "list": [
+        "**Documento Unico di Circolazione e Proprietà (DU):** dal 2020 ha sostituito la vecchia carta di circolazione e il Certificato di Proprietà (CdP). Per auto immatricolate prima del 2020, verifica di possedere sia il libretto sia il CdP.",
+        "**Documento d'identità e codice fiscale** dell'intestatario dell'auto in corso di validità.",
+        "**Seconda chiave originale del veicolo:** la mancanza della seconda chiave comporta per il compratore una spesa tra 150 € e 400 € e suscita dubbi sulla provenienza del veicolo.",
+        "**Libretto tagliandi e fatture di manutenzione:** la documentazione fiscale degli interventi ordinari e straordinari (sostituzione kit cinghia di distribuzione, frizione, freni, ammortizzatori) vale più di mille parole. La dicitura «Frizione sostituita a 142.000 km con fattura visibile» trasmette una sicurezza immensamente superiore al banale «macchina perfetta».",
+        "**Attestazione dell'ultima revisione ministeriale biennale.**",
+        "**Certificati o documentazione di omologazione** per eventuali accessori installati (es. gancio traino, impianto GPL/metano)."
+      ]
+    },
+    {
+      "heading": "3. La visura PRA preventiva: scongiurare fermi amministrativi, ipoteche e gravami",
+      "paragraphs": [
+        "Prima di concludere qualsiasi accordo con un compratore, è fondamentale accertarsi che il veicolo sia legalmente e amministrativamente libero da vincoli.",
+        "Un'auto gravata da **fermo amministrativo** (disposto dall'Agenzia delle Entrate Riscossione per cartelle esattoriali o tributi non versati) o da **ipoteche giudiziali/volontarie** non può circolare legalmente e non può essere trascritta regolarmente al PRA: la procedura di passaggio di proprietà verrà bloccata dagli Sportelli Telematici dell'Automobilista (STA), esponendo il venditore a contestazioni civili e richieste di risarcimento.",
+        "Effettuare una visura per targa al Pubblico Registro Automobilistico (PRA) tramite i servizi online dell'ACI o presso una delegazione consente di accertare l'assenza di fermi amministrativi o ipoteche e la piena corrispondenza dei dati anagrafici. Puoi verificare anche la regolarità della tassa automobilistica con il nostro strumento di [calcolo bollo auto](/calcolo-bollo)."
+      ]
+    },
+    {
+      "heading": "4. Preparazione dell'auto e detailing leggero: valorizzare senza nascondere i difetti",
+      "paragraphs": [
+        "Non serve investire cifre spropositate in carrozzeria per presentare al meglio una vettura, ma un'accurata operazione di pulizia e detailing leggero può incrementare il valore percepito anche di 500 € – 1.000 € e dimezzare i tempi di vendita.",
+        "Prima di scattare le fotografie per l'annuncio, esegui questi passaggi:"
+      ],
+      "list": [
+        "**Lava la carrozzeria a mano:** rimuovi residui di resina o moscerini e sgrassa a fondo cerchi in lega e passaruota.",
+        "**Aspira l'abitacolo con precisione:** pulisci sedili, moquette, tappetini e pulisci cruscotto e pannelli porta con un detergente neutro per plastiche (evita lucida-cruscotti troppo unti che riflettono la luce).",
+        "**Sgrassa i vetri internamente ed esternamente** per eliminare aloni di polvere o fumo.",
+        "**Rimuovi ogni oggetto personale:** svuota vani portaoggetti, tasche laterali e bagagliaio da monete, cavetti e deodoranti esausti.",
+        "**Vano motore:** pulisci le plastiche con un panno umido; non usare lucido siliconico che fa sembrare bagnato il motore e desta sospetti di perdite d'olio mascherate.",
+        "**Trasparenza sui difetti:** se sono presenti graffi, piccole abrasioni o segni d'usura su volante o sedili, non tentare di camuffarli. Fotografali e dichiarali con onestà: la trasparenza azzera le contestazioni sul prezzo durante la visita dal vivo."
+      ]
+    },
+    {
+      "heading": "5. Il servizio fotografico efficace: inquadrature obbligatorie e trasparenza",
+      "paragraphs": [
+        "L'annuncio online vive o muore in base alla qualità e alla chiarezza delle fotografie. Non servono macchine fotografiche costose: basta uno smartphone moderno utilizzato alla luce naturale del giorno, evitando il pieno sole a picco con ombre dure o la penombra del garage.",
+        "Realizza almeno queste 14 inquadrature fondamentali:"
+      ],
+      "list": [
+        "**Tre quarti anteriore destro e tre quarti anteriore sinistro;**",
+        "**Vista frontale perpendicolare e vista posteriore perpendicolare;**",
+        "**Fiancata destra intera e fiancata sinistra intera;**",
+        "**Dettaglio dei 4 cerchi in lega e profondità del battistrada degli pneumatici;**",
+        "**Panoramica del cruscotto dalla fila posteriore con quadro strumenti acceso;**",
+        "**Foto del contachilometri:** documenta il valore visualizzato; non certifica da sola il chilometraggio reale.",
+        "**Sedili anteriori, volante, pedaliera e pomello del cambio (punti di usura primari);**",
+        "**Sedili posteriori e cielo dell'abitacolo;**",
+        "**Vano bagagli aperto con piano di carico e ruota di scorta/kit gonfia e ripara;**",
+        "**Vano motore ordinato;**",
+        "**Documentazione di bordo e doppie chiavi;**",
+        "**Fotografie ravvicinate e oneste di eventuali difetti o segni di carrozzeria.**"
+      ]
+    },
+    {
+      "heading": "6. Come redigere un annuncio onesto, completo ed efficace",
+      "paragraphs": [
+        "Un buon annuncio deve rispondere in anticipo a tutte le domande che un compratore preparato farebbe durante una telefonata, allontanando curiosi e perditempo.",
+        "Indica con precisione la scheda tecnica completa (marca, modello esatto, allestimento, anno e mese di immatricolazione, motore, carburante, cambio, chilometri certificati, potenza in CV e kW, classe Euro e scadenza revisione).",
+        "Spiega con chiarezza le condizioni reali del veicolo: stato di carrozzeria, interni, gomme, data dell'ultimo tagliando e lavori recenti con fatture disponibili. Evita formule generiche come «macchina perfetta», preferendo formule credibili: «L'auto presenta alcuni normali segni di utilizzo coerenti con l'età, visibili nelle fotografie. Manutenzione eseguita regolarmente e documentata». Per approfondire consulta la nostra guida su [come scrivere un annuncio efficace per vendere l'auto](/guide/come-scrivere-annuncio-efficace-vendere-auto)."
+      ]
+    },
+    {
+      "heading": "7. Trasparenza legale e responsabilità civile del venditore privato (Codice Civile vs Codice del Consumo)",
+      "paragraphs": [
+        "Questo è uno dei punti più importanti e fraintesi: **la vendita tra privati non è regolata dal Codice del Consumo, ma questo non significa che il venditore non risponda mai di nulla.**",
+        "Nella vendita tra privati (rapporto C2C) non si applica la Garanzia Legale di Conformità prevista per i professionisti (D.Lgs. 206/2005), ma rimane pienamente vigente la disciplina generale del **Codice Civile** in materia di compravendita (articoli 1490 e seguenti):"
+      ],
+      "list": [
+        "**Garanzia per i vizi della cosa venduta (art. 1490 c.c.):** Il venditore è tenuto a garantire che la cosa venduta sia immune da vizi che la rendano inidonea all'uso o ne diminuiscano in modo apprezzabile il valore.",
+        "**La clausola «vista e piaciuta» e i suoi limiti inderogabili:** Nella vendita tra privati è consuetudine inserire la clausola di vendita nello stato di fatto e di diritto in cui il bene si trova («vista e piaciuta»). Tuttavia, l'art. 1490 comma 2 c.c. stabilisce espressamente che **il patto con cui si esclude o limita la garanzia non ha effetto se il venditore ha in mala fede taciuto al compratore i vizi della cosa**.",
+        "**Cosa si rischia tacendo difetti gravi:** Se il venditore nasconde difetti importanti a lui noti (es. consumo anomalo di olio per fasce elastiche usurate, cambio automatico con problemi, incidenti strutturali pregressi o chilometraggio scalato), il compratore può richiedere la risoluzione del contratto con restituzione dei soldi o la riduzione del prezzo, oltre al risarcimento dei danni.",
+        "Non devi necessariamente vendere un'auto perfetta: devi essere corretto e trasparente su ciò che conosci del mezzo."
+      ]
+    },
+    {
+      "heading": "8. Gestire i contatti e organizzare la prova su strada in totale sicurezza",
+      "paragraphs": [
+        "È normale e legittimo che un potenziale acquirente voglia vedere e provare la macchina prima di versare il prezzo pattuito. Ma non devi mai consegnargli semplicemente le chiavi e lasciarlo andare da solo.",
+        "L'Automobile Club d'Italia raccomanda un protocollo di massima prudenza durante il test drive:"
+      ],
+      "list": [
+        "**Incontrarsi sempre di giorno in un luogo pubblico, aperto e frequentato:** parcheggio di un centro commerciale sorvegliato, piazza o piazzale di una delegazione ACI.",
+        "**Non andare mai da solo:** fatti accompagnare da un amico o un familiare durante l'appuntamento.",
+        "**Verificare la patente di guida:** prima di consentire all'acquirente di mettersi al volante, controlla che abbia una patente valida in corso.",
+        "**Accompagnare personalmente l'acquirente a bordo:** la raccomandazione ACI è categorica: non lasciare mai il potenziale compratore da solo a bordo durante la prova. Sali sempre come passeggero a fianco.",
+        "**Documenti durante la prova:** assicurati di avere a bordo i documenti richiesti per la circolazione; non lasciare documenti personali al potenziale acquirente.",
+        "**Non lasciare l'auto incustodita con le chiavi inserite o il motore acceso per nessun motivo.**",
+        "**Ispezione in officina:** se l'acquirente desidera far controllare l'auto dal proprio meccanico di fiducia, acconsenti volentieri concordando un'officina della tua zona e accompagnando personalmente il veicolo."
+      ]
+    },
+    {
+      "heading": "9. Il pagamento: bonifico istantaneo, circolare e come difendersi dalle truffe",
+      "paragraphs": [
+        "Questo è probabilmente il momento più delicato dell'intera compravendita automobilistica.",
+        "Regola aurea: **non consegnare mai veicolo, chiavi o documenti semplicemente perché qualcuno ti mostra una ricevuta cartacea o uno screenshot del bonifico**. Uno screenshot non dimostra che il denaro sia realmente partito né che sia irrevocabile.",
+        "L'ACI raccomanda di verificare l'effettivo accredito sul conto corrente prima di consegnare veicolo e documenti:"
+      ],
+      "list": [
+        "**Bonifico Istantaneo SEPA (SCT Inst) — Metodo consigliato:** Il denaro arriva ed è accreditato in modo irrevocabile entro pochi secondi. Accedi all'applicazione bancaria dal tuo smartphone e verifica che la somma figuri nel **saldo disponibile** (non solo contabile) prima di recarvi in agenzia.",
+        "**Bonifico Bancario Ordinario:** Richiede normalmente da 24 a 48 ore lavorative. Ricorda che un bonifico ordinario può essere revocato dall'ordinante nelle ore successive all'inserimento: attendi sempre l'accredito definitivo sul tuo conto prima del passaggio.",
+        "**Assegno Circolare:** Emesso direttamente dall'istituto di credito a fronte di fondi vincolati. Fatti inviare una copia fotografica 24 ore prima dell'atto ed effettua il «bene emissione» con la filiale emittente prima di formalizzare il passaggio.",
+        "**Assegno Bancario Ordinario:** Da rifiutare categoricamente nella compravendita tra privati a causa dell'elevato rischio di insoluto o firma non conforme.",
+        "Per un'analisi dettagliata dei raggiri più comuni consulta la nostra guida sulle [truffe comuni nella vendita auto](/guide/truffe-comuni-vendita-auto-usata)."
+      ]
+    },
+    {
+      "heading": "10. Riconoscere i segnali d'allarme di acquirenti truffaldini",
+      "paragraphs": [
+        "Una vendita di automobile non deve essere complicata: acquirente serio → pagamento verificato → passaggio di proprietà contestuale → consegna dell'auto.",
+        "Diffida e interrompi immediatamente la trattativa con chiunque presenti questi segnali di pericolo:"
+      ],
+      "list": [
+        "**Vuole pagare molto più del prezzo richiesto:** la classica truffa dell'overpayment con richiesta di storno.",
+        "**Dichiara di risiedere all'estero** (militare, cooperante, ingegnere) e propone di inviare un corriere a ritirare l'auto a scatola chiusa.",
+        "**Ti chiede di anticipare denaro** per presunte spese di trasporto, sdoganamento o polizze di garanzia.",
+        "**Ti invia link via SMS o WhatsApp** per «ricevere» l'accredito o ti chiede codici ricevuti via telefono (phishing bancario).",
+        "**Insiste per concludere con fretta estrema** senza aver mai voluto vedere o provare l'auto di persona.",
+        "**Propone di portare via l'auto prima del passaggio di proprietà:** non accettare mai la formula «ti pago e poi il passaggio lo faccio io nei prossimi giorni»."
+      ]
+    },
+    {
+      "heading": "11. Il passaggio di proprietà: dove farlo, costi e chi paga",
+      "paragraphs": [
+        "Una volta verificato l'accredito del pagamento, bisogna completare il trasferimento formale di proprietà.",
+        "La pratica può essere effettuata presso uno **Sportello Telematico dell'Automobilista (STA)** attivo presso le unità territoriali ACI/PRA, gli uffici della Motorizzazione Civile o le Delegazioni ACI e agenzie di pratiche auto abilitate. Lo STA garantisce l'aggiornamento telematico in tempo reale degli archivi del PRA e della Motorizzazione con rilascio immediato del Documento Unico aggiornato.",
+        "I costi del passaggio comprendono l'Imposta Provinciale di Trascrizione (IPT, variabile in base a kW e provincia), gli emolumenti ACI, l'imposta di bollo e i diritti di Motorizzazione. Puoi verificare l'importo esatto con il nostro strumento di [calcolo passaggio di proprietà](/passaggio-proprieta).",
+        "**Chi paga il passaggio?** Nella consuetudine e nella prassi commerciale italiana, il costo del passaggio è **interamente a carico dell'acquirente**, salvo diverso accordo preventivo tra le parti."
+      ]
+    },
+    {
+      "heading": "12. Perché non rimandare mai il passaggio: l'art. 94 del Codice della Strada",
+      "paragraphs": [
+        "Questo punto è fondamentale per la tutela del venditore: **non consegnare mai l'auto prima che il passaggio di proprietà sia stato formalizzato**.",
+        "Non pensare mai: «Gli consegno la macchina e poi nei prossimi giorni farà il passaggio». Il Codice della Strada (art. 94) prevede 60 giorni per l'aggiornamento della carta di circolazione, ma finché il trasferimento non è trascritto al PRA il venditore rimane l'intestatario ufficiale a tutti gli effetti di legge:",
+        "Completare la procedura presso uno STA garantisce la contestualità dell'atto e fornisce al venditore la ricevuta ufficiale di avvenuto trasferimento."
+      ],
+      "list": [
+        "**Multe e infrazioni:** Tutte le sanzioni per eccesso di velocità, divieti di sosta o accessi ZTL commesse dal nuovo possessore continueranno a essere notificate all'ex proprietario.",
+        "**Bollo auto regionale:** La tassa automobilistica continuerà a maturare a carico dell'intestatario registrato.",
+        "**Responsabilità civile e penale:** In caso di sinistro con fuga, omissione di soccorso o uso dell'auto per attività illecite, le autorità convocheranno per primo l'intestatario al PRA.",
+        "**Assicurazione:** Se l'acquirente circola privo di copertura assicurativa, il vecchio proprietario rischia di essere coinvolto come responsabile civile solidale."
+      ]
+    },
+    {
+      "heading": "13. La scrittura privata di compravendita: il contratto che ti tutela",
+      "paragraphs": [
+        "Anche se il passaggio di proprietà formalizza il trasferimento pubblico, è ottima norma redigere una **scrittura privata di vendita** in duplice copia originale firmata da entrambe le parti.",
+        "Una scrittura privata non serve a nascondere nulla, ma a documentare ciò che è stato realmente concordato ed evitare contestazioni:"
+      ],
+      "list": [
+        "**Dati completi del venditore e dell'acquirente** con codice fiscale e documento di identità.",
+        "**Dati identificativi del veicolo:** marca, modello, targa, numero di telaio (VIN) e chilometraggio effettivo visualizzato.",
+        "**Prezzo pattuito e modalità di pagamento tracciabile utilizzata.**",
+        "**Clausola di stato d'uso:** indicazione che l'acquirente ha visionato e provato l'auto, accettandola nello stato di fatto e meccanico in cui si trova, con esplicita menzione dei difetti già comunicati.",
+        "**Elenco dei documenti e delle dotazioni consegnate** (seconda chiave, libretto tagliandi, ruota di scorta)."
+      ]
+    },
+    {
+      "heading": "14. Il verbale di consegna con data, ora esatta e chilometri",
+      "paragraphs": [
+        "Al momento della materiale consegna delle chiavi e del veicolo, compila e fai controfirmare una ricevuta o verbale di consegna che riporti:",
+        "«Veicolo [Marca, Modello, Targa], telaio [VIN], consegnato in data [GG/MM/AAAA] alle ore [HH:MM] con contachilometri indicante [KM] km».",
+        "L'indicazione dell'ora esatta è fondamentale: se l'acquirente commette un'infrazione per eccesso di velocità o entra in una ZTL subito dopo la consegna, avrai la prova documentale inoppugnabile dell'orario esatto in cui la disponibilità del mezzo è stata trasferita, consentendo l'annullamento immediato del verbale a tuo carico."
+      ]
+    },
+    {
+      "heading": "15. Cosa fare dopo la vendita: assicurazione, bollo e archiviazione",
+      "paragraphs": [
+        "Una volta completato il trasferimento e consegnata l'auto, restano da gestire gli adempimenti finali:",
+        "Per l'assicurazione RC Auto, invia tempestivamente alla tua compagnia copia dell'atto di vendita o del Documento Unico aggiornato: potrai sospendere la polizza, trasferirla su un'altra vettura mantenendo la classe di merito oppure chiuderla chiedendo il rimborso della frazione di premio non goduta.",
+        "Conserva in una cartella dedicata per almeno 5 anni: copia dell'atto di vendita, ricevuta del passaggio di proprietà STA, prova del pagamento bancario, scrittura privata, verbale di consegna con data e ora e le comunicazioni importanti intercorse con l'acquirente."
+      ]
+    },
+    {
+      "heading": "16. La checklist definitiva pre-consegna",
+      "paragraphs": [
+        "Prima di consegnare definitivamente l'auto e le chiavi all'acquirente, controlla punto per punto questo promemoria di verifica:"
+      ],
+      "list": [
+        "**AUTO:** Auto lavata e pulita, foto complete archiviate, difetti noti dichiarati per iscritto, chilometraggio esatto annotato, manutenzione documentata.",
+        "**DOCUMENTI:** Documento Unico originale presente, documento d'identità e codice fiscale, visura PRA pulita, libretto tagliandi con fatture, seconda chiave originale.",
+        "**ACQUIRENTE:** Identità verificata con documento valido, patente controllata prima del test drive, prova effettuata con proprietario a bordo.",
+        "**PAGAMENTO:** Prezzo concordato per iscritto, metodo di pagamento tracciabile, accredito effettivamente verificato nel saldo disponibile della propria banca, nessuna consegna su screenshot.",
+        "**PASSAGGIO:** Atto di vendita autenticato presso STA/ACI/agenzia, trascrizione contestuale completata, copia della documentazione conservata.",
+        "**CONSEGNA:** Chiavi e doppie chiavi consegnate, Documento Unico consegnato, auto consegnata, verbale con data, ora esatta e chilometri controfirmato."
+      ]
+    },
+    {
+      "heading": "In sintesi: vendere senza concessionario conviene davvero?",
+      "paragraphs": [
+        "Vendere la propria auto da privato conviene e permette di ottenere il massimo realizzo economico sul mercato dell'usato. Il vantaggio principale è massimizzare il ricavo rispetto a una vendita immediata o a una permuta in concessionaria.",
+        "La cosa più importante non è semplicemente «fissare il prezzo più alto», ma vendere al giusto valore di mercato, a una persona affidabile e con una procedura documentata e trasparente.",
+        "Prima di pubblicare l'annuncio, effettua una [valutazione della tua auto usata](/valutazione): conoscere il suo valore reale e avere un quadro chiaro dei costi renderà la trattativa molto più semplice, credibile e redditizia."
+      ]
+    }
+  ],
+  "updated": "2026-09-28"
+},
       {
-        "heading": "Vendere da privato o cedere al concessionario? Pregi, difetti e margini reali",
-        "paragraphs": [
-          "Chi decide di vendere la propria auto usata si trova davanti a un bivio strategico: cederla a un concessionario (tramite permuta sul nuovo o ritiro con pagamento immediato) oppure metterla in vendita autonomamente tra privati sui principali portali online.",
-          "La vendita a un commerciante garantisce comodità e zero incombenze burocratiche, ma a fronte di una svalutazione rilevante: il concessionario deve sostenere le spese di ripristino, accollarsi la garanzia legale di conformità per almeno 12 mesi e applicare il proprio margine commerciale. Di conseguenza, la valutazione di un operatore professionale si colloca mediamente tra il **15% e il 30% al di sotto del reale valore di realizzo sul mercato**.",
-          "Vendere direttamente a un privato permette di incassare l'intero controvalore di mercato della vettura. Tuttavia, trasferisce sul proprietario l'onere completo della gestione: determinazione del prezzo, servizio fotografico e redazione dell'annuncio, selezione dei potenziali compratori, prova su strada, ricezione sicura del pagamento e disbrigo del passaggio di proprietà.",
-          "In questa guida analizziamo ogni singolo passaggio operativo per massimizzare il realizzo economico azzerando ogni rischio di insoluto, truffa o contestazione legale postuma."
-        ]
-      },
-      {
-        "heading": "1. Quanto vale davvero la tua auto? Il metodo analitico per fissare il prezzo di mercato",
-        "paragraphs": [
-          "Il primo errore psicologico commesso da molti venditori privati è decidere il prezzo di vendita guardando esclusivamente a quanto hanno pagato l'auto anni prima o a quanto hanno speso nelle ultime riparazioni.",
-          "Nel mercato automobilistico il valore di un veicolo usato non è definito dai desideri del proprietario, ma dalla legge dell'incontro tra domanda e offerta per quella specifica combinazione di caratteristiche. Come evidenziato anche dalle indicazioni tecniche dell'Automobile Club d'Italia (ACI), la quotazione corretta deve essere valutata considerando parametri oggettivi:",
-          "Prima di fissare la richiesta, confronta il tuo veicolo con la nostra [valutazione auto usate](/valutazione) basata su dati reali del mercato italiano per partire con un prezzo competitivo ma remunerativo."
-        ],
-        "list": [
-          "**Marca, modello e allestimento:** versioni top di gamma o con pacchetti estetici ricercati (es. R-Line, S Line, M Sport) mantengono quotazioni superiori.",
-          "**Anno e classe antinquinamento Euro:** parametro cruciale per le limitazioni al traffico nelle aree urbane (Euro 6d rispetto a Euro 5 o 6b).",
-          "**Chilometraggio e coerenza d'uso:** una percorrenza documentata inferiore alla media nazionale (12.000–15.000 km/anno) valorizza il mezzo.",
-          "**Numero di proprietari precedenti:** un veicolo uniproprietario ispira maggiore fiducia rispetto a un mezzo con 3 o 4 passaggi di mano.",
-          "**Condizioni di carrozzeria e interni:** l'assenza di ammaccature e la cura dell'abitacolo fanno la differenza a parità di meccanica.",
-          "**Storico di manutenzione certificato:** tagliandi eseguiti alle scadenze previste con relative ricevute e fatture fiscali.",
-          "**Stato degli pneumatici e scadenza della revisione ministeriale.**",
-          "**Metodo di confronto:** cerca online da 5 a 10 annunci simili, scarta i prezzi anomali (il più basso e il più alto) e individua la mediana reale, lasciando un margine di trattativa fisiologico (3-5%)."
-        ]
-      },
-      {
-        "heading": "2. Tutta la documentazione in ordine: cosa preparare prima dell'annuncio",
-        "paragraphs": [
-          "Presentarsi a un acquirente con una cartellina ordinata e completa di ogni documento attesta immediatamente serietà e cura del veicolo, riducendo drasticamente le obiezioni durante la negoziazione.",
-          "Prima di inserire l'annuncio online, raccogli e verifica con cura:"
-        ],
-        "list": [
-          "**Documento Unico di Circolazione e Proprietà (DU):** dal 2020 ha sostituito la vecchia carta di circolazione e il Certificato di Proprietà (CdP). Per auto immatricolate prima del 2020, verifica di possedere sia il libretto sia il CdP.",
-          "**Documento d'identità e codice fiscale** dell'intestatario dell'auto in corso di validità.",
-          "**Seconda chiave originale del veicolo:** la mancanza della seconda chiave comporta per il compratore una spesa tra 150 € e 400 € e suscita dubbi sulla provenienza del veicolo.",
-          "**Libretto tagliandi e fatture di manutenzione:** la documentazione fiscale degli interventi ordinari e straordinari (sostituzione kit cinghia di distribuzione, frizione, freni, ammortizzatori) vale più di mille parole. La dicitura «Frizione sostituita a 142.000 km con fattura visibile» trasmette una sicurezza immensamente superiore al banale «macchina perfetta».",
-          "**Attestazione dell'ultima revisione ministeriale biennale.**",
-          "**Certificati o documentazione di omologazione** per eventuali accessori installati (es. gancio traino, impianto GPL/metano)."
-        ]
-      },
-      {
-        "heading": "3. La visura PRA preventiva: scongiurare fermi amministrativi, ipoteche e gravami",
-        "paragraphs": [
-          "Prima di concludere qualsiasi accordo con un compratore, è fondamentale accertarsi che il veicolo sia legalmente e amministrativamente libero da vincoli.",
-          "Un'auto gravata da **fermo amministrativo** (disposto dall'Agenzia delle Entrate Riscossione per cartelle esattoriali o tributi non versati) o da **ipoteche giudiziali/volontarie** non può circolare legalmente e non può essere trascritta regolarmente al PRA: la procedura di passaggio di proprietà verrà bloccata dagli Sportelli Telematici dell'Automobilista (STA), esponendo il venditore a contestazioni civili e richieste di risarcimento.",
-          "Effettuare una visura per targa al Pubblico Registro Automobilistico (PRA) tramite i servizi online dell'ACI o presso una delegazione consente di accertare l'assenza di fermi amministrativi o ipoteche e la piena corrispondenza dei dati anagrafici. Puoi verificare anche la regolarità della tassa automobilistica con il nostro strumento di [calcolo bollo auto](/calcolo-bollo)."
-        ]
-      },
-      {
-        "heading": "4. Preparazione dell'auto e detailing leggero: valorizzare senza nascondere i difetti",
-        "paragraphs": [
-          "Non serve investire cifre spropositate in carrozzeria per presentare al meglio una vettura, ma un'accurata operazione di pulizia e detailing leggero può incrementare il valore percepito anche di 500 € – 1.000 € e dimezzare i tempi di vendita.",
-          "Prima di scattare le fotografie per l'annuncio, esegui questi passaggi:"
-        ],
-        "list": [
-          "**Lava la carrozzeria a mano:** rimuovi residui di resina o moscerini e sgrassa a fondo cerchi in lega e passaruota.",
-          "**Aspira l'abitacolo con precisione:** pulisci sedili, moquette, tappetini e pulisci cruscotto e pannelli porta con un detergente neutro per plastiche (evita lucida-cruscotti troppo unti che riflettono la luce).",
-          "**Sgrassa i vetri internamente ed esternamente** per eliminare aloni di polvere o fumo.",
-          "**Rimuovi ogni oggetto personale:** svuota vani portaoggetti, tasche laterali e bagagliaio da monete, cavetti e deodoranti esausti.",
-          "**Vano motore:** pulisci le plastiche con un panno umido; non usare lucido siliconico che fa sembrare bagnato il motore e desta sospetti di perdite d'olio mascherate.",
-          "**Trasparenza sui difetti:** se sono presenti graffi, piccole abrasioni o segni d'usura su volante o sedili, non tentare di camuffarli. Fotografali e dichiarali con onestà: la trasparenza azzera le contestazioni sul prezzo durante la visita dal vivo."
-        ]
-      },
-      {
-        "heading": "5. Il servizio fotografico efficace: inquadrature obbligatorie e trasparenza",
-        "paragraphs": [
-          "L'annuncio online vive o muore in base alla qualità e alla chiarezza delle fotografie. Non servono macchine fotografiche costose: basta uno smartphone moderno utilizzato alla luce naturale del giorno, evitando il pieno sole a picco con ombre dure o la penombra del garage.",
-          "Realizza almeno queste 14 inquadrature fondamentali:"
-        ],
-        "list": [
-          "**Tre quarti anteriore destro e tre quarti anteriore sinistro;**",
-          "**Vista frontale perpendicolare e vista posteriore perpendicolare;**",
-          "**Fiancata destra intera e fiancata sinistra intera;**",
-          "**Dettaglio dei 4 cerchi in lega e profondità del battistrada degli pneumatici;**",
-          "**Panoramica del cruscotto dalla fila posteriore con quadro strumenti acceso;**",
-          "**Foto ravvicinata del contachilometri:** indispensabile per certificare i chilometri esatti al momento dell'annuncio;",
-          "**Sedili anteriori, volante, pedaliera e pomello del cambio (punti di usura primari);**",
-          "**Sedili posteriori e cielo dell'abitacolo;**",
-          "**Vano bagagli aperto con piano di carico e ruota di scorta/kit gonfia e ripara;**",
-          "**Vano motore ordinato;**",
-          "**Documentazione di bordo e doppie chiavi;**",
-          "**Fotografie ravvicinate e oneste di eventuali difetti o segni di carrozzeria.**"
-        ]
-      },
-      {
-        "heading": "6. Come redigere un annuncio onesto, completo ed efficace",
-        "paragraphs": [
-          "Un buon annuncio deve rispondere in anticipo a tutte le domande che un compratore preparato farebbe durante una telefonata, allontanando curiosi e perditempo.",
-          "Indica con precisione la scheda tecnica completa (marca, modello esatto, allestimento, anno e mese di immatricolazione, motore, carburante, cambio, chilometri certificati, potenza in CV e kW, classe Euro e scadenza revisione).",
-          "Spiega con chiarezza le condizioni reali del veicolo: stato di carrozzeria, interni, gomme, data dell'ultimo tagliando e lavori recenti con fatture disponibili. Evita formule generiche come «macchina perfetta», preferendo formule credibili: «L'auto presenta alcuni normali segni di utilizzo coerenti con l'età, visibili nelle fotografie. Manutenzione eseguita regolarmente e documentata». Per approfondire consulta la nostra guida su [come scrivere un annuncio efficace per vendere l'auto](/guide/come-scrivere-annuncio-efficace-vendere-auto)."
-        ]
-      },
-      {
-        "heading": "7. Trasparenza legale e responsabilità civile del venditore privato (Codice Civile vs Codice del Consumo)",
-        "paragraphs": [
-          "Questo è uno dei punti più importanti e fraintesi: **la vendita tra privati non è regolata dal Codice del Consumo, ma questo non significa che il venditore non risponda mai di nulla.**",
-          "Nella vendita tra privati (rapporto C2C) non si applica la Garanzia Legale di Conformità prevista per i professionisti (D.Lgs. 206/2005), ma rimane pienamente vigente la disciplina generale del **Codice Civile** in materia di compravendita (articoli 1490 e seguenti):"
-        ],
-        "list": [
-          "**Garanzia per i vizi della cosa venduta (art. 1490 c.c.):** Il venditore è tenuto a garantire che la cosa venduta sia immune da vizi che la rendano inidonea all'uso o ne diminuiscano in modo apprezzabile il valore.",
-          "**La clausola «vista e piaciuta» e i suoi limiti inderogabili:** Nella vendita tra privati è consuetudine inserire la clausola di vendita nello stato di fatto e di diritto in cui il bene si trova («vista e piaciuta»). Tuttavia, l'art. 1490 comma 2 c.c. stabilisce espressamente che **il patto con cui si esclude o limita la garanzia non ha effetto se il venditore ha in mala fede taciuto al compratore i vizi della cosa**.",
-          "**Cosa si rischia tacendo difetti gravi:** Se il venditore nasconde difetti importanti a lui noti (es. consumo anomalo di olio per fasce elastiche usurate, cambio automatico con problemi, incidenti strutturali pregressi o chilometraggio scalato), il compratore può richiedere la risoluzione del contratto con restituzione dei soldi o la riduzione del prezzo, oltre al risarcimento dei danni.",
-          "Non devi necessariamente vendere un'auto perfetta: devi essere corretto e trasparente su ciò che conosci del mezzo."
-        ]
-      },
-      {
-        "heading": "8. Gestire i contatti e organizzare la prova su strada in totale sicurezza",
-        "paragraphs": [
-          "È normale e legittimo che un potenziale acquirente voglia vedere e provare la macchina prima di versare il prezzo pattuito. Ma non devi mai consegnargli semplicemente le chiavi e lasciarlo andare da solo.",
-          "L'Automobile Club d'Italia raccomanda un protocollo di massima prudenza durante il test drive:"
-        ],
-        "list": [
-          "**Incontrarsi sempre di giorno in un luogo pubblico, aperto e frequentato:** parcheggio di un centro commerciale sorvegliato, piazza o piazzale di una delegazione ACI.",
-          "**Non andare mai da solo:** fatti accompagnare da un amico o un familiare durante l'appuntamento.",
-          "**Verificare la patente di guida:** prima di consentire all'acquirente di mettersi al volante, controlla che abbia una patente valida in corso.",
-          "**Accompagnare personalmente l'acquirente a bordo:** la raccomandazione ACI è categorica: non lasciare mai il potenziale compratore da solo a bordo durante la prova. Sali sempre come passeggero a fianco.",
-          "**Non lasciare documenti personali o il Documento Unico originale a bordo:** porta con te solo una fotocopia del libretto durante la prova su strada.",
-          "**Non lasciare l'auto incustodita con le chiavi inserite o il motore acceso per nessun motivo.**",
-          "**Ispezione in officina:** se l'acquirente desidera far controllare l'auto dal proprio meccanico di fiducia, acconsenti volentieri concordando un'officina della tua zona e accompagnando personalmente il veicolo."
-        ]
-      },
-      {
-        "heading": "9. Il pagamento: bonifico istantaneo, circolare e come difendersi dalle truffe",
-        "paragraphs": [
-          "Questo è probabilmente il momento più delicato dell'intera compravendita automobilistica.",
-          "Regola aurea: **non consegnare mai veicolo, chiavi o documenti semplicemente perché qualcuno ti mostra una ricevuta cartacea o uno screenshot del bonifico**. Uno screenshot non dimostra che il denaro sia realmente partito né che sia irrevocabile.",
-          "L'ACI raccomanda di verificare l'effettivo accredito sul conto corrente prima di consegnare veicolo e documenti:"
-        ],
-        "list": [
-          "**Bonifico Istantaneo SEPA (SCT Inst) — Metodo consigliato:** Il denaro arriva ed è accreditato in modo irrevocabile entro pochi secondi. Accedi all'applicazione bancaria dal tuo smartphone e verifica che la somma figuri nel **saldo disponibile** (non solo contabile) prima di recarvi in agenzia.",
-          "**Bonifico Bancario Ordinario:** Richiede normalmente da 24 a 48 ore lavorative. Ricorda che un bonifico ordinario può essere revocato dall'ordinante nelle ore successive all'inserimento: attendi sempre l'accredito definitivo sul tuo conto prima del passaggio.",
-          "**Assegno Circolare:** Emesso direttamente dall'istituto di credito a fronte di fondi vincolati. Fatti inviare una copia fotografica 24 ore prima dell'atto ed effettua il «bene emissione» con la filiale emittente prima di formalizzare il passaggio.",
-          "**Assegno Bancario Ordinario:** Da rifiutare categoricamente nella compravendita tra privati a causa dell'elevato rischio di insoluto o firma non conforme.",
-          "Per un'analisi dettagliata dei raggiri più comuni consulta la nostra guida sulle [truffe comuni nella vendita auto](/guide/truffe-comuni-vendita-auto-usata)."
-        ]
-      },
-      {
-        "heading": "10. Riconoscere i segnali d'allarme di acquirenti truffaldini",
-        "paragraphs": [
-          "Una vendita di automobile non deve essere complicata: acquirente serio → pagamento verificato → passaggio di proprietà contestuale → consegna dell'auto.",
-          "Diffida e interrompi immediatamente la trattativa con chiunque presenti questi segnali di pericolo:"
-        ],
-        "list": [
-          "**Vuole pagare molto più del prezzo richiesto:** la classica truffa dell'overpayment con richiesta di storno.",
-          "**Dichiara di risiedere all'estero** (militare, cooperante, ingegnere) e propone di inviare un corriere a ritirare l'auto a scatola chiusa.",
-          "**Ti chiede di anticipare denaro** per presunte spese di trasporto, sdoganamento o polizze di garanzia.",
-          "**Ti invia link via SMS o WhatsApp** per «ricevere» l'accredito o ti chiede codici ricevuti via telefono (phishing bancario).",
-          "**Insiste per concludere con fretta estrema** senza aver mai voluto vedere o provare l'auto di persona.",
-          "**Propone di portare via l'auto prima del passaggio di proprietà:** non accettare mai la formula «ti pago e poi il passaggio lo faccio io nei prossimi giorni»."
-        ]
-      },
-      {
-        "heading": "11. Il passaggio di proprietà: dove farlo, costi e chi paga",
-        "paragraphs": [
-          "Una volta verificato l'accredito del pagamento, bisogna completare il trasferimento formale di proprietà.",
-          "La pratica può essere effettuata presso uno **Sportello Telematico dell'Automobilista (STA)** attivo presso le unità territoriali ACI/PRA, gli uffici della Motorizzazione Civile o le Delegazioni ACI e agenzie di pratiche auto abilitate. Lo STA garantisce l'aggiornamento telematico in tempo reale degli archivi del PRA e della Motorizzazione con rilascio immediato del Documento Unico aggiornato.",
-          "I costi del passaggio comprendono l'Imposta Provinciale di Trascrizione (IPT, variabile in base a kW e provincia), gli emolumenti ACI, l'imposta di bollo e i diritti di Motorizzazione. Puoi verificare l'importo esatto con il nostro strumento di [calcolo passaggio di proprietà](/passaggio-proprieta).",
-          "**Chi paga il passaggio?** Nella consuetudine e nella prassi commerciale italiana, il costo del passaggio è **interamente a carico dell'acquirente**, salvo diverso accordo preventivo tra le parti."
-        ]
-      },
-      {
-        "heading": "12. Perché non rimandare mai il passaggio: l'art. 94 del Codice della Strada",
-        "paragraphs": [
-          "Questo punto è fondamentale per la tutela del venditore: **non consegnare mai l'auto prima che il passaggio di proprietà sia stato formalizzato**.",
-          "Non pensare mai: «Gli consegno la macchina e poi nei prossimi giorni farà il passaggio». Il Codice della Strada (art. 94) prevede 60 giorni per l'aggiornamento della carta di circolazione, ma finché il trasferimento non è trascritto al PRA il venditore rimane l'intestatario ufficiale a tutti gli effetti di legge:",
-          "Completare la procedura presso uno STA garantisce la contestualità dell'atto e fornisce al venditore la ricevuta ufficiale di avvenuto trasferimento."
-        ],
-        "list": [
-          "**Multe e infrazioni:** Tutte le sanzioni per eccesso di velocità, divieti di sosta o accessi ZTL commesse dal nuovo possessore continueranno a essere notificate all'ex proprietario.",
-          "**Bollo auto regionale:** La tassa automobilistica continuerà a maturare a carico dell'intestatario registrato.",
-          "**Responsabilità civile e penale:** In caso di sinistro con fuga, omissione di soccorso o uso dell'auto per attività illecite, le autorità convocheranno per primo l'intestatario al PRA.",
-          "**Assicurazione:** Se l'acquirente circola privo di copertura assicurativa, il vecchio proprietario rischia di essere coinvolto come responsabile civile solidale."
-        ]
-      },
-      {
-        "heading": "13. La scrittura privata di compravendita: il contratto che ti tutela",
-        "paragraphs": [
-          "Anche se il passaggio di proprietà formalizza il trasferimento pubblico, è ottima norma redigere una **scrittura privata di vendita** in duplice copia originale firmata da entrambe le parti.",
-          "Una scrittura privata non serve a nascondere nulla, ma a documentare ciò che è stato realmente concordato ed evitare contestazioni:"
-        ],
-        "list": [
-          "**Dati completi del venditore e dell'acquirente** con codice fiscale e documento di identità.",
-          "**Dati identificativi del veicolo:** marca, modello, targa, numero di telaio (VIN) e chilometraggio effettivo visualizzato.",
-          "**Prezzo pattuito e modalità di pagamento tracciabile utilizzata.**",
-          "**Clausola di stato d'uso:** indicazione che l'acquirente ha visionato e provato l'auto, accettandola nello stato di fatto e meccanico in cui si trova, con esplicita menzione dei difetti già comunicati.",
-          "**Elenco dei documenti e delle dotazioni consegnate** (seconda chiave, libretto tagliandi, ruota di scorta)."
-        ]
-      },
-      {
-        "heading": "14. Il verbale di consegna con data, ora esatta e chilometri",
-        "paragraphs": [
-          "Al momento della materiale consegna delle chiavi e del veicolo, compila e fai controfirmare una ricevuta o verbale di consegna che riporti:",
-          "«Veicolo [Marca, Modello, Targa], telaio [VIN], consegnato in data [GG/MM/AAAA] alle ore [HH:MM] con contachilometri indicante [KM] km».",
-          "L'indicazione dell'ora esatta è fondamentale: se l'acquirente commette un'infrazione per eccesso di velocità o entra in una ZTL subito dopo la consegna, avrai la prova documentale inoppugnabile dell'orario esatto in cui la disponibilità del mezzo è stata trasferita, consentendo l'annullamento immediato del verbale a tuo carico."
-        ]
-      },
-      {
-        "heading": "15. Cosa fare dopo la vendita: assicurazione, bollo e archiviazione",
-        "paragraphs": [
-          "Una volta completato il trasferimento e consegnata l'auto, restano da gestire gli adempimenti finali:",
-          "Per l'assicurazione RC Auto, invia tempestivamente alla tua compagnia copia dell'atto di vendita o del Documento Unico aggiornato: potrai sospendere la polizza, trasferirla su un'altra vettura mantenendo la classe di merito oppure chiuderla chiedendo il rimborso della frazione di premio non goduta.",
-          "Conserva in una cartella dedicata per almeno 5 anni: copia dell'atto di vendita, ricevuta del passaggio di proprietà STA, prova del pagamento bancario, scrittura privata, verbale di consegna con data e ora e le comunicazioni importanti intercorse con l'acquirente."
-        ]
-      },
-      {
-        "heading": "16. La checklist definitiva pre-consegna",
-        "paragraphs": [
-          "Prima di consegnare definitivamente l'auto e le chiavi all'acquirente, controlla punto per punto questo promemoria di verifica:"
-        ],
-        "list": [
-          "**AUTO:** Auto lavata e pulita, foto complete archiviate, difetti noti dichiarati per iscritto, chilometraggio esatto annotato, manutenzione documentata.",
-          "**DOCUMENTI:** Documento Unico originale presente, documento d'identità e codice fiscale, visura PRA pulita, libretto tagliandi con fatture, seconda chiave originale.",
-          "**ACQUIRENTE:** Identità verificata con documento valido, patente controllata prima del test drive, prova effettuata con proprietario a bordo.",
-          "**PAGAMENTO:** Prezzo concordato per iscritto, metodo di pagamento tracciabile, accredito effettivamente verificato nel saldo disponibile della propria banca, nessuna consegna su screenshot.",
-          "**PASSAGGIO:** Atto di vendita autenticato presso STA/ACI/agenzia, trascrizione contestuale completata, copia della documentazione conservata.",
-          "**CONSEGNA:** Chiavi e doppie chiavi consegnate, Documento Unico consegnato, auto consegnata, verbale con data, ora esatta e chilometri controfirmato."
-        ]
-      },
-      {
-        "heading": "In sintesi: vendere senza concessionario conviene davvero?",
-        "paragraphs": [
-          "Vendere la propria auto da privato conviene e permette di ottenere il massimo realizzo economico sul mercato dell'usato. Il vantaggio principale è massimizzare il ricavo rispetto a una vendita immediata o a una permuta in concessionaria.",
-          "La cosa più importante non è semplicemente «fissare il prezzo più alto», ma vendere al giusto valore di mercato, a una persona affidabile e con una procedura documentata e trasparente.",
-          "Prima di pubblicare l'annuncio, effettua una [valutazione della tua auto usata](/valutazione): conoscere il suo valore reale e avere un quadro chiaro dei costi renderà la trattativa molto più semplice, credibile e redditizia."
-        ]
-      }
-    ]
-  },
-  {
-    "slug": "dashcam-24-ore-parking-mode-proteggere-auto-parcheggiata",
-    "title": "Dashcam 24 ore su 24: come proteggere l'auto quando è parcheggiata con il Parking Mode",
-    "description": "Lasci l'auto parcheggiata e ti chiedi cosa succede quando non ci sei? Guida completa alle dashcam con modalità parcheggio: sensori di movimento, G-Sensor, hardwire kit, protezione batteria, cloud, notifiche e normativa privacy italiana.",
-    "published": "2026-09-10",
-    "category": "manutenzione",
-    "cta": "valutazione-auto",
-    "ctaType": "valutazione-auto",
-    "image": "/images/guide/dashcam-24-ore-parking-mode-proteggere-auto-parcheggiata.jpg",
-    "readTime": "9 min",
-    "featured": true,
-    "sections": [
-      {
-        "heading": "L'auto parcheggiata è davvero al sicuro? Perché sempre più automobilisti scelgono una dashcam con Parking Mode",
-        "paragraphs": [
-          "Un piccolo urto durante il parcheggio, un atto vandalico, qualcuno che prova ad aprire la macchina o un tamponamento con fuga: sono eventi che possono accadere in qualsiasi momento mentre il proprietario è completamente ignaro, lontano dalla propria auto.",
-          "Per questo negli ultimi anni le dashcam dotate di modalità parcheggio sono diventate una soluzione sempre più interessante per chi lascia l'auto parcheggiata in strada, nei parcheggi condominiali, nelle aree di sosta dei centri commerciali o semplicemente sotto casa durante la notte.",
-          "Ma una domanda è fondamentale prima di investire in qualsiasi acquisto: **una dashcam può davvero registrare l'auto anche quando il motore è spento?** La risposta è sì, ma bisogna distinguere con attenzione una normale registrazione continua dalla vera **Parking Mode**, una funzione specifica che cambia radicalmente il modo in cui la telecamera opera durante la sosta."
-        ]
-      },
-      {
-        "heading": "Cos'è una dashcam con modalità parcheggio e come funziona?",
-        "paragraphs": [
-          "Una dashcam tradizionale registra esclusivamente mentre stai guidando: si accende con il quadro, registra su una scheda microSD in loop continuo e si spegne quando togli la chiave dal cruscotto.",
-          "Una dashcam dotata di **Parking Mode**, invece, può continuare a monitorare l'auto anche dopo aver spento il motore. A seconda del modello e della fascia di prezzo, può utilizzare una o più delle seguenti tecnologie:"
-        ],
-        "list": [
-          "**Sensore di movimento (Motion Detection):** La telecamera rileva variazioni nell'inquadratura — una persona che passa, un'auto che si avvicina — e avvia automaticamente la registrazione video solo quando c'è qualcosa da documentare.",
-          "**Sensore d'urto / G-Sensor:** Un accelerometro integrato rileva vibrazioni, urti o impatti sulla carrozzeria. Quando la soglia di sensibilità impostata viene superata, la dashcam salva automaticamente il filmato dell'evento, proteggendolo dalla sovrascrittura.",
-          "**Registrazione bufferizzata (Buffer Recording):** Il sistema mantiene costantemente in memoria alcuni secondi di video recente. In caso di evento, salva sia i secondi precedenti all'impatto sia quelli successivi, offrendo un contesto completo della dinamica.",
-          "**Registrazione Time-Lapse:** La telecamera cattura fotogrammi a intervalli ridotti (tipicamente 1 frame al secondo) invece della registrazione video tradizionale a 30 fps, riducendo drasticamente l'occupazione della scheda di memoria e il consumo energetico.",
-          "**Registrazione a basso bitrate:** Una compressione video più aggressiva rispetto alla modalità guida, che permette di estendere le ore di registrazione con la stessa capacità di archiviazione.",
-          "**Notifiche tramite Cloud (modelli connessi):** Sui modelli compatibili con connettività Wi-Fi, LTE o Cloud proprietario, la dashcam può inviare una notifica push sullo smartphone del proprietario quando viene rilevato un movimento o un impatto durante il parcheggio."
-        ]
-      },
-      {
-        "heading": "Cosa succede se qualcuno urta la macchina durante la notte?",
-        "paragraphs": [
-          "Immaginiamo uno scenario concreto che qualsiasi automobilista italiano ha vissuto almeno una volta. Parcheggi l'auto alle 20:00 dopo cena. Alle 23:30 un'altra macchina urta il tuo paraurti durante una manovra e se ne va senza lasciare un biglietto. Tu torni alle 7:30 del mattino successivo e trovi un danno sulla carrozzeria.",
-          "**Senza telecamera** hai soltanto un danno e nessuna informazione su chi l'ha causato. Nessun testimone, nessun orario, nessun elemento per identificare il responsabile. L'unica opzione è pagare di tasca propria o segnalare il sinistro alla propria assicurazione con le conseguenze che questo comporta sulla classe di merito.",
-          "**Con una dashcam dotata di Parking Mode**, invece, il sistema può rilevare l'impatto tramite il sensore G e salvare automaticamente un filmato dell'evento. I modelli con registrazione bufferizzata permettono di avere anche alcuni secondi precedenti all'urto, non soltanto il momento dell'impatto. Questo può essere particolarmente utile per ricostruire:"
-        ],
-        "list": [
-          "**La dinamica dell'incidente:** Come è avvenuto l'urto, da quale direzione e con quale intensità.",
-          "**Il veicolo coinvolto:** Marca, modello, colore e caratteristiche identificative dell'auto che ha causato il danno.",
-          "**La direzione di provenienza e fuga:** Da dove arrivava il veicolo e dove si è diretto dopo l'impatto.",
-          "**La targa del responsabile:** Quando l'angolazione e le condizioni di illuminazione lo permettono, la telecamera può catturare il numero di targa in modo leggibile.",
-          "**Il momento esatto dell'evento:** Data e ora precisi, fondamentali per un'eventuale denuncia o richiesta risarcitoria."
-        ]
-      },
-      {
-        "heading": "E se qualcuno si avvicina alla macchina? Motion detection e limiti della dashcam come antifurto",
-        "paragraphs": [
-          "È qui che la modalità parcheggio diventa ancora più interessante per chi parcheggia in zone a rischio. Alcune dashcam possono utilizzare il **motion detection** attivo: se una persona passa davanti alla telecamera o si avvicina all'auto, il sistema rileva il movimento e salva la registrazione.",
-          "Ma è fondamentale non confondere le due cose e mantenere aspettative realistiche su ciò che una dashcam può e non può fare:"
-        ],
-        "list": [
-          "**Dashcam = documenta quello che succede.** Registra filmati di eventi che possono essere utilizzati successivamente come prova o elemento di ricostruzione.",
-          "**Antifurto = cerca di impedire o segnalare un tentativo di furto in corso.** Attiva sirene, blocca l'avviamento, invia allarmi immediati a centrali operative e forze dell'ordine.",
-          "**Una dashcam non è un sistema antifurto.** Non emette allarmi sonori, non blocca portiere o avviamento e non comunica con centrali di sicurezza. Può diventare un ottimo complemento alla sicurezza dell'auto, ma non dovrebbe mai essere considerata una sostituta di un antifurto satellitare, di un sistema GPS tracker o di un blocca-sterzo meccanico."
-        ]
-      },
-      {
-        "heading": "Registrare 24 ore su 24: serve davvero? La differenza tra sorveglianza continua e Parking Mode intelligente",
-        "paragraphs": [
-          "Non necessariamente. Registrare ininterrottamente per 8, 10 o 12 ore di parcheggio produrrebbe una mole enorme di filmati inutili — ore e ore di inquadratura statica senza alcun evento — consumando rapidamente la scheda di memoria e la batteria dell'auto.",
-          "Una delle soluzioni tecnicamente più interessanti è utilizzare una modalità che registra **soltanto quando succede qualcosa**. Il flusso operativo della Parking Mode intelligente funziona secondo uno di questi schemi:"
-        ],
-        "list": [
-          "**Schema 1 — Rilevamento movimento:** L'auto viene parcheggiata e la dashcam entra automaticamente in modalità parcheggio a basso consumo. Quando il sensore di movimento rileva una variazione nell'inquadratura (una persona, un'auto, un animale), la telecamera avvia la registrazione e salva l'evento. Quando il movimento cessa, torna in standby.",
-          "**Schema 2 — Rilevamento urto (G-Sensor):** L'auto è parcheggiata e la dashcam monitora costantemente le vibrazioni tramite l'accelerometro. Quando viene rilevato un impatto sopra la soglia configurata, il filmato viene salvato e protetto dalla sovrascrittura automatica del loop.",
-          "**Schema 3 — Time-Lapse continuo:** La telecamera registra a intervalli molto più ridotti rispetto alla registrazione video tradizionale (tipicamente 1 fotogramma al secondo), producendo un video accelerato che occupa una frazione dello spazio di una registrazione standard. Ideale per coperture prolungate con consumo minimo di memoria e batteria."
-        ]
-      },
-      {
-        "heading": "Attenzione alla batteria dell'auto: l'hardwire kit e la protezione contro la scarica",
-        "paragraphs": [
-          "Questo è uno degli aspetti più importanti e spesso sottovalutati da chi acquista una dashcam per il Parking Mode. Se vuoi che la telecamera funzioni quando il motore è spento, deve continuare a ricevere alimentazione elettrica da qualche parte.",
-          "La soluzione più comune e affidabile consiste nell'installare un **hardwire kit**: un cavo di collegamento dedicato che connette la dashcam direttamente all'impianto elettrico dell'auto, bypassando la presa accendisigari che si spegne con il quadro.",
-          "Il collegamento diventa: **batteria dell'auto → hardwire kit → dashcam**. Il sistema può quindi alimentare la telecamera anche quando il motore è spento, attingendo dalla batteria a 12V del veicolo.",
-          "Ma c'è una funzione fondamentale che l'hardwire kit deve assolutamente prevedere: la **protezione della batteria (Battery Voltage Cutoff)**. Il dispositivo deve monitorare costantemente la tensione della batteria dell'auto e interrompere automaticamente l'alimentazione alla dashcam quando la tensione scende sotto una determinata soglia (tipicamente 11,8V o 12,0V, configurabile).",
-          "In questo modo si riduce concretamente il rischio di ritrovarsi con la batteria completamente scarica dopo aver lasciato l'auto parcheggiata per un periodo prolungato. Per questo motivo, se l'obiettivo è utilizzare davvero il Parking Mode con regolarità, **sconsigliamo di lasciare la dashcam collegata alla semplice presa accendisigari** o di utilizzare soluzioni improvvisate senza protezione della tensione."
-        ]
-      },
-      {
-        "heading": "Dashcam anteriore, 2 canali o 3 canali: quale configurazione scegliere?",
-        "paragraphs": [
-          "Se devi acquistare una dashcam e il tuo obiettivo principale è la protezione dell'auto anche durante il parcheggio, la scelta della configurazione è un passaggio chiave. Ecco le tre opzioni principali con i rispettivi vantaggi:"
-        ],
-        "list": [
-          "**Dashcam anteriore (1CH):** È la soluzione più semplice ed economica. Una sola telecamera montata sul parabrezza registra quello che succede davanti alla macchina. È utile soprattutto per incidenti frontali, tamponamenti, comportamento degli altri automobilisti ed eventi durante la guida. In modalità parcheggio copre solo la visuale anteriore.",
-          "**Dashcam 2 canali (2CH) — Anteriore + Posteriore:** È composta generalmente da una telecamera anteriore e una telecamera posteriore collegata via cavo. Per la maggior parte degli automobilisti è probabilmente la **configurazione più interessante in rapporto qualità-prezzo**. Durante un incidente puoi avere contemporaneamente una visuale davanti e dietro. E quando l'auto è parcheggiata, raddoppi l'area monitorata coprendo sia il paraurti anteriore sia quello posteriore.",
-          "**Dashcam 3 canali (3CH) — Anteriore + Posteriore + Abitacolo:** Aggiunge una terza telecamera, spesso con LED a infrarossi, rivolta verso l'abitacolo del veicolo. Può essere particolarmente interessante per chi effettua servizio NCC, taxi, car sharing o per chi desidera una copertura ancora maggiore in caso di effrazione. Non è tuttavia indispensabile per tutti gli automobilisti."
-        ]
-      },
-      {
-        "heading": "La configurazione ideale per proteggere l'auto: la piccola scatola nera del veicolo",
-        "paragraphs": [
-          "Se dovessimo costruire un sistema pensando soprattutto alla protezione dell'auto sia durante la guida sia durante la sosta, una configurazione sensata e completa comprenderebbe i seguenti elementi:"
-        ],
-        "list": [
-          "**Dashcam 2 canali (anteriore + posteriore):** Per coprire entrambe le direzioni con un'unica soluzione.",
-          "**Parking Mode con Motion Detection + G-Sensor:** Per registrare automaticamente soltanto gli eventi rilevanti durante il parcheggio.",
-          "**Hardwire Kit con protezione batteria:** Per alimentare la dashcam a motore spento senza rischiare di scaricare la batteria del veicolo.",
-          "**Scheda microSD High Endurance:** Le schede microSD tradizionali non sono progettate per la registrazione video continua e degradano rapidamente. Le schede **High Endurance** (Samsung, SanDisk, Kingston) sono specificamente costruite per resistere a migliaia di ore di sovrascrittura ciclica.",
-          "**GPS integrato:** Per registrare automaticamente la posizione dell'auto, la velocità durante la guida e il luogo esatto dove l'evento è avvenuto durante il parcheggio.",
-          "**Registrazione bufferizzata:** Per non perdere i secondi cruciali che precedono un impatto."
-        ]
-      },
-      {
-        "heading": "E se voglio controllare l'auto dal telefono? Dashcam con connettività Cloud e notifiche push",
-        "paragraphs": [
-          "Qui entriamo nella fascia più interessante e tecnologicamente avanzata delle dashcam moderne. Alcuni modelli con connettività **Cloud, Wi-Fi o LTE integrato** possono inviare notifiche push sullo smartphone quando viene rilevato un evento durante il parcheggio.",
-          "In pratica puoi arrivare ad avere uno scenario del genere: alle 23:41 ricevi una notifica «Movimento rilevato — Auto parcheggiata» con la possibilità di visualizzare il filmato dell'evento direttamente dall'applicazione del produttore. Oppure alle 02:18: «Possibile impatto rilevato — Registrazione salvata».",
-          "Questa soluzione è molto più vicina a un vero sistema di sicurezza collegato all'auto. I modelli più avanzati di marchi come BlackVue, Thinkware e VIOFO offrono piattaforme Cloud proprietarie che consentono, sui dispositivi compatibili, visualizzazione remota in tempo reale, upload automatico degli eventi critici, geolocalizzazione del veicolo e storico delle notifiche."
-        ]
-      },
-      {
-        "heading": "È legale utilizzare una dashcam in Italia? Cosa dice il Garante Privacy",
-        "paragraphs": [
-          "Qui bisogna fare attenzione e non cadere in semplificazioni eccessive. Non è corretto dire semplicemente «le dashcam sono illegali in Italia», ma non è nemmeno corretto affermare «puoi filmare tutto quello che vuoi 24 ore su 24 senza alcun limite».",
-          "Il **Garante per la Protezione dei Dati Personali** richiama il principio di **minimizzazione dei dati**: le riprese devono essere pertinenti e non eccedenti rispetto alla finalità perseguita. Per i sistemi utilizzati in ambito personale e domestico, il Garante distingue le riprese limitate alla propria sfera da quelle che coinvolgono sistematicamente aree comuni, strade pubbliche o proprietà di terzi.",
-          "In presenza di un rischio effettivo e documentato — come furti ripetuti, atti vandalici o episodi di danneggiamento — il Garante ha riconosciuto la possibilità di estendere la ripresa a una porzione immediatamente prossima dell'area interessata, purché ciò sia **necessario e proporzionato** alla finalità di tutela del patrimonio.",
-          "In pratica, se utilizzi una dashcam per proteggere la tua auto, è prudente adottare le seguenti precauzioni:"
-        ],
-        "list": [
-          "**Limitare il più possibile l'area ripresa:** La telecamera deve inquadrare prevalentemente il veicolo e lo spazio strettamente necessario intorno ad esso, non ampie porzioni di marciapiede, ingressi condominiali o finestre di terzi.",
-          "**Evitare di conservare inutilmente enormi quantità di filmati:** Utilizzare la registrazione circolare (loop recording) che sovrascrive automaticamente i filmati più vecchi, conservando soltanto gli eventi rilevanti protetti dal G-Sensor.",
-          "**Non pubblicare online volti o targhe senza una valida ragione:** Diffondere immagini che identificano persone senza il loro consenso può configurare una violazione della normativa privacy con conseguenze sanzionatorie.",
-          "**Utilizzare le immagini per le finalità appropriate:** Un filmato di un incidente o di un reato può essere legittimamente consegnato alle forze dell'ordine o utilizzato in sede giudiziaria e assicurativa.",
-          "**Verificare la situazione specifica per installazioni fisse:** Per situazioni particolari o installazioni che riprendono stabilmente aree pubbliche o condominiali, è opportuno consultare un professionista specializzato in materia di privacy e videosorveglianza."
-        ]
-      },
-      {
-        "heading": "Quale dashcam scegliere? Le caratteristiche da cercare e le funzioni premium",
-        "paragraphs": [
-          "Non esiste una dashcam perfetta per tutti gli automobilisti. Ma se l'obiettivo è coprire gli scenari più comuni — incidenti stradali, protezione durante il parcheggio, vandalismo e maggiore sicurezza complessiva — ecco le caratteristiche da verificare prima dell'acquisto, suddivise tra funzioni fondamentali e funzioni premium:"
-        ],
-        "list": [
-          "**Funzioni fondamentali da pretendere:** Parking Mode con attivazione automatica, sensore G integrato per la protezione dei filmati in caso di impatto, Motion Detection attivo durante la sosta, registrazione bufferizzata (pre-evento), GPS per posizione e velocità, configurazione almeno 2 canali (anteriore + posteriore), compatibilità con hardwire kit, protezione batteria (voltage cutoff) e slot per scheda microSD High Endurance.",
-          "**Funzioni premium per una protezione avanzata:** Connettività Wi-Fi per trasferimento filmati su smartphone, piattaforma Cloud del produttore con upload automatico degli eventi, modulo LTE integrato per connessione permanente senza smartphone nelle vicinanze, notifiche push in tempo reale per movimento e impatto, visualizzazione remota live dell'inquadratura della telecamera."
-        ]
-      },
-      {
-        "heading": "Prima di comprare una dashcam: la checklist definitiva di AutoEsperto",
-        "paragraphs": [
-          "Dopo aver analizzato tecnologie, configurazioni, normativa e scenari di utilizzo, ecco la checklist completa che ogni automobilista dovrebbe seguire prima di acquistare una dashcam con l'obiettivo di proteggere l'auto durante il parcheggio:"
-        ],
-        "list": [
-          "**Verifica che il modello supporti davvero il Parking Mode:** Non tutte le dashcam in commercio lo offrono. Controlla le specifiche tecniche e la documentazione ufficiale del produttore.",
-          "**Controlla come viene alimentata a motore spento:** Verifica se è necessario un hardwire kit dedicato o se il produttore offre soluzioni alternative come batterie esterne (Power Magic Battery Pack o equivalenti).",
-          "**Verifica se l'hardwire kit è incluso o da acquistare separatamente:** Molti produttori lo vendono come accessorio opzionale con un costo aggiuntivo.",
-          "**Accertati della protezione contro la scarica della batteria:** L'hardwire kit deve prevedere un voltage cutoff regolabile. Senza questa protezione rischi di trovare l'auto con la batteria a terra.",
-          "**Calcola quanto spazio occupano le registrazioni:** Una microSD da 128 GB o 256 GB High Endurance è generalmente sufficiente per la maggior parte degli utilizzi con registrazione circolare.",
-          "**Verifica se registra anche la parte posteriore:** Per una protezione completa durante il parcheggio, una configurazione 2CH è decisamente preferibile rispetto a una singola telecamera anteriore.",
-          "**Controlla quali funzioni Cloud sono realmente disponibili in Italia:** Non tutti i servizi Cloud dei produttori asiatici sono pienamente operativi e supportati sul territorio italiano.",
-          "**Non confondere 'registra quando l'auto è spenta' con 'registra 24 ore su 24':** La vera funzione interessante è il Parking Mode intelligente, che permette di concentrarsi sugli eventi importanti senza trasformare la scheda di memoria in un archivio infinito di ore di video vuoto."
-        ]
-      },
-      {
-        "heading": "In sintesi: la dashcam vale la pena? Cosa ricordare prima dell'acquisto",
-        "paragraphs": [
-          "Secondo la redazione di AutoEsperto, la risposta è sì per chi utilizza spesso l'auto e la lascia parcheggiata in luoghi dove esiste un rischio concreto di urti, vandalismi, tamponamenti con fuga o tentativi di effrazione.",
-          "Non è una soluzione magica. Una dashcam non impedisce necessariamente a un ladro di rubare l'auto e non sostituisce un sistema antifurto professionale. Ma può fare qualcosa di estremamente importante: **lasciare una prova**. Un incidente può diventare una registrazione. Un tamponamento con fuga può diventare un filmato con targa. Un atto vandalico può avere un orario preciso documentato. Un movimento sospetto può essere registrato e inviato come notifica sullo smartphone.",
-          "La configurazione che consigliamo per la maggior parte degli automobilisti è: **dashcam 2 canali + Parking Mode + hardwire kit con protezione batteria + microSD High Endurance**. Se invece vuoi trasformare la dashcam in un sistema di sicurezza più completo: **dashcam con GPS + Cloud/LTE + notifiche sullo smartphone**. A quel punto non stai più comprando semplicemente una telecamera: stai creando un piccolo sistema di sorveglianza intelligente per la tua auto.",
-          "Prima di comprare, controlla. Anche quando l'auto è parcheggiata. Verifica il valore della tua auto con la nostra [valutazione auto usate](/valutazione) e confronta i costi di manutenzione sul nostro strumento di [stima riparazione](/riparazione).",
-          "*Le informazioni contenute in questo articolo hanno scopo puramente informativo e divulgativo. Per installazioni specifiche in contesti condominiali o di videosorveglianza pubblica, si raccomanda di consultare un professionista specializzato in materia di privacy.*"
-        ]
-      }
-    ]
-  },
+  "slug": "dashcam-autoesperto-proteggi-auto-anche-quando-non-ci-sei",
+  "title": "Dashcam in auto: come sceglierla e usarla, anche in parcheggio",
+  "description": "Come scegliere una dashcam auto: video 4K, modalità parcheggio, batteria e installazione. Cosa verificare nella 70mai A810S prima di acquistarla.",
+  "published": "2026-09-27",
+  "category": "manutenzione",
+  "cta": "dashcam-a810s",
+  "ctaType": "valutazione-auto",
+  "image": "/images/guide/dashcam-autoesperto-proteggi-auto-anche-quando-non-ci-sei.jpg",
+  "readTime": "10 min",
+  "featured": true,
+  "sections": [
+    {
+      "heading": "Torni al parcheggio e trovi un danno: la dashcam può aiutarti?",
+      "paragraphs": [
+        "Una portiera segnata, il paraurti urtato, nessun biglietto sul parabrezza. Quando trovi un danno sulla tua auto, la prima difficoltà è capire che cosa sia successo. Una dashcam può aggiungere un elemento concreto: le immagini dei momenti prima e dopo l’urto.",
+        "**Il punto AutoEsperto:** è uno strumento per documentare, non una garanzia contro danni e furti. Il risultato dipende da dove guarda la telecamera, dalla luce, dall’alimentazione e dal momento in cui comincia a registrare. Anche un buon modello può non riprendere una fiancata o non rendere leggibile una targa.",
+        "Questa guida spiega come scegliere e usare la dashcam senza perdersi nelle sigle. Le caratteristiche della 70mai A810S sono tratte dalla documentazione del produttore: non presentiamo questo approfondimento come una prova su strada.",
+        "**Link affiliati Amazon:** in qualità di Affiliato Amazon, AutoEsperto riceve un guadagno dagli acquisti idonei, senza costi aggiuntivi per te."
+      ]
+    },
+    {
+      "heading": "Che cosa registra mentre guidi e quando spegni l’auto",
+      "paragraphs": [
+        "Durante la guida la dashcam registra normalmente brevi filmati in sequenza. Quando lo spazio finisce, la registrazione in ciclo sostituisce i file più vecchi. Gli eventi rilevati dal sensore d’urto possono essere salvati separatamente, secondo le impostazioni del dispositivo. Non considerare quella cartella un archivio definitivo: copia subito un video importante.",
+        "A motore spento serve una modalità parcheggio compatibile e un’alimentazione adatta. La sola presenza della scritta “Parking Mode” sulla confezione non dice quante ore riuscirai a coprire né se la funzione sarà pronta con gli accessori inclusi."
+      ],
+      "list": [
+        "**Registrazione dopo un urto:** il sensore rileva una scossa e avvia o protegge una clip. Se la telecamera deve riattivarsi, una parte della scena può essere già passata.",
+        "**Rilevamento del movimento:** può avviare una registrazione quando qualcosa si muove nell’inquadratura. Sensibilità e falsi allarmi cambiano tra modelli e ambienti.",
+        "**Time-lapse:** salva immagini a intervalli per ricostruire la sosta in un video accelerato. Riduce lo spazio utilizzato, ma può perdere dettagli di un evento rapido.",
+        "**Registrazione con buffer:** mantiene anche una porzione precedente all’evento. Controlla nel manuale se è disponibile in marcia, in parcheggio o in entrambe le condizioni: non sono la stessa funzione."
+      ]
+    },
+    {
+      "heading": "Batteria e kit di alimentazione: che cosa significa davvero “24 ore”",
+      "paragraphs": [
+        "Molte prese USB o a 12 volt si spengono insieme all’auto; altre rimangono alimentate. Prima di acquistare accessori, verifica il comportamento della tua vettura. Un hardwire kit compatibile collega la dashcam all’impianto e riconosce lo spegnimento del quadro.",
+        "La protezione da bassa tensione interrompe l’alimentazione quando la batteria raggiunge la soglia impostata. Il [kit regolabile 70mai UP06](https://www.70mai.com/us/up06/) è un esempio di questa soluzione. La protezione limita la scarica, ma non rende infinita l’autonomia e non garantisce l’avviamento di una batteria già debole.",
+        "La durata effettiva cambia con stato della batteria, freddo, consumi e frequenza d’uso dell’auto. “Sorveglianza 24 ore” descrive quindi una possibilità del sistema, non una durata assicurata in ogni parcheggio. Se lasci spesso l’auto ferma per giorni, concorda con l’installatore un limite di funzionamento e verifica se è opportuno un accumulatore specifico per dashcam.",
+        "Il supercondensatore presente in alcuni modelli serve alla gestione dell’alimentazione e al salvataggio dei file: non è una batteria capace di alimentare la telecamera per tutta la notte."
+      ]
+    },
+    {
+      "heading": "Come scegliere: prima le immagini, poi le sigle",
+      "paragraphs": [
+        "Una risoluzione elevata può aiutare, ma la scritta 4K non basta per sapere se leggerai una targa. Movimento, pioggia, riflessi e fari incidono sul risultato. Prima di comprare, cerca filmati originali di giorno e di notte: una clip promozionale compressa dice poco sulla qualità del file che conserverai.",
+        "La domanda utile è: “Che cosa voglio riuscire a documentare nel mio uso quotidiano?”. Se parcheggi sempre contro un muro, per esempio, una telecamera solo anteriore potrebbe guardare nella direzione meno utile."
+      ],
+      "list": [
+        "**Anteriore e posteriore:** aumentano le zone visibili, ma non offrono automaticamente una copertura a 360 gradi. Le fiancate possono restare fuori campo.",
+        "**Memoria:** scegli una microSD adatta alla registrazione continua e compatibile con il manuale. Controlla periodicamente che i file si aprano e che data e ora siano corrette.",
+        "**App e download:** prova a salvare un filmato sul telefono prima di averne bisogno. Il Wi-Fi locale non equivale a ricevere avvisi quando sei lontano dall’auto.",
+        "**Calore e installazione:** verifica la temperatura operativa dichiarata per l’intero dispositivo, lo spazio dietro lo specchietto e l’eventuale ingombro della telecamera posteriore."
+      ]
+    },
+    {
+      "heading": "70mai A810S: un esempio concreto da valutare",
+      "paragraphs": [
+        "Nella [scheda ufficiale della 70mai A810S](https://www.70mai.com/global/a810s/) il produttore indica ripresa anteriore 4K, sensore Sony STARVIS 2 IMX678, GPS, supercondensatore e opzioni per una seconda telecamera. Le funzioni parcheggio richiedono un hardwire kit.",
+        "Attenzione alla sigla: **A810S e A810 sono modelli diversi**. Per A810S la scheda globale elenca le posteriori RC24 e RC23; non bisogna attribuirle automaticamente il corredo RC12 della A810. Anche il contenuto delle confezioni può cambiare tra venditori.",
+        "È un modello da considerare se cerchi ripresa anteriore ad alta risoluzione e possibilità di espansione. La nostra indicazione è verificare il pacchetto completo: modello esatto, posteriore, kit, microSD e servizi remoti. La compatibilità 4G non significa che accessorio, connettività e servizi siano tutti inclusi. Non attribuiamo un voto alla qualità reale delle riprese senza un test diretto.",
+        "Per verificare dotazione del kit, recensioni degli acquirenti e disponibilità attuale in Italia, puoi [consultare la scheda della 70mai A810S 4K su Amazon.it](https://link.amazon/B0gTb5qc5)."
+      ]
+    },
+    {
+      "heading": "70mai A810S su Amazon: prezzo e accessori da verificare",
+      "paragraphs": [
+        "Apri la scheda Amazon per controllare prezzo, venditore e contenuto della confezione selezionata. Verifica separatamente telecamera posteriore, hardwire kit e microSD: non dare per scontato che siano inclusi. Controlla condizioni di garanzia, spedizione e reso della specifica offerta.",
+        "[Controlla la scheda prodotto e il prezzo aggiornato della 70mai A810S 4K su Amazon.it](https://link.amazon/B0gTb5qc5).",
+        "**Link affiliato Amazon:** AutoEsperto riceve un guadagno dagli acquisti idonei. Per te non ci sono costi aggiuntivi legati al link."
+      ]
+    },
+    {
+      "heading": "Installazione e spesa: fai un preventivo completo",
+      "paragraphs": [
+        "Per un montaggio semplice con alimentazione dalla presa, segui le istruzioni del costruttore. La telecamera deve lasciare libera la visuale; il cavo non deve raggiungere pedali, comandi o zone di apertura degli airbag. Non infilare alla cieca i fili nei montanti.",
+        "Per il collegamento ai fusibili, il passaggio al lunotto o un impianto di cui non conosci lo schema, rivolgiti a un installatore. Chiedi che il preventivo comprenda cablaggio, protezioni e verifica della modalità parcheggio. Fai controllare la compatibilità con la tua auto, anche se ibrida o elettrica.",
+        "Il costo da confrontare è la somma di telecamera, eventuale posteriore, microSD, kit e manodopera; aggiungi eventuali canoni se vuoi funzioni a distanza. Non esiste un prezzo di montaggio valido per tutte le vetture. Chiedi inoltre quali interventi vengono eseguiti sull’impianto e quali condizioni di garanzia si applicano.",
+        "Alla consegna, controlla con l’installatore tre cose: un video in marcia, il passaggio alla modalità sosta e il download di una clip. È un controllo semplice che rende più utile tutta la spesa."
+      ]
+    },
+    {
+      "heading": "Dopo un urto: salva il filmato e raccogli i dati",
+      "paragraphs": [
+        "Prima vengono la sicurezza e l’eventuale richiesta di soccorso. Quando puoi farlo senza rischi, conserva il video originale e una seconda copia, comprese le sequenze vicine all’evento. Evita tagli e filtri sull’originale; una copia inviata in chat può perdere qualità.",
+        "Fotografa danni e contesto, annota luogo e orario e raccogli i dati delle persone coinvolte e degli eventuali testimoni. Per comunicare con assicurazione o autorità usa i canali richiesti e segnala che hai una registrazione. Non rimandare la denuncia del sinistro perché aspetti di scaricare il video.",
+        "Se vuoi orientarti sul possibile intervento, puoi consultare lo [strumento AutoEsperto per i costi di riparazione](/riparazione). La stima è indicativa: il preventivo del carrozziere richiede l’esame del danno e di eventuali componenti nascosti.",
+        "Per valutare il prossimo passo, leggi anche [danni alla carrozzeria: fai da te o carrozziere](/guide/danno-carrozzeria-fai-da-te-o-carrozziere)."
+      ]
+    },
+    {
+      "heading": "Modulo CID o CAI: il video non sostituisce la constatazione amichevole",
+      "paragraphs": [
+        "Il modulo blu è comunemente chiamato CID; la denominazione usata oggi è **CAI, Constatazione Amichevole di Incidente**. Serve a raccogliere dati e circostanze del sinistro. Il filmato è un elemento aggiuntivo, non compila il modulo al posto tuo e non stabilisce da solo chi ha ragione.",
+        "Controlla dati dei veicoli e delle polizze, luogo, data, danni visibili, caselle sulle circostanze e disegno. Prima di firmare, rileggi quanto riportato. Se non siete d’accordo, non sottoscrivere una ricostruzione che non condividi e informa comunque la tua compagnia.",
+        "Dal giorno 8 aprile 2026 le compagnie devono rendere disponibile anche la compilazione digitale; il formato cartaceo resta utilizzabile. Per la procedura e i riferimenti alla denuncia, apri le [istruzioni IVASS sul modulo CID/CAI e sulla constatazione amichevole](https://www.ivass.it/consumatori/rc-auto/sinistri/). Per compilare il CAI digitale, usa l’app o il sito indicato dalla tua assicurazione."
+      ]
+    },
+    {
+      "heading": "Il video basta per ottenere un risarcimento?",
+      "paragraphs": [
+        "Non automaticamente. Un filmato può aiutare a ricostruire un incidente, ma vanno valutati contenuto, autenticità e altre prove. L’articolo 2712 del Codice civile disciplina le riproduzioni fotografiche e cinematografiche e il possibile disconoscimento della loro conformità ai fatti: una registrazione non è per definizione incontestabile.",
+        "GPS e orario possono aggiungere contesto, ma non trasformano una dashcam in uno strumento di certificazione. Anche un video senza targa leggibile può mostrare una manovra; non è però detto che permetta di identificare il responsabile. Conserva il materiale e chiedi alla compagnia come trasmetterlo.",
+        "Per il riferimento normativo puoi consultare il [Codice civile, articolo 2712, su Normattiva](https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:regio.decreto:1942-03-16;262:2~art2712!vig=). Il risarcimento dipende dal caso concreto e dalle coperture applicabili, non dal prezzo della telecamera."
+      ]
+    },
+    {
+      "heading": "Privacy: registrare la strada richiede attenzione",
+      "paragraphs": [
+        "Riprendere volti e targhe può comportare un trattamento di dati personali. Non basta dire “la uso per me” per escludere sempre le regole sulla privacy. Nelle [linee guida EDPB sui dispositivi video, pagina 12](https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en_0.pdf), l’esempio della dashcam richiama proprio il problema di registrare costantemente traffico e persone vicino alla strada.",
+        "Limita raccolta e conservazione a ciò che serve allo scopo, proteggi l’accesso ai file e non creare un archivio indiscriminato degli spostamenti altrui. Le riprese dell’evento da conservare per tutelare un diritto vanno distinte dai filmati ordinari da eliminare quando non necessari. Impostare una registrazione breve o su evento è una misura di minimizzazione, non una garanzia automatica di conformità.",
+        "Evita di pubblicare i video sui social: oscurare una targa non risolve necessariamente ogni questione. Comunica le immagini pertinenti a chi gestisce il sinistro o all’autorità quando necessario. Per flotte, dipendenti, taxi o riprese dell’abitacolo serve una valutazione specifica anche degli obblighi di informazione."
+      ]
+    },
+    {
+      "heading": "La scelta AutoEsperto: comprare ciò che serve, saperlo usare",
+      "paragraphs": [
+        "La dashcam ha senso se risponde a un’esigenza concreta: ricostruire un incidente, documentare un urto in sosta o ridurre i dubbi su una manovra. Prima di scegliere il modello, decidi quali zone vuoi riprendere e per quanto tempo lasci normalmente l’auto ferma.",
+        "Poi verifica alimentazione, qualità dei file e facilità di recupero. Un dispositivo ben configurato, con una scheda funzionante e un’inquadratura utile, vale più di una lunga lista di funzioni che non hai mai provato. Il controllo da ripetere nel tempo è semplice: apri una clip recente e verifica che mostri davvero ciò che ti aspetti."
+      ]
+    },
+    {
+      "heading": "La dashcam funziona anche a motore spento?",
+      "paragraphs": [
+        "Sì, se supporta la modalità parcheggio e riceve alimentazione compatibile anche a quadro spento. Per la A810S il produttore richiede un hardwire kit. La durata dipende dalla batteria, dalla modalità scelta e dalle soglie di protezione."
+      ]
+    },
+    {
+      "heading": "Una dashcam 4K legge sempre le targhe di notte?",
+      "paragraphs": [
+        "No. Risoluzione e sensore aiutano, ma velocità, distanza, pioggia e riflessi possono rendere una targa illeggibile. Cerca filmati originali in condizioni simili al tuo utilizzo."
+      ]
+    },
+    {
+      "heading": "Il Wi-Fi invia avvisi quando sono lontano dall’auto?",
+      "paragraphs": [
+        "Il Wi-Fi locale serve a collegare il telefono nelle vicinanze. Per avvisi a distanza occorrono funzioni remote compatibili, connettività e gli eventuali accessori o servizi previsti dal produttore."
+      ]
+    }
+  ],
+  "updated": "2026-09-28",
+  "editorialNote": "Approfondimento della redazione AutoEsperto basato su documentazione 70mai, indicazioni IVASS, linee guida EDPB e Codice civile. Specifiche dichiarate e consigli editoriali sono distinti: non è stata eseguita una prova su strada del prodotto. Fonti consultate il 28 settembre 2026 e collegate nei passaggi pertinenti.",
+  "sources": [
+    "https://www.70mai.com/global/a810s/",
+    "https://www.70mai.com/us/up06/",
+    "https://www.ivass.it/consumatori/rc-auto/sinistri/",
+    "https://www.edpb.europa.eu/sites/default/files/files/file1/edpb_guidelines_201903_video_devices_en_0.pdf",
+    "https://www.normattiva.it/uri-res/N2Ls?urn:nir:stato:regio.decreto:1942-03-16;262:2~art2712!vig="
+  ]
+},
   {
     "slug": "app-evitare-multe-traffico-autovelox-legge-2026",
     "title": "App per evitare multe e traffico: cosa permette davvero la legge nel 2026? Guida tra autovelox, zone di controllo e sanzioni",
@@ -1022,7 +1573,7 @@ const initialGuides: Guide[] = [
           "Avere una targa polacca non è automaticamente sinonimo di truffa, ma non è nemmeno una scorciatoia a costo zero senza conseguenze.",
           "Nel 2026, l'interconnessione informatica tra le polizie europee, il registro REVE e l'inasprimento dei controlli congiunti hanno cancellato i margini di tolleranza. Se l'operazione non poggia su contratti limpidi, idonea registrazione ACI e polizze con estensione territoriale certificata, il rischio economico supera di gran lunga qualsiasi risparmio iniziale.",
           "Prima di comprare un'auto, controlla la regolarità dei documenti, la provenienza reale e il suo valore effettivo di mercato con gli strumenti gratuiti di AutoEsperto: verifica la conformità con la nostra [valutazione auto usate](/valutazione) e confronta i consumi sul nostro [calcolatore consumi](/consumi).",
-          "*Le informazioni contenute in questo articolo hanno scopo puramente informativo e divulgativo e non costituiscono consulenza legale o tributaria vincolante. Per casi specifici si raccomanda di consultare l'ACI, la Motorizzazione Civile o un legale specializzato in diritto della circolazione stradale.*"
+          "*Le informazioni contenute in questo articolo hanno scopo puramente informativo e divulgativo e non costituiscono consulenza legale o tributaria vincolante. Per casi specifici si raccomanda di consultare l'ACI, la Motorizzazione Civile o un legale specializzato in diritto della circolazione stradale.*."
         ]
       }
     ]
@@ -1310,8 +1861,8 @@ const initialGuides: Guide[] = [
   },
   {
     "slug": "autoesperto-freelance-siciliano-dati-reali-mercato-usato",
-    "title": "AutoEsperto.it: il giovane freelance siciliano che porta i dati reali del mercato dell'usato a portata di clic",
-    "description": "Nato a Siracusa da un progetto personale, AutoEsperto è oggi una piattaforma gratuita che aiuta chi compra o vende un'auto usata a farlo con dati di mercato veri, senza registrazione e senza intermediari commerciali.",
+    "title": "AutoEsperto: strumenti e guide per orientarsi nel mercato dell'usato",
+    "description": "La redazione AutoEsperto presenta strumenti, guide e criteri utili per valutare un'auto usata e preparare con più consapevolezza l'acquisto o la vendita.",
     "published": "2026-08-31",
     "category": "valutazione",
     "cta": "autoesperto-storia",
@@ -1325,10 +1876,10 @@ const initialGuides: Guide[] = [
         ]
       },
       {
-        "heading": "Un progetto, un solo sviluppatore: l'idea nata a Siracusa",
+        "heading": "Un progetto indipendente, curato dal Team AutoEsperto",
         "paragraphs": [
-          "Dietro la piattaforma non si nasconde una concessionaria né un grande gruppo finanziario, ma una storia di ingegno e passione: Ralfh Javier, un giovane sviluppatore software freelance basato a Siracusa. Ha concepito, architettato e programmato AutoEsperto in totale autonomia, partendo da un obiettivo concreto: rendere accessibili a qualsiasi cittadino le stesse identiche informazioni che normalmente sono riservate ai periti, ai concessionari professionisti e ai meccanici d'officina.",
-          "«L'idea di fondo è semplice e radicale», spiega il fondatore nella presentazione del progetto: prima di firmare un contratto o versare una caparra, ogni acquirente dovrebbe poter contare sugli stessi dati oggettivi di chi il mercato lo conosce dal di dentro. Nessun vincolo pubblicitario con saloni d'auto, nessun compenso nascosto che possa influenzare i verdetti: solo numeri reali, elaborati con rigore matematico e messi a disposizione di tutti in forma libera."
+          "AutoEsperto è un progetto indipendente. Il Team AutoEsperto cura la redazione, la revisione e l'organizzazione degli strumenti e delle guide, con l'obiettivo di aiutare chi compra o vende un'auto a capire quali informazioni sono disponibili e quali richiedono una verifica ulteriore.",
+          "Le analisi automatiche e le stime hanno limiti che dipendono dai dati disponibili. Per questo la redazione invita a distinguere le informazioni verificate dalle indicazioni orientative e a controllare documenti e condizioni del veicolo prima di concludere una compravendita."
         ]
       },
       {
@@ -1338,7 +1889,7 @@ const initialGuides: Guide[] = [
           "In pochi istanti, il motore algoritmico restituisce un quadro diagnostico e valutativo completo di:"
         ],
         "list": [
-          "Prezzo reale di transazione calcolato al netto del margine di trattativa, confrontato con la richiesta dell'annuncio tramite il modulo di [valutazione auto usata](/valutazione).",
+          "Stima indicativa confrontata con il prezzo richiesto nell'annuncio tramite il modulo di [valutazione auto usata](/valutazione). L'annuncio non indica il prezzo finale di vendita.",
           "Un verdetto chiaro e senza giri di parole: Buon Affare, Tratta il Prezzo, oppure Evita l'Acquisto.",
           "Un Vehicle Health Score da 0 a 100, che misura lo stato di salute generale di motore, cambio, freni, elettronica e carrozzeria sulla base dei difetti storici documentati nell'[archivio affidabilità](/affidabilita).",
           "Il [calcolo esatto del bollo auto](/calcolo-bollo) per tutte le 20 regioni italiane, la stima dei [consumi reali di carburante](/consumi) e una checklist dettagliata per guidare l'ispezione dal vivo."
@@ -1375,145 +1926,6 @@ const initialGuides: Guide[] = [
     ]
   },
   {
-    "slug": "autoesperto-cerca-investitori-ai-auto-usate",
-    "title": "AutoEsperto cerca investitori: investi nel futuro dell'auto usata con l'intelligenza artificiale",
-    "description": "Un progetto italiano di intelligenza artificiale per valutare le auto usate cerca i primi investitori. Nessun minimo di investimento: aperto a tutti coloro che vogliono salire a bordo fin dall'inizio. Ecosistema completo con profilo digitale del veicolo, annunci per chi vende e un'AI che impara e cresce ogni giorno.",
-    "published": "2026-09-04",
-    "category": "valutazione",
-    "cta": "autoesperto-storia",
-    "image": "/images/guide/autoesperto-cerca-investitori-ai-auto-usate.jpg",
-    "readTime": "11 min",
-    "featured": true,
-    "sections": [
-      {
-        "heading": "Un mercato opaco da oltre 25 miliardi di euro all'anno in Italia",
-        "paragraphs": [
-          "Comprare o vendere un'automobile usata in Italia è un'esperienza che coinvolge ogni anno oltre 5,2 milioni di cittadini, per un volume economico transato che supera abbondantemente i 25 miliardi di euro secondo le rilevazioni ufficiali dell'ACI e del PRA.",
-          "Eppure, nonostante le dimensioni monumentali di questo mercato, la compravendita dell'usato è ancora afflitta da un'opacità strutturale senza pari nel panorama del commercio moderno: prezzi in vetrina gonfiati fino al 15% rispetto al reale valore di chiusura, timori fondati di chilometraggi scalati, difetti occulti mascherati con lucidature superficiali e un labirinto burocratico-fiscale fatto di bolli regionali disomogenei e severe limitazioni ambientali ZTL.",
-          "In questo contesto nasce [AutoEsperto.it](/): la prima piattaforma tecnologica italiana progettata per portare trasparenza radicale, perizia visiva istantanea e intelligenza decisionale nella compravendita di veicoli usati.",
-          "Oggi il progetto annuncia ufficialmente l'apertura del suo primo **Round di Raccolta Fondi (Obiettivo complessivo: € 150.000 – € 350.000)**, con una caratteristica fondamentale e trasparente: **non c'è alcun minimo di investimento**. Il round è aperto a chiunque voglia credere nel progetto e partecipare alla sua crescita futura, dai piccoli risparmiatori e appassionati con quote accessibili, fino a imprenditori, business angel e partner strategici nei settori automotive, tech e digitale."
-        ]
-      },
-      {
-        "heading": "La storia del fondatore: uno sviluppatore autonomo che ha creato tutto da solo",
-        "paragraphs": [
-          "Dietro la tecnologia di AutoEsperto non c'è un consorzio di concessionarie né un'azienda storica della Silicon Valley, ma la determinazione di un singolo ingegnere e costruttore software: **Ralfh Javier**, sviluppatore full-stack e AI builder indipendente con base a Siracusa.",
-          "Lavorando **in totale autonomia con le proprie forze e risorse** (attualmente libero professionista e pronto alla costituzione societaria), Ralfh ha progettato, addestrato e sviluppato l'intera architettura tecnologica di AutoEsperto, dimostrando un'efficienza economica del 100%:"
-        ],
-        "list": [
-          "**Zero sprechi di capitale in agenzie o consulenze esterne**: Ogni componente del sistema — dallo scanner di Computer Vision per la perizia danni alla complessa logica predittiva dei prezzi reali, dal calcolo bollo per tutte le 20 regioni italiane al frontend ultra-veloce a 60fps — è stato scritto e ingegnerizzato direttamente dal fondatore.",
-          "**Velocità di esecuzione decuplicata**: Mentre le aziende tradizionali e i giganti del settore impiegano mesi e budget enormi per sviluppare semplici prototipi, AutoEsperto ha messo online un'infrastruttura completa con oltre 2.400 allestimenti storici mappati (coprendo auto fino a 25 anni di età) e una suite di test con 26 verifiche automatizzate.",
-          "**Costituzione Startup Innovativa**: I capitali raccolti saranno utilizzati per costituire formalmente la **S.r.l. come Startup Innovativa**, consentendo a tutti gli investitori aderenti di beneficiare delle **detrazioni fiscali IRPEF/IRES al 30% - 50%** previste dalla legge italiana."
-        ]
-      },
-      {
-        "heading": "L'architettura proprietaria: Computer Vision, IQR predittivo e fiscalità su 20 regioni",
-        "paragraphs": [
-          "Il vantaggio tecnologico di AutoEsperto risiede nell'integrazione armoniosa di tre motori computazionali proprietari:"
-        ],
-        "list": [
-          "**Computer Vision Istantanea da Smartphone**: Caricando una foto dell'auto o incollando il link di un annuncio, l'intelligenza artificiale riconosce allestimento, generazione, stato visibile della carrozzeria e parti danneggiate, calcolando un preventivo indicativo per i ricambi e la manodopera.",
-          "**Fair Value Algoritmico Transato (Non di Vetrina)**: A differenza dei portali convenzionali che si limitano a mostrare i prezzi arbitrari richiesti dai venditori, l'algoritmo di AutoEsperto ripulisce gli annunci con il metodo dell'intervallo interquartile (IQR), esclude i prezzi civetta e determina il reale valore di scambio.",
-          "**Motore Fiscale e Territoriale Dedicato**: Il calcolo del valore e dei costi di possesso è parametrato sulle 20 regioni italiane, tenendo conto delle aliquote del bollo regionale, dei blocchi feriali per i Diesel (es. Milano Area B o Bacino Padano) e delle dinamiche di prezzo locali.",
-          "**Doppia Guida Tattica (Acquirente vs Venditore)**: Un cockpit interattivo che adatta i consigli a seconda che l'utente stia comprando (offrendo le 4 leve per abbassare il prezzo di € 400 - € 600) o vendendo (indicando il prezzo vetrina maggiorato del 9% per proteggere il margine di trattativa)."
-        ]
-      },
-      {
-        "heading": "La strategia di go-to-market: 100% gratuito per l'adozione, poi modello Freemium con perizia certificata",
-        "paragraphs": [
-          "La strategia di crescita commerciale di AutoEsperto è articolata in due fasi chiaramente definite e sinergiche:"
-        ],
-        "list": [
-          "**Fase 1 (Attuale: Piattaforma 100% Gratuita)**: Per abbattere qualsiasi barriera all'ingresso, creare un potente effetto passaparola e perfezionare gli algoritmi di machine learning con milioni di dati reali, il servizio è attualmente completamente accessibile a titolo gratuito. Questa scelta consente di consolidare un formidabile posizionamento SEO organico su migliaia di chiavi di ricerca senza dover spendere cifre ingenti in advertising a pagamento.",
-          "**Fase 2 (Post-Round: Lancio Stabile Freemium)**: Con il completamento del round di finanziamento e il rilascio stabile della piattaforma, verrà introdotto il modello Freemium bilanciato. La scansione base rimarrà gratuita, mentre le perizie approfondite, i dossier certificati in PDF con validità contrattuale per la trattativa e le visure cronologiche PRA in tempo reale faranno parte dei servizi premium on-demand (€ 4,90 – € 9,90)."
-        ]
-      },
-      {
-        "heading": "Modello di business diversificato: B2C, lead generation e B2B SaaS per concessionari",
-        "paragraphs": [
-          "Oltre alla monetizzazione diretta dei report certificati verso gli automobilisti privati, il modello economico prevede canali B2B ad altissima marginalità:"
-        ],
-        "list": [
-          "**Qualified Lead Generation**: Raccordo profilato dell'utente verso le officine e carrozzerie partner geolocalizzate, agenzie telematiche per il passaggio di proprietà e broker per polizze RC Auto e garanzie guasti.",
-          "**Piattaforma B2B SaaS per Dealer e Periti**: Cruscotto professionale per saloni automobilistici e concessionari per stimare istantaneamente il margine di ritiro sulle permute usate, prevedendo i tempi medi di rivendita sul mercato locale.",
-          "**Passaporto Digitale del Veicolo**: Fascicolo permanente condivisibile tramite QR Code, allineato alle normative europee sulla tracciabilità dei chilometri e delle scadenze manutentive."
-        ]
-      },
-      {
-        "heading": "Pubblicità e visibilità per chi vende: privati, concessionari e autosaloni",
-        "paragraphs": [
-          "Una delle fonti di ricavo più interessanti e immediate per AutoEsperto è la piattaforma pubblicitaria integrata dedicata a chi vende auto usate. Il concetto è semplice ma potente: ogni giorno migliaia di persone cercano su AutoEsperto il valore reale della propria auto prima di metterla in vendita. Questo traffico altamente qualificato — utenti con un'intenzione di vendita concreta e verificata — rappresenta un'audience pubblicitaria di enorme valore.",
-          "I venditori privati potranno promuovere il proprio annuncio direttamente sulla piattaforma, con inserzioni mirate che raggiungono compratori già informati sul reale valore di mercato del veicolo. A differenza di Subito.it o AutoScout24, dove l'annuncio si perde tra migliaia di inserzioni generiche, su AutoEsperto la pubblicità è contestuale e intelligente: viene mostrata agli utenti che stanno cercando esattamente quel tipo di auto, in quella fascia di prezzo, in quella zona geografica.",
-          "Per concessionari e autosaloni, il modello diventa ancora più redditizio. Potranno acquistare spazi pubblicitari premium per promuovere il proprio inventario, con annunci sponsorizzati che appaiono nelle ricerche di valutazione degli utenti. Un concessionario di Fiat a Milano, ad esempio, potrà comparire quando un utente milanese cerca il valore di una Fiat Panda usata — intercettando il momento esatto in cui il potenziale cliente decide di comprare o vendere."
-        ],
-        "list": [
-          "**Annunci sponsorizzati per privati**: Promozione del proprio veicolo con visibilità garantita a compratori qualificati, a partire da € 2,90 per 30 giorni.",
-          "**Vetrina Premium per concessionari**: Pagina dedicata con inventario completo, recensioni verificate e posizionamento privilegiato nelle ricerche degli utenti.",
-          "**Campagne geolocalizzate per autosaloni**: Targeting per provincia e regione per raggiungere solo i clienti nella propria area di competenza.",
-          "**Report di performance**: Dashboard con statistiche dettagliate su visualizzazioni, clic e contatti generati da ogni inserzione."
-        ]
-      },
-      {
-        "heading": "Il Profilo Digitale del Veicolo: il futuro della compravendita con un QR Code",
-        "paragraphs": [
-          "Immagina di avvicinarti a un'auto usata in un piazzale, puntare il telefono su un QR Code e avere immediatamente accesso a tutta la storia di quel veicolo: valore di mercato aggiornato in tempo reale, storico dei tagliandi, eventuali sinistri pregressi, costi annuali di mantenimento, scadenze assicurative e revisione, blocchi del traffico attivi nella tua zona. Questo è il Profilo Digitale del Veicolo di AutoEsperto, e rappresenta il futuro concreto della compravendita dell'usato.",
-          "Ogni veicolo analizzato su AutoEsperto genera automaticamente un profilo digitale permanente, accessibile tramite un QR Code unico. Questo profilo non è un semplice documento statico: è un fascicolo vivo che si aggiorna automaticamente con i nuovi dati di mercato, le variazioni di valore e le scadenze imminenti. Quando il proprietario decide di vendere l'auto, il profilo diventa uno strumento di vendita potentissimo: il compratore può verificare in totale autonomia e trasparenza tutto ciò che serve sapere, riducendo drasticamente la diffidenza che blocca il 40% delle trattative tra privati.",
-          "Ma la vera rivoluzione è nella trasferibilità: quando l'auto viene venduta, il Profilo Digitale si trasferisce automaticamente al nuovo proprietario, che continuerà ad arricchirlo con nuovi tagliandi, valutazioni e documenti. Con il tempo, ogni auto avrà una storia digitale completa e certificata — un vero e proprio 'curriculum vitae' del veicolo che ne certifica il valore e l'affidabilità nel tempo.",
-          "Chi vuole vendere direttamente dalla piattaforma potrà farlo con un semplice clic: il profilo digitale si trasforma in un annuncio di vendita completo, già precompilato con tutti i dati tecnici, la valutazione certificata e la documentazione disponibile. Il compratore non dovrà più fidarsi delle parole del venditore: avrà i dati."
-        ]
-      },
-      {
-        "heading": "Un'intelligenza artificiale che migliora ogni giorno: la nostra sfida ai giganti del settore",
-        "paragraphs": [
-          "AutoEsperto non è un prodotto finito: è un sistema di intelligenza artificiale che impara, si adatta e diventa più preciso con ogni singola analisi effettuata. Ogni auto scansionata, ogni prezzo confrontato, ogni feedback degli utenti alimenta gli algoritmi di machine learning, rendendo le valutazioni progressivamente più accurate e le previsioni di mercato sempre più affidabili. Più persone usano AutoEsperto, più il sistema diventa intelligente — un circolo virtuoso che crea un vantaggio competitivo crescente e difficile da replicare.",
-          "Il nostro obiettivo dichiarato è ambizioso ma concreto: costruire un ecosistema completo che includa tutti i dati di cui hai bisogno per qualsiasi decisione legata alla tua auto. Non solo il prezzo, ma i costi reali di gestione, la storia completa del veicolo, i confronti con modelli alternativi, le previsioni di svalutazione e persino il momento migliore per vendere o comprare in base ai trend stagionali.",
-          "Stiamo costruendo questo ecosistema per sfidare frontalmente i colossi del settore — AutoHero, AutoScout24, Subito.it, noicompriamoauto.it — con un approccio radicalmente diverso. Mentre queste piattaforme si limitano a fare da bacheca per annunci o ad acquistare auto a prezzi stracciati per rivenderle con margini opachi, AutoEsperto mette il potere nelle mani del consumatore. Noi non compriamo e rivendiamo auto: noi ti diamo gli strumenti per capire il vero valore della tua auto e per fare la scelta giusta.",
-          "La differenza fondamentale è nel modello: i giganti del settore guadagnano dall'opacità del mercato (comprando a poco e rivendendo a tanto), mentre AutoEsperto guadagna dalla trasparenza. Il nostro successo economico è direttamente legato alla soddisfazione dell'utente — e questo allineamento di interessi è ciò che rende il progetto sostenibile e scalabile nel lungo periodo."
-        ]
-      },
-      {
-        "heading": "Nessun minimo di investimento: aperto a tutti coloro che credono nel futuro del progetto",
-        "paragraphs": [
-          "A differenza dei classici round per addetti ai lavori, riservati a pochi grandi fondi con soglie d'ingresso inaccessibili da decine di migliaia di euro, per AutoEsperto abbiamo stabilito una regola semplice e democratica: **non c'è alcun minimo di investimento**.",
-          "Crediamo fortemente che chiunque voglia sostenere questa rivoluzione nel mercato dell'usato debba poter salire a bordo fin dal primo giorno. Che si tratti di un piccolo risparmiatore o appassionato che vuole investire un importo contenuto, di un automobilista che vuole far parte dell'ecosistema, o di un business angel e imprenditore che desidera entrare con quote importanti, ogni partecipazione ha pari valore strategico e pieno riconoscimento.",
-          "Tutti gli aderenti parteciperanno alla costituzione della **Startup Innovativa S.r.l.** con quote trasparenti e proporzionali all'importo versato, beneficiando delle **detrazioni fiscali IRPEF o deduzioni IRES fino al 50%** previste dalla normativa italiana a supporto delle startup innovative."
-        ],
-        "list": [
-          "**Nessuna soglia minima di ingresso**: Puoi decidere liberamente la cifra da destinare al progetto in base alle tue preferenze, senza alcun vincolo o barriera.",
-          "**Valutazione di ingresso favorevole**: Entrare nella fase iniziale permette di ottenere condizioni di valore nettamente più vantaggiose rispetto ai round successivi alla diffusione di massa.",
-          "**Agevolazione fiscale diretta**: Detrazione dalle imposte fino al 50% del capitale investito per i contribuenti italiani.",
-          "**Canale diretto con il fondatore**: Aggiornamenti periodici e trasparenti su metriche, sviluppo tecnologico e roadmap di crescita."
-        ]
-      },
-      {
-        "heading": "Il round di finanziamento (€150.000 – €350.000), detrazioni fiscali al 50% e allocazione fondi",
-        "paragraphs": [
-          "I capitali raccolti con la campagna di finanziamento saranno destinati a supportare la roadmap di sviluppo per i successivi 18 mesi con la seguente allocazione trasparente:"
-        ],
-        "list": [
-          "**50% – Digital Growth, Lancio al Grande Pubblico e Brand Awareness**: Campagne di posizionamento nazionale, partnership con creator automotive e acquisizione organica su larga scala.",
-          "**25% – Sviluppo App Mobile Nativa (iOS / Android)**: Rilascio dell'applicazione mobile con fotocamera AR per scansionare le auto usate direttamente nei piazzali dei concessionari.",
-          "**15% – Integrazioni Dati Ufficiali (ACI, PRA, Banche Dati Sinistri)**: Connessione telematica certificata con i registri PRA e le banche dati storiche sui sinistri pregressi.",
-          "**10% – Legal, Costituzione Societaria e Brevettazione**: Formalizzazione della Startup Innovativa S.r.l., protezione dei marchi e degli algoritmi di computer vision."
-        ]
-      },
-      {
-        "heading": "Contatti diretti per investitori e richiesta informazioni: ralfhjavier@gmail.com",
-        "paragraphs": [
-          "Chiunque sia interessato al progetto — sia per partecipare al round di raccolta fondi (senza alcun minimo di investimento richiesto), sia per valutare partnership strategiche o commerciali — può mettersi in contatto direttamente con il fondatore senza intermediari:",
-          "Garantiamo una risposta personale, trasparente e approfondita entro 24 ore."
-        ],
-        "list": [
-          "**Fondatore e Lead AI Engineer**: Ralfh Javier.",
-          "**Email diretta per investitori**: ralfhjavier@gmail.com.",
-          "**Oggetto consigliato**: AutoEsperto - Richiesta Investor Deck & Informazioni.",
-          "**Materiale informativo inviato su richiesta**: Investor Deck completo con metriche di trazione, piano di sviluppo tecnologico, modello finanziario e dettagli sulla costituzione della Startup Innovativa S.r.l.",
-          "**Demo e incontro conoscitivo**: Massima disponibilità per organizzare una videochiamata (Google Meet / Zoom) con demo live della piattaforma, walk-through dell'infrastruttura di Computer Vision e confronto strategico sul piano di crescita."
-        ]
-      }
-    ]
-  },
-  {
     "slug": "auto-usata-10-segnali-problema-annuncio",
     "title": "Auto usata: 10 segnali che l’annuncio nasconde un problema",
     "description": "Come capire se stai trovando un vero affare o se stai per comprare un’auto che potrebbe costarti migliaia di euro: i 10 segnali d'allarme prima di lasciare una caparra e la verifica con il metodo AutoEsperto.",
@@ -1534,7 +1946,7 @@ const initialGuides: Guide[] = [
         "heading": "1. Il prezzo è molto più basso degli altri annunci simili",
         "paragraphs": [
           "Questo è il campanello d'allarme principale che dovrebbe indurre alla massima prudenza.",
-          "Se trovi un veicolo proposto a una cifra inferiore del 20% o 30% rispetto alla quotazione media di mercato per quell'anno e chilometraggio, non si tratta quasi mai di generosità del venditore. Il confronto non va fatto sui desideri, ma confrontando il prezzo con il [valore reale di mercato](/valutazione) di modelli comparabili:"
+          "Se trovi un veicolo proposto a una cifra molto inferiore rispetto agli annunci di modelli simili per anno e chilometraggio, verifica con attenzione la documentazione, le condizioni e la storia del veicolo. Il confronto con una stima indicativa non sostituisce i controlli sul singolo esemplare:"
         ],
         "list": [
           "Anno esatto di prima immatricolazione del veicolo.",
@@ -1651,7 +2063,7 @@ const initialGuides: Guide[] = [
         "heading": "10. Il prezzo sembra giusto, ma nessuno ha verificato l'annuncio nel suo complesso",
         "paragraphs": [
           "Valutare un singolo parametro isolato non è sufficiente per fare un acquisto sicuro: un veicolo può avere un prezzo apparentemente congruo ma soffrire di problemi congeniti documentati nella nostra guida ai [difetti noti dei motori](/motori-problemi), avere costi proibitivi per i ricambi o essere soggetto a severi [blocchi del traffico](/blocchi-traffico).",
-          "Prima di firmare qualsiasi impegno, utilizza l'[Analizzatore di Annunci di AutoEsperto](/analizza-annuncio): inserisci il link dell'inserzione per ottenere un'analisi integrata su prezzo reale, affidabilità meccanica e le domande specifiche da porre al venditore per condurre la trattativa con successo."
+          "Prima di firmare qualsiasi impegno, utilizza l'[Analizzatore di Annunci di AutoEsperto](/analizza-annuncio): inserisci il link dell'inserzione per ottenere un confronto indicativo del prezzo, informazioni sull'affidabilità e domande da porre al venditore."
         ]
       }
     ]
@@ -1716,7 +2128,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -1833,7 +2245,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -1898,7 +2310,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -1951,7 +2363,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -2056,7 +2468,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -2121,7 +2533,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -2197,72 +2609,98 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
   },
   {
     "slug": "auto-usata-100000-km-conviene-comprare",
-    "title": "Auto usata con 100.000 km: conviene comprarla nel 2026? La verità su durata e manutenzione",
-    "description": "Ha ancora senso acquistare un'auto usata con 100.000 km? Quali motori durano oltre 300.000 km, quali componenti sostituire e come trattare sul prezzo.",
+    "title": "Auto usata con 100.000 km: quando conviene comprarla",
+    "description": "Un’auto usata con 100.000 km conviene? Valuta età, manutenzione, tipo di motore e lavori in arrivo con un metodo pratico per confrontare due offerte.",
     "image": "/images/guide/auto-usata-100000-km-conviene-comprare.jpg",
     "published": "2026-08-27",
     "category": "acquisto",
     "cta": "auto-usata-affare",
     "sections": [
       {
-        "heading": "Il mito psicologico dei 100.000 km nell'era dei motori moderni",
+        "heading": "Centomila chilometri non sono una data di scadenza",
         "paragraphs": [
-          "Per decenni, nell'immaginario collettivo degli automobilisti italiani, la cifra a cinque zeri sul contachilometri ha rappresentato una sorta di data di scadenza insuperabile, oltre la quale un'automobile era considerata vecchia e prossima alla rottamazione.",
-          "Nel 2026 questa convinzione è ampiamente superata: grazie ai progressi nella metallurgia dei monoblocchi, alla precisione micrometrica delle tolleranze d'accoppiamento e alla superiorità chimica degli oli sintetici moderni, un motore ben manutenuto a 100.000 km ha superato appena un quarto o un terzo della sua vita operativa utile.",
-          "Tuttavia, comprare un'auto usata con 100.000 km richiede di saper distinguere tra i motori capaci di raggiungere 350.000 km senza difficoltà e quelli che a questo traguardo presentano problemi strutturali gravi."
+          "Un’auto con 100.000 km può essere un acquisto sensato oppure una spesa difficile da sostenere. Il numero sul cruscotto, da solo, non permette di sapere quanta vita resti a motore, cambio e altri componenti. Non significa né “appena finito il rodaggio” né “ormai da rottamare”: va letto insieme a età, impiego, manutenzione e condizioni dell’esemplare.",
+          "**Il punto AutoEsperto:** compra la storia documentata e lo stato del veicolo, non una promessa di arrivare a 300.000 km. Il confronto utile è tra ciò che paghi oggi, ciò che dovrai fare a breve e quanto quell’auto sia adatta ai tuoi percorsi. Non esiste una percentuale di vita residua ricavabile dividendo i chilometri per una durata teorica del motore."
         ]
       },
       {
-        "heading": "I motori che a 100.000 km hanno appena completato il rodaggio",
+        "heading": "Età e utilizzo cambiano il significato della percorrenza",
         "paragraphs": [
-          "Se la vettura monta uno di questi propulsori collaudati, il traguardo dei 100.000 km non deve destare alcuna preoccupazione:"
+          "Centomila chilometri in quattro anni e la stessa distanza in quattordici raccontano impieghi diversi. Il primo dato corrisponde a circa 25.000 km annui, il secondo a poco più di 7.000. Sono medie aritmetiche, non prove che la prima auto abbia viaggiato in autostrada o che la seconda sia stata usata soltanto in città.",
+          "Chiedi al proprietario quali tragitti facesse, per quanto tempo la vettura sia rimasta ferma e come sia stata mantenuta. Confronta le risposte con documenti e condizioni osservabili. Lunghi periodi di inutilizzo non equivalgono automaticamente a buona conservazione; tanti chilometri non dimostrano da soli un uso gravoso. Per ogni affermazione importante cerca un riscontro e annota ciò che non puoi verificare."
+        ]
+      },
+      {
+        "heading": "Parti dai documenti, non dalla reputazione del motore",
+        "paragraphs": [
+          "Prima della visita chiedi anno, versione esatta, motorizzazione e fatture degli interventi. Cerca una sequenza di date e percorrenze, distinguendo i semplici cambi d’olio dalle sostituzioni di componenti. Un timbro può essere utile, ma la descrizione del lavoro ti aiuta a capire che cosa sia stato realmente eseguito.",
+          "Confronta anche le letture disponibili delle revisioni. La [guida ai controlli sui chilometri scalati](/guide/contachilometri-scalato-come-riconoscerlo) spiega come costruire una cronologia e quali limiti abbia. Se la manutenzione è incompleta, non compensare il vuoto dicendo che “quel motore è indistruttibile”: chiedi un controllo mirato e valuta se il prezzo giustifichi l’incertezza."
+        ]
+      },
+      {
+        "heading": "Quali lavori controllare vicino ai 100.000 km",
+        "paragraphs": [
+          "Non esiste un tagliando identico per tutte le auto a questa percorrenza. Alcune operazioni dipendono dai chilometri, altre dal tempo o dalle condizioni d’uso. Recupera il piano di manutenzione della versione corretta e chiedi all’officina di confrontarlo con lo storico. Per esempio, le [FAQ manutenzione Toyota](https://www.toyota.it/faq/manutenzione) rimandano al libretto di manutenzione e garanzia della vettura: il principio è usare il documento pertinente, senza trasferire le scadenze di un modello a un altro.",
+          "Un lavoro appena eseguito non cancella il resto della manutenzione. Una frizione nuova, per esempio, non racconta lo stato dei freni o dell’impianto di raffreddamento. Chiedi perché sia stata sostituita e conserva la fattura con i componenti coinvolti."
         ],
         "list": [
-          "**1.5 dCi Renault / Dacia / Nissan / Mercedes (K9K)**: Turbodiesel a 8 valvole proverbiale per affidabilità, bassi consumi e longevità che supera regolarmente i 350.000 km.",
-          "**1.9 e 2.0 Multijet / JTDm Fiat-Alfa**: Motori indistruttibili con basamento in ghisa e testate ad altissima resistenza termica.",
-          "**1.4 D-4D e Powertrain Full Hybrid Toyota (1.5 e 1.8 HSD)**: Distribuzione a catena robusta e cambio e-CVT privo di frizione meccanica tradizionale, motorino d'avviamento o alternatore.",
-          "**2.0 TDI Gruppo Volkswagen (EA288)**: Diesel da grandi percorrenze autostradali con eccezionale tenuta meccanica.",
-          "**1.2 Fire 8v Fiat**: Il motore a benzina più semplice, robusto ed economico da manutenere della storia automobilistica italiana."
+          "**Distribuzione:** identifica il sistema e verifica le prescrizioni e gli eventuali lavori documentati; non presumere che ogni cinghia scada a 100.000 km o che ogni catena sia esente da controlli.",
+          "**Cambio:** accerta quale trasmissione sia montata e quali operazioni siano previste per quella versione.",
+          "**Freni e pneumatici:** fai valutare lo stato reale, non la sola data dell’ultima fattura.",
+          "**Liquidi e filtri:** verifica le scadenze previste e gli interventi effettivamente registrati.",
+          "**Sospensioni, sterzo e perdite:** richiedi un’ispezione quando rumori o comportamento suggeriscono un problema."
         ]
       },
       {
-        "heading": "I motori dove 100.000 km rappresentano invece una soglia critica",
+        "heading": "Benzina, diesel, ibrida ed elettrica: cambia la domanda",
         "paragraphs": [
-          "Al contrario, ci sono propulsori che proprio attorno ai 90.000-110.000 km manifestano criticità note che possono richiedere interventi da migliaia di euro:"
-        ],
-        "list": [
-          "**1.2 PureTech Stellantis (Cinghia a Bagno d'Olio)**: La cinghia tende a degradarsi a contatto con la benzina nell'olio, intasando la pompa del vuoto e la succhiarola dell'olio.",
-          "**1.4 TSI Volkswagen prima generazione (EA111 a Catena)**: Problemi noti di allungamento catena di distribuzione e usura del tenditore idraulico.",
-          "**2.0d N47 BMW (2007-2014)**: Catena di distribuzione posizionata sul lato posteriore del motore verso l'abitacolo, soggetta a rotture che richiedono lo smontaggio completo del propulsore.",
-          "**1.6 THP Prince (Peugeot / Citroën / MINI)**: Consumo anomalo di olio lubrificante e depositi carboniosi pesanti sulle valvole d'aspirazione."
+          "Su un’auto a benzina approfondisci manutenzione, avviamento, consumi anomali segnalati e interventi specifici della motorizzazione. Su un diesel chiedi anche come sia stato utilizzato e quali interventi risultino sui sistemi di trattamento dei gas di scarico. La scritta “diesel da grandi percorrenze” non dimostra che l’esemplare sia adatto ai tuoi brevi tragitti quotidiani.",
+          "Su un’ibrida considera il sistema completo, compresa la batteria di trazione. Su un’elettrica, 100.000 km non indicano da soli la capacità rimasta: chiedi un rapporto sullo stato della batteria, come sia stato ottenuto e quali limiti abbia. L’autonomia visualizzata sul cruscotto dipende anche dall’uso recente e dalle condizioni; non è una misura autonoma dello stato di salute della batteria.",
+          "Per ibride plug-in ed elettriche verifica inoltre funzionamento e dotazione di ricarica. Chiedi le condizioni applicabili dell’eventuale garanzia residua, senza dedurle dal solo anno o dal marchio. Un controllo della batteria e una garanzia sono informazioni diverse: il primo descrive un esito tecnico, la seconda stabilisce coperture e condizioni."
         ]
       },
       {
-        "heading": "La checklist degli interventi obbligatori a 100.000 km",
+        "heading": "Cosa chiedere al meccanico prima di comprare",
         "paragraphs": [
-          "A questa percorrenza, verifica tassativamente nelle fatture d'officina che siano stati eseguiti questi lavori straordinari:"
-        ],
-        "list": [
-          "Sostituzione kit cinghia di distribuzione, tenditori e pompa dell'acqua (scadenza tipica ogni 5-6 anni o 100.000-120.000 km).",
-          "Sostituzione olio e lavaggio del cambio automatico (in particolare su DSG, S tronic o cambi a convertitore).",
-          "Controllo spessore dischi freno anteriori e stato di usura delle pastiglie.",
-          "Verifica dell'efficienza degli ammortizzatori e dei silent block dei bracci oscillanti."
+          "Porta un elenco di dubbi: storico incompleto, rumore alla partenza, manutenzione in scadenza o un intervento raccontato senza documenti. Chiedi di distinguere tre gruppi: difetti da affrontare subito, lavori programmabili e aspetti che richiedono altre verifiche. Un rapporto utile indica anche i limiti dell’ispezione, soprattutto quando non sono previsti smontaggi.",
+          "Per preparare la visita puoi consultare i [controlli ACI prima dell’acquisto](https://www.lautomobile.aci.it/attualita/auto-usate-cosa-controllare-prima-dellacquisto-la-guida-in-7-passi/). Una prova breve e una diagnosi senza errori non certificano l’assenza di guasti futuri. Ti servono però per trasformare impressioni vaghe in domande e preventivi più precisi."
         ]
       },
       {
-        "heading": "Come sfruttare i 100.000 km nella trattativa sul prezzo",
+        "heading": "Confronta due auto con il costo d’ingresso",
         "paragraphs": [
-          "Se il venditore non è in grado di esibire la fattura fiscale del cambio cinghia di distribuzione o del tagliando completo, usa questa mancanza come solida argomentazione per pretendere uno sconto immediato tra i 500 € e i 900 €.",
-          "Usa il nostro tool di [valutazione auto usate](/valutazione) per verificare la quotazione esatta parametrata al chilometraggio del veicolo."
+          "Somma prezzo richiesto, spese di acquisto e lavori già identificati. Tieni separati i costi certi dai dubbi ancora aperti: assegnare arbitrariamente 500 euro a un rumore non diagnosticato rende il confronto solo apparentemente preciso. Chiedi preventivi con operazioni, IVA e condizioni chiaramente indicate.",
+          "**Esempio ipotetico, non quotazione di mercato:** due auto comparabili costano rispettivamente 9.000 e 10.000 euro. Sulla prima risultano 1.400 euro di lavori preventivati; sulla seconda 300 euro. Prima delle spese comuni, il confronto diventa 10.400 contro 10.300 euro. La prima non è necessariamente più economica, anche se l’annuncio lo suggerisce. Restano da confrontare condizioni, documenti e caratteristiche delle due vetture."
+        ]
+      },
+      {
+        "heading": "Come trattare sul prezzo senza inventare sconti",
+        "paragraphs": [
+          "Porta nella trattativa fatti verificabili: un lavoro prescritto in scadenza, un difetto diagnosticato o pneumatici da sostituire secondo il controllo. Evita di chiedere una riduzione automatica soltanto perché l’auto ha superato una cifra tonda. Anche l’assenza di documenti va discussa come incertezza, non trasformata in un costo certo senza riscontri.",
+          "La [valutazione AutoEsperto](/valutazione) può orientare il confronto se inserisci anno, chilometri, versione e alimentazione corretti. Leggi sempre fonte e limiti della stima. Il prezzo richiesto in altri annunci non equivale al prezzo concluso di vendita e non sostituisce il preventivo dei lavori dell’auto che stai valutando."
+        ]
+      },
+      {
+        "heading": "Quando proseguire e quando fermarsi",
+        "paragraphs": [
+          "Prosegui quando la storia è plausibile, l’ispezione chiarisce i punti importanti e il costo totale rientra nel tuo budget senza assorbirlo completamente. Approfondisci quando mancano documenti o non è chiaro l’intervento necessario. Fermati se ti viene chiesto di pagare prima di chiarire contraddizioni rilevanti o se non puoi far controllare un problema che incide sulla decisione.",
+          "La scelta corretta può essere un’auto con più chilometri ma meglio documentata, oppure una con meno strada e costi più adatti a te. Questa guida non stabilisce un vincitore per fascia chilometrica: ti aiuta a capire che cosa rende sostenibile il singolo acquisto."
         ]
       }
+    ],
+    "updated": "2026-09-28",
+    "readTime": "6 min",
+    "editorialNote": "Guida della redazione AutoEsperto aggiornata il 28 settembre 2026. Fonti tecniche e istituzionali sono collegate nei passaggi pertinenti. Esempi numerici, quando presenti, sono ipotetici; controlli visivi e indicazioni editoriali non sostituiscono una diagnosi o una perizia sul singolo veicolo.",
+    "sources": [
+      "https://www.toyota.it/faq/manutenzione",
+      "https://www.lautomobile.aci.it/attualita/auto-usate-cosa-controllare-prima-dellacquisto-la-guida-in-7-passi/"
     ]
   },
   {
@@ -2386,7 +2824,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -2590,61 +3028,56 @@ const initialGuides: Guide[] = [
   },
   {
     "slug": "passaporto-digitale-veicolo-regolamento-ue-2026-1738",
-    "title": "Passaporto Digitale del Veicolo (Regolamento UE 2026/1738): cos'è, quando entra in vigore e cosa cambia per l'usato",
-    "description": "Guida completa al nuovo Regolamento UE 2026/1738 sul Passaporto Digitale di Circolarità del Veicolo: dati obbligatori, storico chilometri, salute della batteria (SoH), date di entrata in vigore e impatto sulle compravendite di auto usate.",
+    "title": "Passaporto digitale di circolarità del veicolo: cosa prevede il regolamento UE",
+    "description": "Dal 2032 il regolamento UE prevede un passaporto digitale di circolarità per i veicoli immessi sul mercato. Scopri cosa contiene e cosa verificare per un'auto usata.",
     "image": "/images/guide/passaporto-digitale-veicolo-regolamento-ue-2026-1738.jpg",
     "published": "2026-08-25",
+    "updated": "2026-10-29",
+    "sources": [
+      "https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX%3A32026R1738"
+    ],
+    "editorialNote": "Guida verificata sul testo del regolamento (UE) 2026/1738, in particolare sulle disposizioni relative al passaporto digitale di circolarità. Le specifiche tecniche sono soggette agli atti di esecuzione previsti dalla normativa.",
     "category": "acquisto",
     "cta": "passaggio-proprieta",
     "sections": [
       {
-        "heading": "Il nuovo quadro normativo europeo (Regolamento UE 2026/1738)",
+        "heading": "Che cos'è il passaporto digitale di circolarità?",
         "paragraphs": [
-          "Pubblicato nella Gazzetta Ufficiale dell'Unione Europea il 24 luglio 2026, il Regolamento (UE) 2026/1738 introduce formalmente il Passaporto Digitale del Veicolo (Digital Vehicle Passport / DPP), una delle riforme più incisive della direttiva europea sull'economia circolare e la tutela del consumatore nel settore automotive.",
-          "La normativa risponde a una criticità storica del mercato unico dell'usato: secondo le stime della Commissione Europea, le frodi sul contachilometri e i danni strutturali non dichiarati costano agli automobilisti europei oltre 8,7 miliardi di euro all'anno, con un picco particolarmente elevato nelle importazioni transfrontaliere (es. vetture importate da Germania, Belgio o Francia)."
+          "Il regolamento (UE) 2026/1738 riguarda la progettazione circolare dei veicoli e la gestione dei veicoli fuori uso. Prevede un passaporto digitale di circolarità per mettere a disposizione informazioni utili, fra l'altro, alla rimozione e alla sostituzione sicura di parti e componenti.",
+          "È uno strumento ambientale legato alle informazioni del costruttore: non è una garanzia che l'auto sia priva di guasti o incidenti e non sostituisce una verifica prima dell'acquisto."
         ]
       },
       {
-        "heading": "1. Quali dati contiene obbligatoriamente il Passaporto Digitale",
+        "heading": "Quando è previsto e quali informazioni contiene?",
         "paragraphs": [
-          "Il passaporto digitale è un fascicolo telematico unico associato al numero di telaio (VIN) del veicolo, strutturato su registri digitali interoperabili a livello unionale. Le informazioni obbligatorie comprendono:",
-          "• Tracciabilità chilometrica certificata: registrazione a ogni revisione ministeriale periodica, passaggio di proprietà e intervento presso officine autorizzate, rendendo impossibile lo \"schilometraggio\" prima della rivendita.",
-          "• Certificato State of Health (SoH) per batterie di trazione: per veicoli 100% elettrici (BEV) e ibridi plug-in (PHEV), il passaporto traccia la capacità residua reale della batteria, il numero di cicli di ricarica rapida DC effettuati e lo storico termico.",
-          "• Registro interventi e riparazioni strutturali: indicazione obbligatoria di incidenti gravi che abbiano intaccato montanti, longheroni o telaio, con verifica della conformità di ripristino.",
-          "• Impronta di carbonio e passaporto di circolarità: composizione dei materiali riciclabili, presenza di terre rare e conformità alle classi di emissione Euro in condizioni reali di guida (RDE)."
+          "Il regolamento stabilisce che, dal 1° settembre 2032, ogni veicolo immesso sul mercato sia munito del passaporto digitale di circolarità. Le disposizioni tecniche e le condizioni di accesso sono demandate ad atti di esecuzione della Commissione, previsti entro il 14 agosto 2030.",
+          "Il passaporto è previsto come accessibile gratuitamente. Il testo include informazioni sulla rimozione e sostituzione di parti, informazioni relative a determinate sostanze, dichiarazioni sul contenuto riciclato e il catalogo ufficiale dei ricambi del tipo di veicolo. Il regolamento prevede l'interoperabilità con altri passaporti ambientali applicabili."
         ]
       },
       {
-        "heading": "2. Date di applicazione ed entrata in vigore graduale",
+        "heading": "Comprende chilometri, incidenti e tagliandi?",
         "paragraphs": [
-          "L'applicazione del Regolamento UE 2026/1738 segue una roadmap progressiva definita per consentire l'adeguamento tecnico a costruttori, motorizzazioni e operatori:",
-          "• Entrata in vigore della normativa generale: 20 giorni dalla pubblicazione in GUUE (agosto 2026).",
-          "• Obbligo per i costruttori su veicoli di nuova omologazione: implementazione standardizzata del chip/QR Code di bordo e dei protocolli API entro 24 mesi.",
-          "• Interconnessione registri nazionali dell'usato (MCTC, PRA, CAR-PASS, RDW): piena operatività della banca dati europea unificata prevista per la fine della fase transitoria."
+          "L'elenco previsto per il passaporto di circolarità non istituisce un registro universale dei chilometri, degli incidenti o dei tagliandi. Non bisogna quindi presumere che una scansione del passaporto certifichi la storia completa dell'auto o impedisca frodi.",
+          "Altre norme, documenti o servizi possono contenere informazioni diverse, comprese quelle relative alle batterie; disponibilità e accesso dipendono dallo strumento specifico. Controlla sempre la fonte, il veicolo e le condizioni di accesso."
         ]
       },
       {
-        "heading": "3. Cosa cambia concretamente per chi compra un'auto usata",
+        "heading": "Cosa controllare se acquisti un'auto usata oggi",
+        "list": [
+          "Confronta il numero di telaio e i documenti del veicolo con i dati forniti dal venditore.",
+          "Chiedi fatture e documentazione delle manutenzioni, verificando date e chilometraggi disponibili.",
+          "Consulta le informazioni ufficiali disponibili su revisioni e stato amministrativo attraverso i servizi competenti.",
+          "Fai controllare l'auto da un professionista indipendente e prova il veicolo prima di firmare o versare una caparra."
+        ],
         "paragraphs": [
-          "Per l'acquirente privato, il passaporto digitale rappresenta una rivoluzione di trasparenza:",
-          "1. Azzeramento del rischio truffe chilometriche: consultando il passaporto tramite scansione QR o verifica targa/VIN, l'acquirente ottiene la curva di progressione dei chilometri senza doversi fidare unicamente del libretto cartaceo o delle dichiarazioni del venditore.",
-          "2. Valutazione oggettiva delle auto elettriche usate: la trasparenza sullo stato di salute della batteria (SoH) elimina la paura di acquistare un EV con pacco batterie degradato, consentendo di calcolare il reale valore residuo di mercato.",
-          "3. Verdetto pre-acquisto immediato: incrociando i dati ufficiali del passaporto con i prezzi medi degli annunci reali (come fa l'algoritmo di AutoEsperto), è possibile stabilire istantaneamente se l'offerta è un affare, è a prezzo di mercato o nasconde anomalie."
+          "Questi controlli aiutano a individuare incongruenze, ma nessun documento da solo esclude tutti i difetti nascosti."
         ]
       },
       {
-        "heading": "4. I vantaggi per chi vende: valorizzazione e velocità",
+        "heading": "Il Profilo Digitale Auto di AutoEsperto è il passaporto UE?",
         "paragraphs": [
-          "Chi vende un'auto dotata di passaporto digitale con manutenzioni verificate e storico chiaro gode di un vantaggio competitivo netto:",
-          "• Difesa del prezzo di vendita: le auto usate con storico digitale certificato registrano un premio di valore compreso tra il +8% e il +15% rispetto a modelli comparabili privi di documentazione.",
-          "• Tempi di compravendita dimezzati: la totale trasparenza abbatte i dubbi e le negoziazioni al ribasso da parte di potenziali compratori diffidenti."
-        ]
-      },
-      {
-        "heading": "5. Come anticipare la normativa con il Profilo Digitale Auto di AutoEsperto",
-        "paragraphs": [
-          "In attesa che l'infrastruttura governativa centrale completi l'interconnessione, gli automobilisti italiani possono già creare gratuitamente il proprio Profilo Digitale Auto permanente su AutoEsperto:",
-          "Caricando il libretto di circolazione (riconosciuto via AI OCR), è possibile archiviare fatture dei tagliandi, scadenze bollo/revisione, e generare un QR Code Trasparente da mostrare all'acquirente in fase di vendita."
+          "Il Profilo Digitale Auto è uno strumento privato di AutoEsperto per organizzare e condividere informazioni sul proprio veicolo. Non è il passaporto digitale di circolarità istituito dal regolamento UE, né certifica automaticamente la veridicità delle informazioni inserite.",
+          "Per capire quali dati saranno disponibili nel passaporto regolamentare e come accedervi, occorre seguire il regolamento e le successive specifiche della Commissione europea."
         ]
       }
     ]
@@ -2720,130 +3153,125 @@ const initialGuides: Guide[] = [
   },
   {
     "slug": "auto-usate-sotto-3000-euro-guida",
-    "title": "Migliori Auto Usate Sotto i 3.000 Euro: Modelli Affidabili e Costi Reali",
-    "description": "Guida all'acquisto economico: citycar robuste, motori indistruttibili e cosa controllare prima del passaggio.",
+    "title": "Auto usata sotto 3.000 euro: cosa controllare prima di comprare",
+    "description": "Come valutare un'auto usata economica: budget per passaggio e riparazioni, verifiche PRA, revisione e controllo meccanico prima dell'acquisto.",
     "image": "/images/guide/auto-usate-sotto-3000-euro-guida.jpg",
     "published": "2026-08-28",
+    "updated": "2026-10-29",
     "category": "acquisto",
     "cta": "car-finder",
+    "sources": [
+      "https://aci.gov.it/pratica-auto/passaggio-di-proprieta-informazioni-utili/",
+      "https://www.aci.it/servizi/come-posso-sapere-se-sulla-mia-auto-e-stato-iscritto-o-e-stato-cancellato-un-fermo-amministrativo-o-un-pignoramento/"
+    ],
+    "editorialNote": "Le procedure su passaggio e vincoli rimandano alle fonti ACI indicate. I prezzi degli annunci e i costi di riparazione cambiano: chiedi preventivi riferiti al veicolo specifico.",
     "sections": [
       {
-        "heading": "Comprare un'auto a 3.000 euro nel 2026: aspettative e modelli migliori",
+        "heading": "Cosa aspettarsi con un budget di 3.000 euro",
         "paragraphs": [
-          "Nel mercato dell'usato del 2026, trovare un'auto funzionante e sicura sotto i 3.000 euro richiede una strategia chiara: privilegiare la semplicità meccanica, la reperibilità dei pezzi di ricambio a basso costo e la totale assenza di elettronica superflua.",
-          "A questo livello di prezzo non si acquista per l'estetica o lo status, ma per la robustezza strutturale e il costo irrisorio di mantenimento."
-        ],
+          "Con un budget limitato è utile confrontare auto diverse senza decidere solo dalla marca o dal chilometraggio. Età, manutenzione, corrosione, disponibilità dei ricambi e restrizioni alla circolazione possono incidere sulla scelta e sui costi successivi.",
+          "Un prezzo basso non dimostra che l'auto sia un affare: tieni una parte del budget per il passaggio e per gli interventi che un controllo indipendente potrebbe individuare. Non esiste un modello o un motore indistruttibile."
+        ]
+      },
+      {
+        "heading": "Come dividere il budget: un esempio",
+        "paragraphs": [
+          "Se i 3.000 euro sono il limite complessivo, un esempio di pianificazione è destinare 2.000 euro all'auto, 500 euro a passaggio e pratiche e 500 euro a controlli o interventi iniziali. Sono importi illustrativi, non preventivi: se le spese effettive risultano superiori occorre ridurre il prezzo dell'auto o rinunciare.",
+          "Prima di accordarti, chiedi un preventivo per il passaggio e, con targa e dati del veicolo, per la polizza. Considera anche bollo, carburante, pneumatici e un margine per imprevisti. L'IPT varia in base al veicolo e alla provincia; ACI elenca i costi e le procedure nella fonte in fondo alla pagina."
+        ]
+      },
+      {
+        "heading": "Quali auto confrontare",
+        "paragraphs": [
+          "Nella ricerca puoi confrontare piccole auto diffuse come Fiat Panda e Punto, Toyota Yaris o Ford Fiesta, verificando prima se esistono esemplari nel tuo budget nella tua zona. Sono esempi da cercare, non una classifica né una garanzia di prezzo, disponibilità o affidabilità.",
+          "Per ogni annuncio annota anno, motore, chilometraggio dichiarato, numero di proprietari, dotazioni di sicurezza e manutenzioni documentate. Confronta esemplari simili; non paragonare automaticamente allestimenti o condizioni molto diversi."
+        ]
+      },
+      {
+        "heading": "Controlli prima di lasciare una caparra",
         "list": [
-          "**Fiat Panda seconda serie (169, 2003-2012)**: con il collaudatissimo motore 1.2 Fire da 60 o 69 CV. Manutenzione facilissima, costi di ricambio minimi e consumi urbani contenuti.",
-          "**Fiat Punto Classic / Grande Punto 1.2 benzina**: spaziosa, comoda e riparabile da qualsiasi meccanico con componenti di concorrenza economici.",
-          "**Toyota Yaris prima e seconda serie (1.0 VVT-i benzina)**: leggendaria affidabilità giapponese con distribuzione a catena e bassissima propensione ai guasti.",
-          "**Ford Fiesta quinta serie (1.2 o 1.4 benzina 16V Zetec)**: telaio solido, ottima tenuta di strada e motorizzazioni robuste che superano agevolmente i 200.000 km."
-        ]
-      },
-      {
-        "heading": "Cosa controllare prima di versare un euro su auto molto economiche",
-        "paragraphs": [
-          "Un'auto venduta a 2.500-3.000 euro può nascondere riparazioni imminenti che superano il suo stesso valore d'acquisto.",
-          "Ecco i controlli prioritari da effettuare sul posto:"
+          "**Documenti e identità:** confronta la targa e il numero di telaio con i documenti; verifica chi vende e chi è intestatario.",
+          "**Vincoli:** il servizio ACI di verifica vincoli richiede targa, tipo di veicolo e codice fiscale di un intestatario; segnala l'eventuale presenza di vincoli. Per i dettagli può essere necessaria una visura a pagamento.",
+          "**Revisione e chilometraggio:** verifica le informazioni di revisione disponibili sul Portale dell'Automobilista e confrontale con fatture e libretto manutenzioni. Le registrazioni disponibili non garantiscono da sole la storia completa.",
+          "**Prova e officina:** concorda una prova su strada in sicurezza e una verifica presso un meccanico indipendente. Fai controllare freni, gomme, perdite, frizione, corrosione e distribuzione secondo il piano del costruttore.",
+          "**Caparra e accordo:** chiarisci per iscritto importo, condizioni e documentazione della vendita prima di versare denaro. Se il venditore non consente verifiche ragionevoli, valuta di interrompere la trattativa."
         ],
-        "list": [
-          "**Guarnizione della testata**: apri il tappo dell'olio a motore freddo (non deve esserci maionese color cappuccino) e controlla che nel vaso d'espansione del refrigerante non ci siano bolle d'aria o tracce oleose.",
-          "**Ruggine e corrosione strutturale sotto scocca**: controlla i longheroni sottoporta, i duomi degli ammortizzatori e i passaruota; la ruggine perforante compromette la sicurezza e fa bocciare l'auto alla revisione.",
-          "**Stato e slittamento della frizione**: inserisci la 3ª marcia a freno a mano tirato e rilascia lentamente la frizione; se il motore non si spegne subito, il disco frizione è finito (costo sostituzione: 350-500 €).",
-          "**Data e scadenza della cinghia di distribuzione**: anche se l'auto ha pochi km, se la cinghia ha più di 6 o 7 anni va sostituita subito (costo: 300-450 € con pompa acqua)."
+        "paragraphs": [
+          "Un controllo visivo o una singola prova non possono diagnosticare con certezza una guarnizione difettosa o la vita residua della frizione. Non aprire il circuito del refrigerante a motore caldo e lascia la diagnosi a un professionista."
         ]
       },
       {
-        "heading": "Costi accessori reali da sommare al prezzo dell'usato",
+        "heading": "Quando conviene continuare la ricerca",
         "paragraphs": [
-          "Non commettere l'errore di spendere tutto il tuo budget per l'acquisto del veicolo.",
-          "Metti sempre in conto i costi burocratici e un tagliando di ripristino per viaggiare tranquilli:"
-        ],
-        "list": [
-          "**Passaggio di proprietà**: tra 350 € e 550 € a seconda dei kW di potenza e della provincia di residenza.",
-          "**Maxi-tagliando iniziale**: preventivare circa 250-350 € per cambio olio, filtro olio, filtro aria, candele e liquido freni.",
-          "**Stato degli pneumatici**: 4 gomme nuove economiche montate costano tra 200 € e 300 €; gomme lisce o vetrificate vanno sostituite immediatamente.",
-          "**Verifica revisione ministeriale**: controlla sul Portale dell'Automobilista lo storico dei chilometri registrati nelle ultime revisioni e la data di scadenza biennale."
-        ]
-      },
-      {
-        "heading": "Consigli pratici prima dell'acquisto",
-        "paragraphs": [
-          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
-          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
-          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
-        ]
-      },
-      {
-        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
-        "paragraphs": [
-          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Confronta il prezzo richiesto con il budget residuo dopo pratiche e preventivi. Un'auto da 2.200 euro che richiede subito interventi costosi può superare il limite complessivo; allo stesso modo una documentazione incompleta lascia rischi che una stima online non può eliminare.",
+          "Se servono riparazioni, fatti indicare per iscritto cosa è urgente, cosa può essere programmato e quale intervallo di spesa prevede l'officina. Per un'altra prospettiva consulta la [guida alle auto con 100.000 km](/guide/auto-usata-100000-km-conviene-comprare)."
         ]
       }
     ]
   },
   {
     "slug": "auto-usate-sotto-5000-euro-scelta",
-    "title": "Migliori Auto Usate Sotto i 5.000 Euro: Quale Scegliere nel 2026",
-    "description": "Le migliori occasioni sul mercato dell'usato tra i 3.000 e i 5.000 euro con spese di gestione ridotte.",
+    "title": "Auto usata sotto 5.000 euro: come scegliere e cosa verificare",
+    "description": "Come confrontare auto usate entro 5.000 euro: budget completo, controlli sul veicolo, documenti e differenze tra acquisto da privato e professionista.",
     "image": "/images/guide/auto-usate-sotto-5000-euro-scelta.jpg",
     "published": "2026-08-28",
+    "updated": "2026-10-29",
     "category": "acquisto",
     "cta": "car-finder",
+    "sources": [
+      "https://aci.gov.it/pratica-auto/acquisto-di-un-veicolo-consigli-e-cautele/",
+      "https://aci.gov.it/pratica-auto/passaggio-di-proprieta-informazioni-utili/",
+      "https://www.consilium.europa.eu/it/policies/consumer-protection-shopping-rights/",
+      "https://www.ilportaledellautomobilista.it/web/portale-automobilista/dettaglio-news/-/asset_publisher/V57QhEdoCmc7/content/verifica-revisioni-effettuate"
+    ],
+    "editorialNote": "I riferimenti ACI, UE e Portale dell’Automobilista riguardano documenti, tutele e revisioni. L’esempio economico è illustrativo: chiedi preventivi per il veicolo e verifica le condizioni di vendita applicabili.",
     "sections": [
       {
-        "heading": "Analisi del mercato e criteri di scelta per Auto Usate Sotto i 5.000 Euro: Quale Scegliere nel 2026",
+        "heading": "Come scegliere con 5.000 euro complessivi",
         "paragraphs": [
-          "Orientarsi nell'acquisto di un'auto usata affrontando il tema di Auto Usate Sotto i 5.000 Euro: Quale Scegliere nel 2026 richiede dati oggettivi, conoscenza delle dinamiche di mercato e un approccio razionale alle reali esigenze di utilizzo quotidiano.",
-          "Nel mercato automobilistico italiano del 2026, l'offerta è ampia ma disomogenea: confrontare allestimenti, motorizzazioni e classi ambientali è indispensabile per fare un vero affare ed evitare fregature."
-        ],
+          "La scelta dipende dall’uso previsto e dalle condizioni dell’esemplare, non solo dal modello. Per tragitti brevi in città valuta dimensioni, accesso alle zone a traffico limitato e costi assicurativi; se percorri molti chilometri considera consumi, manutenzione documentata e confortevolezza su strada.",
+          "Prima di valutare gli annunci decidi se 5.000 euro sono il prezzo massimo dell’auto o il budget totale. Nel secondo caso occorre riservare denaro anche a passaggio di proprietà, assicurazione, manutenzione iniziale e imprevisti."
+        ]
+      },
+      {
+        "heading": "Un esempio di budget da adattare ai preventivi",
+        "paragraphs": [
+          "Esempio puramente illustrativo: su 5.000 euro complessivi puoi riservare 3.800 euro all’auto, 500 euro a passaggio e pratiche e 700 euro a controlli o manutenzione iniziale. Queste somme non sono tariffe e non comprendono necessariamente l’assicurazione: se i preventivi reali superano le riserve, riduci il prezzo di acquisto o continua la ricerca.",
+          "Il costo del passaggio comprende componenti variabili come l’IPT e può cambiare in base a provincia, veicolo e modalità della pratica. Chiedi un preventivo dettagliato e consulta le informazioni ACI collegate in fondo alla guida."
+        ]
+      },
+      {
+        "heading": "Come confrontare gli annunci",
         "list": [
-          "**Fasce di prezzo reali di mercato**: valutazione delle quotazioni effettive desunte dagli annunci reali, depurate da rincari e sovrastime dei venditori.",
-          "**Scelta della motorizzazione ideale**: bilanciamento tra chilometraggio annuo previsto, blocchi del traffico locali (Euro 5/Euro 6) e costi vivi di carburante.",
-          "**Dotazioni e sicurezza**: preferire veicoli dotati di sistemi di sicurezza attiva avanzata (ESP, frenata autonoma, monitoraggio angolo cieco) e compatibilità Apple CarPlay/Android Auto.",
-          "**Rivendibilità futura**: modelli e brand che mantengono un'alta richiesta sul mercato dell'usato garantendo una svalutazione più lenta."
-        ]
-      },
-      {
-        "heading": "Punti critici da ispezionare prima di firmare il contratto o lasciare caparre",
-        "paragraphs": [
-          "La fretta è la peggiore nemica dell'acquirente di auto usate. Un'ispezione approfondita di 20 minuti fa risparmiare migliaia di euro in future riparazioni:",
-          "Segui questa sequenza ordinata di verifiche sul veicolo:"
+          "**Stessi criteri:** annota anno, chilometri, alimentazione, cambio, allestimento e prezzo richiesto; confronta esemplari con caratteristiche e condizioni simili.",
+          "**Documenti:** chiedi documento di circolazione, ricevute delle manutenzioni e prova degli interventi dichiarati. Identifica le scadenze di cinghia o catena applicabili a quel motore nel piano del costruttore.",
+          "**Uso e restrizioni:** verifica la classe ambientale e le regole di accesso della tua città. Non tutti gli annunci riportano correttamente la classe o le dotazioni.",
+          "**Disponibilità:** un modello conosciuto può essere un punto di partenza per la ricerca; prezzo, condizioni e disponibilità cambiano per zona e momento."
         ],
-        "list": [
-          "**Controllo chilometraggio reale**: confronta i km dichiarati nel quadro con le revisioni storiche registrate sul Portale dell'Automobilista e l'usura di volante, pedali e sedile guida.",
-          "**Verifica carrozzeria e allineamento pannelli**: differenze di tonalità della vernice, fessure irregolari tra parafanghi e portiere o residui di verniciatura sulle guarnizioni indicano incidenti riparati.",
-          "**Test drive su strada**: prova l'auto su asfalto irregolare per cogliere rumori di braccetti o sospensioni, e testa frizione, cambio e frenata decisa in rettilineo.",
-          "**Controllo fluidi ed emissioni**: verifica che l'olio non sia esausto, che il refrigerante sia limpido e che dallo scarico non esca fumo bluastro (olio) o bianco denso a motore caldo."
+        "paragraphs": [
+          "Il prezzo di un annuncio è una richiesta del venditore, non la prova del prezzo effettivo di vendita. Anche una valutazione online è una stima da confrontare con l’auto reale."
         ]
       },
       {
-        "heading": "Garanzie legali, tutela dell'acquirente e costi di passaggio",
+        "heading": "Controlli prima di pagare",
         "paragraphs": [
-          "Nel rapporto di compravendita, la legge italiana riconosce tutele precise a favore di chi compra:",
-          "Ecco come far valere i tuoi diritti e calcolare il budget finale completo:"
-        ],
-        "list": [
-          "**Garanzia legale di conformità (24 o 12 mesi)**: obbligatoria per legge su acquisti da venditori professionali ai sensi del Codice del Consumo; non può essere esclusa da clausole \"vista e piaciuta\".",
-          "**Compravendita tra privati (Art. 1490 Codice Civile)**: garanzia per vizi occulti non dichiarati dal venditore, ma con onere della prova a carico dell'acquirente.",
-          "**Calcolo del passaggio di proprietà (IPT)**: calcola anticipatamente l'importo della trascrizione in base ai kW del veicolo e alla provincia di residenza.",
-          "**Secondo parere AutoEsperto**: carica una foto o il link dell'annuncio su AutoEsperto per ricevere il Trust Score indipendente prima di prendere la decisione definitiva."
+          "ACI suggerisce di verificare la situazione giuridica del veicolo e la corrispondenza tra il numero di telaio e i documenti. Il servizio gratuito ACI segnala l’eventuale presenza di vincoli usando targa, tipo di veicolo e codice fiscale di un intestatario; per informazioni dettagliate può servire una visura PRA a pagamento.",
+          "Il Portale dell’Automobilista consente di consultare le revisioni effettuate dopo il 1° giugno 2018. Confronta le informazioni disponibili con i documenti di manutenzione: non costituiscono una certificazione completa della storia dell’auto.",
+          "Concorda un’ispezione presso un meccanico indipendente e una prova su strada in sicurezza. Chiedi un preventivo scritto per eventuali interventi, senza dedurre da una foto l’assenza di danni o problemi meccanici."
         ]
       },
       {
-        "heading": "Consigli pratici prima dell'acquisto",
+        "heading": "Privato o professionista: cosa cambia",
         "paragraphs": [
-          "Prima di concludere qualsiasi trattativa per un'auto usata, è fondamentale seguire una procedura di verifica sistematica che molti acquirenti, presi dall'entusiasmo, tendono a trascurare. Il primo passo è sempre la visura PRA, che permette di verificare l'assenza di fermi amministrativi, ipoteche o gravami sul veicolo — un controllo che costa pochi euro ma può evitare problemi legali enormi.",
-          "Il secondo passaggio imprescindibile è la prova su strada, che andrebbe effettuata sia in città (per valutare frizione, cambio e sterzo a bassa velocità) sia in tangenziale o superstrada (per verificare stabilità, rumorosità e comportamento del motore sotto sforzo). Non limitarti a un giro del parcheggio: un test di almeno 20-30 minuti in condizioni reali di guida è il minimo indispensabile.",
-          "Infine, porta sempre con te un amico che se ne intende o, meglio ancora, prenota un controllo pre-acquisto presso un meccanico di fiducia indipendente dal venditore. La spesa di 50-80 euro per una diagnosi professionale è nulla rispetto al rischio di acquistare un veicolo con problemi meccanici nascosti che potrebbero costare migliaia di euro."
+          "Quando un consumatore acquista beni usati da un venditore professionista si applica la garanzia legale di conformità; secondo le regole UE, per l’usato può essere concordata una durata più breve, comunque non inferiore a un anno. Leggi condizioni e documenti prima della firma.",
+          "Una compravendita tra privati non è coperta dalle stesse norme UE sulla vendita al consumatore. Conserva annuncio, accordi e ricevute e, se hai dubbi su difetti o clausole, chiedi assistenza qualificata."
         ]
       },
       {
-        "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
+        "heading": "Quando fermarsi e continuare la ricerca",
         "paragraphs": [
-          "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Una richiesta di pagamento prima di vedere il veicolo, documenti non coerenti o il rifiuto di consentire controlli ragionevoli meritano particolare cautela. Se i documenti o i costi non sono chiari, rinvia caparra e firma finché non hai le informazioni necessarie.",
+          "Per un budget più stretto trovi un esempio diverso nella [guida alle auto sotto 3.000 euro](/guide/auto-usate-sotto-3000-euro-guida). AutoEsperto può offrire una stima indicativa, ma non sostituisce visure e controlli professionali."
         ]
       }
     ]
@@ -2908,7 +3336,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -2973,7 +3401,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3039,7 +3467,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3104,7 +3532,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3169,7 +3597,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3234,7 +3662,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3299,7 +3727,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3364,7 +3792,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3429,7 +3857,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3494,7 +3922,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3559,7 +3987,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3624,7 +4052,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3689,7 +4117,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3754,7 +4182,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3819,7 +4247,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3884,7 +4312,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -3949,7 +4377,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4014,7 +4442,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4079,7 +4507,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4144,7 +4572,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4209,66 +4637,103 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
   },
   {
     "slug": "auto-usate-con-cambio-automatico",
-    "title": "Auto Usate con Cambio Automatico: Quale Scegliere e Quali Evitare",
-    "description": "Differenze tra convertitore di coppia, doppia frizione (DSG/EDC) e variatore continuo (CVT) sul mercato usato.",
+    "title": "Auto usata con cambio automatico: scelta e controlli",
+    "description": "Convertitore, doppia frizione, CVT o e-CVT? Come scegliere un’auto automatica usata, controllare manutenzione e funzionamento e valutare il costo totale.",
     "image": "/images/guide/auto-usate-con-cambio-automatico.jpg",
     "published": "2026-08-28",
     "category": "acquisto",
     "cta": "affidabilita-modello",
     "sections": [
       {
-        "heading": "Inquadramento tecnico e caratteristiche di Auto Usate con Cambio Automatico: Quale Scegliere e Quali Evitare",
+        "heading": "Parti dal cambio montato sull’auto, non dalla sigla nell’annuncio",
         "paragraphs": [
-          "L'analisi tecnica e l'affidabilità di Auto Usate con Cambio Automatico: Quale Scegliere e Quali Evitare rappresenta uno degli aspetti prioritari per chi valuta l'acquisto o la manutenzione di una vettura usata nel mercato italiano.",
-          "Comprendere il principio di funzionamento, le soluzioni ingegneristiche adottate dal costruttore e la tolleranza dei materiali sotto sforzo permette di prevenire guasti complessi e preservare il valore residuo del mezzo nel tempo."
-        ],
-        "list": [
-          "**Caratteristiche costruttive**: componenti progettati per bilanciare efficienza termodinamica, contenimento delle emissioni inquinanti e prestazioni su strada.",
-          "**Condizioni di impiego critiche**: percorsi urbani frequenti a motore freddo e cicli start&stop continui incrementano lo stress termico e l'usura abrasiva.",
-          "**Ruolo della lubrificazione**: il rispetto rigoroso della gradazione SAE e delle specifiche costruttore è fondamentale per proteggere gli organi meccanici in movimento.",
-          "**Tolleranza chilometrica**: componenti che richiedono monitoraggio preventivo superata la soglia dei 100.000 - 150.000 km."
+          "Due auto dello stesso modello possono avere cambi differenti secondo motore, anno e versione. La scritta “automatico” ti dice che non devi gestire normalmente la frizione, ma non basta per capire comportamento, manutenzione o possibili interventi. Prima di confrontare due offerte, identifica la trasmissione dell’esemplare con i documenti tecnici e, se necessario, con il telaio tramite l’assistenza.",
+          "**Il punto AutoEsperto:** la domanda utile non è quale cambio sia indistruttibile. È quale configurazione risponda al tuo uso e quanto sia documentata la manutenzione dell’auto che stai guardando. Una reputazione positiva della famiglia di cambi non sostituisce il controllo del singolo veicolo."
         ]
       },
       {
-        "heading": "Sintomi di usura, anomalie frequenti e diagnosi strumentale",
+        "heading": "Le principali famiglie: cosa cambia per chi guida",
         "paragraphs": [
-          "Riconoscere tempestivamente i segnali premonitori di malfunzionamento consente di intervenire prima che un guasto secondario provochi danni irreversibili.",
-          "Ecco le manifestazioni più frequenti da verificare con attenzione durante la marcia o con una diagnosi OBD2:"
+          "Le differenze tecniche diventano importanti quando fai manovra, ti muovi in coda o chiedi un’accelerazione. Usa questa mappa per orientarti, poi verifica la configurazione precisa: la stessa famiglia comprende progetti e generazioni diversi."
         ],
         "list": [
-          "**Vibrazioni o rumorosità anomale**: ticchettii metallici, sibili o strisciamenti che variano al variare del regime di rotazione del motore.",
-          "**Accensione di spie di segnalazione**: avvisi sul cruscotto accompagnati da tagli di potenza o funzionamento in modalità recovery (protezione centralina).",
-          "**Consumi anomali di fluidi**: calo anomalo del liquido di raffreddamento o consumo eccessivo di olio motore tra un tagliando e il successivo.",
-          "**Risposta al pedale e fluidità di marcia**: strappi, esitazioni in accelerazione o ritardi nella risposta dei comandi."
+          "**Automatico con convertitore di coppia:** utilizza un accoppiamento idraulico tra motore e trasmissione. Valuta progressività delle partenze e passaggi di rapporto; numero di marce e marchio del cambio non bastano a prevedere l’affidabilità.",
+          "**Doppia frizione:** gestisce due gruppi di rapporti con frizioni distinte. Il [DSG descritto da Volkswagen](https://www.volkswagen.it/it/auto-elettriche-e-ibride/auto-ibride.html) è un esempio. Esistono versioni differenti: non applicare a tutte le stesse scadenze o gli stessi giudizi.",
+          "**CVT tradizionale:** varia il rapporto in modo continuo. In accelerazione il regime motore può comportarsi diversamente da quello di un automatico con marce discrete; occorre distinguere il funzionamento previsto da un’anomalia.",
+          "**e-CVT di alcuni sistemi ibridi:** la denominazione non identifica necessariamente un CVT a cinghia. Il sistema full hybrid illustrato da Toyota utilizza un’architettura diversa; verifica quale tecnologia impieghi l’auto specifica.",
+          "**Manuale robotizzato:** automatizza frizione e innesti di una trasmissione derivata dal manuale. Pause avvertibili nel cambio marcia possono far parte del comportamento previsto, ma strattoni importanti richiedono una verifica."
         ]
       },
       {
-        "heading": "Costi medi di ripristino nel 2026 e consigli pratici per l'acquirente",
+        "heading": "CVT ed e-CVT: perché non vanno confusi",
         "paragraphs": [
-          "I costi di manutenzione e ricambio nel 2026 sono influenzati dalla disponibilità di componenti after-market certificati (OEM) e dai tempi di manodopera prescritti dai tempari ufficiali.",
-          "Segui queste indicazioni prima di acquistare o effettuare interventi straordinari:"
-        ],
-        "list": [
-          "**Richiedi lo storico documentato degli interventi**: le fatture con data e chilometraggio certificano la corretta cura della vettura nel tempo.",
-          "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
-          "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
-          "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+          "Nel [materiale Toyota sulla tecnologia full hybrid](https://www.toyota.it/content/dam/toyota/nmsc/italy/gamma/brochure-listino-prezzi/tecnologie/Minibrochure-HYBRID.pdf) viene spiegato il ruolo del rotismo epicicloidale e dei motori elettrici nella gestione della potenza. Non è corretto trasferire automaticamente a questo sistema i problemi o la manutenzione di un variatore tradizionale a cinghia.",
+          "Anche qui evita la conclusione opposta: una soluzione con meno componenti di un certo tipo non rende l’intera vettura esente da guasti. Su un’ibrida usata vanno considerati anche batteria di trazione, elettronica, raffreddamento e manutenzione. Chiedi documentazione sul veicolo completo, non soltanto una rassicurazione sul cambio."
         ]
       },
       {
-        "heading": "Verifica finale prima di firmare",
+        "heading": "Quale automatico scegliere per città, viaggi e manovre",
         "paragraphs": [
-          "Prima di versare qualsiasi caparra o firmare il contratto di vendita, effettua queste verifiche essenziali: controlla che il numero di telaio stampigliato sulla scocca corrisponda esattamente a quello riportato sul libretto di circolazione. Verifica che la targa non risulti rubata o clonata. Assicurati che il venditore sia effettivamente il proprietario risultante dal certificato di proprietà.",
-          "Se acquisti da un privato, pretendi sempre un contratto di compravendita scritto che includa: dati completi di entrambe le parti, descrizione del veicolo (targa, telaio, km), prezzo pattuito, dichiarazione del venditore sullo stato del veicolo e sull'assenza di vizi occulti noti. Questo documento ti tutela legalmente in caso di contestazioni successive."
+          "Se passi molto tempo in coda, durante la visita dedica attenzione alla partenza dolce, all’arresto e alle manovre lente. Se parcheggi in uno spazio stretto, verifica visibilità e facilità di dosare la velocità. Se fai lunghi tragitti, valuta comfort e risposta durante le normali variazioni di andatura: non serve guidare in modo aggressivo.",
+          "Prima della prova, scrivi due situazioni reali: per esempio la rampa del garage e il tragitto casa-lavoro. Chiedi di riprodurle in condizioni sicure o di provare percorsi comparabili. Un cambio rapidissimo nei passaggi di marcia può essere poco adatto alle tue preferenze in manovra; un funzionamento che inizialmente ti sembra insolito potrebbe invece risultare comodo dopo averne capito la logica."
+        ]
+      },
+      {
+        "heading": "Manutenzione: quali fatture cercare",
+        "paragraphs": [
+          "Chiedi il piano previsto per quel cambio, non una risposta generica come “l’olio dura tutta la vita”. Le [FAQ tecniche ZF sugli oli](https://aftermarket.zf.com/it/portale-aftermarket/domande-frequenti/domande-frequenti-oli/) rimandano alle indicazioni per le trasmissioni interessate e considerano anche l’impiego. Questo non stabilisce un intervallo universale per ogni automatico: il riferimento deve corrispondere al componente installato.",
+          "Nelle fatture cerca data, chilometri, specifica del fluido e descrizione dell’operazione. “Tagliando completo” potrebbe riferirsi soltanto al motore. Chiedi anche se siano stati eseguiti interventi su frizioni, attuatori o gestione elettronica e quali sintomi li avessero motivati. Una riparazione documentata è da comprendere, non da scartare automaticamente come segnale negativo."
+        ]
+      },
+      {
+        "heading": "Come provarlo a freddo e dopo il normale riscaldamento",
+        "paragraphs": [
+          "Concorda la visita in modo da conoscere le condizioni iniziali. Se l’auto è già stata usata, annotalo senza dedurne che il venditore nasconda un difetto. Prima di partire, fatti spiegare selettore, freno di stazionamento e modalità disponibili. Non sperimentare comandi sconosciuti durante la marcia.",
+          "Non passare da avanti a retromarcia con il veicolo in movimento e non tenere l’acceleratore premuto contro il freno per “testare la frizione”. Sono prove inadatte a una visita d’acquisto. Per il resto del veicolo segui la [guida alla prova su strada](/guide/prova-su-strada-auto-usata-cosa-controllare)."
+        ],
+        "list": [
+          "Da fermo, con il freno premuto, seleziona marcia avanti e retromarcia secondo il manuale: osserva eventuali colpi o ritardi insoliti.",
+          "Nelle partenze normali, nota vibrazioni ripetute, esitazioni e difficoltà nel dosare la spinta.",
+          "Durante la guida, ascolta cambiamenti anomali e verifica se compaiano avvisi sul quadro.",
+          "A fine percorso, ripeti una manovra semplice per capire se il comportamento sia cambiato."
+        ]
+      },
+      {
+        "heading": "Strattoni e ritardi: quando serve uno specialista",
+        "paragraphs": [
+          "Un sintomo non identifica da solo il componente da sostituire. Vibrazioni possono dipendere da più parti del veicolo; un comportamento insolito va descritto indicando quando compare, a quale temperatura e durante quale manovra. Evita diagnosi a distanza basate su una sola parola come “strappa”.",
+          "Se il venditore propone “basta cambiare l’olio”, chiedi una diagnosi e un preventivo prima di basare l’acquisto su quella soluzione. Un cambio olio non è una cura universale per un guasto. Uno specialista può verificare errori, funzionamento e interventi opportuni, specificando anche ciò che il controllo non riesce a escludere."
+        ]
+      },
+      {
+        "heading": "Confronta il costo totale, non soltanto il prezzo",
+        "paragraphs": [
+          "Metti sulla stessa riga prezzo d’acquisto, manutenzione documentata, lavori già diagnosticati e verifiche ancora da pagare. Per i problemi non chiariti non inventare una riserva fissa: chiedi prima quanto sia ampio il dubbio e se valga la pena proseguire. Un forte sconto può essere insufficiente quando non sai quale intervento occorra.",
+          "**Esempio ipotetico:** l’auto A costa 12.000 euro e ha un intervento identificato con preventivo di 900 euro; la B costa 12.600 euro e non ha quel lavoro in sospeso. Il confronto iniziale è 12.900 contro 12.600 euro, a parità delle altre condizioni. Questo calcolo non attribuisce un valore di mercato e non copre guasti futuri: mostra soltanto perché il prezzo dell’annuncio può ingannare."
+        ]
+      },
+      {
+        "heading": "Le tre risposte da avere prima della decisione",
+        "paragraphs": [
+          "Devi sapere quale cambio stai comprando, quali interventi risultano documentati e come si comporta l’esemplare nella prova. Se una risposta manca, aggiungila alla verifica in officina prima di firmare. Non scegliere né escludere una vettura soltanto perché una sigla ha buona o cattiva reputazione sui forum.",
+          "Nella [valutazione AutoEsperto](/valutazione) inserisci la versione e la trasmissione corrette e considera i limiti dichiarati della stima. Il prezzo orientativo serve a confrontare offerte simili; lo stato effettivo del cambio richiede la documentazione e il controllo del veicolo."
         ]
       }
+    ],
+    "updated": "2026-09-28",
+    "readTime": "6 min",
+    "editorialNote": "Guida della redazione AutoEsperto aggiornata il 28 settembre 2026. Fonti tecniche e istituzionali sono collegate nei passaggi pertinenti. Esempi numerici, quando presenti, sono ipotetici; controlli visivi e indicazioni editoriali non sostituiscono una diagnosi o una perizia sul singolo veicolo.",
+    "sources": [
+      "https://www.volkswagen.it/it/auto-elettriche-e-ibride/auto-ibride.html",
+      "https://www.toyota.it/content/dam/toyota/nmsc/italy/gamma/brochure-listino-prezzi/tecnologie/Minibrochure-HYBRID.pdf",
+      "https://aftermarket.zf.com/it/portale-aftermarket/domande-frequenti/domande-frequenti-oli/"
     ]
   },
   {
@@ -4332,7 +4797,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4397,7 +4862,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4462,7 +4927,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4527,7 +4992,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4592,7 +5057,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4657,7 +5122,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4722,7 +5187,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4787,7 +5252,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4852,7 +5317,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4917,7 +5382,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -4982,7 +5447,7 @@ const initialGuides: Guide[] = [
         "heading": "Errori comuni da evitare e come AutoEsperto ti aiuta",
         "paragraphs": [
           "L'errore più frequente nell'acquisto di un'auto usata è lasciarsi guidare esclusivamente dal prezzo di vendita senza calcolare i costi totali di possesso: bollo regionale, assicurazione RC Auto (che varia enormemente in base alla provincia di residenza e alla classe di merito), manutenzione ordinaria e straordinaria, consumo di carburante reale e eventuale perdita di valore nel tempo.",
-          "Con AutoEsperto puoi ottenere una stima trasparente e basata su dati reali del valore di mercato effettivo, non dei prezzi gonfiati che trovi negli annunci. La piattaforma analizza migliaia di inserzioni in tempo reale, filtra i prezzi anomali e ti restituisce il prezzo giusto — quello a cui l'auto si vende davvero, non quello che il venditore spera di ottenere."
+          "Con AutoEsperto puoi ottenere una stima indicativa e, quando disponibili, confrontarla con i prezzi richiesti negli annunci. Il risultato dipende dalla copertura e dalla qualità dei dati: il prezzo pubblicato non prova a quanto sarà conclusa la vendita."
         ]
       }
     ]
@@ -6419,59 +6884,99 @@ const initialGuides: Guide[] = [
   },
   {
     "slug": "vendere-auto-usata-incidentata-o-fusa",
-    "title": "Vendere Auto Usata Incidentata, Non Marciante o con Motore Fuso",
-    "description": "Valutazione per pezzi di ricambio, demolitori autorizzati e vendita a commercianti specializzati.",
+    "title": "Vendere un’auto incidentata o con motore fuso: come fare",
+    "description": "Auto incidentata, ferma o con motore guasto: come confrontare vendita, riparazione e demolizione, preparare l’annuncio e gestire documenti e ritiro.",
     "image": "/images/guide/vendere-auto-usata-incidentata-o-fusa.jpg",
     "published": "2026-08-28",
     "category": "vendita",
     "cta": "vendere-auto",
     "sections": [
       {
-        "heading": "Inquadramento tecnico e caratteristiche di Vendere Auto Usata Incidentata, Non Marciante o con Motore Fuso",
+        "heading": "Prima di venderla, chiarisci che cosa stai offrendo",
         "paragraphs": [
-          "L'analisi tecnica e l'affidabilità di Vendere Auto Usata Incidentata, Non Marciante o con Motore Fuso rappresenta uno degli aspetti prioritari per chi valuta l'acquisto o la manutenzione di una vettura usata nel mercato italiano.",
-          "Comprendere il principio di funzionamento, le soluzioni ingegneristiche adottate dal costruttore e la tolleranza dei materiali sotto sforzo permette di prevenire guasti complessi e preservare il valore residuo del mezzo nel tempo."
-        ],
-        "list": [
-          "**Caratteristiche costruttive**: componenti progettati per bilanciare efficienza termodinamica, contenimento delle emissioni inquinanti e prestazioni su strada.",
-          "**Condizioni di impiego critiche**: percorsi urbani frequenti a motore freddo e cicli start&stop continui incrementano lo stress termico e l'usura abrasiva.",
-          "**Ruolo della lubrificazione**: il rispetto rigoroso della gradazione SAE e delle specifiche costruttore è fondamentale per proteggere gli organi meccanici in movimento.",
-          "**Tolleranza chilometrica**: componenti che richiedono monitoraggio preventivo superata la soglia dei 100.000 - 150.000 km."
+          "Un’auto che non parte non è necessariamente un’auto con il motore fuso. E una vettura capace di muoversi dopo un incidente non è necessariamente sicura da guidare. Per decidere come venderla, separa tre informazioni: danni osservabili, diagnosi effettivamente eseguita e possibilità di movimentarla in sicurezza.",
+          "**Il punto AutoEsperto:** descrivi quello che sai e quello che resta da accertare. “Non si avvia, diagnosi non eseguita” è più utile di “basta una batteria” quando nessuno lo ha verificato. Una descrizione precisa aiuta a ottenere offerte confrontabili e riduce le discussioni al momento del ritiro."
         ]
       },
       {
-        "heading": "Sintomi di usura, anomalie frequenti e diagnosi strumentale",
+        "heading": "Vendita, riparazione e demolizione sono percorsi diversi",
         "paragraphs": [
-          "Riconoscere tempestivamente i segnali premonitori di malfunzionamento consente di intervenire prima che un guasto secondario provochi danni irreversibili.",
-          "Ecco le manifestazioni più frequenti da verificare con attenzione durante la marcia o con una diagnosi OBD2:"
-        ],
-        "list": [
-          "**Vibrazioni o rumorosità anomale**: ticchettii metallici, sibili o strisciamenti che variano al variare del regime di rotazione del motore.",
-          "**Accensione di spie di segnalazione**: avvisi sul cruscotto accompagnati da tagli di potenza o funzionamento in modalità recovery (protezione centralina).",
-          "**Consumi anomali di fluidi**: calo anomalo del liquido di raffreddamento o consumo eccessivo di olio motore tra un tagliando e il successivo.",
-          "**Risposta al pedale e fluidità di marcia**: strappi, esitazioni in accelerazione o ritardi nella risposta dei comandi."
+          "Se trovi un acquirente interessato alla vettura nelle condizioni attuali, si può valutare una vendita con le formalità appropriate. Un commerciante specializzato può stimare riparazione e rivendita, ma la sua proposta dipende dal rischio che assume e dai costi che prevede. Chiedi sempre chi acquista e quale operazione verrà effettuata.",
+          "Se invece il veicolo viene destinato alla demolizione, occorre seguire quel percorso tramite soggetti autorizzati e ottenere la documentazione prevista. La frase “la porto via per ricambi” non chiarisce se stai vendendo un veicolo o consegnandolo per la demolizione. Non lasciare questa distinzione a dopo il caricamento sul carro attrezzi."
         ]
       },
       {
-        "heading": "Costi medi di ripristino nel 2026 e consigli pratici per l'acquirente",
+        "heading": "Raccogli un dossier prima di chiedere offerte",
         "paragraphs": [
-          "I costi di manutenzione e ricambio nel 2026 sono influenzati dalla disponibilità di componenti after-market certificati (OEM) e dai tempi di manodopera prescritti dai tempari ufficiali.",
-          "Segui queste indicazioni prima di acquistare o effettuare interventi straordinari:"
+          "Prepara un unico insieme di informazioni da inviare ai soggetti interessati, proteggendo i dati personali non necessari. Le offerte diventano più confrontabili quando tutti valutano lo stesso stato del veicolo. Conserva una copia dell’annuncio e delle comunicazioni.",
+          "Se è coinvolta un’assicurazione, prima di autorizzare riparazione, vendita o demolizione chiarisci con chi gestisce il sinistro se siano necessari accertamenti e quali documenti conservare. Non presumere che un’offerta di acquisto sostituisca la gestione della pratica assicurativa."
         ],
         "list": [
-          "**Richiedi lo storico documentato degli interventi**: le fatture con data e chilometraggio certificano la corretta cura della vettura nel tempo.",
-          "**Esegui una scansione centralina approfondita**: verificare la presenza di codici errore memorizzati nello storico della memoria guasti (DTC).",
-          "**Verifica della garanzia legale di conformità**: per acquisti presso concessionari o rivenditori professionali, la garanzia copre i difetti di conformità per almeno 12 o 24 mesi.",
-          "**Valutazione preventiva con AutoEsperto**: calcola l'impatto economico delle manutenzioni future prima di definire la trattativa sul prezzo finale."
+          "Marca, modello, anno, motorizzazione, versione e lettura del contachilometri.",
+          "Foto generali e dettagli dei danni, senza nascondere le zone interessate.",
+          "Diagnosi e preventivi disponibili, con data e descrizione delle operazioni.",
+          "Informazioni sulla possibilità di avviare, sterzare o spostare il veicolo, soltanto se accertate.",
+          "Posizione dell’auto e accesso per il recupero: strada, cortile, garage o rampa.",
+          "Presenza di chiavi e documentazione, indicando ciò che manca."
         ]
       },
       {
-        "heading": "Come stabilire il prezzo giusto di vendita",
+        "heading": "Come capire quanto può valere un’auto danneggiata",
         "paragraphs": [
-          "Il prezzo di vendita ideale per un'auto usata è quello che attira contatti qualificati nel minor tempo possibile, senza svenderla. La regola pratica è partire dalla valutazione realistica di mercato (che puoi ottenere con AutoEsperto) e aggiungere un margine di trattativa del 8-12%. Questo ti dà spazio per negoziare con il compratore, che si aspetta sempre di 'ottenere uno sconto', senza partire da un prezzo irrealistico che scoraggia i contatti.",
-          "Attenzione a non sopravvalutare la tua auto per motivi affettivi: il valore sentimentale che attribuisci al tuo veicolo (i viaggi fatti, i ricordi, gli optional che hai scelto con cura) non si traduce in valore di mercato. Il compratore valuta l'auto per quello che è oggi, non per quello che ha rappresentato per te."
+          "Il prezzo di un esemplare funzionante è un riferimento iniziale, non il valore della tua auto meno un ricambio trovato online. Vanno considerati manodopera, diagnosi, trasporto, altri danni possibili e interesse reale degli acquirenti. Il valore teorico dei pezzi smontati non coincide con quanto qualcuno pagherà per il veicolo intero.",
+          "Chiedi più proposte scritte, specificando se siano definitive o subordinate alla visione. Verifica l’importo netto per te: un’offerta alta con recupero e altre voci a tuo carico può risultare peggiore di una proposta inferiore ma completa. Diffida soprattutto dei confronti in cui un acquirente valuta il veicolo descritto e un altro presume danni molto diversi."
+        ]
+      },
+      {
+        "heading": "Riparare prima di vendere: un confronto numerico",
+        "paragraphs": [
+          "Per confrontare le alternative usa somme ipotetiche solo come metodo, poi sostituiscile con preventivi e offerte effettivi. Il risultato della riparazione e il prezzo di vendita successivo devono restare ipotesi finché non sono sostenuti da elementi concreti.",
+          "**Esempio puramente illustrativo:** una proposta di acquisto nello stato attuale è di 2.200 euro, con recupero incluso. Riparare costa 3.000 euro e il possibile ricavo successivo è stimato in 5.500 euro: rimarrebbero 2.500 euro prima di trasporto, altre spese, tempi e imprevisti. Il vantaggio apparente di 300 euro può essere troppo ridotto per giustificare il rischio. Non è una regola generale: un altro preventivo o un’altra offerta cambiano la scelta."
+        ]
+      },
+      {
+        "heading": "Come scrivere l’annuncio senza minimizzare i difetti",
+        "paragraphs": [
+          "Metti la condizione già nel titolo: “non marciante”, “incidentata” o “motore guasto” solo quando la descrizione è corretta. Nel testo separa i danni confermati da quelli da diagnosticare. Indica se è necessario il trasporto e se il prezzo comprende qualcosa oltre al veicolo.",
+          "Un esempio da adattare ai fatti: «Auto non marciante. Dopo l’arresto del motore non è stata rimessa in moto; diagnosi disponibile dell’officina, allegabile alla trattativa. Danni visibili nelle fotografie. Recupero da concordare con mezzo idoneo». Evita “riparazione semplice”, “nessun altro problema” o “perfetta per ricambi” se non hai elementi per sostenerlo.",
+          "La formula “visto e piaciuto” non sostituisce una descrizione accurata e non va trattata come una protezione universale. Fai riportare per iscritto condizioni note, documenti consegnati e accordi sul ritiro. Per clausole o responsabilità controverse serve un parere sul caso concreto."
+        ]
+      },
+      {
+        "heading": "Documenti e trasferimento: cosa concordare",
+        "paragraphs": [
+          "Identifica il soggetto che acquista e verifica con uno Sportello Telematico dell’Automobilista o un’agenzia la procedura necessaria. La [guida ACI alla vendita di un veicolo](https://www.aci.it/servizi/devo-vendere-la-mia-auto-cosa-devo-fare/) ricorda la formalizzazione dell’atto e del passaggio negli archivi. Chiedi quali documenti servano nella tua situazione, soprattutto se qualcosa è smarrito o il veicolo presenta vincoli.",
+          "Accordati prima su costi e sequenza delle operazioni. La consegna delle chiavi non dimostra da sola che il trasferimento sia stato registrato. Conserva le ricevute e verifica l’esito della pratica; se acquista un operatore professionale, fatti spiegare l’operazione prevista e quali attestazioni riceverai. Non firmare moduli incompleti confidando che vengano sistemati successivamente."
+        ]
+      },
+      {
+        "heading": "Pagamento e recupero: evita sorprese al momento del ritiro",
+        "paragraphs": [
+          "Concorda chi organizza il recupero, chi lo paga e in quali condizioni l’offerta possa cambiare dopo l’ispezione. Comunica ostacoli e accessi difficili: un’auto in un garage interrato richiede una valutazione logistica diversa da una già accessibile in cortile. Non tentare avviamenti ripetuti o spostamenti improvvisati soltanto per agevolare il compratore.",
+          "Per il pagamento non affidarti a uno screenshot o a una ricevuta mostrata sul telefono dell’altra persona. Organizza con la tua banca le verifiche adatte al mezzo concordato prima della consegna. Raccogli una ricevuta con veicolo, soggetti, importo e data, insieme alla documentazione della pratica. Se l’acquirente propone all’ultimo momento condizioni differenti, chiariscile prima di far portare via l’auto."
+        ]
+      },
+      {
+        "heading": "Se scegli la demolizione",
+        "paragraphs": [
+          "Rivolgiti a un centro autorizzato e controlla in anticipo documenti, costi di recupero e adempimenti. Secondo le [indicazioni ACI sulla demolizione](https://www.aci.it/servizi/come-fare-per-demolire-lauto/), il demolitore rilascia il certificato di rottamazione e provvede alla cancellazione dagli archivi nei termini previsti. Conserva il certificato e verifica i dati del veicolo: non sostituirlo con una semplice promessa di occuparsi delle carte.",
+          "Se esistono vincoli o un fermo amministrativo, chiedi la verifica della procedura applicabile prima della consegna; non presumere che un danno grave li faccia sparire. Evita di smontare autonomamente il mezzo per vendere componenti e gestire i residui: la destinazione del veicolo e il trattamento dei materiali richiedono il percorso appropriato."
+        ]
+      },
+      {
+        "heading": "La decisione finale: scegli un’offerta chiara e documentata",
+        "paragraphs": [
+          "Metti a confronto il ricavo netto della vendita nello stato attuale, quello prudenzialmente ipotizzabile dopo la riparazione e il costo o le condizioni della demolizione. Se le cifre sono vicine, valuta anche tempi, incertezza e semplicità della gestione. Il miglior risultato non è sempre il prezzo più alto scritto in un messaggio.",
+          "Per organizzare la trattativa puoi leggere anche [come vendere un’auto da privato](/guide/come-vendere-auto-da-privato-guida-completa). Per un danno di carrozzeria ancora da valutare, la [guida a riparazione e preventivi](/guide/danno-carrozzeria-fai-da-te-o-carrozziere) aiuta a preparare domande precise senza trasformare una stima da foto in una diagnosi."
         ]
       }
+    ],
+    "updated": "2026-09-28",
+    "readTime": "6 min",
+    "editorialNote": "Guida della redazione AutoEsperto aggiornata il 28 settembre 2026. Fonti tecniche e istituzionali sono collegate nei passaggi pertinenti. Esempi numerici, quando presenti, sono ipotetici; controlli visivi e indicazioni editoriali non sostituiscono una diagnosi o una perizia sul singolo veicolo.",
+    "sources": [
+      "https://www.aci.it/servizi/devo-vendere-la-mia-auto-cosa-devo-fare/",
+      "https://www.aci.it/servizi/come-fare-per-demolire-lauto/"
     ]
   },
   {
@@ -6981,7 +7486,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -7095,7 +7600,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -7352,7 +7857,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -7537,7 +8042,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -7730,7 +8235,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -8043,7 +8548,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -8100,7 +8605,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -8221,7 +8726,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -8470,7 +8975,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -8591,7 +9096,7 @@ const initialGuides: Guide[] = [
         "heading": "Come viene calcolato il valore reale di un'auto usata",
         "paragraphs": [
           "Il valore reale di un'auto usata non è un numero fisso, ma una fascia di prezzo che dipende da decine di variabili interconnesse. I fattori principali sono l'anno di immatricolazione, il chilometraggio effettivo, l'allestimento specifico e la motorizzazione, ma incidono in modo significativo anche lo stato della carrozzeria, la completezza degli optional, la disponibilità dello storico manutentivo documentato e persino la regione in cui l'auto viene venduta.",
-          "AutoEsperto utilizza un algoritmo proprietario basato sull'intervallo interquartile (IQR) che analizza i prezzi reali di transazione — non quelli gonfiati degli annunci — per determinare una fascia di valore attendibile. Questo metodo statistico elimina automaticamente sia i prezzi civetta (inseriti artificialmente bassi per attirare clic) sia i prezzi eccessivamente alti di chi spera in un acquirente poco informato.",
+          "AutoEsperto può confrontare i prezzi richiesti negli annunci disponibili e filtrare valori anomali quando i dati lo consentono. Gli annunci non mostrano necessariamente i prezzi finali di vendita e il risultato resta una stima indicativa: verifica condizioni, chilometraggio e dotazioni del singolo veicolo.",
           "La differenza tra il prezzo medio di vendita reale e il prezzo medio degli annunci in Italia oscilla tipicamente tra il 10% e il 18%: questo significa che se un'auto è pubblicizzata a 12.000 euro, il suo valore di chiusura reale potrebbe attestarsi intorno ai 10.000-10.800 euro. Conoscere questo dato prima della trattativa ti mette in una posizione negoziale enormemente più forte."
         ]
       },
@@ -8976,7 +9481,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -9033,7 +9538,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -9218,7 +9723,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -9339,7 +9844,7 @@ const initialGuides: Guide[] = [
         "heading": "Come AutoEsperto calcola il valore reale e perché è diverso dalle quotazioni tradizionali",
         "paragraphs": [
           "Le quotazioni tradizionali (Eurotax, Quattroruote) si basano su panel di operatori e su modelli statistici che riflettono il valore teorico di un veicolo in condizioni standard. Il problema è che nessun veicolo usato è davvero 'standard': ogni auto ha la sua storia, il suo chilometraggio specifico, i suoi optional, il suo stato di manutenzione e le sue peculiarità regionali.",
-          "AutoEsperto utilizza un approccio radicalmente diverso: analizza in tempo reale migliaia di annunci effettivi sul mercato italiano, filtra statisticamente i prezzi anomali con il metodo dell'intervallo interquartile (IQR) e calcola il prezzo reale a cui quel modello specifico, con quelle caratteristiche specifiche, si vende davvero nella zona di interesse. Il risultato è una valutazione molto più aderente alla realtà di mercato rispetto alle quotazioni standard, che per loro natura non possono tenere conto della variabilità locale e stagionale."
+          "AutoEsperto può confrontare la stima con i prezzi richiesti negli annunci disponibili per modelli simili. Il campione e la corrispondenza possono variare; i prezzi pubblicati non sono prezzi di vendita conclusi e la valutazione resta indicativa."
         ]
       }
     ]
@@ -13649,9 +14154,127 @@ const initialGuides: Guide[] = [
       }
     ]
   }
+,
+  {
+    "slug": "auto-cinesi-italia-2026-nuovi-marchi-conviene-preoccuparsi",
+    "title": "Auto cinesi in Italia nel 2026: quali marchi arrivano e dobbiamo preoccuparci?",
+    "description": "BYD, Geely, Omoda, Jaecoo, Leapmotor e Zeekr stanno ampliando l’offerta italiana. Ecco chi è già presente, cosa cambia per chi compra e i controlli da fare su rete, ricambi, garanzia e valore futuro.",
+    "published": "2026-10-05",
+    "updated": "2026-10-05",
+    "category": "acquisto",
+    "cta": "analizza-annuncio",
+    "ctaType": "analizza-annuncio",
+    "image": "/images/guide/auto-cinesi-italia-2026-nuovi-marchi-conviene-preoccuparsi.svg",
+    "readTime": "25 min",
+    "featured": true,
+    "editorialNote": "Articolo del Team AutoEsperto aggiornato al 5 ottobre 2026. Distingue comunicazioni dei costruttori, dati UNRAE e valutazioni Euro NCAP; le condizioni commerciali possono cambiare. Fonti consultate il 5 ottobre 2026 e collegate nel testo.",
+    "sources": [
+      "https://www.unrae.it/index.php/dati-statistici/immatricolazioni/7816/immatricolazioni-di-autovetture-per-marca-settembre-2026",
+      "https://geelyitalia.com/news/un-anno-di-geely-in-italia/",
+      "https://press-it.zeekr.eu/zeekr-e-jameel-motors-italia-annunciano-lancio-in-italia-del-brand-globale-di-veicoli-elettrici-p",
+      "https://www.media.stellantis.com/it-it/leapmotor/press/leapmotor-leader-del-mercato-elettrico-in-italia-porta-a-rom-e-2026-le-nuove-b05-e-b03x",
+      "https://cheryautoitalia.com/chery-italy-nuova-identita-omoda-jaecoo/",
+      "https://www.fawcar.it/",
+      "https://www.euroncap.com/assessments/leapmotor/b10/1217/",
+    "https://eur-lex.europa.eu/eli/reg_impl/2024/2754/oj/ita",
+      "https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32026D0328"
+    ],
+    "sections": [
+      {
+        "heading": "In breve: una scelta in più, con verifiche da fare come per ogni auto",
+        "paragraphs": [
+          "La presenza dei costruttori cinesi in Italia non è più una promessa lontana. Alcuni marchi hanno già una rete commerciale e modelli in vendita; altri stanno appena organizzando la distribuzione o ampliando la gamma. La differenza conta: un annuncio di arrivo non equivale a un’auto ordinabile, consegnabile e assistibile vicino a casa.",
+          "Per chi compra, l’ingresso di nuovi concorrenti può portare più scelta, tecnologie elettrificate e prezzi competitivi. I rischi da valutare riguardano soprattutto continuità della rete, ricambi, tempi di riparazione, software, garanzia e valore dell’usato. Sono verifiche concrete, non un motivo per scartare un’auto in base alla nazionalità del marchio.",
+          "**Il punto AutoEsperto:** non chiederti soltanto “è cinese?”. Chiedi chi vende e ripara quel modello nella tua zona, quali condizioni sono scritte in garanzia e quanto costa mantenerlo per gli anni in cui pensi di tenerlo."
+        ],
+        "list": []
+      },
+      {
+        "heading": "Quali marchi cinesi sono già in Italia e quali stanno crescendo",
+        "paragraphs": [
+          "BYD e MG sono già nomi riconoscibili; OMODA e JAECOO, marchi del gruppo Chery, hanno avviato le vendite italiane nel 2024. Anche Geely è entrata nel mercato nel 2025 con EX5 e Starray EM-i. Nel luglio 2026 il distributore ha riferito oltre 3.000 contratti nel primo anno e una rete di circa 70 punti vendita e assistenza: sono dati comunicati dal marchio, utili per capire la sua espansione ma non una misurazione indipendente della qualità del servizio.",
+          "Leapmotor è un caso particolare: il costruttore è cinese, ma opera in Italia con il supporto commerciale e industriale di Stellantis. Nel 2026 ha allargato l’offerta con la compatta elettrica B05 e il crossover B03X, mentre la B10 è proposta anche in versione REEV, con motore termico usato per estendere l’autonomia. La rete Stellantis è un elemento da verificare sul modello e sull’officina specifica: non significa che ogni riparazione o ricambio sia automaticamente disponibile in ogni sede.",
+          "Zeekr, marchio elettrico premium del gruppo Geely, ha annunciato l’ingresso in Italia nel febbraio 2026 tramite Jameel Motors, con ordini previsti per X, 7X e 001. Il comunicato iniziale è una conferma del piano commerciale; prima di firmare controlla quali showroom e centri assistenza siano effettivamente operativi nella tua provincia.",
+          "Un altro cambiamento riguarda Chery: il 1° ottobre 2026 la società italiana che gestisce OMODA e JAECOO ha annunciato il passaggio alla denominazione CHERY ITALY e una strategia multibrand. Non vuol dire che i due marchi spariscano: la comunicazione parla di identità comune e posizionamenti distinti. Per i proprietari contano le istruzioni ufficiali su garanzia, ricambi e assistenza di ciascun modello."
+        ],
+        "list": []
+      },
+      {
+        "heading": "Arrivano anche marchi meno conosciuti: distinguere il piano dalla disponibilità",
+        "paragraphs": [
+          "FAW Bestune è un esempio utile di quanto sia facile confondere un catalogo pubblicato con un lancio completato. Il sito dell’importatore italiano elenca modelli Bestune e altri marchi, ma indica che dati tecnici, dotazioni e disponibilità sono indicativi e in attesa di conferma per il mercato italiano. Finché non sono pubblicati listino definitivo, rete attiva, tempi di consegna e condizioni di garanzia, è corretto considerarla una presenza in fase di definizione.",
+          "Per ogni nuovo marchio cerca quattro prove: un listino italiano datato, un configuratore o un ordine effettivamente disponibile, una rete di assistenza con indirizzi verificabili e documenti di garanzia intestati al venditore o al costruttore. Una pagina social, una fiera o un comunicato di lancio possono anticipare l’arrivo, ma non dimostrano ancora che il servizio sia pronto.",
+          "Per leggere i dati senza confondere gli annunci con le vendite, consulta le [immatricolazioni per marca pubblicate da UNRAE](https://www.unrae.it/index.php/dati-statistici/immatricolazioni/7816/immatricolazioni-di-autovetture-per-marca-settembre-2026). Il dato si riferisce alle auto registrate in Italia nel periodo indicato; non misura da solo soddisfazione, affidabilità o quota di clienti privati."
+        ],
+        "list": []
+      },
+      {
+        "heading": "Cosa può essere positivo per chi compra",
+        "paragraphs": [
+          "Più concorrenti possono mettere pressione su prezzi, dotazioni e tempi di aggiornamento dei modelli. L’offerta non è solo elettrica: in gamma si trovano BEV, ibride plug-in e sistemi con range extender. Questo permette di confrontare soluzioni diverse, purché si considerino ricarica disponibile, tragitti abituali, consumi reali e costo complessivo.",
+          "La sicurezza va giudicata modello per modello. Per esempio, Euro NCAP assegna cinque stelle alla Leapmotor B10 testata nel 2025 e specifica le varianti cui si applica il risultato. È un dato utile su quel veicolo e su quelle versioni; non certifica automaticamente tutti i modelli dello stesso marchio. Controlla sempre anno del test, allestimento e validità della valutazione.",
+          "La competizione porta anche nuove batterie, software e sistemi di assistenza. Il vantaggio è reale solo se funzioni e aggiornamenti sono chiari, supportati e utilizzabili nel tempo. Una schermata ricca o una lunga lista di ADAS non sostituiscono una prova su strada e una verifica dei comandi che userai ogni giorno."
+        ],
+        "list": []
+      },
+      {
+        "heading": "I rischi da controllare prima di firmare",
+        "paragraphs": [
+          "**Rete e ricambi.** Chiedi qual è il centro autorizzato più vicino, quali interventi può eseguire e dove vengono ordinati i componenti. Per un danno da collisione, informati sui tempi medi dei ricambi di carrozzeria e sulla disponibilità di tecnici formati. Se l’auto è ferma, la promessa di una garanzia lunga serve poco senza un percorso di riparazione chiaro.",
+          "**Garanzia.** Separa la garanzia legale di conformità dovuta dal venditore professionale da eventuali coperture commerciali del costruttore. Leggi durata e chilometraggio, soggetto che risponde, esclusioni, manutenzione richiesta e condizioni specifiche per batteria e componenti ad alta tensione. Chiedi il documento completo prima di versare un anticipo.",
+          "**Software e dati.** Verifica per quanto tempo sono previsti aggiornamenti, quali funzioni dipendono da app o servizi connessi e che cosa succede se termina un abbonamento o cambia il supporto del servizio. Controlla le impostazioni per account, geolocalizzazione e condivisione dei dati; conserva la documentazione privacy consegnata con l’auto.",
+          "**Valore dell’usato.** Per i modelli appena lanciati spesso non esiste ancora uno storico robusto di prezzi di rivendita in Italia. Un’offerta promozionale o un valore futuro garantito valgono soltanto alle condizioni scritte nel contratto. Prima di confrontare la rata, chiedi prezzo in contanti, anticipo, rate, maxi-rata, chilometraggio e penali di restituzione.",
+          "**Prezzi e regole commerciali.** Nell’UE sono in vigore misure compensative sulle importazioni di auto elettriche a batteria dalla Cina, e la Commissione ha adottato anche decisioni successive nell’ambito di quel procedimento. L’ambito riguarda le BEV importate e i produttori interessati; non si traduce automaticamente in un rincaro uguale per tutte le auto cinesi o per le ibride. Per il cliente, il prezzo rilevante resta quello del listino e del contratto italiani alla data dell’acquisto."
+        ],
+        "list": []
+      },
+      {
+        "heading": "Checklist pratica per confrontare due modelli",
+        "paragraphs": [],
+        "list": [
+          "**Fai un test drive nel tuo percorso abituale**, includendo parcheggio, strada dissestata e manovre lente. Prova comandi, frenata rigenerativa e sistemi di assistenza.",
+          "**Chiedi per iscritto dove si fa manutenzione**, quali centri gestiscono garanzia e alta tensione e chi risponde se il venditore cambia o chiude.",
+          "**Confronta le garanzie complete** di auto, batteria e componenti elettrici; verifica limiti in chilometri, manutenzioni obbligatorie ed esclusioni.",
+          "**Richiedi un preventivo di assicurazione e riparazione**, indicando versione e valore dei ricambi. Se possibile, chiedi all’assicuratore se il modello è già censito.",
+          "**Calcola il costo totale**, includendo prezzo, finanziamento, ricarica o carburante, manutenzione, pneumatici, assicurazione e valore di rivendita prudenziale.",
+          "**Controlla il risultato Euro NCAP della versione esatta** e non trasferire le stelle da un modello all’altro.",
+          "**Per un’auto elettrica o plug-in**, verifica una ricarica compatibile vicino a casa o al lavoro e simula una settimana reale, non soltanto l’autonomia dichiarata."
+        ]
+      },
+      {
+        "heading": "Dobbiamo preoccuparci? Il giudizio AutoEsperto",
+        "paragraphs": [
+          "No, non serve preoccuparsi per il passaporto del marchio. Serve prudenza davanti a una rete appena nata, a un modello senza storico o a condizioni di garanzia poco leggibili. Un’auto cinese può essere una scelta sensata se prodotto, assistenza, prezzo e contratto reggono il confronto con le alternative; lo stesso vale per qualsiasi costruttore.",
+          "Se vuoi tenere l’auto molti anni o vivi lontano dai grandi centri, pesa di più la disponibilità di officine e ricambi. Se cambi auto spesso, guarda con attenzione finanziamento, valore futuro e domanda dell’usato. Per tutti, chiedi un’offerta dettagliata e fai mettere per iscritto promesse su consegna, manutenzione e copertura.",
+          "La novità è che oggi hai più marchi tra cui scegliere. La decisione migliore resta quella basata sul singolo modello e sul servizio che puoi raggiungere, non su una reputazione generale costruita in anticipo."
+        ],
+        "list": []
+      },
+      {
+        "heading": "Domande frequenti sulle auto cinesi in Italia",
+        "paragraphs": [
+          "### Le auto cinesi sono meno sicure?",
+          "Non si può rispondere per nazionalità. Cerca il test Euro NCAP del modello e dell’anno esatti, poi leggi i punteggi delle singole aree. Se non trovi una valutazione, non attribuire stelle per analogia.",
+          "### Se il marchio è nuovo, chi ripara l’auto in garanzia?",
+          "La risposta deve essere nei documenti del venditore e del costruttore. Prima dell’acquisto fatti indicare per iscritto il centro autorizzato, la procedura di prenotazione e chi sostiene trasporto e diagnosi.",
+          "### I dazi UE fanno aumentare tutte le auto cinesi?",
+          "No. Le misure considerate dall’UE riguardano specifiche auto elettriche a batteria importate dalla Cina e produttori soggetti a regole determinate. Non sono un supplemento uniforme applicato a qualsiasi marchio, modello o motorizzazione."
+        ],
+        "list": []
+      },
+      {
+        "heading": "Fonti e metodo",
+        "paragraphs": [
+          "Abbiamo distinto i marchi con attività e modelli documentati in Italia dai piani di distribuzione ancora in fase di avvio. I comunicati dei costruttori descrivono prodotti e strategie dichiarati dalle aziende; i dati sulle immatricolazioni sono statistica di mercato, mentre Euro NCAP è una valutazione indipendente di sicurezza. Disponibilità, listini e condizioni possono cambiare: verifica sempre la versione italiana al momento dell’acquisto.",
+          "*Fonti: [UNRAE – immatricolazioni per marca, settembre 2026](https://www.unrae.it/index.php/dati-statistici/immatricolazioni/7816/immatricolazioni-di-autovetture-per-marca-settembre-2026); [Geely – bilancio del primo anno in Italia](https://geelyitalia.com/news/un-anno-di-geely-in-italia/); [Zeekr – annuncio d’ingresso in Italia](https://press-it.zeekr.eu/zeekr-e-jameel-motors-italia-annunciano-lancio-in-italia-del-brand-globale-di-veicoli-elettrici-p); [Leapmotor – modelli B05 e B03X in Italia](https://www.media.stellantis.com/it-it/leapmotor/press/leapmotor-leader-del-mercato-elettrico-in-italia-porta-a-rom-e-2026-le-nuove-b05-e-b03x); [Chery Italy – nuova identità Omoda e Jaecoo](https://cheryautoitalia.com/chery-italy-nuova-identita-omoda-jaecoo/); [FAW Car Italia – modelli e disponibilità indicativa](https://www.fawcar.it/); [Euro NCAP – Leapmotor B10](https://www.euroncap.com/assessments/leapmotor/b10/1217/); [Commissione europea – decisione 2026/328 sulle misure per le BEV cinesi](https://eur-lex.europa.eu/legal-content/IT/TXT/?uri=CELEX:32026D0328). Fonti consultate il 5 ottobre 2026.*"
+        ],
+        "list": []
+      }
+    ]
+  }
 ];
 
-export const guides: Guide[] = [...initialGuides, ...articoliGuides];
+export const guides: Guide[] = [targhePersonalizzateGuide, ...initialGuides, ...articoliGuides];
 
 export function getGuide(slug: string): Guide | undefined {
   return guides.find(g => g.slug === slug);

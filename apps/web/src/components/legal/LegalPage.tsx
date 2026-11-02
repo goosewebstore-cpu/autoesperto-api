@@ -60,6 +60,7 @@ export default function LegalPage({ title, updated, intro, sections }: LegalPage
           {sections.map((s, idx) => (
             <section
               key={s.heading}
+              id={s.heading === 'Pubblicità e collaborazioni commerciali' ? 'pubblicita' : undefined}
               className="rounded-2xl border border-slate-200/70 bg-white p-6 shadow-card hover:border-slate-300 transition-all"
             >
               <h2 className="text-base font-bold text-slate-900 mb-3 flex items-center gap-2.5">

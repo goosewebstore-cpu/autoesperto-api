@@ -35,15 +35,15 @@ export const metadata: Metadata = {
 const VALUES = [
   {
     icon: Database,
-    title: 'Dati reali, non stime generiche',
+    title: 'Stime con fonti e limiti visibili',
     description:
-      'I nostri prezzi arrivano dagli annunci di vendita effettivi, aggiornati quotidianamente con rimozione statistica di outlier. Non inventiamo numeri: li calcoliamo dal mercato reale.',
+      'Quando sono disponibili annunci comparabili, li usiamo per orientare la stima. Se il campione è insufficiente, il report indica un valore algoritmico orientativo. I prezzi richiesti non sono prezzi di vendita conclusa.',
   },
   {
     icon: Eye,
     title: 'Trasparenza totale',
     description:
-      'Ogni dato mostrato ha una fonte chiara e verificabile. Spieghiamo sempre come calcoliamo i valori, le deviazioni standard e cosa significano per la tua decisione.',
+      'Distinguiamo i dati inseriti dall’utente, gli annunci disponibili e le stime. Un dato mancante o un campione ridotto non rappresentano una verifica positiva.',
   },
   {
     icon: ShieldCheck,
@@ -53,9 +53,9 @@ const VALUES = [
   },
   {
     icon: User,
-    title: 'Accessibilità gratuita',
+    title: 'Prima prova e prezzi trasparenti',
     description:
-      'Tutti gli strumenti principali sono gratuiti e utilizzabili liberamente. Crediamo che informarsi prima di un acquisto importante sia un diritto di ogni consumatore.',
+      'Puoi ottenere un’anteprima gratuita partendo da modello, foto o annuncio. Il report completo costa 1,99 €; il pacchetto da 4,99 € comprende 3 report acquistati e 1 in omaggio. AutoEsperto PRO offre 30 report + 3 omaggio per ciclo a 29,99 €/mese.',
   },
 ];
 
@@ -63,7 +63,7 @@ const METHODOLOGY_STEPS = [
   {
     num: '1',
     title: 'Raccolta e Normalizzazione Dati',
-    description: 'Analizziamo quotidianamente oltre 10.000 annunci reali di compravendita in Italia per marca, modello, anno e chilometraggio, filtrando annunci duplicati, prezzi civetta e vetture con fermi o anomalie.',
+    description: 'Partiamo da marca, modello, anno, chilometri e alimentazione confermati dall’utente. Quando disponibili, selezioniamo annunci confrontabili per orientare la stima.',
   },
   {
     num: '2',
@@ -73,9 +73,9 @@ const METHODOLOGY_STEPS = [
   },
   {
     num: '3',
-    title: 'Incrocio Banche Dati Ufficiali',
+    title: 'Informazioni sul modello e verifiche separate',
     description:
-      'Incrociamo i dati di prezzo con i registri storici di revisione (MCTC Portale dell\'Automobilista), bollettini di richiamo per la sicurezza (Safety Gate UE, NHTSA) e curve di difettosità per gruppo motore.',
+      'Le informazioni sui difetti noti riguardano il modello e non certificano lo stato del singolo veicolo. Revisioni, chilometraggio documentato e storico incidenti richiedono verifiche specifiche su fonti esterne.',
   },
   {
     num: '4',
@@ -97,7 +97,7 @@ function JsonLd() {
       image: `${siteUrl}/og-image.png`,
       description:
         'Piattaforma tecnologica indipendente per la valutazione, il controllo pre-acquisto e il passaporto digitale delle auto usate in Italia con dati reali di mercato.',
-      email: 'supporto@autoesperto.it',
+      email: 'goosewebstore@gmail.com',
       address: {
         '@type': 'PostalAddress',
         addressLocality: 'Siracusa',
@@ -108,7 +108,7 @@ function JsonLd() {
       contactPoint: {
         '@type': 'ContactPoint',
         contactType: 'customer support',
-        email: 'supporto@autoesperto.it',
+        email: 'goosewebstore@gmail.com',
         availableLanguage: ['Italian'],
       },
       founder: {
@@ -185,7 +185,7 @@ export default function ChiSiamoPage() {
           <p className="text-text-secondary text-lg leading-relaxed mt-4">
             AutoEsperto nasce da un&apos;idea semplice: prima di comprare o vendere un&apos;auto usata,
             dovresti avere accesso alle stesse informazioni dei professionisti del settore. Noi rendiamo
-            questi dati accessibili a tutti, gratis e con totale indipendenza.
+            la valutazione per modello gratuita e le funzioni AI con un abbonamento dal prezzo visibile prima dell’attivazione.
           </p>
         </header>
 
@@ -275,17 +275,17 @@ export default function ChiSiamoPage() {
         <section className="mb-12 rounded-2xl bg-surface-2 border border-border p-6">
           <h2 className="text-lg font-bold text-text-primary flex items-center gap-2 mb-3">
             <Database className="h-5 w-5 text-accent" />
-            Pipeline dati e fonti certificate
+            Fonti, stime e limiti
           </h2>
           <div className="text-sm text-text-secondary leading-relaxed space-y-3">
             <p>
-              <strong>Prezzi di mercato:</strong> elaborati analizzando quotidianamente gli annunci di vendita pubblici sulle principali piattaforme di compravendita in Italia (AutoScout24, Subito.it, Automobile.it). I dati vengono normalizzati e depurati da anomalie statistiche.
+              <strong>Prezzi di mercato:</strong> stimati con i dati del veicolo e gli eventuali annunci disponibili. Il report mostra il campione e la data di rilevazione quando presenti; senza confronti adeguati la stima resta algoritmica.
             </p>
             <p>
-              <strong>Affidabilità e richiami ufficiali:</strong> incrociamo le segnalazioni della banca dati europea sui richiami di sicurezza (Safety Gate UE / Rapex), i registri ministeriali dei collaudi e le statistiche di difettosità per codice motore.
+              <strong>Affidabilità e richiami ufficiali:</strong> le informazioni generali sul modello aiutano a preparare le domande al venditore. La presenza o assenza di richiami sul singolo veicolo va verificata tramite VIN presso il costruttore.
             </p>
             <p>
-              <strong>Passaporto Digitale del Veicolo:</strong> integrato con i requisiti del Regolamento UE 2026/1738 sulla tracciabilità chilometrica e la certificazione dello stato di salute delle batterie (SoH).
+              <strong>Passaporto Digitale del Veicolo:</strong> raccoglie le informazioni e i documenti caricati dall’utente. Non certifica i chilometri reali, lo stato della batteria o la conformità a un regolamento europeo.
             </p>
           </div>
         </section>
@@ -297,7 +297,7 @@ export default function ChiSiamoPage() {
             <p><strong>Piattaforma:</strong> AutoEsperto.it — Servizio di analisi e quotazione auto usate</p>
             <p><strong>Titolare &amp; Gestione:</strong> Ralfh (Sviluppatore Freelance — Progetto indipendente non societario)</p>
             <p><strong>Sede:</strong> Siracusa (SR) · Italia</p>
-            <p><strong>PEC:</strong> autoesperto@pec.it · <strong>Email supporto:</strong> supporto@autoesperto.it</p>
+            <p><strong>Email generale:</strong> goosewebstore@gmail.com · <strong>Partner e investitori:</strong> ralfhjavier@gmail.com</p>
             <p><strong>Conformità normativa:</strong> Operante ai sensi dell&apos;art. 21 Cost. e del D.Lgs. 206/2005 (Codice del Consumo).</p>
           </div>
         </section>
@@ -320,9 +320,9 @@ export default function ChiSiamoPage() {
 
         {/* CTA */}
         <section className="rounded-2xl bg-accent-light border border-accent/20 p-6 text-center">
-          <h2 className="text-lg font-bold text-text-primary">Prova lo strumento gratuito</h2>
+          <h2 className="text-lg font-bold text-text-primary">Valuta per modello, gratis</h2>
           <p className="text-sm text-text-secondary mt-2">
-            Analizza un&apos;auto usata in pochi secondi: prezzo di mercato, affidabilità e checklist controlli.
+            Analizza un&apos;auto usata con i dati che confermi: prezzo di mercato, affidabilità e checklist controlli.
           </p>
           <Link
             href="/#scanner-section"

@@ -7,6 +7,7 @@ import SiteFooter from '@/components/SiteFooter';
 import AdInArticle from '@/components/ads/AdInArticle';
 import AdBanner from '@/components/ads/AdBanner';
 import ArticleInteractiveBar, { ArticleFeedbackBox } from '@/components/ArticleInteractiveBar';
+import GuideComments from '@/components/GuideComments';
 import { getGuide, guides, GUIDE_CATEGORIES, type Guide } from '@/lib/guides';
 import GuideTableOfContents from '@/components/GuideTableOfContents';
 import ArticleValuatorWidget from '@/components/ArticleValuatorWidget';
@@ -18,8 +19,7 @@ interface PageProps {
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
-/** Compute a realistic dateModified for freshness signals.
- *  Returns the 1st of the current month, or the published date if it's more recent. */
+// Dates reflect publication or a recorded editorial update.
 
 const IT_MONTHS_LONG = [
   'gennaio', 'febbraio', 'marzo', 'aprile', 'maggio', 'giugno',
@@ -54,13 +54,15 @@ function formatMonthYear(dateStr: string): string {
 }
 
 function getDateModified(published: string): string {
-  const pub = new Date(published);
-  const now = new Date();
-  const firstOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
-  return pub > firstOfMonth ? published : firstOfMonth.toISOString().slice(0, 10);
+  return published;
 }
 
 const guideCtas: Record<string, { label: string; href: string; description: string }> = {
+  'autoesperto-investitori': {
+    label: 'Parliamo del progetto AutoEsperto',
+    href: '/contatti',
+    description: 'Scrivici se sei interessato a investire o collaborare e raccontaci brevemente il tuo profilo.',
+  },
   'car-finder': {
     label: 'Trova l\'auto giusta per il tuo budget',
     href: '/auto-finder',
@@ -70,12 +72,12 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'autoesperto-storia': {
     label: 'Analizza un\'auto gratis con AutoEsperto',
     href: '/#scanner-section',
-    description: 'Carica una foto, incolla un annuncio o seleziona marca e modello: calcola prezzo reale e stato di salute gratis.',
+    description: 'Carica una foto, incolla un annuncio o seleziona marca e modello per una stima indicativa e un report.',
   },
   'analizza-annuncio': {
     label: 'Analizza annuncio con AutoEsperto',
     href: '/analizza-annuncio',
-    description: 'Incolla il link o carica una foto: calcola Trust Score, prezzo reale e controlli da fare prima di comprare.',
+    description: 'Incolla il link o carica una foto: scopri una stima indicativa e i controlli da fare prima di comprare.',
   },
   'auto-usata-affare': {
     label: 'Valuta il prezzo reale',
@@ -120,7 +122,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'riparare-o-rottamare': {
     label: 'Scopri quanto vale la tua auto',
     href: '/valutazione',
-    description: 'Confronta il preventivo con il valore reale di mercato.',
+    description: 'Confronta il preventivo con una stima indicativa del veicolo.',
   },
   'prezzo-giusto': {
     label: 'Verifica il prezzo reale',
@@ -130,7 +132,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'passaggio-proprieta': {
     label: 'Scopri quanto vale la tua auto',
     href: '/valutazione',
-    description: 'Parti da un valore reale di mercato prima di avviare il passaggio.',
+    description: 'Consulta una stima indicativa prima di avviare il passaggio.',
   },
   'elettrica-benzina': {
     label: 'Confronta i valori di mercato',
@@ -145,7 +147,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'assicurazione-auto': {
     label: 'Scopri quanto vale l\'auto',
     href: '/valutazione',
-    description: 'Parti dal valore reale di mercato per scegliere le coperture giuste.',
+    description: 'Consulta una stima indicativa per scegliere le coperture giuste.',
   },
   'revisione-auto': {
     label: 'Stima i costi di manutenzione',
@@ -165,7 +167,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'permuta-o-vendita': {
     label: 'Scopri quanto vale la tua auto',
     href: '/valutazione',
-    description: 'Confronta la permuta con il valore reale di mercato della tua auto.',
+    description: 'Confronta la permuta con una stima indicativa della tua auto.',
   },
   'ibride-convengono': {
     label: 'Confronta i modelli',
@@ -190,7 +192,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'valutazione-auto': {
     label: 'Scopri quanto vale la tua auto',
     href: '/valutazione',
-    description: 'Prezzo medio reale dagli annunci per marca, modello e anno.',
+    description: 'Prezzi richiesti negli annunci e stime indicative per marca, modello e anno.',
   },
   'controllo-usato': {
     label: 'Controlla il prezzo reale dell\'usato',
@@ -235,7 +237,7 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
   'permuta-valutazione': {
     label: 'Valuta la tua auto per la permuta',
     href: '/valutazione',
-    description: 'Confronta la valutazione proposta con il valore reale di mercato.',
+    description: 'Confronta la valutazione proposta con una stima indicativa.',
   },
   'truffa-km': {
     label: 'Verifica chilometri e usura',
@@ -276,6 +278,21 @@ const guideCtas: Record<string, { label: string; href: string; description: stri
     label: 'Stima costi ricarica e riparazione clima',
     href: '/riparazione',
     description: 'Calcola i costi reali per ricarica gas R134a/R1234yf, sostituzione compressore o filtro abitacolo per il tuo modello.',
+  },
+  'creare-sito-blog-auto': {
+    label: 'Scopri i servizi di Siracusa Web Store',
+    href: 'https://siracusawebstore.it',
+    description: 'Contatta il nostro partner Siracusa Web Store per creare il sito o blog su misura per la tua auto o concessionaria.',
+  },
+  'siracusa-webstore': {
+    label: 'Visita Siracusa Web Store',
+    href: 'https://siracusawebstore.it',
+    description: 'Crea il tuo sito o blog auto con assistenza completa e soluzioni economiche su misura.',
+  },
+  'dashcam-a810s': {
+    label: 'Vedi prezzo e kit 70mai A810S su Amazon',
+    href: 'https://link.amazon/B0gTb5qc5',
+    description: 'Controlla prezzo, venditore e accessori inclusi. Link affiliato: AutoEsperto riceve un guadagno dagli acquisti idonei, senza costi aggiuntivi per te.',
   },
 };
 
@@ -339,8 +356,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       url: fullUrl,
       siteName: 'AutoEsperto',
       publishedTime: guide.published,
-      modifiedTime: getDateModified(guide.published),
-      authors: ['Redazione AutoEsperto'],
+      modifiedTime: guide.updated || getDateModified(guide.published),
+      authors: ['Team AutoEsperto'],
       section: GUIDE_CATEGORIES[guide.category].label,
       images: [
         {
@@ -421,18 +438,26 @@ function renderParagraphWithLinks(text: string) {
     }
     const label = match[1];
     const href = match[2];
-    if (href.startsWith('/')) {
+    if (href.startsWith('#')) {
+      parts.push(
+        <a key={`${href}-${match.index}`} href={href} className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2">
+          {label}
+        </a>
+      );
+    } else if (href.startsWith('/') && !href.startsWith('//')) {
       parts.push(
         <Link key={`${href}-${match.index}`} href={href} className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2">
           {label}
         </Link>
       );
-    } else {
+    } else if (/^https?:\/\//i.test(href)) {
       parts.push(
-        <a key={`${href}-${match.index}`} href={href} target="_blank" rel="noopener noreferrer" className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2">
+        <a key={`${href}-${match.index}`} href={href} target="_blank" rel={/amazon\.|link\.amazon\//i.test(href) || href.includes('tag=autoesperto-21') ? 'sponsored noopener noreferrer' : 'noopener noreferrer'} className="font-semibold text-blue-600 hover:text-blue-700 underline underline-offset-2">
           {label}
         </a>
       );
+    } else {
+      parts.push(label);
     }
     lastIndex = match.index + match[0].length;
   }
@@ -629,39 +654,13 @@ function extractGuideTakeaways(guide: Guide): Array<{ topic: string; summary: st
 }
 
 function getRelatedGuides(currentGuide: Guide, count: number = 3): Guide[] {
-  // 1. Guides in the same category
-  const sameCategory = guides.filter(
-    (g) => g.slug !== currentGuide.slug && g.category === currentGuide.category
-  );
-  // 2. Guides in other categories
-  const otherCategory = guides.filter(
-    (g) => g.slug !== currentGuide.slug && g.category !== currentGuide.category
-  );
-
-  const related: Guide[] = [];
-
-  // Pick from same category first (up to count - 1)
-  for (const g of sameCategory) {
-    if (related.length >= count - 1) break;
-    related.push(g);
-  }
-
-  // Fill remainder from other categories
-  for (const g of otherCategory) {
-    if (related.length >= count) break;
-    related.push(g);
-  }
-
-  // Fallback to fill up to count if needed
-  if (related.length < count) {
-    for (const g of sameCategory) {
-      if (!related.some((r) => r.slug === g.slug) && related.length < count) {
-        related.push(g);
-      }
-    }
-  }
-
-  return related.slice(0, count);
+  const stop = new Set(['auto', 'autoesperto', 'usata', 'usato', 'come', 'cosa', 'quando', 'quanto', 'guida', 'italia', 'prezzo', 'costi', 'della', 'delle', 'dalla', 'nella', 'sono', 'tutto', '2026', '2025']);
+  const terms = (guide: Guide) => new Set(normalize(`${guide.title} ${guide.description}`).split(/[^a-z0-9]+/).filter(word => word.length > 3 && !stop.has(word)));
+  const currentTerms = terms(currentGuide);
+  return guides.filter(g => g.slug !== currentGuide.slug).map(g => {
+    const shared = [...terms(g)].filter(word => currentTerms.has(word)).length;
+    return { guide: g, score: shared * 3 + (g.category === currentGuide.category ? 2 : 0) };
+  }).sort((a, b) => b.score - a.score || a.guide.slug.localeCompare(b.guide.slug)).slice(0, count).map(item => item.guide);
 }
 
 export default async function GuidePage({ params }: PageProps) {
@@ -670,7 +669,8 @@ export default async function GuidePage({ params }: PageProps) {
   const guide = getGuide(rawSlug);
   if (!guide) notFound();
 
-  const mentionedModels = getMentionedModels(guide);
+  const isDashcamGuide = guide.slug === 'dashcam-autoesperto-proteggi-auto-anche-quando-non-ci-sei';
+  const mentionedModels = isDashcamGuide ? [] : getMentionedModels(guide);
   const cta = getGuideCta(guide.cta);
   const takeaways = extractGuideTakeaways(guide);
   const otherGuides = getRelatedGuides(guide, 3);
@@ -689,7 +689,7 @@ export default async function GuidePage({ params }: PageProps) {
     headline: guide.title,
     description: guide.description,
     datePublished: guide.published,
-    dateModified: getDateModified(guide.published),
+    dateModified: guide.updated || getDateModified(guide.published),
     inLanguage: 'it-IT',
     wordCount,
     timeRequired: `PT${readingTimeMinutes}M`,
@@ -697,24 +697,12 @@ export default async function GuidePage({ params }: PageProps) {
       '@type': 'SpeakableSpecification',
       cssSelector: ['.article-summary', 'h1', '.key-takeaways'],
     },
-    about: [
-      { '@type': 'Thing', name: 'Auto usata', sameAs: 'https://it.wikipedia.org/wiki/Autovettura' },
-      { '@type': 'Thing', name: 'Quotazione automobile', sameAs: 'https://it.wikipedia.org/wiki/Valutazione' },
-    ],
-    isBasedOn: [
-      'https://www.mit.gov.it/',
-      'https://ec.europa.eu/safety-gate',
-    ],
+    about: { '@type': 'Thing', name: guide.title },
+    isBasedOn: guide.sources,
     author: [
       {
-        '@type': 'Person',
-        name: 'Ralfh',
-        jobTitle: 'Fondatore & Analista Mercato Auto',
-        url: `${siteUrl}/chi-siamo`,
-      },
-      {
         '@type': 'Organization',
-        name: 'Redazione Tecnica AutoEsperto',
+        name: 'Team AutoEsperto',
         url: `${siteUrl}/chi-siamo`,
       },
     ],
@@ -807,7 +795,7 @@ export default async function GuidePage({ params }: PageProps) {
               </span>
               <span className="text-xs font-semibold text-slate-700 inline-flex items-center gap-1.5 bg-slate-100/90 rounded-full px-2.5 py-1">
                 <span className="h-1.5 w-1.5 rounded-full bg-blue-600"></span>
-                A cura di Ralfh · Redazione Tecnica
+                A cura del Team AutoEsperto
               </span>
               <span className="text-text-tertiary">·</span>
               <div className="flex items-center gap-1 text-xs text-text-tertiary font-medium">
@@ -823,9 +811,19 @@ export default async function GuidePage({ params }: PageProps) {
               </div>
               <span className="text-slate-300">·</span>
               <span className="inline-flex items-center gap-1 rounded-full bg-emerald-50 text-emerald-700 px-2 py-0.5 text-[11px] font-bold">
-                ✓ Aggiornato {formatMonthYear(getDateModified(guide.published))}
+                ✓ Aggiornato {guide.updated ? formatLongDate(guide.updated) : formatMonthYear(getDateModified(guide.published))}
               </span>
             </div>
+
+            {guide.slug === 'targhe-personalizzate-italia-costi-regole-quando' && (
+              <img
+                src="/images/guide/targhe-personalizzate-logo.svg"
+                alt="AutoEsperto · Targhe personalizzate"
+                width={210}
+                height={48}
+                className="mt-5 h-12 w-auto"
+              />
+            )}
 
             <h1 itemProp="headline" className="text-2xl md:text-4xl font-extrabold tracking-tight text-slate-900 leading-[1.2] mt-4">
               {guide.title}
@@ -855,10 +853,7 @@ export default async function GuidePage({ params }: PageProps) {
           )}
 
           <div itemProp="articleBody" className="mt-8 space-y-10">
-            {guide.content ? (
-              <div className="prose max-w-none space-y-6" dangerouslySetInnerHTML={{ __html: guide.content }} />
-            ) : guide.sections ? (
-              guide.sections.map((section, index) => {
+            {guide.sections?.map((section, index) => {
                 const sectionId = slugifyHeading(section.heading);
                 return (
                   <section key={section.heading} id={sectionId} className="scroll-mt-28">
@@ -880,11 +875,22 @@ export default async function GuidePage({ params }: PageProps) {
                         ))}
                       </ul>
                     )}
-                    {index === 1 && guide.sections && guide.sections.length > 3 && <AdInArticle />}
+                    {isDashcamGuide && index === 0 && (
+                      <aside aria-label="Scopri il Profilo Digitale Auto" className="mt-6 rounded-xl border border-blue-200 bg-blue-50/60 p-5 sm:flex sm:items-center sm:gap-6">
+                        <div className="flex-1">
+                          <p className="text-[11px] font-bold uppercase tracking-wider text-blue-700">Uno strumento AutoEsperto · Gratuito</p>
+                          <h3 className="mt-2 text-lg font-bold text-slate-900">La storia della tua auto, in un unico posto</h3>
+                          <p className="mt-2 text-sm leading-relaxed text-slate-600">Raccogli foto, manutenzioni e scadenze nel Profilo Digitale Auto. Utile oggi per tenerle in ordine, domani per raccontare la tua auto a chi la compra.</p>
+                        </div>
+                        <Link href="/passport" className="mt-4 inline-flex shrink-0 items-center gap-2 rounded-lg bg-blue-600 px-4 py-3 text-sm font-bold text-white transition-colors hover:bg-blue-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-blue-600 sm:mt-0">
+                          Scopri il profilo auto <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                        </Link>
+                      </aside>
+                    )}
+                    {!isDashcamGuide && index === 1 && guide.sections && guide.sections.length > 3 && <AdInArticle />}
                   </section>
                 );
-              })
-            ) : null}
+              })}
 
             {/* Highlights / Key Takeaways Box — Sintesi conclusiva dell'esperto a fine articolo */}
             {takeaways.length > 0 && (
@@ -915,29 +921,30 @@ export default async function GuidePage({ params }: PageProps) {
             )}
           </div>
 
-          <ArticleValuatorWidget suggestedModels={mentionedModels} articleTitle={guide.title} />
+          {!isDashcamGuide && guide.cta !== 'consumi-auto' && <ArticleValuatorWidget suggestedModels={mentionedModels} articleTitle={guide.title} />}
 
           <ArticleFeedbackBox />
+          <GuideComments slug={guide.slug} />
 
           {/* Autore dell'articolo & E-E-A-T */}
           <div className="mt-10 rounded-2xl border border-slate-200 bg-slate-50/70 p-5 sm:p-6 shadow-xs">
             <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4">
-              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white font-black text-lg shadow-md shadow-blue-600/20">
-                R
+              <div className="grid h-12 w-12 shrink-0 place-items-center rounded-2xl bg-blue-600 text-white font-black text-sm shadow-md shadow-blue-600/20">
+                AE
               </div>
               <div className="flex-1">
                 <div className="flex flex-wrap items-center gap-2">
-                  <h3 className="text-sm font-bold text-slate-900">A cura di Ralfh</h3>
+                  <h3 className="text-sm font-bold text-slate-900">A cura del Team AutoEsperto</h3>
                   <span className="rounded-full bg-blue-100 text-blue-800 px-2 py-0.5 text-[11px] font-bold">
-                    Fondatore &amp; Analista Mercato Auto
+                    Redazione Tecnica &amp; Analisi Automotive
                   </span>
                 </div>
                 <p className="text-xs text-slate-600 leading-relaxed mt-1.5">
-                  Esperto indipendente di dinamiche di compravendita e valutazioni di mercato in Italia. Cura la metodologia di analisi prezzi, l&apos;incrocio con i registri storici MCTC / Safety Gate UE e la revisione tecnica delle guide di AutoEsperto.it.
+                  La redazione AutoEsperto raccoglie informazioni e consigli per chi usa, compra o vende un’auto. Consulta i riferimenti indicati nella guida e verifica le informazioni applicabili al tuo veicolo.
                 </p>
                 <div className="mt-2.5 flex items-center gap-3 text-xs">
                   <Link href="/chi-siamo" className="font-bold text-blue-600 hover:text-blue-700 hover:underline">
-                    Scopri chi siamo &amp; la nostra indipendenza &rarr;
+                    Scopri il nostro team &amp; la metodologia &rarr;
                   </Link>
                   <span className="text-slate-300">·</span>
                   <Link href="/contatti" className="text-slate-500 hover:text-slate-700 hover:underline">
@@ -954,8 +961,20 @@ export default async function GuidePage({ params }: PageProps) {
               <span>Metodologia Giornalistica &amp; Fonti Tecniche</span>
             </div>
             <p className="text-xs text-slate-600 leading-relaxed mt-2.5">
-              Questa guida e analisi di mercato è redatta dalla <strong>Redazione Tecnica di AutoEsperto</strong> con approccio da giornalismo automotive indipendente ed esperienza sul campo. I dati su quotazioni, difettosità e costi di gestione sono elaborati incrociando l&apos;osservatorio annunci italiano con banche dati ufficiali (Safety Gate UE, NHTSA, bollettini tecnici ministeriali).
+              {guide.editorialNote || 'Le informazioni e le stime sono indicative. Per norme, costi e caratteristiche del veicolo verifica i riferimenti riportati e la documentazione ufficiale aggiornata.'}
             </p>
+            {guide.sources && guide.sources.length > 0 && (
+              <div className="mt-4">
+                <h3 className="text-xs font-bold uppercase tracking-wide text-slate-700">Fonti e approfondimenti</h3>
+                <ul className="mt-2 space-y-2 text-sm">
+                  {guide.sources.filter((source) => /^https?:\/\//i.test(source)).map((source) => (
+                    <li key={source} className="break-all">
+                      <a href={source} target="_blank" rel="noopener noreferrer" className="text-blue-700 underline underline-offset-2">{source}</a>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </article>
 
@@ -993,14 +1012,25 @@ export default async function GuidePage({ params }: PageProps) {
           <p className="text-sm text-slate-600 leading-relaxed mt-2 max-w-md mx-auto">
             {cta.description}
           </p>
-          <Link
-            href={cta.href}
-            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 hover:bg-blue-700 transition-colors"
-          >
-            {cta.label} <ArrowRight className="h-4 w-4" />
-          </Link>
+          {cta.href.startsWith('http') ? (
+            <a
+              href={cta.href}
+              target="_blank"
+              rel={/amazon\.|link\.amazon\//i.test(cta.href) || cta.href.includes('tag=autoesperto-21') ? 'sponsored noopener noreferrer' : 'noopener noreferrer'}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 hover:bg-blue-700 transition-colors"
+            >
+              {cta.label} <ArrowRight className="h-4 w-4" />
+            </a>
+          ) : (
+            <Link
+              href={cta.href}
+              className="mt-4 inline-flex items-center gap-2 rounded-xl bg-blue-600 px-5 py-2.5 text-sm font-bold text-white shadow-md shadow-blue-600/20 hover:bg-blue-700 transition-colors"
+            >
+              {cta.label} <ArrowRight className="h-4 w-4" />
+            </Link>
+          )}
           <p className="mt-3 text-xs text-slate-400">
-            Gratis · senza registrazione · risultato in pochi secondi
+            {isDashcamGuide ? 'Link affiliato: AutoEsperto può ricevere una commissione sugli acquisti, senza costi aggiuntivi per te. Verifica modello, venditore, accessori e prezzo prima di ordinare.' : cta.href.startsWith('http') ? 'Consulta condizioni e disponibilità sul sito del venditore' : 'Consulta lo strumento e verifica le condizioni prima di iniziare.'}
           </p>
         </section>
 

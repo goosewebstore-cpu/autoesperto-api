@@ -46,7 +46,7 @@ function walkAndMinify(dir) {
 walkAndMinify(path.resolve('.open-next'));
 
 console.log('=== Step 3: Deploying with Wrangler ===');
-execSync('npx wrangler deploy', {
+execSync('npx wrangler deploy --keep-vars', {
   stdio: 'inherit',
   env: {
     ...process.env,

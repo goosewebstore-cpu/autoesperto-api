@@ -18,7 +18,7 @@ export const metadata: Metadata = {
     url: `${siteUrl}/passport`,
     title: 'Profilo Digitale Auto & Passaporto Veicolo — AutoEsperto',
     description:
-      'Il passaporto permanente della tua auto: conserva analisi, foto, documenti, valore di mercato, cronologia tagliandi e scadenze.',
+      'Organizza nel browser foto, documenti e storico della tua auto; condividi solo le sezioni che scegli.',
     siteName: 'AutoEsperto',
     images: [{ url: `${siteUrl}/og-image.png`, width: 1200, height: 630, alt: 'Profilo Digitale Auto AutoEsperto' }],
   },
@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 const passportFaqs = [
   {
     q: "Cos'è il Profilo Digitale Auto (o Passaporto Digitale Auto)?",
-    a: "È il passaporto permanente e gratuito della tua macchina su AutoEsperto. Raccoglie in un unico luogo digitale tutti i dati del libretto, la cronologia dei tagliandi, lo stato di salute meccanica (Vehicle Health Score), le scadenze di bollo e revisione, le foto e l'andamento del valore di mercato.",
+    a: "È una scheda gratuita della tua auto salvata nel browser. Puoi aggiungere dati del veicolo, foto, tagliandi e promemoria. Il punteggio e un eventuale valore sono indicativi, non certificazioni.",
   },
   {
     q: 'Quanto costa creare e mantenere il Profilo Digitale Auto?',
@@ -41,11 +41,11 @@ const passportFaqs = [
   },
   {
     q: 'I miei dati personali e la targa sono protetti?',
-    a: 'Sì. Tutti i dati del tuo veicolo vengono salvati in modo sicuro e privato sul tuo dispositivo. Quando decidi di condividere la scheda della tua auto con un potenziale acquirente tramite QR code o link pubblico, i tuoi dati personali sensibili rimangono protetti.',
+    a: 'Il profilo chiede dati dell’auto, non nome o indirizzo. La targa è esclusa dal link; km, score, stima, foto e storico si condividono solo se li selezioni. Il link va trattato come pubblico e un recapito è facoltativo in modalità vendita.',
   },
   {
     q: 'Come aiuta il Profilo Digitale Auto quando voglio vendere la macchina?',
-    a: 'Un veicolo con cronologia tagliandi documentata, scadenze in regola e analisi trasparente di mercato si vende fino al 40% più velocemente e permette di difendere il prezzo richiesto, offrendo massima fiducia a chi compra.',
+    a: 'Una cronologia documentata può aiutare chi compra a valutare il veicolo. Mostra solo i dati che vuoi condividere e distingui quelli dichiarati dai documenti disponibili.',
   },
   {
     q: 'Posso caricare foto del libretto per compilare i dati in automatico?',

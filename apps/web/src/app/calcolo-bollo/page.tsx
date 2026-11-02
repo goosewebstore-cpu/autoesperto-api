@@ -11,7 +11,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 export const metadata: Metadata = {
   title: 'Calcolo bollo auto 2026: quanto paghi? | AutoEsperto',
   description:
-    'Calcola subito il bollo auto 2026 gratis: calcolo per kW o cavalli (CV), regione di residenza, classe Euro e superbollo per autovetture usate e nuove.',
+    'Stima indicativa del bollo auto da potenza, regione e classe Euro. Per l’importo dovuto inserisci la targa nel calcolatore ufficiale ACI.',
   alternates: {
     canonical: `${siteUrl}/calcolo-bollo`,
     languages: { 'it-IT': `${siteUrl}/calcolo-bollo` },
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     locale: 'it_IT',
     title: 'Calcolo bollo auto 2026: quanto paghi? | AutoEsperto',
     description:
-      'Calcola subito il costo del bollo auto e superbollo per la tua regione con tabelle ACI aggiornate.',
+      'Stima indicativa del bollo auto e collegamento al calcolatore ufficiale ACI per la verifica con targa.',
     url: `${siteUrl}/calcolo-bollo`,
     siteName: 'AutoEsperto',
     images: [{ url: '/og-image.png', width: 1200, height: 630, alt: 'Calcolo bollo auto 2026' }],
@@ -37,7 +37,7 @@ export const metadata: Metadata = {
 const FAQS = [
   {
     q: 'Come si calcola il bollo auto?',
-    a: 'Il bollo si calcola moltiplicando la potenza espressa in kW indicata sulla carta di circolazione per la tariffa regionale unitaria. Per le auto con classe Euro 4, 5 e 6 la tariffa base standard è di 2,58 € al kW fino a 100 kW, e 3,87 € per ogni kW eccedente i 100 kW.',
+    a: 'La stima usa potenza in kW, classe ambientale e regione. Tariffe, riduzioni e scadenze possono variare: per conoscere l’importo dovuto verifica la targa sul sito ACI o della tua regione.',
   },
   {
     q: 'Che cos\'è il Superbollo e chi lo paga?',
@@ -45,7 +45,7 @@ const FAQS = [
   },
   {
     q: 'Le auto ibride ed elettriche pagano il bollo?',
-    a: 'Le auto 100% elettriche (BEV) beneficiano di un\'esenzione totale dal pagamento del bollo per i primi 5 anni dalla prima immatricolazione in quasi tutte le regioni; dal 6° anno pagano una tariffa ridotta pari al 25% del corrispondente importo a benzina. Molte regioni offrono esenzioni temporanee o sconti (es. 50%) anche per le vetture ibride.',
+    a: 'Le agevolazioni per veicoli elettrici e ibridi variano per regione, tipo di veicolo e data di immatricolazione. Verifica la regola applicabile sul sito ACI o della tua regione.',
   },
   {
     q: 'Quando scade e come si paga il bollo auto?',
@@ -123,13 +123,13 @@ export default function CalcoloBolloPage() {
         <div className="text-center max-w-2xl mx-auto mb-10">
           <div className="inline-flex items-center gap-2 rounded-full bg-blue-50 border border-blue-200 px-3.5 py-1.5 text-xs font-bold text-blue-700 mb-4">
             <Calculator className="h-3.5 w-3.5" />
-            Tabelle ACI 2026
+            Stima indicativa · verifica ACI
           </div>
           <h1 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-slate-900 leading-[1.15]">
             Calcolo bollo auto 2026
           </h1>
           <p className="mt-3 text-base text-slate-600 leading-relaxed">
-            Calcola la tassa automobilistica regionale in base a potenza (kW o CV), regione, alimentazione e classe ambientale.
+            Inserisci i dati reali del libretto per una stima. L'importo dovuto si verifica con la targa sul sito ACI.
           </p>
         </div>
 
@@ -164,7 +164,7 @@ export default function CalcoloBolloPage() {
               </div>
               <h3 className="text-base font-bold text-slate-900">Esenzioni Ecologiche</h3>
               <p className="text-xs text-slate-600 leading-relaxed">
-                Le auto 100% elettriche godono di 5 anni di esenzione nella maggioranza delle regioni. Le ibride beneficiano di riduzioni fino al 50% nei primi 3-5 anni di vita.
+                Le agevolazioni per elettriche e ibride dipendono dalla regione e dalla prima immatricolazione. Controlla il caso specifico sul sito ACI.
               </p>
             </div>
           </div>
@@ -174,7 +174,7 @@ export default function CalcoloBolloPage() {
             <div className="space-y-2 text-center sm:text-left">
               <h3 className="text-xl font-bold">Stai valutando di comprare quest&apos;auto usata?</h3>
               <p className="text-xs text-blue-100 max-w-lg leading-relaxed">
-                Oltre al bollo, controlla il prezzo di mercato reale dagli annunci in vendita, l&apos;affidabilità e i guasti frequenti del modello.
+                Oltre al bollo, confronta la stima del prezzo con gli annunci disponibili e controlla affidabilità e difetti noti del modello.
               </p>
             </div>
             <Link

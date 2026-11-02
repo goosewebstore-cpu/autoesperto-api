@@ -61,6 +61,16 @@ export function createApp(options: AppOptions = {}) {
   app.use('/analyses', apiLimiter);
   app.use('/comments', apiLimiter);
 
+  const previewLimiter = rateLimit({
+    windowMs: 15 * 60 * 1000,
+    max: 20,
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: { success: false, error: 'Hai raggiunto il limite temporaneo di anteprime. Riprova più tardi.' },
+  });
+  app.use('/reports/free-scan', previewLimiter);
+  app.use('/reports/analyze', previewLimiter);
+
   const authLimiter = rateLimit({
     windowMs: 15 * 60 * 1000,
     max: 20,

@@ -13,8 +13,8 @@ import type { Guide } from './guide-types';
 export const articoliGuides: Guide[] = [
   {
     "slug": "quanto-vale-volkswagen-golf-usata-2026",
-    "title": "Quanto vale una Volkswagen Golf usata nel 2026? Prezzi reali, motorizzazioni e difetti da controllare",
-    "description": "Guida alle quotazioni reali della Volkswagen Golf usata nel 2026: differenze tra Golf 7 e 8, quotazioni per allestimento, affidabilità dei motori TSI e TDI e controlli sul cambio DSG.",
+    "title": "Quanto vale una Volkswagen Golf usata nel 2026? Valutazione indicativa, motori e controlli",
+    "description": "Guida per orientarsi sul valore di una Golf usata: differenze tra generazioni e versioni, elementi che spostano il prezzo e verifiche da fare prima dell’acquisto.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -27,19 +27,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Volkswagen Golf continua a rappresentare uno dei punti di riferimento assoluti nel mercato delle auto usate in Italia. Con l'uscita dei modelli ibridi e le tensioni sui listini del nuovo, la domanda per Golf 7 (prodotta dal 2012 al 2019) e per i primi esemplari di Golf 8 (dal 2020 in avanti) è ai massimi storici.",
           "Chi cerca una Golf usata cerca solidità costruttiva, piacere di guida equilibrato e una tenuta del valore nel tempo senza eguali nel segmento C. Tuttavia, la vasta gamma di motorizzazioni — benzina TSI, turbodiesel TDI, metano TGI e mild/plug-in hybrid eTSI/eHybrid — nasconde differenze sostanziali in termini di costi di gestione e difettosità cronica che vanno comprese prima di firmare o versare una caparra.",
-          "Prima di iniziare la trattativa, puoi verificare la conformità del prezzo richiesto dal venditore confrontandolo con la nostra [valutazione auto usate](/valutazione) basata su migliaia di annunci reali rilevati ogni giorno."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Fasce di prezzo di mercato reali nel 2026 per anno e serie",
+        "heading": "Come stimare il valore di una Volkswagen Golf usata",
         "paragraphs": [
-          "Le quotazioni della Golf usata variano considerevolmente in base alla generazione, all'omologazione antinquinamento (Euro 6b, 6d-Temp, 6d) e al chilometraggio certificato:"
+          "Non esiste un prezzo unico valido per tutte le Volkswagen Golf. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Golf 7 pre-restyling (2013-2016):** da 8.500 € a 12.500 € per versioni 1.6 TDI o 1.2/1.4 TSI con oltre 130.000 km. Le versioni Highline ben accessoriate con fari xeno o LED mantengono una quotazione superiore di circa 1.000 €.",
-          "**Golf 7.5 restyling (2017-2019):** da 13.000 € a 18.500 €. È considerata dagli esperti la Golf moderna più matura e priva di difetti di gioventù, con cockpit digitale (Active Info Display) e motori 1.0 TSI, 1.5 TSI Evo e 1.6/2.0 TDI Euro 6d-Temp.",
-          "**Golf 8 prima serie (2020-2022):** da 18.500 € a 24.500 € per le versioni Life e Style 1.5 eTSI o 2.0 TDI. Le versioni R-Line con pacchetto estetico sportivo e fari Matrix IQ.Light toccano i 26.000 €.",
-          "**Golf 8 restyling (2023-2024):** da 24.000 € a 32.000 € con garanzia residua della casa madre e percorrenze inferiori a 40.000 km."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -77,8 +78,8 @@ export const articoliGuides: Guide[] = [
   },
   {
     "slug": "quanto-vale-volkswagen-polo-usata-2026",
-    "title": "Quanto vale una Volkswagen Polo usata nel 2026? Prezzi reali, motori e affidabilità",
-    "description": "Quotazioni aggiornate della Volkswagen Polo usata nel 2026: fasce di prezzo per Polo 5 e 6, pregi dei motori 1.0 MPI e TSI, consumi e difetti da verificare prima dell'acquisto.",
+    "title": "Quanto vale una Volkswagen Polo usata nel 2026? Valutazione indicativa e controlli",
+    "description": "Come confrontare una Polo usata per generazione, motore, chilometri, manutenzione e dotazioni senza confondere i prezzi richiesti con il prezzo finale di vendita.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -91,19 +92,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Volkswagen Polo è da decenni la compagna ideale per chi desidera il comfort, l'insonorizzazione e la precisione di guida tipiche di una vettura di segmento superiore racchiuse in meno di 4,10 metri di lunghezza. Sul mercato dell'usato italiano è tra le 5 utilitarie più scambiate in assoluto.",
           "Tra la quinta generazione (Polo 5 o 6R/6C, prodotta dal 2009 al 2017) e la sesta generazione (Polo 6 o AW, dal 2017 a oggi costruita sul pianale modulare MQB-A0), il salto generazionale è notevole per abitabilità interna e dotazione ADAS di sicurezza attiva.",
-          "Prima di scegliere l'esemplare giusto, confronta il prezzo dell'annuncio con la nostra [valutazione auto usate](/valutazione) per accertarti di non pagarla sopra la media di mercato."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Quotazioni di mercato per anno di immatricolazione",
+        "heading": "Come stimare il valore di una Volkswagen Polo usata",
         "paragraphs": [
-          "Le quotazioni medie sul mercato italiano per esemplari con storico manutenzioni documentato:"
+          "Non esiste un prezzo unico valido per tutte le Volkswagen Polo. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Polo 5 (2012-2015):** tra 5.500 € e 8.200 € a seconda della motorizzazione (1.2 TSI 90 CV o 1.4 TDI 3 cilindri). Ottima soluzione per chi cerca un'auto economica e solida.",
-          "**Polo 5 Restyling (2016-2017):** tra 8.000 € e 10.500 €. Presenta infotainment compatibile con Apple CarPlay/Android Auto e motori Euro 6b.",
-          "**Polo 6 pre-facelift (2018-2021):** tra 11.500 € e 15.800 €. Spazio a bordo record con bagagliaio da 351 litri (pari a quello di una Golf 6). Motorizzazioni 1.0 MPI da 65/80 CV adatte anche a neopatentati.",
-          "**Polo 6 Restyling (2022-2024):** tra 15.500 € e 21.000 €. Frontale con barra LED continua (IQ.Light), Digital Cockpit di serie su tutti gli allestimenti e interni rifiniti."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -129,13 +131,38 @@ export const articoliGuides: Guide[] = [
           "**Frizione del cambio manuale:** Sulle motorizzazioni 1.0 TSI con guida frequente in città, il cuscinetto reggispinta o il disco frizione possono mostrare segni di affaticamento prima dei 100.000 km. Prova a inserire la terza marcia col freno a mano tirato e rilascia la frizione: l'auto deve spegnersi immediatamente.",
           "**Condizioni pneumatici e usura battistrada:** Se le gomme anteriori sono consumate asimmetricamente verso l'interno, l'auto ha preso una buca violenta e richiede convergenza e campanatura."
         ]
+      },
+      {
+        "heading": "Ispezione dal vivo e prova su strada: i controlli specifici sulla Polo",
+        "paragraphs": [
+          "Prima di firmare la proposta di acquisto per una Volkswagen Polo usata (serie 6 prodotta dal 2017 o serie 5 dal 2009 al 2017), è fondamentale verificare sul campo alcuni comportamenti dinamici tipici del telaio MQB-A0.",
+          "Durante il test drive, presta attenzione a questi quattro passaggi peritali:"
+        ],
+        "list": [
+          "**Frizione e innesti marce del cambio manuale 5 marce (motori 1.0 MPI e TSI 95 CV):** Innesta la retromarcia a vettura ferma con pedale frizione a fondo corsa. Se avverti grattamenti o impuntamenti, il comando idraulico o lo spingidisco stanno cedendo.",
+          "**Rumori dal ponte torcente posteriore sui dossi:** Le boccole del ponte posteriore tendono a indurirsi precocemente se la vettura ha circolato su strade dissestate, generando cigolii gommosi avvertibili a finestrini abbassati.",
+          "**Consumo liquido refrigerante sui 1.0 TSI:** Controlla a motore freddo la vaschetta del liquido di raffreddamento: microperdite dal corpo pompa acqua/termostato integrato sono note intorno agli 80.000-100.000 km.",
+          "**Verifica dell'impianto frenante posteriore a tamburo vs dischi:** Le versioni con potenze inferiori a 100 CV montano freni a tamburo al posteriore. Richiedono pulizia e verifica dei cilindretti idraulici ogni 60.000 km per evitare frenata disomogenea."
+        ]
+      },
+      {
+        "heading": "Consumi reali rilevati e costi medi di gestione annua",
+        "paragraphs": [
+          "La Volkswagen Polo brilla per efficienza nei consumi, ma le spese fisse variano notevolmente a seconda della motorizzazione scelta:"
+        ],
+        "list": [
+          "**1.0 TSI benzina 95 CV:** Consumo medio reale di 17,5 km/l in ciclo combinato (fino a 20 km/l su tratte extraurbane a 90 km/h). Bollo auto medio annuo: circa 185-210 € in base alla regione di residenza.",
+          "**1.0 TGI a metano (90 CV):** Percorre oltre 27 km con un kg di metano (circa 4,80 € per 100 km). Esenzione parziale o totale del bollo auto in molte regioni italiane (es. Lombardia e Piemonte). Ricorda il collaudo quadriennale delle bombole.",
+          "**1.6 TDI diesel (80-95 CV):** Oltre 21 km/l reali, ma sconsigliato a chi percorre meno di 15.000 km/anno o si muove solo in città per rischio intasamento del filtro DPF.",
+          "**Tagliando ordinario completo (olio 0W-20 LongLife IV + filtri aria, olio, abitacolo):** da 180 € a 280 € presso officine indipendenti qualificate."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-toyota-yaris-usata-2026",
-    "title": "Quanto vale una Toyota Yaris usata nel 2026? Prezzi reali, ibrida e cosa sapere prima di comprarla",
-    "description": "Guida alle quotazioni della Toyota Yaris usata nel 2026: differenze tra benzina e full hybrid, salute della batteria di trazione, tagliandi Toyota Relax e tenuta del valore.",
+    "title": "Quanto vale una Toyota Yaris usata nel 2026? Valutazione per versione e controlli",
+    "description": "Guida alla valutazione di una Yaris usata: generazione, motorizzazione ibrida o benzina, chilometri, manutenzione e controlli da fare sull’esemplare.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -148,19 +175,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Toyota Yaris rappresenta l'utilitaria ibrida per antonomasia. Grazie all'esperienza ventennale di Toyota nella tecnologia Full Hybrid (HSD - Hybrid Synergy Drive), la Yaris gode di una reputazione di affidabilità quasi granitica sul mercato dell'usato italiano.",
           "Questo primato si traduce in una svalutazione straordinariamente bassa: una Yaris ibrida usata di 4 o 5 anni conserva spesso oltre il 60% del suo valore originario di listino, rendendola un investimento sicuro ma anche un veicolo su cui fare molta attenzione al momento dell'acquisto per non strapagarla.",
-          "Controlla il valore di mercato attuale del modello con la [valutazione auto usate di AutoEsperto](/valutazione) prima di formulare la tua offerta al venditore."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Fasce di prezzo della Yaris usata nel 2026",
+        "heading": "Come stimare il valore di una Toyota Yaris usata",
         "paragraphs": [
-          "Le quotazioni sul mercato reale variano in base alla serie e alla presenza del sistema ibrido:"
+          "Non esiste un prezzo unico valido per tutte le Toyota Yaris. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Yaris 3 ibrida pre-restyling (2012-2016):** da 7.500 € a 10.500 € per auto con 100.000-140.000 km. Motore 1.5 ibrido 4 cilindri da 100 CV complessivi.",
-          "**Yaris 3 Restyling (2017-2019):** da 11.000 € a 14.500 €. Include il pacchetto di sicurezza Toyota Safety Sense di serie e frontale a X ridisegnato.",
-          "**Yaris 4 ibrida (2020-2022):** da 15.500 € a 19.500 €. Costruita sulla nuova piattaforma TNGA-B con motore 1.5 a 3 cilindri e batteria agli ioni di litio da 116 CV totali. Consumi record (fino a 25 km/l reali in città).",
-          "**Yaris 4 recente (2023-2024):** da 19.000 € a 23.500 €, comprese le versioni Lounge, GR Sport o Trend con garanzia residua della casa."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -180,13 +208,38 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "Durante il test drive, verifica il passaggio fluido tra motore elettrico e termico. Non devono esserci scossoni o vibrazioni metalliche quando il motore a benzina si avvia. L'e-CVT è privo di frizione meccanica tradizionale, quindi non esiste usura del disco frizione. Controlla infine lo stato di dischi e pastiglie: sulle ibride, grazie alla frenata rigenerativa, i freni durano spesso oltre 80.000 km."
         ]
+      },
+      {
+        "heading": "Checklist peritale specifica per la Yaris Hybrid usata",
+        "paragraphs": [
+          "La tecnologia Full Hybrid Toyota è celebre per l'altissima affidabilità meccanica, ma su un esemplare di seconda mano occorre verificare parametri specifici del sistema elettrico e della trasmissione e-CVT:",
+          "Ecco i controlli da eseguire prima di concludere la trattativa:"
+        ],
+        "list": [
+          "**Stato della batteria di avviamento 12V ausiliaria:** Situata nel bagagliaio o sotto il sedile posteriore, è una batteria di piccole dimensioni (35-45 Ah). Se l'auto è rimasta ferma nei piazzali per mesi, la tensione scende sotto i 12,2V causando mancate accensioni del sistema ibrido Ready.",
+          "**Ispezione visiva dell'inverter e del circuito ad alta tensione (cavi arancioni):** Verifica che non vi siano tracce di ossidazione o manomissioni nei cavi arancioni nel vano motore e che il circuito di raffreddamento dell'inverter abbia il liquido al livello prescritto.",
+          "**Verifica dell'assenza di trascinamento e vibrazioni a freddo:** All'accensione del motore termico a freddo, il 3 cilindri 1.5 o il 4 cilindri 1.5 non devono manifestare scuotimenti anomali sui supporti motore.",
+          "**Usura dischi freno e pastiglie:** Grazie alla frenata rigenerativa elettrica, i freni della Yaris durano oltre 90.000 km. Se a 50.000 km trovi dischi già solcati o pastiglie finite, la percorrenza reale potrebbe essere molto superiore a quella indicata sul tachimetro."
+        ]
+      },
+      {
+        "heading": "Costi di mantenimento reali e consumi record della Yaris ibrida",
+        "paragraphs": [
+          "I costi di possesso della Toyota Yaris sono tra i più bassi del mercato automobilistico italiano:"
+        ],
+        "list": [
+          "**Consumo urbano reale:** 23-26 km/l nel traffico cittadino sfruttando la trazione elettrica EV fino al 60% del tempo di percorrenza.",
+          "**Consumo autostradale:** 16-18 km/l a 130 km/h costanti (dove il motore termico lavora a regime sostenuto per via della trasmissione epicicloidale).",
+          "**Bollo auto ibrida:** Paghi solo la potenza del motore termico (circa 54-68 kW), con esenzioni regionali totali per 3 o 5 anni a seconda della regione (es. Lazio, Puglia, Campania, Liguria).",
+          "**Manutenzione ordinaria semplificata:** Assenza di frizione, motorino d'avviamento tradizionale, alternatore e cinghie servizi ausiliarie, con un risparmio stimato di oltre 600 € sui primi 100.000 km."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-peugeot-208-usata-2026",
-    "title": "Quanto vale una Peugeot 208 usata nel 2026? Prezzi, motorizzazioni e difetti da controllare",
-    "description": "Quotazioni e guida all'acquisto della Peugeot 208 usata nel 2026: prima vs seconda generazione, allerta cinghia a bagno d'olio PureTech, consumi del diesel BlueHDi e controlli chiave.",
+    "title": "Quanto vale una Peugeot 208 usata nel 2026? Versioni, valutazione e controlli",
+    "description": "Cosa incide sul valore di una Peugeot 208 usata: generazione, motore, cambio, chilometri e manutenzione, con una checklist per confrontare gli annunci.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -199,19 +252,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Peugeot 208 è una delle compatte più vendute in Europa. Dal design aggressivo con i caratteristici fari anteriori a dente di leone fino all'innovativo posto di guida i-Cockpit con volante compatto ribassato e strumentazione digitale 3D, la 208 ha conquistato un pubblico vastissimo, dai giovani alle famiglie.",
           "Sul mercato dell'usato, tuttavia, la 208 richiede una perizia tecnica superiore alla media a causa di problematiche meccaniche ampiamente documentate che hanno interessato le motorizzazioni a benzina PureTech e i diesel BlueHDi.",
-          "Prima di valutare un esemplare, verifica il prezzo reale tramite il nostro strumento di [valutazione auto usate](/valutazione) per comprendere se la richiesta è allineata allo stato di manutenzione documentato."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Fasce di prezzo della 208 usata nel 2026",
+        "heading": "Come stimare il valore di una Peugeot 208 usata",
         "paragraphs": [
-          "I valori di compravendita effettivi tra privati e concessionari in Italia:"
+          "Non esiste un prezzo unico valido per tutte le Peugeot 208. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**208 I serie (2013-2016):** da 4.500 € a 7.500 € per versioni 1.2 VTi o 1.4/1.6 HDi con oltre 120.000 km.",
-          "**208 I serie restyling (2017-2019):** da 7.500 € a 10.800 €. Versioni Allure o GT Line con fari LED e cerchi in lega.",
-          "**208 II serie (2020-2022):** da 12.500 € a 17.500 €. Salto stilistico notevole, interni tecnologici e motori Euro 6d.",
-          "**208 II serie recente (2023-2024):** da 17.500 € a 22.000 €, comprese le versioni elettriche e-208 da 136 CV."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -231,13 +285,37 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "Se scegli il motore turbodiesel 1.5 BlueHDi da 100 o 130 CV, controlla se è stata eseguita la modifica alla catena di collegamento tra i due alberi a camme (passata da 7 mm a 8 mm nei richiami ufficiali per evitare rotture improvvise) e verifica che non ci sia la spia UREA accesa fissa, sintomo del guasto alla pompa del serbatoio AdBlue (approfondisci nella nostra [guida all'AdBlue nei diesel](/guide/adblue-diesel-cosa-e-quanto-costa))."
         ]
+      },
+      {
+        "heading": "Ispezione dal vivo e prova dinamica della Peugeot 208 usata",
+        "paragraphs": [
+          "Se stai visionando una Peugeot 208 di seconda mano, la prova su strada e il controllo visivo del vano motore devono concentrarsi sui seguenti punti critici:"
+        ],
+        "list": [
+          "**Test della pressione dell'olio sul PureTech:** All'avvio a motore freddo la spia rossa della pressione olio deve spegnersi istantaneamente. Se indugia per più di 1-2 secondi o se senti rumori di punterie idrauliche scariche, la pescante della pompa dell'olio potrebbe essere parzialmente ostruita dai residui della cinghia di distribuzione.",
+          "**Frenata assistita e servofreno a depressione:** Poiché la pompa a vuoto dei freni è azionata dall'albero a camme e lubrificata dallo stesso olio, i detriti della cinghia possono comprometterne il vuoto, rendendo il pedale del freno insolitamente duro.",
+          "**Aggiornamento infotainment e quadro strumenti 3D i-Cockpit:** Sul touchscreen centrale verifica la reattività ai comandi del clima e la connessione Apple CarPlay / Android Auto; sui modelli GT verifica che la visualizzazione olografica 3D del quadro strumenti non presenti sfarfallii.",
+          "**Ammortizzatori e tamponi di finecorsa anteriori:** Su buche secche non devono manifestarsi colpi metallici sordi, tipici dell'usura precoce dei cuscinetti reggispinta superiori dei montanti MacPherson."
+        ]
+      },
+      {
+        "heading": "Consumi effettivi e guida alla scelta tra PureTech, BlueHDi ed e-208",
+        "paragraphs": [
+          "La scelta dell'alimentazione sulla 208 usata determina l'affidabilità complessiva e i costi annui di percorrenza:"
+        ],
+        "list": [
+          "**1.2 PureTech 100 CV con cambio manuale 6 marce:** Molto brillante, consuma 16,5 km/l reali. Consigliabile solo se provvisto di storico tagliandi annuali certificati con olio 0W-20 conforme e cinghia verificata con calibro.",
+          "**1.5 BlueHDi 100-130 CV:** Consumi eccezionali oltre 22 km/l reali su percorsi extraurbani. Ideale per chi percorre oltre 20.000 km all'anno. Attenzione alla modifica della catena camme da 8 mm e all'efficienza del serbatoio AdBlue.",
+          "**e-208 Elettrica (50 kWh, 136 CV):** Autonomia reale compresa tra 240 e 310 km. Ideale per chi carica a casa; prima di comprarla esigi il certificato dello stato di salute della batteria (SoH - State of Health), che deve essere superiore al 90%.",
+          "**Bollo auto:** Esenzione quinquennale completa sulle elettriche; importo compreso tra 170 € e 240 € per le versioni PureTech 100 CV."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-citroen-c3-usata-2026",
-    "title": "Quanto vale una Citroën C3 usata nel 2026? Prezzi e i punti deboli da conoscere",
-    "description": "Guida completa alle quotazioni della Citroën C3 usata nel 2026: prezzi della terza serie con Airbump, affidabilità dei motori PureTech e BlueHDi e controlli sospensioni.",
+    "title": "Quanto vale una Citroën C3 usata nel 2026? Versioni e controlli",
+    "description": "Come orientarsi tra le generazioni della Citroën C3 e valutare un esemplare considerando motore, chilometraggio, manutenzione, condizioni e dotazioni.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -250,18 +328,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Citroën C3 di terza generazione (lanciata a fine 2016 e rimasta a listino con vari aggiornamenti fino al 2024) è una delle protagoniste assolute delle città italiane. Con i suoi celebri Airbump laterali antigraffio, le combinazioni bicolore del tetto e le sospensioni con smorzamento morbido votate al massimo comfort, la C3 usata è la citycar ideale per chi fa molti chilometri su asfalti sconnessi e pavé cittadino.",
           "Condividendo la piattaforma e i motori con la Peugeot 208, la Citroën C3 condivide anche i medesimi punti di attenzione meccanica che ogni compratore consapevole deve conoscere per negoziare il prezzo corretto.",
-          "Puoi controllare se il prezzo richiesto per la C3 che hai individuato è conveniente utilizzando la nostra [valutazione auto usate](/valutazione)."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Fasce di prezzo della Citroën C3 usata nel 2026",
+        "heading": "Come stimare il valore di una Citroën C3 usata",
         "paragraphs": [
-          "Le quotazioni realistiche sul mercato italiano per la terza serie:"
+          "Non esiste un prezzo unico valido per tutte le Citroën C3. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**C3 III serie pre-restyling (2017-2019):** da 7.000 € a 10.500 € per le versioni Feel e Shine con motore 1.2 PureTech 82 CV o 1.6/1.5 BlueHDi.",
-          "**C3 III serie Restyling (2020-2022):** da 10.500 € a 14.200 €. Riconoscibile dal frontale con baffo cromato a forma di V e fari LED di serie, sedili Advanced Comfort con imbottitura maggiorata.",
-          "**C3 III serie recente (2023-2024):** da 13.500 € a 17.500 € per allestimenti Max o You con chilometraggio inferiore a 35.000 km."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -275,13 +355,37 @@ export const articoliGuides: Guide[] = [
           "**Ammortizzatori posteriori:** Se l'auto rimbalza vistosamente dopo un avvallamento a velocità sostenuta o carica bagagli, gli ammortizzatori posteriori hanno perso efficienza e vanno rimpiazzati.",
           "**Stato degli Airbump e guarnizioni portiere:** Verifica che i pannelli paracolpi in poliuretano sulle portiere non si siano scoloriti o staccati sui bordi a causa di lavaggi aggressivi con lancia ad alta pressione."
         ]
+      },
+      {
+        "heading": "Checklist di controllo dal vivo e prova dinamica per la Citroën C3",
+        "paragraphs": [
+          "La Citroën C3 terza serie (con o senza protezioni Airbump laterali) si distingue per l'assetto morbidissimo e i sedili Advanced Comfort. Prima di acquistarla, verifica questi aspetti peritali:"
+        ],
+        "list": [
+          "**Verifica visiva della cinghia a bagno d'olio sul 1.2 PureTech:** Svita il tappo dell'olio a motore freddo con l'ausilio di una torcia led. La cinghia non deve presentare micro-crepe, rigonfiamenti o sfilacciature filamentose sui bordi.",
+          "**Stato degli Airbump e delle guarnizioni portiere:** Sugli esemplari parcheggiati regolarmente al sole, controlla che le modanature paracolpi Airbump non presentino sbiancamenti o distacchi dei ganci di fissaggio e che i profili cromati siano saldi.",
+          "**Condensatore e compressore dell'aria condizionata:** Il condensatore anteriore è molto esposto al pietrisco sollevato dai veicoli che precedono. Accendi il climatizzatore: deve erogare aria a 6-8°C entro 90 secondi. Se non raffredda, sospetta una microfessurazione del radiatore clima (riparazione: 250-400 €).",
+          "**Silent block e ammortizzatori morbidi:** L'assetto votato al comfort tende a usurarsi prima sui fondi dissestati: controlla che l'auto non rolli eccessivamente in curva o oscilli ripetutamente dopo i dossi rallentatori."
+        ]
+      },
+      {
+        "heading": "Consumi reali rilevati e costi annui di manutenzione della Citroën C3",
+        "paragraphs": [
+          "La C3 è una delle citycar più economiche da gestire, a patto di rispettare scadenze d'officina scrupolose:"
+        ],
+        "list": [
+          "**1.2 PureTech 83 CV (aspirato per neopatentati):** Consumo medio reale di 16 km/l. Motore robusto ma tranquillo, perfetto per contesti urbani ed extraurbani a medio raggio.",
+          "**1.2 PureTech 110 CV Turbo:** Molto reattivo e divertente, consumo medio di 15,2 km/l. Richiede cambio olio tassativo ogni 12 mesi o 15.000 km con specifica certificata Stellantis per preservare la cinghia.",
+          "**1.5 BlueHDi 100 CV diesel:** Uno dei motori più parchi della categoria, con medie effettive di oltre 21,5 km/l in autostrada. Richiede tragitti lunghi per la rigenerazione FAP.",
+          "**Bollo e assicurazione RC Auto:** Potenze contenute (da 61 a 81 kW) mantengono il bollo annuale tra 140 € e 195 € e la classe di merito assicurativa tra le più economiche del segmento B."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-dacia-duster-usata-2026",
-    "title": "Quanto vale una Dacia Duster usata nel 2026? Prezzi reali e il motore da evitare",
-    "description": "Quotazioni della Dacia Duster usata nel 2026: differenze tra prima e seconda serie, versioni 4x4 e GPL Eco-G, l'analisi del motore 1.2 TCe da evitare e la tenuta del valore.",
+    "title": "Quanto vale una Dacia Duster usata nel 2026? Versione, trazione e controlli",
+    "description": "Gli elementi che incidono sul valore di una Dacia Duster usata: generazione, motore, trazione, allestimento, manutenzione e controlli prima dell’acquisto.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -294,18 +398,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Dacia Duster ha riscritto le regole del mercato dei SUV in Italia. Nata come vettura economica senza fronzoli, nelle sue prime due generazioni si è trasformata in un vero e proprio status symbol pragmatico, capace di unire una vera motricità off-road nelle versioni 4x4 a costi di esercizio bassissimi nelle versioni a GPL.",
           "Proprio questa reputazione fa sì che la Duster usata mantenga prezzi altissimi: trovare una Duster recente a meno di 12.000 € con pochi chilometri è quasi impossibile. Tuttavia, ci sono motorizzazioni da evitare assolutamente per non incorrere in danni da migliaia di euro.",
-          "Verifica sempre il valore di mercato stimato inserendo targa o modello nella nostra [valutazione auto usate](/valutazione)."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Quotazioni reali per anno e allestimento nel 2026",
+        "heading": "Come stimare il valore di una Dacia Duster usata",
         "paragraphs": [
-          "I prezzi effettivi di mercato in Italia per esemplari ben manutenuti:"
+          "Non esiste un prezzo unico valido per tutte le Dacia Duster. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Duster I serie (2010-2017):** tra 5.500 € e 9.000 €. Molto richieste le 1.5 dCi 4x4 da cacciatori e appassionati di montagna, ma attenzione alla ruggine sottoscocca su auto provenienti da zone montane.",
-          "**Duster II serie pre-restyling (2018-2021):** tra 11.500 € e 15.500 €. Comfort notevolmente migliorato, servosterzo elettrico, plancia moderna e allestimenti Prestige molto completi.",
-          "**Duster II serie Restyling (2022-2024):** tra 15.000 € e 20.000 € con il nuovo logo Dacia Link, fari a Y e cambio automatico EDC a doppia frizione disponibile sul 1.3 TCe."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -324,13 +430,37 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "Se acquisti una Duster 4x4, falla sollevare sul ponte: controlla l'integrità delle cuffie dei semiassi, l'albero di trasmissione centrale e verifica che non ci siano ammaccature sul serbatoio o sulla coppa dell'olio dovute a passaggi fuoristrada gravosi. Testa la manopola di selezione 4WD (2WD, Auto, Lock) verificando che la spia 4WD Lock si inserisca prontamente senza scatti o cigolii metallici."
         ]
+      },
+      {
+        "heading": "Checklist di controllo peritale dal vivo per Dacia Duster usata",
+        "paragraphs": [
+          "Il Dacia Duster (prima serie fino al 2017 o seconda serie dal 2018 al 2024) è un SUV compatto robusto e pragmatico, spesso impiegato su strade bianche, cantieri o contesti montani. Prima di formulare un'offerta, controlla attentamente:"
+        ],
+        "list": [
+          "**Sottoscocca, traverse e bracci delle sospensioni (ispezione da sotto):** Verifica che il fondo dell'auto non presenti bozze, graffi profondi o colpi sul serbatoio carburante e sui differenziali posteriori delle versioni 4x4.",
+          "**Innesto della trazione integrale 4WD Lock (modelli 4x4):** Ruota il selettore rotativo tra 2WD, Auto e Lock. Su fondo a scarsa aderenza verifica che il blocco centrale del giunto elettromagnetico si attivi senza spie di anomalia 4WD sul cruscotto.",
+          "**Controllo iniettori e riduttore di pressione sul 1.0 TCe ECO-G a GPL:** Passa dall'alimentazione benzina a gas: il passaggio deve essere istantaneo e fluido, senza strattonamenti o ritardi nell'erogazione sotto carico.",
+          "**Allineamento cofano, portellone baule e guarnizioni:** Sulle prime serie i ganci del portellone posteriore e i supporti delle portiere tendono a cedere provocando fastidiosi cigolii durante la marcia su sterrato."
+        ]
+      },
+      {
+        "heading": "Consumi reali sul campo e motorizzazioni: quale Duster conviene comprare?",
+        "paragraphs": [
+          "Il Duster offre combinazioni motoristiche molto diverse tra loro, con costi di esercizio diametralmente opposti:"
+        ],
+        "list": [
+          "**1.0 TCe ECO-G (100 CV bifuel GPL/Benzina):** Il vero campione di economia d'esercizio. Con un pieno di GPL da 25-30 € percorre oltre 420 km (costo inferiore a 7 centesimi al chilometro). Esenzioni bollo parziali o totali in molte regioni.",
+          "**1.5 Blue dCi / dCi 110-115 CV (Diesel Renault K9K):** Motore proverbiale per longevità e robustezza, capace di oltre 300.000 km. Consumo reale combinato di 18-20 km/l. La scelta obbligata per chi fa tanta autostrada o sceglie la trazione integrale 4x4.",
+          "**1.2 TCe 125 CV (motore da evitare):** Prodotto tra il 2013 e il 2018, afflitto da grave consumo anomalo d'olio e rotture precoci della catena di distribuzione. Se ne consiglia categoricamente l'esclusione dalla ricerca.",
+          "**Costi tagliandi e ricambi:** Ricambi condivisi con la banca organi Renault-Nissan, reperibili a costi fino al 40% inferiori rispetto ai SUV tedeschi o giapponesi."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-fiat-tipo-usata-2026",
-    "title": "Quanto vale una Fiat Tipo usata nel 2026? Prezzi reali e il motore consigliato",
-    "description": "Guida alle quotazioni della Fiat Tipo usata nel 2026: berlina, 5 porte o Station Wagon, affidabilità del motore 1.6 MultiJet e 1.4 Fire, consumi e difetti noti.",
+    "title": "Quanto vale una Fiat Tipo usata nel 2026? Motori, versioni e controlli",
+    "description": "Guida per confrontare una Fiat Tipo usata in base a carrozzeria, motore, anno, chilometri, manutenzione e condizioni dell’esemplare.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -343,18 +473,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Fiat Tipo è la regina del rapporto qualità/prezzo nel segmento delle auto da famiglia. Disponibile nelle varianti 5 porte, 4 porte berlina tre volumi e la spaziosissima Station Wagon (con oltre 550 litri di baule), la Tipo è un'automobile senza complicazioni tecnologiche inutili, robusta e facile da riparare in qualsiasi officina d'Italia con ricambi a prezzi contenuti.",
           "Sul mercato dell'usato, la Tipo subisce una svalutazione iniziale più marcata rispetto a Golf o Focus, il che rappresenta un enorme vantaggio per chi compra: con cifre comprese tra 8.000 e 13.000 euro si possono acquistare esemplari recenti con chilometraggio contenuto e motori capaci di fare centinaia di migliaia di chilometri.",
-          "Verifica il range di prezzo per il modello specifico confrontandolo con la nostra [valutazione auto usate](/valutazione)."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Fasce di prezzo della Fiat Tipo usata nel 2026",
+        "heading": "Come stimare il valore di una Fiat Tipo usata",
         "paragraphs": [
-          "I valori reali rilevati sul mercato dell'usato in Italia:"
+          "Non esiste un prezzo unico valido per tutte le Fiat Tipo. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Tipo pre-facelift (2016-2019):** da 6.800 € a 10.500 € per allestimenti Easy o Lounge con motorizzazioni 1.4 Fire benzina 95 CV o 1.3/1.6 MultiJet.",
-          "**Tipo Restyling (2020-2022):** da 10.500 € a 14.500 € con nuova griglia con logo FIAT a lettere grandi, fari Full LED e quadro strumenti digitale parziale.",
-          "**Tipo Cross e recenti (2023-2024):** da 14.500 € a 19.500 € per le versioni Cross con assetto rialzato di 4 cm, protezioni sottoscocca e motorizzazioni 1.5 Hybrid 130 CV con cambio automatico a 7 rapporti."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -374,13 +506,38 @@ export const articoliGuides: Guide[] = [
           "**Schermo Uconnect da 7 pollici:** Sui modelli 2016-2018 controlla che il display touch non soffra di \"ghost touch\" (comandi fantasma) o delaminazione degli angoli.",
           "**Volano bimassa sul 1.6 MultiJet:** A chilometraggi superiori a 150.000 km, ascolta il rumore a cofano aperto con frizione abbassata e rilasciata in folle: non devono esserci battiti metallici ciclici."
         ]
+      },
+      {
+        "heading": "Ispezione dal vivo e prova dinamica della Fiat Tipo usata",
+        "paragraphs": [
+          "Disponibile in versione 5 porte, Station Wagon e 4 porte berlina (oltre alla versione rialzata Tipo Cross introdotta con il restyling 2021), la Fiat Tipo è la regina del rapporto spazio/prezzo. Prima di acquistarla, verifica questi componenti:"
+        ],
+        "list": [
+          "**Funzionamento servosterzo elettrico Dualdrive (tasto City):** Attiva e disattiva la modalità City girando il volante da fermo da battuta a battuta. Non devono avvertirsi impuntamenti, scatti o accensioni della spia rossa del volante sul quadro strumenti.",
+          "**Supporti motore e oscillazioni al minimo sui motori MultiJet:** Nei diesel 1.3 e 1.6 MultiJet, a vettura ferma al regime minimo, un supporto motore usurato trasmette vibrazioni percepibili su volante e pedaliera.",
+          "**Consumo dischi freno anteriori e usura pastiglie:** La Tipo monta pinze freno che tendono a usurare i dischi anteriori in circa 60.000-70.000 km; controlla con un dito lo scalino sul bordo esterno del disco.",
+          "**Climatizzatore bizona e attuatori palette:** Controlla che la temperatura cambi coerentemente tra lato guida e lato passeggero; la rottura degli attuatori in plastica dei motoposizionatori è un difetto diffuso sulle serie 2016-2018 (riparazione complessa per via dello smontaggio plancia)."
+        ]
+      },
+      {
+        "heading": "Consumi reali e costi di esercizio: perché il 1.6 MultiJet domina l'usato",
+        "paragraphs": [
+          "La Fiat Tipo è una delle automobili più economiche da mantenere dell'intero mercato europeo:"
+        ],
+        "list": [
+          "**1.6 MultiJet II (120-130 CV diesel):** Il motore più equilibrato. Eroga 320 Nm di coppia a 1.750 giri, garantisce riprese scattanti anche a pieno carico e percorre agevolmente 19-21 km/l reali su percorsi extraurbani.",
+          "**1.3 MultiJet (95 CV diesel per neopatentati):** Bassissimi consumi (oltre 22 km/l), distribuzione a catena. Un po' pigro sotto i 2.000 giri, ma ideale per chi cerca costi minimi.",
+          "**1.4 Fire 95 CV benzina (aspirato):** Meccanicamente indistruttibile e ideale per la conversione a GPL dopo l'acquisto, ma le prestazioni sono modeste e i consumi salgono a 13-14 km/l reali in città.",
+          "**1.0 T3 FireFly 100 CV 3 cilindri (dal 2021):** Molto più moderno, silenzioso e pronto ai bassi regimi, con consumi medi intorno ai 16,5 km/l.",
+          "**Tagliando completo e ricambi:** Il costo medio di un tagliando ordinario dal meccanico di fiducia non supera i 140-190 € e qualsiasi officina in Italia dispone dei ricambi originali a magazzino."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-jeep-renegade-usato-2026",
-    "title": "Quanto vale un Jeep Renegade usato nel 2026? Prezzi reali e difetti noti da controllare",
-    "description": "Guida all'acquisto del Jeep Renegade usato nel 2026: prezzi per allestimento e trazione, affidabilità dei motori MultiJet e MultiAir, cambio automatico a 9 marce e ibrido 4xe.",
+    "title": "Quanto vale una Jeep Renegade usata nel 2026? Versioni e controlli",
+    "description": "Come valutare una Jeep Renegade usata considerando motore, cambio, trazione, allestimento, chilometri e costi da verificare prima di comprare.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -393,18 +550,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "Il Jeep Renegade è uno dei SUV compatti più desiderati e venduti in Italia fin dal suo debutto. Prodotto a Melfi insieme alla Fiat 500X con cui condivide telaio e meccanica, il Renegade si distingue per il suo stile squadrato inconfondibile, la griglia a 7 feritoie, la posizione di guida dominante e la reale capacità fuoristradistica nelle versioni Trailhawk a trazione integrale.",
           "La sua popolarità garantisce una tenuta del valore straordinaria, ma trattandosi di un veicolo complesso con molteplici configurazioni (trazione anteriore, integrale meccanica o elettrica 4xe plug-in), le quotazioni possono trarre in inganno.",
-          "Consulta la [valutazione auto usate di AutoEsperto](/valutazione) per verificare se il prezzo dell'annuncio è congruo con l'allestimento e gli optional installati."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Quotazioni medie di mercato nel 2026",
+        "heading": "Come stimare il valore di una Jeep Renegade usata",
         "paragraphs": [
-          "I prezzi effettivi del Renegade usato in Italia:"
+          "Non esiste un prezzo unico valido per tutte le Jeep Renegade. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Renegade prima serie (2015-2018):** da 10.500 € a 15.000 € per allestimenti Longitude o Limited con motore 1.6 MultiJet 120 CV o 1.4 MultiAir 140 CV.",
-          "**Renegade Restyling (2019-2021):** da 15.500 € a 21.000 €. Frontale con fari Full LED circolari, plancia aggiornata con schermo fino a 8.4 pollici e debutto dei motori turbo benzina FireFly T3 (1.0 120 CV) e T4 (1.3 150 CV).",
-          "**Renegade 4xe Plug-in Hybrid (2021-2023):** da 19.500 € a 27.000 € per le versioni con motore 1.3 turbo anteriore e motore elettrico posteriore (190 o 240 CV combinati)."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -418,13 +577,38 @@ export const articoliGuides: Guide[] = [
           "**Consumo d'olio sui motori FireFly 1.0 T3:** Controlla l'astina dell'olio a motore freddo sui modelli con percorrenze oltre 70.000 km.",
           "**Assorbimento anomalo della batteria ausiliaria:** Alcuni proprietari segnalano scarica rapida della batteria dopo soste di qualche giorno a causa del modulo telematico o dell'allarme volumetrico."
         ]
+      },
+      {
+        "heading": "Ispezione dal vivo e prova su strada: cosa controllare su Jeep Renegade usato",
+        "paragraphs": [
+          "Costruita a Melfi sulla medesima piattaforma della Fiat 500X, la Jeep Renegade unisce personalità off-road a praticità cittadina. La verifica peritale prima dell'acquisto richiede attenzione a questi specifici comparti:"
+        ],
+        "list": [
+          "**Supporti motore e vibrazioni al minimo sul 1.6 e 2.0 MultiJet:** È il difetto più ricorrente sulle serie 2015-2019. Se al minimo il cruscotto e la leva del cambio tremano vistosamente, il supporto lato distribuzione e la bielletta inferiore di reazione sono da sostituire (costo: 180-260 € la coppia).",
+          "**Cambio automatico ZF 9 marce (sui motori 2.0 MultiJet 4WD):** Durante la prova su strada verifica la fluidità tra 2ª e 3ª marcia e le scalate in frenata dolce. Se noti sfrizionamenti o colpi secchi, esigi la prova con tester diagnostico e la verifica della sostituzione olio trasmissione AT.",
+          "**Batteria ausiliaria e anomalie Start&Stop:** L'impianto elettrico della Renegade è sensibile alla carica della batteria principale AGM. Se lo Start&Stop non entra in funzione o compaiono falsi allarmi su ESC/Hill Holder, la batteria è al termine del suo ciclo vitale.",
+          "**Tettuccio apribile My Sky / Panoramic Roof:** Se presente, aziona l'apertura completa e verifica che non vi siano scricchiolii o blocchi nei binari e che le guarnizioni non presentino infiltrazioni di pioggia nel cielo dell'abitacolo."
+        ]
+      },
+      {
+        "heading": "Consumi reali rilevati e costi annui di manutenzione della Renegade",
+        "paragraphs": [
+          "La Renegade ha un'aerodinamica squadrata e masse importanti che incidono direttamente sui consumi autostradali:"
+        ],
+        "list": [
+          "**1.6 MultiJet 120-130 CV (Trazione anteriore 2WD):** Consumo medio reale di 16-17,5 km/l. È la versione più venduta e consigliata per costi di gestione equilibrati.",
+          "**2.0 MultiJet 140-170 CV 4WD (Trazione integrale con marce ridotte Trailhawk):** Consumi tra 13,5 e 15 km/l. Imbattibile nell'off-road leggero e sulla neve, ma con bollo e manutenzione più elevati per via del differenziale posteriore e dell'albero di trasmissione.",
+          "**1.3 T4 GSE FireFly Turbo (150-180 CV):** Motore brillante a benzina, ma in città e in autostrada i consumi si attestano tra i 11 e i 13 km/l.",
+          "**4xe Plug-in Hybrid (190-240 CV):** Trazione integrale elettrica al posteriore. Autonomia in solo elettrico di circa 35-42 km reali. Conviene solo se puoi ricaricare ogni notte nel box di casa.",
+          "**Bollo auto annuale:** Da circa 230 € per il 1.6 MultiJet fino a oltre 420 € per le versioni benzina più potenti."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-lancia-ypsilon-usata-2026",
-    "title": "Quanto vale una Lancia Ypsilon usata nel 2026? Prezzi reali e cosa controllare",
-    "description": "Quotazioni della Lancia Ypsilon usata nel 2026: dalla terza serie con motori Fire e Hybrid alla nuova generazione, prezzi reali, punti deboli dello sterzo e consumi.",
+    "title": "Quanto vale una Lancia Ypsilon usata nel 2026? Motori e controlli",
+    "description": "Guida alla valutazione di una Lancia Ypsilon usata: generazione, motorizzazione, allestimento, chilometraggio, manutenzione e condizioni.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -437,18 +621,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "La Lancia Ypsilon di terza generazione (prodotta dal 2011 al 2024 nello stabilimento di Tychy) è stata per oltre un decennio stabilmente al secondo posto delle auto più vendute in Italia, subito dietro la Fiat Panda. I motivi del suo successo duraturo sono l'eleganza degli interni in velluto o Alcantara, le 5 porte con maniglie posteriori a scomparsa e la meccanica condivisa con la Panda, garanzia di costi di manutenzione irrisori.",
           "Sul mercato dell'usato c'è un'offerta vastissima, ma le condizioni di conservazione variano enormemente tra auto usate con cura e veicoli usurati dal traffico metropolitano.",
-          "Controlla il valore corretto del veicolo con la nostra [valutazione auto usate](/valutazione) prima di concordare l'appuntamento con il venditore."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Quotazioni della Ypsilon usata nel 2026",
+        "heading": "Come stimare il valore di una Lancia Ypsilon usata",
         "paragraphs": [
-          "I prezzi medi reali rilevati dagli annunci in Italia:"
+          "Non esiste un prezzo unico valido per tutte le Lancia Ypsilon. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Ypsilon 2012-2016:** tra 4.500 € e 7.200 € per le versioni 1.2 Fire 69 CV o 1.3 MultiJet 95 CV.",
-          "**Ypsilon Restyling (2017-2019):** tra 7.500 € a 10.200 € con sistema Uconnect e allestimenti Gold o Platinum.",
-          "**Ypsilon Hybrid (2020-2024):** tra 10.500 € e 14.500 € per le versioni 1.0 FireFly Mild Hybrid 70 CV con omologazione ibrida, bollo ridotto e consumi in città superiori a 19 km/l."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -461,13 +647,38 @@ export const articoliGuides: Guide[] = [
           "**Frizione e cambio manuale:** Sulle Ypsilon usate prevalentemente in città da più guidatori, il disco frizione tende a staccare molto in alto. Fai una prova di spunto in salita.",
           "**Ingiallimento policarbonato fari:** Sui modelli pre-2017 esposti al sole, i proiettori tendono a opacizzarsi, compromettendo la revisione ministeriale biennale. Lucidatura professionale circa 60-90 € la coppia."
         ]
+      },
+      {
+        "heading": "Checklist di controllo peritale prima di acquistare una Lancia Ypsilon usata",
+        "paragraphs": [
+          "La Lancia Ypsilon terza serie (prodotta dal 2011 al 2024 a 5 porte) è da oltre un decennio stabilmente nella top 3 delle auto più vendute in Italia. La sua straordinaria reperibilità sul mercato dell'usato impone di selezionare solo esemplari con manutenzione trasparente:",
+          "I controlli specifici da effettuare dal vivo:"
+        ],
+        "list": [
+          "**Servosterzo elettrico Dualdrive con funzione City:** È lo stesso sistema montato su Fiat 500 e Panda. A motore acceso gira il volante fino a fondo corsa in entrambe le direzioni: se il volante vibra, si disallinea o compare la spia rossa del servosterzo, i sensori di coppia o il piantone sterzo sono difettosi (costo revisione: 250-400 €).",
+          "**Termostato e livello liquido refrigerante sul motore 1.2 Fire 69 CV:** Il corpo termostato in plastica tende a microfessurarsi col calore provocando piccole perdite di liquido rosso Paraflu. Controlla la vaschetta e il manicotto superiore del radiatore.",
+          "**Ponte posteriore e silent block:** Su fondi sconnessi controlla che non provengano rumori sordi dalla parte posteriore dell'abitacolo.",
+          "**Allineamento cristalli elettrici anteriori:** I pattini guida in plastica dei finestrini elettrici tendono a rompersi con l'età, facendo scendere il finestrino di sbieco o bloccandolo all'interno della portiera."
+        ]
+      },
+      {
+        "heading": "Consumi reali e guida alla motorizzazione: Fire, MultiJet, TwinAir o Mild Hybrid?",
+        "paragraphs": [
+          "La gamma Ypsilon ha attraversato oltre un decennio di evoluzione motoristica:"
+        ],
+        "list": [
+          "**1.2 Fire 69 CV (Benzina e GPL Ecochic):** Il motore più collaudato della storia italiana. Adatto ai neopatentati, robusto ed economico nei ricambi. Se a GPL, verifica la data di scadenza decennale del serbatoio toroidale (la sostituzione costa circa 450-600 €). Consumo medio benzina: 15-16 km/l.",
+          "**1.0 FireFly Mild Hybrid 70 CV (dal 2020 con cambio a 6 marce):** Tre cilindri con sistema BSG a 12V e batteria al litio sotto il sedile guida. Molto efficiente in città (oltre 18,5 km/l reali), rispetta la normativa Euro 6d ed è esente da blocchi del traffico o da strisce blu a pagamento in numerosi comuni.",
+          "**1.3 MultiJet 95 CV (Diesel):** Molto vivace ed economico (oltre 22 km/l), ma raro sulle ultime serie per le normative ambientali. Consigliato solo se risiedi fuori dai grandi bacini urbani soggetti a blocchi invernali.",
+          "**0.9 TwinAir Turbo (85 CV bicilindrico a metano Ecochic):** Costi al km bassissimi, ma il sistema elettroidraulico delle valvole UniAir richiede olio 5W-40 Selenia con cambi categorici entro 15.000 km per evitare rotture del modulo (800-1.200 €)."
+        ]
       }
     ]
   },
   {
     "slug": "quanto-vale-nissan-qashqai-usato-2026",
-    "title": "Quanto vale un Nissan Qashqai usato nel 2026? Prezzi e i 3 difetti da conoscere",
-    "description": "Guida alle quotazioni del Nissan Qashqai usato nel 2026: II vs III serie, prezzi reali sul mercato, i problemi noti del cambio CVT Xtronic e del motore 1.2 DIG-T.",
+    "title": "Quanto vale un Nissan Qashqai usato nel 2026? Versioni e controlli",
+    "description": "Come confrontare un Nissan Qashqai usato per generazione, motore, cambio, chilometri, dotazioni e stato di manutenzione.",
     "published": "2026-09-04",
     "category": "valutazione",
     "cta": "auto-usata-affare",
@@ -480,18 +691,20 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "Il Nissan Qashqai è il modello che nel 2007 ha inventato il segmento dei crossover compatti in Europa, combinando la seduta rialzata e la sensazione di sicurezza di un fuoristrada con i costi di gestione e la maneggevolezza di una berlina da famiglia. La seconda generazione (J11, venduta dal 2014 al 2021) è attualmente uno dei modelli più cercati in assoluto sul mercato dell'usato tra 10.000 e 18.000 euro.",
           "Tuttavia, prima di acquistare un Qashqai usato è indispensabile conoscere la storia manutentiva dell'esemplare, perché alcune combinazioni di motore e cambio hanno fatto registrare difettosità severe.",
-          "Effettua una [valutazione auto usate](/valutazione) prima di procedere per conoscere la quotazione esatta parametrata al chilometraggio effettivo."
+          "Per un primo orientamento puoi consultare la [valutazione AutoEsperto](/valutazione). Il risultato è una stima da leggere insieme a versione, chilometraggio, condizioni e annunci comparabili: non è una quotazione ufficiale né il prezzo finale di vendita."
         ]
       },
       {
-        "heading": "Fasce di prezzo del Qashqai usato nel 2026",
+        "heading": "Come stimare il valore di una Nissan Qashqai usata",
         "paragraphs": [
-          "Le quotazioni realistiche in Italia suddivise per generazione:"
+          "Non esiste un prezzo unico valido per tutte le Nissan Qashqai. Il nome del modello comprende generazioni e allestimenti diversi, mentre due auto dello stesso anno possono avere motori, cambi, chilometri e manutenzioni molto differenti. La stima va costruita confrontando esemplari simili e condizioni documentate."
         ],
         "list": [
-          "**Qashqai II serie pre-restyling (2014-2017):** tra 9.500 € e 13.500 € per versioni Acenta o N-Connecta 1.5 dCi o 1.2 DIG-T.",
-          "**Qashqai II serie Restyling (2018-2021):** tra 14.000 € e 19.500 €. Riconoscibile dal volante sportivo a D, fari Full LED e motori 1.3 DIG-T da 140/160 CV sviluppati con Mercedes o 1.7 dCi 150 CV 4WD.",
-          "**Qashqai III serie (2021-2024):** tra 20.500 € e 29.000 € con sistema mild hybrid o l'innovativo propulsore elettrico con range extender e-POWER."
+          "**Identifica la versione precisa.** Annota generazione, anno di prima immatricolazione, motore, potenza, cambio, carrozzeria e allestimento. Non confrontare due annunci solo perché riportano lo stesso modello.",
+          "**Scegli confronti omogenei.** Cerca esemplari dello stesso motore e generazione, con chilometraggio e dotazioni vicini. Registra data e zona dell’annuncio: la disponibilità locale e l’età dell’inserzione possono cambiare il confronto.",
+          "**Valuta stato e manutenzione.** Considera fatture, tagliandi, revisione, pneumatici, danni visibili e interventi prossimi. Sottrai dal tuo budget i lavori da fare, senza trasformare ogni difetto in una riduzione fissa uguale per tutti.",
+          "**Confronta lo stesso tipo di venditore.** Un prezzo di un professionista può includere preparazione e condizioni contrattuali diverse da una vendita tra privati; leggi cosa è compreso e chi vende.",
+          "**Distingui richiesta e vendita.** Il prezzo pubblicato è una richiesta, non la prova del prezzo concluso. Senza dati verificabili sulle transazioni, una fascia online resta indicativa e non va chiamata ‘prezzo reale’."
         ]
       },
       {
@@ -504,13 +717,38 @@ export const articoliGuides: Guide[] = [
           "**Consumo anomalo di olio sul motore benzina 1.2 DIG-T (H5Ft):** Come sul cugino Dacia 1.2 TCe, questo motore soffre di consumo eccessivo d'olio e usura catena. Consigliatissimo orientarsi sul più recente 1.3 DIG-T (dal 2019 in poi) o sul collaudatissimo diesel 1.5 dCi.",
           "**Boccole della barra stabilizzatrice posteriore:** Sui modelli con oltre 100.000 km le sospensioni posteriori tendono a produrre scricchiolii sulle ondulazioni dell'asfalto. Riparazione da circa 120-180 €."
         ]
+      },
+      {
+        "heading": "Ispezione dal vivo e prova dinamica del Nissan Qashqai usato",
+        "paragraphs": [
+          "Il Nissan Qashqai è il pioniere dei crossover compatti in Europa. Tra la seconda generazione (J11, prodotta dal 2014 al 2021) e la terza (J12, dal 2021 con tecnologia e-Power), ci sono importanti controlli tecnici da eseguire sul campo:"
+        ],
+        "list": [
+          "**Frizione e volano bimassa sul 1.5 dCi e 1.6 dCi manuale:** Premi il pedale frizione a metà corsa al minimo: se avverti pulsazioni metalliche sotto la suola o se allo spegnimento del motore si sente un sobbalzo metallico secco, il volano bimassa ha gioco eccessivo (sostituzione kit frizione + volano: 750-1.100 €).",
+          "**Cambio automatico a variazione continua X-Tronic (CVT):** Durante l'accelerazione progressiva verifica che la trasmissione simuli i cambi marcia senza strappi violenti, slittamenti prolungati del nastro metallico o rumorosità di cuscinetti.",
+          "**Telecamere Around View Monitor 360° e radar anticollisione:** Prova le manovre di parcheggio a display: tutte e 4 le telecamere (griglia frontale, specchietti e portellone) devono trasmettere immagini pulite senza righe o schermate blu.",
+          "**Condotti aria intercooler e tubazioni turbo sul 1.5 dCi:** Controlla che i manicotti in gomma nera tra turbina e intercooler non presentino trasudamenti d'olio abbondanti o fessurazioni da calore."
+        ]
+      },
+      {
+        "heading": "Consumi reali rilevati e costi medi di gestione del Qashqai",
+        "paragraphs": [
+          "Il Qashqai vanta masse contenute rispetto alla concorrenza, che si traducono in percorrenze vantaggiose:"
+        ],
+        "list": [
+          "**1.5 dCi / Blue dCi (110-115 CV diesel Renault):** Il re dell'efficienza: percorre 18-20 km/l reali in autostrada a 130 km/h. Tagliandi economici e grande longevità chilometrica se ben manutenuto.",
+          "**1.3 DIG-T benzina 4 cilindri (140-160 CV sviluppato con Mercedes-Benz):** Motore moderno a iniezione diretta, molto silenzioso e progressivo, con consumi medi effettivi di 15-16 km/l in ciclo misto.",
+          "**1.2 DIG-T 115 CV (da controllare con estrema cautela):** Versione 2014-2018 soggetta a consumi d'olio anomali (fino a 1 litro ogni 1.500 km) dovuti a fasce elastiche difettose. Pretendi la verifica del livello e lo storico interventi.",
+          "**e-Power (serie J12 dal 2022):** Trazione 100% elettrica con generatore termico 1.5 a benzina a bordo. Consumi urbani sorprendenti di 20-22 km/l reali, silenziosità assoluta e zero ansia da ricarica alla spina.",
+          "**Bollo e costi tagliandi:** Bollo annuale tra 210 € e 290 € per le versioni termiche più diffuse."
+        ]
       }
     ]
   },
   {
     "slug": "comprare-auto-usata-rivenditore-o-privato",
     "title": "Comprare auto usata da concessionario o da privato: pro, contro e cosa conviene nel 2026",
-    "description": "Guida comparativa: differenze di prezzo del 15-25%, garanzia legale obbligatoria di 12-24 mesi contro il visto e piaciuto, rischi burocratici e strategie di trattativa.",
+    "description": "Concessionario o privato? Confronta tutele, condizioni dell’auto, prezzo complessivo e verifiche da fare prima di acquistare un’auto usata.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -522,51 +760,72 @@ export const articoliGuides: Guide[] = [
         "heading": "Il dilemma di ogni acquirente: sicurezza o massimo risparmio?",
         "paragraphs": [
           "Quando si decide di acquistare un'auto usata, la prima scelta fondamentale riguarda il canale d'acquisto: rivolgersi a un concessionario/autosalone professionale oppure negoziare direttamente con un privato cittadino?",
-          "Entrambe le strade presentano vantaggi concreti e insidie ben precise. Da un lato, il rivenditore professionale offre tutele di legge obbligatorie ma applica un ricarico commerciale significativo. Dall'altro, la compravendita tra privati consente di risparmiare tra il 15% e il 25% sul prezzo d'acquisto, ma espone al rischio del \"visto e piaciuto\" senza alcuna garanzia post-vendita.",
-          "In questa guida analizziamo nel dettaglio le differenze legali, economiche e operative per aiutarti a capire quale formula sia più adatta al tuo budget e alla tua tolleranza al rischio. Puoi anche verificare l'affidabilità dell'offerta incollando il link nell'[analizzatore annunci di AutoEsperto](/analizza-annuncio)."
+          "Il prezzo richiesto da un professionista e quello chiesto da un privato non sono direttamente confrontabili: possono cambiare chilometraggio, manutenzione, preparazione, condizioni contrattuali e servizi inclusi. Anche la tutela legale dipende da chi vende realmente e dal tipo di rapporto, non solo dal luogo in cui hai trovato l'annuncio.",
+          "In questa guida trovi una griglia per confrontare le due offerte e le verifiche da fare prima di pagare. Per l’annuncio specifico puoi usare anche l’[analizzatore AutoEsperto](/analizza-annuncio), ricordando che l’analisi non sostituisce l’ispezione e i controlli dei documenti."
         ]
       },
       {
         "heading": "Acquisto da Concessionario: tutele legali e costi aggiuntivi",
         "paragraphs": [
-          "Comprare da un operatore professionale garantisce una rete di protezione giuridica stabilita dal Codice del Consumo che nessun privato può offrire:"
+          "Se il venditore opera come professionista e tu acquisti come consumatore, si applicano le norme sulla conformità dei beni di consumo. Prima di firmare, identifica il soggetto indicato nel contratto e chiedi quali condizioni sono incluse:"
         ],
         "list": [
-          "**Garanzia Legale di Conformità obbligatoria:** Per legge (art. 128-135 Codice del Consumo), il venditore professionale risponde di qualsiasi difetto di conformità per almeno 24 mesi, riducibili a non meno di 12 mesi solo con accordo scritto. Nei primi 12 mesi vige l'inversione dell'onere della prova: il difetto si presume già presente al momento della consegna.",
+          "**Garanzia legale di conformità:** riguarda difetti di conformità del bene, non è una polizza per qualsiasi guasto. Per un veicolo usato il periodo può essere ridotto rispetto ai due anni solo nei limiti previsti e con accordo chiaro; controlla durata e condizioni nel contratto. La Commissione europea riassume i diritti per i [beni usati acquistati da un professionista](https://europa.eu/youreurope/citizens/consumers/shopping/guarantees/index_it.htm).",
           "**Permuta del tuo usato:** Il concessionario ritira la tua vecchia auto scalando immediatamente il valore dal prezzo finale, evitandoti la fatica di gestire annunci e acquirenti privati.",
           "**Gestione burocratica completa:** L'autosalone si occupa del passaggio di proprietà telematico e della consegna del Documento Unico aggiornato.",
-          "**Il costo del margine:** Il prezzo da concessionario è mediamente superiore di 1.500-3.000 € rispetto a quello tra privati. Questa differenza remunera il ripristino del veicolo, la garanzia, le tasse (regime del margine IVA) e il profitto dell'azienda."
+          "**Confronta ciò che è compreso:** chiedi il prezzo totale da pagare, gli interventi eseguiti, gli eventuali lavori da fare, la documentazione disponibile e il contenuto di ogni garanzia commerciale proposta. Non presumere che un prezzo maggiore significhi automaticamente auto più affidabile."
         ]
       },
       {
-        "heading": "Acquisto da Privato: prezzo netto ma zero tutele sul guasto",
+        "heading": "Acquisto da privato: verifiche e responsabilità diverse",
         "paragraphs": [
-          "La trattativa diretta tra privati è il terreno preferito dagli affaristi, ma richiede massima competenza tecnica:"
+          "Nella compravendita tra privati non si applica la garanzia legale del Codice del Consumo; questo non significa che ogni tutela civile venga meno. Leggi con attenzione ciò che il contratto dichiara sullo stato del veicolo e sui difetti conosciuti. Le regole concrete dipendono dai fatti e dagli accordi, quindi chiedi un parere professionale se hai dubbi."
         ],
         "list": [
-          "**Prezzo nettamente inferiore:** Nessun intermediario da remunerare. Il prezzo rispecchia il reale valore di liquidazione del bene, con ampi margini di trattativa se individui piccoli difetti di carrozzeria o usura.",
+          "**Confronto diretto con il proprietario:** puoi chiedere da quanto tempo possiede l’auto, come è stata utilizzata e vedere i documenti di manutenzione disponibili. Le risposte vanno confrontate con fatture, revisioni e stato del veicolo.",
           "**Colloquio diretto con l'utilizzatore reale:** Puoi guardare negli occhi il proprietario, capire il suo stile di vita, come custodiva l'auto (box o strada) e verificare le fatture originali dei tagliandi.",
-          "**Zero garanzia post-vendita:** Si applica il Codice Civile (art. 1490 c.c.): la vendita avviene con la formula \"visto e piaciuto\". Se dopo una settimana si rompe la turbina o il cambio, le spese sono al 100% a carico tuo, a meno che tu non riesca a dimostrare in tribunale un dolo o una truffa intenzionale (procedimento lungo e costoso).",
-          "**Spese di passaggio a tuo carico:** Dovrai calcolare l'IPT provinciale e i diritti ACI/PRA. Calcola il costo esatto con il nostro calcolatore di [passaggio di proprietà](/passaggio-proprieta)."
+          "**Tutela diversa da quella del consumatore:** le vendite private non rientrano nella garanzia europea per i consumatori. Le dichiarazioni sullo stato del veicolo e gli accordi scritti contano: non affidarti alla sola formula “visto e piaciuto” per capire i tuoi diritti in un caso concreto.",
+          "**Pratica e costi:** accordati su chi gestisce la pratica e come vengono pagate le relative voci. Puoi stimare il costo con il [calcolatore del passaggio di proprietà](/passaggio-proprieta) e chiedere conferma allo STA o all’agenzia."
         ]
       },
       {
-        "heading": "La matrice decisionale: cosa conviene scegliere?",
+        "heading": "Una griglia per confrontare due auto e due offerte",
         "paragraphs": [
-          "Per orientarti nella scelta, segui questa regola empirica basata sul valore del veicolo:"
+          "Non esiste una soglia di prezzo che renda sempre migliore un canale. Compila la stessa lista per entrambe le auto e confronta il costo complessivo, non soltanto il prezzo d’annuncio:"
         ],
         "list": [
-          "**Auto sotto i 6.000 € (anzianità > 10 anni):** Conviene spesso il **privato**. A questi importi le garanzie dei commercianti sono piene di franchigie e clausole di vetustà che rimborsano cifre irrisorie. Meglio spendere 1.500 € in meno da un privato e tenere quella cifra come fondo emergenza per eventuali riparazioni.",
-          "**Auto tra 7.000 € e 18.000 € (segmento medio, 4-8 anni):** Situazione di pareggio. Scegli il **concessionario** se non hai competenze meccaniche e vuoi rateizzare l'importo; scegli il **privato** se l'auto è uniproprietario con storico tagliandi impeccabile e fai eseguire una perizia pre-acquisto.",
-          "**Auto sopra i 20.000 € o con meccanica complessa (ibride plug-in, cambi doppia frizione, marchi premium):** Conviene il **concessionario ufficiale** o rivenditore strutturato. Una rottura della mecatronica o del pacco batterie da 4.000 € senza garanzia legale può trasformarsi in un incubo economico."
+          "**Prezzo effettivo:** prezzo concordato più passaggio, lavori necessari e accessori che devi acquistare separatamente.",
+          "**Stato documentato:** confronta cronologia manutenzione, chilometri registrati alle revisioni, numero di intestatari se verificabile e documenti del veicolo.",
+          "**Verifica indipendente:** considera un controllo pre-acquisto in officina e chiedi chi lo paga; il costo va confrontato con il valore dell’auto e con le anomalie da chiarire.",
+          "**Tutele e assistenza:** leggi il contratto, identifica il venditore e distingui la garanzia legale da eventuali coperture commerciali. Se scegli un privato, non dare per scontato che la sola dicitura “visto e piaciuto” risolva ogni questione."
+        ]
+      },
+      {
+        "heading": "Prima di confrontare i prezzi, identifica chi ti sta vendendo l’auto",
+        "paragraphs": [
+          "Il nome dell’annuncio o dell’insegna non basta a stabilire chi è la controparte: leggi la proposta e il contratto e controlla chi firma come venditore. Un professionista può esporre un veicolo per conto di un privato; in quel caso chiedi chi riceverà il pagamento, chi emetterà i documenti e quale rapporto contrattuale ti verrà proposto. La tutela del consumatore dipende dalla natura effettiva della vendita, non solo dal luogo in cui hai visto l’auto.",
+          "Se acquisti da un professionista, fatti consegnare per iscritto prezzo complessivo, identità del venditore, chilometraggio dichiarato, difetti già noti, lavori promessi e durata della garanzia legale applicata al veicolo usato. Una copertura commerciale aggiuntiva è un documento distinto: confronta massimali, esclusioni, franchigie e procedura per autorizzare una riparazione. La sintesi ufficiale europea sui [beni usati comprati da un professionista](https://europa.eu/youreurope/citizens/consumers/shopping/guarantees/index_it.htm) chiarisce che la durata può essere ridotta per accordo entro i limiti previsti."
+        ]
+      },
+      {
+        "heading": "Il controllo pre-acquisto in sei passaggi, prima di versare denaro",
+        "paragraphs": [
+          "Usa la stessa sequenza per ogni auto che stai confrontando. Se un dato non è disponibile, segnalo come non verificato invece di colmare il vuoto con una supposizione:"
+        ],
+        "list": [
+          "**Identità e documenti:** confronta documento del venditore, targa e numero di telaio (VIN) leggibile sul veicolo con i dati riportati nel Documento Unico. Se firma una persona diversa dall’intestatario, chiedi quale titolo le consente di vendere e verifica con lo STA prima di pagare.",
+          "**Situazione giuridica:** prima dell’accordo controlla eventuali vincoli e gravami al PRA. ACI descrive il proprio [servizio di verifica](https://aci.gov.it/servizio/verifica-tipo-documento-e-vincoli/) e, per il quadro completo, la [visura per targa](https://aci.gov.it/pratica-auto/acquisto-di-un-veicolo-consigli-e-cautele/).",
+          "**Chilometri e manutenzione:** confronta fatture datate, tagliandi e revisioni registrate; una cronologia coerente è un indizio, non una certificazione dello stato di ogni componente. Chiedi spiegazione documentata per vuoti, salti o incongruenze.",
+          "**Ispezione a freddo e prova:** concorda l’avviamento con motore freddo, osserva spie e perdite, prova freni, sterzo, cambio e climatizzatore in un percorso sicuro. Se non sei pratico, fai controllare l’auto da un professionista indipendente.",
+          "**Costo totale:** somma prezzo, passaggio, manutenzioni imminenti e difetti già preventivati. Per orientarti puoi usare la [valutazione AutoEsperto](/valutazione) e l’[analisi dell’annuncio](/analizza-annuncio), poi verifica sul veicolo ogni dato decisivo."
         ]
       }
     ]
   },
   {
     "slug": "garanzia-legale-auto-usata-concessionario",
-    "title": "Garanzia legale sull'auto usata del concessionario: cosa copre davvero, durata e diritti 2026",
-    "description": "Guida definitiva alla Garanzia di Conformità: durata da 12 a 24 mesi ex Codice del Consumo, differenza tra normale usura e difetto, inversione dell'onere della prova e cosa fare se il venditore rifiuta la riparazione.",
+    "title": "Garanzia legale sull’auto usata: durata, difetti e cosa fare",
+    "description": "Come funziona la garanzia legale su un’auto usata comprata da un professionista: durata, difetti di conformità, differenza dalle polizze commerciali e primi passi se emerge un problema.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -577,115 +836,153 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "La Garanzia di Conformità: il diritto irrinunciabile del consumatore",
         "paragraphs": [
-          "Quando acquisti un'auto usata da un rivenditore professionista (concessionario, salone multimarca o commerciante con partita IVA), la legge italiana ed europea ti assegna automaticamente una tutela fondamentale: la **Garanzia Legale di Conformità**, disciplinata dagli articoli 128 e seguenti del Codice del Consumo.",
-          "Troppo spesso i venditori tentano di confondere gli acquirenti proponendo \"garanzie a parte\" da 300 o 500 euro, oppure affermando che l'auto è venduta \"senza garanzia per via dell'età o del prezzo basso\". Si tratta di comportamenti illegali: la garanzia legale è obbligatoria, gratuita e non può essere esclusa da alcuna clausola contrattuale.",
-          "In questa guida facciamo chiarezza su cosa spetta davvero all'automobilista, come distinguere un guasto coperto dalla normale usura e come far valere i propri diritti."
+          "Se acquisti un’auto usata da un professionista come consumatore, la vendita rientra nella garanzia legale di conformità prevista dalle norme sui beni di consumo. Il referente è il venditore indicato nel contratto. Le vendite concluse tra privati seguono regole diverse.",
+          "La garanzia legale non è una polizza che paga automaticamente ogni guasto: riguarda la conformità del bene rispetto al contratto, alle descrizioni e alle caratteristiche ragionevolmente attese, tenendo conto di età, chilometraggio, prezzo e difetti dichiarati. La Commissione europea riassume i diritti applicabili anche ai [beni usati comprati da un professionista](https://europa.eu/youreurope/citizens/consumers/shopping/guarantees/index_it.htm).",
+          "Questa guida offre indicazioni generali. Per decidere se un difetto specifico rientra nella tutela, servono il contratto, la descrizione dell’auto e una valutazione del problema concreto."
         ]
       },
       {
         "heading": "Durata, termini e la rivoluzione dei primi 12 mesi",
         "paragraphs": [
-          "Le tempistiche previste dalla normativa vigente sono precise e stringenti:"
+          "Per un bene usato la tutela può avere una durata inferiore a quella ordinaria se le parti la concordano nei limiti di legge. Verifica cosa è scritto nel contratto e conserva la documentazione della consegna:"
         ],
         "list": [
-          "**Durata standard di 24 mesi:** La legge stabilisce che la garanzia duri due anni anche sull'usato. Può essere ridotta a un minimo di **12 mesi** esclusivamente se c'è un accordo scritto e firmato tra le parti nel contratto di vendita.",
-          "**Inversione dell'onere della prova (primi 12 mesi):** Con il recepimento della Direttiva UE 2019/771, per qualsiasi difetto che si manifesti entro il primo anno dalla consegna, si presume per legge che fosse già presente al momento della vendita. Spetta al concessionario dimostrare il contrario con perizia tecnica, non al cliente.",
-          "**Termine di denuncia abolito o esteso:** Il consumatore non è più vincolato ai rigidi 60 giorni per denunciare il guasto: ha tempo fino alla prescrizione dell'azione (26 mesi dalla consegna)."
+          "**Durata:** la garanzia legale è normalmente di due anni dalla consegna. Per un bene usato può essere concordato un periodo più breve, ma non inferiore a un anno; controlla che la riduzione sia chiaramente concordata al momento dell’acquisto.",
+          "**Primo anno:** se il difetto si manifesta entro un anno dalla consegna, si presume in generale che fosse già presente, salvo prova contraria o incompatibilità con la natura del bene o del difetto. La regola non significa che qualsiasi guasto venga automaticamente accolto.",
+          "**Quando emerge un problema:** contatta il venditore appena possibile, descrivi il sintomo e conserva data, fotografie, diagnosi e ricevute. Non basarti su termini o procedure riportati in moduli commerciali senza verificare la disciplina e il contratto applicabili."
         ]
       },
       {
         "heading": "Cosa copre la garanzia e cosa rientra nella \"normale usura\"",
         "paragraphs": [
-          "Il punto di maggior contenzioso tra automobilisti e autosaloni è il confine tra difetto di conformità e normale logorio legato al chilometraggio del veicolo:"
+          "Non basta che un componente si guasti perché il difetto rientri nella garanzia legale. Conta se l’auto corrispondeva a quanto concordato e a ciò che si poteva ragionevolmente attendere per un veicolo con quella storia, età e percorrenza:"
         ],
         "list": [
-          "**Cosa è sempre coperto:** Rotture premature o cedimenti strutturali di componenti principali (blocco motore, albero motore, testata, pistoni, cambio manuale o automatico, centraline elettroniche principali, scatola dello sterzo, impianto frenante primario) che non siano compatibili con l'età e i chilometri dichiarati nel contratto.",
-          "**Cosa è considerato materiale d'usura:** Pastiglie e dischi freno consumati, spazzole tergicristallo, lampadine, pneumatici, ammortizzatori scarichi dopo 100.000 km, batteria a 12V con più di 3 anni. Questi componenti sono a carico dell'acquirente, a meno che non si rompano nei primi giorni per difetto manifesto.",
-          "**Il principio di vetustà e la percentuale a carico:** Se un alternatore si rompe su un'auto di 8 anni e 140.000 km, il concessionario non è tenuto a montare un ricambio nuovo di fabbrica a costo zero se ciò comporterebbe un arricchimento ingiustificato del consumatore: può installare un ricambio revisionato/usato garantito, oppure richiedere una quota proporzionale all'aumento di valore del veicolo."
+          "**Difetti dichiarati:** se il venditore informa in modo specifico di una caratteristica o anomalia e l’acquirente l’accetta espressamente, quella difformità va valutata alla luce di quanto comunicato e concordato.",
+          "**Usura e manutenzione:** pneumatici, freni, batteria e altri componenti hanno vita utile limitata, ma non esiste una soglia chilometrica universale che risolva ogni caso. Stato al momento della consegna, uso prevedibile e informazioni fornite sono rilevanti.",
+          "**Diagnosi:** annota quando è comparso il problema e chiedi un referto tecnico con la causa, non solo un preventivo. Un guasto può avere più origini e la diagnosi aiuta a discutere il caso con il venditore."
         ]
       },
       {
         "heading": "Garanzia legale vs polizze commerciali terze (Mapfre, ConformGest, ecc.)",
         "paragraphs": [
-          "Spesso il concessionario consegna all'acquisto un libretto di una società esterna di assicurazione guasti. È fondamentale comprendere la gerarchia:"
+          "Una garanzia commerciale o polizza guasti può aggiungere coperture, massimali e procedure, ma è distinta dalla garanzia legale. Leggi il documento prima di acquistare e verifica chi è il soggetto che offre la copertura:"
         ],
         "list": [
-          "La polizza assicurativa convenzionale è un **servizio accessorio facoltativo** gestito da una terza parte.",
-          "Se la società terza rifiuta il rimborso eccependo clausole restrittive o massimali di spesa, **il concessionario resta direttamente responsabile in prima persona** ex Codice del Consumo.",
-          "Non accettare mai frasi come \"la garanzia non copre questo pezzo, parli con l'assicurazione\": il tuo unico interlocutore contrattuale obbligato alla riparazione o al ripristino è il venditore."
+          "Controlla se il documento è una garanzia commerciale, una polizza assicurativa o un servizio di assistenza e se è facoltativo o parte dell’offerta.",
+          "Verifica componenti coperti ed esclusi, massimali, franchigie, durata, rete di riparatori e obblighi di manutenzione. Non presumere che il titolo “garanzia” descriva per intero la copertura.",
+          "La presenza di una copertura aggiuntiva non sostituisce automaticamente la garanzia legale. In caso di problema, informa il venditore e segui le istruzioni contrattuali senza rinunciare a verificare i tuoi diritti."
         ]
       },
       {
         "heading": "Come agire se il concessionario fa finta di niente: i 3 passi",
         "paragraphs": [
-          "Se subisci un guasto coperto nei primi 12 mesi, non far toccare l'auto a un meccanico terzo prima di aver avvisato il venditore:",
-          "1. Invia immediatamente una **comunicazione scritta via PEC o raccomandata A/R** descrivendo l'anomalia, intimando la presa in carico del veicolo per diagnosi e riparazione entro 15 giorni.",
-          "2. Esigi che le spese di trasporto e manodopera siano a carico del venditore (art. 130 Codice del Consumo).",
-          "3. Se il venditore temporeggia o rifiuta, puoi richiedere la **risoluzione del contratto con restituzione integrale del prezzo** o una congrua riduzione del prezzo d'acquisto parametrata al preventivo di riparazione."
+          "Se compare un problema, documentalo e informa il venditore per iscritto in modo tempestivo. Descrivi i sintomi, quando sono iniziati e quali spie sono apparse; allega fotografie e la diagnosi disponibile.",
+          "Evita di autorizzare riparazioni non urgenti prima di aver dato al venditore la possibilità di esaminare il veicolo e concordato la procedura. Se l’auto non è sicura da guidare, non circolare: chiedi come organizzare il trasporto.",
+          "Conserva risposte, preventivi, fatture e rapporti tecnici. Le soluzioni previste dipendono dal caso e dall’ordine dei rimedi stabilito dalla legge: se il venditore rifiuta o la controversia è rilevante, chiedi assistenza a un’associazione dei consumatori o a un professionista legale.",
+          "Prima di acquistare un’altra vettura, puoi usare [Analizza Annuncio](/analizza-annuncio) per organizzare le domande da fare sul veicolo. Lo strumento non stabilisce se un guasto futuro sarà coperto: per i diritti sui beni usati acquistati da un professionista consulta anche la [guida Your Europe](https://europa.eu/youreurope/citizens/consumers/shopping/guarantees/index_it.htm)."
         ]
       }
     ]
   },
   {
     "slug": "prova-su-strada-auto-usata-cosa-controllare",
-    "title": "Prova su strada auto usata: la checklist dei controlli meccanici da fare prima di comprare",
-    "description": "Guida completa al test drive dell'auto usata: avviamento a motore freddo, controlli a bassa velocità, frenata senza mani sul volante, fumo di scarico e rumori del cambio.",
+    "title": "Prova su strada di un’auto usata: checklist pratica",
+    "description": "Cosa controllare durante la prova di un’auto usata: preparazione, avviamento, cambio, sterzo, freni e verifiche finali prima di decidere l’acquisto.",
     "published": "2026-09-04",
+    "updated": "2026-09-28",
+    "sources": [
+      "https://www.lautomobile.aci.it/attualita/auto-usate-cosa-controllare-prima-dellacquisto-la-guida-in-7-passi/"
+    ],
+    "editorialNote": "Guida della redazione AutoEsperto aggiornata il 28 settembre 2026. Fonti tecniche e istituzionali sono collegate nei passaggi pertinenti. Esempi numerici, quando presenti, sono ipotetici; controlli visivi e indicazioni editoriali non sostituiscono una diagnosi o una perizia sul singolo veicolo.",
     "category": "acquisto",
     "cta": "analizza-annuncio",
     "image": "/images/guide/prova-su-strada-auto-usata-cosa-controllare.jpg",
-    "readTime": "6 min",
+    "readTime": "7 min",
     "featured": false,
     "sections": [
       {
-        "heading": "Perché 15 minuti di test drive valgono più di mille parole",
+        "heading": "La prova serve a fare domande migliori, non a certificare l’auto",
         "paragraphs": [
-          "Molti acquirenti commettono l'errore di limitarsi a una rapida occhiata alla carrozzeria lucidata e a un giro dell'isolato di 3 minuti con la radio accesa e il venditore che parla continuamente per distrarre l'attenzione.",
-          "Una prova su strada ben condotta, invece, è lo strumento diagnostico più potente che hai a disposizione per scovare problemi meccanici da migliaia di euro prima che diventino a carico tuo. Non avere fretta: richiedi almeno 15-20 minuti di guida su percorsi variati (città, pavé/dossi e un breve tratto a scorrimento veloce).",
-          "Ecco il protocollo passo-passo utilizzato dai periti e dai collaudatori esperti per mettere alla frusta motore, cambio, sospensioni e sterzo."
+          "Hai letto l’annuncio, le fotografie ti convincono e il prezzo sembra interessante. La prova su strada è il momento per capire come ti trovi al volante e osservare eventuali comportamenti da approfondire. Non sostituisce un’ispezione sul ponte, una diagnosi o l’esame dei documenti: alcuni problemi non compaiono in un giro breve.",
+          "**Il punto AutoEsperto:** torna dalla prova con osservazioni precise. “Vibra durante una frenata normale” aiuta il meccanico più di “non mi convince”. Non devi provocare un guasto o dimostrare di saperlo riconoscere: devi raccogliere informazioni sufficienti per decidere quali verifiche fare prima dell’acquisto."
         ]
       },
       {
-        "heading": "Fase 1: Il controllo fondamentale a motore di pietra (completamente freddo)",
+        "heading": "Prima dell’appuntamento: concorda percorso e condizioni",
         "paragraphs": [
-          "Prima ancora di salire a bordo, tocca il cofano motore e il blocco motore con la mano per assicurarti che sia **completamente freddo**:"
+          "Chiedi al venditore se puoi provare la vettura e farla controllare da un’officina indipendente. Concorda un percorso adatto alle condizioni del traffico, con una parte urbana, normali variazioni di velocità e uno spazio sicuro per una manovra. Chiarisci chi guiderà e quali condizioni assicurative e requisiti siano applicabili alla prova; non presumere che qualunque conducente sia coperto nello stesso modo.",
+          "Se possibile chiedi di vedere l’avviamento prima dell’uso della giornata. Se trovi il motore caldo, domanda da quanto sia stato avviato e annota che non hai osservato la partenza a freddo. Non considerarlo da solo un inganno. Se non puoi guidare o non ti senti sicuro, chiedi al proprietario di condurre l’auto, lasciando l’eventuale valutazione tecnica a un professionista."
+        ]
+      },
+      {
+        "heading": "Da fermo: identifica il veicolo e sistemati al posto guida",
+        "paragraphs": [
+          "Confronta targa, telaio e documentazione con quanto concordato. Regola sedile, volante e specchi prima di partire: una posizione scomoda può farti giudicare male pedali, visibilità e comandi. Chiedi come funzionino selettore del cambio, freno di stazionamento, avviamento e arresto. Se il modello ha funzioni che non conosci, fatti spiegare quelle necessarie alla guida.",
+          "Controlla visibilità attraverso vetri e specchi, stato apparente degli pneumatici e presenza di danni evidenti. Non partire se emergono condizioni che rendono dubbia la sicurezza. All’interno prova da fermo climatizzazione, alzacristalli e comandi essenziali, senza passare il tragitto a esplorare lo schermo centrale."
+        ]
+      },
+      {
+        "heading": "Avviamento e quadro strumenti: che cosa annotare",
+        "paragraphs": [
+          "Osserva l’avviamento e gli avvisi sul quadro, confrontandoli con il comportamento previsto nel manuale. Le spie non si accendono e spengono tutte nello stesso modo su ogni auto. Se un messaggio resta presente, chiedi che cosa significhi e quali verifiche siano state fatte, invece di accettare automaticamente “è solo un sensore”.",
+          "Ascolta rumori persistenti e annota eventuali odori o emissioni insolite, mantenendoti lontano dai gas di scarico e dalle parti in movimento. Vapore in certe condizioni può avere spiegazioni diverse da un fumo persistente, ma il colore osservato non basta a diagnosticare un componente. Non aprire il circuito di raffreddamento caldo e non toccare parti meccaniche per cercare la causa di un rumore."
+        ]
+      },
+      {
+        "heading": "Partenza, cambio e manovre a bassa velocità",
+        "paragraphs": [
+          "Parti normalmente, senza accelerazioni brusche. Su un manuale osserva se leva e frizione si usino con regolarità; non cercare di far slittare la frizione apposta. Su un automatico valuta partenza, rallentamento e una manovra semplice, ricordando che famiglie diverse possono avere sensazioni diverse. Se serve, prepara la prova con la [guida ai cambi automatici usati](/guide/auto-usate-con-cambio-automatico).",
+          "Descrivi ritardi, strattoni o rumori indicando la manovra in cui compaiono. Non attribuire subito tutto al cambio: supporti, motore e altre parti possono influire sulla sensazione. Non eseguire test con acceleratore contro freno, cambi di direzione a veicolo in movimento o partenze forzate. Un dubbio si risolve con la diagnosi, non mettendo sotto stress l’auto durante una visita."
+        ]
+      },
+      {
+        "heading": "Sterzo e sospensioni durante la guida normale",
+        "paragraphs": [
+          "Su un tratto regolare osserva la risposta del volante, la facilità di mantenere la traiettoria e le eventuali vibrazioni. Tieni sempre le mani sul volante: non serve lasciarlo per controllare se l’auto vada dritta. Fondo stradale, vento, pressione e stato degli pneumatici possono influenzare ciò che senti, quindi annota anche le condizioni.",
+          "Ascolta eventuali colpi sulle piccole irregolarità incontrate nel percorso. Non cercare buche, non affrontare dossi velocemente e non sterzare bruscamente per “provare gli ammortizzatori”. Un colpo ripetuto merita un controllo, ma non identifica da solo il componente. Se il comportamento diventa preoccupante, interrompi la prova in un luogo sicuro e chiedi assistenza."
+        ]
+      },
+      {
+        "heading": "Freni e sistemi di assistenza: niente prove al limite",
+        "paragraphs": [
+          "Durante normali rallentamenti, su strada adatta e mantenendo lo spazio di sicurezza, nota la risposta del pedale, eventuali vibrazioni e rumori. Non simulare frenate d’emergenza e non provocare l’intervento di ABS o frenata automatica. L’assenza di anomalie in una frenata non misura l’usura residua di dischi e pastiglie.",
+          "Per gli aiuti alla guida chiedi quali sistemi siano presenti, se compaiano avvisi e se vi siano interventi documentati su parabrezza, sensori o parti coinvolte. Non creare situazioni di pericolo per verificare il loro funzionamento. La [guida ACI ai controlli dell’usato](https://www.lautomobile.aci.it/attualita/auto-usate-cosa-controllare-prima-dellacquisto-la-guida-in-7-passi/) include la prova nel percorso di valutazione: il controllo tecnico resta distinto dalle impressioni di guida."
+        ]
+      },
+      {
+        "heading": "Se stai provando un’ibrida o un’elettrica",
+        "paragraphs": [
+          "Fatti spiegare gli indicatori di avviamento e le modalità di marcia: il silenzio del motore termico non significa necessariamente che l’auto sia spenta. Nelle ibride osserva eventuali messaggi e chiedi chiarimenti sul comportamento tra le diverse fasi di funzionamento. Non giudicare un passaggio tra propulsione elettrica e termica senza conoscere il sistema.",
+          "Su un’elettrica annota carica iniziale, temperatura esterna e tipo di percorso se vuoi contestualizzare il consumo mostrato. Un giro breve non misura l’autonomia annuale né la salute della batteria. Se concordato, verifica anche una sessione di ricarica compatibile, lo sportello e i cavi disponibili. Chiedi separatamente un rapporto sulla batteria, con metodo e data: non ricavare il suo stato dal solo numero di chilometri residui sul display."
+        ]
+      },
+      {
+        "heading": "A fine giro: ripeti i controlli che possono cambiare a caldo",
+        "paragraphs": [
+          "Fermati in sicurezza e osserva se siano comparsi nuovi avvisi, odori o rumori. Ripeti una semplice manovra e verifica che i comandi restino regolari. Non infilarti sotto il veicolo e non aprire componenti caldi: per perdite, fissaggi e parti nascoste serve l’officina.",
+          "Chiedi al venditore spiegazioni specifiche: «Quel rumore in manovra era già presente? È stato controllato? Hai il rapporto?». Una risposta generica non risolve il dubbio, ma può indicare il prossimo controllo. Se un comportamento non si ripete, annotalo comunque insieme alle condizioni in cui lo hai percepito, senza trasformarlo in una diagnosi certa."
+        ]
+      },
+      {
+        "heading": "La scheda da compilare dopo la prova",
+        "paragraphs": [
+          "Scrivi le note appena terminato il giro, quando ricordi bene le circostanze. Se sei solo, fermati prima di prendere appunti o usare il telefono. Un accompagnatore può aiutarti a osservare, ma non deve distrarre chi guida."
         ],
         "list": [
-          "**Perché è decisivo:** Molti difetti gravi (candelette bruciate, iniettori diesel che gocciolano, battito catena di distribuzione, mecatronica del cambio automatico, fumo blu da usura fasce) scompaiono o si attenuano drasticamente una volta che il motore si è scaldato. Se trovi l'auto già calda al tuo arrivo, chiedi spiegazioni e insisti per riprovarla a freddo.",
-          "**Gira il quadro senza avviare:** Tutte le spie di diagnosi (avaria motore MIL, pressione olio, airbag, ABS, servosterzo) devono accendersi per il check iniziale. Se la spia motore non si accende affatto, potrebbe essere stata scollegata o coperta per mascherare codici errore memorizzati.",
-          "**Avviamento:** Il motorino deve girare vigoroso e il motore deve avviarsi in meno di 2 secondi senza vibrazioni anomale o cigolii metallici stridenti."
+          "**Condizioni della prova:** motore inizialmente freddo o caldo, percorso e traffico.",
+          "**Comandi e comfort:** posizione di guida, visibilità, manovre e facilità d’uso.",
+          "**Evento osservato:** rumore, vibrazione, spia o esitazione, descritto senza diagnosi improvvisate.",
+          "**Quando compare:** partenza, frenata normale, curva, retromarcia o fine percorso.",
+          "**Documenti o risposte ricevuti:** fattura, diagnosi, spiegazione del venditore.",
+          "**Verifica successiva:** controllo in officina, documento da recuperare o prova non eseguita."
         ]
       },
       {
-        "heading": "Fase 2: Fumo di scarico e odori nei primi 60 secondi",
+        "heading": "Quando comprare, approfondire o rinunciare",
         "paragraphs": [
-          "Lascia il motore al minimo, scendi dall'auto e posizionati vicino al terminale di scarico:"
-        ],
-        "list": [
-          "**Fumo bianco denso e persistente con odore dolciastro:** Bruciatura di liquido refrigerante nella camera di scoppio (guarnizione della testata bruciata o fessurazione nel monoblocco). Se invece è solo vapore acqueo leggero che svanisce subito d'inverno, è normale condensa.",
-          "**Fumo azzurrognolo/blu con odore acre di olio bruciato:** Olio trafilato dai paraoli delle valvole o dalle fasce elastiche dei pistoni o usura dell'alberino del turbocompressore.",
-          "**Fumo nero intenso sotto accelerazione:** Combustione imperfetta, iniettori intasati, filtro aria saturo o valvola EGR bloccata aperta.",
-          "**Fumo zero e scarico pulito:** Segno di combustione ottimale e filtro antiparticolato integro."
-        ]
-      },
-      {
-        "heading": "Fase 3: La prova dinamica a bassa velocità (sterzo, frizione, sospensioni)",
-        "paragraphs": [
-          "In un piazzale o parcheggio sgombro, esegui queste manovre specifiche:"
-        ],
-        "list": [
-          "**Sterzo a fine corsa (giunti omocinetici):** Sterza completamente a destra e parti lentamente in prima marcia, poi fai lo stesso a sinistra facendo un cerchio stretto. Se senti un ticchettio metallico ritmico (\"clac-clac-clac\"), i giunti omocinetici dei semiassi sono sboccolati (costo 150-300 € a giunto).",
-          "**Punto di stacco della frizione:** Inserisci la prima e rilascia lentamente la frizione senza accelerare. Se l'auto parte solo quando il pedale è quasi tutto in alto, il disco è ormai sottile. Prova a tirare il freno a mano, inserisci la terza marcia e rilascia la frizione: se il motore non si spegne all'istante ma continua a girare, la frizione slitta.",
-          "**Test dossi e pavé:** Affronta una strada con buche o dossi a 30 km/h a finestrini abbassati. Se avverti colpi sordi (\"toc-toc\"), le boccole dei bracci oscillanti o le biellette della barra antirollio hanno gioco."
-        ]
-      },
-      {
-        "heading": "Fase 4: Velocità e frenata d'emergenza rettilinea",
-        "paragraphs": [
-          "Su una strada dritta e sicura a 60-70 km/h, controlla il comportamento del telaio:",
-          "Lascia leggermente la presa del volante su strada piana: l'auto deve proseguire perfettamente dritta senza tirare a destra o a sinistra.",
-          "Effettua una frenata decisa rilasciando momentaneamente le mani dal volante: l'auto deve frenare in asse senza scarti laterali e il pedale del freno non deve pulsare (dischi imbarcati da sostituire).",
-          "Se riscontri dubbi o incongruenze, confronta le quotazioni di modelli simili sulla [valutazione auto usate di AutoEsperto](/valutazione) prima di procedere."
+          "Una prova soddisfacente consente di proseguire con controlli e documenti, non rende superfluo il resto. Un difetto diagnosticato e preventivato può essere valutato nel prezzo; un problema importante ancora senza spiegazione richiede prima un approfondimento. Non sostituire una diagnosi mancante con uno sconto scelto a caso.",
+          "Se il venditore non permette verifiche ragionevoli, valuta con prudenza la prosecuzione. Per completare il quadro leggi anche [quando conviene un’auto con 100.000 km](/guide/auto-usata-100000-km-conviene-comprare). Alla fine dovresti poter spiegare perché l’auto è adatta a te, quali condizioni risultano verificate e quali incertezze restano da accettare o risolvere."
         ]
       }
     ]
@@ -693,7 +990,7 @@ export const articoliGuides: Guide[] = [
   {
     "slug": "documenti-controllare-prima-comprare-auto-privato",
     "title": "Documenti da controllare prima di comprare un'auto usata da privato: la guida antifrode",
-    "description": "Come verificare il Documento Unico di Circolazione (DU), Certificato di Proprietà, visura PRA per fermi amministrativi e storico chilometrico sul Portale dell'Automobilista.",
+    "description": "Checklist dei documenti prima di comprare un’auto usata da un privato: identità, Documento Unico, VIN, visura PRA e revisioni registrate.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -704,59 +1001,77 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "La trappola dei documenti: comprare l'auto giusta dalla persona sbagliata",
         "paragraphs": [
-          "Nel mercato dell'usato, un'automobile perfetta di carrozzeria e meccanica può trasformarsi in un incubo legale se i documenti non sono in regola. Comprare un veicolo gravato da fermo amministrativo, pignoramento, o venduto da un soggetto che non ha titolo legale per disporne significa rischiare il sequestro del mezzo e la perdita totale della somma versata.",
-          "Prima di versare anche un solo euro di caparra a un privato, è tuo diritto e dovere esaminare l'intera documentazione ufficiale del veicolo. I controlli richiedono meno di 15 minuti e possono essere eseguiti online per pochi euro.",
-          "Ecco la checklist esaustiva di tutti i documenti da richiedere e cosa verificare punto per punto."
+          "Prima di comprare un’auto usata da un privato, confronta l’identità di chi vende con i documenti del veicolo e controlla lo stato giuridico al PRA. Un documento mancante, un VIN che non coincide o un vincolo iscritto sono ragioni per fermare la trattativa e chiedere chiarimenti prima di versare denaro.",
+          "Non tutti i veicoli hanno lo stesso formato documentale: alcuni dispongono del Documento Unico, altri di documenti precedenti. Se non sai come leggere un dato o un vincolo, chiedi conferma ad ACI/PRA o allo STA. Questa checklist orienta i controlli ma non sostituisce la verifica ufficiale."
         ]
       },
       {
         "heading": "1. Il Documento Unico di Circolazione e Proprietà (DU)",
         "paragraphs": [
-          "Dal 2020 il Documento Unico ha sostituito sia il vecchio libretto di circolazione cartaceo che il Certificato di Proprietà (CdP):"
+          "Molti veicoli immatricolati o aggiornati con il nuovo sistema hanno un Documento Unico; altri possono ancora avere carta di circolazione e documentazione di proprietà separate. Verifica i documenti effettivamente rilasciati per quel veicolo:"
         ],
         "list": [
-          "**Verifica dell'intestatario (Riquadro 1 e 2):** Nome, cognome, data di nascita e codice fiscale devono corrispondere al 100% con il documento d'identità della persona che hai davanti. Se l'interlocutore dichiara di vendere \"per conto del cognato/amico\", fermati: l'atto di vendita può essere firmato solo dall'intestatario o da procuratore speciale notarile.",
-          "**Numero di telaio (VIN - Riquadro E):** Il codice alfanumerico di 17 caratteri sul documento deve coincidere alla perfezione con quello punzonato fisicamente sul metallo del telaio (visibile solitamente alla base del parabrezza o nel vano motore sul duomo della sospensione) e sulla targhetta adesiva nel montante porta.",
-          "**Classe ambientale e kW (Riquadro V.9 e P.2):** Verifica l'omologazione antinquinamento (Euro 6d, Euro 6b, ecc.) e la potenza in kW, fondamentale per il corretto [calcolo del bollo auto](/calcolo-bollo) e per i limiti di potenza neopatentati.",
-          "**Misure pneumatici omologate (Riquadro 3):** Controlla che le gomme montate fisicamente sull'auto abbiano esattamente le misure, l'indice di carico e il codice di velocità registrati sul libretto."
+          "**Identità e titolo a vendere:** confronta nome e dati del venditore con quelli riportati nei documenti. Se vende un rappresentante, chiedi quale procura o titolo lo autorizza e verifica con lo STA come deve essere documentato.",
+          "**Numero di telaio (VIN):** confronta il numero riportato nei documenti con quello punzonato sul veicolo. La posizione varia secondo marca e modello; usa il manuale o chiedi a un’officina se non trovi la marcatura. Se i dati non coincidono o sembrano alterati, non procedere finché la discrepanza non è chiarita ufficialmente.",
+          "**Dati tecnici:** controlla modello, alimentazione, potenza e caratteristiche rilevanti per uso e assicurazione. Se hai dubbi su classe ambientale o misure degli pneumatici, verifica i campi corretti sul documento e con una fonte ufficiale.",
+          "**Stato e leggibilità:** controlla che i documenti siano completi, autentici e coerenti tra loro. Non accettare una foto o una scansione come sostituto automatico degli originali richiesti per la pratica."
         ]
       },
       {
         "heading": "2. La Visura PRA per targa: verifica fermi amministrativi e ipoteche",
         "paragraphs": [
-          "Questo è il controllo più critico in assoluto prima di fare qualsiasi pagamento:"
+          "La visura PRA permette di conoscere lo stato giuridico del veicolo registrato. ACI indica il servizio Visurenet anche per chi valuta l’acquisto di un mezzo intestato a un’altra persona:"
         ],
         "list": [
-          "**Cosa rivela la visura:** Indica lo stato giuridico del mezzo iscritto al Pubblico Registro Automobilistico (PRA). Segnala la presenza di ipoteche bancarie (da finanziamenti non estinti), pignoramenti giudiziari o **fermi amministrativi fiscali** (le celebri ganasce fiscali iscritte da Agenzia delle Entrate Riscossione per debiti o cartelle esattoriali non pagate).",
-          "**Cosa succede se compri un'auto con fermo amministrativo:** L'auto non può circolare su strada pubblica né essere esportata. Se vieni fermato, il veicolo viene sequestrato e confiscato. Inoltre il fermo resta sul bene anche dopo il passaggio: dovrai pagare tu i debiti del precedente proprietario per sbloccarla.",
-          "**Come farla:** Puoi richiederla online sul sito ufficiale dell'ACI per soli 8,83 € inserendo la targa del veicolo. Il report è immediato in formato PDF."
+          "**Che cosa verificare:** controlla se risultano vincoli o gravami, tra cui un fermo amministrativo. Leggi il risultato completo e chiedi ad ACI/PRA come si applica al caso specifico; non confondere la posizione del precedente proprietario con gli obblighi che derivano dalla pratica di acquisto.",
+          "**Dove richiederla:** consulta i [servizi online ACI](https://aci.gov.it/servizi/tutti-i-servizi-online/?area=pratiche-auto) e individua Visurenet per la visura PRA. Prezzi, modalità e contenuto possono cambiare: controlla costo e data del risultato sul portale prima di procedere.",
+          "Se emerge un vincolo, non versare caparre o saldi finché il venditore non chiarisce come verrà risolto e lo STA o ACI non confermano per iscritto la procedura da seguire."
         ]
       },
       {
         "heading": "3. Lo storico delle revisioni sul Portale dell'Automobilista",
         "paragraphs": [
-          "Strumento gratuito e fondamentale per smascherare i chilometri scalati:"
+          "Le revisioni registrate possono aiutarti a confrontare i chilometri rilevati in date diverse, ma non forniscono da sole la storia completa del veicolo:"
         ],
         "list": [
           "Collegati al [Portale dell'Automobilista (MIT)](https://www.ilportaledellautomobilista.it/) nella sezione \"Verifica Ultima Revisione\".",
-          "Inserisci la targa: visualizzerai la data e il chilometraggio registrato dall'ispettore ministeriale all'ultima revisione periodica e alle revisioni precedenti (dal 2018 in poi).",
-          "Se l'auto in vendita segna 95.000 km sul quadro ma nella revisione di due anni prima ne risultavano registrati 140.000 km, sei di fronte a una truffa penale. Consulta la nostra guida su [come riconoscere il contachilometri scalato](/guide/contachilometri-scalato-come-riconoscerlo)."
+          "Consulta la sezione di verifica revisioni del [Portale dell’Automobilista](https://www.ilportaledellautomobilista.it/) e confronta le date e le percorrenze effettivamente disponibili con il quadro e le fatture di manutenzione.",
+          "Una percorrenza incoerente richiede un chiarimento, ma può dipendere anche da errori di registrazione o sostituzioni documentate. Chiedi spiegazioni e prove prima dell’acquisto; per altri controlli consulta la guida sul [chilometraggio dell’auto usata](/guide/contachilometri-scalato-come-riconoscerlo)."
         ]
       },
       {
         "heading": "4. Tassa di possesso (Bollo) e doppie chiavi",
         "paragraphs": [
-          "Controlla che le ricevute degli ultimi bolli siano regolari: anche se per legge i bolli pregressi non pagati restano a carico del vecchio proprietario alla data di scadenza, verificare la regolarità dimostra la serietà gestionale del venditore.",
-          "Esigi la consegna di **entrambe le chiavi originali** (chiave principale con telecomando e chiave di scorta). Rifare una chiave moderna con transponder codificato e keyless può costare tra 200 € e 450 €."
+          "Per la tassa automobilistica, verifica la posizione secondo le regole della Regione competente o chiedi all’ente preposto; non dedurre automaticamente dal documento chi debba saldare eventuali importi arretrati.",
+          "Chiedi quali chiavi, telecomandi e accessori sono inclusi e annotalo nel contratto o nella ricevuta di consegna. Se manca una chiave, considera il costo di duplicazione nel confronto e chiedi un preventivo per quella specifica marca e modello."
+        ]
+      },
+      {
+        "heading": "Il controllo finale prima di firmare",
+        "paragraphs": [
+          "Durante la visita, confronta di nuovo il VIN punzonato con il Documento Unico, verifica la targa e chiedi che il venditore indicato nel contratto sia la persona che hai identificato. Se interviene un delegato, chiarisci prima quale documentazione serve per dimostrare che può vendere il veicolo.",
+          "Scrivi nel contratto prezzo concordato, data e modalità di consegna, dotazioni e chiavi comprese, difetti conosciuti e accordi su eventuali lavori. Evita moduli incompleti o impegni di pagamento prima di aver letto tutte le condizioni. Per i passaggi e i documenti richiesti, segui le [informazioni ACI sul passaggio di proprietà](https://aci.gov.it/pratica-auto/passaggio-di-proprieta-informazioni-utili/).",
+          "Se hai trovato l’auto online, puoi usare [Analizza Annuncio](/analizza-annuncio) per ordinare dati e domande da portare all’appuntamento. Il servizio non interroga la banca dati PRA e non autentica i documenti: visura e identità vanno controllate separatamente presso le fonti ufficiali."
+        ],
+        "list": [
+          "**Prima di versare una caparra:** verifica identità, VIN, documenti disponibili e condizioni scritte per la restituzione della somma.",
+          "**Prima del saldo:** ottieni la visura aggiornata, chiarisci gli eventuali vincoli e concorda quando si svolgeranno pagamento e pratica di trasferimento.",
+          "**Alla consegna:** annota lettura del contachilometri, stato visibile, chiavi e accessori; conserva copia di contratto, ricevute e documenti della pratica."
         ]
       }
     ]
   },
   {
     "slug": "contachilometri-scalato-come-riconoscerlo",
-    "title": "Contachilometri scalato: come riconoscere un'auto truccata e difendersi dalla truffa",
-    "description": "La guida tecnica per scoprire se i chilometri sono stati manomessi: verifiche online, centraline motore nascoste, usura dell'abitacolo, perizia OBD e tutele penali per truffa.",
+    "title": "Chilometri scalati su un’auto usata: quali controlli fare",
+    "description": "Come verificare i chilometri di un’auto usata con revisioni, fatture e diagnosi: indizi da approfondire, documenti da chiedere e limiti dei controlli.",
     "published": "2026-09-04",
+    "updated": "2026-09-28",
+    "sources": [
+      "https://www.ilportaledellautomobilista.it/interrogazionistoricorevisioni/spa/",
+      "https://aci.gov.it/pratica-auto/acquisto-di-un-veicolo-consigli-e-cautele/"
+    ],
+    "editorialNote": "Guida della redazione AutoEsperto aggiornata il 28 settembre 2026. Fonti tecniche e istituzionali sono collegate nei passaggi pertinenti. Esempi numerici, quando presenti, sono ipotetici; controlli visivi e indicazioni editoriali non sostituiscono una diagnosi o una perizia sul singolo veicolo.",
     "category": "acquisto",
     "cta": "analizza-annuncio",
     "image": "/images/guide/contachilometri-scalato-come-riconoscerlo.jpg",
@@ -764,53 +1079,73 @@ export const articoliGuides: Guide[] = [
     "featured": false,
     "sections": [
       {
-        "heading": "Il fenomeno del chilometraggio ritoccato: un danno da miliardi di euro",
+        "heading": "Pochi chilometri dichiarati: come capire se il dato è credibile",
         "paragraphs": [
-          "La manomissione del contachilometri (in gergo \"ringiovanimento\" o schilometraggio) è la frode commerciale più diffusa nel mercato delle auto usate in Italia e in Europa. Secondo le stime delle associazioni dei consumatori, tra il 15% e il 25% delle auto usate in vendita ha subito una riduzione fraudolenta della percorrenza registrata.",
-          "Il motivo è puramente economico: togliere 80.000 km a un'auto diesel aziendale di 4 anni permette al truffatore di aumentarne artificialmente il prezzo di vendita di 3.000-5.000 euro, addossando all'ignaro acquirente costi di manutenzione straordinaria immediati (cinghie di distribuzione che rischiano di spezzarsi, turbine esauste, filtri antiparticolato intasati).",
-          "Ecco gli strumenti e le tecniche usati dai periti professionisti per smascherare l'inganno prima di firmare il contratto."
+          "Un’auto ha 82.000 km sul cruscotto, il volante sembra nuovo e il venditore dice che è stata usata poco. Sono informazioni da verificare, non una conferma della percorrenza. Per capire se il dato è credibile serve una cronologia: letture registrate in momenti diversi, documenti collegati a quella vettura e spiegazioni coerenti sugli eventuali vuoti.",
+          "**Il punto AutoEsperto:** non cercare un singolo trucco per scoprire i chilometri scalati. Cerca più riscontri indipendenti e distingui ciò che è documentato da ciò che è soltanto dichiarato. Un’anomalia giustifica un approfondimento; non autorizza da sola ad accusare il proprietario di frode. L’obiettivo è decidere se comprare con informazioni sufficienti."
         ]
       },
       {
-        "heading": "1. Verifica ufficiale delle revisioni MCTC",
+        "heading": "Prima della visita: chiedi targa, telaio e documenti disponibili",
         "paragraphs": [
-          "Il primo riscontro è pubblico, gratuito e immediato:"
+          "Chiedi una foto recente del contachilometri e quali documenti di manutenzione siano disponibili. Alla visita, confronta targa e numero di telaio con il veicolo e con i documenti mostrati. Una fattura senza un riferimento identificativo chiaro non dimostra che il lavoro sia stato eseguito sull’auto in vendita.",
+          "Puoi fare una richiesta semplice: «Prima di venire, vorrei capire la cronologia dei chilometri. Hai fatture con data e percorrenza, documenti delle revisioni e informazioni su eventuali sostituzioni del quadro?». Lascia al venditore il tempo di recuperare i documenti; l’assenza immediata di una fattura non prova una manomissione. Se invece rifiuta ogni verifica, considera il rischio prima di impegnare denaro."
+        ]
+      },
+      {
+        "heading": "Dove controllare i chilometri delle revisioni",
+        "paragraphs": [
+          "Il servizio del [Portale dell’Automobilista per verificare le revisioni](https://www.ilportaledellautomobilista.it/interrogazionistoricorevisioni/spa/) consente di ricercare le revisioni effettuate dopo il 1° giugno 2018. Usa i dati effettivamente mostrati dal servizio e annota date e letture disponibili. Non confondere questa consultazione con una certificazione dell’intera vita del veicolo.",
+          "Una sequenza crescente è un riscontro utile, ma non esclude che una modifica sia avvenuta prima della prima lettura disponibile o tra due registrazioni. Se l’auto è stata importata, possono mancare gli anni trascorsi all’estero. Se un dato non compare, scrivi “non disponibile”: riempire il vuoto con una stima personale renderebbe il controllo meno affidabile."
+        ]
+      },
+      {
+        "heading": "Costruisci una cronologia, anche su un foglio",
+        "paragraphs": [
+          "Ordina i documenti per data, senza partire dalla conclusione che speri di trovare. Per ogni evento, annota la fonte e separa i valori letti dai valori raccontati a voce. Le informazioni utili sono poche, purché siano confrontabili.",
+          "**Esempio ipotetico:** una fattura riporta 119.000 km nel 2023 e il cruscotto ne indica 86.000 nel 2026. La diminuzione richiede una spiegazione documentata: errore nella fattura, documento di un’altra auto o quadro sostituito sono possibilità da verificare. Finché il contrasto resta irrisolto, non considerare 86.000 km una percorrenza accertata e non fissare il prezzo su quella base."
         ],
         "list": [
-          "Dal 2018 in Italia è obbligatorio registrare i chilometri durante ogni revisione periodica ministeriale (dopo 4 anni dalla prima immatricolazione e successivamente ogni 2 anni).",
-          "Accedi al **Portale dell'Automobilista** e verifica lo storico. Cerca discrepanze: se un'auto nel 2022 aveva 110.000 km e nel 2024 ne segna 90.000 km, la manomissione è provata documentalmente.",
-          "**Il trucco della revisione anticipata:** Attenzione ai commercianti disonesti che scalano i chilometri prima della prima revisione (al quarto anno). In quel caso la prima revisione registrerà il dato già falsificato. Per questo motivo servono controlli incrociati."
+          "**Data:** giorno della revisione, della fattura o della fotografia.",
+          "**Chilometri riportati:** valore esatto e unità di misura, soprattutto per veicoli provenienti dall’estero.",
+          "**Fonte:** documento originale, copia, schermata del servizio o dichiarazione del venditore.",
+          "**Identificazione:** targa o telaio a cui si riferisce il documento.",
+          "**Chiarimento necessario:** lettura inferiore, periodo senza riscontri o sostituzione del quadro."
         ]
       },
       {
-        "heading": "2. Diagnosi centraline elettroniche (non solo il cruscotto)",
+        "heading": "Quadro sostituito e tagliandi digitali: quali prove chiedere",
         "paragraphs": [
-          "Chi modifica il contachilometri con strumenti economici si limita a riprogrammare la memoria EEPROM del quadro strumenti, ma le auto moderne registrano i chilometri in decine di memorie indipendenti:"
-        ],
-        "list": [
-          "**Centralina motore (ECU):** Registra le ore di funzionamento totali del motore (engine operating hours). Moltiplicando le ore per una velocità media realistica (35-45 km/h per uso misto), ottieni una stima affidabile dei km effettivi.",
-          "**Modulo ABS / ESP:** Registra i chilometri percorsi da ciascuna singola ruota e il numero di cicli di attivazione del controllo stabilità.",
-          "**Mecatronica del cambio automatico (DSG, S-Tronic, ZF):** Memorizza il chilometraggio esatto in cui sono avvenute le cambiate e i picchi di temperatura dell'olio.",
-          "**Modulo Airbag e chiave d'avviamento:** Nelle BMW e Mercedes, la chiave d'accensione memorizza chilometri e scadenze tagliandi ogni volta che viene inserita nel quadro. Una diagnosi professionale con scanner OBD rivela immediatamente il disallineamento tra cruscotto e centralina motore."
+          "Una sostituzione del quadro può essere legittima. Chiedi la fattura dell’intervento, la data e le letture annotate prima e dopo. Una spiegazione verbale come “si era rotto il display” è meno utile di una documentazione che consenta al tecnico di ricostruire cosa sia stato fatto.",
+          "Anche uno storico digitale deve essere interpretato. Chiedi al proprietario di ottenere dalla rete di assistenza i dati disponibili per quel telaio, secondo le procedure previste. Una rete può non avere gli interventi eseguiti altrove; una schermata vuota non dimostra che l’auto non sia stata mantenuta. Viceversa, una sequenza di tagliandi presenti non garantisce che ogni dato sia corretto o che non esistano periodi scoperti."
         ]
       },
       {
-        "heading": "3. Gli indicatori fisici di usura nell'abitacolo",
+        "heading": "Volante e pedali consumati dimostrano i chilometri scalati?",
         "paragraphs": [
-          "L'occhio umano esperto individua incongruenze che nessun software può cancellare:"
-        ],
-        "list": [
-          "**Volante e pomello cambio:** Un volante in pelle comincia a perdere la goffratura ruvida originale attorno ai 100.000 km. Se a 60.000 km la corona è liscia, lucida e consumata sulle cuciture, i chilometri reali sono almeno il doppio.",
-          "**Gommini dei pedali (freno e frizione):** Se la gomma è consumata fino al metallo sui bordi, l'auto ha percorso ben più di 100.000 km.",
-          "**Fianchetto sinistro del sedile guida:** È la parte più sollecitata dal salire e scendere. Se l'imbottitura è ceduta o la pelle è strappata, la vettura ha un uso intensivo alle spalle.",
-          "**Cinture di sicurezza:** Estrai tutta la cintura del guidatore e controlla la targhetta con l'anno di produzione cucita alla base: deve corrispondere all'anno dell'auto e il nastro non deve presentare sfilacciature."
+          "No. Materiali, corporatura, impiego urbano, prodotti di pulizia e sostituzioni modificano l’aspetto degli interni. Un sedile rovinato può meritare domande, ma non permette di assegnare una percorrenza. Allo stesso modo, un volante appena rivestito non rende sospetta tutta l’auto: chiedi il motivo e confrontalo con il resto della storia.",
+          "Osserva l’insieme: comandi, sedile guida, cinture, maniglie e bagagliaio. Se il venditore descrive un uso familiare occasionale e trovi un’usura intensa in più zone, porta questa incongruenza al controllo in officina. Evita formule come “a 50.000 km questo pezzo deve essere perfetto”: non esiste una corrispondenza universale tra aspetto e chilometri."
         ]
       },
       {
-        "heading": "Cosa fare se scopri la truffa: tutele penali e civili",
+        "heading": "La diagnosi elettronica può certificare la percorrenza?",
         "paragraphs": [
-          "Scalare i chilometri costituisce il reato di **truffa contrattuale aggravata** (art. 640 c.p.), punibile con la reclusione da uno a cinque anni.",
-          "Se scopri la manomissione dopo l'acquisto, puoi sporgere denuncia-querela presso Carabinieri o Guardia di Finanza ed esigere la **risoluzione del contratto con restituzione totale del prezzo pagato** più il risarcimento dei danni, oppure una congrua riduzione del prezzo parametrata al reale valore di mercato rilevato con la nostra [valutazione auto usate](/valutazione)."
+          "Non esiste una lettura OBD universale capace di certificare i chilometri reali di qualsiasi auto. Un’officina che conosce il modello può cercare incoerenze nei dati disponibili, ma centraline, parametri e possibilità di lettura cambiano. Un valore di ore di funzionamento non si trasforma in chilometri moltiplicandolo per una velocità media scelta a caso.",
+          "Chiedi un rapporto che specifichi cosa è stato controllato e con quali limiti. “Nessun errore presente” è diverso da “chilometraggio verificato”: i codici guasto e la percorrenza rispondono a domande differenti. Porta al tecnico la cronologia preparata, così la diagnosi parte da un dubbio preciso e non dalla richiesta generica di trovare una truffa."
+        ]
+      },
+      {
+        "heading": "Come decidere prima di firmare",
+        "paragraphs": [
+          "Se le letture sono coerenti e i documenti sufficienti, passa alla verifica dello stato meccanico: un chilometraggio credibile non rende automaticamente conveniente l’acquisto. Se mancano periodi importanti, valuta il prezzo tenendo conto dell’incertezza. Se esiste una contraddizione non chiarita, sospendi la trattativa e chiedi un controllo indipendente.",
+          "Fai distinguere nella proposta o nel contratto la lettura del cruscotto da eventuali dichiarazioni sulla percorrenza complessiva. Le [cautele ACI per acquistare un veicolo usato](https://aci.gov.it/pratica-auto/acquisto-di-un-veicolo-consigli-e-cautele/) aiutano anche a separare i controlli sul mezzo da quelli sulla sua situazione giuridica. Una visura e una verifica dei chilometri non sono lo stesso servizio."
+        ]
+      },
+      {
+        "heading": "Se il dubbio nasce dopo l’acquisto",
+        "paragraphs": [
+          "Conserva annuncio, contratto, messaggi, documenti e rapporto dell’officina. Descrivi la discrepanza con date e valori, evitando di modificare gli originali o di pubblicare accuse. Chiedi una spiegazione scritta al venditore e, se il dubbio resta, assistenza professionale per valutare la situazione e gli eventuali rimedi: contano prove, accordi e tipo di vendita.",
+          "Per completare il controllo, leggi la [checklist della prova su strada](/guide/prova-su-strada-auto-usata-cosa-controllare). Il risultato utile non è una sensazione di certezza, ma un fascicolo ordinato: cosa sai dell’auto, cosa non sai e quali verifiche mancano prima di decidere."
         ]
       }
     ]
@@ -818,31 +1153,30 @@ export const articoliGuides: Guide[] = [
   {
     "slug": "comprare-auto-usata-asta-giudiziaria",
     "title": "Comprare auto usata all'asta giudiziaria: come funziona, rischi, costi occulti e opportunità",
-    "description": "Guida completa alle aste fallimentari ed esecutive: Portale Vendite Pubbliche, perizia CTU, assenza totale di garanzia, diritti d'asta e cancellazione gravami al PRA.",
+    "description": "Come valutare un’auto venduta all’asta giudiziaria: avviso e perizia, visita, cauzione, scadenze, costi e rischi da verificare prima di offrire.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
     "image": "/images/guide/comprare-auto-usata-asta-giudiziaria.jpg",
-    "readTime": "6 min",
+    "readTime": "7 min",
     "featured": false,
     "sections": [
       {
         "heading": "Affari d'oro o trappole legali? La verità sulle aste di automobili",
         "paragraphs": [
-          "L'idea di aggiudicarsi un'auto usata di recente immatricolazione a un prezzo inferiore del 30-50% rispetto alle quotazioni di mercato attira ogni anno migliaia di automobilisti verso le aste giudiziarie (esecuzioni mobiliari, procedure fallimentari o liquidazioni giudiziali).",
-          "Sebbene le opportunità di risparmio siano reali, acquistare un'auto in tribunale è un'operazione radicalmente diversa dalla compravendita tradizionale: non c'è un venditore con cui trattare, non esiste alcuna garanzia legale e gli errori di valutazione si pagano per intero.",
-          "In questa guida esaminiamo le procedure telematiche ufficiali, come leggere la perizia del tribunale e quali costi nascosti considerare prima di formulare un'offerta economica."
+          "Un prezzo base d’asta non è una stima garantita del valore né il prezzo finale che pagherai. Un’auto venduta nell’ambito di una procedura giudiziaria richiede di leggere con attenzione l’avviso, la perizia e le condizioni di partecipazione pubblicate per quel singolo lotto.",
+          "La visita potrebbe essere limitata e la possibilità di prova dipende dall’avviso e dall’organizzazione della vendita. Nelle vendite forzate la garanzia per i vizi è limitata dalla disciplina applicabile; considera quindi l’incertezza tecnica e i costi di ritiro prima di offrire."
         ]
       },
       {
         "heading": "Come funzionano le aste: il Portale delle Vendite Pubbliche (PVP)",
         "paragraphs": [
-          "Tutte le vendite giudiziarie in Italia sono pubblicate obbligatoriamente sul **Portale delle Vendite Pubbliche del Ministero della Giustizia** (pvp.giustizia.it) e gestite da commissionari autorizzati (come l'Istituto Vendite Giudiziarie - IVG, Gobid o Aste Giudiziarie):"
+          "Per le vendite giudiziarie consulta il [Portale delle Vendite Pubbliche del Ministero della Giustizia](https://pvp.giustizia.it/pvp/), l’avviso del lotto e i recapiti del professionista incaricato. Controlla come e quando si può presentare un’offerta:"
         ],
         "list": [
-          "**Tipologia di asta:** La quasi totalità delle aste si svolge oggi in modalità telematica (sincrona mista o asincrona telematica) previa registrazione con SPID o CIE.",
-          "**La cauzione obbligatoria:** Per partecipare è necessario versare una cauzione (solitamente pari al 10% del prezzo offerto) tramite bonifico bancario vincolato. Se non ti aggiudichi il bene, la somma ti viene riaccreditata per intero.",
-          "**Rilanci e prezzo base:** L'offerta minima ammissibile è solitamente inferiore del 25% rispetto al prezzo base d'asta stimato dal perito."
+          "**Modalità di vendita:** l’avviso indica se la procedura è telematica, sincrona, mista o si svolge in altra forma e come registrarsi.",
+          "**Cauzione:** importo, scadenza, coordinate, causale e condizioni di restituzione sono indicati nei documenti della singola vendita. Non usare percentuali trovate in guide generiche.",
+          "**Offerta e rilanci:** verifica offerta minima, rilancio minimo, termine di presentazione, modalità di pagamento del saldo e conseguenze in caso di mancato pagamento."
         ]
       },
       {
@@ -851,28 +1185,76 @@ export const articoliGuides: Guide[] = [
           "Prima di farti prendere dall'entusiasmo per un prezzo stracciato, considera questi fattori determinanti:"
         ],
         "list": [
-          "**Zero garanzia (\"visto e piaciuto\" assoluto):** L'art. 2922 del Codice Civile stabilisce espressamente che nelle vendite forzate non ha luogo la garanzia per vizi della cosa. Se il giorno dopo il ritiro scopri che il motore è grippato o il cambio è rotto, non puoi rivalerti su nessuno.",
-          "**Nessuna prova su strada:** Salvo rarissime eccezioni, è consentito solo visionare il veicolo fermo nel deposito del custode giudiziario. Spesso la batteria è a terra e non è possibile nemmeno avviare il motore.",
-          "**Presenza di chiavi e documenti:** Verifica sempre nella perizia se le chiavi sono presenti e se esiste il Documento Unico. Rifare le chiavi codificate e chiedere il duplicato del libretto alla Motorizzazione può costare tra 400 € e 800 €.",
-          "**Fermo prolungato nel tempo:** Le auto pignorate restano spesso ferme all'aperto nei piazzali per 12-24 mesi. Pneumatici ovalizzati, freni bloccati dalla ruggine, serbatoi con gasolio degradato e batterie solfatate sono all'ordine del giorno."
+          "**Stato meccanico:** chiedi quando e come puoi vedere l’auto e se è possibile avviarla o provarla. Non dare per scontato che una perizia recente descriva lo stato attuale.",
+          "**Chiavi e documenti:** controlla avviso, perizia e risposta del custode; annota cosa è incluso e chi gestisce i documenti successivi all’aggiudicazione.",
+          "**Fermo e custodia:** verifica da quanto tempo il veicolo è depositato, dove si trova, come si prenota il ritiro e se sono dovuti costi di custodia o movimentazione.",
+          "**Condizioni legali della vendita:** leggi le clausole applicabili e chiedi chiarimenti al professionista incaricato. Non estendere a ogni eventualità una sintesi della regola sulla garanzia per vizi."
         ]
       },
       {
-        "heading": "I costi nascosti che riducono il margine di risparmio",
+        "heading": "Stima l’esborso complessivo prima di presentare l’offerta",
         "paragraphs": [
-          "Il prezzo di aggiudicazione finale non è mai quello che pagherai realmente:",
-          "**Diritti d'asta del commissionario:** Tra il 9% e il 15% del prezzo di aggiudicazione + IVA sui diritti.",
-          "**Imposte di cancellazione gravami:** Il decreto di trasferimento del giudice ordina la cancellazione di fermi amministrativi e pignoramenti, ma i costi di cancellazione al PRA (circa 50-100 € per ogni singolo vincolo) sono a carico dell'acquirente.",
-          "**Passaggio di proprietà e carroattrezzi:** L'IPT provinciale va pagata per intero e, se l'auto ha la revisione scaduta, dovrai noleggiare un carroattrezzi per portarla in officina (150-300 €).",
-          "Calcola sempre la convenienza effettiva confrontando la spesa totale stimata con la nostra [valutazione auto usate di mercato](/valutazione)."
+          "Costruisci il budget usando gli importi e le scadenze dell’avviso, del disciplinare e della perizia. Oltre all’offerta, verifica eventuali imposte, compensi del gestore, spese amministrative e modalità per il saldo; le voci e gli importi possono variare tra procedure.",
+          "Aggiungi al conto eventuale custodia, trasporto con carro attrezzi, documenti o chiavi mancanti, revisione, riparazioni e la pratica necessaria per rimettere il veicolo in circolazione. Chiedi al professionista incaricato quali spese sono già note e quali sono a carico dell’aggiudicatario.",
+          "Confronta la somma con il prezzo di auto equivalenti e con un preventivo realistico dei lavori. La [valutazione AutoEsperto](/valutazione) può offrire un riferimento indicativo, non la garanzia del valore di realizzo."
+        ]
+      },
+      {
+        "heading": "Checklist per visita e lettura della perizia",
+        "paragraphs": [
+          "Usa la perizia come fotografia della situazione alla data del sopralluogo, non come garanzia che l’auto funzioni al momento della consegna. Segna ciò che manca o non è stato controllato e chiedi al custode se è possibile un ulteriore accesso:"
+        ],
+        "list": [
+          "**Identificativi e stato:** confronta VIN, targa e chilometraggio riportati nella perizia con ciò che puoi leggere sul veicolo.",
+          "**Meccanica e sicurezza:** osserva pneumatici, vetri, spie e danni visibili; non smontare coperture o aprire circuiti. Se non è possibile avviare l’auto, considera la condizione non verificata.",
+          "**Documenti e dotazione:** chiedi quali chiavi, documenti, cavi e accessori sono presenti e come verranno consegnati.",
+          "**Ritiro e trasferimento:** verifica scadenza per il saldo, luogo e orario di ritiro, documenti necessari, possibilità di circolare e necessità di trasporto. Se il veicolo non è idoneo alla strada, organizza un carro attrezzi."
+        ]
+      },
+      {
+        "heading": "Protocollo operativo peritale: come esaminare l'auto prima dell'asta",
+        "paragraphs": [
+          "La visita è spesso breve e può non permettere avviamento o prova su strada. Se le condizioni lo consentono, porta un meccanico o un perito; chiedi prima al custode quali controlli sono permessi:"
+        ],
+        "list": [
+          "Non collegare booster, dispositivi OBD o caricabatterie senza autorizzazione del custode e senza sapere se la procedura è sicura per il veicolo.",
+          "Non aprire serbatoi, circuiti o componenti non accessibili al pubblico. Se non puoi verificare motore, batteria o trasmissione, considera questi elementi come rischio economico non risolto.",
+          "Fotografa solo dove consentito e conserva copia dell’avviso e della perizia. In caso di dubbi su titoli, gravami o tempi di trasferimento, chiedi risposta al professionista incaricato prima dell’offerta."
+        ]
+      },
+      {
+        "heading": "Come trovare un’auto all’asta e capire chi gestisce la vendita",
+        "paragraphs": [
+          "Parti dall’avviso pubblicato sul [Portale delle Vendite Pubbliche del Ministero della Giustizia](https://pvp.giustizia.it/pvp/it/homepage.page), che raccoglie avvisi anche per beni mobili e veicoli. Apri la scheda del singolo lotto e verifica numero della procedura, tribunale, custode o professionista incaricato, modalità di vendita, scadenze e recapiti ufficiali. Non basarti solo su una pagina social, un aggregatore o un messaggio ricevuto da un intermediario.",
+          "La procedura non è uguale per ogni asta: avviso e allegati stabiliscono modalità di visita, deposito, forma dell’offerta, rilanci, saldo e ritiro. Scarica perizia e condizioni complete; se una clausola o un termine non è chiaro, chiedi spiegazione al referente indicato nell’avviso prima di registrarti o versare somme. Non affidare credenziali o denaro a un soggetto che non riesci a ricondurre ai contatti ufficiali della procedura."
+        ]
+      },
+      {
+        "heading": "Calcola il tetto massimo prima dell’offerta",
+        "paragraphs": [
+          "Il prezzo base non è il costo finale. Stabilisci prima un tetto che puoi sostenere e scrivi tutte le voci da sommare: importo dell’offerta, imposte e spese indicate negli atti, eventuale compenso o commissione prevista, trasporto, custodia o deposito, chiavi o documenti mancanti, ripristino e interventi necessari per rimettere il mezzo in circolazione. Gli importi e chi li paga dipendono dalla procedura: non applicare una percentuale standard a tutte le aste.",
+          "Esempio di metodo, non di tariffa: se il tuo limite complessivo è 8.000 euro e prevedi 1.200 euro di trasporto e lavori più 400 euro di oneri indicati nell’avviso, la somma massima da destinare all’offerta è 6.400 euro. Aggiorna il conto quando un preventivo cambia; se non conosci un costo, usa una stima prudente o rinuncia al lotto. La [valutazione AutoEsperto](/valutazione) può aiutare a confrontare il veicolo con il mercato, ma gli annunci non dimostrano il prezzo effettivo di vendita."
+        ]
+      },
+      {
+        "heading": "Visita, deposito e ritiro: checklist del lotto",
+        "paragraphs": [
+          "La perizia fotografa il mezzo alla data dell’ispezione e può non includere una prova su strada o una diagnosi elettronica. Se il custode consente la visita, annota ciò che riesci a controllare e considera tutto il resto come rischio ancora aperto:"
+        ],
+        "list": [
+          "Verifica corrispondenza tra targa, VIN, fotografie e descrizione; segnala subito al custode ogni differenza.",
+          "Chiedi se è possibile avviare il veicolo, vedere le chiavi e controllare i documenti; non collegare strumenti o intervenire senza autorizzazione.",
+          "Leggi se il deposito dell’offerta è rimborsabile, in quali casi può essere trattenuto e come deve essere effettuato. Usa esclusivamente i riferimenti di pagamento indicati negli atti.",
+          "Prima di offrire, annota la data limite per saldo e ritiro, il luogo, le modalità di trasferimento e se il mezzo può circolare o deve essere caricato su carro attrezzi.",
+          "Dopo l’aggiudicazione, segui gli atti della procedura per il pagamento e il trasferimento. Per i costi del passaggio consulta il [prospetto ACI](https://www.aci.it/servizi/costi-del-passaggio-di-proprieta/) e conferma allo STA gli importi del caso concreto."
         ]
       }
     ]
   },
   {
     "slug": "auto-neopatentati-2026-regole-potenza",
-    "title": "Auto per neopatentati 2026: le nuove regole del Codice della Strada, limiti e migliori usate",
-    "description": "Tutto sulla riforma del Codice della Strada 2026 per neopatentati: nuovi limiti a 75 kW/t e 105 kW, durata estesa a 3 anni, sanzioni e la selezione dei migliori modelli usati.",
+    "title": "Auto per neopatentati: limiti di potenza e come verificare un modello",
+    "description": "Come verificare se un’auto usata è guidabile da un neopatentato: limiti dell’articolo 117, data di conseguimento della patente e controllo ufficiale tramite targa.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "auto-neopatentati",
@@ -881,59 +1263,78 @@ export const articoliGuides: Guide[] = [
     "featured": false,
     "sections": [
       {
-        "heading": "La riforma 2026: limiti di potenza più elastici ma durata triplicata",
+        "heading": "Quali limiti si applicano alla tua patente",
         "paragraphs": [
-          "La disciplina per i neopatentati in Italia ha subito una trasformazione profonda con l'entrata in vigore del Nuovo Codice della Strada. Il legislatore ha modificato i parametri tecnici dei veicoli guidabili nel periodo successivo al conseguimento della patente B, introducendo un bilanciamento tra maggiore scelta di modelli e controlli più severi.",
-          "La novità principale riguarda l'innalzamento dei tetti di potenza, che consente ai neopatentati di guidare vetture di segmento medio e piccoli SUV familiari precedentemente vietati, a fronte però dell'estensione del periodo di limitazione da 1 anno a ben **3 anni**.",
-          "In questa guida trovi i parametri esatti per verificare il libretto di circolazione, le sanzioni previste e i modelli usati più intelligenti ed economici da acquistare."
+          "I limiti dipendono dalla data in cui è stata rilasciata la patente B. Le modifiche introdotte dalla Legge 177/2024 si applicano alle patenti conseguite dalla data di entrata in vigore della legge, il 14 dicembre 2024; per le patenti precedenti si applica il regime transitorio previsto dalla legge.",
+          "Per chi ha ottenuto la patente dal 14 dicembre 2024, l’articolo 117 prevede per i primi tre anni un limite di 75 kW per tonnellata e, per i veicoli M1, un limite ulteriore di 105 kW. Leggi il testo aggiornato dell’[articolo 117 ACI](https://aci.gov.it/codice-della-strada/art-117/) e verifica la targa nel servizio ufficiale del Ministero."
         ]
       },
       {
-        "heading": "I parametri tecnici esatti del Nuovo Codice della Strada",
+        "heading": "I limiti previsti dall'articolo 117",
         "paragraphs": [
           "Per poter essere guidata da un neopatentato, l'autovettura deve rispettare contemporaneamente due requisiti di legge:"
         ],
         "list": [
-          "**Rapporto potenza/tara non superiore a 75 kW/t:** Precedentemente il limite era fissato a 55 kW/t per le auto tradizionali. Il calcolo si ottiene dividendo la potenza in kW (riquadro P.2 del libretto) per la massa a vuoto del veicolo in tonnellate.",
-          "**Potenza massima assoluta non superiore a 105 kW (142,8 CV):** In precedenza il tetto massimo era di 70 kW (95 CV). Questo allargamento apre le porte a motorizzazioni turbodiesel 2.0 e ibride brillanti.",
-          "**Per le auto elettriche e ibride plug-in:** Si applica il limite di potenza specifica riferito alla potenza omologata a libretto (potenza continua erogabile per 30 minuti, solitamente molto inferiore alla potenza di picco).",
-          "**Durata del vincolo:** 3 anni dal giorno di superamento della prova pratica di guida della patente B."
+          "Per le patenti conseguite dal 14 dicembre 2024, il controllo riguarda sia il rapporto potenza/tara (massimo 75 kW/t) sia, per i veicoli M1, la potenza massima di 105 kW. I requisiti vanno rispettati entrambi.",
+          "Il limite dura tre anni dalla data di conseguimento della patente. Per le patenti conseguite prima della data di entrata in vigore valgono le disposizioni transitorie: non applicare automaticamente i nuovi valori.",
+          "Per veicoli elettrici, ibridi e versioni con omologazioni particolari, evita calcoli basati su dati commerciali o potenza di picco: usa la verifica ministeriale associata alla targa e controlla i dati di omologazione."
         ]
       },
       {
         "heading": "Come verificare se un'auto usata è idonea sul libretto",
         "paragraphs": [
-          "Non fidarti mai delle dichiarazioni verbali del venditore o dell'annuncio. Prendi in mano il Documento Unico (DU) o il vecchio libretto e controlla:",
-          "1. Nel riquadro 3 (in basso a sinistra) o tra le righe descrittive è spesso stampata la dicitura esplicita: *\"Veicolo idoneo alla guida dei titolari di patente B ai sensi dell'art. 117 CdS\"* con il valore kW/t calcolato.",
-          "2. In alternativa, collegati alla sezione gratuita \"Verifica Limiti Guida Neopatentati\" sul Portale dell'Automobilista e inserisci la targa.",
-          "3. Puoi verificare l'elenco completo aggiornato nella nostra sezione dedicata alle [migliori auto usate per neopatentati](/neopatentati)."
+          "Prima di lasciare una caparra, usa il [servizio ufficiale per i neopatentati del Portale dell’Automobilista](https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/neopatentati) inserendo la targa dell'esemplare. Verifica inoltre che la targa e la versione corrispondano all'auto vista: lo stesso modello può avere motori diversi.",
+          "La carta di circolazione o il Documento Unico possono aiutare a controllare i dati tecnici, ma non basarti su un riquadro o una dicitura non prevista in tutte le versioni del documento. Se il dato non è chiaro, chiedi al venditore la documentazione del veicolo e verifica con il servizio ministeriale.",
+          "La pagina [ACI sull'articolo 117](https://aci.gov.it/codice-della-strada/art-117/) riporta il quadro normativo; per un singolo veicolo la targa resta il controllo pratico da fare."
         ]
       },
       {
         "heading": "I migliori modelli usati per neopatentati consigliati da AutoEsperto",
         "paragraphs": [
-          "La nostra selezione basata su affidabilità, costi di manutenzione e sicurezza passiva:"
+          "Citycar come Panda, Yaris, Clio, Polo e Sandero possono essere punti di partenza per la ricerca, ma la compatibilità dipende da anno, motore e allestimento. Non considerare il nome del modello una conferma di idoneità: verifica ogni targa e confronta costi di acquisto, assicurazione, manutenzione e sicurezza dell'esemplare specifico."
         ],
         "list": [
-          "**Fiat Panda 1.0 FireFly Hybrid (70 CV):** L'utilitaria più economica da mantenere. Bassi consumi urbani, esenzione o sconto bollo regionale e ricambi reperibili ovunque a prezzi stracciati.",
-          "**Volkswagen Polo 1.0 MPI (65 o 80 CV):** Qualità tedesca, 5 porte, ottima insonorizzazione e sicurezza al vertice con frenata automatica d'emergenza.",
-          "**Renault Clio 1.0 SCe (67 CV) o 1.5 dCi (85 CV):** Grande comfort di marcia e bagagliaio generoso per viaggi extraurbani.",
-          "**Toyota Yaris 1.0 VVT-i (72 CV a benzina):** Meccanica giapponese priva di difetti cronici, ideale per chi cerca affidabilità assoluta.",
-          "**Dacia Sandero Streetway 1.0 SCe (65 CV):** Spazio da segmento superiore al prezzo più accessibile del mercato."
+          "Per ogni annuncio annota versione esatta, anno, alimentazione, potenza e targa; controlla l'idoneità sul servizio ministeriale.",
+          "Confronta visibilità, dimensioni, sistemi di assistenza effettivamente presenti e risultati di sicurezza riferiti allo specifico anno e allestimento.",
+          "Chiedi preventivi assicurativi prima dell'acquisto e stima bollo e manutenzione in base a regione, alimentazione, percorrenza e storico dell'auto."
         ]
       },
       {
-        "heading": "Le sanzioni per chi viola i limiti",
+        "heading": "Cosa fare se la verifica dà esito negativo",
         "paragraphs": [
-          "Guidare un veicolo non conforme durante il triennio comporta pesanti conseguenze ai sensi dell'art. 117 comma 5 del Codice della Strada: sanzione amministrativa pecuniaria da 165 € a 660 € e la **sospensione della patente di guida da 2 a 8 mesi**, con possibile rivalsa dell'assicurazione in caso di sinistro con colpa."
+          "Non guidare l'auto finché non hai chiarito la compatibilità con la tua patente. Consulta il testo aggiornato dell'articolo 117 e, se la risposta del servizio ministeriale non coincide con i documenti del veicolo, chiedi chiarimenti all'ufficio competente o alla Motorizzazione. Non presumere automaticamente una rivalsa assicurativa: coperture ed effetti dipendono dalle circostanze e dal contratto."
+        ]
+      },
+      {
+        "heading": "Controllo finale prima dell'acquisto",
+        "paragraphs": [
+          "Ripeti la verifica quando hai scelto un esemplare preciso e conserva i dati consultati. Questa lista evita di confondere la compatibilità generale di un modello con quella della vettura in vendita:"
+        ],
+        "list": [
+          "Inserisci nel servizio ministeriale la targa dell'esemplare, non quella di un veicolo simile trovato online.",
+          "Assicurati di aver selezionato la data corretta di conseguimento della patente e di aver letto l'esito per quel regime normativo.",
+          "Chiedi al venditore di riportare nel contratto targa, versione e dati identificativi corretti; non accettare rassicurazioni generiche basate sul solo nome commerciale.",
+          "Se l'auto verrà usata da più conducenti, verifica separatamente che sia compatibile con i requisiti di ciascuno."
+        ]
+      },
+      {
+        "heading": "Come scegliere un'auto adatta alle proprie esigenze",
+        "paragraphs": [
+          "Dopo la verifica legale, confronta l'auto con il tipo di percorso e con il budget di gestione. Un modello compatibile può comunque non essere adatto a spazio, sicurezza o costi che cerchi. Per il controllo preliminare usa lo [strumento AutoEsperto per neopatentati](/neopatentati) e inserisci la targa nel [servizio del Portale dell’Automobilista](https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/neopatentati): verifica anche la data di conseguimento della patente e le condizioni indicate per il tuo caso."
+        ],
+        "list": [
+          "Se guidi soprattutto in città, confronta ingombri, visibilità, sensori disponibili e facilità di parcheggio.",
+          "Per percorsi extraurbani valuta comfort, frenata, pneumatici, dotazioni di sicurezza e consumi d'uso realistici per la tua tratta.",
+          "Prima della decisione, fai un preventivo assicurativo con i dati esatti dell'auto e chiedi una verifica meccanica indipendente.",
+          "Controlla storico manutenzione, revisione, eventuali richiami e coerenza tra versione descritta, targa e documenti."
         ]
       }
     ]
   },
   {
     "slug": "auto-elettriche-usate-sotto-15000-euro",
-    "title": "Auto elettriche usate sotto i 15.000 €: cosa sapere prima di comprarle nel 2026",
-    "description": "Guida all'acquisto dell'auto elettrica economica usata: come misurare lo State of Health (SoH) della batteria, autonomia reale, modelli affidabili e vantaggi bollo/ZTL.",
+    "title": "Auto elettriche usate sotto i 15.000 €: controlli prima dell’acquisto",
+    "description": "Come valutare un’auto elettrica usata con budget fino a 15.000 €: batteria, autonomia adatta ai tuoi percorsi, ricarica, garanzia residua e costi da verificare.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -944,57 +1345,70 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "L'elettrico usato diventa popolare: opportunità e cautele",
         "paragraphs": [
-          "Con la rapida evoluzione tecnologica e la svalutazione fisiologica delle prime generazioni di auto a batteria, il mercato dell'usato elettrico in Italia è entrato in una fase di grande maturità. Oggi è possibile acquistare un'auto elettrica usata sotto la soglia psicologica dei 15.000 euro (e in molti casi sotto i 10.000 euro).",
-          "Per chi dispone di un punto di ricarica domestico o nel box privato e percorre tipicamente percorsi urbani o suburbani (30-60 km al giorno), l'elettrica usata rappresenta un abbattimento clamoroso dei costi chilometrici di gestione, azzerando le spese per benzina, bollo e manutenzioni complesse come cinghie o filtri antiparticolato.",
-          "Tuttavia, comprare un'elettrica usata richiede un approccio completamente diverso: il vero valore dell'auto non è il chilometraggio, ma lo stato di salute della batteria di trazione."
+          "Un budget di 15.000 € può includere modelli e anni molto diversi; annunci, prezzi e disponibilità cambiano nel tempo e in base alla zona. Prima di scegliere, verifica le inserzioni aggiornate e confronta versioni, batteria, percorrenza e dotazioni, senza assumere che ogni auto elettrica in questa fascia abbia le stesse caratteristiche.",
+          "La convenienza dipende dai tuoi tragitti, da dove puoi ricaricare e dal costo dell’energia che userai. Considera anche assicurazione, pneumatici, manutenzione, ricariche pubbliche e possibili spese di installazione: un confronto sui soli consumi non basta.",
+          "Sull’usato elettrico, batteria e ricarica richiedono controlli specifici. Chiedi una verifica documentata dello stato della batteria e prova a collegare l’auto a una stazione compatibile prima di concludere."
         ]
       },
       {
         "heading": "Il vero prezzo dell'auto: lo State of Health (SoH) della batteria",
         "paragraphs": [
-          "La batteria agli ioni di litio rappresenta circa il 40-50% del valore economico complessivo dell'automobile:"
+          "Lo stato della batteria di trazione incide su autonomia e possibilità di ricarica. Il valore SoH e il metodo con cui viene ottenuto possono variare fra modelli e strumenti:"
         ],
         "list": [
-          "**Cos'è il SoH (State of Health):** È la percentuale che misura la capacità energetica residua della batteria rispetto a quando è uscita di fabbrica (100%). Un'auto con SoH al 75% ha perso un quarto dell'autonomia originaria.",
-          "**Come verificarlo obiettivamente:** Non fidarti dell'indicatore sul cruscotto. Collega un dongle OBD-II alla presa di diagnosi e usa app specifiche (come LeafSpy per Nissan, CanZE per Renault o Car Scanner) per leggere il SoH reale certificato dal Battery Management System (BMS). In alternativa, richiedi un certificato di stato batteria rilasciato da enti terzi (Aviloo o rete ufficiale).",
-          "**Garanzia del costruttore sulla batteria:** Quasi tutti i marchi garantiscono la batteria per **8 anni o 160.000 km** con una capacità minima garantita del 70%. Verifica con la data di prima immatricolazione se il veicolo rientra ancora nella copertura ufficiale."
+          "**Che cosa indica il SoH:** è una stima dello stato della batteria rispetto a un riferimento definito dal costruttore o dal metodo di misurazione; non corrisponde direttamente alla percentuale di autonomia che avrai in ogni condizione.",
+          "**Come verificarlo:** chiedi un rapporto recente della rete ufficiale o di un servizio specializzato indipendente. Prima di usare una lettura OBD, verifica che metodo e strumento siano compatibili con marca, modello e versione; una lettura del BMS non è automaticamente una certificazione indipendente.",
+          "**Garanzia batteria:** durata, soglia di capacità, condizioni e trasferibilità variano per marca, modello, anno e mercato. Chiedi al costruttore o a un’officina autorizzata una conferma scritta collegata al VIN e controlla eventuali esclusioni."
         ]
       },
       {
         "heading": "Raffreddamento della batteria: attivo a liquido vs passivo ad aria",
         "paragraphs": [
-          "Un elemento tecnico discriminante che incide profondamente sulla longevità:"
+          "La gestione termica varia da modello a modello e influisce sulle condizioni d’uso e ricarica. Verifica la configurazione della specifica versione sul manuale del costruttore e chiedi se siano disponibili rapporti di diagnosi:"
         ],
         "list": [
-          "**Nissan Leaf 24 e 30 kWh (raffreddamento passivo ad aria):** Non dispone di raffreddamento a liquido delle celle. Nei climi caldi del Sud Italia o con ricariche rapide Fast (CHAdeMO) ripetute, la batteria si surriscalda degradando rapidamente. Da acquistare solo se a prezzo molto basso e per uso cittadino puro.",
-          "**Renault Zoe, BMW i3, VW e-Golf (raffreddamento attivo):** Sistemi di gestione termica molto più sofisticati che preservano la chimica delle celle anche dopo 8-10 anni di utilizzo intensivo."
+          "**Controlla la soluzione del modello esatto:** non dedurre il sistema di raffreddamento dal solo nome commerciale; generazione e capacità della batteria possono cambiare le specifiche.",
+          "**Chiedi come è stata usata e ricaricata:** sono informazioni utili da confrontare con le condizioni della batteria, ma non sostituiscono un test o una diagnosi. Evita previsioni sulla durata residua basate solo sul tipo di raffreddamento."
         ]
       },
       {
         "heading": "La trappola del noleggio batteria su Renault Zoe",
         "paragraphs": [
-          "Attenzione massima agli annunci di Renault Zoe a prezzi apparentemente stracciati (5.000-7.000 €):",
-          "Fino al 2020 molte Zoe venivano vendute con la formula **\"batteria a noleggio\"** (formula Flex). Chi acquista l'auto usata è obbligato a sottoscrivere un canone mensile con Mobilize Financial Services (da 69 € a oltre 120 € al mese in base ai km percorsi). Assicurati che l'annuncio specifichi espressamente **\"batteria di proprietà\"** oppure calcola il costo del riscatto della batteria dalla finanziaria."
+          "Su alcune Renault Zoe e su altri veicoli sono esistite formule con batteria di proprietà o in locazione. Non dedurre la situazione dal prezzo o dall’anno:",
+          "Chiedi se la batteria è inclusa nella proprietà del veicolo, verifica contratto e documenti e contatta la società indicata per conoscere eventuali canoni, vincoli, opzioni di riscatto e modalità di trasferimento. Inserisci ogni costo ricorrente nel confronto economico prima di versare una caparra."
         ]
       },
       {
-        "heading": "I migliori modelli sotto i 15.000 € nel 2026",
+        "heading": "Come valutare i modelli che rientrano nel budget",
         "paragraphs": [
-          "I nostri consigli per un acquisto equilibrato:"
+          "Non esiste un modello migliore per tutti. Verifica che la specifica inserzione rientri davvero nel tuo budget e che l’esemplare sia compatibile con uso, ricariche e autonomia richiesta:"
         ],
         "list": [
-          "**Renault Zoe R110 / ZE 40 o ZE 50 (batteria 41 o 52 kWh):** Autonomia reale tra 250 e 320 km, caricatore AC Caméléon da 22 kW che ricarica in meno di 2 ore alle colonnine pubbliche standard.",
-          "**Volkswagen e-Golf (batteria 35.8 kWh, 2017-2020):** Qualità costruttiva eccelsa, autonomia reale di circa 180-220 km, porta di ricarica rapida CCS Combo2.",
-          "**Smart EQ Fortwo (batteria 17.6 kWh):** Regina assoluta del parcheggio in città, autonomia reale di circa 100-120 km, perfetta come seconda auto da casa-lavoro.",
-          "**BMW i3 (94 Ah o 120 Ah):** Telaio in carbonio indistruttibile, design futuristico e batteria molto longeva prodotta da Samsung SDI."
+          "**Renault Zoe:** verifica versione, capacità, connettori e soprattutto titolarità della batteria e relativi contratti.",
+          "**Volkswagen e-Golf:** confronta anno e versione, dotazioni di ricarica e autonomia dichiarata con i tuoi tragitti reali.",
+          "**Smart EQ fortwo:** può essere adatta a spostamenti urbani brevi se autonomia, posti e bagagliaio sono compatibili con le tue necessità.",
+          "**BMW i3:** controlla anno, versione, stato batteria, ricarica e disponibilità di ricambi e assistenza nella tua zona."
+        ]
+      },
+      {
+        "heading": "Checklist prima di pagare una caparra",
+        "paragraphs": [
+          "La distanza percorribile dipende da temperatura, velocità, riscaldamento o climatizzazione, pneumatici e carico. Per stimare l’autonomia utile, parti dal tuo tragitto più lungo abituale e valuta un margine per freddo, deviazioni e soste; poi prova l’auto nelle condizioni che userai davvero. Se stai confrontando più esemplari, annota anno, chilometri, autonomia dichiarata, dotazione di ricarica e documenti della batteria. La [valutazione AutoEsperto](/valutazione) aiuta a inquadrare il prezzo richiesto; lo stato della batteria va verificato con un rapporto diagnostico riferito a quella vettura."
+        ],
+        "list": [
+          "Richiedi un rapporto recente sullo stato della batteria, con metodo e data di misurazione.",
+          "Controlla che cavi, prese e modalità di ricarica siano inclusi e compatibili con casa e percorsi abituali.",
+          "Esegui una prova di ricarica o chiedi una verifica in officina, compresi eventuali messaggi di errore.",
+          "Chiedi conferma scritta di garanzia residua e di eventuali contratti o canoni collegati alla batteria.",
+          "Confronta il costo complessivo d’uso: energia domestica o pubblica, assicurazione, pneumatici, manutenzione e installazione del punto di ricarica."
         ]
       }
     ]
   },
   {
     "slug": "migliori-auto-familiari-usate-15000-euro-2026",
-    "title": "Le migliori auto usate familiari sotto i 15.000 € nel 2026: spazio, affidabilità e consumi",
-    "description": "Classifica delle migliori familiari usate economiche: station wagon spaziose, multispazio e SUV affidabili con bagagliaio oltre 500 litri e motori diesel o GPL collaudati.",
+    "title": "Auto familiare usata fino a 15.000 €: come scegliere spazio e costi",
+    "description": "Guida alla scelta di un'auto familiare usata: prova passeggini e seggiolini, confronta bagagliaio, posti, consumi e controlli prima dell'acquisto.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -1005,33 +1419,30 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "Spazio vero per la famiglia senza spendere una fortuna",
         "paragraphs": [
-          "Gestire una famiglia con figli, passeggini, attrezzature sportive o animali domestici richiede spazio a bordo, praticità e soprattutto affidabilità meccanica per evitare spese impreviste. Con i prezzi dei SUV nuovi che superano facilmente i 35.000 euro, il mercato dell'usato sotto i 15.000 euro è il terreno ideale per trovare vetture comode e collaudate.",
-          "A questa cifra non conviene inseguire l'ultimo modello di tendenza, ma puntare su station wagon pragmatiche, multispazio derivati dai commerciali leggeri o crossover spaziosi con motorizzazioni Euro 6 efficienti.",
-          "Ecco la nostra selezione delle 5 migliori auto familiari usate del 2026 valutate dal team tecnico di AutoEsperto."
+          "Il budget di 15.000 € è un limite di ricerca, non una garanzia di prezzo: disponibilità e quotazioni cambiano per anno, chilometraggio, alimentazione, zona e condizioni. Una familiare adatta deve contenere passeggini, bagagli o attrezzatura senza compromettere i posti e la sicurezza che servono alla tua famiglia.",
+          "Station wagon, monovolume, multispazio e SUV rispondono a esigenze diverse. I modelli citati qui sono esempi di categorie da confrontare, non una classifica universale né una certificazione di affidabilità per ogni esemplare."
         ]
       },
       {
-        "heading": "1. Skoda Octavia Wagon (2016-2019): il record assoluto di bagagliaio",
+        "heading": "Station wagon: adatte a chi viaggia con bagagli",
         "paragraphs": [
-          "La regina indiscussa delle station wagon per rapporto prezzo/volume:"
+          "Skoda Octavia Wagon, Ford Focus Wagon, Fiat Tipo Station Wagon e Peugeot 308 SW sono possibili punti di partenza per una ricerca. Capienza e dotazioni variano con generazione, motore e allestimento: controlla i dati della versione esatta e porta alla visione gli oggetti che usi di solito."
         ],
         "list": [
-          "**Volume bagagliaio:** 610 litri in configurazione standard, che salgono a 1.740 litri abbattendo gli schienali.",
-          "**Motore consigliato:** 1.6 TDI 115 CV o 2.0 TDI 150 CV. Meccanica Golf/Passat condivisa con ricambi reperibili ovunque.",
-          "**Punti di forza:** Spazio per le gambe nei sedili posteriori da ammiraglia, soluzioni \"Simply Clever\" (tasche, ganci bagagliaio, ombrello integrato), consumi autostradali attorno ai 20 km/l.",
-          "**Prezzo medio 2026:** tra 10.500 € e 14.500 € per versioni Executive ben manutenute."
+          "Per ogni versione verifica volume e forma del vano, altezza della soglia e possibilità di abbattere i sedili nel manuale o nella scheda del costruttore.",
+          "Prova l'accesso ai sedili posteriori e controlla che i seggiolini si installino correttamente e che resti spazio per le persone davanti.",
+          "Confronta il prezzo dell'annuncio con esemplari dello stesso anno, versione, alimentazione e chilometraggio; fai verificare lo stato meccanico a prescindere dalla reputazione del modello."
         ]
       },
       {
-        "heading": "2. Fiat Tipo Station Wagon (2017-2021): la scelta pragmatica a costi minimi",
+        "heading": "Monovolume e multispazio: accesso e configurabilità",
         "paragraphs": [
-          "Se cerchi il costo di gestione più basso in assoluto:"
+          "Dacia Lodgy e altri veicoli a più posti possono offrire sedili configurabili, ma controlla la disposizione effettiva, lo spazio per i bagagli quando tutti i posti sono occupati e la disponibilità di cinture e attacchi per i seggiolini."
         ],
         "list": [
-          "**Volume bagagliaio:** 550 litri con piano di carico a doppio fondo piatto e soglia bassa.",
-          "**Motore consigliato:** 1.6 MultiJet 120 CV turbodiesel, un campione di durata chilometrica.",
-          "**Punti di forza:** Manutenzione ordinaria a prezzi popolari, elettronica semplice priva di bug fastidiosi, ottima robustezza delle sospensioni.",
-          "**Prezzo medio 2026:** tra 8.500 € e 12.500 € per allestimenti Lounge o Business."
+          "Se servono sei o sette posti, verifica sul veicolo specifico quanti siano omologati e accessibili; misura lo spazio residuo nel bagagliaio con tutti i sedili in uso.",
+          "Controlla porte, soglia di carico e sistemi di fissaggio previsti dal costruttore per i seggiolini.",
+          "Chiedi preventivi per manutenzione e assicurazione sulla versione esatta e verifica documenti, revisioni e storico manutentivo."
         ]
       },
       {
@@ -1056,13 +1467,36 @@ export const articoliGuides: Guide[] = [
         "paragraphs": [
           "Bagagliaio enorme da 610 litri nascosto sotto una linea filante. Ottimo il motore 1.6 BlueHDi 120 CV (attenzione sui modelli benzina PureTech per la cinghia). Interni raffinati e silenziosità di marcia da segmento superiore. Quotazioni tra 8.500 € e 13.000 €."
         ]
+      },
+      {
+        "heading": "Come confrontare modelli e annunci entro il budget",
+        "paragraphs": [
+          "Crea una rosa di modelli e poi valuta gli esemplari, senza dare per scontato che una motorizzazione o un marchio siano sempre la scelta migliore. Lascia nel budget margine per passaggio, manutenzione iniziale e interventi emersi dalla perizia. Puoi usare [Auto Finder](/auto-finder) per definire una prima rosa in base alle tue esigenze; poi confronta gli annunci reali e verifica spazio, manutenzione e condizioni dell’esemplare scelto."
+        ],
+        "list": [
+          "Confronta Octavia, Focus, Tipo o 308 in carrozzeria familiare solo dopo aver verificato la capienza della versione specifica e lo stato del singolo esemplare.",
+          "Valuta monovolume e multispazio se contano accessibilità e posti; verifica bagagliaio e configurazione con l'intera famiglia a bordo.",
+          "Se percorri molti tragitti urbani, confronta anche ibride e benzina; controlla le regole locali di circolazione e non presumere che ogni ibrida abbia accesso a ZTL o agevolazioni.",
+          "Usa preventivi reali di assicurazione e manutenzione: non ricavare i costi dalla sola cilindrata o dal nome commerciale."
+        ]
+      },
+      {
+        "heading": "Cosa controllare prima dell'acquisto su un'auto familiare usata",
+        "paragraphs": [
+          "Le auto familiari sono spesso sottoposte a carichi pesanti, vacanze a pieno carico e tragitti frequenti. Prima di concludere, ispeziona:"
+        ],
+        "list": [
+          "**Molle e ammortizzatori posteriori:** Controlla che il posteriore dell'auto non sia \"seduto\" o eccessivamente ribassato e che le boccole dei bracci posteriori non siano fessurate dal carico prolungato.",
+          "**Moquette e plastiche del vano bagagli:** Segni di usura marcata, graffi profondi sui passaruota interni e macchie di umidità nel pozzetto della ruota di scorta indicano un uso intenso o infiltrazioni dalle guarnizioni del portellone.",
+          "**Usura dei freni posteriori:** Sui veicoli familiari caricati frequentemente a pieno carico i dischi e le pastiglie posteriori lavorano molto di più rispetto alle citycar; controllane lo spessore prima di firmare."
+        ]
       }
     ]
   },
   {
     "slug": "km0-vs-usato-quale-conviene-2026",
-    "title": "Km0 vs usato: quale conviene davvero comprare nel 2026? Guida al risparmio reale",
-    "description": "Analisi economica approfondita tra auto a Km zero e usato recente aziendale: svalutazione anno uno, decorrenza garanzia, bollo già attivo e calcolo del valore residuo.",
+    "title": "Auto a km zero o usata: differenze e controlli prima di scegliere",
+    "description": "Confronta un'auto già immatricolata a km zero con un'usata recente: prezzo, data di prima immatricolazione, garanzie e condizioni del contratto.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -1073,48 +1507,92 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "Oltre il mito del nuovo a metà prezzo: cosa significa davvero Km0",
         "paragraphs": [
-          "Nel linguaggio comune delle concessionarie, il termine \"Km zero\" evoca l'idea dell'affare perfetto: una vettura nuova fiammante, con zero chilometri percorsi, venduta con uno sconto sostanzioso rispetto al listino ufficiale.",
-          "Ma dal punto di vista giuridico e fiscale, un'auto a Km0 **è a tutti gli effetti un'auto usata**, essendo già stata immatricolata e intestata a un primo proprietario (solitamente la concessionaria stessa o la casa madre per raggiungere gli obiettivi di vendita periodici).",
-          "Nel contesto di mercato del 2026, con listini del nuovo elevati ma tempi di consegna tornati alla normalità, comprendere le differenze economiche tra Km0 e usato recente di 12-24 mesi è fondamentale per massimizzare il ritorno sul proprio investimento."
+          "“Km zero” è un'espressione commerciale usata per auto già immatricolate e spesso con percorrenza limitata; l'esatto stato giuridico, la data di prima immatricolazione e il venditore risultano dai documenti. Chiedi questi dati prima di confrontare il prezzo con quello di un'auto nuova o usata.",
+          "La convenienza dipende da sconto effettivo, chilometri, dotazioni, garanzie e condizioni di vendita. L'etichetta da sola non prova né che l'auto non sia mai stata usata né che il prezzo sia inferiore alle alternative."
         ]
       },
       {
         "heading": "Le caratteristiche nascoste dell'auto a Km zero",
         "paragraphs": [
-          "Prima di farti abbagliare dallo sconto, considera questi 4 elementi che pochi venditori spiegano apertamente:"
+          "Prima di confrontare le offerte, raccogli le informazioni che incidono davvero sul costo e sulla copertura:"
         ],
         "list": [
-          "**La garanzia della casa madre è già partita:** I 2 anni di garanzia legale ufficiale del costruttore decorrono dal giorno della prima immatricolazione al PRA, non dal giorno in cui la ritiri tu. Se compri una Km0 immatricolata 10 mesi prima, ti restano solo 14 mesi di garanzia ufficiale.",
-          "**Il bollo auto è già attivo:** Essendo immatricolata, l'obbligo del bollo è già scattato. Verifica che il venditore abbia regolarizzato i pagamenti o richiedi il rimborso dei mesi trascorsi.",
-          "**Sei il secondo proprietario sul libretto:** Quando deciderai di rivenderla tra 3 o 4 anni, la vettura risulterà avere 2 proprietari storici anziché 1, con un piccolo impatto negativo sulla svalutazione futura.",
-          "**Allestimenti \"bloccati\":** Non puoi personalizzare colore o accessori: devi accontentarti dell'esemplare fisicamente presente nel piazzale."
+          "**Prima immatricolazione:** confronta la data riportata nei documenti e chiedi se ci sono stati passaggi o utilizzi precedenti. La percorrenza va verificata con documenti e controlli sul veicolo.",
+          "**Garanzie:** separa la garanzia legale dovuta dal venditore professionale al consumatore da un'eventuale garanzia commerciale del costruttore. Durata e condizioni di quest'ultima dipendono dal contratto e dalla copertura; chiedi conferma scritta legata al VIN.",
+          "**Bollo e costi amministrativi:** chiedi al venditore chi gestisce gli adempimenti relativi al periodo precedente e verifica le regole applicabili nella tua regione.",
+          "**Dotazioni e condizioni:** annota allestimento, accessori, pneumatici e segni d'uso dell'esemplare esatto, quindi confrontali con un'usata recente equivalente."
         ]
       },
       {
         "heading": "Usato recente aziendale (1-2 anni, 20.000-40.000 km): il vero affare economico",
         "paragraphs": [
-          "L'alternativa più intelligente al Km0 è spesso l'usato aziendale o ex-noleggio a lungo termine di 18-24 mesi:"
+          "Un'auto aziendale o ex-noleggio può avere più chilometri e una storia d'uso diversa. Valuta ogni esemplare in base a documenti, manutenzione, condizioni e prezzo, senza applicare percentuali di svalutazione standard."
         ],
         "list": [
-          "**Assorbimento del crollo IVA:** Il primo anno di vita di un'auto è il più devastante per il valore: si perde istantaneamente il 22% di IVA più un 10-15% di svalutazione fisiologica d'uso.",
-          "**Risparmio netto del 30-40% rispetto al listino:** Rispetto a una Km0 (che sconta mediamente il 15-20%), un usato fresco di 30.000 km ti fa risparmiare migliaia di euro in più a parità di modello.",
-          "**Difetti di gioventù già risolti:** Eventuali problemi di assemblaggio, richiami della casa o bug software sono già stati gestiti durante i primi tagliandi ufficiali documentati."
+          "Chiedi fatture o registrazioni degli interventi, controlla le revisioni e confronta la sequenza chilometrica disponibile.",
+          "Verifica con il VIN eventuali campagne di richiamo e chiedi se risultano eseguite; non presumere che tutti i problemi siano già stati risolti.",
+          "Considera il chilometraggio insieme a tipo di utilizzo, manutenzione, usura e prezzo richiesto. Una percorrenza maggiore non definisce da sola il valore dell'auto."
         ]
       },
       {
         "heading": "Verdetto finale: cosa comprare in base alle tue esigenze",
         "paragraphs": [
-          "Scegli la **Km0** se pretendi un'auto con zero usura meccanica, odore di nuovo nell'abitacolo, disponibilità immediata in concessionaria e intendi tenerla per almeno 8-10 anni (diluendo nel tempo l'extra costo iniziale).",
-          "Scegli l'**usato recente (1-3 anni)** se guardi al bilancio economico complessivo, vuoi il massimo valore per ogni euro speso e preferisci allestimenti ricchi (Highline, GT Line, Titanium) che a Km0 avrebbero prezzi troppo alti.",
-          "Confronta le quotazioni reali di entrambi i canali con il modulo di [valutazione auto usate di AutoEsperto](/valutazione)."
+          "Confronta almeno due offerte omogenee e scrivi il prezzo finale, gli accessori, le spese, la data di consegna e le garanzie incluse. Chiedi un preventivo completo, non solo lo sconto sul listino.",
+          "Scegli in base a budget complessivo, percorrenza prevista, dotazioni necessarie e condizioni documentate dell'esemplare. Se finanzi, confronta separatamente il costo totale del credito.",
+          "Prima della firma controlla contratto, targa o VIN, data di prima immatricolazione, chilometri dichiarati, eventuali difetti e accordi di consegna."
+        ]
+      },
+      {
+        "heading": "Un esempio per confrontare il costo totale",
+        "paragraphs": [
+          "Non esiste una curva uguale per tutti i modelli. Puoi però confrontare offerte concrete con la stessa configurazione di costi. L'esempio seguente è solo uno schema di calcolo: sostituisci i numeri con i preventivi che ricevi."
+        ],
+        "list": [
+          "Annota per ciascuna proposta: prezzo finale, passaggio e spese, manutenzione necessaria, garanzie aggiuntive, eventuali costi ricorrenti e valore previsto di rivendita. Quest'ultimo è una stima incerta, da non confondere con un importo garantito.",
+          "Esempio: se l'offerta A costa 20.000 € e richiede 800 € di interventi iniziali, il costo prima della gestione è 20.800 €. Se l'offerta B costa 19.000 € ma richiede 2.000 € di interventi, il totale diventa 21.000 €. Inserisci poi gli stessi costi di passaggio, finanziamento e manutenzione per confrontarle in modo coerente."
+        ]
+      },
+      {
+        "heading": "Checklist dei controlli prima di firmare per un Km 0",
+        "paragraphs": [
+          "Un'auto Km 0 non è esente da rischi commerciali. Prima di versare il saldo in concessionaria, verifica sempre:",
+          "Per confrontare l’offerta con un usato recente, annota prezzo, data di immatricolazione, garanzia residua, chilometri e spese iniziali per entrambe le alternative. La [valutazione AutoEsperto](/valutazione) può offrire un riferimento orientativo per l’usato; verifica sempre i dati dell’esemplare e il prezzo finale scritto nel contratto."
+        ],
+        "list": [
+          "**Data e documenti:** confronta prima immatricolazione, VIN, chilometraggio e intestazione con contratto e documenti; se importata, chiedi documentazione completa e chiarisci eventuali adempimenti con il venditore.",
+          "**Garanzie per iscritto:** chiedi chi è il venditore contrattuale, quale garanzia legale si applica e quali coperture commerciali sono incluse, con durata, decorrenza, limiti e modalità di assistenza.",
+          "**Ispezione dell'auto:** controlla pneumatici, batteria, carrozzeria, interni e segni di sosta o uso; richiedi una prova e una verifica indipendente. Ogni difetto o intervento promesso va descritto nel contratto o in un allegato."
+        ]
+      },
+      {
+        "heading": "Km zero: controlla data d’immatricolazione, intestazione e garanzia",
+        "paragraphs": [
+          "“Km zero” descrive di solito un’auto già immatricolata dal concessionario e con percorrenza contenuta, ma non è una categoria tecnica che garantisce condizioni identiche da un’offerta all’altra. Chiedi la data di prima immatricolazione, chi risulta intestatario, il chilometraggio effettivo, se l’auto è stata usata per esposizione o dimostrazione e quali dotazioni sono presenti sull’esemplare consegnato.",
+          "Fatti indicare nel contratto quando decorre la garanzia del costruttore e quale tutela legale si applica alla vendita che stai concludendo. Se l’auto è già immatricolata, non presumere che la copertura inizi il giorno in cui la compri: chiedi una conferma scritta della decorrenza e degli eventuali mesi già trascorsi. Verifica anche pneumatici, batteria, tagliandi dovuti e condizioni della consegna."
+        ]
+      },
+      {
+        "heading": "Confronta il costo reale con una simulazione, non con lo sconto in vetrina",
+        "paragraphs": [
+          "Metti a confronto due preventivi completi per auto con uso e dotazioni simili. Per entrambe considera prezzo finale, passaggio e immatricolazione, eventuali accessori obbligatori, finanziamento, assicurazione, manutenzione prevista e valore residuo che ipotizzi. Se il prezzo promozionale è legato a un finanziamento, chiedi anche il totale dovuto e confrontalo con il prezzo senza finanziamento: uno sconto iniziale può essere superato da interessi e spese.",
+          "Esempio puramente illustrativo: tra un km zero da 25.000 euro e un usato recente da 22.000 euro ci sono 3.000 euro di differenza iniziale. Se l’usato richiede 900 euro di pneumatici e manutenzione ravvicinata, il divario si riduce a 2.100; se il km zero ha una copertura residua più breve di quanto pensavi, anche quel vantaggio va ricalcolato. Non sono quotazioni di mercato: sostituisci ogni cifra con i preventivi del tuo caso. Per stimare i consumi usa il [calcolatore AutoEsperto](/consumi) e per l’usato confronta esemplari omogenei con la [valutazione](/valutazione)."
+        ]
+      },
+      {
+        "heading": "La lista di controllo per scegliere tra km zero e usato",
+        "list": [
+          "**Km zero:** fotografa il Documento Unico, annota la prima immatricolazione e confronta targa, VIN e dotazioni con il contratto. Chiedi quando scade la copertura del costruttore e quali manutenzioni sono già dovute.",
+          "**Usato:** confronta la storia delle revisioni, fatture, usura di volante e pedali, pneumatici e stato della batteria; pianifica un controllo indipendente se l’auto ha segnali che non sai valutare.",
+          "**Entrambi:** fai una prova compatibile con le regole del venditore, prova i dispositivi che userai davvero e metti per iscritto difetti dichiarati, accessori compresi e data di consegna.",
+          "**Prima di firmare:** chiedi due offerte con identica modalità di pagamento, conserva il prospetto economico completo e non lasciare caparre sulla base di promesse non riportate nel contratto."
         ]
       }
     ]
   },
   {
     "slug": "finanziamento-auto-usata-tan-taeg-rata",
-    "title": "Finanziamento auto usata: come funziona, TAN, TAEG e i costi occulti della maxi-rata nel 2026",
-    "description": "Guida pratica ai prestiti auto: differenza tra TAN e TAEG reale, polizze assicurative abbinate obbligatorie e facoltative, funzionamento del VFG e confronto con il prestito personale bancario.",
+    "title": "Finanziamento auto usata: TAN, TAEG, rata e maxi-rata",
+    "description": "Come confrontare un finanziamento auto usata: TAN, TAEG, costo totale, polizze, maxi-rata e documenti da leggere prima di firmare.",
     "published": "2026-09-04",
     "category": "acquisto",
     "cta": "analizza-annuncio",
@@ -1123,22 +1601,21 @@ export const articoliGuides: Guide[] = [
     "featured": false,
     "sections": [
       {
-        "heading": "Il business delle concessionarie si è spostato sui finanziamenti",
+        "heading": "Confronta prezzo dell'auto e finanziamento separatamente",
         "paragraphs": [
-          "Chiunque sia entrato in una concessionaria negli ultimi anni ha notato un cambiamento evidente: i venditori propongono con insistenza il prezzo scontato \"solo con finanziamento\", applicando un sovrapprezzo di 1.500-2.500 euro a chi desidera pagare l'auto usata per intero con bonifico bancario.",
-          "Il motivo è semplice: i concessionari incassano provvigioni altissime dalle società finanziarie partner per ogni contratto di credito stipulato, oltre a guadagnare sulle polizze assicurative accessorie (furto/incendio, kasko, GAP e protezione credito) inserite nelle rate mensili.",
-          "Capire come funziona davvero un piano di ammortamento e come smascherare i costi occulti è fondamentale per non pagare un'auto usata da 12.000 euro fino a 18.000 euro al termine delle rate."
+          "Un'offerta può presentare un prezzo diverso in caso di acquisto con finanziamento. Chiedi entrambe le proposte per iscritto e confronta prezzo del veicolo, anticipo, rate, spese, prodotti abbinati ed eventuale maxi-rata: una rata bassa da sola non indica quanto pagherai in totale.",
+          "Le condizioni dipendono dal contratto e dal finanziatore. Prima di firmare, leggi il modulo informativo precontrattuale e chiedi una copia del piano completo, incluse le condizioni di rimborso anticipato e le conseguenze di un ritardo."
         ]
       },
       {
-        "heading": "TAN vs TAEG: l'unico numero che devi guardare",
+        "heading": "TAN, TAEG e costo totale: cosa confrontare",
         "paragraphs": [
-          "La prima trappola commerciale consiste nel mettere in evidenza solo il TAN a caratteri cubitali:"
+          "Il TAN esprime il tasso nominale degli interessi; il TAEG riassume il costo annuo del credito secondo le regole applicabili. Per decidere, confronta anche gli importi in euro e le voci escluse o facoltative indicate nella documentazione del finanziatore."
         ],
         "list": [
-          "**TAN (Tasso Annuo Nominale):** È il tasso di interesse puro applicato al capitale finanziato. Non tiene conto di nessuna spesa accessoria ed è un dato parziale.",
-          "**TAEG (Tasso Annuo Effettivo Globale):** È il costo reale, onnicomprensivo e obbligatorio per legge. Include: interessi TAN, spese di istruttoria pratica (spesso 350-500 €), commissioni di incasso rata mensile (2-4 € a rata), imposta di bollo statale (16 €) e tutte le polizze assicurative obbligatorie per ottenere il finanziamento.",
-          "**La regola d'oro:** Non confrontare mai due finanziamenti basandoti sul TAN o sulla sola rata mensile. L'unico elemento di confronto valido è il **TAEG** e il **costo totale del credito** (somma di tutte le rate + anticipo + maxi rata finale)."
+          "**TAN:** tasso nominale usato per calcolare gli interessi, senza rappresentare da solo tutte le spese.",
+          "**TAEG:** indicatore utile per confrontare il costo del credito secondo le regole applicabili; verifica nel documento quali costi sono inclusi e se una copertura assicurativa è facoltativa o richiesta per ottenere quelle condizioni.",
+          "**Esborso complessivo:** somma anticipo, rate, spese indicate, eventuale maxi-rata e prodotti acquistati insieme. Confronta offerte per lo stesso importo e la stessa durata e chiedi al finanziatore il totale dovuto."
         ]
       },
       {
@@ -1147,111 +1624,131 @@ export const articoliGuides: Guide[] = [
           "Oggi diffusissima anche sull'usato recente fino a 4-5 anni di vita:"
         ],
         "list": [
-          "**Come funziona:** Anticipo iniziale (es. 3.000 €), rate mensili contenute per 36 o 48 mesi (es. 190 €/mese) e una cospicua maxi-rata finale pari al 40-50% del valore del veicolo (es. 8.000 €).",
-          "**Allo scadere dei 36 mesi hai 3 opzioni:** 1) Pagare la maxi-rata in contanti o rifinanziarla a tassi solitamente più alti; 2) Restituire l'auto al concessionario; 3) Sostituire l'auto con un'altra usata o nuova accendendo un nuovo finanziamento.",
-          "**L'inganno del chilometraggio contrattuale:** Il Valore Futuro Garantito è valido solo se rispetti il limite di chilometri prefissato (es. 15.000 km/anno). Se superi il limite, ogni chilometro in eccesso ti verrà addebitato alla restituzione a caro prezzo (tra 0,10 € e 0,25 € al km). Qualsiasi graffio o danno di carrozzeria ti verrà decurtato dal valore di riscatto."
+          "Alcuni contratti prevedono rate e una somma finale, con possibili opzioni di saldo, rifinanziamento o restituzione disciplinate dalle condizioni firmate. Non tutte le offerte prevedono un valore futuro garantito o le stesse opzioni.",
+          "Leggi con attenzione chilometraggio massimo, criteri di valutazione dei danni, modalità e luogo di restituzione, scadenze e importi dovuti. Chiedi un esempio scritto dei costi in caso di percorrenza superiore o danni contestati.",
+          "Prima di scegliere, verifica se riuscirai a sostenere la somma finale o se il contratto offre davvero un'alternativa utilizzabile senza nuovi costi non previsti."
         ]
       },
       {
         "heading": "Polizze assicurative abbinate: quali sono facoltative?",
         "paragraphs": [
-          "Nel calcolo del finanziamento vengono spesso inseriti pacchetti assicurativi gonfiati:",
-          "La **polizza CPI (Credit Protection Insurance)** o protezione del credito in caso di perdita del lavoro o malattia è per legge **facoltativa**, anche se spesso viene presentata come obbligatoria per far approvare la pratica. Hai il diritto di rifiutarla o di recedere entro 60 giorni dalla stipula.",
-          "Le polizze Furto/Incendio e GAP (che rimborsa il valore a nuovo in caso di furto totale) possono essere utili, ma confronta sempre il costo annuo inserito nel finanziamento con quello della tua compagnia assicurativa di fiducia: spesso a parità di massimali la polizza della concessionaria costa il doppio."
+          "Se il finanziamento include un'assicurazione o un servizio, chiedi se è facoltativo o condizione dell'offerta, quanto costa in totale e come incide su rata e importo finanziato. Leggi esclusioni, franchigie, durata e modalità di recesso nei relativi documenti.",
+          "Non confrontare solo il premio: confronta coperture e condizioni equivalenti. Per dubbi sul credito al consumo o sui diritti previsti, consulta la documentazione ufficiale del finanziatore e le guide della Banca d'Italia."
         ]
       },
       {
         "heading": "La mossa vincente: il prestito personale bancario",
         "paragraphs": [
-          "Prima di firmare il finanziamento proposto dal venditore, chiedi un preventivo di prestito personale alla tua banca o tramite comparatori online: spesso i prestiti bancari personali offrono TAEG inferiori del 2-4%, non vincolano l'auto con ipoteche o patti di riservato dominio e ti permettono di presentarti in concessionaria come acquirente con pagamento per cassa, ottenendo un trattamento di forza durante la trattativa."
+          "Richiedi più preventivi, inclusa un'eventuale proposta di prestito personale, sullo stesso importo e durata. Confronta TAEG, somma totale dovuta, spese, prodotti facoltativi e garanzie sul veicolo; le condizioni dipendono dal profilo e dal finanziatore, quindi non esiste una formula sempre più conveniente."
+        ]
+      },
+      {
+        "heading": "Leggere il preventivo e conservare le condizioni",
+        "paragraphs": [
+          "Chiedi il prospetto informativo e il piano di rimborso prima di impegnarti. Controlla che importo, durata e prezzo dell'auto corrispondano all'accordo discusso e conserva preventivo, contratto e allegati."
+        ],
+        "list": [
+          "Annota capitale richiesto, anticipo, numero e importo delle rate, eventuale rata finale e importo totale dovuto.",
+          "Verifica spese iniziali e periodiche, imposte, modalità di addebito e conseguenze di rate pagate in ritardo.",
+          "Se sono inclusi servizi o polizze, chiedi prezzo, durata, copertura, esclusioni e se siano necessari per ottenere il finanziamento proposto.",
+          "Controlla nel contratto le condizioni per estinzione anticipata, recesso e reclami; diritti e procedure dipendono dal tipo di contratto e dalla normativa applicabile."
+        ]
+      },
+      {
+        "heading": "La trappola della maxi-rata finale: calcolo di convenienza economica",
+        "paragraphs": [
+          "Per confrontare una proposta con maxi-rata usa un esempio completo e chiedi al finanziatore di confermare gli importi. Valuta anche uno scenario in cui la tua situazione economica o il valore dell'auto cambiano. Prima di firmare, leggi il modulo SECCI e confronta TAEG, totale dovuto e condizioni della rata finale: la [guida della Banca d’Italia sul credito ai consumatori](https://economiapertutti.bancaditalia.it/aree-tematiche/prestiti/credito-ai-consumatori/) spiega quali informazioni controllare. Per valutare il prezzo dell’auto, puoi partire dalla [valutazione AutoEsperto](/valutazione), tenendo separati il costo del veicolo e quello del credito."
+        ],
+        "list": [
+          "Somma quanto avrai pagato all'inizio e durante il contratto, aggiungi la rata finale e le spese applicabili: è il costo complessivo per tenere l'auto.",
+          "Se pensi di restituirla o sostituirla, verifica che il contratto conceda davvero questa opzione e leggi i requisiti su chilometri, stato del veicolo, scadenze e soggetto a cui consegnarla.",
+          "Un eventuale nuovo finanziamento richiede nuove condizioni e una nuova valutazione; non considerarlo automatico né garantito."
         ]
       }
     ]
   },
   {
     "slug": "come-scrivere-annuncio-efficace-vendere-auto",
-    "title": "Come scrivere un annuncio efficace per vendere l'auto più velocemente nel 2026",
-    "description": "Guida completa per scrivere un annuncio auto usata che genera contatti reali: informazioni indispensabili, impostazione del prezzo, foto che convincono e gli errori che allungano la vendita di settimane.",
+    "title": "Come scrivere un annuncio per vendere un’auto usata: esempio e checklist",
+    "description": "Prepara un annuncio auto usata chiaro e completo: dati da inserire, prezzo, fotografie, difetti da dichiarare e un modello di descrizione da adattare.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/come-scrivere-annuncio-efficace-vendere-auto.jpg",
-    "readTime": "7 min",
+    "readTime": "6 min",
     "featured": false,
     "sections": [
       {
         "heading": "Un buon annuncio risponde alle domande prima che vengano fatte",
         "paragraphs": [
-          "In Italia, nel 2026, su Subito.it sono attivi contemporaneamente oltre 500.000 annunci di auto usate, e su AutoScout24 se ne contano altri 350.000. In mezzo a questa massa, il tuo annuncio ha in media 3-5 secondi per catturare l'attenzione di un acquirente che scrolla col pollice sul telefono: se le foto sono buie, il titolo è generico e la descrizione è un copia-incolla da template, l'utente scorre oltre senza neppure aprire la scheda.",
-          "Gli annunci più efficaci sono quelli che eliminano il bisogno di scambiare dieci messaggi prima di fissare un appuntamento. Ogni informazione mancante è un dubbio in più nella testa del compratore, e ogni dubbio è una probabilità in più che quel contatto si rivolga al venditore successivo che ha pubblicato un annuncio più completo.",
-          "Il principio è semplice: chi legge il tuo annuncio deve potersi fare un'idea chiara dell'auto, del suo stato e del suo valore in meno di due minuti, senza dover mandare messaggi per chiedere \"ma è diesel o benzina?\" o \"quando scade la revisione?\". Vediamo punto per punto come costruire un annuncio che funziona davvero."
+          "Un annuncio utile consente a chi cerca un’auto di capire se il veicolo corrisponde alle sue esigenze prima di contattarti. Indica i dati verificabili, racconta la manutenzione documentata e mostra l’auto nelle condizioni attuali: così riduci le domande ripetute e prepari una visita più concreta.",
+          "Non esiste una formula che garantisca un certo numero di contatti o una vendita in un tempo preciso. Modello, prezzo, zona, stagione e condizioni incidono sul risultato. Puoi però rendere l’annuncio più chiaro seguendo questi passaggi."
         ]
       },
       {
-        "heading": "Le informazioni che non possono mancare: la checklist del venditore professionista",
+        "heading": "I dati da inserire nell’annuncio di vendita auto",
         "paragraphs": [
-          "Un annuncio incompleto è il modo più rapido per attirare perditempo e allontanare acquirenti seri. Ecco tutte le informazioni che devono essere presenti, senza eccezione:"
+          "Compila i campi tecnici usando il Documento Unico o la carta di circolazione e controlla le date prima di pubblicare. Se un dato non è disponibile o non puoi verificarlo, dichiaralo invece di indovinarlo."
         ],
         "list": [
-          "**Marca, modello, allestimento esatto e anno di prima immatricolazione.** Non basta scrivere \"Golf 2019\": specifica se è una Golf 7.5 Highline 1.5 TSI Evo 150 CV DSG con Active Info Display e fari LED, oppure una Trendline 1.0 TSI 115 CV con cambio manuale. L'acquirente deve sapere esattamente cosa guarda senza dover decifrare le foto del cruscotto.",
-          "**Chilometraggio aggiornato alla data dell'annuncio.** Non scrivere il chilometraggio di quando hai fatto l'ultima revisione sei mesi fa: aggiornalo al giorno della pubblicazione. Un contachilometri che mostra 87.340 km è molto più credibile di un generico \"circa 85.000 km\".",
+          "**Marca, modello, versione e prima immatricolazione.** Riporta l’allestimento solo se lo hai verificato sulla documentazione del veicolo.",
+          "**Chilometraggio attuale.** Indica la lettura e la data in cui l’hai rilevata; non arrotondare per far apparire l’auto meno usata.",
           "**Alimentazione e tipo di cambio specifico.** Manuale a 5 o 6 marce, automatico DSG, CVT, doppia frizione Powershift, robotizzato ETG — ogni tipo ha un mercato diverso e un profilo di affidabilità diverso. Per i cambi automatici a doppia frizione, l'acquirente attento vorrà sapere se è stato fatto il tagliando dedicato: consulta la nostra guida sulla [manutenzione del cambio DSG](/guide/cambio-dsg-doppia-frizione-usato-cosa-controllare).",
-          "**Classe Euro di omologazione.** Con i crescenti blocchi del traffico nei centri urbani italiani (Area B a Milano, LEZ a Torino, ZTL Fascia Verde a Roma), la classe ambientale è diventata un fattore determinante per il valore di rivendita. Un Euro 6d-Temp vale sensibilmente di più di un Euro 5.",
-          "**Stato della revisione e del bollo, con scadenze precise.** Indica mese e anno della prossima revisione e la data di scadenza del bollo. Puoi verificare la scadenza del bollo con il nostro [calcolo bollo auto](/calcolo-bollo).",
-          "**Storico tagliandi documentato.** Se i tagliandi sono stati effettuati in rete ufficiale, scrivilo chiaramente e offri di mostrare le fatture all'appuntamento. Se sono stati fatti in officine indipendenti, specificalo ugualmente: la trasparenza è il primo fattore di fiducia.",
-          "**Difetti noti e interventi già effettuati.** Dichiarare un graffio sulla portiera posteriore destra o la sostituzione della frizione a 120.000 km non abbassa il valore dell'annuncio: lo rende credibile. Un acquirente che scopre un difetto taciuto durante l'incontro si sentirà ingannato, anche se il difetto era trascurabile, e spesso interromperà la trattativa per principio."
+          "**Alimentazione, motore, potenza e cambio.** Specifica se il cambio è manuale o automatico e riporta la potenza corretta; non dedurla dal solo nome commerciale.",
+          "**Classe ambientale e dotazioni.** Indica la classe Euro se verificata sui documenti e gli accessori effettivamente presenti. Le limitazioni alla circolazione dipendono anche dal Comune e possono cambiare.",
+          "**Manutenzione e revisione.** Riassumi gli interventi recenti con data e chilometraggio e indica la data dell’ultima revisione. Le fatture possono essere mostrate durante la visita, oscurando i dati personali non necessari.",
+          "**Condizioni e difetti conosciuti.** Descrivi graffi, spie, guasti noti o lavori da fare. Distingui ciò che hai osservato da una diagnosi meccanica; non definire “perfetto” un veicolo che non è stato controllato."
         ]
       },
       {
-        "heading": "Come impostare il prezzo giusto: né troppo alto, né troppo basso",
+        "heading": "Come stimare e motivare il prezzo richiesto",
         "paragraphs": [
-          "Il prezzo è il secondo filtro dopo le foto. Un annuncio con un prezzo del 25% sopra il mercato genera zero contatti per settimane, costringendoti a ribassare più volte (e ogni ribasso visibile sulle piattaforme comunica disperazione, attirando cacciatori di affari che chiederanno sconti ancora più aggressivi). All'opposto, un prezzo troppo basso attira prevalentemente rivenditori professionisti che punteranno a comprare per poi rivendere con margine.",
-          "La strategia più efficace è impostare un prezzo coerente con la media di mercato, con un margine di trattativa del 5-8% già incorporato. Prima di pubblicare, verifica la quotazione reale del tuo modello specifico con la nostra [valutazione auto usate](/valutazione): inserisci marca, modello, anno, allestimento e chilometraggio per ottenere un range di prezzo basato su migliaia di annunci analizzati quotidianamente.",
-          "Se hai investito in manutenzione documentata (tagliandi in rete ufficiale, gomme nuove, cinghia appena sostituita), hai diritto a posizionarti nella fascia alta del range. Se l'auto presenta difetti estetici o meccanici noti, posizionati nella fascia bassa ma non sotto: svendere comunica un problema nascosto più di quanto comunichi generosità."
+          "Confronta annunci attivi dello stesso modello, generazione, motore e allestimento nella tua zona. Considera chilometraggio, condizioni, manutenzione dimostrabile e dotazioni. I prezzi pubblicati sono richieste, non prove del prezzo finale di vendita.",
+          "Definisci in anticipo il minimo che accetteresti e annota le ragioni del prezzo, per esempio pneumatici recenti documentati o un intervento imminente da considerare. Una stima online, compresa la [valutazione AutoEsperto](/valutazione), è un riferimento orientativo: il prezzo effettivo dipende dall’auto specifica e dalla domanda locale. Evita percentuali automatiche di trattativa e ribassi ripetuti senza aver prima confrontato veicoli simili."
         ]
       },
       {
-        "heading": "Le foto che funzionano davvero: la differenza tra 2 contatti e 20",
+        "heading": "Quali fotografie includere e come scattarle",
         "paragraphs": [
-          "Le piattaforme di annunci mostrano i dati interni: gli annunci con 15-20 foto di qualità ricevono in media 3 volte più contatti rispetto a quelli con 4-5 foto scattate in un garage buio. L'investimento di 30 minuti nel fare foto decenti si ripaga in settimane di vendita più rapida."
+          "Le fotografie permettono di valutare in anticipo ciò che una descrizione non riesce a mostrare. Scatta l’auto pulita, all’aperto e con luce uniforme; mantieni lo stesso orientamento e non applicare filtri che alterino colore o difetti."
         ],
         "list": [
           "**Luce naturale diffusa, mai flash o garage.** Il momento ideale per fotografare è la mattina presto o il tardo pomeriggio in una giornata coperta, quando la luce è uniforme e non crea riflessi aggressivi sulla carrozzeria. Per i dettagli su come preparare l'auto prima dello scatto, consulta la nostra guida dedicata a [come preparare l'auto per le foto](/guide/preparare-auto-foto-annuncio-vendita).",
           "**Sfondo neutro e ordinato.** Un piazzale pulito, una strada residenziale tranquilla o un parcheggio vuoto. Mai davanti a un cassonetto, in mezzo ad altre auto parcheggiate o con il disordine del garage alle spalle.",
-          "**I 12 scatti indispensabili:** 3/4 anteriore destro, 3/4 anteriore sinistro, fiancata destra, fiancata sinistra, posteriore, cruscotto acceso con contachilometri visibile, sedili anteriori, sedili posteriori, bagagliaio aperto, vano motore (cofano alzato, motore freddo), un primo piano dello schermo infotainment e una foto del libretto con dati sensibili oscurati.",
-          "**Difetti fotografati con onestà.** Se c'è un graffio o un'ammaccatura, scatta una foto chiara del difetto. Un acquirente che vede il difetto in foto prima dell'incontro lo ha già metabolizzato e non userà la scoperta come leva per abbattere il prezzo di 500 €."
+          "**Sequenza pratica:** tre quarti anteriore, frontale, entrambi i lati, tre quarti posteriore e retro; poi abitacolo, sedili, bagagliaio, quadro strumenti e pneumatici. Aggiungi immagini ravvicinate dei difetti già descritti.",
+          "**Tutela dei dati:** non pubblicare il Documento Unico integrale. Se fotografi documenti o schermi, oscura indirizzi, codici fiscali, numeri di telaio e altri dati personali non necessari.",
+          "**Difetti fotografati con chiarezza.** Inquadra il danno da vicino e da una distanza che mostri dove si trova. Le immagini documentano lo stato visibile, ma non sostituiscono una verifica tecnica."
         ]
       },
       {
         "heading": "Il titolo e la descrizione: come farsi trovare dai motori di ricerca interni",
         "paragraphs": [
-          "I portali di annunci funzionano con motori di ricerca interni. Un titolo come \"Auto usata, bella\" è invisibile. Un titolo come \"Volkswagen Golf 8 1.5 TSI Life DSG 2021 - 47.000 km - Tagliandi ufficiali\" è una calamita per chi cerca esattamente quel modello.",
-          "Nella descrizione, usa un tono diretto e concreto, evita le maiuscole a caso (comunicano dilettantismo) e le esclamazioni eccessive. Scrivi come se stessi parlando a un amico che ti ha chiesto informazioni sulla tua auto: concretezza, onestà e dettaglio tecnico.",
-          "Chiudi sempre la descrizione con una frase che invita all'azione: \"Disponibile per visionare di persona e prova su strada in zona [città]. Contattami per fissare un appuntamento.\" Questo filtra i curiosi e invita chi è realmente interessato a fare il passo successivo."
+          "Scrivi un titolo leggibile con marca, modello, versione e un elemento distintivo verificabile, per esempio chilometraggio o manutenzione documentata. Usa i campi previsti dal portale e le parole che un acquirente userebbe; keyword ripetute, maiuscole e promesse assolute peggiorano la leggibilità.",
+          "Organizza la descrizione in blocchi brevi: dati, manutenzione, condizioni, dotazioni, difetti e modalità di visione. Scrivi un testo specifico per la tua auto invece di copiare altri annunci. Indica il motivo della vendita solo se vuoi: non sostituisce le informazioni sul veicolo."
         ]
       },
       {
-        "heading": "In sintesi: la formula di un annuncio che vende",
+        "heading": "Esempio di annuncio auto usata: campi da compilare",
         "paragraphs": [
-          "Un annuncio efficace non è questione di talento letterario: è una checklist precisa che qualsiasi venditore privato può seguire per ridurre drasticamente i tempi di vendita e la qualità dei contatti ricevuti."
+          "Prima di pubblicare, rileggi l’annuncio confrontando ogni specifica con i documenti e ogni intervento con le fatture disponibili. Non esiste una checklist che garantisca tempi o prezzo di vendita, ma chiarezza e accuratezza aiutano le persone a valutare l’auto."
         ],
         "list": [
           "**Più informazioni, meno perditempo:** un annuncio completo riduce gli scambi di messaggi inutili e attrae acquirenti seri pronti a fissare un appuntamento.",
-          "**Prezzo coerente:** verifica sempre la quotazione reale con la [valutazione AutoEsperto](/valutazione) prima di pubblicare, impostando un margine di trattativa del 5-8%.",
-          "**15-20 foto in luce naturale:** tutti gli angoli, contachilometri, interni, bagagliaio, vano motore e difetti fotografati onestamente.",
-          "**Titolo specifico:** marca, modello, allestimento, motorizzazione, anno e chilometraggio nel titolo dell'annuncio per massimizzare la visibilità nelle ricerche.",
-          "**Trasparenza totale:** dichiarare i difetti noti e gli interventi effettuati aumenta la fiducia e riduce le contestazioni in fase di trattativa."
+          "**Prezzo motivato:** confronta auto davvero simili e usa la [valutazione AutoEsperto](/valutazione) come riferimento indicativo, senza presentarla come prezzo garantito.",
+          "**Foto complete e fedeli:** mostra angoli, abitacolo, bagagliaio e difetti senza esporre documenti o dati personali.",
+          "**Titolo specifico:** marca, modello e versione; inserisci nel titolo solo le informazioni che il portale consente e che puoi verificare.",
+          "**Esempio di descrizione:** “Vendo [modello/versione], immatricolata [data], [km] rilevati il [data]. Interventi documentati: [elenco]. Condizioni e difetti visibili: [elenco]. Revisione: [data]. Visione possibile a [zona] su appuntamento.” Sostituisci ogni campo con dati reali."
         ]
       }
     ]
   },
   {
     "slug": "preparare-auto-foto-annuncio-vendita",
-    "title": "Come preparare l'auto prima delle foto per l'annuncio: la guida pratica per vendere prima",
-    "description": "Guida pratica completa per preparare l'auto prima di fotografarla per l'annuncio di vendita: interventi estetici rapidi, dove scattare, come illuminare e gli errori che abbassano il valore percepito.",
+    "title": "Foto per vendere un’auto usata: preparazione e inquadrature",
+    "description": "Come preparare un’auto usata per le foto dell’annuncio: pulizia, luce, inquadrature, piccoli difetti da mostrare e dati personali da proteggere.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/preparare-auto-foto-annuncio-vendita.jpg",
     "readTime": "6 min",
     "featured": false,
@@ -1259,21 +1756,20 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "Le prime impressioni si giocano tutte nelle foto",
         "paragraphs": [
-          "Prima ancora di vedere l'auto dal vivo, un potenziale acquirente si forma un'opinione definitiva guardando le fotografie dell'annuncio. Le piattaforme di annunci come Subito.it e AutoScout24 mostrano le statistiche interne: gli annunci con foto chiare, luminose e professionali ricevono fino al triplo dei contatti rispetto a quelli con immagini scure, sfuocate o scattate in un garage disordinato.",
-          "Un'ora di preparazione prima dello scatto fotografico può fare la differenza tra un'auto venduta in 10 giorni e una che resta online per 2 mesi, costringendoti a ribassare il prezzo più volte. La buona notizia è che non servono competenze fotografiche particolari: bastano un telefono con una fotocamera decente, la luce giusta e una preparazione metodica dell'auto.",
-          "L'obiettivo non è ingannare l'acquirente facendo sembrare l'auto migliore di quanto sia, ma eliminare tutto il \"rumore visivo\" che distrae dall'auto stessa: sporco, disordine, riflessi, sfondi caotici. Un'auto pulita e ben fotografata comunica cura e affidabilità prima ancora che l'acquirente legga il chilometraggio."
+          "Le foto aiutano chi legge a capire dimensioni, condizioni e dotazioni prima di chiedere un appuntamento. Immagini chiare mostrano l’auto; non dimostrano da sole lo stato meccanico né garantiscono una vendita più rapida.",
+          "Non servono attrezzature professionali: uno smartphone, luce uniforme e uno sfondo semplice sono sufficienti. Lo scopo è documentare fedelmente il veicolo, non farlo sembrare più nuovo o privo di difetti."
         ]
       },
       {
         "heading": "Pulizia esterna: il minimo indispensabile che fa la differenza",
         "paragraphs": [
-          "La pulizia esterna è il primo investimento, e anche il più economico. Un lavaggio a mano completo in un autolavaggio self-service costa tra 5 € e 10 € e richiede 20-30 minuti di impegno:"
+          "Un lavaggio accurato rende più leggibili le superfici nelle fotografie. Il tempo e il costo dipendono dalle condizioni dell’auto e dal servizio scelto; non è necessario lucidare o riparare la carrozzeria per preparare un annuncio:"
         ],
         "list": [
           "**Lavaggio carrozzeria completo con prelavaggio.** Inizia con un getto di acqua ad alta pressione per rimuovere lo sporco superficiale, poi lava a mano con shampoo auto e guanto in microfibra. Non usare mai detersivo per piatti: sgrasserebbe la vernice rimuovendo la protezione cerosa residua.",
-          "**Ruote, pneumatici e passaruota.** Le ruote sporche sono la prima cosa che un acquirente attento nota nelle foto laterali. Pulisci i cerchi con un prodotto specifico anti-polvere freni (la polvere dei dischi corrode il cerchio se lasciata a lungo) e annerisci i pneumatici con un rinnovatore per gomme: bastano 3 € di prodotto per dare un aspetto immediatamente più curato.",
+          "**Ruote, pneumatici e passaruota.** Rimuovi lo sporco superficiale senza usare prodotti aggressivi o applicare lucidanti sul battistrada. Fotografa anche l’usura visibile delle gomme.",
           "**Vetri e specchietti.** Vetri sporchi rendono le foto degli interni opache e scure. Pulisci sia l'esterno sia l'interno dei vetri con un panno in microfibra e un detergente specifico (non lasciarti tentare dall'ammoniaca: rovina le pellicole oscuranti se presenti).",
-          "**Paraurti, sottoporta e griglie.** Rimuovi con attenzione moscerini secchi, residui di catrame e macchie di resina dalle carrozzerie chiare. Un prodotto sgrassa-catrame da 5-8 € risolve il problema in pochi minuti."
+          "**Paraurti, sottoporta e griglie.** Pulisci con prodotti compatibili con la superficie e segui le istruzioni. Se non sei sicuro del trattamento, limitati al lavaggio ordinario per evitare di rovinare la vernice."
         ]
       },
       {
@@ -1282,58 +1778,59 @@ export const articoliGuides: Guide[] = [
           "Gli interni comunicano immediatamente quanta cura il proprietario ha dedicato alla vettura. Un cruscotto polveroso, tappetini infangati e oggetti personali sparsi ovunque trasmettono trascuratezza, anche se il motore è stato mantenuto in modo impeccabile:"
         ],
         "list": [
-          "**Aspirapolvere su sedili, tappetini e bagagliaio.** Rimuovi briciole, peli di animali, sabbia e polvere accumulata nei binari dei sedili. Se i sedili sono in tessuto e presentano macchie, un detergente schiumogeno per tappezzeria (8-12 €) può fare miracoli in 15 minuti.",
-          "**Cruscotto e plastiche con prodotto specifico, mai silicone.** I prodotti a base di silicone lucidano ma lasciano le plastiche unte e appiccicose, con un effetto innaturale nelle foto. Usa un detergente per plastiche opaco che pulisce senza lucidare in modo esagerato.",
-          "**Eliminazione di oggetti personali.** Togli tutto dal bagagliaio, dai vani portaoggetti, dalla mensola posteriore. L'acquirente deve potersi proiettare nell'auto come futura sua, non percepirla come il salotto di qualcun altro.",
-          "**Rimozione di adesivi, pendagli dallo specchietto, coprisedili consumati.** Ogni personalizzazione è un ostacolo alla proiezione dell'acquirente. Un'auto \"neutrale\" si vende più velocemente."
+          "**Sedili, tappetini e bagagliaio.** Aspira sporco e oggetti personali. Per macchie o materiali delicati segui le istruzioni del produttore o affidati a un professionista: un prodotto inadatto può lasciare aloni o danni.",
+          "**Cruscotto e plastiche.** Usa un panno morbido e un detergente adatto alla superficie, senza bagnare schermi, pulsanti o bocchette. Evita finiture lucide che producono riflessi nelle foto.",
+          "**Rimozione degli oggetti personali.** Svuota il bagagliaio e i vani che compaiono nelle foto. Controlla anche eventuali dispositivi associati a un account o dati salvati nel sistema multimediale.",
+          "**Oggetti personali e accessori.** Togli ciò che non è incluso nella vendita e chiarisci nell’annuncio quali accessori rimangono. Non rimuovere elementi fissati se rischi di lasciare segni o danneggiare la superficie."
         ]
       },
       {
-        "heading": "Piccoli interventi estetici che aumentano il valore percepito (e costano poco)",
+        "heading": "Piccoli controlli prima dello scatto: cosa fare e cosa evitare",
         "paragraphs": [
-          "Ci sono interventi da 10-50 € che possono far percepire l'auto come 500-1.000 € più curata di quanto sia realmente. Il ritorno sull'investimento è enorme:"
+          "Prima di investire in riparazioni estetiche, valuta se l’intervento è sicuro, proporzionato e davvero necessario. La preparazione fotografica serve a presentare l’auto con ordine, non a coprire difetti o promettere un aumento di prezzo."
         ],
         "list": [
-          "**Lampadine bruciate.** Un fanale anteriore o una luce targa non funzionante nelle foto generano immediatamente domande sui \"costi nascosti\" nella testa dell'acquirente. Una lampadina H7 costa 4-8 €, una LED targa 2-3 €.",
-          "**Pneumatici gonfiati alla pressione corretta.** Un'auto con le gomme sgonfie nelle foto laterali appare \"affossata\" e trascurata. 5 minuti al compressore dell'autolavaggio risolvono il problema.",
-          "**Graffi superficiali trattati con polish.** Un polish abrasivo fine (10-15 €) e un panno in microfibra possono eliminare il 70-80% dei graffi che non hanno intaccato il primer. Un graffio profondo va fotografato con onestà, non nascosto.",
-          "**Tergicristalli nuovi.** Spazzole tergicristallo striate e consumate in bella vista nel campo visivo delle foto del parabrezza comunicano trascuratezza. Un set completo costa 12-25 € e si monta in 2 minuti."
+          "**Luci e spie.** Controlla che le luci funzionino e non cancellare o nascondere spie. Se c’è un’anomalia, riportala nell’annuncio e falla valutare da un professionista.",
+          "**Pneumatici.** Controlla che non ci siano danni visibili e annota marca, misura e usura se sono informazioni utili. Non gonfiare oltre i valori indicati dal costruttore; se una gomma sembra danneggiata, chiedi una verifica prima di spostare l’auto.",
+          "**Graffi e ammaccature.** Puliscili per renderli visibili e fotografali; non tentare riparazioni improvvisate che potrebbero alterare la superficie.",
+          "**Tergicristalli e accessori.** Se li sostituisci, indica la manutenzione solo dopo averla eseguita e conserva la ricevuta. Non è necessario cambiare componenti per fare le foto."
         ]
       },
       {
         "heading": "Dove e come scattare le foto: luce, sfondo e sequenza",
         "paragraphs": [
-          "La differenza tra una foto che vende e una che non vende è quasi sempre una questione di luce e sfondo, non di qualità della fotocamera del telefono:"
+          "Scegli un luogo consentito, sicuro e senza persone riconoscibili sullo sfondo. Scatta alla luce del giorno, evitando riflessi forti e ombre che nascondono graffi o ammaccature:"
         ],
         "list": [
-          "**Luce naturale diffusa.** Il momento ideale è la mattina presto (8:00-10:00) o il tardo pomeriggio (17:00-19:00 in estate), oppure in una giornata nuvolosa con cielo coperto e uniforme. Il sole diretto a mezzogiorno crea ombre nere sotto l'auto e riflessi abbaglianti sulla carrozzeria che nascondono i dettagli.",
+          "**Luce uniforme.** Una giornata luminosa ma non abbagliante aiuta a mostrare il colore e le superfici. Se il sole crea riflessi, cambia orientamento o orario e controlla le immagini prima di concludere.",
           "**Sfondo neutro e ordinato.** Un piazzale asfaltato, un parcheggio vuoto, una strada residenziale tranquilla. Mai in garage (troppo buio), mai con altre auto parcheggiate a ridosso (distrae e confonde), mai davanti a cassonetti o cantieri.",
-          "**Sequenza dei 12 scatti indispensabili.** 3/4 anteriore da sinistra, 3/4 anteriore da destra, fiancata sinistra, fiancata destra, posteriore completo, cruscotto acceso con contachilometri visibile, sedile guida con volante, sedili posteriori, bagagliaio aperto e vuoto, vano motore con cofano alzato (motore freddo), schermo infotainment acceso, foto del libretto di circolazione con dati sensibili oscurati.",
-          "**Documenta con onestà i difetti.** Un graffio fotografato in anticipo e dichiarato nella descrizione diventa un non-problema. Un graffio scoperto dall'acquirente durante l'incontro dopo non averlo visto nelle foto diventa un motivo di sfiducia e un pretesto per un ribasso aggressivo."
+          "**Sequenza suggerita:** tre quarti anteriore, frontale, entrambi i lati, retro e tre quarti posteriore; poi plancia, sedili, bagagliaio, pneumatici e dettagli delle dotazioni. Fotografa il vano motore solo se è sicuro farlo e senza manipolare parti calde o in movimento.",
+          "**Dati e persone.** Evita foto di documenti integrali, indirizzi, chiavi con targhette identificative, persone o targhe di terzi. Se una foto include dati non necessari, rimuovila o oscurali prima della pubblicazione.",
+          "**Documenta i difetti.** Fai una foto ravvicinata e una panoramica che mostri la posizione del danno. Aggiungi una breve descrizione: la fotografia non sostituisce una diagnosi meccanica."
         ]
       },
       {
-        "heading": "In sintesi: preparare l'auto per le foto è il miglior investimento pre-vendita",
+        "heading": "Checklist fotografica per l’annuncio",
         "paragraphs": [
-          "Un'ora di preparazione e 20-50 € di prodotti per la pulizia possono abbreviare i tempi di vendita di settimane e difendere il prezzo richiesto. Ecco la checklist finale:"
+          "Prima di caricare le immagini, verifica che mostrino il veicolo in modo fedele e che non rivelino informazioni personali. Dopo la pubblicazione, [Analizza Annuncio](/analizza-annuncio) può aiutarti a ricontrollare la chiarezza dei dati e della descrizione: non certifica le condizioni meccaniche e non sostituisce fotografie nitide o documenti."
         ],
         "list": [
-          "**Pulizia esterna completa:** lavaggio, ruote, vetri, paraurti — 30 minuti, 5-10 €.",
+          "**Esterni puliti e asciutti:** controlla che colore, graffi e ammaccature siano visibili.",
           "**Interni aspirati e neutrali:** niente oggetti personali, cruscotto pulito, tappetini senza fango.",
-          "**Interventi estetici rapidi:** lampadine funzionanti, gomme gonfiate, graffi lucidati, tergicristalli nuovi.",
-          "**Foto in luce naturale:** mattina presto o pomeriggio coperto, sfondo neutro, almeno 12 scatti dalla sequenza completa.",
-          "**Prezzo coerente:** una volta pronte le foto, verifica il valore di mercato del tuo modello con la [valutazione AutoEsperto](/valutazione) per presentare un annuncio curato e con un prezzo credibile."
+          "**Nessun ritocco ingannevole:** niente filtri che cambiano il colore e nessuna riparazione cosmetica non dichiarata.",
+          "**Immagini varie e ordinate:** esterni, abitacolo, bagagliaio, gomme, dotazioni e difetti noti.",
+          "**Dati personali protetti:** non mostrare documenti integrali, indirizzi o oggetti identificativi."
         ]
       }
     ]
   },
   {
     "slug": "vendere-auto-usata-subito-it-senza-truffe",
-    "title": "Come vendere un'auto usata su Subito.it senza rischiare truffe: la guida di sicurezza 2026",
-    "description": "Guida pratica alla vendita sicura su Subito.it e AutoScout24: i segnali di un acquirente truffaldino, le regole per proteggersi dai falsi bonifici e come gestire pagamento e passaggio di proprietà senza rischi.",
+    "title": "Vendere un’auto usata online: contatti, pagamento e passaggio sicuro",
+    "description": "Come vendere un’auto usata online con più sicurezza: segnali d’allarme nei messaggi, prova su strada, pagamento e passaggio di proprietà.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/vendere-auto-usata-subito-it-senza-truffe.jpg",
     "readTime": "6 min",
     "featured": false,
@@ -1341,68 +1838,80 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "La truffa più comune non è quella che pensi",
         "paragraphs": [
-          "Quando si parla di truffe nella compravendita di auto usate tra privati, la maggior parte dei venditori pensa al rischio di ricevere banconote false o di essere rapinati all'appuntamento. In realtà, nel 2026 le truffe più diffuse — e più insidiose — sono digitali e colpiscono soprattutto chi vende, non chi compra.",
-          "Secondo le segnalazioni raccolte dalla Polizia Postale e dalle stesse piattaforme di annunci, i tre schemi più diffusi in Italia sono: il falso bonifico istantaneo (screenshot manipolato di un bonifico mai realmente eseguito), la truffa del finto acquirente estero con richiesta di anticipo spese di spedizione, e l'assegno circolare contraffatto o senza copertura. Per una panoramica completa sugli schemi più sofisticati, consulta la nostra guida dedicata alle [truffe comuni nella vendita auto usata](/guide/truffe-comuni-vendita-auto-usata).",
-          "La buona notizia è che tutte queste truffe seguono schemi riconoscibili: chi le conosce non ci casca. Vediamo i segnali d'allarme e le regole di protezione una per una."
+          "Un messaggio frettoloso o un acquirente che vive lontano non dimostrano da soli una truffa. Il rischio aumenta quando ti viene chiesto di anticipare denaro, aprire un link ricevuto in chat, comunicare codici bancari o consegnare il veicolo prima di aver verificato il pagamento.",
+          "Questa guida offre una procedura prudente per gestire contatti, visita e conclusione della vendita. Per approfondire i singoli schemi, consulta anche la guida alle [truffe nella vendita di un’auto usata](/guide/truffe-comuni-vendita-auto-usata)."
         ]
       },
       {
-        "heading": "I 6 segnali inequivocabili di un acquirente sospetto",
+        "heading": "Sei richieste che meritano una verifica prima di procedere",
         "paragraphs": [
-          "Non tutti gli acquirenti con comportamenti insoliti sono truffatori, ma l'accumulo di due o più di questi segnali deve far scattare l'allarme:"
+          "Nessun singolo comportamento dimostra una frode. Se ricevi una delle richieste seguenti, fermati e verifica prima di condividere dati, pagare o consegnare il veicolo:"
         ],
         "list": [
-          "**Offerta superiore al prezzo richiesto senza aver visto l'auto.** Nessun acquirente reale offre più di quanto chiedi: chi lo fa sta costruendo un pretesto per chiederti di restituire una \"differenza\" o di anticipare spese.",
-          "**Comunicazione esclusivamente via email o messaggistica, mai telefonica.** Chi rifiuta sistematicamente una telefonata o una videochiamata spesso opera dall'estero con identità false. Una voce al telefono non è una garanzia, ma un rifiuto categorico a parlare è un campanello d'allarme.",
-          "**Acquirente \"all'estero\" con corriere per il ritiro.** Lo schema classico: l'acquirente dice di risiedere in Francia, Germania o UK, propone un corriere per il ritiro dell'auto e chiede al venditore di anticipare le spese di trasporto o sdoganamento (300-800 €), con la promessa di rimborsare tutto insieme al pagamento totale. Il rimborso non arriva mai.",
-          "**Screenshot di bonifico \"in attesa di accredito\".** Uno screenshot non è mai una prova di pagamento: può essere manipolato in pochi secondi con un editor di immagini. L'unica prova valida è l'accredito effettivo e verificato sul tuo conto corrente, visibile nell'home banking con data e CRO.",
-          "**Fretta estrema di chiudere senza vedere l'auto.** Un acquirente che vuole pagare e ritirare \"oggi stesso\" senza fare domande, senza un test drive e senza controllare i documenti sta cercando di non darti il tempo di verificare il pagamento.",
-          "**Richiesta di dati personali o bancari non necessari.** Un acquirente legittimo ha bisogno solo del tuo IBAN per disporre un bonifico. Non ha bisogno del tuo codice fiscale, del tuo indirizzo di casa o del numero della tua carta di credito."
+          "**Richiesta di anticipare denaro per trasporto, assicurazione o commissioni.** Non pagare spese per conto di un acquirente sconosciuto né accettare promesse di rimborso successive.",
+          "**Link o QR code per “ricevere” denaro.** Non inserire credenziali, dati della carta o codici monouso su pagine inviate dall’acquirente. Per verificare un accredito, apri autonomamente la tua app bancaria.",
+          "**Screenshot o email di conferma usati come prova.** Un’immagine può essere contraffatta e un’email può imitare la banca. Controlla il saldo e il movimento nell’app o sul sito ufficiale della tua banca.",
+          "**Pressione per consegnare subito.** Non saltare la verifica del pagamento, l’atto di vendita o il controllo dei documenti anche se l’interlocutore dice di avere fretta.",
+          "**Richiesta di documenti o dati eccedenti.** Condividi solo ciò che serve per la pratica e oscura le informazioni personali sulle copie non necessarie.",
+          "**Prova su strada senza precauzioni.** Verifica la patente, concorda il percorso e accompagna l’interessato. Non lasciare le chiavi o i documenti incustoditi."
         ]
       },
       {
-        "heading": "Le regole d'oro per una vendita sicura tra privati nel 2026",
+        "heading": "Una procedura prudente per incontro e pagamento",
         "paragraphs": [
-          "Ecco le 5 regole fondamentali che ogni venditore privato deve seguire per proteggersi, indipendentemente dal metodo di pagamento:"
+          "Concorda prima dell’appuntamento come avverranno visita, pagamento e pratica. Usa recapiti ufficiali per le verifiche bancarie e amministrative; se un passaggio non è chiaro, rinvia la consegna e chiedi conferma."
         ],
         "list": [
-          "**Mai consegnare l'auto prima dell'accredito effettivo e verificato.** Non basta vedere uno screenshot di bonifico \"disposto\": i tempi di accredito di un bonifico ordinario SEPA sono di 1 giorno lavorativo. Se l'acquirente non è disposto ad aspettare che il bonifico arrivi prima di ritirare l'auto, c'è un problema. La soluzione ottimale è il bonifico istantaneo (SCT Inst), verificabile in tempo reale.",
-          "**Preferisci il contante contato in banca insieme all'acquirente, o il bonifico istantaneo.** Se il pagamento è in contanti, fissa l'incontro davanti alla filiale della tua banca: puoi entrare, depositare e far verificare le banconote allo sportello. Ricorda che dal 2023 la soglia di pagamento in contanti in Italia è di 5.000 €: sopra questa cifra serve obbligatoriamente un bonifico o un altro strumento tracciabile.",
-          "**Fissa sempre l'incontro in un luogo pubblico e alla luce del giorno.** Un bar, il parcheggio di un centro commerciale, il piazzale di una caserma dei Carabinieri. Comunica a un familiare dove sei, con chi ti stai incontrando e a che ora prevedi di tornare.",
-          "**Non accettare assegni da soggetti sconosciuti.** Un assegno bancario può essere protestato, contraffatto o senza copertura anche giorni dopo l'apparente incasso. Se l'acquirente insiste per pagare con assegno, chiedi un assegno circolare emesso dalla sua banca e verifica telefonicamente con la filiale emittente prima di consegnare l'auto.",
-          "**Formalizza il passaggio di proprietà il prima possibile.** Finché l'auto è intestata a te, sei tu il responsabile civile e amministrativo per multe, incidenti e omissioni. Puoi calcolare in anticipo i costi del [passaggio di proprietà](/passaggio-proprieta) con il nostro calcolatore dedicato."
+          "**Verifica il pagamento sul tuo conto.** Non consegnare il veicolo sulla base di una contabile, uno screenshot o un’email. Accedi alla banca attraverso l’app o il sito ufficiale e, in caso di dubbio, chiedi conferma alla banca con i recapiti ufficiali.",
+          "**Concorda in anticipo una modalità di pagamento tracciabile.** Informati sui tempi e sulle condizioni con la tua banca prima dell’appuntamento. Se si usano contanti, rispetta i limiti di legge vigenti e valuta di effettuare l’operazione allo sportello; verifica la soglia aggiornata prima di pubblicare la guida o concludere la vendita.",
+          "**Organizza la visita in un luogo adatto e informa una persona di fiducia.** Verifica la patente prima della prova su strada, concorda il percorso e accompagna l’interessato. Non lasciare auto o chiavi incustodite.",
+          "**Se si usa un assegno, verifica prima il titolo.** Contatta la banca emittente usando recapiti reperiti autonomamente e chiedi alla tua banca quali verifiche e tempi applica. Non basarti sul numero stampato sul titolo o su quello inviato dall’acquirente.",
+          "**Completa e verifica il trasferimento.** ACI raccomanda al venditore di verificare che il passaggio risulti trascritto al PRA; consulta le [cautele ACI per chi vende](https://www.aci.it/i-servizi/guide-utili/guida-pratiche-auto/consigli-e-cautele-per-la-vendita) e concorda dove svolgere la pratica."
         ]
       },
       {
         "heading": "Cosa fare in caso di tentata truffa",
         "paragraphs": [
           "Se riconosci uno degli schemi descritti sopra, segui questa sequenza:",
-          "Interrompi immediatamente la trattativa senza spiegare all'interlocutore il motivo specifico (non dargli informazioni su come perfezionare la truffa con il prossimo venditore). Segnala il profilo alla piattaforma tramite il pulsante \"Segnala utente\" presente su Subito.it e AutoScout24. Conserva tutti i messaggi, le email e gli screenshot ricevuti: sono prove utilizzabili in caso di denuncia. Se hai subito un danno economico concreto, sporgi denuncia alla Polizia Postale o ai Carabinieri con tutta la documentazione raccolta.",
-          "Pubblica un annuncio con un prezzo coerente con il valore di mercato reale verificato sulla nostra [valutazione auto usate](/valutazione): un prezzo troppo basso attira anche cacciatori di opportunità poco seri, mentre un prezzo in linea con il mercato filtra naturalmente i contatti più affidabili."
+          "Interrompi la comunicazione se ti chiedono denaro, codici di accesso o di ignorare i controlli. Segnala il profilo alla piattaforma e conserva messaggi, email e ricevute. Se hai condiviso credenziali o autorizzato un pagamento, contatta subito la banca tramite i recapiti ufficiali e chiedi come bloccare l’operazione; se hai subito un danno, rivolgiti alle forze dell’ordine."
         ]
       },
       {
         "heading": "In sintesi: vendere in sicurezza è una questione di metodo, non di fortuna",
         "paragraphs": [
-          "Ecco i punti essenziali per vendere la tua auto usata online senza rischi:"
+          "Questi controlli riducono alcuni rischi, ma non possono garantire una vendita priva di problemi:"
         ],
         "list": [
-          "**Le truffe più comuni colpiscono chi vende:** falsi bonifici, finti acquirenti esteri, assegni senza copertura.",
-          "**Regola d'oro assoluta:** non consegnare mai l'auto prima che il pagamento sia effettivamente e definitivamente accreditato sul tuo conto.",
-          "**Pagamento sicuro:** contante in banca (sotto 5.000 €) o bonifico istantaneo verificato in tempo reale.",
-          "**Passaggio di proprietà immediato:** finché l'auto è a tuo nome, sei responsabile. Calcola i costi con il [calcolatore AutoEsperto](/passaggio-proprieta).",
-          "**Segnala e denuncia:** conserva ogni prova e segnala i profili sospetti alla piattaforma e alle forze dell'ordine."
+          "**Non fidarti di screenshot o link:** verifica gli accrediti accedendo autonomamente alla tua banca.",
+          "**Non anticipare costi a uno sconosciuto** per trasporto, assicurazione o sblocco di denaro.",
+          "**Organizza visita e prova su strada con precauzioni** e non lasciare l’auto incustodita.",
+          "**Concludi la pratica e controlla la trascrizione al PRA**, seguendo le indicazioni ACI.",
+          "**Segnala il profilo alla piattaforma e conserva le prove.** Se hai subito un danno, rivolgiti alle forze dell’ordine."
+        ]
+      },
+      {
+        "heading": "Checklist per il giorno della visita",
+        "paragraphs": [
+          "Prima dell’appuntamento, prepara un luogo e un orario in cui ti senti a tuo agio, controlla di avere con te solo i documenti necessari e concorda in anticipo la durata della prova. Durante la visita resta presente e non lasciare che l’auto venga portata via “per un controllo” senza un accordo chiaro e senza aver completato gli adempimenti.",
+          "Prima di consegnare le chiavi, verifica che il pagamento risulti sul tuo conto e che l’atto e la pratica di trasferimento siano stati gestiti come concordato. Se una verifica richiede tempo, rimanda il ritiro: non devi concludere la vendita durante il primo incontro."
+        ],
+        "list": [
+          "Verifica la patente e accompagna il potenziale acquirente durante la prova.",
+          "Non condividere codici bancari, credenziali o documenti completi via chat.",
+          "Controlla il pagamento attraverso l’app o il sito della tua banca, raggiunti autonomamente.",
+          "Conserva copia dell’atto, della ricevuta e dei messaggi che documentano accordi e consegna.",
+          "Dopo la pratica, verifica che il trasferimento sia stato trascritto al PRA secondo le indicazioni ACI."
         ]
       }
     ]
   },
   {
     "slug": "truffe-comuni-vendita-auto-usata",
-    "title": "Le truffe più comuni quando si vende un'auto usata nel 2026: come riconoscerle e difendersi",
-    "description": "Guida completa alle truffe più diffuse a danno di chi vende un'auto usata in Italia: dal falso bonifico istantaneo all'assegno contraffatto, passando per il finto acquirente estero e la caparra fantasma.",
+    "title": "Truffe nella vendita di auto usate: falsi pagamenti e richieste di denaro",
+    "description": "Truffe nella vendita di auto usate: come riconoscere falsi pagamenti, richieste di anticipi e documenti sospetti e quali verifiche fare prima della consegna.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/truffe-comuni-vendita-auto-usata.jpg",
     "readTime": "6 min",
     "featured": false,
@@ -1410,40 +1919,37 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "Chi vende è un bersaglio quanto chi compra",
         "paragraphs": [
-          "Si parla molto delle truffe subite da chi compra un'auto usata — il contachilometri scalato, i difetti nascosti, l'auto incidentata con telaio raddrizzato — ma nel 2026 le truffe ai danni di chi vende sono in forte crescita e spesso più sofisticate di un semplice mancato pagamento. Secondo i dati della Polizia Postale, le segnalazioni di frode nella compravendita online di veicoli sono aumentate del 18% tra il 2024 e il 2025, con un danno medio di 4.200 € per vittima.",
-          "Il meccanismo è quasi sempre lo stesso: il truffatore crea urgenza, offre condizioni apparentemente vantaggiose per il venditore e spinge verso una consegna rapida dell'auto prima che il venditore possa verificare l'effettività del pagamento. Conoscere gli schemi specifici è il modo più efficace per non caderci."
+          "Le frodi ai danni di chi vende un’auto possono usare messaggi, ricevute contraffatte, link di pagamento o richieste di anticipare denaro. Non è possibile riconoscere una truffa da un singolo dettaglio: la tutela più affidabile è verificare ogni passaggio attraverso canali scelti dal venditore e interrompere la trattativa quando viene chiesto di aggirare quei controlli.",
+          "Gli esempi seguenti descrivono segnali di rischio, non statistiche sulla diffusione dei singoli schemi. Per il trasferimento di proprietà consulta le [cautele ACI per la vendita](https://www.aci.it/i-servizi/guide-utili/guida-pratiche-auto/consigli-e-cautele-per-la-vendita) e l’[articolo 94 del Codice della Strada](https://aci.gov.it/codice-della-strada/art-94/)."
         ]
       },
       {
         "heading": "Truffa 1: Il falso bonifico istantaneo",
         "paragraphs": [
-          "È la truffa più diffusa nel 2026 e colpisce migliaia di venditori privati ogni anno in Italia. L'acquirente si presenta all'appuntamento (o comunica via messaggio) mostrando sullo schermo del telefono uno screenshot di un bonifico \"disposto\" o \"in lavorazione\" dal proprio home banking.",
-          "Lo screenshot mostra l'importo esatto, il tuo IBAN come beneficiario e una data di esecuzione che coincide con il giorno stesso. Il trucco è che lo screenshot è stato creato con un semplice editor di immagini (o con uno dei tanti generatori online di false ricevute bancarie) e non corrisponde a nessuna operazione reale. In alcuni casi più sofisticati, il truffatore dispone realmente un bonifico per poi annullarlo entro le 24 ore successive alla consegna dell'auto, sfruttando la finestra di revoca prevista da alcune banche.",
-          "Come proteggersi: non consegnare mai l'auto basandoti su uno screenshot. Verifica l'accredito effettivo sul tuo conto tramite l'home banking o lo sportello della tua banca. Se l'acquirente propone un bonifico istantaneo (SCT Inst), l'accredito è visibile in 10-20 secondi: è il metodo più sicuro e verificabile."
+          "L’acquirente mostra una ricevuta o un messaggio che dichiara un bonifico “disposto” o “in elaborazione”. Quel documento non prova che il denaro sia arrivato: può essere incompleto o contraffatto.",
+          "Accedi alla tua banca tramite l’app o il sito che usi abitualmente e verifica l’effettivo accredito. Tempi, disponibilità e possibilità di intervento dipendono dal tipo di pagamento e dalle regole della banca: chiedi conferma direttamente al tuo istituto prima della consegna."
         ]
       },
       {
         "heading": "Truffa 2: L'assegno che \"torna indietro\"",
         "paragraphs": [
-          "Un assegno bancario, anche se appare autentico, può risultare senza copertura, protestato o addirittura contraffatto. La banca del venditore accredita provvisoriamente l'importo (la cosiddetta \"disponibilità salvo buon fine\"), ma dopo 5-10 giorni lavorativi, se l'assegno risulta non pagabile, l'importo viene addebitato nuovamente sul conto del venditore. Nel frattempo, l'auto è già stata consegnata.",
-          "Le truffe con assegno circolare contraffatto sono ancora più insidiose: l'assegno sembra autentico, ha tutti i timbri e le filigrane, ma è stato stampato su carta comune con una stampante di alta qualità. Nel 2024, la Guardia di Finanza ha sequestrato una stamperia clandestina che aveva prodotto assegni circolari falsi per oltre 2 milioni di euro destinati all'acquisto di veicoli usati.",
-          "Come proteggersi: se l'acquirente insiste per pagare con assegno circolare, chiedi di recarvi insieme alla filiale emittente per verificare l'autenticità. In alternativa, chiama direttamente la banca emittente (cercando il numero tu stesso, non usando il numero indicato sull'assegno, che potrebbe essere falso) e chiedi conferma del numero di serie e dell'importo."
+          "La consegna di un assegno non equivale alla conferma che il denaro sia disponibile. Modalità e tempi di verifica dipendono dal titolo e dalla banca; un accredito provvisorio non va confuso con l’esito definitivo.",
+          "Se l’acquirente propone un assegno circolare, contatta la banca emittente usando un recapito trovato autonomamente e chiedi alla tua banca quali verifiche può effettuare. Non consegnare il veicolo finché non hai una conferma chiara sul pagamento."
         ]
       },
       {
         "heading": "Truffa 3: Il finto acquirente \"all'estero\"",
         "paragraphs": [
-          "Un profilo apparentemente normale contatta il venditore dichiarandosi residente in Francia, Germania, Svizzera o Regno Unito. L'acquirente si mostra entusiasta dell'auto, non tratta sul prezzo (primo segnale d'allarme) e propone di inviare un corriere o un amico per il ritiro. Prima del ritiro, però, chiede al venditore di anticipare le spese di trasporto, assicurazione del viaggio, tasse doganali o costi di pratiche internazionali — tipicamente tra 300 € e 800 € — tramite bonifico su un conto (spesso estero) o, peggio, tramite ricarica su carta prepagata.",
-          "La promessa è sempre la stessa: \"Ti rimborserò le spese insieme al pagamento dell'auto\". Il rimborso non arriva mai, il corriere non esiste, il profilo scompare. In alcune varianti più elaborate, il truffatore invia un falso bonifico per l'importo totale maggiorato delle spese di trasporto, chiedendo al venditore di \"restituire\" la differenza: è un classico schema di overpayment.",
-          "Come proteggersi: non anticipare mai nessuna spesa per conto di un acquirente. In una vendita legittima, tutti i costi di trasporto e pratiche sono a carico dell'acquirente, che li gestisce in autonomia."
+          "Un interlocutore che dichiara di essere all’estero può proporre un corriere o un incaricato e chiedere al venditore di anticipare trasporto, assicurazione o pratiche, promettendo un rimborso successivo. La richiesta di inviare denaro a uno sconosciuto è un motivo per fermarsi e verificare in modo indipendente.",
+          "Non usare conti o servizi indicati solo dall’interlocutore e non restituire una presunta differenza prima che la tua banca confermi l’accredito. Se stai davvero valutando una vendita a distanza, concorda contratto, pagamento e consegna con professionisti scelti da te."
         ]
       },
       {
         "heading": "Truffa 4: La caparra \"salvo verifiche\" mai versata",
         "paragraphs": [
           "Questa truffa non mira al tuo denaro ma al tuo tempo. Un acquirente apparentemente molto interessato concorda l'acquisto e promette di versare una caparra \"entro domani\" o \"non appena verifico con la banca\". Nel frattempo, chiede al venditore di ritirare l'annuncio dagli altri portali e di non mostrare l'auto ad altri interessati.",
-          "Passano giorni, la caparra non arriva, le scuse si accumulano (\"ero in viaggio\", \"la banca ha dei tempi\"), e nel frattempo altri acquirenti reali hanno visitato il tuo annuncio senza trovarlo disponibile. Quando finalmente l'acquirente fantasma scompare, hai perso 7-10 giorni di visibilità dell'annuncio nel periodo in cui era più fresco e più visibile nelle ricerche.",
-          "Come proteggersi: non ritirare mai l'annuncio prima di aver ricevuto una caparra reale e tracciabile (bonifico, non promessa verbale). Continua a rispondere ad altri contatti finché non hai un impegno scritto e un versamento confermato. Per approfondire la gestione di queste situazioni, consulta la nostra guida su [cosa fare se il compratore non paga](/guide/compratore-non-paga-cosa-fare)."
+          "Se la caparra non arriva, non trattare una promessa come un pagamento. Chiarisci per iscritto se l’auto è riservata e per quanto tempo; continua a gestire gli altri contatti finché non hai concordato condizioni chiare. Per approfondire, leggi la guida su [cosa fare se il compratore non paga](/guide/compratore-non-paga-cosa-fare).",
+          "Se avete già firmato un accordo o ricevuto denaro, controlla esattamente cosa prevede il documento prima di accettare un’altra offerta o trattenere l’importo."
         ]
       },
       {
@@ -1458,16 +1964,23 @@ export const articoliGuides: Guide[] = [
           "**Verifica sempre attivamente:** chiama la banca, controlla l'home banking, verifica il CRO. Non fidarti di screenshot, conferme verbali o email che \"sembrano\" della banca.",
           "**Prezzo coerente con il mercato:** un annuncio con un prezzo verificato sulla [valutazione AutoEsperto](/valutazione) attira acquirenti seri e riduce i contatti opportunistici."
         ]
+      },
+      {
+        "heading": "Se hai già cliccato un link o inviato denaro",
+        "paragraphs": [
+          "Agisci rapidamente e conserva le prove. Se hai inserito credenziali o codici, contatta la banca usando il numero presente sulla carta o sul sito ufficiale e chiedi di bloccare l’accesso o l’operazione. Cambia le password da un dispositivo sicuro e attiva le procedure di recupero dell’account. Se hai disposto un pagamento o consegnato il veicolo, comunica subito alla banca e alle forze dell’ordine cosa è successo.",
+          "Salva l’annuncio, il profilo, i numeri di telefono, gli indirizzi email, gli IBAN indicati, le conversazioni e le ricevute originali. Non cancellare la chat e non continuare la trattativa per “recuperare” il denaro pagando altri importi: una seconda richiesta di commissioni o sblocco è un ulteriore motivo di allarme."
+        ]
       }
     ]
   },
   {
     "slug": "compratore-non-paga-cosa-fare",
     "title": "Cosa fare se il compratore non si presenta o non paga: guida pratica per venditori",
-    "description": "Guida pratica alle situazioni più frustranti nella vendita di un'auto usata tra privati: acquirenti che spariscono, appuntamenti saltati, caparre non versate e come tutelarsi con il Codice Civile italiano.",
+    "description": "Cosa fare se chi vuole comprare un’auto usata sparisce, non versa la caparra o non paga: quali prove conservare e quando chiedere assistenza.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/compratore-non-paga-cosa-fare.jpg",
     "readTime": "6 min",
     "featured": false,
@@ -1483,27 +1996,23 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "Scenario 1: L'acquirente sparisce prima di un accordo scritto",
         "paragraphs": [
-          "Senza una caparra versata o un documento firmato, un accordo verbale — per quanto sentito come un impegno morale — non è legalmente vincolante in modo praticamente esigibile. L'art. 1325 del Codice Civile richiede il consenso delle parti e una forma adeguata per i contratti, e una promessa verbale di acquisto di un bene mobile registrato come un'auto non crea un obbligo azionabile in giudizio in modo efficiente.",
-          "La soluzione più pragmatica è semplice: non prendertela, rimetti l'annuncio online immediatamente e prosegui con altri interessati. Non perdere tempo a inseguire chi è sparito: ogni messaggio non risposto è una risposta chiara.",
-          "Per ridurre il rischio la volta successiva, adotta una regola ferma: non bloccare l'auto per nessuno senza un acconto tracciabile. Se un acquirente ti chiede di \"tenergli l'auto\" per 3 giorni senza versare nulla, rispondi con cortesia ma con fermezza: \"Sono felice di riservarla con un acconto di [importo]. Nel frattempo continuo a ricevere visite.\""
+          "Se l’interessato non si presenta e non avete concluso un accordo documentato, annota l’appuntamento mancato, aggiorna l’annuncio se serve e passa agli altri contatti. Evita affermazioni giuridiche automatiche: l’effetto di una promessa o di un accordo dipende da ciò che le parti hanno effettivamente concordato e dalle prove disponibili.",
+          "Per una futura prenotazione, mettete per iscritto prezzo, durata della riserva, importo versato e condizioni di restituzione. Se non siete sicuri che l’importo sia un acconto o una caparra confirmatoria, chiedete a un professionista di formulare l’accordo prima di ricevere denaro."
         ]
       },
       {
         "heading": "Scenario 2: È stata versata una caparra e l'acquirente si ritira",
         "paragraphs": [
-          "Se avete formalizzato per iscritto una caparra confirmatoria — anche con una semplice scrittura privata firmata da entrambe le parti, che specifica importo, auto oggetto della compravendita e data prevista per il saldo — le regole del Codice Civile italiano (art. 1385) sono chiare:",
-          "Se l'acquirente recede senza giusta causa, perde la caparra versata. Se è il venditore a recedere, deve restituire il doppio della caparra ricevuta. Queste regole valgono solo se la caparra è stata definita esplicitamente come \"confirmatoria\" nell'accordo scritto.",
-          "Se invece l'importo è stato versato come semplice \"acconto\" (senza la dicitura \"caparra confirmatoria\"), il venditore è tenuto a restituirlo in caso di mancato perfezionamento della compravendita, indipendentemente da chi ha causato la mancata conclusione. La differenza tra \"caparra confirmatoria\" e \"acconto\" è sostanziale: specifica sempre chiaramente la natura dell'importo nel documento scritto.",
-          "Per importi significativi (oltre 1.000-2.000 €), valuta di formalizzare l'accordo con l'assistenza di un'agenzia pratiche auto o di un legale, che può predisporre un preliminare di compravendita con clausole chiare su tempistiche, condizioni e penali."
+          "Prima di trattenere o restituire un importo, rileggi ciò che avete firmato e come il pagamento è stato descritto. Caparra confirmatoria e acconto hanno conseguenze diverse; termini generici come “anticipo” possono lasciare spazio a contestazioni. L’articolo 1385 del Codice Civile non va applicato senza valutare accordo e circostanze concrete.",
+          "Conserva ricevuta del pagamento e conversazioni. Se l’altra parte contesta la restituzione o l’importo è rilevante, chiedi assistenza legale prima di trattenere il denaro o inviare comunicazioni definitive."
         ]
       },
       {
         "heading": "Scenario 3: L'auto è già stata consegnata e il pagamento non arriva",
         "paragraphs": [
           "È lo scenario più grave e purtroppo non raro: hai consegnato l'auto confidando in un bonifico \"in arrivo\" o in un assegno che poi risulta senza copertura. Ecco la sequenza di azioni da seguire immediatamente:",
-          "Contatta l'acquirente per iscritto (messaggio o email, non solo telefono) chiedendo l'esecuzione immediata del pagamento entro un termine preciso (ad esempio 48 ore). Conserva ogni comunicazione: messaggi WhatsApp, email, screenshot, registrazioni delle chiamate (dove legalmente permesso). Se il pagamento non arriva entro il termine, sporgi denuncia alle forze dell'ordine (Carabinieri o Polizia) per appropriazione indebita o truffa, allegando tutta la documentazione.",
-          "Se hai firmato un atto di vendita ma il passaggio di proprietà non è ancora stato trascritto al PRA, hai ancora la proprietà formale del veicolo. Se il passaggio è già stato trascritto, la situazione è più complessa e richiede l'intervento di un legale. Consulta il nostro calcolatore del [passaggio di proprietà](/passaggio-proprieta) per capire tempistiche e costi della trascrizione.",
-          "Per prevenire questo scenario, la regola è una sola: mai consegnare l'auto prima dell'accredito verificato. Mai."
+          "Contatta subito la tua banca tramite un canale ufficiale se hai consegnato il veicolo senza vedere il pagamento, hai ricevuto un titolo che non viene onorato o hai condiviso credenziali. Conserva contratto, atto, prova della consegna, ricevute e messaggi; non modificare né cancellare le conversazioni.",
+          "Rivolgiti tempestivamente alle forze dell’ordine e a un avvocato per valutare i passi successivi. La firma dell’atto, la consegna materiale e la trascrizione al PRA sono fatti distinti: non presumere che la mancata trascrizione renda automaticamente nullo il trasferimento o restituisca il veicolo al venditore. Per la registrazione consulta le [indicazioni ACI per chi vende](https://www.aci.it/i-servizi/guide-utili/guida-pratiche-auto/consigli-e-cautele-per-la-vendita)."
         ]
       },
       {
@@ -1512,22 +2021,42 @@ export const articoliGuides: Guide[] = [
           "Ogni vendita andata male è un'esperienza che affina il metodo. Ecco le regole preventive per non trovarti mai più in queste situazioni:"
         ],
         "list": [
-          "**Conferma il giorno stesso dell'appuntamento.** Non contare su un accordo preso 3 giorni prima: manda un messaggio la mattina dell'incontro chiedendo conferma. Se non risponde entro 2 ore dall'orario fissato, consideralo annullato.",
-          "**Richiedi un acconto tracciabile per bloccare la data.** Anche 100-200 € inviati via bonifico istantaneo dimostrano un impegno reale e filtrano i perditempo. Chi non è disposto a versare nemmeno un piccolo acconto raramente è un acquirente serio.",
+          "**Conferma il giorno dell’appuntamento.** Se l’interessato non risponde, non sospendere gli altri contatti; concorda un nuovo orario solo dopo una conferma chiara.",
+          "**Se concordate una riserva, definite i termini per iscritto.** Specifica durata, importo, natura dell’importo e condizioni di restituzione; non esiste un importo universale adatto a ogni vendita.",
           "**Non smettere di rispondere ad altri contatti.** Finché non hai un accordo scritto E un versamento confermato, continua a mostrare l'auto ad altri interessati. Non sei moralmente obbligato a \"bloccare\" l'auto per una promessa verbale.",
-          "**Metti tutto per iscritto.** Anche un semplice messaggio WhatsApp con \"Confermo l'acquisto della [modello] targa [XX] per € [importo], con caparra confirmatoria di € [importo] versata il [data]\" firmato da entrambi ha valore probatorio.",
-          "**Verifica il prezzo prima di ripubblicare.** Se devi rimettere l'annuncio online dopo un appuntamento saltato, controlla che il prezzo sia ancora coerente con il mercato usando la [valutazione AutoEsperto](/valutazione): il mercato dell'usato si muove velocemente."
+          "**Conserva le prove.** Archivia messaggi, ricevute e accordi, proteggendo i dati personali. Se hai dubbi sul valore o sulla forma dell’accordo, chiedi un parere professionale.",
+          "**Verifica il prezzo prima di ripubblicare.** Confronta annunci simili e usa la [valutazione AutoEsperto](/valutazione) come riferimento indicativo, non come garanzia del prezzo finale."
+        ]
+      },
+      {
+        "heading": "Prima dell’appuntamento: prenotazione chiara e pagamento verificabile",
+        "paragraphs": [
+          "Conferma per messaggio data, luogo, persone presenti e modalità di pagamento; evita di inviare in anticipo documenti personali non necessari. Se togli l’annuncio dalla vendita per una riserva, mettete per iscritto fino a quando vale, quale importo viene versato e se si tratta di acconto o caparra confirmatoria. Sono nozioni con effetti diversi: descrivile con precisione e chiedi assistenza professionale se non sai quale formula usare.",
+          "Non consegnare auto, chiavi o Documento Unico sulla base di una schermata, di una ricevuta inviata in chat o di un messaggio che dice “bonifico disposto”. Verifica l’accredito direttamente dal tuo conto usando l’app o il sito della tua banca; per un assegno, chiedi alla banca come verificarne l’effettiva disponibilità prima della consegna. Non comunicare PIN, password, codici OTP o dati della carta per “ricevere” un pagamento e non seguire link inviati dall’acquirente."
+        ]
+      },
+      {
+        "heading": "Se salta l’appuntamento o cambia idea, cosa fare in ordine",
+        "paragraphs": [
+          "Se l’interessato non arriva e non esiste un accordo scritto, conserva la conversazione essenziale e riprendi i contatti con gli altri potenziali acquirenti. Puoi inviare un messaggio breve e neutro: “Non avendo ricevuto conferma entro l’orario concordato, considero concluso l’appuntamento e l’auto torna disponibile”. Non minacciare penali che non sono state pattuite e non dichiarare trattenuta una somma prima di aver letto l’accordo.",
+          "Se è stata versata una somma, confronta ricevuta e testo firmato: importo, funzione, condizioni per il recesso e scadenza della riserva devono risultare comprensibili. Conserva copia del bonifico, annuncio e messaggi. Se l’acquirente contesta la restituzione o la somma è significativa, evita decisioni definitive e chiedi un parere legale sul caso concreto."
+        ],
+        "list": [
+          "Rimetti l’annuncio online solo dopo aver chiarito la situazione della prenotazione e aggiornane prezzo e disponibilità in modo veritiero.",
+          "Non accettare pagamenti eccedenti seguiti da richieste di restituire la differenza a un altro conto o tramite un servizio non concordato.",
+          "Se hai già consegnato veicolo o documenti senza pagamento verificato, contatta subito la banca e le forze dell’ordine; conserva le prove e senti un legale. La firma, la consegna e la trascrizione al PRA sono passaggi distinti: non presumere che un solo adempimento risolva automaticamente gli altri.",
+          "Per regolarizzare la vendita, segui le [indicazioni ACI per chi vende](https://web.aci.it/servizi/devo-vendere-la-mia-auto-cosa-devo-fare/) e verifica che il passaggio sia stato trascritto. Per preparare un prezzo aggiornato puoi usare la [valutazione AutoEsperto](/valutazione), che resta indicativa."
         ]
       }
     ]
   },
   {
     "slug": "documenti-necessari-vendere-auto-usata-privatamente",
-    "title": "I documenti necessari per vendere un'auto usata privatamente nel 2026: checklist completa",
-    "description": "Guida completa ai documenti da preparare per vendere un'auto usata tra privati in Italia nel 2026: carta di circolazione, certificato di proprietà digitale, passaggio al PRA, IPT e checklist per l'incontro.",
+    "title": "Documenti per vendere un’auto usata tra privati: checklist e passaggio di proprietà",
+    "description": "Quali documenti servono per vendere un’auto usata tra privati, come si autentica l’atto, chi gestisce il passaggio al PRA e cosa controllare dopo la vendita.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/documenti-necessari-vendere-auto-usata-privatamente.jpg",
     "readTime": "6 min",
     "featured": false,
@@ -1535,8 +2064,8 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "Preparare i documenti prima dell'annuncio velocizza la vendita (e la rende più sicura)",
         "paragraphs": [
-          "Un venditore che si presenta all'appuntamento con tutta la documentazione in ordine, completa e verificata trasmette immediatamente affidabilità e serietà. Al contrario, un venditore che non sa dove sia il certificato di proprietà, non ricorda quando scade la revisione o scopre all'ultimo che il bollo è scaduto da 8 mesi perde credibilità — e spesso perde anche l'acquirente.",
-          "Nel 2026, con la progressiva digitalizzazione dei documenti auto (certificato di proprietà digitale al PRA, visura online della revisione sul Portale dell'Automobilista, verifica bollo tramite ACI o Regione), molte operazioni che un tempo richiedevano code agli sportelli si possono fare comodamente online. Ma sapere cosa serve, dove trovarlo e come presentarlo all'acquirente rimane fondamentale."
+          "Preparare i documenti prima di pubblicare l’annuncio aiuta a rispondere alle domande e a individuare per tempo eventuali problemi amministrativi. La documentazione esatta dipende dal veicolo e dalla situazione del proprietario: verifica i requisiti aggiornati con ACI, PRA o uno Sportello Telematico dell’Automobilista (STA) prima dell’appuntamento.",
+          "Molti veicoli hanno il Documento Unico (DU), che riunisce i dati di circolazione e di proprietà; altri possono avere documenti precedenti. Non dare per scontato che ogni venditore debba procurarsi un certificato di proprietà separato."
         ]
       },
       {
@@ -1545,33 +2074,28 @@ export const articoliGuides: Guide[] = [
           "Ecco tutto ciò che devi preparare prima ancora di pubblicare l'annuncio, in ordine di importanza:"
         ],
         "list": [
-          "**Carta di circolazione (libretto) originale.** Deve essere integra, leggibile e con i tuoi dati come intestatario aggiornati. Se hai cambiato residenza senza aggiornare il libretto (obbligo entro 30 giorni dal cambio, art. 116 CdS), regolarizza la situazione prima della vendita: un libretto con indirizzo diverso dalla carta d'identità genera domande e complicazioni al passaggio.",
-          "**Certificato di proprietà (CdP).** Dal 2015 il CdP è in formato digitale e consultabile tramite il portale del PRA (Pubblico Registro Automobilistico). Se hai ancora il vecchio certificato cartaceo (foglio complementare), è comunque valido per la vendita. Il CdP serve per formalizzare il passaggio di proprietà.",
-          "**Ultimo certificato di revisione in corso di validità.** La revisione è obbligatoria dopo 4 anni dalla prima immatricolazione e successivamente ogni 2 anni. Puoi verificare lo stato della revisione gratuitamente sul Portale dell'Automobilista inserendo la targa. Un'auto con revisione scaduta è legalmente non circolabile: l'acquirente potrebbe chiedere uno sconto per coprire il costo della revisione (circa 66,88 € + IVA in un centro autorizzato nel 2026) o, peggio, rinunciare all'acquisto.",
-          "**Documento d'identità valido di entrambe le parti.** Necessario per la firma dell'atto di vendita. Sia il venditore sia l'acquirente devono presentare un documento in corso di validità.",
-          "**Codice fiscale dell'acquirente.** Da richiedere in anticipo all'acquirente per predisporre l'atto di vendita. Senza codice fiscale non è possibile formalizzare il passaggio.",
+          "**Documento Unico (DU), oppure carta di circolazione e documenti di proprietà disponibili.** Controlla che i dati del veicolo e dell’intestatario siano leggibili. Se non sai quale documento occorre nel tuo caso, chiedi allo STA prima di fissare l’appuntamento.",
+          "**Documento d’identità e codice fiscale del venditore e dell’acquirente.** Servono per predisporre la pratica; chiedi allo sportello quali originali o copie sono richiesti per la procedura scelta.",
+          "**Informazioni sulla revisione.** Verifica la data e gli esiti registrati sul Portale dell’Automobilista. Indica nell’annuncio la situazione corretta; evita importi standard per la revisione perché tariffa e costi accessori possono variare.",
           "**Fatture dei tagliandi e degli interventi straordinari.** Non sono obbligatorie per legge, ma presentare uno storico manutenzioni documentato con fatture datate e chilometraggi progressivi è la prova più convincente della cura dedicata al veicolo. Se disponibili, ordinale cronologicamente in una cartellina."
         ]
       },
       {
         "heading": "Come si formalizza il passaggio di proprietà nel 2026",
         "paragraphs": [
-          "Il passaggio di proprietà di un veicolo usato tra privati può essere formalizzato attraverso tre canali:",
-          "Lo Sportello Telematico dell'Automobilista (STA), presente presso le sedi della Motorizzazione Civile e le delegazioni ACI, che con un'unica operazione aggiorna sia il PRA (proprietà) sia la Motorizzazione (carta di circolazione). Un'agenzia di pratiche auto privata (più rapida ma con costi di servizio aggiuntivi di 80-150 €). Oppure, dal 2024, tramite i servizi digitali dell'ACI per alcune tipologie di passaggi.",
-          "Il passaggio va effettuato entro 60 giorni dalla data dell'atto di vendita (sottoscritto con firma autenticata): superato questo termine, l'acquirente è soggetto a sanzioni che partono da 346 € e possono arrivare a 1.739 €. Puoi calcolare in anticipo l'importo esatto del passaggio con il nostro [calcolatore passaggio di proprietà](/passaggio-proprieta)."
+          "La firma del venditore sull’atto di vendita deve essere autenticata. La registrazione aggiorna il PRA e l’Archivio Nazionale dei Veicoli; chiedi allo STA o all’agenzia scelta se autentica e trascrizione saranno effettuate contestualmente. ACI spiega la procedura nella guida [“Devo vendere la mia auto”](https://www.aci.it/servizi/devo-vendere-la-mia-auto-cosa-devo-fare/).",
+          "In base all’articolo 94 del Codice della Strada, l’acquirente deve richiedere l’aggiornamento entro 60 giorni dalla data in cui la firma è stata autenticata. Se la pratica non viene presentata allo STA contestualmente, ACI consiglia al venditore di controllare la trascrizione e di chiedere una visura se necessario. Consulta la fonte normativa aggiornata: [art. 94 CdS](https://aci.gov.it/codice-della-strada/art-94/). Puoi usare il [calcolatore AutoEsperto](/passaggio-proprieta) come stima, verificando il preventivo finale con lo sportello."
         ]
       },
       {
         "heading": "Quanto costa il passaggio e chi paga",
         "paragraphs": [
-          "I costi del passaggio di proprietà sono composti da voci fisse e da una variabile legata alla potenza del veicolo e alla provincia di residenza dell'acquirente:"
+          "Il costo dipende dalla potenza del veicolo, dalla provincia competente e dal canale usato per la pratica. Consulta il [prospetto ACI sui costi del passaggio](https://www.aci.it/servizi/costi-del-passaggio-di-proprieta/) o chiedi un preventivo aggiornato allo STA: evita di basarti su importi riportati in vecchi annunci o articoli."
         ],
         "list": [
-          "**Imposta Provinciale di Trascrizione (IPT).** È la voce più pesante: si calcola in base ai kW del veicolo e alla delibera della Provincia di residenza dell'acquirente. Per un'utilitaria da 55 kW si parte da circa 150 € e si arriva a 200 €; per un'auto da 100 kW e oltre si può superare i 350-400 €.",
-          "**Emolumenti ACI e diritti di Motorizzazione.** Circa 27 € di emolumenti ACI + 10,20 € di diritti della Motorizzazione Civile.",
-          "**Imposta di bollo e marca da bollo.** 32 € di imposta di bollo per la registrazione + 16 € di marca da bollo per l'atto.",
-          "**Costi dell'agenzia (se utilizzata).** Da 80 € a 150 € a seconda dell'agenzia e della complessità della pratica.",
-          "**Chi paga cosa.** Non esiste un obbligo di legge che stabilisca chi debba sostenere i costi del passaggio: per consuetudine l'acquirente paga tutto, ma è una voce di trattativa che va concordata esplicitamente e messa per iscritto prima della firma. In alcune trattative, il venditore accetta di dividere i costi in cambio di un prezzo di vendita più alto."
+          "**IPT e importi amministrativi.** L’IPT varia secondo la potenza e le regole provinciali; emolumenti e bolli dipendono dalla pratica. ACI pubblica le voci aggiornate e i relativi casi particolari.",
+          "**Compenso dell’agenzia.** Se ti rivolgi a un’agenzia, chiedi prima il costo del servizio e quali importi amministrativi sono inclusi.",
+          "**Chi sostiene la spesa.** Concordate prima della firma chi paga ciascuna voce e riportate l’accordo nella documentazione della compravendita. Non presentare un importo consuetudinario come regola valida per ogni contratto."
         ]
       },
       {
@@ -1580,21 +2104,41 @@ export const articoliGuides: Guide[] = [
           "La vendita non finisce con la firma dell'atto. Ecco cosa fare nei giorni successivi:"
         ],
         "list": [
-          "**Conserva una copia dell'atto di vendita firmato.** È la tua tutela in caso di multe, sinistri o contestazioni relative al periodo tra la firma dell'atto e la trascrizione effettiva del passaggio al PRA. Conservala per almeno 5 anni.",
-          "**Verifica la trascrizione del passaggio.** Dopo 60 giorni dalla firma, controlla sul portale del PRA che il passaggio sia stato effettivamente trascritto a nome dell'acquirente. Se non lo è, contatta l'acquirente per sollecitare la trascrizione: finché il veicolo è a tuo nome, le responsabilità civili e amministrative ricadono su di te.",
-          "**Disdici l'assicurazione RCA.** Se l'auto era assicurata a tuo nome, comunica la vendita alla compagnia assicurativa per ottenere il rimborso del premio non goduto (proporzionale ai mesi residui) e conservare la classe di merito maturata.",
+          "**Conserva copia dell’atto e della ricevuta della pratica.** Archivia i documenti insieme alla prova del pagamento e ai messaggi che confermano data e ora della consegna.",
+          "**Verifica la trascrizione al PRA.** ACI raccomanda di controllare che il trasferimento sia registrato; se non risulta, contatta tempestivamente lo sportello o l’agenzia che ha gestito la pratica e chiedi come tutelarti.",
+          "**Avvisa la compagnia assicurativa.** Comunica la vendita e chiedi quali opzioni prevede il contratto per la polizza e per la classe di merito; condizioni e rimborsi dipendono dalla compagnia e dalla tua posizione.",
           "**Cancella l'annuncio dalle piattaforme.** Può sembrare banale, ma un annuncio ancora attivo dopo la vendita genera contatti inutili e può creare confusione se il nuovo proprietario decide di rivendere lo stesso veicolo."
+        ]
+      },
+      {
+        "heading": "Prima di pubblicare: controlla intestatari e stato giuridico",
+        "paragraphs": [
+          "Accertati che chi firmerà l’atto sia l’intestatario risultante e che tutti gli eventuali comproprietari siano disponibili a firmare secondo la procedura richiesta. In caso di eredità, procura, società, tutela o documenti smarriti, la pratica può richiedere verifiche e atti ulteriori: chiedi allo STA quali documenti servono per quella situazione prima di fissare la consegna.",
+          "Controlla inoltre che sul veicolo non risultino vincoli o gravami che possano bloccare o complicare il trasferimento. ACI offre una [verifica online di documenti e vincoli](https://aci.gov.it/servizio/verifica-tipo-documento-e-vincoli/) e spiega le cautele per [chi vende l’auto](https://web.aci.it/servizi/devo-vendere-la-mia-auto-cosa-devo-fare/). Se emergono ipoteche, fermi o discrepanze, non promettere nell’annuncio una vendita immediata: chiarisci prima come verrà gestita la pratica."
+        ]
+      },
+      {
+        "heading": "Consegna e pagamento: una sequenza che lascia prove",
+        "paragraphs": [
+          "Organizza firma, pagamento e consegna in modo che ogni passaggio sia documentato. Se possibile, venditore e acquirente possono rivolgersi insieme a uno Sportello Telematico dell’Automobilista per autenticare la firma e gestire contestualmente la trascrizione. ACI indica che quando la firma viene autenticata allo STA del PRA o della Motorizzazione la richiesta del Documento Unico aggiornato va presentata subito dopo; verifica con lo sportello la procedura applicabile al tuo caso.",
+          "Prima di consegnare le chiavi, controlla l’accredito dal tuo canale bancario ufficiale, non da uno screenshot. Sottoscrivi una ricevuta di consegna con data e ora, targa, chilometraggio visibile, chiavi e accessori consegnati; consegna le copie dei documenti solo attraverso la pratica concordata. Conserva atto, ricevute, messaggi essenziali e documentazione del pagamento. Non lasciare in auto documenti o dispositivi collegati ai tuoi account personali."
+        ],
+        "list": [
+          "Annota chi paga IPT, emolumenti, bolli e commissione dell’agenzia: concordate la ripartizione e chiedete allo STA un preventivo aggiornato. Il [prospetto ACI dei costi](https://www.aci.it/servizi/costi-del-passaggio-di-proprieta/) spiega le voci, che possono dipendere dalla potenza e dalla provincia.",
+          "Dopo la pratica, verifica l’avvenuta trascrizione al PRA e conserva la ricevuta. Se non compare nei tempi indicati dallo sportello, ricontatta chi ha gestito la formalità.",
+          "Comunica la vendita alla compagnia assicurativa e segui le istruzioni della polizza per sospensione, trasferimento o rimborso; non presumere che la copertura si chiuda da sola.",
+          "Se la firma non viene trascritta contestualmente, l’acquirente deve richiedere l’aggiornamento nei termini di legge. Non lasciare la pratica affidata solo a una promessa verbale: chiedi prova della presentazione e verifica lo stato."
         ]
       }
     ]
   },
   {
     "slug": "permuta-o-vendita-diretta-cosa-conviene",
-    "title": "Permuta o vendita diretta: cosa conviene di più nel 2026? L'analisi completa",
-    "description": "Guida pratica al confronto tra permuta in concessionaria e vendita diretta a un privato nel 2026: differenze di valutazione reali, costi nascosti, casi in cui la permuta conviene e quando invece vendere da soli.",
+    "title": "Permuta o vendita privata dell’auto: come confrontare le offerte",
+    "description": "Permuta o vendita a un privato? Confronta il ricavo netto, gli sconti collegati, i tempi e gli impegni prima di decidere cosa conviene per la tua auto.",
     "published": "2026-09-04",
     "category": "vendita",
-    "cta": "vendita-auto-usata",
+    "cta": "vendere-auto",
     "image": "/images/guide/permuta-o-vendita-diretta-cosa-conviene.jpg",
     "readTime": "6 min",
     "featured": false,
@@ -1602,52 +2146,53 @@ export const articoliGuides: Guide[] = [
       {
         "heading": "La permuta costa comodità, non solo denaro",
         "paragraphs": [
-          "Il concessionario che ritira la tua auto usata in permuta applica quasi sempre una valutazione inferiore rispetto a quanto potresti ottenere vendendola direttamente a un privato. Quella differenza — che varia dal 10% al 25% a seconda del modello, dello stato dell'auto e della capacità negoziale del venditore — è in sostanza il prezzo che paghi per evitare le complicazioni della vendita diretta: annunci da preparare, foto da scattare, appuntamenti con sconosciuti, trattative estenuanti, rischio di truffe e gestione burocratica del passaggio di proprietà.",
-          "La domanda vera non è \"quanto perdo con la permuta\", ma \"quanto vale il mio tempo e quanta voglia ho di gestire una vendita privata?\". La risposta cambia radicalmente a seconda del modello, della tua situazione personale e delle condizioni specifiche offerte dal concessionario. Vediamo i numeri reali e i fattori da considerare."
+          "La permuta riduce il lavoro necessario per vendere, ma il suo valore non si può confrontare isolando la cifra offerta per l’auto. Considera anche prezzo dell’auto che acquisti, sconti legati alla permuta, eventuale finanziamento, servizi aggiuntivi e costi della vendita privata.",
+          "Non esiste una percentuale universale che misuri quanto “si perde” con una permuta: offerte e prezzi finali dipendono dal veicolo, dal concessionario e dal momento. La scelta si chiarisce confrontando due preventivi completi e calcolando il denaro che rimane dopo tutte le voci."
         ]
       },
       {
-        "heading": "Quanto si perde realmente con la permuta: i numeri",
+        "heading": "Confronta il costo totale delle due alternative",
         "paragraphs": [
-          "La differenza tra la valutazione in permuta e il prezzo realizzabile con una vendita diretta varia in base alla tipologia di veicolo e alla velocità con cui il concessionario stima di poter rivendere l'usato ritirato:"
+          "Richiedi un’offerta di permuta scritta e un preventivo per la stessa auto senza permuta. Per la vendita privata, usa un prezzo realistico ricavato da annunci comparabili e sottrai i costi che dovrai sostenere. Questa semplice tabella evita di confondere lo sconto pubblicizzato con il risparmio effettivo:"
         ],
         "list": [
-          "**Auto molto richieste sull'usato (es. Fiat Panda, Toyota Yaris, Dacia Duster):** differenza del 10-15%. Il concessionario sa che l'auto si rivende rapidamente e applica un margine contenuto. Su un'auto quotata 10.000 € al privato, la permuta vale tipicamente 8.500-9.000 €.",
-          "**Auto di gamma media (es. Volkswagen Golf, Peugeot 3008, Jeep Renegade):** differenza del 15-20%. Su un'auto quotata 15.000 € al privato, la permuta vale 12.000-12.750 €.",
-          "**Auto di nicchia, alto chilometraggio o difetti noti (diesel con FAP problematico, cambi automatici con usura avanzata, colori impopolari):** differenza che può superare il 25%. Il concessionario incorpora nel prezzo il rischio di giacenza prolungata e di ricondizionamento costoso.",
-          "**Auto premium tedesche (BMW, Mercedes, Audi):** la permuta può essere sorprendentemente vantaggiosa presso un concessionario della stessa marca che ha una lista d'attesa di clienti per quel modello specifico. In questi casi, la differenza può scendere al 5-10%."
+          "**Vendita privata — ricavo netto stimato:** prezzo realistico concordabile meno riparazioni o preparazione, pubblicazione, passaggio se concordato a tuo carico, tempo e altri costi effettivi.",
+          "**Permuta — costo netto dell’acquisto:** prezzo finale dell’auto sostitutiva meno valore riconosciuto per la tua auto e sconti realmente disponibili, più eventuali finanziamenti, polizze, servizi e spese obbligatorie.",
+          "**Controlla il finanziamento separatamente.** Se lo sconto o la valutazione migliore richiedono un finanziamento, confronta il costo totale dovuto e i servizi inclusi con il prezzo senza finanziamento; chiedi il TAEG e tutte le spese prima di firmare.",
+          "**Fai confronti omogenei.** Usa la stessa auto sostitutiva, gli stessi accessori e le stesse condizioni di pagamento. Un’offerta alta per la permuta può essere compensata da un prezzo d’acquisto o da servizi accessori più elevati."
         ]
       },
       {
         "heading": "Quando la permuta conviene nonostante il prezzo più basso",
         "paragraphs": [
-          "Ci sono situazioni in cui la permuta è oggettivamente la scelta migliore, anche considerando la perdita economica:"
+          "La permuta può essere adatta se il vantaggio di tempo e semplicità compensa, per te, l’eventuale differenza di ricavo netto:"
         ],
         "list": [
           "**Quando il tempo ha un valore concreto per te.** Se gestire una vendita privata significa prendere ferie dal lavoro per gli appuntamenti, stressarsi per i perditempo e rischiare di non vendere per settimane, la differenza di prezzo è il tuo \"compenso\" per non averlo fatto.",
-          "**Quando l'auto ha problemi che rallentano la vendita diretta.** Alto chilometraggio (oltre 200.000 km), difetti estetici visibili, motorizzazione diesel in zona a traffico limitato, allestimento base senza optional richiesti dal mercato. In questi casi, i tempi di vendita diretta si allungano di settimane o mesi, e ogni settimana in più è bollo, assicurazione e svalutazione che si accumulano.",
-          "**Quando il concessionario offre sconti aggiuntivi sull'auto nuova legati alla permuta.** Molti concessionari nel 2026 applicano sconti di 1.000-3.000 € sul listino dell'auto nuova condizionati alla permuta di un veicolo usato. In questi casi, la differenza netta tra permuta e vendita diretta si riduce drasticamente o si annulla del tutto.",
-          "**Quando vuoi evitare il rischio di truffe.** La vendita diretta tra privati espone a rischi concreti (falsi bonifici, assegni scoperti, acquirenti fantasma). La permuta in concessionaria elimina completamente questi rischi."
+          "**Quando vuoi ridurre tempi e impegni.** La permuta può essere adatta se preferisci non preparare annunci, incontrare acquirenti e gestire più appuntamenti. Valuta questo vantaggio insieme alla differenza economica effettiva.",
+          "**Quando l’offerta complessiva è competitiva.** Un bonus permuta può incidere, ma chiedi un preventivo scritto e confrontalo con il prezzo senza permuta: verifica se è vincolato a finanziamenti o servizi aggiuntivi.",
+          "**Quando preferisci un unico interlocutore commerciale.** La permuta può semplificare la gestione rispetto a visite e trattative con più privati, ma verifica comunque identità, contratto, pagamento e trasferimento."
         ]
       },
       {
         "heading": "Quando conviene vendere direttamente a un privato",
         "paragraphs": [
-          "La vendita diretta è la scelta economicamente migliore quando:"
+          "Una vendita privata può avere senso quando il ricavo netto stimato supera in misura utile l’offerta di permuta e puoi gestire i passaggi richiesti:"
         ],
         "list": [
-          "**Il modello è molto richiesto sull'usato e si vende in 1-2 settimane.** Auto come Fiat Panda, Toyota Yaris Cross, Dacia Sandero Stepway si vendono rapidamente se il prezzo è coerente: la differenza di prezzo rispetto alla permuta giustifica l'impegno.",
-          "**Hai tempo e pazienza per gestire 5-10 contatti.** Se puoi dedicare qualche ora nei weekend per mostrare l'auto e gestire le trattative senza stress, il ritorno economico è quasi sempre superiore alla permuta.",
-          "**L'auto è in condizioni eccellenti con documentazione completa.** Tagliandi in rete ufficiale, revisione in corso, carrozzeria senza difetti, gomme nuove: un'auto perfetta si vende velocemente al privato e difficilmente un acquirente serio tratterà aggressivamente.",
+          "**Il ricavo netto atteso supera l’offerta di permuta in misura sufficiente per te.** Non fare affidamento su tempi di vendita garantiti: chiediti quanti appuntamenti e quanto tempo puoi realisticamente dedicare.",
+          "**Puoi gestire visite e trattative in sicurezza.** Considera la disponibilità per telefonate, prove su strada, verifiche e pratica di trasferimento.",
+          "**Hai documentazione e informazioni chiare da offrire.** Manutenzione dimostrabile e descrizione trasparente possono rendere l’annuncio più utile; non garantiscono un determinato prezzo o un acquirente rapido.",
           "**Hai già esperienza di vendita tra privati.** Chi ha già venduto un'auto privatamente conosce le dinamiche, sa filtrare i perditempo e gestisce la trattativa con sicurezza."
         ]
       },
       {
-        "heading": "La strategia ottimale: richiedi più valutazioni e confronta",
+        "heading": "Come confrontare le offerte prima di decidere",
         "paragraphs": [
           "Prima di decidere, segui questa procedura in tre passi:",
-          "Primo: verifica la quotazione di mercato reale della tua auto con la [valutazione AutoEsperto](/valutazione) — è il tuo riferimento oggettivo per capire quanto potresti realizzare con una vendita diretta. Secondo: richiedi almeno 2-3 valutazioni in permuta da concessionari diversi (non solo dalla tua marca) e confrontale tra loro e con la quotazione AutoEsperto. Terzo: calcola il costo-opportunità. Se la differenza tra permuta e vendita diretta è di 1.500 € ma stimi di impiegare 3-4 settimane e 10 appuntamenti per vendere da privato, chiediti onestamente se quel tempo e quella energia valgono 1.500 €.",
-          "Se la differenza supera i 2.000-3.000 € e il modello è richiesto, la vendita diretta è quasi sempre la scelta giusta. Se la differenza è sotto i 1.000 € e il concessionario offre sconti aggiuntivi sul nuovo, la permuta è probabilmente la scelta più intelligente."
+          "Primo: stima il prezzo realistico della tua auto usando annunci comparabili e la [valutazione AutoEsperto](/valutazione) come riferimento indicativo. Secondo: richiedi offerte scritte a più concessionari e un preventivo del veicolo sostitutivo sia con sia senza permuta. Terzo: confronta ricavo netto, costo totale, tempi e impegno richiesto. Ripeti i calcoli includendo finanziamento e servizi solo se sono davvero parte dell’offerta che intendi accettare.",
+          "Esempio puramente aritmetico: un concessionario propone l’auto sostitutiva a 20.000 € e riconosce 4.000 € per la tua vettura, quindi restano 16.000 € da pagare prima di eventuali altri costi. Un’offerta senza permuta è 19.000 €; se vendendo da privato incassi 5.000 €, la spesa netta sarebbe 14.000 €, prima dei costi e del tempo della vendita privata. In questo scenario la differenza è 2.000 €: usa le cifre dei tuoi preventivi, perché sconti, condizioni e risultato della vendita possono cambiare il confronto.",
+          "Scegli la soluzione che soddisfa meglio le tue priorità: ricavo, comodità, tempi o gestione della pratica. Conserva i preventivi e chiedi di chiarire per iscritto condizioni, scadenze e costi prima di firmare."
         ]
       }
     ]

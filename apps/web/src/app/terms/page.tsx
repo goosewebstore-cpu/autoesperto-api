@@ -11,13 +11,13 @@ export default function TermsPage() {
   return (
     <LegalPage
       title="Termini di Servizio"
-      updated="25 agosto 2026"
+      updated="2 novembre 2026"
       intro="I presenti Termini di Servizio disciplinano l’accesso, la creazione dell’account e l’utilizzo della piattaforma web e degli strumenti di valutazione AutoEsperto."
       sections={[
         {
           heading: 'Servizio acquistato e Funzionalità',
           paragraphs: [
-            'L’acquisto di report avanzati o funzionalità premium include l’elaborazione completa per singolo veicolo, senza tacito rinnovo automatico. Il prezzo visualizzato prima del pagamento è chiaro, trasparente e omnicomprensivo.',
+            'La valutazione per modello è sempre gratuita, senza account e senza carta. AutoEsperto AI include riconoscimento da foto e analisi annunci illimitati al prezzo di 3,99 € al mese, con addebito immediato e rinnovo automatico. Puoi disdire dall’account in qualsiasi momento; l’accesso resta disponibile fino alla scadenza già pagata. I vecchi abbonamenti mantengono le condizioni confermate al momento dell’acquisto. Illimitato indica assenza di un tetto giornaliero di analisi; restano limiti tecnici di velocità e dimensione dei file per proteggere il servizio. Non sono inclusi controlli storici esterni o ispezioni fisiche.',
             'Il report include l’identificazione del veicolo, il valore stimato di mercato calcolato su annunci reali, osservazioni esterne e approfondimenti specifici per marca, modello, allestimento e anno.',
           ],
         },
@@ -32,7 +32,7 @@ export default function TermsPage() {
           heading: 'Pagamento e Sicurezza',
           paragraphs: [
             'I pagamenti sono gestiti tramite protocollo crittografato dal circuito Stripe. AutoEsperto non memorizza i dati completi delle carte di credito.',
-            'Il report viene reso disponibile istantaneamente dopo la conferma positiva della transazione bancaria.',
+            'Dopo la conferma del pagamento viene attivato il diritto all’analisi acquistata. L’elaborazione richiede l’invio dei dati del veicolo e può richiedere alcuni istanti. In caso di problema, contatta l’assistenza indicando il riferimento del pagamento.',
           ],
         },
         {
@@ -52,7 +52,7 @@ export default function TermsPage() {
         {
           heading: 'Assistenza e Reclami',
           paragraphs: [
-            'Per assistenza tecnica, problemi di accesso al report generato o richieste di fatturazione, il nostro supporto è attivo all’indirizzo: supporto@autoesperto.it.',
+            'Per assistenza tecnica, problemi di accesso al report generato o richieste di fatturazione, il nostro supporto è attivo all’indirizzo: goosewebstore@gmail.com.',
           ],
         },
         {

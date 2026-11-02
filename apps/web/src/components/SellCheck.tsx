@@ -2,8 +2,10 @@
 
 import { useEffect, useMemo, useState } from 'react';
 import { AlertTriangle, Car, CheckCircle2, Loader2, RotateCcw, Search } from 'lucide-react';
-import type { AutoReport } from '@autoesperto/types';
+import type { ReportPreview } from '@autoesperto/types';
 import { analyzeVehicle } from '@/lib/api';
+import { trackEvent } from '@/lib/analytics';
+import { fireAdsAnalysisCompleted } from '@/components/AdsTracker';
 import { getAllMakes } from '@/lib/catalogo';
 import { SellAdGenerator } from '@/components/SellAdGenerator';
 
@@ -35,7 +37,7 @@ export default function SellCheck() {
   const [loading, setLoading] = useState(false);
   const [phaseIndex, setPhaseIndex] = useState(0);
   const [error, setError] = useState('');
-  const [report, setReport] = useState<AutoReport | null>(null);
+  const [preview, setPreview] = useState<ReportPreview | null>(null);
 
   const brands = useMemo(() => getAllMakes(), []);
 
@@ -61,7 +63,7 @@ export default function SellCheck() {
     event.preventDefault();
     if (!canSubmit) return;
     setError('');
-    setReport(null);
+    setPreview(null);
     setPhaseIndex(0);
     setLoading(true);
     try {
@@ -71,8 +73,10 @@ export default function SellCheck() {
         year: Number.parseInt(year, 10),
         km: Number.parseInt(km, 10),
       });
-      if (result.success && result.report) {
-        setReport(result.report);
+      if (result.success && result.preview) {
+        setPreview(result.preview);
+        trackEvent('analysis_completed', { make: make.trim(), model: model.trim() });
+        fireAdsAnalysisCompleted();
         window.scrollTo({ top: 0, behavior: 'smooth' });
       } else {
         setError('Non siamo riusciti a calcolare il valore. Riprova.');
@@ -88,109 +92,23 @@ export default function SellCheck() {
   };
 
   const handleReset = () => {
-    setReport(null);
+    setPreview(null);
     setError('');
     setPhaseIndex(0);
   };
 
-  if (report) {
-    const { price: p, vehicle } = report;
-
-    const fastSell = roundTo100(p.min);
-    const recommended = roundTo100(p.estimatedValue);
-    const maxAsk = roundTo100(Math.max(p.max, Math.round(p.estimatedValue * 1.05)));
-
+  if (preview) {
+    const range = preview.marketRange;
+    const fastSell = range ? roundTo100(range.min) : null;
+    const recommended = range ? roundTo100((range.min + range.max) / 2) : null;
+    const maxAsk = range ? roundTo100(range.max) : null;
+    const vehicle = preview.vehicle;
     return (
       <div className="animate-fade-in space-y-5">
-        <div className="flex items-start justify-between gap-3">
-          <div>
-            <p className="text-xs font-bold uppercase tracking-wider text-accent">
-              Voglio vendere la mia auto
-            </p>
-            <h1 className="mt-1 text-2xl md:text-3xl font-extrabold tracking-tight text-text-primary">
-              {vehicle.make} {vehicle.model}
-            </h1>
-            <p className="mt-1 text-sm text-text-secondary">
-              {[vehicle.year, vehicle.fuel, vehicle.body].filter(Boolean).join(' · ')}
-              {p.inputKm ? ` · ${p.inputKm.toLocaleString('it-IT')} km` : ''}
-            </p>
-          </div>
-          <button
-            type="button"
-            onClick={handleReset}
-            className="inline-flex shrink-0 items-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-xs font-semibold text-text-secondary hover:border-accent hover:text-accent transition-colors"
-          >
-            <RotateCcw className="h-3.5 w-3.5" /> Nuova stima
-          </button>
-        </div>
-
-        {/* Valore stimato */}
-        <div className="rounded-2xl border border-border bg-white p-5 md:p-6 shadow-card">
-          <div className="flex flex-wrap items-end justify-between gap-3">
-            <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-text-tertiary">
-                Valore stimato di mercato
-              </div>
-              <div className="mt-1 text-3xl font-extrabold text-text-primary number-mono">
-                {euro(p.min)} – {euro(p.max)}
-              </div>
-            </div>
-          </div>
-          {p.market?.total ? (
-            <p className="mt-2 text-[11px] text-text-tertiary">
-              Basato su {p.market.total} annunci simili.
-              {p.market.fetchedAt
-                ? ` Ultimo aggiornamento: ${new Date(p.market.fetchedAt).toLocaleDateString('it-IT')}.`
-                : ''}
-            </p>
-          ) : (
-            <p className="mt-2 text-[11px] text-text-tertiary">
-              Stima indicativa basata sui dati di mercato disponibili.
-            </p>
-          )}
-        </div>
-
-        {/* Fascia di vendita */}
-        <div className="rounded-2xl border border-border bg-white p-5 md:p-6 shadow-card">
-          <h2 className="mb-4 text-sm font-bold text-text-primary">A che prezzo metterla in vendita?</h2>
-          <div className="grid grid-cols-3 gap-3 text-center">
-            <div className="rounded-xl bg-surface-2 p-4">
-              <div className="text-lg font-extrabold text-text-primary number-mono">{euro(fastSell)}</div>
-              <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
-                Vendita veloce
-              </div>
-              <p className="mt-1 text-[11px] leading-snug text-text-tertiary">
-                Per chiudere in fretta e attirare contatti
-              </p>
-            </div>
-            <div className="rounded-xl border border-accent/20 bg-accent/5 p-4">
-              <div className="text-lg font-extrabold text-accent number-mono">{euro(recommended)}</div>
-              <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-accent">
-                Prezzo consigliato
-              </div>
-              <p className="mt-1 text-[11px] leading-snug text-text-tertiary">
-                In linea con la media del mercato
-              </p>
-            </div>
-            <div className="rounded-xl bg-surface-2 p-4">
-              <div className="text-lg font-extrabold text-text-primary number-mono">{euro(maxAsk)}</div>
-              <div className="mt-1 text-[10px] font-bold uppercase tracking-wider text-text-tertiary">
-                Massimo da provare
-              </div>
-              <p className="mt-1 text-[11px] leading-snug text-text-tertiary">
-                Prezzo di partenza, lascia spazio alla trattativa
-              </p>
-            </div>
-          </div>
-          <p className="mt-4 text-[11px] text-text-tertiary leading-relaxed">
-            La stima è basata sui prezzi pubblicati negli annunci disponibili. Condizioni, optional e
-            storico dei tagliandi possono alzare o abbassare il valore reale dell&apos;esemplare.
-          </p>
-        </div>
-
-        <div className="rounded-2xl border border-border bg-white p-5 md:p-6 shadow-card">
-          <SellAdGenerator report={report} />
-        </div>
+        <div className="flex items-start justify-between gap-3"><div><p className="text-xs font-bold uppercase tracking-wider text-accent">Anteprima per la vendita</p><h1 className="mt-1 text-2xl font-extrabold tracking-tight text-text-primary">{vehicle.make} {vehicle.model}</h1><p className="mt-1 text-sm text-text-secondary">{[vehicle.year, vehicle.fuel, km ? `${Number(km).toLocaleString('it-IT')} km` : null].filter(Boolean).join(' · ')}</p></div><button type="button" onClick={handleReset} className="inline-flex min-h-10 shrink-0 items-center gap-1.5 rounded-lg border border-border bg-white px-3 text-xs font-semibold text-text-secondary hover:border-accent hover:text-accent"><RotateCcw className="h-3.5 w-3.5" />Nuova stima</button></div>
+        {range ? <div className="rounded-2xl border border-border bg-white p-5 shadow-card"><p className="text-xs font-bold uppercase tracking-wider text-text-tertiary">Fascia di annunci comparabili</p><p className="mt-1 text-3xl font-extrabold text-text-primary">{euro(range.min)} – {euro(range.max)}</p><p className="mt-2 text-xs text-text-secondary">È una fascia indicativa basata su confronti disponibili, non una perizia dell’esemplare.</p><div className="mt-5 grid grid-cols-3 gap-2 text-center">{[[fastSell,'Vendita veloce'],[recommended,'Prezzo centrale'],[maxAsk,'Prezzo alto']].map(([price,label])=><div key={String(label)} className="rounded-xl bg-surface-2 p-3"><strong className="block text-sm font-extrabold text-text-primary">{euro(Number(price))}</strong><span className="mt-1 block text-[10px] font-bold text-text-tertiary">{String(label)}</span></div>)}</div></div> : <div className="rounded-2xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-950"><strong>Non ci sono confronti sufficienti per consigliare un prezzo.</strong><p className="mt-1">Puoi comunque preparare una bozza dell’annuncio; evita di indicare un valore non supportato dai dati.</p></div>}
+        <div className="rounded-2xl border border-border bg-white p-5 shadow-card"><p className="text-sm font-bold text-text-primary">Un controllo da ricordare</p><p className="mt-1 text-sm leading-relaxed text-text-secondary">{preview.firstCheck}</p><p className="mt-3 text-xs text-text-tertiary">Affidabilità dell’anteprima: {preview.confidence}. Chilometraggio, incidenti e stato meccanico non sono verificati automaticamente.</p></div>
+        <div className="rounded-2xl border border-border bg-white p-5 md:p-6 shadow-card"><SellAdGenerator report={{ vehicle: { make: vehicle.make, model: vehicle.model, year: vehicle.year, fuel: vehicle.fuel, version: vehicle.version }, price: { requestedPrice: preview.requestedPrice, inputKm: km ? Number(km) : undefined } }} /></div>
       </div>
     );
   }

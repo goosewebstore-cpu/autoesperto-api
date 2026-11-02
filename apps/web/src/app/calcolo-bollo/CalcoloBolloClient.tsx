@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { Calculator, Euro, Zap, AlertTriangle, ArrowRight, CheckCircle2, Info } from 'lucide-react';
 
@@ -39,11 +39,21 @@ const REGION_RATES: Record<string, { name: string; rate: RegionRate }> = {
 
 export default function CalcoloBolloClient() {
   const [powerType, setPowerType] = useState<'kw' | 'cv'>('kw');
-  const [powerValue, setPowerValue] = useState<number | ''>(75);
+  const [powerValue, setPowerValue] = useState<number | ''>('');
+  const [plate, setPlate] = useState('');
+  const [copyStatus, setCopyStatus] = useState('');
   const [region, setRegion] = useState<string>('lombardia');
   const [euroClass, setEuroClass] = useState<string>('euro6');
   const [fuelType, setFuelType] = useState<string>('benzina');
   const [autoAge, setAutoAge] = useState<number>(3); // anni del veicolo per superbollo
+
+  useEffect(() => {
+    try {
+      const transferred = sessionStorage.getItem('autoesperto:plate:bollo');
+      if (transferred && /^[A-Z]{2}(?:\d{3}[A-Z]{2}|\d{5,6})$/.test(transferred)) setPlate(transferred);
+      sessionStorage.removeItem('autoesperto:plate:bollo');
+    } catch { /* The calculator also works without browser storage. */ }
+  }, []);
 
   const kw = powerType === 'kw' ? (Number(powerValue) || 0) : Math.round((Number(powerValue) || 0) * 0.735499);
   const cv = powerType === 'cv' ? (Number(powerValue) || 0) : Math.round((Number(powerValue) || 0) * 1.35962);
@@ -98,7 +108,9 @@ export default function CalcoloBolloClient() {
       const extraSuperKw = kw - 185;
       let superRate = 20;
       // Riduzioni per anzianità superbollo
-      if (autoAge > 15) {
+      if (autoAge >= 20) {
+        superRate = 0;
+      } else if (autoAge > 15) {
         superRate = 3; // -85%
       } else if (autoAge > 10) {
         superRate = 6; // -70%
@@ -120,6 +132,14 @@ export default function CalcoloBolloClient() {
 
   return (
     <div className="space-y-8">
+      {plate && <div className="rounded-2xl border border-blue-200 bg-blue-50 p-5 text-sm text-slate-800 space-y-3">
+        <p><strong>Targa {plate}</strong> ricevuta dalla verifica. Il solo formato della targa non rivela kW, classe Euro o bollo dovuto.</p>
+        <div className="flex flex-wrap gap-3 items-center">
+          <a href="https://online.aci.it/acinet/calcolobollo/index.asp?FinePagina=1&TipoPagamento=10" target="_blank" rel="noopener noreferrer" className="rounded-xl bg-blue-600 px-4 py-2 font-bold text-white">Calcola l'importo ufficiale su ACI</a>
+          <button type="button" onClick={async () => { try { await navigator.clipboard.writeText(plate); setCopyStatus('Targa copiata: incollala su ACI.'); } catch { setCopyStatus(`Inserisci ${plate} su ACI.`); } }} className="rounded-xl border border-blue-300 px-4 py-2 font-bold text-blue-700">Copia la targa</button>
+        </div>
+        {copyStatus && <p role="status">{copyStatus}</p>}
+      </div>}
       <div className="rounded-3xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xl shadow-slate-100">
         <div className="grid md:grid-cols-2 gap-8">
           {/* Form parametri */}
@@ -135,6 +155,7 @@ export default function CalcoloBolloClient() {
                     min="1"
                     max="1500"
                     value={powerValue}
+                    placeholder="kW dal libretto"
                     onChange={(e) => setPowerValue(e.target.value === '' ? '' : Number(e.target.value))}
                     className="w-full h-12 px-4 rounded-xl border border-slate-300 bg-slate-50 text-slate-900 font-bold text-lg focus:bg-white focus:border-blue-600 focus:outline-none focus:ring-2 focus:ring-blue-600/20"
                   />
@@ -265,7 +286,11 @@ export default function CalcoloBolloClient() {
               </div>
 
               <div className="text-center py-4">
-                {result.isElectricExempt ? (
+                {powerValue === '' || Number(powerValue) <= 0 ? (
+                  <p className="text-sm text-slate-300">Inserisci la potenza reale del veicolo per vedere una stima indicativa.</p>
+                ) : fuelType === 'elettrica' || fuelType === 'ibrida' ? (
+                  <p className="text-sm text-slate-300">Le agevolazioni per elettriche e ibride dipendono dalla regione e dalla data di immatricolazione. Verifica l'importo su ACI.</p>
+                ) : result.isElectricExempt ? (
                   <div>
                     <div className="text-4xl font-extrabold text-emerald-400 mb-2">
                       0 € / anno
@@ -288,7 +313,7 @@ export default function CalcoloBolloClient() {
               </div>
 
               {/* Dettaglio quote */}
-              <div className="space-y-2.5 pt-4 border-t border-slate-800 text-xs">
+              {powerValue !== '' && fuelType !== 'elettrica' && fuelType !== 'ibrida' && <div className="space-y-2.5 pt-4 border-t border-slate-800 text-xs">
                 <div className="flex justify-between text-slate-300">
                   <span>Bollo ordinario:</span>
                   <span className="font-bold text-white font-mono">{result.bolloBase} €</span>
@@ -306,10 +331,12 @@ export default function CalcoloBolloClient() {
                   <span>Regione:</span>
                   <span>{REGION_RATES[region]?.name}</span>
                 </div>
-              </div>
+              </div>}
             </div>
 
             <div className="pt-6 mt-6 border-t border-slate-800">
+              <p className="mb-3 text-xs text-slate-300">Stima locale, non importo dovuto. Tariffe, riduzioni e scadenze possono variare: usa il calcolo ufficiale ACI prima di pagare.</p>
+              <a href="https://online.aci.it/acinet/calcolobollo/index.asp?FinePagina=1&TipoPagamento=10" target="_blank" rel="noopener noreferrer" className="mb-3 block text-center rounded-xl border border-blue-400 p-3 text-xs font-bold text-blue-200">Verifica bollo su ACI ↗</a>
               <Link
                 href="/#scanner-section"
                 className="w-full inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 hover:bg-blue-500 p-3 text-xs font-bold text-white transition-colors shadow-lg shadow-blue-600/30"

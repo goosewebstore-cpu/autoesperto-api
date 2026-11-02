@@ -3,7 +3,9 @@
   "name": "autoesperto",
   "main": ".open-next/worker.js",
   "compatibility_date": "2026-08-12",
-  "compatibility_flags": ["nodejs_compat"],
+  "compatibility_flags": [
+    "nodejs_compat"
+  ],
   "minify": true,
   "assets": {
     "directory": ".open-next/assets",
@@ -11,12 +13,26 @@
   },
   "workers_dev": true,
   "routes": [
-    { "pattern": "autoesperto.it", "custom_domain": true },
-    { "pattern": "www.autoesperto.it", "custom_domain": true }
+    {
+      "pattern": "autoesperto.it",
+      "custom_domain": true
+    },
+    {
+      "pattern": "www.autoesperto.it",
+      "custom_domain": true
+    }
   ],
   "vars": {
     "NEXT_PUBLIC_API_URL": "https://autoesperto-api.onrender.com",
     "NEXT_PUBLIC_SITE_URL": "https://autoesperto.it",
     "ADSENSE_PUBLISHER_ID": "pub-4052961089956241"
+  },
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 0.1,
+    "traces": {
+      "enabled": true,
+      "head_sampling_rate": 0.1
+    }
   }
 }

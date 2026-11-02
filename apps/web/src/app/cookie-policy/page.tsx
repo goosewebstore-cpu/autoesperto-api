@@ -44,7 +44,7 @@ export default function CookiePolicyPage() {
         },
         {
           heading: 'Contatti per la Privacy',
-          paragraphs: ['Per domande o chiarimenti relativi all’uso dei cookie su AutoEsperto: privacy@autoesperto.it.'],
+          paragraphs: ['Per domande o chiarimenti relativi all’uso dei cookie su AutoEsperto: goosewebstore@gmail.com.'],
         },
       ]}
     />

@@ -1,8 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import Script from 'next/script';
 import { Outfit, DM_Sans } from 'next/font/google';
-import { Analytics } from '@vercel/analytics/next';
-import { SpeedInsights } from '@vercel/speed-insights/next';
 import './globals.css';
 import ServiceWorker from '@/components/ServiceWorker';
 import CookieConsent from '@/components/CookieConsent';
@@ -26,9 +23,9 @@ const dmSans = DM_Sans({
 });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
-const siteTitle = 'AutoEsperto: Valutazione Auto Usate, Controllo Annunci e Profilo Digitale';
+const siteTitle = 'AutoEsperto: Valutazione Auto Usate 2026, Controllo Annunci e Profilo Digitale';
 const siteDescription =
-  'Valutazione auto usate gratuita: controlla annunci da link o foto, calcola il prezzo reale di mercato, affidabilità, bollo, consumi e crea il tuo Profilo Digitale Auto.';
+  'Valutazione indicativa di auto usate: controlla annunci da link o foto, confronta i prezzi richiesti, consulta affidabilità, bollo e consumi e crea il tuo Profilo Digitale Auto.';
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
@@ -39,17 +36,17 @@ export const metadata: Metadata = {
   },
   description: siteDescription,
   keywords: [
-    'valutazione auto usata',
-    'controlla annuncio auto',
+    'valutazione auto usata 2026',
+    'quanto vale la mia auto usata',
+    'vendere auto usata prezzo',
+    'comprare auto usata 2026',
+    'prezzo auto usata mercato',
+    'controlla annuncio auto usata',
     'profilo auto digitale',
     'passaporto digitale veicolo',
-    'quanto vale la mia auto',
-    'comprare auto usata',
     'calcolo bollo auto',
     'storico tagliandi auto',
-    'libretto digitale manutenzione',
-    'prezzo auto usata',
-    'affidabilità auto',
+    'affidabilità auto usata',
     'AutoEsperto',
   ],
   category: 'automotive',
@@ -91,7 +88,7 @@ export const metadata: Metadata = {
         width: 1200,
         height: 630,
         type: 'image/png',
-        alt: 'AutoEsperto — Valutazione auto gratis: prezzo, affidabilità e danni da foto',
+        alt: 'AutoEsperto — Valutazione per modello gratuita e analisi AI',
       },
     ],
   },
@@ -155,7 +152,7 @@ function JsonLd() {
       inLanguage: 'it-IT',
       image: `${siteUrl}/og-image.png`,
       featureList: [
-        'Valutazione auto usate basata su annunci reali',
+        'Stima indicativa e confronto con i prezzi richiesti negli annunci disponibili',
         'Controlla Annuncio pre-acquisto con verdetto immediato',
         'Profilo Digitale Auto e Passaporto Veicolo permanente',
         'Calcolo bollo auto con esenzioni regionali',
@@ -165,7 +162,7 @@ function JsonLd() {
         '@type': 'Offer',
         price: '0',
         priceCurrency: 'EUR',
-        description: 'Analisi completa gratuita delle auto usate e Profilo Digitale Auto',
+        description: 'Valutazione per modello gratuita; foto AI e annunci con abbonamento separato',
       },
     },
   ];
@@ -199,12 +196,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-        {/* Google AdSense official script — required for site ownership verification */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4052961089956241"
-          crossOrigin="anonymous"
-        />
       </head>
       <body className="min-h-screen pb-20 md:pb-0">
         <JsonLd />
@@ -215,8 +206,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <AnalyticsTracker />
         <AdsTracker />
         {children}
-        <Analytics />
-        <SpeedInsights />
       </body>
     </html>
   );

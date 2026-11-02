@@ -20,18 +20,8 @@ export interface ConsumptionEstimate {
   note: string;
 }
 
-const EV_BRANDS = ['tesla', 'polestar', 'byd', 'smart', 'lucid', 'rivian', 'nio', 'xpeng', 'fisker'];
-const EV_MODELS = ['500e', 'taycan', 'id.3', 'id.4', 'id.5', 'id.7', 'id.buzz', 'e-208', 'e-2008', 'leaf', 'zoe', 'enyaq', 'ev6', 'ioniq 5', 'ioniq 6', 'ariya', 'spring', 'mustang mach-e', 'eqc', 'eqa', 'eqb', 'eqe', 'eqs', 'ix', 'ix1', 'ix3', 'i4', 'i5', 'i7', 'q4 e-tron', 'e-tron'];
-
-export function checkIsElectric(make: string, model: string, fuel?: string): boolean {
-  const f = (fuel || '').toLowerCase();
-  if (f.includes('elettr') || f.includes('ev') || f.includes('bev')) return true;
-  const mk = make.toLowerCase();
-  if (EV_BRANDS.some((b) => mk.includes(b))) return true;
-  const mdl = model.toLowerCase();
-  if (EV_MODELS.some((m) => mdl.includes(m))) return true;
-  return false;
-}
+export { isBatteryElectric as checkIsElectric } from './powertrain';
+import { isBatteryElectric as checkIsElectric } from './powertrain';
 
 const SEGMENT_BASE: Record<SegmentKey, number> = {
   citycar: 5.2,

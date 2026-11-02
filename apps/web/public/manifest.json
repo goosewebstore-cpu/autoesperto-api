@@ -4,7 +4,7 @@
   "description": "Valutazione auto usate, riconoscimento foto con IA, difetti noti e passaporto digitale del veicolo.",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#0B1120",
+  "background_color": "#f8fbff",
   "theme_color": "#2563EB",
   "orientation": "portrait-primary",
   "scope": "/",

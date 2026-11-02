@@ -83,7 +83,7 @@ export default function CookieConsent() {
           if (current) setPrefs({ analytics: current.analytics, marketing: current.marketing });
           setView('preferences');
         }}
-        className="fixed bottom-3 left-3 z-40 inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-2 text-[11px] font-bold text-slate-600 shadow-sm hover:text-slate-950 transition-colors"
+        className="fixed bottom-3 left-3 z-40 hidden md:inline-flex items-center gap-1.5 rounded-full border border-slate-300 bg-white px-3 py-2 text-[11px] font-bold text-slate-600 shadow-sm hover:text-slate-950 transition-colors"
         aria-label="Modifica preferenze cookie"
       >
         <Cookie className="h-3.5 w-3.5" /> Cookie
@@ -112,7 +112,7 @@ export default function CookieConsent() {
   if (view === 'banner') {
     return (
       <div
-        className="fixed bottom-[76px] md:bottom-0 inset-x-0 z-[100] p-3 sm:p-6 animate-slide-up"
+        className="fixed bottom-[calc(70px+env(safe-area-inset-bottom))] md:bottom-0 inset-x-0 z-[100] p-3 sm:p-6 animate-slide-up"
         role="dialog"
         aria-label="Consenso cookie"
       >

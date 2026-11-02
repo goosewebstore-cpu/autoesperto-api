@@ -17,9 +17,13 @@ export interface VehicleTcoResult {
   annualKm: number;
   breakdown: TcoBreakdown;
   summarySentence: string;
+  fuel: string;
+  consumption: number;
+  unit: string;
+  energyPrice: number;
 }
 
-const FUEL_PRICES = {
+export const FUEL_PRICES = {
   benzina: 1.82, // €/L
   diesel: 1.74, // €/L
   hybrid: 1.82, // €/L
@@ -32,38 +36,31 @@ const FUEL_PRICES = {
 export function calculateVehicleTco(
   vehicle: VehicleProfile,
   annualKm: number = 12000,
-  fuelTypePreference?: string
+  fuelTypePreference?: string,
+  assumptions: { energyPrices?: Partial<typeof FUEL_PRICES>; consumption?: number; taxAnnual?: number; insuranceAnnual?: number } = {}
 ): VehicleTcoResult {
+  if (!Number.isFinite(annualKm) || annualKm < 0 || annualKm > 200000) throw new RangeError('Chilometri annui non validi');
   const fuel = (fuelTypePreference || vehicle.availableFuels[0] || 'benzina') as keyof typeof FUEL_PRICES;
-  const fuelPricePerUnit = FUEL_PRICES[fuel] || 1.82;
+  const suppliedPrice = assumptions.energyPrices?.[fuel];
+  const fuelPricePerUnit = suppliedPrice !== undefined && Number.isFinite(suppliedPrice) && suppliedPrice > 0 ? suppliedPrice : (FUEL_PRICES[fuel] || FUEL_PRICES.benzina);
+  const consumption = assumptions.consumption && Number.isFinite(assumptions.consumption) && assumptions.consumption > 0
+    ? assumptions.consumption
+    : fuel === 'elettrica' ? 17 : fuel === 'gpl' ? vehicle.litersPer100Km * 1.15 : fuel === 'metano' ? vehicle.litersPer100Km * 0.65 : vehicle.litersPer100Km;
+  const unit = fuel === 'elettrica' ? 'kWh/100 km' : fuel === 'metano' ? 'kg/100 km' : 'L/100 km';
+  const fuelCostAnnual = Math.round((annualKm / 100) * consumption * fuelPricePerUnit);
 
-  // Fuel annual cost
-  let fuelCostAnnual = 0;
-  if (fuel === 'gpl') {
-    // GPL burns ~15% more volume but costs half
-    const litersNeeded = (annualKm / 100) * (vehicle.litersPer100Km * 1.15);
-    fuelCostAnnual = Math.round(litersNeeded * FUEL_PRICES.gpl);
-  } else if (fuel === 'elettrica') {
-    // ~15 kWh/100km
-    const kwhNeeded = (annualKm / 100) * 15;
-    fuelCostAnnual = Math.round(kwhNeeded * FUEL_PRICES.elettrica);
-  } else {
-    const litersNeeded = (annualKm / 100) * vehicle.litersPer100Km;
-    fuelCostAnnual = Math.round(litersNeeded * fuelPricePerUnit);
-  }
-
-  // Bollo estimation (kW estimation based on segment)
+  // Budget placeholder: actual liability depends on kW, class, region and age.
+  // No invented average hybrid discount or permanent EV exemption.
   const kwEst = vehicle.segment === 'A' ? 51 : vehicle.segment === 'B' ? 66 : vehicle.segment === 'C' ? 85 : 110;
-  let bolloAnnual = Math.round(kwEst * 2.58);
-  if (vehicle.availableFuels.includes('hybrid')) bolloAnnual = Math.round(bolloAnnual * 0.7); // hybrid regional discount avg
-  if (vehicle.availableFuels.includes('elettrica')) bolloAnnual = 0; // first 5 years free
+  const ordinaryTax = Math.round(Math.min(kwEst, 100) * 2.58 + Math.max(0, kwEst - 100) * 3.87);
+  const bolloAnnual = assumptions.taxAnnual !== undefined && Number.isFinite(assumptions.taxAnnual) && assumptions.taxAnnual >= 0 ? assumptions.taxAnnual : ordinaryTax;
 
   // Maintenance & Tires
   const maintAnnual = vehicle.annualMaintenanceEst;
   const tiresAnnual = Math.round((annualKm / 40000) * 350); // set every 40k km
 
   // Insurance estimation baseline
-  const insuranceAnnual = vehicle.segment === 'A' ? 440 : vehicle.segment === 'B' ? 510 : vehicle.segment === 'C' ? 590 : 720;
+  const insuranceAnnual = assumptions.insuranceAnnual !== undefined && Number.isFinite(assumptions.insuranceAnnual) && assumptions.insuranceAnnual >= 0 ? assumptions.insuranceAnnual : vehicle.segment === 'A' ? 440 : vehicle.segment === 'B' ? 510 : vehicle.segment === 'C' ? 590 : 720;
 
   // Depreciation allocation (~7% annual on used car)
   const depreciationAnnual = Math.round(vehicle.priceAvg * 0.075);
@@ -88,7 +85,8 @@ export function calculateVehicleTco(
     vehicle,
     annualKm,
     breakdown,
-    summarySentence: `Per ${annualKm.toLocaleString('it-IT')} km/anno il costo reale stimato è di circa €${totalAnnual.toLocaleString('it-IT')}/anno (≈ €${monthly}/mese, pari a €${costPerKm.toFixed(2)}/km).`,
+    fuel, consumption: Math.round(consumption * 10) / 10, unit, energyPrice: fuelPricePerUnit,
+    summarySentence: `Per ${annualKm.toLocaleString('it-IT')} km/anno il costo indicativo è di circa €${totalAnnual.toLocaleString('it-IT')}/anno (≈ €${monthly}/mese, pari a €${costPerKm.toFixed(2)}/km).`,
   };
 }
 
@@ -103,6 +101,7 @@ export function compareVehiclesTco(
   const tcos = vehicles.map((v) => calculateVehicleTco(v, annualKm));
   tcos.sort((a, b) => a.breakdown.totalAnnualCost - b.breakdown.totalAnnualCost);
 
+  if (!tcos.length) return { results: [], cheapestVehicleId: '', annualSavingsMax: 0 };
   const cheapest = tcos[0];
   const mostExpensive = tcos[tcos.length - 1];
   const diff = mostExpensive.breakdown.totalAnnualCost - cheapest.breakdown.totalAnnualCost;

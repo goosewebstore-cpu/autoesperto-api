@@ -3,11 +3,17 @@ import assert from 'node:assert';
 import type { Server } from 'node:http';
 import type { RequestInit } from 'undici';
 import { app } from '../src/app';
+import { prisma } from '@autoesperto/database';
 
 let BASE = process.env.TEST_API_URL || '';
 let server: Server | undefined;
+const generated = new Map<string, any>();
+const originalGeneratedCreate = prisma.generatedReport.create;
+const originalGeneratedFind = prisma.generatedReport.findUnique;
 
 before(async () => {
+  prisma.generatedReport.create = (async ({ data }: any) => { const row = { ...data }; generated.set(data.id, row); return row; }) as any;
+  prisma.generatedReport.findUnique = (async ({ where }: any) => generated.get(where.id) || null) as any;
   if (BASE) return;
   await new Promise<void>((resolve) => {
     server = app.listen(0, () => {
@@ -20,6 +26,8 @@ before(async () => {
 });
 
 after(async () => {
+  prisma.generatedReport.create = originalGeneratedCreate;
+  prisma.generatedReport.findUnique = originalGeneratedFind;
   if (server) await new Promise<void>((resolve) => server!.close(() => resolve()));
 });
 
@@ -56,31 +64,28 @@ describe('AutoEsperto API (MVP)', () => {
   });
 
   describe('POST /reports/analyze', () => {
-    it('targa valida → report completo', async () => {
+    it('targa valida → anteprima e report protetto sul server', async () => {
       const r = await req('/reports/analyze', {
         method: 'POST',
         body: { plate: 'FE120KD', km: 85000, requestedPrice: 14500 },
       });
       assert.strictEqual(r.status, 200);
       assert.ok(r.data.success);
-      assert.ok(r.data.report.vehicle.make);
-      assert.strictEqual(r.data.report.vehicle.dataSource, 'plate');
-      assert.ok(r.data.report.reliability.score > 0);
-      assert.ok(r.data.report.price.estimatedValue > 0);
-      assert.ok(Array.isArray(r.data.report.price.marketUrls));
-      assert.ok(r.data.report.price.marketUrls.length > 0);
+      assert.ok(r.data.preview.vehicle.make);
+      assert.equal(r.data.report, undefined);
+      assert.ok(r.data.preview.reportId);
+      assert.ok(r.data.preview.accessToken);
     });
 
-    it('ricerca per modello → report con dataSource model', async () => {
+    it('ricerca per modello → anteprima senza dettagli completi', async () => {
       const r = await req('/reports/analyze', {
         method: 'POST',
         body: { make: 'BMW', model: 'Serie 3', year: 2016, km: 120000, requestedPrice: 22000 },
       });
       assert.strictEqual(r.status, 200);
-      assert.strictEqual(r.data.report.vehicle.dataSource, 'model');
-      assert.strictEqual(r.data.report.vehicle.year, 2016);
-      assert.strictEqual(r.data.report.price.inputYear, 2016);
-      assert.ok(r.data.report.reliability.advice.length > 0);
+      assert.equal(r.data.report, undefined);
+      assert.strictEqual(r.data.preview.vehicle.year, 2016);
+      assert.ok(r.data.preview.firstCheck);
     });
 
     it('targa in formato non valido → 400 con messaggio', async () => {
@@ -97,15 +102,15 @@ describe('AutoEsperto API (MVP)', () => {
       assert.strictEqual(r.status, 400);
     });
 
-    it('modello non nel database → report generico 200', async () => {
+    it('modello non nel database → anteprima generica 200', async () => {
       const r = await req('/reports/analyze', {
         method: 'POST',
         body: { make: 'XYZ', model: 'Q123' },
       });
       assert.strictEqual(r.status, 200);
-      assert.strictEqual(r.data.report.vehicle.make, 'XYZ');
-      assert.strictEqual(r.data.report.vehicle.model, 'Q123');
-      assert.strictEqual(r.data.report.vehicle.dataSource, 'model');
+      assert.strictEqual(r.data.preview.vehicle.make, 'XYZ');
+      assert.strictEqual(r.data.preview.vehicle.model, 'Q123');
+      assert.equal(r.data.report, undefined);
     });
 
     it('richieste ripetute → risposta in cache', async () => {

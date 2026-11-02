@@ -12,6 +12,7 @@ import type {
   VehicleData,
 } from '@autoesperto/types';
 import type { AutoReport } from '@autoesperto/types';
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from 'lz-string';
 import {
   resolveVehicleImage,
   getVehiclePassportPhoto,
@@ -20,20 +21,49 @@ import {
 
 const PASSPORTS_STORAGE_KEY = 'autoesperto_vehicle_passports_v2';
 const LEGACY_STORAGE_KEY = 'autoesperto_vehicle_passports_v1';
+const SHARED_CACHE_KEY = 'autoesperto_shared_passports_cache_v1';
 
 export function generateShareCode(): string {
-  const num = Math.floor(10000 + Math.random() * 90000);
-  return `AE-${num}`;
+  const bytes = new Uint8Array(16);
+  globalThis.crypto.getRandomValues(bytes);
+  const suffix = Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join('');
+  return `AE-${suffix}`;
 }
 
 let memoryPassports: VehiclePassportData[] = [];
+
+export function getSharedPassportsCache(): VehiclePassportData[] {
+  if (typeof window === 'undefined') return [];
+  try {
+    const raw = localStorage.getItem(SHARED_CACHE_KEY);
+    if (!raw) return [];
+    const list = JSON.parse(raw) as VehiclePassportData[];
+    return Array.isArray(list) ? list.map(sanitizePassport) : [];
+  } catch (e) {
+    return [];
+  }
+}
+
+export function saveSharedPassportCache(passport: VehiclePassportData): void {
+  if (typeof window === 'undefined') return;
+  try {
+    const sanitized = sanitizePassport(passport);
+    const existing = getSharedPassportsCache().filter(
+      (p) => (p.shareCode || '').toUpperCase() !== (sanitized.shareCode || '').toUpperCase()
+    );
+    existing.unshift(sanitized);
+    localStorage.setItem(SHARED_CACHE_KEY, JSON.stringify(existing.slice(0, 25)));
+  } catch (e) {
+    console.error('Error saving shared passport cache', e);
+  }
+}
 
 /**
  * Calculates a realistic dynamic Health Score breakdown based on available data
  */
 export function computeDynamicHealthScore(passport: Partial<VehiclePassportData>): VehicleHealthBreakdown {
   const vehicle = passport.vehicle || ({} as any);
-  const km = passport.currentKm || 50000;
+  const km = passport.currentKm ?? 50000;
   const year = vehicle.year || (new Date().getFullYear() - 3);
   const age = Math.max(1, new Date().getFullYear() - year);
   const avgKmPerYear = km / age;
@@ -178,12 +208,12 @@ function sanitizePassport(p: any): VehiclePassportData {
     },
     nickname: p.nickname || `${vehicle.make || 'Auto'} ${vehicle.model || ''}`.trim(),
     mainPhoto: photo,
-    currentKm: Number(p.currentKm) || 50000,
+    currentKm: Number.isFinite(Number(p.currentKm)) ? Number(p.currentKm) : 50000,
     lastKmDate: p.lastKmDate || new Date().toISOString().split('T')[0],
     healthScore: p.healthScore || 88,
     healthBreakdown: p.healthBreakdown || computeDynamicHealthScore(p),
-    estimatedValue: p.estimatedValue || p.price?.estimatedValue || 18000,
-    estimatedValueMax: p.estimatedValueMax || Math.round((p.estimatedValue || 18000) * 1.08),
+    estimatedValue: p.estimatedValue ?? p.price?.estimatedValue,
+    estimatedValueMax: p.estimatedValueMax ?? (p.estimatedValue ? Math.round(p.estimatedValue * 1.08) : undefined),
     recommendedSellPrice: p.recommendedSellPrice,
     attractiveBuyerPrice: p.attractiveBuyerPrice,
     insuranceExpiry: p.insuranceExpiry,
@@ -229,15 +259,350 @@ export function getPassportById(id: string): VehiclePassportData | null {
 }
 
 export function getPassportByShareCode(code: string): VehiclePassportData | null {
+  if (!code) return null;
   const clean = code.toUpperCase().trim();
+
+  // 1. Check user's local garage
   const all = getAllPassports();
-  const found = all.find((p) => p.shareCode.toUpperCase() === clean);
+  const found = all.find((p) => p.shareCode && p.shareCode.toUpperCase() === clean);
   if (found) return found;
 
+  // 2. Check cached shared passports loaded on this device
+  const cached = getSharedPassportsCache().find((p) => p.shareCode && p.shareCode.toUpperCase() === clean);
+  if (cached) return cached;
+
+  // 3. Check memory store
+  const inMemory = memoryPassports.find((p) => p.shareCode && p.shareCode.toUpperCase() === clean);
+  if (inMemory) return inMemory;
+
+  // 4. Sample fallback ONLY if code is specifically AE-48291 or SAMPLE
   if (clean === 'AE-48291' || clean === 'SAMPLE') {
     return ensureSamplePassport();
   }
   return null;
+}
+
+export interface CompactPublicPassportPayload {
+  c: string; // shareCode
+  nn?: string; // nickname
+  v: {
+    mk: string; // make
+    md: string; // model
+    vr?: string; // version
+    y?: number; // year
+    f?: string; // fuel
+    p?: string; // power
+    dp?: string; // displacement
+    tr?: string; // transmission
+    bd?: string; // body
+    cl?: string; // color
+    ec?: string; // euroClass
+    pl?: string; // plate
+    vin?: string; // vin
+    img?: string; // imageUrl
+  };
+  km?: number;
+  kd?: string; // lastKmDate
+  hs?: number; // healthScore
+  ev?: number; // estimatedValue
+  em?: number; // estimatedValueMax
+  rp?: number; // recommendedSellPrice
+  ab?: number; // attractiveBuyerPrice
+  ph?: Array<{
+    id?: string;
+    u: string;
+    c?: string;
+    t?: string;
+    d?: string;
+  }>;
+  tm?: Array<{
+    id?: string;
+    d: string;
+    k?: number;
+    t: any;
+    ti: string;
+    de?: string;
+    c?: number;
+  }>;
+  sc?: PassportShareConfig;
+  sl?: SellingProfileConfig;
+  tb?: 'AI_ANALYZED' | 'VERIFIED' | 'INSPECTED';
+  ca?: string;
+}
+
+export function encodePublicPassport(payload: any): string {
+  try {
+    const json = JSON.stringify(payload);
+    return `z.${compressToEncodedURIComponent(json)}`;
+  } catch (err) {
+    console.error('Error encoding passport for share:', err);
+    return '';
+  }
+}
+
+export function decodePublicPassport(encoded: string): any | null {
+  try {
+    if (!encoded) return null;
+    if (encoded.startsWith('z.')) {
+      const json = decompressFromEncodedURIComponent(encoded.slice(2));
+      return json ? JSON.parse(json) : null;
+    }
+    let base64 = encoded.replace(/-/g, '+').replace(/_/g, '/');
+    while (base64.length % 4 !== 0) {
+      base64 += '=';
+    }
+    const binary = atob(base64);
+    const bytes = new Uint8Array(binary.length);
+    for (let i = 0; i < binary.length; i++) {
+      bytes[i] = binary.charCodeAt(i);
+    }
+    const json = new TextDecoder().decode(bytes);
+    return JSON.parse(json);
+  } catch (err) {
+    console.error('Error decoding public passport:', err);
+    return null;
+  }
+}
+
+export function serializePassportForShare(passport: VehiclePassportData): CompactPublicPassportPayload {
+  const v = passport.vehicle || ({} as any);
+  const sc = passport.shareConfig || {
+    enabled: true,
+    showVehicleInfo: true,
+    showMaintenance: true,
+    showRepairs: true,
+    showRevisions: true,
+    showHealthScore: true,
+    showOriginalDocs: false,
+    showPhotos: true,
+    showTimeline: true,
+    showValuation: true,
+  };
+
+  const photo = getVehiclePassportPhoto(passport);
+  const selling = passport.sellingConfig;
+
+  let photosForShare: Array<{ id?: string; u: string; c?: string; t?: string; d?: string }> = [];
+  if (sc.showPhotos !== false && Array.isArray(passport.photos)) {
+    photosForShare = passport.photos
+      .filter((p) => p && p.url && !(isOldHardcodedBMWUrl(p.url) && !v.make?.toLowerCase().includes('bmw')))
+      .map((p) => ({
+        id: p.id,
+        u: p.url,
+        c: p.category,
+        t: p.title,
+        d: p.description,
+      }));
+  }
+
+  if (photosForShare.length === 0 && photo && sc.showPhotos !== false) {
+    photosForShare.push({
+      u: photo,
+      c: 'auto',
+      t: `${v.make || 'Auto'} ${v.model || ''}`.trim(),
+    });
+  }
+
+  let timelineForShare: Array<{ id?: string; d: string; k?: number; t: any; ti: string; de?: string; c?: number }> = [];
+  if (sc.showTimeline !== false && Array.isArray(passport.timeline)) {
+    timelineForShare = passport.timeline.map((item) => ({
+      id: item.id,
+      d: item.date,
+      k: sc.showMileage === true ? item.km : undefined,
+      t: item.type,
+      ti: item.title,
+      de: item.description,
+      c: item.cost,
+    }));
+  }
+
+  const payload: CompactPublicPassportPayload = {
+    c: passport.shareCode,
+    nn: undefined,
+    v: {
+      mk: v.make || 'Auto',
+      md: v.model || '',
+      vr: sc.showVehicleInfo ? v.version : undefined,
+      y: sc.showVehicleInfo ? v.year : undefined,
+      f: sc.showVehicleInfo ? v.fuel : undefined,
+      p: sc.showVehicleInfo ? v.power : undefined,
+      dp: sc.showVehicleInfo ? v.displacement : undefined,
+      tr: sc.showVehicleInfo ? v.transmission : undefined,
+      bd: sc.showVehicleInfo ? v.body : undefined,
+      cl: sc.showVehicleInfo ? v.color : undefined,
+      ec: sc.showVehicleInfo ? v.euroClass : undefined,
+    // Never expose the registration plate in a public share link.
+      img: sc.showPhotos ? photo : undefined,
+    },
+    km: sc.showMileage === true ? passport.currentKm : undefined,
+    kd: sc.showMileage === true ? passport.lastKmDate : undefined,
+    hs: sc.showHealthScore ? passport.healthScore : undefined,
+    ev: sc.showValuation !== false ? passport.estimatedValue : undefined,
+    em: sc.showValuation !== false ? passport.estimatedValueMax : undefined,
+    rp: sc.showValuation !== false ? passport.recommendedSellPrice : undefined,
+    ab: sc.showValuation !== false ? passport.attractiveBuyerPrice : undefined,
+    ph: photosForShare,
+    tm: timelineForShare,
+    sc,
+    sl: selling?.enabled ? {
+      enabled: true,
+      askingPrice: selling.askingPrice,
+      negotiable: selling.negotiable,
+      showValuation: selling.showValuation,
+      showHealthScore: selling.showHealthScore,
+      showMaintenance: selling.showMaintenance,
+      showInspection: selling.showInspection,
+      showPhotos: selling.showPhotos,
+      allowContact: selling.allowContact,
+      contactMethod: selling.allowContact ? selling.contactMethod : undefined,
+      contactValue: selling.allowContact ? selling.contactValue : undefined,
+      sellerNotes: selling.sellerNotes?.slice(0, 1000),
+    } : undefined,
+    tb: passport.trustBadge || getTrustBadgeForPassport(passport).badge,
+    ca: passport.createdAt,
+  };
+
+  return payload;
+}
+
+export function deserializePassportFromShare(encoded: string): VehiclePassportData | null {
+  try {
+    const raw = decodePublicPassport(encoded);
+    if (!raw || typeof raw !== 'object' || !raw.c) return null;
+
+    const v = raw.v || {};
+    const photo = v.img || resolveVehicleImage(v.mk, v.md, v.bd);
+
+    const nowIso = new Date().toISOString().split('T')[0];
+    const photos: PassportPhotoItem[] = Array.isArray(raw.ph)
+      ? raw.ph.map((p: any, idx: number) => ({
+          id: p.id || `photo-shared-${idx}`,
+          url: p.u || photo,
+          category: p.c || 'auto',
+          title: p.t || `${v.mk || ''} ${v.md || ''}`.trim(),
+          description: p.d,
+          date: p.dt || raw.kd || nowIso,
+        }))
+      : [];
+
+    if (photos.length === 0 && photo) {
+      photos.push({
+        id: 'photo-main',
+        url: photo,
+        category: 'auto',
+        title: `${v.mk || ''} ${v.md || ''}`.trim(),
+        date: raw.kd || nowIso,
+      });
+    }
+
+    const timeline: PassportTimelineItem[] = Array.isArray(raw.tm)
+      ? raw.tm.map((t: any, idx: number) => ({
+          id: t.id || `evt-shared-${idx}`,
+          date: t.d || new Date().toISOString().split('T')[0],
+          km: t.k,
+          type: t.t || 'ALTRO',
+          title: t.ti || 'Evento Manutenzione',
+          description: t.de,
+          cost: t.c,
+        }))
+      : [];
+
+    const reconstructed: VehiclePassportData = {
+      id: `shared-${raw.c}`,
+      shareCode: raw.c,
+      nickname: raw.nn || `${v.mk || 'Auto'} ${v.md || ''}`.trim(),
+      vehicle: {
+        make: v.mk || 'Auto',
+        model: v.md || '',
+        version: v.vr,
+        year: v.y,
+        fuel: v.f,
+        power: v.p,
+        displacement: v.dp,
+        transmission: v.tr,
+        body: v.bd,
+        color: v.cl,
+        euroClass: v.ec,
+        plate: v.pl,
+        imageUrl: photo,
+      },
+      mainPhoto: photo,
+      currentKm: Number.isFinite(Number(raw.km)) && raw.km !== undefined ? Number(raw.km) : 0,
+      lastKmDate: raw.kd || new Date().toISOString().split('T')[0],
+      healthScore: Number(raw.hs) || 88,
+      estimatedValue: raw.ev,
+      estimatedValueMax: raw.em,
+      recommendedSellPrice: raw.rp,
+      attractiveBuyerPrice: raw.ab,
+      photos,
+      timeline,
+      inspections: [],
+      documents: [],
+      reminders: [],
+      shareConfig: raw.sc || {
+        enabled: true,
+        showVehicleInfo: true,
+        showMaintenance: true,
+        showRepairs: true,
+        showRevisions: true,
+        showHealthScore: true,
+        showOriginalDocs: false,
+        showPhotos: true,
+        showTimeline: true,
+        showValuation: true,
+      },
+      sellingConfig: raw.sl,
+      trustBadge: raw.tb,
+      privacyAcknowledged: true,
+      createdAt: raw.ca || new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    };
+
+    reconstructed.healthBreakdown = computeDynamicHealthScore(reconstructed);
+    if (typeof raw.hs === 'number') {
+      reconstructed.healthBreakdown.totalScore = raw.hs;
+      reconstructed.healthScore = raw.hs;
+    }
+
+    return reconstructed;
+  } catch (err) {
+    console.error('Failed to deserialize shared passport:', err);
+    return null;
+  }
+}
+
+export function buildPassportShareUrl(passport: VehiclePassportData, baseUrl?: string): string {
+  const origin = baseUrl || (typeof window !== 'undefined' ? window.location.origin : 'https://autoesperto.it');
+  const payload = serializePassportForShare(passport);
+  const encoded = encodePublicPassport(payload);
+  if (encoded) {
+    // Keep private profile data in the fragment, which browsers do not send
+    // to the server in HTTP requests or include in ordinary access logs.
+    return `${origin}/passport/public/${passport.shareCode}#d=${encoded}`;
+  }
+  return `${origin}/passport/public/${passport.shareCode}`;
+}
+
+export async function fetchPassportFromPublicApi(shareCode: string): Promise<VehiclePassportData | null> {
+  try {
+    const clean = shareCode.toUpperCase().trim();
+    const res = await fetch(`/api/passport/public/${clean}`);
+    if (!res.ok) return null;
+    const data = await res.json();
+    if (data.success && data.payload) {
+      if (typeof data.payload === 'string') {
+        return deserializePassportFromShare(data.payload);
+      }
+      if (data.payload.v) {
+        const enc = encodePublicPassport(data.payload);
+        return deserializePassportFromShare(enc);
+      }
+      return sanitizePassport(data.payload);
+    }
+    return null;
+  } catch {
+    return null;
+  }
 }
 
 export function savePassport(passport: VehiclePassportData): void {
@@ -372,7 +737,7 @@ export function createPassportFromReport(report: AutoReport, customNickname?: st
   const reliability = report.reliability || ({} as any);
 
   const year = vehicle.year || price.inputYear || new Date().getFullYear() - 3;
-  const km = price.inputKm || (vehicle as any).mileage || 50000;
+  const km = price.inputKm ?? (vehicle as any).mileage ?? 50000;
   const valMin = price.estimatedValue || 15000;
   const valMax = (price.market as any)?.maxPrice || (price.market as any)?.max || Math.round(valMin * 1.08);
   const repVerdict = reliability.verdict || (report as any).verdict || 'Buon Affare';
@@ -515,18 +880,9 @@ export function createNewPassport(input: {
   const shareCode = generateShareCode();
   const now = new Date().toISOString();
   const year = input.vehicle.year || new Date().getFullYear() - 3;
-  const km = input.currentKm || 50000;
+  const km = input.currentKm ?? 50000;
 
-  const initialTimeline: PassportTimelineItem[] = [
-    {
-      id: `evt-${Date.now()}-1`,
-      date: `${year}-05-15`,
-      km: 0,
-      type: 'IMMATRICOLAZIONE',
-      title: 'Prima Immatricolazione',
-      description: `Veicolo immatricolato nuovo in Italia (${input.vehicle.fuel || 'Alimentazione standard'}).`,
-    },
-  ];
+  const initialTimeline: PassportTimelineItem[] = [];
 
   const initialReminders: PassportReminderItem[] = [];
 
@@ -585,10 +941,10 @@ export function createNewPassport(input: {
     currentKm: km,
     lastKmDate: now.split('T')[0],
     healthScore: 88,
-    estimatedValue: 18500,
-    estimatedValueMax: 19800,
-    recommendedSellPrice: 19000,
-    attractiveBuyerPrice: 17800,
+    estimatedValue: undefined,
+    estimatedValueMax: undefined,
+    recommendedSellPrice: undefined,
+    attractiveBuyerPrice: undefined,
     insuranceExpiry: input.insuranceExpiry,
     insuranceCompany: input.insuranceCompany,
     revisionExpiry: input.revisionExpiry,
@@ -611,6 +967,7 @@ export function createNewPassport(input: {
     shareConfig: {
       enabled: true,
       showVehicleInfo: true,
+      showMileage: false,
       showMaintenance: true,
       showRepairs: true,
       showRevisions: true,
@@ -618,7 +975,7 @@ export function createNewPassport(input: {
       showOriginalDocs: false,
       showPhotos: true,
       showTimeline: true,
-      showValuation: true,
+      showValuation: false,
     },
     privacyAcknowledged: true,
     createdAt: now,

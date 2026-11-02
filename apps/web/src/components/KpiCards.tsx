@@ -1,3 +1,4 @@
+import { isBatteryElectric } from '@/lib/powertrain';
 import { useState } from 'react';
 import { Euro, Gauge, Wallet, Fuel, Calendar, HelpCircle, X, CheckCircle2, ChevronRight, Info } from 'lucide-react';
 import type { AutoReport } from '@autoesperto/types';
@@ -38,9 +39,7 @@ export function calculateRealisticAnnualCost(report: AutoReport): {
   const tax = rel.taxAnnual !== undefined ? rel.taxAnnual : bolloCalc.totale;
 
   // 3. Tipologia motore & consumi reali su percorrenza media italiana (10.000 km/anno)
-  const isElectric = fuel.includes('elettr') || fuel.includes('ev') || fuel.includes('bev') ||
-    /tesla|polestar|byd/.test(make) ||
-    /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(model);
+  const isElectric = isBatteryElectric(make, model, fuel);
   const isHybrid = fuel.includes('ibrid') || fuel.includes('hybrid') || fuel.includes('phev') || fuel.includes('hev');
   const isDiesel = fuel.includes('diesel') || fuel.includes('jtd') || fuel.includes('tdi') || fuel.includes('dci') || fuel.includes('hdi') || fuel.includes('cdti');
   const isGpl = fuel.includes('gpl') || fuel.includes('lpg');
@@ -143,7 +142,7 @@ export default function KpiCards({ report }: Props) {
   const makeLower = (vehicle.make || '').toLowerCase();
   const modelLower = (vehicle.model || '').toLowerCase();
 
-  const isElectric = rawUnit.includes('kwh') || rawUnit.includes('elettr') || fuelLower.includes('elettr') || fuelLower.includes('ev') || /tesla|polestar|byd/.test(makeLower) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(modelLower);
+  const isElectric = isBatteryElectric(makeLower, modelLower, fuelLower);
   const isKmL = rawUnit.includes('km/l') || rawUnit.includes('km/litro');
 
   let consumptionDisplay = isElectric ? '15.2 kWh/100 km' : '5.2 L/100 km';
@@ -163,7 +162,7 @@ export default function KpiCards({ report }: Props) {
       icon: Euro,
       label: 'Valore di Mercato',
       value: `${euro(pr.estimatedValue || 0)} €`,
-      desc: 'Stima prezzo reale',
+      desc: 'Stima indicativa',
       tone: 'indigo',
     },
     {

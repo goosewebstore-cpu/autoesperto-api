@@ -8,6 +8,7 @@ import { estimateConsumption } from '@/lib/consumi';
 import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { isCuratedModel } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -40,6 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: isCuratedModel(make.name, model), follow: true },
     alternates: {
       canonical: `/consumi/${resolved.make}/${resolved.model}`,
       languages: { 'it-IT': `${siteUrl()}/consumi/${resolved.make}/${resolved.model}` },
@@ -62,6 +64,7 @@ export default async function ConsumiModelPage({ params }: PageProps) {
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
+  const isCurated = isCuratedModel(make.name, model);
 
   const latest = estimateConsumption(make.name, model, CURRENT_YEAR);
 
@@ -149,7 +152,7 @@ export default async function ConsumiModelPage({ params }: PageProps) {
           </p>
         </section>
 
-        <AdBanner />
+        {isCurated && <AdBanner />}
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
@@ -247,7 +250,7 @@ export default async function ConsumiModelPage({ params }: PageProps) {
         <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
           <h2 className="text-lg font-bold text-text-primary">Valore e costi totali prima di comprare</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            I consumi sono una parte del costo di proprietà: confrontali con il valore reale di mercato, l&apos;affidabilità e i costi di manutenzione
+            I consumi sono una parte del costo di proprietà: confrontali con la stima indicativa, l&apos;affidabilità e i costi di manutenzione
             della {make.name} {model}.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">

@@ -1,6 +1,7 @@
 'use client';
 
 import { Component, type ReactNode } from 'react';
+import { trackEvent } from '@/lib/analytics';
 import { AlertTriangle } from 'lucide-react';
 
 interface Props {
@@ -25,6 +26,7 @@ export default class ReportErrorBoundary extends Component<Props, State> {
 
   componentDidCatch(error: Error) {
     console.error('ReportErrorBoundary caught:', error);
+    trackEvent('analysis_failed', { reason: 'report_render_failed' });
   }
 
   render() {

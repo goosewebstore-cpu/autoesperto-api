@@ -7,6 +7,7 @@ import { estimateConsumption } from '@/lib/consumi';
 import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { isCuratedMake } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string }>;
@@ -38,6 +39,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: isCuratedMake(make.name), follow: true },
     alternates: {
       canonical: `/consumi/${resolved.make}`,
       languages: { 'it-IT': `${siteUrl()}/consumi/${resolved.make}` },
@@ -82,7 +84,7 @@ export default async function ConsumiMakePage({ params }: PageProps) {
           </p>
         </section>
 
-        <AdBanner />
+        {isCuratedMake(make.name) && <AdBanner />}
 
         <section className="mt-8">
           <h2 className="text-lg font-bold text-text-primary mb-3">Modelli {make.name}</h2>

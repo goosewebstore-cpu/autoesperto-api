@@ -37,7 +37,7 @@ const credentialsSchema = z.object({
 
 const registerSchema = credentialsSchema.extend({
   name: z.string().trim().min(2, 'Inserisci il tuo nome').max(80),
-  termsAccepted: z.literal(true, { errorMap: () => ({ message: 'Accetta i Termini e la Privacy Policy' }) }),
+  termsAccepted: z.literal(true, { error: 'Accetta i Termini e la Privacy Policy' }),
 });
 
 async function accountSummary(userId: string) {

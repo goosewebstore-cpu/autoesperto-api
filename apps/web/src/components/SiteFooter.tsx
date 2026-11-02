@@ -1,135 +1,16 @@
+import CookiePreferencesButton from './CookiePreferencesButton';
 import Link from 'next/link';
-import { ShieldCheck, ArrowRight } from 'lucide-react';
-import NewsletterSignup from '@/components/NewsletterSignup';
-
-const VALUTAZIONI_LINKS = [
-  { label: 'Valutazione per modello', href: '/valutazione' },
-  { label: 'Controlla annuncio & Trust Score', href: '/analizza-annuncio' },
-  { label: 'Profilo Digitale Auto', href: '/passport' },
-  { label: 'AI Car Advisor', href: '/ai-car-advisor' },
-  { label: 'Auto Finder (Trova Auto)', href: '/auto-finder' },
-];
-
-const COMPRAVENDITA_LINKS = [
-  { label: 'Quanto vale la mia auto?', href: '/vendi' },
-  { label: 'Mi conviene comprarla?', href: '/compra' },
-  { label: 'Migliori auto usate', href: '/migliori-auto-usate' },
-  { label: 'Auto per neopatentati', href: '/neopatentati' },
-  { label: 'Confronta modelli', href: '/confronta' },
-];
-
-const COSTI_GUASTI_LINKS = [
-  { label: 'Calcolo bollo auto', href: '/calcolo-bollo' },
-  { label: 'Incentivi ed Ecobonus 2026', href: '/incentivi-auto' },
-  { label: 'Blocchi del traffico Euro', href: '/blocchi-traffico' },
-  { label: 'Passaggio di proprietà', href: '/passaggio-proprieta' },
-  { label: 'Affidabilità e guasti', href: '/affidabilita' },
-  { label: 'Guida problemi motori', href: '/motori-problemi' },
-];
-
-const INFO_LEGAL_LINKS = [
-  { label: 'Guide per l\'usato', href: '/guide' },
-  { label: 'Chi siamo', href: '/chi-siamo' },
-  { label: 'Contatti e assistenza', href: '/contatti' },
-  { label: 'Area personale', href: '/account' },
-  { label: 'Privacy & Cookie Policy', href: '/privacy' },
-  { label: 'Termini di Servizio & EULA', href: '/terms' },
-];
-
 export default function SiteFooter() {
-  return (
-    <footer className="mt-16 border-t border-slate-200 bg-white text-slate-600">
-      <div className="mx-auto max-w-6xl px-5 pt-14 pb-8">
-        {/* Newsletter */}
-        <div className="pb-10 border-b border-slate-200 mb-10">
-          <div className="max-w-md">
-            <NewsletterSignup />
-          </div>
-        </div>
-
-        {/* Main Footer Columns */}
-        <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 pb-10 border-b border-slate-200">
-          {/* Col 1: Brand & CTA */}
-          <div className="sm:col-span-2 md:col-span-3 lg:col-span-1 pr-2">
-            <div className="flex items-center gap-2.5">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src="/logo.png" alt="AutoEsperto Logo" className="h-9 w-9 rounded-full shadow-xs shrink-0 object-contain" width={36} height={36} />
-              <span className="text-lg font-bold tracking-tight text-slate-900">
-                Auto<span className="text-blue-600">Esperto</span>
-              </span>
-            </div>
-            <p className="mt-3 text-xs leading-relaxed text-slate-600">
-              Il tuo secondo parere prima di comprare o vendere un&apos;auto usata. Dati reali e stime trasparenti.
-            </p>
-            <Link
-              href="/#scanner-section"
-              className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-blue-600 px-3.5 py-2 text-xs font-bold text-white shadow-xs hover:bg-blue-700 transition"
-            >
-              Analizza auto gratis <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
-            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[11px] font-semibold text-slate-700">
-              <ShieldCheck className="h-3.5 w-3.5 text-emerald-600 shrink-0" />
-              100% gratuito
-            </div>
-          </div>
-
-          {/* Col 2: Valutazioni & AI */}
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Valutazioni &amp; AI</p>
-            <ul className="mt-3.5 space-y-2 text-xs">
-              {VALUTAZIONI_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 3: Compravendita */}
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Compravendita</p>
-            <ul className="mt-3.5 space-y-2 text-xs">
-              {COMPRAVENDITA_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 4: Costi & Guasti */}
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Costi &amp; Guasti</p>
-            <ul className="mt-3.5 space-y-2 text-xs">
-              {COSTI_GUASTI_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Col 5: Info & Note Legali */}
-          <div>
-            <p className="text-xs font-extrabold uppercase tracking-wider text-slate-900">Info &amp; Note Legali</p>
-            <ul className="mt-3.5 space-y-2 text-xs">
-              {INFO_LEGAL_LINKS.map((link) => (
-                <li key={link.href}>
-                  <Link href={link.href} className="text-slate-600 transition-colors hover:text-blue-600">{link.label}</Link>
-                </li>
-              ))}
-            </ul>
-          </div>
-        </div>
-
-        <div className="mt-7 flex flex-col items-center justify-between gap-4 text-center text-xs text-slate-500 sm:flex-row sm:text-left">
-          <p>
-            Le stime di AutoEsperto sono indicative e basate sui dati di mercato disponibili.
-            Danni nascosti o meccanici richiedono sempre un controllo professionale.
-          </p>
-          <p className="shrink-0">© {new Date().getFullYear()} AutoEsperto · autoesperto.it</p>
-        </div>
+  return <footer className="mt-12 border-t border-slate-200 bg-white text-slate-600">
+    <div className="mx-auto max-w-[1440px] px-5 py-8">
+      <div className="flex flex-col justify-between gap-6 sm:flex-row sm:items-center">
+        <div className="flex items-center gap-3"><img src="/logo.png" alt="" width={36} height={36} className="h-9 w-9 shrink-0 rounded-full object-contain" /><div><p className="font-extrabold text-slate-950">Auto<span className="text-blue-600">Esperto</span></p><p className="mt-1 text-xs">Un secondo parere, prima di scegliere.</p></div></div>
+        <nav aria-label="Link utili" className="flex flex-wrap gap-x-5 gap-y-3 text-sm font-semibold"><Link href="/guide" className="hover:text-blue-700">Guide</Link><Link href="/chi-siamo" className="hover:text-blue-700">Chi siamo</Link><Link href="/contatti" className="hover:text-blue-700">Assistenza</Link><Link href="/account" className="hover:text-blue-700">Il tuo account</Link></nav>
       </div>
-    </footer>
-  );
+      <div className="mt-6 flex flex-col gap-5 border-t border-slate-100 pt-5 sm:flex-row sm:items-center sm:justify-between">
+        <div className="text-xs"><p>© {new Date().getFullYear()} AutoEsperto</p><div className="mt-2 flex flex-wrap items-center gap-4"><Link href="/privacy" className="hover:underline">Privacy</Link><Link href="/cookie-policy" className="hover:underline">Cookie</Link><CookiePreferencesButton /><Link href="/terms" className="hover:underline">Termini e abbonamento</Link></div><p className="mt-3 max-w-lg text-[11px] leading-relaxed text-slate-400">Stime indicative. Per le condizioni reali dell’auto serve un controllo professionale.</p></div>
+        <div className="flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50 px-3 py-2"><img src="/images/brand/siracusa-web-design.webp" alt="Logo Siracusa Web Design" width={64} height={64} loading="lazy" className="h-16 w-16 rounded-xl object-contain" /><div><p className="text-[10px] uppercase tracking-wider text-slate-400">Ideazione e sviluppo</p><p className="mt-1 text-sm font-bold text-slate-800">Siracusa Web Design</p></div></div>
+      </div>
+    </div>
+  </footer>;
 }

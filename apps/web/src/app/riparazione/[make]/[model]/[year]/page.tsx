@@ -81,7 +81,7 @@ export default async function RepairYearPage({ params }: PageProps) {
     },
     {
       q: `Conviene riparare una ${make.name} ${model} del ${yearNum} o rottamarla?`,
-      a: `Come regola pratica conviene riparare quando il costo dell'intervento è inferiore al 50–70% del valore dell'auto. Per una ${make.name} ${model} ${yearNum}, controlla prima il valore reale di mercato: se la riparazione supera il valore dell'auto, spesso conviene cambiarla.`,
+      a: `Come regola pratica confronta il preventivo con una stima indicativa del veicolo e considera condizioni, necessità d'uso e altri interventi previsti. Per una ${make.name} ${model} ${yearNum}, fai valutare il singolo esemplare prima di decidere se ripararlo o sostituirlo.`,
     },
     {
       q: `Quanto costa la manutenzione annuale di una ${make.name} ${model} ${yearNum}?`,
@@ -215,7 +215,7 @@ export default async function RepairYearPage({ params }: PageProps) {
           <h2 className="text-lg font-bold text-text-primary">Riparare o rottamare? Dipende dal valore dell&apos;auto</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
             Regola pratica: conviene riparare se l&apos;intervento costa meno del 50–70% del valore dell&apos;auto. Controlla
-            il valore reale di mercato della {make.name} {model} {yearNum} prima di decidere.
+            una stima indicativa della {make.name} {model} {yearNum} prima di decidere.
           </p>
           <Link
             href={`/valutazione/${resolved.make}/${resolved.model}/${resolved.year}`}

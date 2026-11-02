@@ -1,3 +1,5 @@
+import { listingNumber } from './listingFacts';
+import { resolveVehicleFuel } from './powertrain';
 import { getAllMakes, slugify } from './catalogo';
 
 export interface ParsedAdData {
@@ -15,6 +17,8 @@ export interface ParsedAdData {
   source?: string;
   title?: string;
   rawText?: string;
+  readStatus?: 'complete' | 'partial' | 'blocked';
+  message?: string;
 }
 
 export async function fetchAndParseAd(input: string): Promise<ParsedAdData> {
@@ -40,9 +44,9 @@ export async function fetchAndParseAd(input: string): Promise<ParsedAdData> {
           ...json.data,
           make: json.data.make || localFallback.make,
           model: json.data.model || localFallback.model,
-          year: json.data.year || localFallback.year,
-          km: json.data.km || localFallback.km,
-          price: json.data.price || localFallback.price,
+          year: json.data.year ?? localFallback.year,
+          km: json.data.km ?? localFallback.km,
+          price: json.data.price ?? localFallback.price,
           fuel: json.data.fuel || localFallback.fuel,
           version: json.data.version || localFallback.version,
         };
@@ -59,7 +63,7 @@ const COMMON_FUELS = [
   { key: 'diesel', label: 'Diesel', regex: /\b(diesel|jtd|tdi|dci|hdi|cdti|crdi|bluehdi|d-4d|d4d)\b/i },
   { key: 'benzina', label: 'Benzina', regex: /\b(benzina|tsi|tfsi|puretech|tce|ecoboost|vti|firefly|fire|skyactiv-g)\b/i },
   { key: 'ibrida', label: 'Ibrida', regex: /\b(ibrid[ao]|hybrid|hev|phev|mhev|mild[- ]hybrid|plug[- ]in)\b/i },
-  { key: 'gpl', label: 'GPL', regex: /\b(gpl|lpg|bifuel|bi-fuel|dual)\b/i },
+  { key: 'gpl', label: 'GPL', regex: /\b(gpl|lpg|bifuel|bi-fuel)\b/i },
   { key: 'metano', label: 'Metano', regex: /\b(metano|cng|natural power|g-tron|tgi)\b/i },
   { key: 'elettrica', label: 'Elettrica', regex: /\b(elettric[ao]|bev|ev|full electric|kwh)\b/i },
 ];
@@ -79,7 +83,7 @@ export function parseListingTextOrUrl(input: string): ParsedAdData {
       const url = new URL(text);
       const decodedPath = decodeURIComponent(url.pathname);
       const decodedSearch = decodeURIComponent(url.search);
-      searchSpace = `${decodedPath} ${decodedSearch} ${text}`;
+      searchSpace = `${decodedPath.split('/id/')[0].replace(/[-_/]/g,' ')} ${['year','anno','km','mileage','price','prezzo'].map(key => url.searchParams.has(key) ? key+'='+url.searchParams.get(key) : '').join(' ')}`;
     } catch {
       // Proceed with raw text
     }
@@ -88,11 +92,10 @@ export function parseListingTextOrUrl(input: string): ParsedAdData {
   // 1. Prezzo: es. "9.500 €", "€ 14.800", "12500 euro", "price=15000", "prezzo: 10000"
   const priceMatch =
     searchSpace.match(/(?:€|eur|euro)\s*(\d{1,3}(?:[.,]\d{3})+|\d{3,6})/i) ||
-    searchSpace.match(/(\d{1,3}(?:[.,]\d{3})+|\d{3,6})\s*(?:€|eur|euro)\b/i) ||
+    searchSpace.match(/(\d{1,3}(?:[.,]\d{3})+(?:[.,]\d{2})?|\d{3,6}(?:[.,]\d{2})?)\s*(?:€|eur\b|euro\b)/i) ||
     searchSpace.match(/(?:prezzo|price)[:=\s]+(\d{1,3}(?:[.,]\d{3})+|\d{3,6})/i);
   if (priceMatch) {
-    const rawVal = priceMatch[1].replace(/[.,]/g, '');
-    const num = parseInt(rawVal, 10);
+    const num = listingNumber(priceMatch[1]) ?? NaN;
     if (!isNaN(num) && num >= 500 && num <= 500000) {
       result.price = num;
     }
@@ -106,12 +109,11 @@ export function parseListingTextOrUrl(input: string): ParsedAdData {
 
   // 3. Chilometri: es. "45.000 km", "km 65.000", "km: 65000", "mileage=80000"
   const kmMatch =
-    searchSpace.match(/(\d{1,3}(?:[.,]\d{3})+|\d{4,6})\s*(?:km|chilometri|mila km)\b/i) ||
-    searchSpace.match(/(?:km|chilometri|chilometraggio|mileage)[:=\s]+(\d{1,3}(?:[.,]\d{3})+|\d{4,6})/i);
+    searchSpace.match(/(\d{1,3}(?:[.,]\d{3})+|\d{1,7})\s*(?:km|chilometri)\b/i) ||
+    searchSpace.match(/(?:km|chilometri|chilometraggio|mileage)[:=\s]+(\d{1,3}(?:[.,]\d{3})+|\d{1,7})/i);
   if (kmMatch) {
-    const rawKm = kmMatch[1].replace(/[.,]/g, '');
-    const numKm = parseInt(rawKm, 10);
-    if (!isNaN(numKm) && numKm >= 100 && numKm <= 1000000 && numKm !== result.year) {
+    const numKm = listingNumber(kmMatch[1]) ?? NaN;
+    if (!isNaN(numKm) && numKm >= 0 && numKm <= 1000000 && numKm !== result.year) {
       result.km = numKm;
     }
   }

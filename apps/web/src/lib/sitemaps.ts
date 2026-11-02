@@ -1,12 +1,9 @@
 import { getAllMakes, slugify } from './catalogo';
 import { guides } from './guides';
+import { POPULAR_MODELS, isCuratedMake } from './popular';
 
 export const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
-/** ISO date string used as default lastmod — falls back to today. */
-const BUILD_DATE =
-  process.env.BUILD_DATE ||
-  new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
 export interface UrlEntry {
   url: string;
@@ -16,37 +13,37 @@ export interface UrlEntry {
 }
 
 const staticPages: UrlEntry[] = [
-  { url: siteUrl, changeFrequency: 'weekly', priority: 1, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/auto-finder`, changeFrequency: 'daily', priority: 0.95, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/ai-car-advisor`, changeFrequency: 'daily', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/analizza-annuncio`, changeFrequency: 'daily', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/confronta`, changeFrequency: 'daily', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/buying-room`, changeFrequency: 'daily', priority: 0.85, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/compra`, changeFrequency: 'weekly', priority: 0.85, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/vendi`, changeFrequency: 'weekly', priority: 0.85, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/valutazione`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/riparazione`, changeFrequency: 'weekly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/affidabilita`, changeFrequency: 'weekly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/consumi`, changeFrequency: 'weekly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/guide`, changeFrequency: 'weekly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/chi-siamo`, changeFrequency: 'monthly', priority: 0.6, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/verifica-targa`, changeFrequency: 'monthly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/calcolo-bollo`, changeFrequency: 'monthly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/passaggio-proprieta`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/neopatentati`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/incentivi-auto`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/blocchi-traffico`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/migliori-auto-usate`, changeFrequency: 'weekly', priority: 0.9, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/motori-problemi`, changeFrequency: 'weekly', priority: 0.85, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/passport`, changeFrequency: 'weekly', priority: 0.8, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/condizione`, changeFrequency: 'monthly', priority: 0.7, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/contatti`, changeFrequency: 'yearly', priority: 0.5, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/lavora-con-noi`, changeFrequency: 'monthly', priority: 0.6, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/terms`, changeFrequency: 'yearly', priority: 0.3, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/cookie-policy`, changeFrequency: 'yearly', priority: 0.3, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/eula`, changeFrequency: 'yearly', priority: 0.3, lastmod: BUILD_DATE },
-  { url: `${siteUrl}/dmca`, changeFrequency: 'yearly', priority: 0.3, lastmod: BUILD_DATE },
+  { url: siteUrl, changeFrequency: 'weekly', priority: 1 },
+  { url: `${siteUrl}/auto-finder`, changeFrequency: 'daily', priority: 0.95 },
+  { url: `${siteUrl}/ai-car-advisor`, changeFrequency: 'daily', priority: 0.9 },
+  { url: `${siteUrl}/analizza-annuncio`, changeFrequency: 'daily', priority: 0.9 },
+  { url: `${siteUrl}/confronta`, changeFrequency: 'daily', priority: 0.9 },
+  { url: `${siteUrl}/compra`, changeFrequency: 'weekly', priority: 0.85 },
+  { url: `${siteUrl}/vendi`, changeFrequency: 'weekly', priority: 0.85 },
+  { url: `${siteUrl}/valutazione`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/riparazione`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/affidabilita`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/consumi`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/guide/archivio`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/guide`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/chi-siamo`, changeFrequency: 'monthly', priority: 0.6 },
+  { url: `${siteUrl}/verifica-targa`, changeFrequency: 'monthly', priority: 0.8 },
+  { url: `${siteUrl}/calcolo-bollo`, changeFrequency: 'monthly', priority: 0.8 },
+  { url: `${siteUrl}/passaggio-proprieta`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/neopatentati`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/incentivi-auto`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/blocchi-traffico`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/migliori-auto-usate`, changeFrequency: 'weekly', priority: 0.9 },
+  { url: `${siteUrl}/motori-problemi`, changeFrequency: 'weekly', priority: 0.85 },
+  { url: `${siteUrl}/passport`, changeFrequency: 'weekly', priority: 0.8 },
+  { url: `${siteUrl}/condizione`, changeFrequency: 'monthly', priority: 0.7 },
+  { url: `${siteUrl}/contatti`, changeFrequency: 'yearly', priority: 0.5 },
+  { url: `${siteUrl}/lavora-con-noi`, changeFrequency: 'monthly', priority: 0.6 },
+  { url: `${siteUrl}/privacy`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${siteUrl}/terms`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${siteUrl}/cookie-policy`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${siteUrl}/eula`, changeFrequency: 'yearly', priority: 0.3 },
+  { url: `${siteUrl}/dmca`, changeFrequency: 'yearly', priority: 0.3 },
 ];
 
 function uniqueUrls(entries: UrlEntry[]): UrlEntry[] {
@@ -61,12 +58,7 @@ function uniqueUrls(entries: UrlEntry[]): UrlEntry[] {
 }
 
 export function sitemapNames(): string[] {
-  return [
-    'static',
-    'guides',
-    'makes',
-    'models',
-  ];
+  return ['static', 'guides', 'makes', 'models'];
 }
 
 export function buildSitemap(name: string): UrlEntry[] {
@@ -80,87 +72,79 @@ export function buildSitemap(name: string): UrlEntry[] {
         url: `${siteUrl}/guide/${guide.slug}`,
         changeFrequency: 'weekly',
         priority: 0.85,
-        lastmod: guide.published,
+        lastmod: guide.updated || guide.published,
       }));
     case 'makes':
       return uniqueUrls(
-        getAllMakes().map((make) => ({
+        getAllMakes().filter((make) => isCuratedMake(make.name)).map((make) => ({
           url: `${siteUrl}/valutazione/${make.slug}`,
           changeFrequency: 'weekly',
           priority: 0.7,
-          lastmod: BUILD_DATE,
+
         }))
       );
     case 'models':
       return uniqueUrls(
-        getAllMakes().flatMap((make) =>
-          make.models.map((model) => ({
-            url: `${siteUrl}/valutazione/${make.slug}/${slugify(model)}`,
+        POPULAR_MODELS.map((popular) => ({
+            url: `${siteUrl}${popular.href}`,
             changeFrequency: 'weekly',
             priority: 0.6,
-            lastmod: BUILD_DATE,
+  
           }))
-        )
       );
     case 'rip-makes':
       return uniqueUrls(
-        getAllMakes().map((make) => ({
+        getAllMakes().filter((make) => isCuratedMake(make.name)).map((make) => ({
           url: `${siteUrl}/riparazione/${make.slug}`,
           changeFrequency: 'weekly',
           priority: 0.7,
-          lastmod: BUILD_DATE,
+
         }))
       );
     case 'rip-models':
       return uniqueUrls(
-        getAllMakes().flatMap((make) =>
-          make.models.map((model) => ({
-            url: `${siteUrl}/riparazione/${make.slug}/${slugify(model)}`,
+        POPULAR_MODELS.map((popular) => ({
+            url: `${siteUrl}/riparazione/${slugify(popular.make)}/${slugify(popular.model)}`,
             changeFrequency: 'weekly',
             priority: 0.6,
-            lastmod: BUILD_DATE,
+  
           }))
-        )
       );
     case 'aff-makes':
       return uniqueUrls(
-        getAllMakes().map((make) => ({
+        getAllMakes().filter((make) => isCuratedMake(make.name)).map((make) => ({
           url: `${siteUrl}/affidabilita/${make.slug}`,
           changeFrequency: 'weekly',
           priority: 0.7,
-          lastmod: BUILD_DATE,
+
         }))
       );
     case 'aff-models':
       return uniqueUrls(
-        getAllMakes().flatMap((make) =>
-          make.models.map((model) => ({
-            url: `${siteUrl}/affidabilita/${make.slug}/${slugify(model)}`,
+        POPULAR_MODELS.map((popular) => ({
+            url: `${siteUrl}/affidabilita/${slugify(popular.make)}/${slugify(popular.model)}`,
             changeFrequency: 'weekly',
             priority: 0.6,
-            lastmod: BUILD_DATE,
+  
           }))
-        )
       );
     case 'cons-makes':
       return uniqueUrls(
-        getAllMakes().map((make) => ({
+        getAllMakes().filter((make) => isCuratedMake(make.name)).map((make) => ({
           url: `${siteUrl}/consumi/${make.slug}`,
           changeFrequency: 'weekly',
           priority: 0.7,
-          lastmod: BUILD_DATE,
+
         }))
       );
     case 'cons-models':
       return uniqueUrls(
-        getAllMakes().flatMap((make) =>
-          make.models.map((model) => ({
-            url: `${siteUrl}/consumi/${make.slug}/${slugify(model)}`,
+        POPULAR_MODELS.map((popular) => ({
+            url: `${siteUrl}/consumi/${slugify(popular.make)}/${slugify(popular.model)}`,
             changeFrequency: 'weekly',
             priority: 0.6,
-            lastmod: BUILD_DATE,
+  
           }))
-        )
       );
     default:
       return [];

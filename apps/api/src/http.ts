@@ -18,6 +18,8 @@ export const forbidden = (message: string): HttpError => new HttpError(403, mess
 
 export const conflict = (message: string): HttpError => new HttpError(409, message);
 
+export const paymentRequired = (message: string): HttpError => new HttpError(402, message);
+
 export const notFound = (message: string): HttpError => new HttpError(404, message);
 
 export const serviceUnavailable = (message: string): HttpError => new HttpError(503, message);

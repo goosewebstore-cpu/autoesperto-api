@@ -2,13 +2,27 @@
 
 import { useState } from 'react';
 import Link from 'next/link';
-import { Search, ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, Sparkles, Car } from 'lucide-react';
+import { Search, ArrowRight, ShieldCheck, CheckCircle2, AlertCircle, Sparkles, Car, ExternalLink } from 'lucide-react';
 
 export default function VerificaTargaClient() {
   const [targa, setTarga] = useState('');
   const [error, setError] = useState('');
-  const [isScanning, setIsScanning] = useState(false);
   const [checked, setChecked] = useState(false);
+  const [portalHint, setPortalHint] = useState('');
+
+  const passPlate = (destination: 'bollo' | 'passport') => {
+    try { sessionStorage.setItem(`autoesperto:plate:${destination}`, targa.replace(/\s+/g, '').toUpperCase()); } catch { /* Storage may be unavailable. */ }
+  };
+
+  const openRevisionPortal = async () => {
+    const clean = targa.replace(/\s+/g, '').toUpperCase();
+    try {
+      await navigator.clipboard.writeText(clean);
+      setPortalHint(`Targa ${clean} copiata: incollala nel Portale dell'Automobilista.`);
+    } catch {
+      setPortalHint(`Sul Portale dell'Automobilista inserisci la targa ${clean}.`);
+    }
+  };
 
   // Formato targa italiana standard: 2 lettere, 3 numeri, 2 lettere (es. AB123CD)
   // O formato vecchio (es. MI123456 o RM123456)
@@ -31,13 +45,7 @@ export default function VerificaTargaClient() {
       return;
     }
     setError('');
-    setIsScanning(true);
-    setChecked(false);
-
-    setTimeout(() => {
-      setIsScanning(false);
-      setChecked(true);
-    }, 900);
+    setChecked(true);
   };
 
   return (
@@ -50,9 +58,6 @@ export default function VerificaTargaClient() {
           </label>
           
           <div className="relative flex items-center overflow-hidden rounded-xl">
-            {/* Fascio laser animato durante scansione */}
-            {isScanning && <div className="laser-line z-20 pointer-events-none" />}
-
             {/* Banda blu sinistra europea */}
             <div className="absolute left-2.5 flex flex-col items-center justify-center w-7 h-11 bg-blue-700 text-white rounded-l-md text-[9px] font-bold select-none z-10">
               <span className="text-yellow-300 text-[10px] leading-none mb-0.5">★</span>
@@ -63,7 +68,6 @@ export default function VerificaTargaClient() {
               id="targa-input"
               type="text"
               value={targa}
-              disabled={isScanning}
               onChange={(e) => {
                 setTarga(e.target.value.toUpperCase());
                 if (error) setError('');
@@ -71,9 +75,7 @@ export default function VerificaTargaClient() {
               }}
               placeholder="AA 000 BB"
               maxLength={8}
-              className={`w-full h-14 pl-12 pr-12 text-center text-2xl tracking-[0.25em] font-mono font-extrabold uppercase rounded-xl border-2 bg-slate-50 text-slate-900 placeholder:text-slate-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-base focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-600/10 transition-all shadow-inner ${
-                isScanning ? 'border-blue-500 bg-blue-50/40 ring-4 ring-blue-500/20' : 'border-slate-300'
-              }`}
+              className="w-full h-14 pl-12 pr-12 text-center text-2xl tracking-[0.25em] font-mono font-extrabold uppercase rounded-xl border-2 border-slate-300 bg-slate-50 text-slate-900 placeholder:text-slate-300 placeholder:tracking-normal placeholder:font-sans placeholder:text-base focus:border-blue-600 focus:bg-white focus:outline-none focus:ring-4 focus:ring-blue-600/10 transition-all shadow-inner"
             />
 
             {/* Banda blu destra */}
@@ -92,24 +94,14 @@ export default function VerificaTargaClient() {
 
           <button
             type="submit"
-            disabled={isScanning}
             className="w-full h-12 inline-flex items-center justify-center gap-2 rounded-xl bg-blue-600 px-6 font-bold text-white shadow-lg shadow-blue-600/25 hover:bg-blue-700 hover:shadow-xl active:scale-[0.99] disabled:opacity-80 transition-all"
           >
-            {isScanning ? (
-              <>
-                <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
-                Scansione registri in corso...
-              </>
-            ) : (
-              <>
-                <Search className="w-4 h-4" />
-                Verifica Targa Gratis
-              </>
-            )}
+            <Search className="w-4 h-4" />
+            Controlla il formato della targa
           </button>
 
           <p className="text-center text-[11px] text-slate-500">
-            Nessuna registrazione richiesta · 100% anonimo e gratuito
+            Controllo gratuito del formato · questa schermata non interroga registri esterni
           </p>
         </form>
       </div>
@@ -120,14 +112,14 @@ export default function VerificaTargaClient() {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-blue-200/80 pb-5">
             <div>
               <div className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 uppercase tracking-wider bg-blue-100 px-2.5 py-1 rounded-full mb-1">
-                <CheckCircle2 className="w-3.5 h-3.5" /> Targa identificata
+                <CheckCircle2 className="w-3.5 h-3.5" /> Formato riconosciuto
               </div>
               <h3 className="text-xl font-extrabold text-slate-900 font-mono tracking-wider">
                 {targa.replace(/\s+/g, '').toUpperCase()}
               </h3>
             </div>
             <div className="text-xs text-slate-600">
-              Formato valido del registro italiano
+              Controllo locale del formato
             </div>
           </div>
 
@@ -141,7 +133,7 @@ export default function VerificaTargaClient() {
                   Vuoi conoscere valore di mercato, affidabilità e difetti?
                 </h4>
                 <p className="text-xs text-slate-600 leading-relaxed mt-1">
-                  Inserisci la marca e il modello (o carica una foto) sullo scanner di AutoEsperto per ottenere quotazione in tempo reale, storico prezzi e checklist pre-acquisto.
+                  Questa verifica controlla solo che la sequenza assomigli a una targa italiana: non consulta l’intestatario, la revisione o l’assicurazione. Per una verifica storica su richiesta, chiedici prima disponibilità e prezzo.
                 </p>
               </div>
             </div>
@@ -157,27 +149,34 @@ export default function VerificaTargaClient() {
               </Link>
               <Link
                 href="/calcolo-bollo"
+                onClick={() => passPlate('bollo')}
                 className="inline-flex items-center justify-center gap-2 rounded-xl bg-slate-100 hover:bg-slate-200 px-5 py-3 text-sm font-bold text-slate-700 transition-colors"
               >
                 Calcola il Bollo Auto
               </Link>
+              <Link
+                href="/passport"
+                onClick={() => passPlate('passport')}
+                className="inline-flex items-center justify-center gap-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 px-5 py-3 text-sm font-bold text-emerald-800 transition-colors"
+              >
+                Aggiungi la tua auto (facoltativo)
+              </Link>
             </div>
+            <p className="text-xs text-slate-600">Il profilo richiede solo dati dell'auto. La targa resta privata; scegli tu se mostrare pubblicamente punteggio, km, stima, foto e storico. Un recapito è facoltativo solo se attivi la modalità vendita.</p>
           </div>
 
           <div className="grid sm:grid-cols-3 gap-3 text-xs text-slate-600">
-            <div className="flex items-center gap-2 p-3 bg-white/70 rounded-lg border border-blue-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Verifica revisione su Portale dell&apos;Automobilista</span>
-            </div>
-            <div className="flex items-center gap-2 p-3 bg-white/70 rounded-lg border border-blue-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Controllo fermi amministrativi ACI</span>
-            </div>
-            <div className="flex items-center gap-2 p-3 bg-white/70 rounded-lg border border-blue-100">
-              <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-              <span>Valutazione valore medio da annunci reali</span>
-            </div>
+            <a href="https://www.ilportaledellautomobilista.it/interrogazionistoricorevisioni/spa/" target="_blank" rel="noopener noreferrer" onClick={openRevisionPortal} className="flex items-center justify-between gap-2 p-3 bg-white/70 rounded-lg border border-blue-100 hover:border-blue-300">
+              <span><ShieldCheck className="mr-2 inline h-4 w-4 text-emerald-600" />Revisioni e km registrati</span><ExternalLink className="h-3.5 w-3.5 shrink-0" />
+            </a>
+            <a href="https://www.ilportaledellautomobilista.it/web/portale-automobilista/ext/verifica-copertura-rc" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-2 p-3 bg-white/70 rounded-lg border border-blue-100 hover:border-blue-300">
+              <span><ShieldCheck className="mr-2 inline h-4 w-4 text-emerald-600" />Copertura assicurativa RCA</span><ExternalLink className="h-3.5 w-3.5 shrink-0" />
+            </a>
+            <a href="https://www.aci.it/servizi/la-visura-pra/" target="_blank" rel="noopener noreferrer" className="flex items-center justify-between gap-2 p-3 bg-white/70 rounded-lg border border-blue-100 hover:border-blue-300">
+              <span><ShieldCheck className="mr-2 inline h-4 w-4 text-emerald-600" />Visura e gravami PRA</span><ExternalLink className="h-3.5 w-3.5 shrink-0" />
+            </a>
           </div>
+          {portalHint && <p role="status" className="text-xs text-blue-800">{portalHint}</p>}
         </div>
       )}
     </div>

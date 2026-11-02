@@ -19,6 +19,9 @@ export interface Guide {
   title: string;
   description: string;
   published: string;
+  updated?: string;
+  sources?: string[];
+  editorialNote?: string;
   category: GuideCategory;
   sections?: GuideSection[];
   content?: string;

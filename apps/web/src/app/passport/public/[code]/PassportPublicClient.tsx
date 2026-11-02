@@ -24,26 +24,125 @@ import {
   Fuel,
   Gauge,
   Share2,
+  Copy,
+  Check,
 } from 'lucide-react';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
-import { getPassportByShareCode, ensureSamplePassport, computeDynamicHealthScore, getTrustBadgeForPassport } from '@/lib/passportStorage';
+import {
+  getPassportByShareCode,
+  ensureSamplePassport,
+  computeDynamicHealthScore,
+  getTrustBadgeForPassport,
+  deserializePassportFromShare,
+  saveSharedPassportCache,
+  fetchPassportFromPublicApi,
+  buildPassportShareUrl,
+} from '@/lib/passportStorage';
 import { getVehiclePassportPhoto } from '@/lib/vehicleImageResolver';
 import type { VehiclePassportData } from '@autoesperto/types';
 
 export default function PassportPublicClient({ code }: { code: string }) {
   const [passport, setPassport] = useState<VehiclePassportData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
-    let p = getPassportByShareCode(code);
-    if (!p) {
-      const sample = ensureSamplePassport();
-      if (sample.shareCode.toUpperCase() === code.toUpperCase() || code.toUpperCase() === 'SAMPLE' || code.toUpperCase() === 'AE-48291') {
-        p = sample;
+    let isMounted = true;
+
+    async function loadPassport() {
+      const cleanCode = (code || '').toUpperCase().trim();
+
+      // 1. Check compact share data in the fragment (#d=...); retain legacy query support.
+      if (typeof window !== 'undefined') {
+        const urlParams = new URLSearchParams(window.location.search);
+        let encodedData = urlParams.get('d') || urlParams.get('data') || urlParams.get('p');
+
+        if (!encodedData && window.location.hash) {
+          const hashParams = new URLSearchParams(window.location.hash.replace(/^#/, ''));
+          encodedData = hashParams.get('d') || hashParams.get('data');
+        }
+
+        if (encodedData) {
+          const fromUrl = deserializePassportFromShare(encodedData);
+          if (fromUrl) {
+            saveSharedPassportCache(fromUrl);
+            if (isMounted) {
+              setPassport(fromUrl);
+              setLoading(false);
+            }
+            // Keep the fragment in the URL so refreshing still works.
+            return;
+          }
+          // If ?d= was present but decode failed (truncated URL etc.), continue to fallbacks
+        }
+      }
+
+      // 2. Check local garage or shared cache
+      const local = getPassportByShareCode(cleanCode);
+      if (local) {
+        if (isMounted) {
+          setPassport(local);
+          setLoading(false);
+        }
+        return;
+      }
+
+      // 3. Try fetching from server API
+      try {
+        const remote = await fetchPassportFromPublicApi(cleanCode);
+        if (remote && isMounted) {
+          saveSharedPassportCache(remote);
+          setPassport(remote);
+          setLoading(false);
+          return;
+        }
+      } catch {}
+
+      // 4. Sample fallback ONLY if code is specifically AE-48291 or SAMPLE
+      if (cleanCode === 'AE-48291' || cleanCode === 'SAMPLE') {
+        const sample = ensureSamplePassport();
+        if (isMounted) {
+          setPassport(sample);
+          setLoading(false);
+        }
+        return;
+      }
+
+      if (isMounted) {
+        setPassport(null);
+        setLoading(false);
       }
     }
-    setPassport(p);
+
+    loadPassport();
+
+    return () => {
+      isMounted = false;
+    };
   }, [code]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen flex flex-col bg-slate-50 dark:bg-slate-950">
+        <SiteHeader />
+        <main className="flex-1 max-w-xl mx-auto px-4 py-28 text-center space-y-4">
+          <div className="relative w-16 h-16 mx-auto">
+            <div className="w-16 h-16 rounded-3xl bg-blue-600/10 dark:bg-blue-500/10 flex items-center justify-center animate-pulse">
+              <Car className="w-8 h-8 text-blue-600 animate-bounce" />
+            </div>
+          </div>
+          <h2 className="text-lg font-black text-slate-800 dark:text-white">
+            Caricamento Profilo Digitale Auto...
+          </h2>
+          <p className="text-xs text-slate-500 font-mono">
+            Verifica dello storico del veicolo ({code.toUpperCase()})
+          </p>
+        </main>
+        <SiteFooter />
+      </div>
+    );
+  }
 
   if (!passport || passport.shareConfig?.enabled === false) {
     return (
@@ -86,6 +185,18 @@ export default function PassportPublicClient({ code }: { code: string }) {
   const selling = passport.sellingConfig;
   const mainPhoto = getVehiclePassportPhoto(passport);
 
+  const currentWorkingShareUrl = typeof window !== 'undefined'
+    ? (passport ? buildPassportShareUrl(passport, window.location.origin) : window.location.href)
+    : `https://autoesperto.it/passport/public/${passport.shareCode}`;
+
+  const handleCopyPublicLink = () => {
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      void navigator.clipboard.writeText(currentWorkingShareUrl);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <div className="min-h-screen flex flex-col bg-slate-100/70 dark:bg-slate-950 text-slate-900 dark:text-white">
       <SiteHeader />
@@ -107,7 +218,7 @@ export default function PassportPublicClient({ code }: { code: string }) {
 
               <div className="flex items-center gap-2">
                 <a
-                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Guarda il Profilo Digitale certificato di questa ${v.make} ${v.model} su AutoEsperto: ${typeof window !== 'undefined' ? window.location.href : `https://autoesperto.it/passport/public/${passport.shareCode}`}`)}`}
+                  href={`https://api.whatsapp.com/send?text=${encodeURIComponent(`Guarda il profilo auto di questa ${v.make} ${v.model} su AutoEsperto: ${currentWorkingShareUrl}`)}`}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-emerald-600/90 hover:bg-emerald-500 text-white font-bold text-xs shadow-xs transition-all"
@@ -118,16 +229,12 @@ export default function PassportPublicClient({ code }: { code: string }) {
 
                 <button
                   type="button"
-                  onClick={() => {
-                    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-                      void navigator.clipboard.writeText(window.location.href);
-                      alert('Link del Profilo Digitale copiato negli appunti!');
-                    }
-                  }}
-                  className="inline-flex items-center gap-1 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition-all"
+                  onClick={handleCopyPublicLink}
+                  className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs border border-slate-700 transition-all"
                   title="Copia link"
                 >
-                  <Share2 className="w-3.5 h-3.5" /> Copia link
+                  {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5" />}
+                  {copied ? 'Copiato!' : 'Copia link'}
                 </button>
               </div>
             </div>
@@ -144,20 +251,20 @@ export default function PassportPublicClient({ code }: { code: string }) {
                 )}
 
                 <div className="mt-4 flex flex-wrap items-center gap-2 text-xs">
-                  <span className="bg-blue-600/40 border border-blue-400/40 text-blue-200 px-3 py-1.5 rounded-xl font-mono font-black">
-                    {passport.currentKm.toLocaleString('it-IT')} km certificati
-                  </span>
-                  {v.year && (
+                  {cfg.showMileage === true && typeof passport.currentKm === 'number' && <span className="bg-blue-600/40 border border-blue-400/40 text-blue-200 px-3 py-1.5 rounded-xl font-mono font-black">
+                    {passport.currentKm.toLocaleString('it-IT')} km dichiarati
+                  </span>}
+                  {cfg.showVehicleInfo && v.year && (
                     <span className="bg-white/10 text-slate-300 px-3 py-1.5 rounded-xl font-semibold">
                       Anno {v.year}
                     </span>
                   )}
-                  {v.fuel && (
+                  {cfg.showVehicleInfo && v.fuel && (
                     <span className="bg-white/10 text-slate-300 px-3 py-1.5 rounded-xl font-semibold flex items-center gap-1">
                       <Fuel className="w-3.5 h-3.5 text-slate-400" /> {v.fuel}
                     </span>
                   )}
-                  {v.euroClass && (
+                  {cfg.showVehicleInfo && v.euroClass && (
                     <span className="bg-white/10 text-slate-300 px-3 py-1.5 rounded-xl font-semibold">
                       {v.euroClass}
                     </span>
@@ -241,16 +348,17 @@ export default function PassportPublicClient({ code }: { code: string }) {
               <p className="text-xs text-slate-600 dark:text-slate-300 leading-relaxed">
                 {health.verdictNote}
               </p>
+              <p className="text-[11px] text-slate-500">Punteggio indicativo calcolato sui dati inseriti nel profilo; non è una certificazione tecnica.</p>
 
               <div className="grid sm:grid-cols-2 md:grid-cols-4 gap-3 pt-2">
                 <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
                   <span className="text-[11px] text-slate-500 font-semibold">Manutenzione</span>
                   <p className="text-base font-black text-slate-900 dark:text-white">{health.maintenanceScore}/100</p>
                 </div>
-                <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
+                {cfg.showMileage === true && <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
                   <span className="text-[11px] text-slate-500 font-semibold">Chilometraggio</span>
                   <p className="text-base font-black text-slate-900 dark:text-white">{health.mileageScore}/100</p>
-                </div>
+                </div>}
                 <div className="p-3 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-700">
                   <span className="text-[11px] text-slate-500 font-semibold">Carrozzeria</span>
                   <p className="text-base font-black text-slate-900 dark:text-white">{health.bodyConditionScore}/100</p>
@@ -267,7 +375,7 @@ export default function PassportPublicClient({ code }: { code: string }) {
           {cfg.showPhotos && passport.photos?.length > 0 && (
             <section className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
               <h2 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Camera className="w-4 h-4 text-blue-600" /> Galleria Fotografica Certificata ({passport.photos.length})
+                <Camera className="w-4 h-4 text-blue-600" /> Foto condivise ({passport.photos.length})
               </h2>
 
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
@@ -291,7 +399,7 @@ export default function PassportPublicClient({ code }: { code: string }) {
           {cfg.showTimeline && passport.timeline?.length > 0 && (
             <section className="bg-white dark:bg-slate-900 rounded-3xl p-5 sm:p-6 border border-slate-200 dark:border-slate-800 shadow-sm space-y-4">
               <h2 className="text-base font-extrabold text-slate-900 dark:text-white flex items-center gap-2">
-                <Clock className="w-4 h-4 text-blue-600" /> Storico e Manutenzione Dimostrabile ({passport.timeline.length} eventi)
+                <Clock className="w-4 h-4 text-blue-600" /> Storico dichiarato ({passport.timeline.length} eventi)
               </h2>
 
               <div className="space-y-3 pl-2 border-l-2 border-slate-200 dark:border-slate-800 ml-3">
@@ -302,9 +410,9 @@ export default function PassportPublicClient({ code }: { code: string }) {
                       <span className="text-xs font-bold text-slate-900 dark:text-white">{evt.title}</span>
                       <span className="text-[11px] text-slate-400 font-medium">{evt.date}</span>
                     </div>
-                    {evt.km && (
+                    {cfg.showMileage === true && evt.km && (
                       <span className="inline-block text-[10px] font-bold px-2 py-0.5 rounded-md bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300">
-                        {evt.km.toLocaleString('it-IT')} km registrati
+                        {evt.km.toLocaleString('it-IT')} km dichiarati
                       </span>
                     )}
                     {evt.description && (
@@ -333,7 +441,7 @@ export default function PassportPublicClient({ code }: { code: string }) {
                 )}
               </p>
               <p className="text-xs text-slate-500">
-                Basato sull&apos;analisi in tempo reale di migliaia di annunci auto comparabili in Italia per anno, alimentazione e chilometraggio.
+                Valore indicativo: verifica fonte, numero di annunci comparabili e criteri nel report prima di usarlo per una trattativa.
               </p>
             </section>
           )}

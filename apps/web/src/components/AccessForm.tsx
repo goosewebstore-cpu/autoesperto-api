@@ -5,8 +5,8 @@ import Link from 'next/link';
 import { useRouter, useSearchParams } from 'next/navigation';
 import SiteHeader from '@/components/SiteHeader';
 import { ArrowLeft, Car, Check, Loader2, LockKeyhole, MailCheck, AlertTriangle } from 'lucide-react';
-import { loginAccount, registerAccount, verifyEmail, API_URL } from '@/lib/api';
-import { setAuthToken } from '@/lib/auth';
+import { loginAccount, registerAccount, verifyEmail, GOOGLE_AUTH_URL } from '@/lib/api';
+import { markAuthSession, setAuthToken } from '@/lib/auth';
 
 function GoogleIcon() {
   return (
@@ -25,8 +25,9 @@ export default function AccessForm() {
   const nextPath = searchParams.get('next') || '/account';
   const verifyToken = searchParams.get('verify') || undefined;
   const googleToken = searchParams.get('token') || undefined;
+  const googleSuccess = searchParams.get('google') === '1';
   const googleErr = searchParams.get('err') || undefined;
-  const [mode, setMode] = useState<'login' | 'register'>('register');
+  const [mode, setMode] = useState<'login' | 'register'>('login');
   const [name, setName] = useState('');
   const [identifier, setIdentifier] = useState('');
   const [password, setPassword] = useState('');
@@ -38,16 +39,28 @@ export default function AccessForm() {
   const destination = nextPath.startsWith('/') && !nextPath.startsWith('//') ? nextPath : '/account';
 
   useEffect(() => {
+    if (googleSuccess) {
+      markAuthSession();
+      let googleDestination = destination;
+      try {
+        const saved = window.sessionStorage.getItem('autoesperto.google-next');
+        if (saved?.startsWith('/') && !saved.startsWith('//')) googleDestination = saved;
+        window.sessionStorage.removeItem('autoesperto.google-next');
+      } catch { /* Browser storage may be unavailable */ }
+      router.replace(googleDestination);
+      return;
+    }
     if (googleToken) {
-      setAuthToken(googleToken);
-      router.replace('/account');
+      void setAuthToken(googleToken)
+        .then(() => router.replace(destination))
+        .catch(() => setError('Accesso con Google non riuscito. Riprova.'));
       return;
     }
     if (googleErr) {
       setError('Accesso con Google non riuscito. Riprova oppure usa email e password.');
       return;
     }
-  }, [googleToken, googleErr, router]);
+  }, [googleSuccess, googleToken, googleErr, router, destination]);
 
   useEffect(() => {
     if (!verifyToken) return;
@@ -56,7 +69,6 @@ export default function AccessForm() {
     verifyEmail(verifyToken)
       .then((result) => {
         if (!active) return;
-        setAuthToken(result.token);
         setVerifying('ok');
         setTimeout(() => router.replace('/account'), 1200);
       })
@@ -76,7 +88,6 @@ export default function AccessForm() {
       const result = mode === 'register'
         ? await registerAccount({ name, identifier, password, termsAccepted: termsAccepted as true })
         : await loginAccount({ identifier, password });
-      setAuthToken(result.token);
       router.replace(destination);
     } catch (err) {
       const message = err instanceof Error ? err.message : '';
@@ -133,7 +144,7 @@ export default function AccessForm() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50">
+    <div className="min-h-screen bg-slate-50 bg-cover bg-center" style={{ backgroundImage: "linear-gradient(135deg, rgba(241,245,249,.96), rgba(239,246,255,.88)), url('/images/ui/interface-texture.webp')" }}>
       <SiteHeader />
       <main className="px-5 py-8 sm:py-14">
       <div className="mx-auto max-w-md">
@@ -158,7 +169,8 @@ export default function AccessForm() {
           </div>
 
           <a
-            href={`${API_URL}/auth/google`}
+            href={GOOGLE_AUTH_URL}
+            onClick={() => { try { window.sessionStorage.setItem('autoesperto.google-next', destination); } catch { /* Browser storage may be unavailable */ } }}
             className="mt-6 flex h-12 w-full items-center justify-center gap-3 rounded-xl border border-slate-300 bg-white text-sm font-extrabold text-slate-800 transition hover:bg-slate-50"
           >
             <GoogleIcon />

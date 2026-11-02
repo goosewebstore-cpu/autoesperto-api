@@ -5,14 +5,14 @@ import { Car, Search } from 'lucide-react';
 import ConditionAssessment from '@/components/ConditionAssessment';
 import { analyzeVehicle } from '@/lib/api';
 import catalogo from '@/lib/catalogo.json';
-import type { AutoReport } from '@autoesperto/types';
+import type { ReportPreview } from '@autoesperto/types';
 
 export default function ConditionPage() {
   const [make, setMake] = useState('');
   const [model, setModel] = useState('');
   const [year, setYear] = useState('');
   const [estimatedValue, setEstimatedValue] = useState<number | null>(null);
-  const [report, setReport] = useState<AutoReport | null>(null);
+  const [preview, setPreview] = useState<ReportPreview | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -40,8 +40,8 @@ export default function ConditionPage() {
         model: model.trim(),
         year: parseInt(year, 10),
       });
-      setReport(res.report);
-      setEstimatedValue(res.report.price.estimatedValue);
+      setPreview(res.preview);
+      if (res.preview.marketRange) setEstimatedValue(Math.round((res.preview.marketRange.min + res.preview.marketRange.max) / 2));
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Errore nel calcolo del valore. Riprova.');
     } finally {
@@ -68,7 +68,7 @@ export default function ConditionPage() {
             type="button"
             onClick={() => {
               setEstimatedValue(null);
-              setReport(null);
+              setPreview(null);
               setError('');
             }}
             className="text-xs font-semibold text-accent hover:underline flex-shrink-0"
@@ -79,10 +79,13 @@ export default function ConditionPage() {
         <ConditionAssessment
           estimatedValue={estimatedValue}
           vehicle={{ make: make.trim(), model: model.trim(), year: parseInt(year, 10) }}
-          report={report || undefined}
         />
       </div>
     );
+  }
+
+  if (preview && !preview.marketRange) {
+    return <div className="rounded-2xl border border-amber-200 bg-amber-50 p-5"><p className="text-sm font-extrabold text-amber-950">Non ci sono confronti sufficienti per stimare il valore.</p><p className="mt-2 text-sm text-amber-900">{preview.firstCheck}</p><p className="mt-2 text-xs leading-relaxed text-amber-800">{preview.missingData.join(' · ') || preview.limitations.join(' ')}</p><button type="button" onClick={() => { setPreview(null); setError(''); }} className="mt-4 min-h-10 rounded-lg border border-amber-400 bg-white px-4 text-sm font-bold text-amber-900">Modifica i dati</button></div>;
   }
 
   return (

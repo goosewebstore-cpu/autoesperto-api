@@ -1,4 +1,4 @@
-const STATIC_CACHE = 'autoesperto-static-v6';
+const STATIC_CACHE = 'autoesperto-static-v7';
 const MAX_CACHE_ENTRIES = 80;
 
 const PRECACHE_URLS = [
@@ -40,7 +40,7 @@ self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
   if (url.origin !== self.location.origin) return;
 
-  if (url.pathname === '/sw.js' || url.pathname.startsWith('/_next/')) return;
+  if (url.pathname === '/sw.js' || url.pathname.startsWith('/_next/') || url.pathname.startsWith('/api/') || ['/account', '/abbonamento', '/accesso'].includes(url.pathname)) return;
 
   if (e.request.mode === 'navigate') {
     e.respondWith(fetch(e.request).catch(() => caches.match('/')));

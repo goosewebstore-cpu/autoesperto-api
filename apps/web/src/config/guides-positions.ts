@@ -38,12 +38,12 @@ export const HOME_GUIDES_ORDER: Record<string, { label: string; slugs: string[] 
   tutte: {
     label: 'Tutte',
     slugs: [
-      'auto-usata-10-segnali-problema-annuncio',                 // 1ª Posizione
-      '5-cose-da-controllare-prima-comprare-auto-usata',         // 2ª Posizione
-      'come-vendere-auto-da-privato-guida-completa',             // 3ª Posizione
-      'aria-condizionata-auto-salva-motore-batteria-caldo-2026', // 4ª Posizione
-      'quanto-vale-fiat-500-usata-2026-prezzi-controlli',        // 5ª Posizione
-      'analisi-auto-report-comprare-vendere',                    // 6ª Posizione
+      'diesel-usato-finito-benzina-ibrido-dati-aci-settembre-2026',
+      'autoesperto-cerca-investitori-sistema-proprietario',
+      'diesel-219-euro-tetto-prezzi-eni-enilive',
+      'sta-arrivando-il-freddo-tempo-di-cambiare-gomme',
+      'dashcam-autoesperto-proteggi-auto-anche-quando-non-ci-sei',
+      'analisi-auto-report-comprare-vendere',
     ],
   },
 
@@ -108,12 +108,12 @@ export const HOME_GUIDES_ORDER: Record<string, { label: string; slugs: string[] 
  * Un multiplo di 3 (3 o 6) garantisce un allineamento perfetto della griglia desktop.
  */
 export const GUIDE_PAGE_FEATURED: string[] = [
-  'come-vendere-auto-da-privato-guida-completa',                 // 1ª In evidenza
+  'diesel-usato-finito-benzina-ibrido-dati-aci-settembre-2026',
+  'autoesperto-cerca-investitori-sistema-proprietario',         // 1ª In evidenza
+  'come-vendere-auto-da-privato-guida-completa',                 // 2ª In evidenza
   'perche-auto-targa-polacca-italia-cosa-ce-dietro',             // 2ª In evidenza
   'aria-condizionata-auto-salva-motore-batteria-caldo-2026',     // 3ª In evidenza
   'malta-compra-carburante-italia-prezzi-pompa-confronto',       // 4ª In evidenza
-  'benzina-quasi-da-record-guida-risparmiare-1500-euro',         // 5ª In evidenza
-  'auto-usata-10-segnali-problema-annuncio',                     // 6ª In evidenza
 ];
 
 /**
@@ -124,6 +124,8 @@ export const GUIDE_PAGE_FEATURED: string[] = [
  * posizioni della pagina /guide, seguite da tutte le altre.
  */
 export const GUIDE_PRIORITY_ORDER: string[] = [
+  'diesel-usato-finito-benzina-ibrido-dati-aci-settembre-2026',
+  'autoesperto-cerca-investitori-sistema-proprietario',
   'auto-usata-10-segnali-problema-annuncio',
   'come-vendere-auto-da-privato-guida-completa',
   '5-cose-da-controllare-prima-comprare-auto-usata',

@@ -18,7 +18,7 @@ export default function PrivacyPage() {
           heading: 'Titolare del Trattamento e Contatti',
           paragraphs: [
             'Il Titolare del trattamento è Ralfh (Sviluppatore Freelance e gestore della piattaforma AutoEsperto.it), con sede a Siracusa (SR), Italia.',
-            'Per qualsiasi richiesta di chiarimento, esercizio dei diritti degli interessati o comunicazioni relative alla protezione dei dati personali, è possibile contattare l’indirizzo: privacy@autoesperto.it oppure supporto@autoesperto.it.',
+            'Per qualsiasi richiesta di chiarimento, esercizio dei diritti degli interessati o comunicazioni relative alla protezione dei dati personali, è possibile contattare goosewebstore@gmail.com.',
           ],
         },
         {
@@ -65,7 +65,7 @@ export default function PrivacyPage() {
         {
           heading: 'Diritti dell’Interessato (Artt. 15-22 GDPR)',
           paragraphs: [
-            'L’utente ha il diritto di accedere ai propri dati personali, chiederne la rettifica, la cancellazione (diritto all’oblio), la limitazione del trattamento o la portabilità, nonché di opporsi al trattamento in qualsiasi momento, inviando una comunicazione scritta a: privacy@autoesperto.it.',
+            'L’utente ha il diritto di accedere ai propri dati personali, chiederne la rettifica, la cancellazione (diritto all’oblio), la limitazione del trattamento o la portabilità, nonché di opporsi al trattamento in qualsiasi momento, inviando una comunicazione scritta a: goosewebstore@gmail.com.',
             'È inoltre sempre possibile proporre reclamo all’Autorità Garante per la Protezione dei Dati Personali (Piazza Venezia 11, 00187 Roma - www.garanteprivacy.it).',
           ],
         },

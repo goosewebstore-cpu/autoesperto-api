@@ -1,0 +1,6 @@
+import assert from 'node:assert/strict';
+import test from 'node:test';
+import { depreciationScenario, suggestedDepreciationRate } from '../src/lib/depreciation';
+test('auto usata di sette anni: scenario composto, senza la perdita fissa del 58%',()=>{assert.equal(suggestedDepreciationRate(2019,2026),7);const data=depreciationScenario(13200,7);assert.equal(data[0].value,13200);assert.equal(data[5].value,9200);assert.equal(data[5].loss,4000);assert.equal(data[1].value,12300);});
+test('scenari e perdita cumulata restano ordinati, finiti e non negativi',()=>{for(const base of [51,999,13200,80000])for(const rate of [0,5,12,25,NaN,-100,100]){const d=depreciationScenario(base,rate);for(let i=0;i<d.length;i++){assert.ok(d[i].lower<=d[i].value);assert.ok(d[i].upper>=d[i].value);assert.ok(d[i].value>=0&&d[i].value<=base);assert.equal(d[i].loss,base-d[i].value);if(i)assert.ok(d[i].value<=d[i-1].value);}}});
+test('anni mancanti o non validi non fingono un’auto vecchia; tasso zero conserva il capitale',()=>{for(const y of [undefined,NaN,2030,1800])assert.equal(suggestedDepreciationRate(y,2026),9);assert.ok(suggestedDepreciationRate(2025,2026)>suggestedDepreciationRate(2010,2026));assert.equal(depreciationScenario(13200,0)[5].value,13200);for(const value of [NaN,-5,0])assert.equal(depreciationScenario(value,7)[5].value,0);});

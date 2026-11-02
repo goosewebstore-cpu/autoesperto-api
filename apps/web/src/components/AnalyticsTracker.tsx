@@ -1,117 +1,61 @@
 'use client';
-
 import { useEffect, useRef } from 'react';
 import { usePathname } from 'next/navigation';
 import { hasCategory } from '@/lib/consent';
-
-const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:4000';
+import { getAnalyticsSessionId, trackEvent } from '@/lib/analytics';
 const GA4_ID = process.env.NEXT_PUBLIC_GA4_ID || '';
-const VISITOR_KEY = 'ae_visitor_id';
-
+let gaConfigured = false;
 declare global {
   interface Window {
     dataLayer: unknown[];
     gtag: (...args: unknown[]) => void;
   }
 }
-
 function loadGtag() {
-  if (typeof window === 'undefined') return;
-  if (typeof (window as unknown as { gtag?: unknown }).gtag === 'function') return;
-
-  window.dataLayer = window.dataLayer || [];
-  window.gtag = function gtag(...args: unknown[]) {
-    window.dataLayer.push(args);
-  };
+  if (!GA4_ID || gaConfigured) return;
+  window.dataLayer ||= [];
+  window.gtag ||= (...args: unknown[]) => { window.dataLayer.push(args); };
   window.gtag('js', new Date());
-  window.gtag('config', GA4_ID, { anonymize_ip: true });
-
-  const s = document.createElement('script');
-  s.async = true;
-  s.src = `https://www.googletagmanager.com/gtag/js?id=${GA4_ID}`;
-  document.head.appendChild(s);
-}
-
-function getVisitorId(): string {
-  if (typeof window === 'undefined') return '';
-  try {
-    let id = window.localStorage.getItem(VISITOR_KEY);
-    if (!id) {
-      id = `v_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 10)}`;
-      window.localStorage.setItem(VISITOR_KEY, id);
-    }
-    return id;
-  } catch {
-    return '';
+  window.gtag('config', GA4_ID, { send_page_view: false });
+  if (!document.querySelector('script[src^="https://www.googletagmanager.com/gtag/js?id="]')) {
+    const script = document.createElement('script');
+    script.async = true;
+    script.src = 'https://www.googletagmanager.com/gtag/js?id=' + GA4_ID;
+    document.head.appendChild(script);
   }
+  gaConfigured = true;
 }
-
 export default function AnalyticsTracker() {
   const pathname = usePathname();
-  const sessionRef = useRef<{ path: string; start: number; leaveSent: boolean } | null>(null);
-  const lastGaPage = useRef('');
-
+  const page = useRef<{ path: string; id: string; start: number; sent: boolean; closed: boolean } | null>(null);
   useEffect(() => {
-    if (!GA4_ID || !hasCategory('analytics')) return;
-    loadGtag();
-    const onConsent = () => {
-      if (hasCategory('analytics')) loadGtag();
+    if (page.current?.path !== pathname) {
+      page.current = { path: pathname, id: crypto.randomUUID(), start: Date.now(), sent: false, closed: false };
+    }
+    const current = page.current!;
+    const recordPage = () => {
+      if (!hasCategory('analytics') || current.sent) return;
+      current.sent = true;
+      trackEvent('visit', undefined, getAnalyticsSessionId());
+      trackEvent('page_view', undefined, current.id);
+      loadGtag();
+      if (GA4_ID) window.gtag('event', 'page_view', { page_path: pathname, page_title: document.title });
     };
-    window.addEventListener('ae-consent-changed', onConsent);
-    return () => window.removeEventListener('ae-consent-changed', onConsent);
-  }, []);
-
-  useEffect(() => {
-    if (!GA4_ID || !hasCategory('analytics')) return;
-    if (lastGaPage.current === pathname) return;
-    lastGaPage.current = pathname;
-    loadGtag();
-    window.gtag('event', 'page_view', {
-      page_path: pathname,
-      page_title: document.title,
-    });
-  }, [pathname]);
-
-  useEffect(() => {
-    const visitorId = getVisitorId();
-    if (!visitorId) return;
-
-    const track = (type: string, path: string, duration?: number) => {
-      try {
-        fetch(`${API_URL}/analytics/track`, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ type, path, visitorId, duration }),
-          keepalive: true,
-        }).catch(() => undefined);
-      } catch {
-        /* privacy-first: never block the user */
-      }
+    const closePage = () => {
+      if (!current.sent || current.closed || !hasCategory('analytics')) return;
+      current.closed = true;
+      trackEvent('page_leave', { duration: Math.round((Date.now() - current.start) / 1000), pageId: current.id });
     };
-
-    const closeSession = () => {
-      const s = sessionRef.current;
-      if (!s || s.leaveSent) return;
-      s.leaveSent = true;
-      track('visit', s.path, Math.round((Date.now() - s.start) / 1000));
-    };
-
-    const onVisibility = () => {
-      if (document.visibilityState === 'hidden') closeSession();
-    };
-
-    if (sessionRef.current) closeSession();
-    sessionRef.current = { path: pathname, start: Date.now(), leaveSent: false };
-    track('visit', pathname);
-
+    const onVisibility = () => { if (document.visibilityState === 'hidden') closePage(); };
+    recordPage();
+    window.addEventListener('ae-consent-changed', recordPage);
+    window.addEventListener('pagehide', closePage);
     document.addEventListener('visibilitychange', onVisibility);
-    window.addEventListener('pagehide', closeSession);
     return () => {
+      window.removeEventListener('ae-consent-changed', recordPage);
+      window.removeEventListener('pagehide', closePage);
       document.removeEventListener('visibilitychange', onVisibility);
-      window.removeEventListener('pagehide', closeSession);
-      closeSession();
     };
   }, [pathname]);
-
   return null;
 }

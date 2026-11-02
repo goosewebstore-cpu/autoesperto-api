@@ -1,0 +1,10 @@
+Payment marks used to identify actual supported payment options, without endorsement claims.
+
+Stripe badge: https://stripe.com/newsroom/information (official Powered by Stripe SVG).
+Apple Pay: https://developer.apple.com/apple-pay/marketing/Apple-Pay-Mark.zip (official acceptance mark).
+Google Pay: https://developers.google.com/static/pay/api/download-assets/Google-Pay-Acceptance.zip (official acceptance mark).
+Visa and Mastercard vector icons: https://github.com/activemerchant/payment_icons (merchant acceptance artwork distributed by the Shopify/Active Merchant project). Logos remain trademarks of their owners.
+
+Logos are served locally without modification. Wallet availability is determined by Stripe Checkout, browser, device, country and card. No bank partnership or certification is asserted.
+
+American Express and PayPal icons: Simple Icons CDN (https://cdn.simpleicons.org/), unmodified SVGs; used as trademarks to identify possible payment methods, not as a claim of account activation.

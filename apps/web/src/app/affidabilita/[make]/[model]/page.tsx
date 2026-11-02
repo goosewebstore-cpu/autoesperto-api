@@ -8,6 +8,7 @@ import { estimateReliability } from '@/lib/affidabilita';
 import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { isCuratedModel } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -40,6 +41,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: isCuratedModel(make.name, model), follow: true },
     alternates: {
       canonical: `/affidabilita/${resolved.make}/${resolved.model}`,
       languages: { 'it-IT': `${siteUrl()}/affidabilita/${resolved.make}/${resolved.model}` },
@@ -62,6 +64,7 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
+  const isCurated = isCuratedModel(make.name, model);
 
   const latest = estimateReliability(make.name, model, CURRENT_YEAR);
 
@@ -151,7 +154,7 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
           </p>
         </section>
 
-        <AdBanner />
+        {isCurated && <AdBanner />}
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
           <div className="flex items-center gap-4">
@@ -260,7 +263,7 @@ export default async function ReliabilityModelPage({ params }: PageProps) {
         <section className="mt-8 rounded-2xl border border-blue-100 bg-blue-50 p-5">
           <h2 className="text-lg font-bold text-text-primary">Verifica valore e costi prima di comprare</h2>
           <p className="text-sm text-text-secondary leading-relaxed mt-2">
-            Affidabilità e valore di mercato vanno letti insieme: controlla il prezzo medio reale della {make.name} {model},
+            Affidabilità e prezzo vanno letti insieme: confronta la stima indicativa per la {make.name} {model} con i prezzi richiesti negli annunci disponibili,
             i consumi reali e i costi di riparazione prima di decidere.
           </p>
           <div className="mt-4 flex flex-wrap gap-3">

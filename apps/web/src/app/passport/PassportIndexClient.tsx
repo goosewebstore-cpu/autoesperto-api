@@ -35,12 +35,14 @@ import {
   ensureSamplePassport,
   createNewPassport,
   deletePassport,
+  updatePassportShareConfig,
   computeDynamicHealthScore,
   claimPassportTransfer,
   getTrustBadgeForPassport,
 } from '@/lib/passportStorage';
 import { scanPassportDoc } from '@/lib/api';
-import { getVehiclePassportPhoto } from '@/lib/vehicleImageResolver';
+import { getVehiclePassportPhoto, resolveVehicleImage } from '@/lib/vehicleImageResolver';
+import ShareProfileModal from '@/components/passport/ShareProfileModal';
 import type { VehiclePassportData } from '@autoesperto/types';
 
 // Preset dei modelli più popolari in Italia per compilazione istantanea
@@ -69,12 +71,13 @@ export default function PassportIndexClient() {
   // Form states
   const [plate, setPlate] = useState('');
   const [vin, setVin] = useState('');
-  const [make, setMake] = useState('Fiat');
-  const [model, setModel] = useState('Panda');
-  const [year, setYear] = useState('2022');
-  const [fuel, setFuel] = useState('Ibrida / Benzina');
-  const [power, setPower] = useState('70 CV');
-  const [km, setKm] = useState('35000');
+  const [make, setMake] = useState('');
+  const [model, setModel] = useState('');
+  const [year, setYear] = useState('');
+  const [fuel, setFuel] = useState('');
+  const [power, setPower] = useState('');
+  const [km, setKm] = useState('');
+  const [formError, setFormError] = useState('');
   const [insuranceExpiry, setInsuranceExpiry] = useState('');
   const [insuranceCompany, setInsuranceCompany] = useState('');
   const [revisionExpiry, setRevisionExpiry] = useState('');
@@ -88,6 +91,9 @@ export default function PassportIndexClient() {
   const [showClaimModal, setShowClaimModal] = useState(false);
   const [claimInput, setClaimInput] = useState('');
   const [claimError, setClaimError] = useState('');
+
+  // Sharing modal on garage cards
+  const [sharingPassport, setSharingPassport] = useState<VehiclePassportData | null>(null);
 
   const handleClaimPassport = () => {
     setClaimError('');
@@ -107,6 +113,16 @@ export default function PassportIndexClient() {
 
   useEffect(() => {
     refreshPassports();
+    try {
+      const transferred = sessionStorage.getItem('autoesperto:plate:passport');
+      if (transferred && /^[A-Z]{2}(?:\d{3}[A-Z]{2}|\d{5,6})$/.test(transferred)) {
+        setPlate(transferred);
+        setActiveTab('targa');
+        setWizardStep(1);
+        setShowWizard(true);
+      }
+      sessionStorage.removeItem('autoesperto:plate:passport');
+    } catch { /* The wizard works without browser storage. */ }
   }, []);
 
   const refreshPassports = () => {
@@ -122,29 +138,45 @@ export default function PassportIndexClient() {
   const handleSelectPreset = (preset: typeof POPULAR_MODELS_PRESETS[0]) => {
     setMake(preset.make);
     setModel(preset.model);
-    setYear(String(preset.year));
+    setYear('');
     setFuel(preset.fuel);
     setPower(preset.power);
-    setKm(String(preset.km));
+    setKm('');
     setWizardStep(2);
   };
 
   const handleCreatePassport = () => {
+    const vMake = make.trim();
+    const vModel = model.trim();
+    const vehicleYear = Number(year);
+    const vehicleKm = Number(km);
+    if (!vMake || !vModel || !Number.isInteger(vehicleYear) || vehicleYear < 1900 || vehicleYear > new Date().getFullYear() + 1 || km.trim() === '' || !Number.isFinite(vehicleKm) || vehicleKm < 0 || vehicleKm > 2_000_000) {
+      setFormError('Inserisci marca, modello, anno e chilometri reali prima di creare il profilo.');
+      return;
+    }
+    setFormError('');
+    const resolvedPhoto = resolveVehicleImage(vMake, vModel);
+
     const created = createNewPassport({
       vehicle: {
-        make: make.trim() || 'Auto',
-        model: model.trim() || 'Modello',
-        year: Number(year) || 2022,
+        make: vMake,
+        model: vModel,
+        year: vehicleYear,
         fuel,
         power,
         plate: plate.toUpperCase().trim() || undefined,
         vin: vin.toUpperCase().trim() || undefined,
+        imageUrl: resolvedPhoto,
       },
-      currentKm: Number(km) || 50000,
+      mainPhoto: resolvedPhoto,
+      currentKm: vehicleKm,
       insuranceExpiry: insuranceExpiry || undefined,
       insuranceCompany: insuranceCompany || undefined,
       revisionExpiry: revisionExpiry || undefined,
     });
+
+    // Clean up sample demo BMW from garage so only the user's real car appears
+    deletePassport('pass-bmw-320d-sample');
 
     setShowWizard(false);
     refreshPassports();
@@ -214,7 +246,7 @@ export default function PassportIndexClient() {
             </h1>
 
             <p className="text-xs sm:text-sm text-slate-300 leading-relaxed">
-              Conserva analisi, foto, documenti, valore e storico delle tue auto in un unico posto permanente. Sempre aggiornabile, condivisibile con QR code e protetto sul tuo dispositivo.
+              Organizza foto, documenti e storico delle tue auto nel browser. Puoi aggiornare i dati e scegliere cosa condividere con link o QR code.
             </p>
 
             <div className="pt-2 flex flex-wrap items-center gap-3">
@@ -311,6 +343,12 @@ export default function PassportIndexClient() {
                         </div>
                       </div>
 
+                      {p.id === 'pass-bmw-320d-sample' && (
+                        <div className="absolute top-3 left-3 bg-amber-500/90 text-slate-950 font-black text-[10px] uppercase tracking-wider px-2.5 py-0.5 rounded-full shadow-sm backdrop-blur-xs">
+                          Esempio dimostrativo
+                        </div>
+                      )}
+
                       {p.sellingConfig?.enabled && (
                         <div className="absolute top-3 right-3 bg-emerald-600 text-white text-[10px] font-black px-2.5 py-0.5 rounded-full flex items-center gap-1 shadow-md">
                           <Tag className="w-3 h-3" /> In Vendita
@@ -361,13 +399,28 @@ export default function PassportIndexClient() {
                     <span className="text-blue-600 group-hover:underline flex items-center gap-1">
                       Apri Profilo Digitale <ChevronRight className="w-3.5 h-3.5" />
                     </span>
-                    <button
-                      onClick={(e) => handleDelete(p.id, e)}
-                      className="text-slate-400 hover:text-rose-600 p-1 transition-colors"
-                      title="Elimina dal garage"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                    </button>
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          setSharingPassport(p);
+                        }}
+                        className="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 hover:bg-blue-100 dark:hover:bg-blue-900/60 transition-colors text-[11px] font-bold"
+                        title="Condividi profilo & QR"
+                      >
+                        <Share2 className="w-3.5 h-3.5" /> Condividi
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleDelete(p.id, e)}
+                        className="text-slate-400 hover:text-rose-600 p-1.5 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-800 transition-colors"
+                        title="Elimina dal garage"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
                   </div>
                 </div>
               );
@@ -467,7 +520,7 @@ export default function PassportIndexClient() {
             {[
               {
                 q: "Cos'è il Profilo Digitale Auto (o Passaporto Digitale)?",
-                a: "È il fascicolo permanente e gratuito della tua auto su AutoEsperto. Raccoglie in un unico luogo digitale tutti i dati del libretto, la cronologia dei tagliandi, lo stato di salute meccanica (Vehicle Health Score), le scadenze di bollo e revisione, le foto e l'andamento del valore di mercato.",
+                a: "È una scheda gratuita della tua auto salvata nel browser. Puoi aggiungere dati del veicolo, foto, tagliandi e promemoria. Punteggio e valore, se disponibili, sono stime indicative.",
               },
               {
                 q: "Quanto costa creare e mantenere il Profilo Digitale?",
@@ -475,11 +528,11 @@ export default function PassportIndexClient() {
               },
               {
                 q: "I miei dati personali e la targa sono protetti?",
-                a: "Sì. Tutti i dati del tuo veicolo vengono memorizzati localmente e in sicurezza sul tuo dispositivo. Quando condividi la scheda pubblica per la vendita, i tuoi dati personali sensibili (indirizzo, nome completo, ecc.) restano protetti.",
+                a: "Per creare il profilo chiediamo dati dell'auto, non nome o indirizzo. Il profilo resta nel browser; se condividi il link, i dati selezionati diventano accessibili a chi lo riceve. Targa e documento originale sono esclusi dal link. Un recapito è facoltativo solo in modalità vendita.",
               },
               {
                 q: "Come aiuta il Profilo Digitale a vendere l'auto più velocemente?",
-                a: "Mostrare agli acquirenti una cronologia trasparente di tagliandi, scadenze in regola e verdetto AutoEsperto elimina la diffidenza tipica del mercato dell'usato, velocizzando le trattative fino al 40% e difendendo il prezzo richiesto.",
+                a: "Puoi mostrare cronologia, foto e dati del veicolo che scegli di condividere. Gli acquirenti possono valutare più facilmente le informazioni, che restano dichiarate finché non sono supportate da documenti verificabili.",
               },
             ].map((faq, idx) => (
               <details
@@ -504,7 +557,7 @@ export default function PassportIndexClient() {
             Pronto a creare il Profilo Digitale della tua auto?
           </h2>
           <p className="text-xs sm:text-sm text-blue-100 max-w-xl mx-auto">
-            Bastano meno di 60 secondi: inserisci la targa o scegli il modello per generare subito il passaporto permanente.
+            Inserisci la targa o scegli il modello, poi completa anno e km reali. Il profilo rimane nel browser e puoi scegliere cosa condividere.
           </p>
           <div className="pt-2 flex justify-center">
             <button
@@ -597,6 +650,7 @@ export default function PassportIndexClient() {
                       >
                         Continua
                       </button>
+                      <p className="text-[11px] text-slate-500">La targa non identifica automaticamente marca, modello o km: completa tu i dati. Rimane privata nel profilo pubblico.</p>
                     </div>
                   )}
 
@@ -756,6 +810,7 @@ export default function PassportIndexClient() {
                   </div>
 
                   <div className="pt-2 flex items-center justify-between">
+                    {formError && <p role="alert" className="text-xs text-rose-600">{formError}</p>}
                     <button
                       onClick={() => setWizardStep(1)}
                       className="text-xs font-bold text-slate-600 hover:underline"
@@ -835,6 +890,22 @@ export default function PassportIndexClient() {
               </div>
             </div>
           </div>
+        )}
+
+        {/* Share Modal from Garage card */}
+        {sharingPassport && (
+          <ShareProfileModal
+            isOpen={!!sharingPassport}
+            onClose={() => setSharingPassport(null)}
+            passport={sharingPassport}
+            onUpdateShareConfig={(cfg) => {
+              const updated = updatePassportShareConfig(sharingPassport.id, cfg);
+              if (updated) {
+                setSharingPassport(updated);
+                refreshPassports();
+              }
+            }}
+          />
         )}
       </main>
 

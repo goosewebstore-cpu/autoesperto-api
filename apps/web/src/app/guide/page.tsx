@@ -2,17 +2,19 @@ import type { Metadata } from 'next';
 import { Suspense } from 'react';
 import GuideIndex from '@/components/GuideIndex';
 import GuideCard from '@/components/GuideCard';
+import GuideEditorialOverview from '@/components/GuideEditorialOverview';
 import PageHero from '@/components/PageHero';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import { guides, GUIDE_CATEGORIES } from '@/lib/guides';
+import { GUIDE_PRIORITY_ORDER } from '@/config/guides-positions';
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it';
 
 export const metadata: Metadata = {
-  title: 'Guide Auto Usata 2026: Consigli per Comprare, Vendere e Valutare | AutoEsperto',
+  title: 'Guide auto usate: acquisto, vendita e manutenzione',
   description:
-    'Oltre 130 guide pratiche e aggiornate per l\'acquisto e la vendita di auto usate: controlli pre-acquisto, passaggio di proprietà, affidabilità motori, incentivi e quotazioni reali.',
+    'Controlli prima di comprare un’auto usata, documenti per venderla, manutenzione e costi: consulta le guide e le fonti di AutoEsperto.',
   robots: {
     index: true,
     follow: true,
@@ -43,7 +45,13 @@ export const metadata: Metadata = {
 import Link from 'next/link';
 
 function GuideSsrFallback() {
-  const initialGuides = [...guides].sort((a, b) => b.published.localeCompare(a.published)).slice(0, 12);
+  const initialGuides = [...guides].sort((a, b) => {
+    const aPriority = GUIDE_PRIORITY_ORDER.indexOf(a.slug);
+    const bPriority = GUIDE_PRIORITY_ORDER.indexOf(b.slug);
+    const aRank = aPriority < 0 ? Number.MAX_SAFE_INTEGER : aPriority;
+    const bRank = bPriority < 0 ? Number.MAX_SAFE_INTEGER : bPriority;
+    return aRank !== bRank ? aRank - bRank : b.published.localeCompare(a.published);
+  }).slice(0, 12);
   return (
     <div>
       <PageHero
@@ -54,6 +62,7 @@ function GuideSsrFallback() {
         <p>Consigli pratici per comprare, vendere e valutare un&apos;auto usata con dati reali di mercato.</p>
       </PageHero>
       <main className="page-body">
+        <GuideEditorialOverview />
         <div className="mt-4 flex flex-wrap items-center gap-2">
           <Link
             href="/guide"
@@ -88,6 +97,9 @@ export default function GuideIndexPage() {
       <Suspense fallback={<GuideSsrFallback />}>
         <GuideIndex />
       </Suspense>
+      <nav aria-label="Archivio completo" className="mx-auto max-w-6xl px-5 py-8">
+        <Link href="/guide/archivio" className="text-lg font-semibold text-blue-700 underline underline-offset-4">Sfoglia tutte le guide per argomento</Link>
+      </nav>
       <SiteFooter />
     </div>
   );

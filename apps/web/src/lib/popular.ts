@@ -54,3 +54,14 @@ const LIST: Array<{ make: string; model: string }> = [
 export const POPULAR_MODELS: Array<{ make: string; model: string; href: string }> = LIST.map(
   (item) => ({ ...item, href: `/valutazione/${toSlug(item.make)}/${toSlug(item.model)}` })
 );
+
+export function isCuratedModel(make: string, model: string): boolean {
+  const makeSlug = toSlug(make);
+  const modelSlug = toSlug(model);
+  return LIST.some((item) => toSlug(item.make) === makeSlug && toSlug(item.model) === modelSlug);
+}
+
+export function isCuratedMake(make: string): boolean {
+  const makeSlug = toSlug(make);
+  return LIST.some((item) => toSlug(item.make) === makeSlug);
+}

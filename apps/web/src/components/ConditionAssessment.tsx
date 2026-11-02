@@ -27,6 +27,7 @@ import {
   Download,
 } from 'lucide-react';
 import { analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
+import { optimiseImageForAnalysis } from '@/lib/imageOptim';
 import type { AutoReport } from '@autoesperto/types';
 
 const MAX_PHOTOS = 4;
@@ -468,12 +469,7 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
       setError('La foto deve essere al massimo di 5 MB.');
       return;
     }
-    const imageData = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = () => reject(new Error('Impossibile leggere la foto'));
-      reader.readAsDataURL(file);
-    });
+    const imageData = await optimiseImageForAnalysis(file);
     setLoading(true);
     try {
       const response = await analyzeVehiclePhoto(imageData, { make: vehicle?.make, model: vehicle?.model, year });
@@ -664,7 +660,7 @@ export default function ConditionAssessment({ estimatedValue, vehicle, report }:
       items,
     };
 
-    downloadPDF(report, conditionData);
+    try { await downloadPDF(report, conditionData); } catch (error) { alert(error instanceof Error ? error.message : 'Impossibile creare il PDF. Riprova.'); }
   };
 
   return (

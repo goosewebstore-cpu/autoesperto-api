@@ -6,6 +6,7 @@ import { findMakeBySlug, getAllMakes, slugify } from '@/lib/catalogo';
 import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { isCuratedMake } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string }>;
@@ -28,6 +29,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: isCuratedMake(make.name), follow: true },
     alternates: {
       canonical: `/valutazione/${resolved.make}`,
       languages: { 'it-IT': `${process.env.NEXT_PUBLIC_SITE_URL || 'https://autoesperto.it'}/valutazione/${resolved.make}` },
@@ -94,7 +96,7 @@ export default async function MakeValutazionePage({ params }: PageProps) {
           </p>
         </section>
 
-        <AdBanner />
+        {isCuratedMake(make.name) && <AdBanner />}
 
         <div className="mt-6 grid grid-cols-2 sm:grid-cols-3 gap-2.5">
           {make.models.map((model) => (

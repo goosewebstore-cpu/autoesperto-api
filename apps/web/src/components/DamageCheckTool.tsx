@@ -4,6 +4,7 @@ import { useRef, useState } from 'react';
 import { Camera, CheckCircle2, Clock, Hammer, Loader2, MapPin, ShieldAlert, Sparkles, Upload, Wrench, AlertTriangle } from 'lucide-react';
 import type { VehicleData } from '@autoesperto/types';
 import { analyzeVehiclePhoto, type PhotoAnalysis } from '@/lib/api';
+import { optimiseImageForAnalysis } from '@/lib/imageOptim';
 
 function price(value: number) {
   return value.toLocaleString('it-IT') + ' €';
@@ -55,12 +56,7 @@ export default function DamageCheckTool({ vehicle }: { vehicle?: VehicleData }) 
       setError('La foto deve essere al massimo di 5 MB.');
       return;
     }
-    const imageData = await new Promise<string>((resolve, reject) => {
-      const reader = new FileReader();
-      reader.onload = () => resolve(String(reader.result));
-      reader.onerror = () => reject(new Error('Impossibile leggere la foto'));
-      reader.readAsDataURL(file);
-    });
+    const imageData = await optimiseImageForAnalysis(file);
     setLoading(true);
     try {
       const response = await analyzeVehiclePhoto(imageData, vehicle);

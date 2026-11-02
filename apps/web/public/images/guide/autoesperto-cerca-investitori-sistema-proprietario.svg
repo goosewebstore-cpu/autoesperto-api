@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#0f172a"/>
+  <path d="M880 0v630M1040 0v630M0 485h1200" stroke="#26344d" stroke-width="2"/>
+  <circle cx="1040" cy="315" r="178" fill="none" stroke="#2563eb" stroke-width="2"/>
+  <circle cx="1040" cy="315" r="118" fill="none" stroke="#3b82f6" stroke-width="2"/>
+  <circle cx="1040" cy="315" r="46" fill="#2563eb"/>
+  <rect x="64" y="62" width="8" height="36" rx="4" fill="#60a5fa"/>
+  <g font-family="Arial, sans-serif">
+    <text x="90" y="91" fill="#fff" font-size="32" font-weight="700">AutoEsperto</text>
+    <text x="64" y="191" fill="#93c5fd" font-size="21" letter-spacing="4">PROGETTO INDIPENDENTE</text>
+    <text x="60" y="284" fill="#fff" font-size="66" font-weight="700">Sviluppato in casa.</text>
+    <text x="60" y="370" fill="#fff" font-size="66" font-weight="700">Pronto a crescere.</text>
+    <text x="64" y="432" fill="#cbd5e1" font-size="27">Il sistema proprietario AutoEsperto</text>
+    <text x="64" y="562" fill="#fff" font-size="30" font-weight="700">Cerchiamo investitori e partner</text>
+    <text x="1040" y="568" fill="#93c5fd" font-size="44" text-anchor="middle">↗</text>
+  </g>
+</svg>

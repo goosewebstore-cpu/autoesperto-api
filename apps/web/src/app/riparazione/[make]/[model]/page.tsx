@@ -8,6 +8,7 @@ import { estimateRepair } from '@/lib/riparazione';
 import AdBanner from '@/components/ads/AdBanner';
 import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
+import { isCuratedModel } from '@/lib/popular';
 
 interface PageProps {
   params: Promise<{ make: string; model: string }>;
@@ -39,6 +40,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title,
     description,
+    robots: { index: isCuratedModel(make.name, model), follow: true },
     alternates: {
       canonical: `/riparazione/${resolved.make}/${resolved.model}`,
       languages: { 'it-IT': `${siteUrl()}/riparazione/${resolved.make}/${resolved.model}` },
@@ -61,6 +63,7 @@ export default async function RepairModelPage({ params }: PageProps) {
   if (!make) notFound();
   const model = findModelBySlug(make, resolved.model);
   if (!model) notFound();
+  const isCurated = isCuratedModel(make.name, model);
 
   const latest = estimateRepair(make.name, model, CURRENT_YEAR);
   const faq = [
@@ -151,7 +154,7 @@ export default async function RepairModelPage({ params }: PageProps) {
           </p>
         </section>
 
-        <AdBanner />
+        {isCurated && <AdBanner />}
 
         <section className="mt-6 rounded-2xl border border-border bg-surface-2 p-5">
           <div className="flex items-center gap-4">

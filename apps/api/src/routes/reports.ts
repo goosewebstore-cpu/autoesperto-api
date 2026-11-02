@@ -9,9 +9,12 @@ import { analyzeVehiclePhoto, askAutoEsperto, isVisionConfigured, type PhotoAnal
 import { searchModel } from '../services/modelDB';
 import { findModelEra } from '../services/modelEra';
 import { verifyAuthToken } from '../services/auth';
-import { asyncHandler, serviceUnavailable, badRequest } from '../http';
+import { asyncHandler, serviceUnavailable, badRequest, notFound, paymentRequired } from '../http';
 import { getAccountEntitlement } from '../services/entitlement';
 import { getAnalysisPrice } from '../services/billing';
+import { createUnlockedReportShare, getUnlockedReport, readGeneratedReportPreview, readSharedReport, saveGeneratedReport, unlockReportWithCredit, unlockReportWithPro } from '../services/reportPreview';
+import { requireAuth, type AuthenticatedRequest } from '../services/auth';
+import { PRO_REPORTS_PER_CYCLE } from '../services/proPlans';
 
 const router = Router();
 
@@ -102,22 +105,84 @@ function manualPhotoAnalysis(make: string, model: string, year?: number, fuel?: 
 
 async function premiumAccess(req: Request, res: import('express').Response): Promise<boolean> {
   const userId = getOptionalUserId(req);
-  if (!userId) { res.status(401).json({success:false,needsLogin:true,error:'Accedi per attivare i 7 giorni di prova per foto AI e annunci. La valutazione per modello resta gratuita.'}); return false; }
+  if (!userId) { res.status(401).json({success:false,needsLogin:true,error:'Accedi per usare questa funzione. Puoi comunque ottenere un’anteprima gratuita da modello, foto o annuncio.'}); return false; }
   const entitlement = await getAccountEntitlement(userId);
-  if (!entitlement.entitled) { res.status(402).json({success:false,needsUpgrade:true,error:'Attiva AutoEsperto AI: 7 giorni gratis alla prima attivazione, poi 3,99 €/mese. Il modello resta gratuito.'}); return false; }
+  if (!entitlement.entitled) { res.status(402).json({success:false,needsUpgrade:true,error:'Questa funzione AI avanzata non è inclusa nei nuovi piani. Puoi consultare l’anteprima e sbloccare il report completo dalla pagina prezzi.'}); return false; }
   return true;
 }
-router.get('/trial', asyncHandler(async (_req,res) => { res.set('Cache-Control','no-store'); res.json({success:true,available:false,modelFree:true,trialDays:7}); }));
+router.get('/trial', asyncHandler(async (_req,res) => { res.set('Cache-Control','no-store'); res.json({success:true,available:false,modelFree:true,trialDays:0}); }));
 
 router.post(
   '/analyze',
   asyncHandler(async (req, res) => {
     const input = reportSchema.parse(req.body);
     const { report, cached } = await buildReport(input);
+    const preview = await saveGeneratedReport({
+      userId: getOptionalUserId(req),
+      title: [report.vehicle.make, report.vehicle.model, report.vehicle.year].filter(Boolean).join(' '),
+      report,
+      photoAnalysis: report.photoAnalysis,
+    });
     res.set('Cache-Control', 'no-store');
-    res.json({ success: true, report, cached });
+    res.json({ success: true, preview, cached });
   })
 );
+
+router.get('/preview/:id', asyncHandler(async (req, res) => {
+  const token = req.header('x-report-access') || '';
+  const preview = await readGeneratedReportPreview(req.params.id, token);
+  res.set('Cache-Control', 'no-store');
+  if (!preview) { res.status(404).json({ success: false, error: 'Anteprima non trovata o scaduta.' }); return; }
+  res.json({ success: true, preview });
+}));
+
+router.get('/:id/full', requireAuth, asyncHandler(async (req, res) => {
+  const { userId } = (req as AuthenticatedRequest).auth;
+  const report = await getUnlockedReport(req.params.id, userId);
+  res.set('Cache-Control', 'no-store');
+  if (!report) throw notFound('Report non trovato o non acquistato da questo account.');
+  res.json({ success: true, report });
+}));
+
+router.post('/:id/share', requireAuth, asyncHandler(async (req, res) => {
+  const { userId } = (req as AuthenticatedRequest).auth;
+  const share = await createUnlockedReportShare(req.params.id, userId);
+  if (!share) throw notFound('Report completo non trovato in questo account.');
+  await prisma.analyticsEvent.create({ data: { type: 'share_clicked', userId, path: '/account/pro', meta: JSON.stringify({ reportId: req.params.id, expiresAt: share.expiresAt.toISOString() }) } });
+  res.set('Cache-Control', 'no-store').json({ success: true, token: share.token, expiresAt: share.expiresAt.toISOString() });
+}));
+
+router.get('/share/:token', asyncHandler(async (req, res) => {
+  const shared = await readSharedReport(req.params.token);
+  res.set('Cache-Control', 'private, no-store');
+  if (!shared) throw notFound('Questo link è scaduto o non è più valido.');
+  res.json({ success: true, ...shared });
+}));
+
+router.post('/:id/unlock-with-credit', requireAuth, asyncHandler(async (req, res) => {
+  const { userId } = (req as AuthenticatedRequest).auth;
+  const token = req.header('x-report-access') || '';
+  const report = await unlockReportWithCredit(req.params.id, userId, token);
+  if (!report) {
+    const remaining = await prisma.reportCredit.count({ where: { userId, status: 'AVAILABLE', purchase: { status: 'PAID' } } });
+    if (!remaining) throw paymentRequired('Non hai crediti disponibili. Scegli il report singolo o il pacchetto da 4 report (3 + 1 omaggio).');
+    throw notFound('Anteprima scaduta o non associata al tuo account.');
+  }
+  res.set('Cache-Control', 'no-store').json({ success: true, report });
+}));
+
+router.post('/:id/unlock-pro', requireAuth, asyncHandler(async (req, res) => {
+  const { userId } = (req as AuthenticatedRequest).auth;
+  const token = req.header('x-report-access') || '';
+  const report = await unlockReportWithPro(req.params.id, userId, token);
+  if (!report) {
+    const subscription = await prisma.proSubscription.findUnique({ where: { userId } });
+    if (!subscription || subscription.status !== 'ACTIVE' || !subscription.periodEnd || subscription.periodEnd <= new Date()) throw paymentRequired('AutoEsperto PRO non è attivo.');
+    if (subscription.reportsUsed >= PRO_REPORTS_PER_CYCLE) throw paymentRequired('Hai utilizzato tutti i 33 report di questo ciclo (30 inclusi + 3 omaggio). La quota si rinnova alla prossima data di fatturazione.');
+    throw notFound('Anteprima scaduta o non associata al tuo account.');
+  }
+  res.set('Cache-Control', 'no-store').json({ success: true, report });
+}));
 
 router.post(
   '/ask',
@@ -162,8 +227,6 @@ router.post(
     const input = freeScanSchema.parse(req.body);
     const mode = input.mode || (input.imageData ? 'photo' : 'model');
     if (mode === 'model' && (!input.make || !input.model)) throw badRequest('Inserisci marca e modello per la valutazione gratuita.');
-    if (mode !== 'model' && !(await premiumAccess(req,res))) return;
-
     let photo: PhotoAnalysisResult | undefined;
     let photoAnalysis: PhotoAnalysisResult;
     let make: string | undefined;
@@ -267,7 +330,7 @@ router.post(
       return;
     }
 
-    const userId = mode === 'model' ? null : getOptionalUserId(req);
+    const userId = getOptionalUserId(req);
 
     let report;
     try {
@@ -290,39 +353,20 @@ router.post(
 
     if (input.imageData) report.photoAnalysis = photoAnalysis;
 
-    let saved = false;
-    let analysis: { id: string; createdAt: Date } | null = null;
-    if (userId) {
-      const stored = await prisma.analysis.create({
-        data: {
-          userId,
-          title,
-          vehicleJson: JSON.stringify({ ...photoAnalysis.vehicle, make, model, year, fuel: vehicle.fuel }),
-          photoAnalysisJson: JSON.stringify(photoAnalysis),
-          reportJson: JSON.stringify(report),
-          sourceImageStored: false,
-          immediateExecutionAccepted: true,
-          consentAt: new Date(),
-          termsVersion: '2026-08-02',
-        },
-      });
-      saved = true;
-      analysis = { id: stored.id, createdAt: stored.createdAt };
-    }
+    const preview = await saveGeneratedReport({ userId, title, report, photoAnalysis });
 
     res.set('Cache-Control', 'no-store');
     void prisma.analyticsEvent.create({
-      data: { type: 'scan', path: '/', meta: JSON.stringify({ make, model, recognized: true, saved }), userId },
+      data: { type: 'scan', path: '/', meta: JSON.stringify({ make, model, recognized: true, saved: false }), userId },
     }).catch(() => undefined);
     const result = {
       success: true,
       recognized: true,
       vehicle,
-      report,
-      saved,
+      preview,
+      saved: false,
       freeUsed: false,
       mode,
-      analysis: analysis ? { id: analysis.id, createdAt: analysis.createdAt.toISOString() } : undefined,
     };
     res.json(result);
   })

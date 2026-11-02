@@ -1,3 +1,4 @@
+import { isBatteryElectric } from './powertrain';
 export interface RepairItem {
   label: string;
   min: number;
@@ -204,7 +205,7 @@ export function estimateRepair(make: string, model: string, year: number, fuelIn
   const f = (fuelInput || '').toLowerCase();
   const mk = make.toLowerCase();
   const mdl = model.toLowerCase();
-  const isElectric = f.includes('elettr') || f.includes('ev') || f.includes('bev') || /tesla|polestar|byd/.test(mk) || /500e|taycan|id\.3|id\.4|id\.5|e-208|leaf|zoe/.test(mdl);
+  const isElectric = isBatteryElectric(mk, mdl, f);
 
   const segment = SEGMENTS[detectSegment(make, model)];
   const age = Math.max(0, new Date().getFullYear() - year);

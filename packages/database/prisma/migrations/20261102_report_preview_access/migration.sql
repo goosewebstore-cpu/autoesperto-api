@@ -35,7 +35,7 @@ ALTER TABLE "Purchase"
 ADD CONSTRAINT "Purchase_generatedReportId_fkey"
 FOREIGN KEY ("generatedReportId") REFERENCES "GeneratedReport"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
-CREATE UNIQUE INDEX "Purchase_generatedReportId_key" ON "Purchase"("generatedReportId");
+CREATE INDEX "Purchase_generatedReportId_idx" ON "Purchase"("generatedReportId");
 CREATE INDEX "Purchase_productType_status_idx" ON "Purchase"("productType", "status");
 
 CREATE TABLE "ReportCredit" (

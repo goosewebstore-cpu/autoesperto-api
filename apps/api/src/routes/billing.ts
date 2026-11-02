@@ -41,7 +41,7 @@ router.post('/report-checkout', requireAuth, asyncHandler(async (req, res) => {
   const returnTo = input.returnTo.startsWith('/') && !input.returnTo.startsWith('//') && !input.returnTo.includes('\\') ? input.returnTo : '/account';
   const webUrl = (process.env.WEB_URL || process.env.WEB_URLS?.split(',')[0] || 'http://localhost:3000').replace(/\/$/, '');
   let purchase = input.product === 'single_report'
-    ? await prisma.purchase.findUnique({ where: { generatedReportId: input.reportId! } })
+    ? await prisma.purchase.findFirst({ where: { generatedReportId: input.reportId!, status: { in: ['PENDING', 'FAILED'] } }, orderBy: { createdAt: 'desc' } })
     : await prisma.purchase.findFirst({ where: { userId, productType: 'REPORT_PACK_3', status: 'PENDING' }, orderBy: { createdAt: 'desc' } });
   if (purchase?.status === 'PENDING' && purchase.stripeSessionId) {
     const pendingSession = await stripe.checkout.sessions.retrieve(purchase.stripeSessionId);

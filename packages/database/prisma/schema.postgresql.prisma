@@ -40,7 +40,7 @@ model Purchase {
   amountCents           Int
   currency              String    @default("eur")
   productType           String    @default("SINGLE_ANALYSIS")
-  generatedReportId     String?   @unique
+  generatedReportId     String?
   generatedReport      GeneratedReport? @relation(fields: [generatedReportId], references: [id], onDelete: SetNull)
   creditsGranted        Int       @default(0)
   checkoutAttempt      Int       @default(0)
@@ -52,6 +52,7 @@ model Purchase {
   reportCredits         ReportCredit[]
 
   @@index([userId, status])
+  @@index([generatedReportId])
 }
 
 model Analysis {

@@ -239,6 +239,8 @@ router.post(
       }
     }
 
+    fuel = resolveVehicleFuel(make,model,fuel || photoAnalysis.vehicle.fuel);
+    photoAnalysis.vehicle.fuel = fuel;
     const vehicle = {
       make,
       model,

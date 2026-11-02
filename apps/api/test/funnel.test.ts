@@ -27,22 +27,20 @@ after(async () => { for (const restore of saved.reverse()) restore(); await new 
 async function post(path: string, body: unknown, cookie?: string) {
   return fetch(base + path, { method: 'POST', headers: { 'Content-Type': 'application/json', ...(cookie ? { cookie } : {}) }, body: JSON.stringify(body) });
 }
-test('first anonymous report succeeds, a retry is reusable and a second vehicle requires login', async () => {
-  const first = await fetch(base + '/reports/trial');
-  const cookie = first.headers.get('set-cookie')!.split(';')[0];
-  assert.equal((await first.json() as any).available, true);
-  const input = { make: 'Fiat', model: 'Panda', year: 2019, km: 75000, requestedPrice: 9500, fuel: 'Benzina' };
-  const report = await post('/reports/free-scan', input, cookie);
-  assert.equal(report.status, 200);
-  const result = await report.json() as any;
-  assert.ok(result.report?.price?.estimatedValue > 0);
-  const repeated = await post('/reports/free-scan', input, cookie);
-  assert.equal(repeated.status, 200);
-  assert.deepEqual(await repeated.json(), result);
-  const next = await post('/reports/free-scan', { ...input, model: '500' }, cookie);
-  assert.equal(next.status, 401);
-  assert.equal((await next.json() as any).needsLogin, true);
-  assert.equal((await (await fetch(base + '/reports/trial', { headers: { cookie } })).json() as any).available, false);
+test('model reports remain free across repeated vehicles, while listing analysis requires an account', async () => {
+  const input = { mode:'model', make:'Fiat', model:'Panda', year:2019, km:75000, requestedPrice:9500, fuel:'Benzina' };
+  for (const model of ['Panda','500','Panda']) {
+    const report = await post('/reports/free-scan',{...input,model});
+    assert.equal(report.status,200);
+    const result = await report.json() as any;
+    assert.ok(result.report?.price?.estimatedValue > 0);
+    assert.equal(result.saved,false);
+  }
+  const listing = await post('/reports/free-scan',{...input,mode:'listing'});
+  assert.equal(listing.status,401);
+  assert.equal((await listing.json() as any).needsLogin,true);
+  const config = await (await fetch(base+'/reports/trial')).json() as any;
+  assert.equal(config.available,false); assert.equal(config.modelFree,true);
 });
 test('new funnel events are accepted, repeated delivery is counted once and unknown events are rejected', async () => {
   const id = randomUUID();

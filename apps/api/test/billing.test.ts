@@ -3,11 +3,11 @@ import assert from 'node:assert/strict';
 import { calculateAccountEntitlement } from '../src/services/entitlement';
 import { getAnalysisPrice } from '../src/services/billing';
 
-test('un account riceve una sola analisi gratuita', () => {
+test('un account senza piano non riceve analisi AI gratuite a consumo', () => {
   const first = calculateAccountEntitlement({ userId: 'user-1', paidPurchases: 0, analysisCount: 0, premium: false });
   const next = calculateAccountEntitlement({ userId: 'user-1', paidPurchases: 0, analysisCount: 1, premium: false });
-  assert.equal(first.entitled, true);
-  assert.equal(first.freeAvailable, true);
+  assert.equal(first.entitled, false);
+  assert.equal(first.freeAvailable, false);
   assert.equal(next.entitled, false);
   assert.equal(next.needsUpgrade, true);
 });

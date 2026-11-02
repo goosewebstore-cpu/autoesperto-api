@@ -1,5 +1,4 @@
 import { imageDataSchema } from '../services/imageValidation';
-import { createHash } from 'node:crypto';
 import { Router } from 'express';
 import { z } from 'zod';
 import type { Request } from 'express';
@@ -9,10 +8,9 @@ import { analyzeVehiclePhoto, askAutoEsperto, isVisionConfigured, type PhotoAnal
 import { searchModel } from '../services/modelDB';
 import { findModelEra } from '../services/modelEra';
 import { verifyAuthToken } from '../services/auth';
-import { asyncHandler, serviceUnavailable } from '../http';
+import { asyncHandler, serviceUnavailable, badRequest } from '../http';
 import { getAccountEntitlement } from '../services/entitlement';
 import { getAnalysisPrice } from '../services/billing';
-import { claimGuestTrial, ensureGuestTrial } from '../services/guestTrial';
 
 const router = Router();
 
@@ -62,6 +60,7 @@ const freeScanSchema = z
     fuel: z.string().trim().optional(),
     transmission: z.string().trim().optional(),
     version: z.string().trim().optional(),
+    mode: z.enum(['model', 'photo', 'listing']).optional(),
     // La foto viene prima usata per un riconoscimento rapido; il report parte
     // solo dopo che l'utente ha confermato anno e chilometri.
     recognitionOnly: z.boolean().optional(),
@@ -100,18 +99,14 @@ function manualPhotoAnalysis(make: string, model: string, year?: number, fuel?: 
   };
 }
 
-router.get(
-  '/trial',
-  asyncHandler(async (req, res) => {
-    const userId = getOptionalUserId(req);
-    if (userId) await claimGuestTrial(req, userId);
-    const available = userId
-      ? (await getAccountEntitlement(userId)).freeAvailable
-      : !(await ensureGuestTrial(req, res)).usedAt;
-    res.set('Cache-Control', 'no-store');
-    res.json({ success: true, available });
-  })
-);
+async function premiumAccess(req: Request, res: import('express').Response): Promise<boolean> {
+  const userId = getOptionalUserId(req);
+  if (!userId) { res.status(401).json({success:false,needsLogin:true,error:'Accedi per attivare i 7 giorni di prova per foto AI e annunci. La valutazione per modello resta gratuita.'}); return false; }
+  const entitlement = await getAccountEntitlement(userId);
+  if (!entitlement.entitled) { res.status(402).json({success:false,needsUpgrade:true,error:'Attiva AutoEsperto AI: 7 giorni gratis alla prima attivazione, poi 3,99 €/mese. Il modello resta gratuito.'}); return false; }
+  return true;
+}
+router.get('/trial', asyncHandler(async (_req,res) => { res.set('Cache-Control','no-store'); res.json({success:true,available:false,modelFree:true,trialDays:7}); }));
 
 router.post(
   '/analyze',
@@ -127,6 +122,7 @@ router.post(
   '/ask',
   asyncHandler(async (req, res) => {
     const { question, vehicle, analysis } = askSchema.parse(req.body);
+    if (!(await premiumAccess(req,res))) return;
     const answer = await askAutoEsperto(question, vehicle, analysis);
     res.set('Cache-Control', 'no-store');
     res.json({ success: true, answer });
@@ -137,6 +133,7 @@ router.post(
   '/photo-analyze',
   asyncHandler(async (req, res) => {
     const input = photoSchema.parse(req.body);
+    if (!(await premiumAccess(req,res))) return;
     let analysis;
     try {
       analysis = await analyzeVehiclePhoto(input);
@@ -162,6 +159,9 @@ router.post(
   '/free-scan',
   asyncHandler(async (req, res) => {
     const input = freeScanSchema.parse(req.body);
+    const mode = input.mode || (input.imageData ? 'photo' : 'model');
+    if (mode === 'model' && (!input.make || !input.model)) throw badRequest('Inserisci marca e modello per la valutazione gratuita.');
+    if (mode !== 'model' && !(await premiumAccess(req,res))) return;
 
     let photo: PhotoAnalysisResult | undefined;
     let photoAnalysis: PhotoAnalysisResult;
@@ -170,7 +170,7 @@ router.post(
     let year: number | undefined;
     let fuel: string | undefined = input.fuel;
 
-    if (input.imageData) {
+    if (input.imageData && mode === 'photo') {
       // Un solo tentativo di riconoscimento: i loop AI sequenziali multipli
       // ritardavano la risposta oltre ogni budget. Se l'AI non è configurata o
       // il primo tentativo non riconosce l'auto, rispondiamo subito con
@@ -264,34 +264,7 @@ router.post(
       return;
     }
 
-    const userId = getOptionalUserId(req);
-    const inputHash = createHash('sha256').update(JSON.stringify(input)).digest('hex');
-    const guestTrial = userId ? null : await ensureGuestTrial(req, res);
-    if (userId) await claimGuestTrial(req, userId);
-    if (guestTrial?.usedAt) {
-      if (guestTrial.inputHash === inputHash && guestTrial.resultJson) {
-        res.set('Cache-Control', 'no-store');
-        res.json(JSON.parse(guestTrial.resultJson));
-        return;
-      }
-      res.status(401).json({
-        success: false,
-        error: 'Hai già usato la tua analisi gratuita. Crea un account per scegliere il pagamento.',
-        needsLogin: true,
-      });
-      return;
-    }
-
-    const entitlement = userId ? await getAccountEntitlement(userId) : null;
-    if (userId && !entitlement?.entitled) {
-      res.status(402).json({
-        success: false,
-        error: 'Hai terminato l’analisi gratuita. Acquista un’analisi singola a 1,99 €.',
-        needsUpgrade: true,
-        amountCents: getAnalysisPrice().amountCents,
-      });
-      return;
-    }
+    const userId = mode === 'model' ? null : getOptionalUserId(req);
 
     let report;
     try {
@@ -344,24 +317,10 @@ router.post(
       vehicle,
       report,
       saved,
-      freeUsed: !userId,
+      freeUsed: false,
+      mode,
       analysis: analysis ? { id: analysis.id, createdAt: analysis.createdAt.toISOString() } : undefined,
     };
-    if (guestTrial) {
-      const claimed = await prisma.guestTrial.updateMany({
-        where: { id: guestTrial.id, usedAt: null },
-        data: { usedAt: new Date(), inputHash, resultJson: JSON.stringify(result) },
-      });
-      if (!claimed.count) {
-        const latest = await prisma.guestTrial.findUnique({ where: { id: guestTrial.id } });
-        if (latest?.inputHash === inputHash && latest.resultJson) {
-          res.json(JSON.parse(latest.resultJson));
-          return;
-        }
-        res.status(401).json({ success: false, error: 'Hai già usato la tua analisi gratuita. Accedi per proseguire.', needsLogin: true });
-        return;
-      }
-    }
     res.json(result);
   })
 );

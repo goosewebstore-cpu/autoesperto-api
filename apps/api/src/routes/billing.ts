@@ -1,9 +1,10 @@
+import { createHash } from 'node:crypto';
 import { Router } from 'express';
 import { prisma } from '@autoesperto/database';
 import { z } from 'zod';
-import { asyncHandler, forbidden } from '../http';
+import { asyncHandler, forbidden, conflict } from '../http';
 import { type AuthenticatedRequest, requireAuth } from '../services/auth';
-import { getAnalysisPrice, getStripe, recordPaidCheckout, getPremiumConfig } from '../services/billing';
+import { getAnalysisPrice, getStripe, recordPaidCheckout, getPremiumConfig, premiumCheckoutParams, syncStripeSubscription } from '../services/billing';
 
 const router = Router();
 const confirmSchema = z.object({ sessionId: z.string().trim().startsWith('cs_').max(255) });
@@ -91,47 +92,46 @@ router.post(
   }),
 );
 
-// POST /billing/subscribe - Create Stripe subscription checkout
-router.post(
-  '/subscribe',
-  requireAuth,
-  asyncHandler(async (req, res) => {
-    const { userId } = (req as AuthenticatedRequest).auth;
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { id: true, email: true } });
-    if (!user) throw forbidden('Account non trovato.');
-
-    const stripe = getStripe();
-    const interval = req.body.interval === 'year' ? 'year' : 'month';
-    const config = getPremiumConfig(interval);
-    const webUrl = (process.env.WEB_URL || process.env.WEB_URLS?.split(',')[0] || 'http://localhost:3000').replace(/\/$/, '');
-
-    const session = await stripe.checkout.sessions.create({
-      mode: 'subscription',
-      locale: 'it',
-      client_reference_id: userId,
-      ...(user.email ? { customer_email: user.email } : {}),
-      line_items: [{
-        quantity: 1,
-        price_data: {
-          currency: config.currency,
-          unit_amount: config.amountCents,
-          recurring: { interval: config.interval },
-          product_data: {
-            name: 'AutoEsperto Premium',
-            description: interval === 'year' ? 'Analisi complete illimitate, nessuna pubblicità.' : 'Fino a 10 analisi complete al giorno, nessuna pubblicità.',
-          },
-        },
-      }],
-      metadata: { userId, product: 'premium_subscription', interval, plan: interval === 'year' ? 'PREMIUM_YEARLY' : 'PREMIUM_MONTHLY' },
-      subscription_data: { metadata: { userId, product: 'premium_subscription', interval, plan: interval === 'year' ? 'PREMIUM_YEARLY' : 'PREMIUM_MONTHLY' } },
-      success_url: `${webUrl}/account?subscription=success&session_id={CHECKOUT_SESSION_ID}`,
-      cancel_url: `${webUrl}/account?subscription=cancelled`,
-    });
-
-    if (!session.url) throw new Error('Stripe non ha restituito il link di pagamento.');
-    res.status(201).json({ success: true, url: session.url });
-  }),
-);
+router.post('/subscribe', requireAuth, asyncHandler(async (req, res) => {
+  const { userId } = (req as AuthenticatedRequest).auth;
+  const input = z.object({ interval: z.literal('month').optional(), returnTo: z.string().max(300).optional().default('/account') }).parse(req.body || {});
+  const returnTo = input.returnTo.startsWith('/') && !input.returnTo.startsWith('//') && !input.returnTo.includes('\\') ? input.returnTo.split('#')[0] : '/account';
+  const user = await prisma.user.findUnique({ where: { id:userId }, select: { id:true, email:true, subscription:true } });
+  if (!user) throw forbidden('Account non trovato.');
+  const stripe = getStripe();
+  let customerId = user.subscription?.stripeCustomerId;
+  if (!customerId) {
+    const customer = await stripe.customers.create({ ...(user.email ? {email:user.email} : {}), metadata:{userId} }, { idempotencyKey: 'ae-customer:' + userId });
+    customerId = customer.id;
+    await prisma.subscription.upsert({ where:{userId}, create:{userId,plan:'FREE',status:'INACTIVE',stripeCustomerId:customerId}, update:{stripeCustomerId:customerId} });
+  }
+  const history = await stripe.subscriptions.list({ customer:customerId, status:'all', limit:100 });
+  if (history.data.some(sub => ['active','trialing','past_due','unpaid','incomplete','paused'].includes(sub.status))) throw conflict('Hai già un abbonamento. Gestiscilo dal tuo account.');
+  const trialEligible = !user.subscription?.stripeSubscriptionId && history.data.length === 0;
+  const open = await stripe.checkout.sessions.list({customer:customerId,limit:10});
+  const reusable = open.data.find(session => session.status === 'open' && session.mode === 'subscription' && session.metadata?.offer === 'ai_7days_v2' && session.metadata?.returnTo === returnTo);
+  if (reusable?.url) { res.json({success:true,url:reusable.url,sessionId:reusable.id,trialDays:trialEligible?7:0}); return; }
+  const webUrl = (process.env.WEB_URL || 'https://autoesperto.it').replace(/\/$/,'');
+  const params = premiumCheckoutParams({userId,customerId,webUrl,returnTo,trialEligible});
+  params.metadata = {...params.metadata,returnTo};
+  const configurations = await stripe.paymentMethodConfigurations.list({limit:100});
+  const wallets = configurations.data.find(item => item.active && item.apple_pay?.display_preference.value === 'on' && item.google_pay?.display_preference.value === 'on');
+  if (wallets) {params.payment_method_configuration=wallets.id;delete params.payment_method_types;}
+  const session = await stripe.checkout.sessions.create(params, { idempotencyKey: 'ai-v2:' + userId + ':' + (trialEligible?'trial':'paid') + ':' + Math.floor(Date.now()/1800000) + ':' + createHash('sha256').update(returnTo).digest('hex').slice(0,16) });
+  if (!session.url) throw new Error('Stripe non ha restituito il link di pagamento.');
+  await prisma.analyticsEvent.upsert({ where:{id:'checkout:'+session.id},update:{},create:{id:'checkout:'+session.id,type:'checkout',userId,path:returnTo,meta:JSON.stringify({product:'premium_subscription',trialDays:trialEligible?7:0})} });
+  res.status(201).json({success:true,url:session.url,sessionId:session.id,trialDays:trialEligible?7:0});
+}));
+router.post('/confirm-subscription', requireAuth, asyncHandler(async (req,res) => {
+  const {userId} = (req as AuthenticatedRequest).auth;
+  const {sessionId} = confirmSchema.parse(req.body);
+  const stripe = getStripe();
+  const session = await stripe.checkout.sessions.retrieve(sessionId);
+  if (session.mode !== 'subscription' || session.metadata?.product !== 'premium_subscription' || session.metadata?.userId !== userId || session.status !== 'complete' || !session.subscription) throw forbidden('Attivazione non completata per questo account.');
+  const sub = typeof session.subscription === 'string' ? await stripe.subscriptions.retrieve(session.subscription) : session.subscription;
+  await syncStripeSubscription(sub,userId);
+  res.json({success:true,active:['trialing','active'].includes(sub.status),trial:sub.status==='trialing'});
+}));
 
 // POST /billing/cancel-subscription
 router.post(

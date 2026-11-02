@@ -119,7 +119,7 @@ describe('AutoEsperto API (MVP)', () => {
   });
 
   describe('POST /reports/ask', () => {
-    it('risponde a una domanda sul veicolo', async () => {
+    it('richiede l’accesso per l’assistente AI', async () => {
       const r = await req('/reports/ask', {
         method: 'POST',
         body: {
@@ -128,8 +128,8 @@ describe('AutoEsperto API (MVP)', () => {
           analysis: { score: 7.9, verdict: 'BUY', summary: 'Affidabile.' },
         },
       });
-      assert.strictEqual(r.status, 200);
-      assert.ok(r.data.answer.length > 20);
+      assert.strictEqual(r.status, 401);
+      assert.strictEqual(r.data.needsLogin, true);
     });
 
     it('payload non valida → 400', async () => {

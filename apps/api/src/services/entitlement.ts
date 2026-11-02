@@ -28,10 +28,10 @@ export function calculateAccountEntitlement(input: {
   dailyAnalysisCount?: number;
 }): AccountEntitlement {
   const owner = isOwnerEmail(input.email);
-  const unlimited = owner || input.premium;
+  const unlimited = owner || input.premium || Boolean(input.monthlyPremium);
   const dailyLimit = input.monthlyPremium ? 10 : null;
   const withinDailyLimit = dailyLimit === null || (input.dailyAnalysisCount || 0) < dailyLimit;
-  const freeAvailable = Boolean(input.userId) && !unlimited && !input.guestTrialUsed && input.analysisCount === 0;
+  const freeAvailable = false; // Model estimates are public; AI uses a timed Stripe trial.
   const paid = input.paidPurchases > 0;
   const paidCreditAvailable = input.paidPurchases > 0 && input.analysisCount < input.paidPurchases + (input.guestTrialUsed ? 0 : 1);
   const entitled = unlimited || (input.monthlyPremium && withinDailyLimit) || freeAvailable || paidCreditAvailable;
@@ -49,14 +49,7 @@ export function calculateAccountEntitlement(input: {
   };
 }
 
-/**
- * Regole di accesso al report completo:
- * - Annuale / owner → accesso illimitato
- * - Mensile → 10 analisi al giorno, senza pubblicità
- * - una sola analisi gratuita, come ospite o con account
- * - ogni acquisto singolo (€1,99) → sblocca UNA analisi completa:
- *   ogni pagamento PAID copre una analisi aggiuntiva
- */
+/** AI requires a timed trial or subscription. Existing purchased report credits remain valid. */
 export async function getAccountEntitlement(userId: string | null): Promise<AccountEntitlement> {
   if (!userId) {
     return {
@@ -83,7 +76,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
         emailVerified: true,
         guestTrialUsedAt: true,
         purchases: { where: { status: 'PAID' }, select: { id: true } },
-        subscription: { select: { plan: true, status: true } },
+        subscription: { select: { plan: true, status: true, renewsAt: true } },
       },
     }),
     prisma.analysis.count({ where: { userId } }),
@@ -105,7 +98,7 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     };
   }
 
-  const active = user.subscription?.status === 'ACTIVE';
+  const active = subscriptionHasAccess(user.subscription);
   const premium = active && ['PREMIUM', 'PREMIUM_YEARLY'].includes(user.subscription?.plan || '');
   const monthlyPremium = active && user.subscription?.plan === 'PREMIUM_MONTHLY';
   return calculateAccountEntitlement({
@@ -119,4 +112,10 @@ export async function getAccountEntitlement(userId: string | null): Promise<Acco
     monthlyPremium,
     dailyAnalysisCount,
   });
+}
+
+export function subscriptionHasAccess(subscription: { status: string; renewsAt?: Date | null } | null | undefined, now = new Date()): boolean {
+  if (!subscription || !['ACTIVE', 'TRIALING'].includes(subscription.status)) return false;
+  if (!subscription.renewsAt) return subscription.status === 'ACTIVE';
+  return subscription.renewsAt.getTime() > now.getTime();
 }

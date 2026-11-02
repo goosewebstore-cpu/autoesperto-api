@@ -85,7 +85,7 @@ router.post(
     if (!entitlement.entitled) {
       return res.status(402).json({
         success: false,
-        error: 'Hai terminato l’analisi gratuita. Acquista un’analisi singola a 1,99 €.',
+        error: 'Attiva AutoEsperto AI: prova di 7 giorni alla prima attivazione, poi 3,99 €/mese.',
         needsUpgrade: true,
         amountCents: getAnalysisPrice().amountCents,
       });

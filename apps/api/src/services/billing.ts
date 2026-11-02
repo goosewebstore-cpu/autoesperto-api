@@ -94,3 +94,39 @@ export async function deactivatePremium(stripeSubscriptionId: string): Promise<v
     });
   }
 }
+
+export function premiumCheckoutParams(input: { userId: string; customerId: string; webUrl: string; returnTo: string; trialEligible: boolean }): Stripe.Checkout.SessionCreateParams {
+  const metadata = { userId: input.userId, product: 'premium_subscription', interval: 'month', plan: 'PREMIUM_MONTHLY', offer: 'ai_7days_v2' };
+  const trialDays = input.trialEligible ? 7 : 0;
+  return {
+    mode: 'subscription', locale: 'it', customer: input.customerId, client_reference_id: input.userId,
+    payment_method_types: ['card'], payment_method_collection: 'always',
+    line_items: [{ quantity: 1, price_data: { currency: 'eur', unit_amount: 399, recurring: { interval: 'month' }, product_data: { name: 'AutoEsperto AI', description: 'Foto AI e analisi annunci illimitate. Valutazione per modello sempre gratuita.' } } }],
+    metadata,
+    subscription_data: { metadata, ...(trialDays ? { trial_period_days: 7, trial_settings: { end_behavior: { missing_payment_method: 'cancel' } } } : {}) },
+    custom_text: { submit: { message: trialDays ? 'Oggi 0 €. Dopo 7 giorni, 3,99 €/mese con rinnovo automatico. Disdici dal tuo account prima della fine della prova per evitare il primo addebito.' : '3,99 €/mese con rinnovo automatico. La prova di 7 giorni è riservata alla prima attivazione. Disdici dal tuo account.' } },
+    success_url: input.webUrl + input.returnTo + (input.returnTo.includes('?') ? '&' : '?') + 'subscription=success&session_id={CHECKOUT_SESSION_ID}',
+    cancel_url: input.webUrl + input.returnTo + (input.returnTo.includes('?') ? '&' : '?') + 'subscription=cancelled',
+  };
+}
+
+export async function syncStripeSubscription(sub: Stripe.Subscription, expectedUserId?: string): Promise<void> {
+  const userId = sub.metadata.userId;
+  if (!userId || (expectedUserId && userId !== expectedUserId)) throw forbidden('Abbonamento non associato a questo account.');
+  const current = await prisma.subscription.findUnique({ where: { userId } });
+  // A delayed event for an old subscription must not overwrite a newer one.
+  if (current?.stripeSubscriptionId && current.stripeSubscriptionId !== sub.id && !['canceled', 'incomplete_expired'].includes(sub.status)) {
+    const existing = await getStripe().subscriptions.retrieve(current.stripeSubscriptionId);
+    if (['active', 'trialing'].includes(existing.status)) throw forbidden('Esiste già un abbonamento attivo.');
+  } else if (current?.stripeSubscriptionId && current.stripeSubscriptionId !== sub.id) return;
+  const item = sub.items.data[0];
+  const periodEnd = sub.status === 'trialing' ? sub.trial_end : item?.current_period_end;
+  const endsAt = periodEnd ? new Date(periodEnd * 1000) : null;
+  const status = sub.status === 'trialing' ? 'TRIALING' : sub.status === 'active' ? 'ACTIVE' : sub.status === 'past_due' ? 'PAST_DUE' : 'CANCELLED';
+  const data = { plan: sub.metadata.plan === 'PREMIUM_YEARLY' ? 'PREMIUM_YEARLY' : 'PREMIUM_MONTHLY', status, credits: 0, stripeCustomerId: typeof sub.customer === 'string' ? sub.customer : sub.customer.id, stripeSubscriptionId: sub.id, stripePriceId: item?.price.id || null, renewsAt: endsAt, cancelledAt: sub.cancel_at_period_end || sub.status === 'canceled' ? new Date((sub.canceled_at || Math.floor(Date.now()/1000)) * 1000) : null };
+  await prisma.subscription.upsert({ where: { userId }, create: { userId, ...data }, update: data });
+  if (['active', 'trialing'].includes(sub.status)) await prisma.analyticsEvent.upsert({
+    where: { id: 'subscription:' + sub.id + ':' + sub.status }, update: {},
+    create: { id: 'subscription:' + sub.id + ':' + sub.status, type: sub.status === 'trialing' ? 'trial_started' : 'premium_subscribed', userId, path: '/account', meta: JSON.stringify({ source:'stripe', subscriptionId:sub.id, status:sub.status }) },
+  });
+}

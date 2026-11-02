@@ -12,6 +12,7 @@ import {
   verifyPassword,
 } from '../services/auth';
 import { sendVerificationEmail } from '../services/email';
+import { subscriptionHasAccess } from '../services/entitlement';
 import { isOwnerEmail } from '../services/owner';
 
 const router = Router();
@@ -69,13 +70,13 @@ async function accountSummary(userId: string) {
   if (!user) throw unauthorized('Account non trovato');
   const owner = isOwnerEmail(user.email);
   const paidPurchases = user.purchases.length;
-  const activeSubscription = user.subscription?.status === 'ACTIVE';
+  const activeSubscription = subscriptionHasAccess(user.subscription);
   const premium = activeSubscription && ['PREMIUM', 'PREMIUM_YEARLY'].includes(user.subscription?.plan || '');
   const monthlyPremium = activeSubscription && user.subscription?.plan === 'PREMIUM_MONTHLY';
   const paid = paidPurchases > 0;
   const emailVerified = !!user.emailVerified;
-  const trialAvailable = !owner && !premium && !monthlyPremium && !user.guestTrialUsedAt && analysisCount === 0;
-  const included = owner || premium ? 999 : monthlyPremium ? 10 : (user.guestTrialUsedAt ? 0 : 1) + paidPurchases;
+  const trialAvailable = !owner && !user.subscription?.stripeSubscriptionId;
+  const included = owner || premium || monthlyPremium ? 999999 : paidPurchases;
   const used = monthlyPremium ? await prisma.analysis.count({ where: { userId, createdAt: { gte: new Date(new Date().setHours(0, 0, 0, 0)) } } }) : analysisCount;
   return {
     ...user,
@@ -96,6 +97,8 @@ async function accountSummary(userId: string) {
       emailVerified,
       freeUsed: Boolean(user.guestTrialUsedAt) || analysisCount > 0,
       trialAvailable,
+      unlimited: owner || premium || monthlyPremium,
+      trialActive: activeSubscription && user.subscription?.status === 'TRIALING',
       owner,
       purchase: user.purchases[0] || null,
     },

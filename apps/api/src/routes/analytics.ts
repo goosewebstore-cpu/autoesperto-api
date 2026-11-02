@@ -11,15 +11,8 @@ const router = Router();
 // restano validi per retrocompatibilità; i nuovi eventi coprono l'intero funnel
 // di conversione: analisi → risultato → offerta report → pagamento.
 const trackSchema = z.object({
-  type: z.enum([
-    'visit', 'scan', 'analysis', 'checkout', 'login', 'register',
-    'page_view', 'search_car', 'photo_upload', 'car_selected', 'car_image_uploaded',
-    'analysis_started', 'analysis_completed', 'result_viewed',
-    'premium_viewed', 'premium_cta_clicked', 'premium_subscribed',
-    'report_offer_viewed', 'report_purchase_started', 'premium_checkout_started',
-    'purchase_completed', 'pdf_requested', 'share_clicked',
-    'sell_ad_generated', 'ad_impression', 'compare_started', 'guide_read', 'account_created',
-  ]),
+  type: z.enum(["visit","scan","analysis","checkout","login","register","page_view","page_leave","analysis_failed","photo_recognition_started","photo_recognition_completed","photo_recognition_failed","search_car","photo_upload","car_selected","car_image_uploaded","analysis_started","analysis_completed","result_viewed","premium_viewed","premium_cta_clicked","premium_checkout_started","premium_subscribed","report_offer_viewed","report_purchase_started","purchase_completed","pdf_requested","share_clicked","sell_ad_generated","ad_impression","compare_started","guide_read","account_created","tool_click","sell_cta","advisor_message_sent","natural_language_search_executed","homepage_view","valuation_viewed","passport_created","passport_shared","passport_transferred","document_uploaded","document_verified","vehicle_saved","comparison_started","auto_finder_started","auto_finder_completed","finder_started","finder_completed","preference_changed","car_saved","buy_score_viewed","negotiator_message_copied","listing_analyzed","health_scan_completed","health_score_applied"]),
+  eventId: z.string().uuid().optional(),
   path: z.string().max(300).optional(),
   meta: z.string().max(2000).optional(),
   visitorId: z.string().max(120).optional(),
@@ -51,8 +44,10 @@ router.post(
       }
     }
 
+    try {
     await prisma.analyticsEvent.create({
       data: {
+        ...(input.eventId ? { id: input.eventId } : {}),
         type: input.type,
         path: input.path || null,
         meta: input.meta || null,
@@ -61,6 +56,9 @@ router.post(
         duration: input.duration || null,
       },
     });
+    } catch (error) {
+      if (!input.eventId || (error as { code?: string }).code !== 'P2002') throw error;
+    }
     res.set('Cache-Control', 'no-store');
     res.json({ success: true });
   })
@@ -129,6 +127,7 @@ router.get(
       { step: 'Analisi completate', count: byType7d('analysis_completed') },
       { step: 'Risultato visto', count: byType7d('result_viewed') },
       { step: 'Offerta report vista', count: byType7d('report_offer_viewed') },
+      { step: 'Checkout avviato', count: byType7d('checkout') },
       { step: 'Pagamenti completati', count: byType7d('purchase_completed') },
     ];
     const funnelWithPct = funnel7d.map((f, i) => ({
@@ -137,10 +136,24 @@ router.get(
       overall: pct(f.count, funnel7d[0].count),
     }));
 
+    const failures = await prisma.analyticsEvent.findMany({
+      where: { type: 'analysis_failed', createdAt: { gte: sevenDaysAgo } },
+      select: { meta: true },
+    });
+    const reasons = new Map<string, number>();
+    for (const failure of failures) {
+      try {
+        const meta = JSON.parse(failure.meta || '{}');
+        const reason = String(meta.reason || 'unknown');
+        reasons.set(reason, (reasons.get(reason) || 0) + 1);
+      } catch { reasons.set('unknown', (reasons.get('unknown') || 0) + 1); }
+    }
     res.set('Cache-Control', 'no-store');
     res.json({
       success: true,
       overview: {
+        measurement: { version: 2, since: '2026-11-02', visits: 'Sessioni browser con consenso analytics; scadenza dopo 30 minuti di inattività.', note: 'I dati precedenti alla versione 2 includono visite duplicate. Gli step sono conteggi di eventi, non una coorte di persone; non tutti gli utenti devono acquistare dopo la prima prova gratuita.' },
+        failures7d: [...reasons].map(([reason, count]) => ({ reason, count })).sort((a, b) => b.count - a.count),
         totals: {
           visits: totalVisits,
           scans: totalScans,
@@ -160,6 +173,8 @@ router.get(
           registers: byType7d('register'),
           pageViews: byType7d('page_view'),
           analysesStarted: byType7d('analysis_started'),
+          analysesCompleted: byType7d('analysis_completed'),
+          analysesFailed: byType7d('analysis_failed'),
           resultsViewed: byType7d('result_viewed'),
           reportOffersViewed: byType7d('report_offer_viewed'),
           reportPurchasesStarted: byType7d('report_purchase_started'),
@@ -174,6 +189,8 @@ router.get(
           registers: byType30d('register'),
           pageViews: byType30d('page_view'),
           analysesStarted: byType30d('analysis_started'),
+          analysesCompleted: byType30d('analysis_completed'),
+          analysesFailed: byType30d('analysis_failed'),
           resultsViewed: byType30d('result_viewed'),
           reportOffersViewed: byType30d('report_offer_viewed'),
           reportPurchasesStarted: byType30d('report_purchase_started'),

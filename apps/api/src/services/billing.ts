@@ -26,6 +26,10 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
   const purchase = await prisma.purchase.findUnique({ where: { id: purchaseId } });
   if (!purchase || purchase.userId !== userId) throw forbidden('Pagamento non associato a questo account.');
 
+  if (session.amount_total !== purchase.amountCents || session.currency?.toLowerCase() !== purchase.currency.toLowerCase()) {
+    throw forbidden('Importo o valuta del pagamento non corrispondenti.');
+  }
+  if (purchase.stripeSessionId && purchase.stripeSessionId !== session.id) throw forbidden('Sessione di pagamento non corrispondente.');
   const paymentIntent = typeof session.payment_intent === 'string' ? session.payment_intent : session.payment_intent?.id;
   await prisma.purchase.update({
     where: { id: purchaseId },
@@ -35,6 +39,10 @@ export async function recordPaidCheckout(session: Stripe.Checkout.Session): Prom
       stripePaymentIntentId: paymentIntent || undefined,
       paidAt: purchase.paidAt || new Date(),
     },
+  });
+  await prisma.analyticsEvent.upsert({
+    where: { id: 'payment:' + session.id }, update: {},
+    create: { id: 'payment:' + session.id, type: 'purchase_completed', userId, path: '/account', meta: JSON.stringify({ transactionId: session.id, amountCents: purchase.amountCents, currency: purchase.currency, source: 'stripe' }) },
   });
 }
 

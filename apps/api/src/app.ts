@@ -68,7 +68,14 @@ export function createApp(options: AppOptions = {}) {
     legacyHeaders: false,
     message: { success: false, error: 'Troppi tentativi. Riprova tra qualche minuto.' },
   });
-  app.use('/auth', authLimiter);
+  const sessionLimiter = rateLimit({
+    windowMs: 60 * 1000, max: 120, standardHeaders: true, legacyHeaders: false,
+    message: { success: false, error: 'Troppe richieste di sessione. Riprova tra un minuto.' },
+  });
+  app.use('/auth', (req, res, next) => {
+    if (req.method === 'GET' && req.path === '/me') return sessionLimiter(req, res, next);
+    return authLimiter(req, res, next);
+  });
 
   const passportAiLimiter = rateLimit({
     windowMs: 60 * 1000,

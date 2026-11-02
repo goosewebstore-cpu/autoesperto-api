@@ -118,7 +118,7 @@ router.post(
           recurring: { interval: config.interval },
           product_data: {
             name: 'AutoEsperto Premium',
-            description: 'Analisi complete illimitate, dati di mercato reali, nessuna pubblicita.',
+            description: interval === 'year' ? 'Analisi complete illimitate, nessuna pubblicità.' : 'Fino a 10 analisi complete al giorno, nessuna pubblicità.',
           },
         },
       }],
